@@ -16,7 +16,7 @@ export function BoutiqueHero() {
           transition={{ duration: 0.8 }}
         >
           <span className="ishes-label mb-4 block">Éditions ISHES</span>
-          <h1 className="ishes-heading text-5xl md:text-8xl text-ishes-dark mb-6">
+          <h1 className="ishes-heading text-4xl sm:text-5xl md:text-8xl text-ishes-dark mb-6">
             LA BOUTIQUE <br />
             <span className="text-ishes-green italic font-serif">spirituelle.</span>
           </h1>

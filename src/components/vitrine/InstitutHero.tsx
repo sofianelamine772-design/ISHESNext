@@ -36,7 +36,7 @@ export function InstitutHero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
-          <h1 className="text-6xl md:text-[120px] font-black text-white leading-[0.9] tracking-tighter mb-10 overflow-hidden">
+          <h1 className="text-[42px] sm:text-6xl md:text-[120px] font-black text-white leading-[0.9] tracking-tighter mb-10 overflow-hidden">
             <motion.span 
               initial={{ y: 100 }}
               animate={{ y: 0 }}
