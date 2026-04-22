@@ -12,7 +12,10 @@ const isPublicRoute = createRouteMatcher([
   '/formation-enseignant(.*)', 
   '/campus(.*)', 
   '/conseil-spiritualite(.*)', 
-  '/fr(.*)'
+  '/fr(.*)',
+  '/institut(.*)',
+  '/boutique(.*)',
+  '/inscription(.*)'
 ]);
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 
