@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -25,11 +26,15 @@ export function Navbar() {
 
           <div className="flex-shrink-0">
             <Link href="/" className="group flex items-center transition-transform hover:scale-105 active:scale-95">
-              <img
-                src="/logo.png"
-                alt="ISHES Logo"
-                className="h-10 md:h-12 w-auto object-contain"
-              />
+              <div className="relative h-10 md:h-12 w-32 md:w-36">
+                <Image
+                  src="/logo.png"
+                  alt="ISHES Logo"
+                  fill
+                  priority
+                  className="object-contain"
+                />
+              </div>
             </Link>
           </div>
 

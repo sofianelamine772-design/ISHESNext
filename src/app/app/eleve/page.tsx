@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, BookOpenText, CalendarDays, MessageSquareText, GraduationCap } from "lucide-react";
 import { useUser, SignOutButton } from "@clerk/nextjs";
+import Image from "next/image";
 
 export default function EleveDashboard() {
   const { user } = useUser();
@@ -53,7 +54,7 @@ export default function EleveDashboard() {
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full border border-gray-200 overflow-hidden relative shadow-sm bg-gray-100 flex items-center justify-center">
               {user?.imageUrl ? (
-                <img src={user.imageUrl} alt="Avatar étudiant" className="w-full h-full object-cover" />
+                <Image src={user.imageUrl} alt="Avatar étudiant" fill className="object-cover" />
               ) : (
                 <span className="text-sm font-bold text-gray-400">{(user?.firstName?.[0] || 'U')}</span>
               )}

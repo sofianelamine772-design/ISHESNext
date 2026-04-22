@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Heart } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ArabicBackground } from "@/components/ArabicBackground";
@@ -83,7 +84,7 @@ export default function Home() {
             <div className="flex -space-x-3">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden relative shadow-sm hover:scale-110 transition-transform cursor-pointer z-10 hover:z-20">
-                  <img src={`https://i.pravatar.cc/100?img=${i + 31}`} alt="Avatar étudiant" className="w-full h-full object-cover" />
+                  <Image src={`https://i.pravatar.cc/100?img=${i + 31}`} alt="Avatar étudiant" fill className="object-cover" />
                 </div>
               ))}
             </div>
@@ -148,10 +149,12 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group"
             >
-              <img 
+              <Image 
                 src="/images/home-hero.png" 
                 alt="Institut ISHES" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                fill
+                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-ishes-green/10 mix-blend-overlay" />
             </motion.div>
@@ -229,7 +232,7 @@ export default function Home() {
         {/* Scrolling rows */}
         <div className="flex flex-col gap-5">
           {/* Row 1 — scroll left */}
-          <div className="flex gap-5 w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="flex gap-5 w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused] will-change-transform">
             {[
               { name: "Fanny Vincent", role: "Parent d'élève", text: "Pédagogie excellente, explications simples. Les enfants adorent les cours à distance." },
               { name: "Abdoullah M.", role: "Étudiant", text: "Efficace, sérieux et très professionnel. Je recommande vivement pour progresser vite." },
@@ -266,7 +269,7 @@ export default function Home() {
           </div>
 
           {/* Row 2 — scroll right */}
-          <div className="flex gap-5 w-max animate-[marquee-reverse_100s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="flex gap-5 w-max animate-[marquee-reverse_100s_linear_infinite] hover:[animation-play-state:paused] will-change-transform">
             {[
               { name: "Imane R.", role: "Étudiante", text: "Le cours de Sîrah du Prophète ﷺ m'a vraiment touchée. Enseigné avec passion et rigueur." },
               { name: "Hassan D.", role: "Étudiant", text: "Grâce à ISHES, j'ai enfin compris les bases du Tajwid. Méthode claire et progressive." },
