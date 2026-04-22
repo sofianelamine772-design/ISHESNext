@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { WhatsappButton } from "@/components/WhatsappButton";
 
 export default function VitrineLayout({
   children,
@@ -16,6 +17,7 @@ export default function VitrineLayout({
         {children}
       </div>
       <Footer />
+      <WhatsappButton />
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star } from "lucide-react";
+import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby } from "lucide-react";
 
 type Program = {
   id: string;
@@ -16,6 +16,7 @@ type Program = {
   priceSub: string;
   isRecommended?: boolean;
   type: "presentiel" | "distanciel";
+  audience: "adulte" | "enfant";
 };
 
 const PROGRAMS: Program[] = [
@@ -34,7 +35,8 @@ const PROGRAMS: Program[] = [
     ],
     price: "349 €",
     priceSub: "/ SESSION",
-    type: "presentiel"
+    type: "presentiel",
+    audience: "adulte"
   },
   {
     id: "tajwid_intensif",
@@ -52,7 +54,44 @@ const PROGRAMS: Program[] = [
     price: "649 €",
     priceSub: "/ SESSION",
     isRecommended: true,
-    type: "distanciel"
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "fiqh_malikite",
+    title: "Fiqh Mâlikite",
+    subtitle: "Maîtrisez les actes d'adoration selon l'école de l'Imam Mâlik. Étude du Matn Ibn Achir.",
+    tagText: "DROIT",
+    tagColor: "bg-indigo-100 text-indigo-700",
+    durationText: "9 mois",
+    features: [
+      "Pureté & Prière",
+      "Jeûne & Zakat",
+      "Pèlerinage (Hajj)",
+      "Preuves (Dalila)"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "sciences_du_coran",
+    title: "Sciences du Coran",
+    subtitle: "Découvrez l'histoire de la révélation et de la préservation du Livre Saint. Module passionnant.",
+    tagText: "HISTOIRE",
+    tagColor: "bg-amber-100 text-amber-700",
+    durationText: "5 mois",
+    features: [
+      "Processus de Révélation",
+      "Compilation (Mushaf)",
+      "Lectures & Lecteurs",
+      "Inimitabilité (I'jaz)"
+    ],
+    price: "249 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
   },
   {
     id: "sciences_islamiques",
@@ -69,7 +108,8 @@ const PROGRAMS: Program[] = [
     ],
     price: "349 €",
     priceSub: "/ SESSION",
-    type: "distanciel"
+    type: "distanciel",
+    audience: "adulte"
   },
   {
     id: "arabe_coran_junior",
@@ -86,7 +126,8 @@ const PROGRAMS: Program[] = [
     ],
     price: "349 €",
     priceSub: "/ SESSION",
-    type: "distanciel"
+    type: "distanciel",
+    audience: "enfant"
   },
   {
     id: "pack_accompagnement",
@@ -103,14 +144,16 @@ const PROGRAMS: Program[] = [
     ],
     price: "49 €",
     priceSub: "/ SESSION",
-    type: "distanciel"
+    type: "distanciel",
+    audience: "adulte"
   }
 ];
 
 export default function ProgrammesPage() {
-  const [activeMode, setActiveMode] = useState<"presentiel" | "distanciel">("presentiel");
+  const [activeMode, setActiveMode] = useState<"presentiel" | "distanciel">("distanciel");
+  const [activeAudience, setActiveAudience] = useState<"adulte" | "enfant">("adulte");
 
-  const filteredPrograms = PROGRAMS.filter((p) => p.type === activeMode);
+  const filteredPrograms = PROGRAMS.filter((p) => p.type === activeMode && p.audience === activeAudience);
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-[#008953] selection:text-white pb-24">
@@ -132,28 +175,54 @@ export default function ProgrammesPage() {
                </p>
             </div>
 
-            {/* Mode Toggle Switch */}
-            <div className="bg-gray-100 p-1.5 rounded-2xl flex items-center shadow-inner self-start lg:self-auto shrink-0 w-full sm:w-auto overflow-hidden">
-               <button
-                  onClick={() => setActiveMode("presentiel")}
-                  className={`flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm transition-all w-1/2 sm:w-auto ${
-                     activeMode === "presentiel"
-                        ? "bg-white text-[#008953] shadow-sm transform scale-100"
-                        : "text-gray-500 hover:text-gray-700"
-                  }`}
-               >
-                  <MapPin className="w-4 h-4" /> Présentiel
-               </button>
-               <button
-                  onClick={() => setActiveMode("distanciel")}
-                  className={`flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm transition-all w-1/2 sm:w-auto ${
-                     activeMode === "distanciel"
-                        ? "bg-white text-[#008953] shadow-sm transform scale-100"
-                        : "text-gray-500 hover:text-gray-700"
-                  }`}
-               >
-                  <Monitor className="w-4 h-4" /> Distanciel
-               </button>
+            <div className="flex flex-col gap-4 w-full sm:w-auto">
+               {/* Mode Toggle Switch (Présentiel / Distanciel) */}
+               <div className="bg-gray-100 p-1.5 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
+                  <button
+                     onClick={() => setActiveMode("presentiel")}
+                     className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm transition-all ${
+                        activeMode === "presentiel"
+                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                           : "text-gray-500 hover:text-gray-700"
+                     }`}
+                  >
+                     <MapPin className="w-4 h-4" /> Présentiel
+                  </button>
+                  <button
+                     onClick={() => setActiveMode("distanciel")}
+                     className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm transition-all ${
+                        activeMode === "distanciel"
+                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                           : "text-gray-500 hover:text-gray-700"
+                     }`}
+                  >
+                     <Monitor className="w-4 h-4" /> Distanciel
+                  </button>
+               </div>
+
+               {/* Audience Toggle Switch (Adulte / Enfant) */}
+               <div className="bg-gray-100 p-1.5 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
+                  <button
+                     onClick={() => setActiveAudience("adulte")}
+                     className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm transition-all ${
+                        activeAudience === "adulte"
+                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                           : "text-gray-500 hover:text-gray-700"
+                     }`}
+                  >
+                     <User className="w-4 h-4" /> Adulte
+                  </button>
+                  <button
+                     onClick={() => setActiveAudience("enfant")}
+                     className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm transition-all ${
+                        activeAudience === "enfant"
+                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                           : "text-gray-500 hover:text-gray-700"
+                     }`}
+                  >
+                     <Baby className="w-4 h-4" /> Enfant
+                  </button>
+               </div>
             </div>
          </div>
       </section>
@@ -258,9 +327,12 @@ export default function ProgrammesPage() {
             ))}
          </div>
          {filteredPrograms.length === 0 && (
-            <div className="text-center py-20 bg-gray-50 rounded-3xl border border-gray-100">
+            <div className="text-center py-20 bg-gray-50 rounded-[2rem] border border-gray-100">
                <h3 className="text-xl font-bold text-gray-800 mb-2">Aucune formation disponible</h3>
-               <p className="text-gray-500">Il n'y a pas encore de formation pour le mode {activeMode}.</p>
+               <p className="text-gray-500">
+                  Il n'y a pas encore de formation pour le mode {activeMode === "presentiel" ? "Présentiel" : "Distanciel"} 
+                  et le public {activeAudience === "adulte" ? "Adulte" : "Enfant"}.
+               </p>
             </div>
          )}
       </section>

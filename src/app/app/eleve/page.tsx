@@ -1,8 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, BookOpenText, CalendarDays, MessageSquareText, GraduationCap } from "lucide-react";
+import { useUser, SignOutButton } from "@clerk/nextjs";
 
 export default function EleveDashboard() {
+  const { user } = useUser();
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar - Etudiant */}
@@ -31,9 +36,11 @@ export default function EleveDashboard() {
         </nav>
 
         <div className="p-4 border-t border-gray-100">
-          <Link href="/app" className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-red-50 hover:text-red-500 rounded-lg text-sm font-medium transition-colors">
-            <LogOut className="w-4 h-4" /> Déconnexion
-          </Link>
+          <SignOutButton>
+            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-red-50 hover:text-red-500 rounded-lg text-sm font-medium transition-colors">
+              <LogOut className="w-4 h-4" /> Déconnexion
+            </button>
+          </SignOutButton>
         </div>
       </aside>
 
@@ -43,13 +50,21 @@ export default function EleveDashboard() {
         <header className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8">
           <h1 className="text-2xl font-bold text-gray-800">Espace Étudiant</h1>
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full border border-gray-200 overflow-hidden relative shadow-sm">
-              <img src="https://i.pravatar.cc/100?img=3" alt="Avatar étudiant" className="w-full h-full object-cover" />
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full border border-gray-200 overflow-hidden relative shadow-sm bg-gray-100 flex items-center justify-center">
+              {user?.imageUrl ? (
+                <img src={user.imageUrl} alt="Avatar étudiant" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-sm font-bold text-gray-400">{(user?.firstName?.[0] || 'U')}</span>
+              )}
             </div>
             <div className="flex flex-col hidden md:flex">
-              <span className="text-sm font-bold text-gray-800 leading-none mb-1">Amine Y.</span>
-              <span className="text-[10px] font-bold text-[#086b51] uppercase tracking-wider leading-none">Niveau Avancé</span>
+              <span className="text-sm font-bold text-gray-800 leading-none mb-1">
+                {user?.firstName} {user?.lastName?.[0]}.
+              </span>
+              <span className="text-[10px] font-bold text-[#086b51] uppercase tracking-wider leading-none">Étudiant Actif</span>
             </div>
+          </div>
           </div>
         </header>
 

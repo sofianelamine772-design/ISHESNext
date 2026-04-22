@@ -15,6 +15,12 @@
   .text-balance {
     text-wrap: balance;
   }
+  .ishes-heading {
+    @apply font-black italic uppercase tracking-tighter;
+  }
+  .ishes-label {
+    @apply font-bold uppercase tracking-widest text-ishes-green text-xs;
+  }
 }
 
 @theme inline {
@@ -139,4 +145,14 @@
   html {
     @apply font-sans;
   }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }

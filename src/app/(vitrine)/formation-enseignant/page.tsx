@@ -1,0 +1,214 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { CheckCircle2, GraduationCap, Monitor, CreditCard, ChevronRight, FileText } from "lucide-react";
+import Link from "next/link";
+
+const formations = [
+  {
+    id: "nour-al-bayan",
+    title: "Diplôme TAJWID",
+    subtitle: "Formation Nour Al Bayan",
+    availableRemote: true,
+    paymentTerms: "Jusqu'à 10x sans frais",
+    tags: ["Arrangement du Coran", "La science du Mecquois"],
+    description: "L'enseignement à la méthodologie Nour Al Bayan est destiné aux enseignants et aux adultes qui souhaitent enseigner la lecture et la récitation du Saint Coran suivant cette méthode reconnue. L'Institut dispose de formateurs spécialisés depuis plusieurs années dans l'enseignement de cette méthode.",
+    objectifs: [
+      "Redéfinir l'intention de devenir enseignant de la méthode Nour Al Bayan",
+      "Formation à la méthode d'enseignement Nour Al Bayan Kids à destination des enfants",
+      "Formation à la méthode d'enseignement Nour Al Bayan à destination des adultes",
+      "Tarbya Bil Houb, éducation à la bienveillance dans la transmission du savoir",
+      "Enseignement de la pédagogie niveau 1, 2 et 3 : Fath Rahman, Fath Rabbani / Sifat El Hourous",
+      "Maîtrise du Tajwid"
+    ],
+    pricing: "Devis personnalisé",
+    format: "Enseignement à distance",
+    badgeColor: "bg-ishes-green/10 text-ishes-green"
+  },
+  {
+    id: "tarbya-islamya",
+    title: "Diplôme Tahbiya Islamya",
+    subtitle: "Formation Tarbya Islamya",
+    availableRemote: true,
+    paymentTerms: "Jusqu'à 10x sans frais",
+    tags: ["Formation Nour Al Bayan", "La science du Mecquois"],
+    description: "L'enseignement Tarbya Islamya est destiné aux adultes souhaitant enseigner aux enfants une pédagogie adaptée dont l'objectif est de préserver la \"Fitra\" (la nature saine). La formation se déroulera sur plusieurs semaines (environ 5 mois).",
+    deroulement: [
+      "20h de formation",
+      "Stage pratique dans notre Institut à distance (avec une classe en Tarbya Islamya sur ZOOM)",
+      "10h de suivi pratique post-formation (pendant votre mise en pratique) par votre enseignant formateur"
+    ],
+    objectifs: [
+      "Formation théorique (les fondamentaux de la religion)",
+      "Formation pratique (méthodologie d'enseignement à destination de jeunes enfants et adolescents)",
+      "Accès aux supports pédagogiques des cours (affichages, vidéos, livre de Dou'a, etc.)",
+      "Contenus vidéos des cours que nous proposons",
+      "Examen final"
+    ],
+    pricing: "Devis personnalisé",
+    format: "Enseignement à distance",
+    badgeColor: "bg-[#c8a96e]/10 text-[#c8a96e]"
+  }
+];
+
+export default function FormationEnseignantPage() {
+  return (
+    <div className="min-h-screen bg-white font-sans selection:bg-ishes-green selection:text-white">
+      
+      {/* --- HERO SECTION --- */}
+      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+        <div className="absolute inset-0 bg-ishes-green/[0.02] -z-10" />
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-3xl">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-3 py-1 bg-ishes-green/10 text-ishes-green rounded-full mb-6"
+            >
+              <GraduationCap className="w-4 h-4" />
+              <span className="text-xs font-black uppercase tracking-widest">Formation Professionnelle</span>
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl md:text-7xl font-black text-ishes-dark leading-[1.05] tracking-tight mb-8"
+            >
+              Devenez <span className="text-ishes-green italic underline decoration-ishes-green/20">enseignant</span> certifié.
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl text-gray-500 font-medium leading-relaxed max-w-2xl"
+            >
+              Transmettez le savoir avec excellence. Nos formations diplômantes vous ouvrent les portes d'une pédagogie moderne et reconnue.
+            </motion.p>
+          </div>
+        </div>
+      </section>
+
+      {/* --- FORMATIONS SECTION --- */}
+      <section className="pb-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col gap-24">
+            
+            {formations.map((f, idx) => (
+              <motion.div 
+                key={f.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: idx * 0.1 }}
+                className="grid lg:grid-cols-2 gap-16 items-start"
+              >
+                {/* Visual / Info Left */}
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <span className={`text-[10px] font-black uppercase tracking-[.25em] px-3 py-1 rounded-md ${f.badgeColor}`}>
+                        {f.subtitle}
+                      </span>
+                      {f.availableRemote && (
+                        <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          <Monitor className="w-3.5 h-3.5" /> En distanciel
+                        </div>
+                      )}
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-black text-ishes-dark tracking-tight leading-none uppercase">
+                      {f.title}
+                    </h2>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                       {f.tags.map(tag => (
+                         <span key={tag} className="text-xs font-bold text-gray-400 border border-gray-100 px-3 py-1 rounded-full uppercase tracking-widest">{tag}</span>
+                       ))}
+                    </div>
+                  </div>
+
+                  <p className="text-lg text-gray-600 leading-relaxed font-medium bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                    {f.description}
+                  </p>
+
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                      <CreditCard className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
+                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Flexibilité</div>
+                      <div className="text-sm font-black text-ishes-dark">{f.paymentTerms}</div>
+                    </div>
+                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                      <FileText className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
+                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Investissement</div>
+                      <div className="text-sm font-black text-ishes-dark uppercase tracking-wide">{f.pricing}</div>
+                    </div>
+                  </div>
+
+                  <Link 
+                    href="/contact" 
+                    className="inline-flex items-center justify-center gap-3 bg-ishes-dark hover:bg-black text-white px-10 py-5 rounded-2xl text-[15px] font-bold transition-all hover:-translate-y-1 shadow-xl shadow-ishes-dark/10 group"
+                  >
+                    Demander un devis personnalisé
+                    <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+
+                {/* Content / Objectives Right */}
+                <div className="bg-ishes-dark rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-8 opacity-20 transition-transform group-hover:scale-110 group-hover:rotate-6">
+                    <GraduationCap className="w-32 h-32" strokeWidth={1} />
+                  </div>
+
+                  {f.deroulement && (
+                    <div className="mb-12 relative z-10">
+                      <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>
+                      <div className="space-y-6">
+                        {f.deroulement.map((item, i) => (
+                           <div key={i} className="flex gap-4 items-start">
+                             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-xs font-black">{i + 1}</div>
+                             <p className="text-[15px] font-medium text-gray-300 leading-snug">{item}</p>
+                           </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="relative z-10">
+                    <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Objectifs de la formation</h3>
+                    <div className="space-y-4">
+                      {f.objectifs.map((obj, i) => (
+                        <div key={i} className="flex gap-4 items-start py-4 border-b border-white/5 last:border-0 translate-x-0 transition-transform hover:translate-x-2">
+                          <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0 mt-0.5" />
+                          <p className="text-[17px] font-bold leading-tight">{obj}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </motion.div>
+            ))}
+
+          </div>
+        </div>
+      </section>
+
+      {/* --- REASSURANCE --- */}
+      <section className="bg-ishes-green/5 py-24 border-y border-ishes-green/10">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-black text-ishes-dark mb-6 tracking-tight">Besoin de plus d'informations ?</h2>
+          <p className="text-lg text-gray-500 font-medium mb-10">
+            Nos conseillers pédagogiques sont à votre disposition pour vous guider dans votre projet professionnel.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/contact" className="w-full sm:w-auto bg-ishes-green text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-ishes-green/20 hover:scale-105 transition-transform">
+              Nous contacter
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}

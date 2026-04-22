@@ -15,19 +15,23 @@ export const metadata: Metadata = {
   description: "Institut de référence à Toulouse. Pédagogie certifiée CECRL pour une maîtrise complète, du niveau débutant à l'expertise.",
 };
 
+import { ClerkProvider } from "@clerk/nextjs";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="fr"
-      className={cn("antialiased", "h-full", outfit.variable, "font-sans", geist.variable)}
-    >
-      <body className="font-sans min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-green selection:text-white">
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="fr"
+        className={cn("antialiased", "h-full", outfit.variable, "font-sans", geist.variable)}
+      >
+        <body className="font-sans min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-green selection:text-white">
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

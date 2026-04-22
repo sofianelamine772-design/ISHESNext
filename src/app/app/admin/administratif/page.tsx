@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText } from "lucide-react";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export default function AdministratifPage() {
   return (
@@ -34,10 +35,8 @@ export default function AdministratifPage() {
 
         </nav>
 
-        <div className="p-4 border-t border-white/10">
-          <Link href="/app" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 hover:text-red-400 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-            <LogOut className="w-4 h-4" /> Déconnexion
-          </Link>
+        <div className="p-4 border-t border-white/10 shrink-0">
+          <LogoutButton />
         </div>
       </aside>
 
@@ -58,7 +57,7 @@ export default function AdministratifPage() {
 
         <div className="p-8 flex-1">
           <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm h-full flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-4">
+            <div className="w-16 h-16 bg-ishes-green/10 text-ishes-green rounded-2xl flex items-center justify-center mb-4">
               <FileText className="w-8 h-8" />
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Module Administratif en construction</h2>
