@@ -6,6 +6,7 @@ import { HeroSection } from "@/components/vitrine/HeroSection";
 import { StatsSection } from "@/components/vitrine/StatsSection";
 import { TestimonialsMarquee } from "@/components/vitrine/TestimonialsMarquee";
 import { SocialSection } from "@/components/vitrine/SocialSection";
+import { ArabicBackground } from "@/components/ArabicBackground";
 
 export const metadata: Metadata = {
   title: "ISHES - L'excellence de la langue arabe à Toulouse",
@@ -27,12 +28,13 @@ export default function Home() {
       </div>
 
       {/* ─── HERO SECTION ─── */}
+      {/* (HeroSection already has ArabicBackground internally) */}
       <HeroSection />
 
       {/* Stats */}
       <StatsSection />
 
-      {/* ===== MINI FORMATION SECTION ===== */}
+      {/* ===== MINI FORMATION SECTION (ONLY WHITE) ===== */}
       <section className="bg-white py-12 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-[#fafafa] border border-gray-100 rounded-[2.5rem] p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 hover:shadow-xl hover:shadow-gray-200/20 transition-all duration-500">
@@ -62,9 +64,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== NOTRE INSTITUT SECTION (Split Visual) ===== */}
-      <section className="relative bg-white overflow-hidden py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* ===== NOTRE INSTITUT SECTION (HAS ARABIC TEXT) ===== */}
+      <section className="relative bg-[#fafafa] overflow-hidden py-24 md:py-32">
+        <ArabicBackground />
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             
             {/* Visual Column */}
@@ -82,19 +85,16 @@ export default function Home() {
 
             {/* Content Column */}
             <div>
-              {/* Label */}
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-6 h-[2px] bg-ishes-green" />
                 <span className="text-[11px] font-bold tracking-[0.3em] text-ishes-green uppercase">Notre Institut</span>
               </div>
 
-              {/* Headline */}
               <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-8">
                 Un savoir qui transforme<br />
                 <span className="text-ishes-green italic">chaque musulman.</span>
               </h2>
 
-              {/* Body */}
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium">
                 <p>
                   L'Institut des Sciences Humaines et Spirituelles de Toulouse est porté par un couple — également fondateur de l'école <strong className="text-ishes-dark">Transmettre</strong> —, forts de <strong className="text-ishes-dark">plus de 15 ans d'expérience</strong> dans l'enseignement.
@@ -104,14 +104,12 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Mission Quote */}
               <div className="mt-12 relative pl-7 border-l-4 border-ishes-green">
                 <p className="text-ishes-dark text-xl leading-relaxed font-bold italic">
                   "Notre mission : ouvrir les portes d'un savoir qui transforme, pour que chaque musulman puisse vivre sa religion avec conscience, équilibre et profondeur."
                 </p>
               </div>
 
-              {/* Founder Signature */}
               <div className="mt-10 flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-ishes-green/10 flex items-center justify-center text-ishes-green">
                   <Heart className="w-6 h-6" />
@@ -127,11 +125,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TÉMOIGNAGES SECTION ===== */}
-      <TestimonialsMarquee />
+      {/* ===== TÉMOIGNAGES SECTION (ONLY WHITE) ===== */}
+      <section className="bg-white py-20 border-y border-gray-100">
+        <TestimonialsMarquee />
+      </section>
 
-      {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
-      <SocialSection />
+      {/* ===== RÉSEAUX SOCIAUX SECTION (HAS ARABIC TEXT) ===== */}
+      <section className="relative bg-[#fafafa] py-24 overflow-hidden">
+        <ArabicBackground />
+        <div className="relative z-10">
+          <SocialSection />
+        </div>
+      </section>
 
     </div>
   );

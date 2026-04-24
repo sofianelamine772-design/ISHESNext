@@ -13,7 +13,8 @@ const products = [
     description: "Donnez du sens à votre foi à travers des histoires vraies et morales inspirantes pour vous aider à vous connecter à ALLAH ﷻ.",
     image: "/images/livre_chahada.jpg",
     price: "19.90 €",
-    tag: "Best-seller"
+    tag: "Best-seller",
+    amazonUrl: "https://www.amazon.fr/CHAHADA-chemin-son-coeur-comprendre/dp/B0GD7LVTMP"
   },
   {
     id: "mohammed",
@@ -22,16 +23,8 @@ const products = [
     description: "Cette étape propose de découvrir la seconde partie de l’attestation de foi : MOHAMMAD ﷺ Le Messager d’ALLAHﷻ, par l’étude de la Sîrah du Prophète ﷺ.",
     image: "/images/livre_sirah.png",
     price: "22.50 €",
-    tag: "Must-have"
-  },
-  {
-    id: "ramadan",
-    title: "Mon Ramadan Planner",
-    subtitle: "POUR ENFANTS : 30 JOURS DE SUIVI QUOTIDIEN",
-    description: "De bonnes actions (Coran, prière, dhikr, dou'a...) et de bilans pour mieux comprendre et réussir son Ramadan.",
-    image: "/images/livre_ramadan.png",
-    price: "15.00 €",
-    tag: "Nouveauté"
+    tag: "Must-have",
+    amazonUrl: "https://www.amazon.fr/Mohammed-Messager-dALLAH-accessible-découvrir/dp/B0GDF23MZZ"
   },
   {
     id: "invocation",
@@ -40,7 +33,18 @@ const products = [
     description: "Conçu avec des invocations en arabe, phonétique et traduction française pour vous accompagner chaque jour.",
     image: "/images/livre_invocation.jpg",
     price: "12.90 €",
-    tag: "Essentiel"
+    tag: "Essentiel",
+    amazonUrl: "https://www.amazon.fr/Carnet-dinvocation-Tableau-suivi-dapprentissage/dp/B0G6WRKNFV"
+  },
+  {
+    id: "ramadan",
+    title: "Mon Ramadan Planner",
+    subtitle: "POUR ENFANTS : 30 JOURS DE SUIVI QUOTIDIEN",
+    description: "De bonnes actions (Coran, prière, dhikr, dou'a...) et de bilans pour mieux comprendre et réussir son Ramadan.",
+    image: "/images/livre_ramadan.png",
+    price: "15.00 €",
+    tag: "Nouveauté",
+    amazonUrl: "https://www.amazon.fr/s?k=rachida+reziga+ramadan"
   }
 ];
 
@@ -92,9 +96,11 @@ export function BoutiqueProducts() {
                   <span className="ishes-heading text-xl text-ishes-dark">
                     {product.price}
                   </span>
-                  <Button variant="ishes" className="h-12 px-6 gap-2">
-                    Acheter en ligne <ShoppingBag className="w-4 h-4" />
-                  </Button>
+                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="ishes" className="h-12 px-6 gap-2">
+                      Acheter en ligne <ShoppingBag className="w-4 h-4" />
+                    </Button>
+                  </a>
                 </div>
               </div>
             </motion.div>

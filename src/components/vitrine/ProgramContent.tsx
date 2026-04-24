@@ -39,6 +39,24 @@ const PROGRAMS: Program[] = [
     audience: "adulte"
   },
   {
+    id: "tajwid_standard",
+    title: "Tajwid (Standard)",
+    subtitle: "Apprends à lire le Coran à distance avec un suivi personnalisé. Progresser de chez soi.",
+    tagText: "STANDARD",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "8 mois",
+    features: [
+      "Cours en ligne direct",
+      "Accès aux replays",
+      "Correction audio",
+      "Suivi WhatsApp"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
     id: "tajwid_intensif",
     title: "Tajwid Intensif",
     subtitle: "3 mois pour transformer ta lecture du Coran. Ce que d'autres mettent 2 ans à maîtriser.",
@@ -112,6 +130,132 @@ const PROGRAMS: Program[] = [
     audience: "adulte"
   },
   {
+    id: "sciences_hadith",
+    title: "Sciences du Hadith",
+    subtitle: "Comprendre la parole du Prophète (ﷺ) et les efforts des savants pour sa préservation.",
+    tagText: "AUTHENTICITÉ",
+    tagColor: "bg-teal-100 text-teal-700",
+    durationText: "10 mois",
+    features: [
+      "Étude de la Sunnah",
+      "Science des rapporteurs",
+      "Authentification",
+      "Cours interactifs"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "memoriser_coran",
+    title: "Mémorisation du Coran",
+    subtitle: "Accompagnement personnalisé pour mémoriser le Livre d'Allah à votre rythme.",
+    tagText: "HIFZ",
+    tagColor: "bg-amber-100 text-amber-700",
+    durationText: "Annuel",
+    features: [
+      "Correction lecture",
+      "Révision suivie",
+      "Progression par Hizb",
+      "Soutien spirituel"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "al_aqida",
+    title: "Al-'Aqîda",
+    subtitle: "Étude de la Tahawiya pour comprendre les fondements de la foi musulmane sunnite.",
+    tagText: "FOI",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "9 mois",
+    features: [
+      "Étude de la Tahawiya",
+      "Fondements de la foi",
+      "Monde invisible",
+      "Cours hebdomadaire"
+    ],
+    price: "250 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "as_sirah",
+    title: "Sîrah An-Nabawiyya",
+    subtitle: "Découvrez la vie du Prophète ﷺ, de sa naissance à Médine, un guide pour l'humanité.",
+    tagText: "BIOGRAPHIE",
+    tagColor: "bg-amber-100 text-amber-700",
+    durationText: "Annuel",
+    features: [
+      "Période Mécquoise",
+      "Période Médinoise",
+      "Enseignements & Vertus",
+      "Lien spirituel"
+    ],
+    price: "250 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "spiritualite_islam",
+    title: "Spiritualité Musulmane",
+    subtitle: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam.",
+    tagText: "OFFERT",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "Continu",
+    features: [
+      "Éducation de l'âme",
+      "Piliers de la foi",
+      "Quête de sens",
+      "Cursus gratuit"
+    ],
+    price: "0 €",
+    priceSub: "GRATUIT",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "correction_fatiha",
+    title: "Correction al Fatiha",
+    subtitle: "Corrigez la lecture de la Fatiha et des 3 dernières sourates. Module offert.",
+    tagText: "OFFERT",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "Session",
+    features: [
+      "Fatiha & 3 sourates",
+      "Validité de la prière",
+      "Prononciation correcte",
+      "Totalement gratuit"
+    ],
+    price: "0 €",
+    priceSub: "GRATUIT",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "cours_particuliers",
+    title: "Cours Particuliers",
+    subtitle: "Apprentissage individuel du Coran et Tajwid pour adultes et enfants.",
+    tagText: "SUR-MESURE",
+    tagColor: "bg-purple-100 text-purple-700",
+    durationText: "À la carte",
+    features: [
+      "Programme 100% solo",
+      "Rythme personnalisé",
+      "Tous niveaux",
+      "Adultes & Enfants"
+    ],
+    price: "Sur Devis",
+    priceSub: "PERSONNALISÉ",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
     id: "arabe_coran_junior",
     title: "Arabe & Coran Junior",
     subtitle: "Méthode ludique pour les 6-15 ans. Arabe, Coran, Tajwid et Éducation Islamique.",
@@ -128,6 +272,114 @@ const PROGRAMS: Program[] = [
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "enfant"
+  },
+  {
+    id: "arabe_coran_junior",
+    title: "Arabe & Coran Junior",
+    subtitle: "Immersion totale et pédagogie active en présentiel pour les 6-15 ans à Toulouse.",
+    tagText: "JUNIOR",
+    tagColor: "bg-pink-100 text-pink-700",
+    durationText: "Annuel",
+    features: [
+      "Enseignement direct",
+      "Activités ludiques",
+      "Vie d'institut",
+      "Ateliers pratiques"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "enfant"
+  },
+  {
+    id: "tajwid_standard",
+    title: "Tajwid (Enfant)",
+    subtitle: "Apprends à lire le Coran correctement dès le plus jeune âge. Méthode ludique.",
+    tagText: "ENFANT",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "Annuel",
+    features: [
+      "Lecture correcte",
+      "Pédagogie adaptée",
+      "Mémorisation facile",
+      "Suivi parents"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "enfant"
+  },
+  {
+    id: "tajwid_standard",
+    title: "Tajwid (Enfant)",
+    subtitle: "Cours de Tajwid en ligne pour enfants. Apprendre et réciter de chez soi.",
+    tagText: "ENFANT",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "Annuel",
+    features: [
+      "Cours en direct",
+      "Interactivité",
+      "Progression douce",
+      "Suivi WhatsApp"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "enfant"
+  },
+  {
+    id: "tarbiya_islamiya",
+    title: "Tarbiya Islamiya",
+    subtitle: "Éveil du cœur et amour d'Allah. Un cours pour préserver la Fitra de vos enfants.",
+    tagText: "SPIRITUALITÉ",
+    tagColor: "bg-amber-100 text-amber-700",
+    durationText: "Annuel",
+    features: [
+      "Professeure diplômée",
+      "Pédagogie active",
+      "Éveil spirituel",
+      "À partir de 6 ans"
+    ],
+    price: "249 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "enfant"
+  },
+  {
+    id: "arabe_adulte",
+    title: "Arabe Littéraire (Adulte)",
+    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation courante. Méthode immersive.",
+    tagText: "LANGUE",
+    tagColor: "bg-blue-100 text-blue-700",
+    durationText: "9 mois",
+    features: [
+      "Lecture & Écriture",
+      "Conversation réelle",
+      "Grammaire & Syntaxe",
+      "Immersion totale"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "adulte"
+  },
+  {
+    id: "arabe_adulte",
+    title: "Arabe Littéraire (Adulte)",
+    subtitle: "Apprenez l'arabe de chez vous avec des professeurs natifs et une méthode interactive.",
+    tagText: "LANGUE",
+    tagColor: "bg-blue-100 text-blue-700",
+    durationText: "9 mois",
+    features: [
+      "Cours en direct",
+      "Accès aux replays",
+      "Supports numériques",
+      "Suivi personnalisé"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
   },
   {
     id: "pack_accompagnement",
@@ -306,7 +558,25 @@ export function ProgramContent() {
                         </div>
                         <div className="grid grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
                            <Link 
-                              href={`/program/${program.id}`}
+                              href={
+                                program.id === 'arabe_coran_junior' ? '/fr/cours-arabe-enfant' : 
+                                program.id === 'tajwid_standard' ? '/fr/cours-lecture-tajwid' : 
+                                program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
+                                program.id === 'arabe_adulte' ? '/fr/cours-arabe-adulte' : 
+                                program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
+                                program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
+                                program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
+                                program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
+                                program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
+                                program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
+                                program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
+                                program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
+                                program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
+                                program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
+                                program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
+                                program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
+                                `/program/${program.id}`
+                              }
                               className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-3.5 rounded-xl transition-all shadow-sm"
                            >
                               Info
