@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby } from "lucide-react";
 
 type Program = {
@@ -412,7 +413,22 @@ export function ProgramContent() {
       {/* HERO SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 overflow-hidden">
          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-            <div className="max-w-2xl">
+            <div className="max-w-2xl relative">
+                {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
+                <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
+                  <Image 
+                    src="/images/clean_manga_bubble.png" 
+                    alt="Manga Bubble" 
+                    fill 
+                    className="object-contain"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center text-center p-8 pr-10 pb-16 font-sans">
+                    <p className="text-[#101828] text-xs font-black uppercase tracking-widest leading-relaxed">
+                      Sélectionnez ici <br /> pour choisir <br /> la formation !
+                    </p>
+                  </div>
+                </div>
+
                <div className={`font-black tracking-widest text-xs uppercase mb-6 ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>
                   Nos Formations
                </div>
@@ -425,7 +441,7 @@ export function ProgramContent() {
                </p>
             </div>
 
-            <div className="flex flex-col gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-4 w-full sm:w-auto relative">
                {/* Mode Toggle Switch (Présentiel / Distanciel) */}
                <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
                   <button
