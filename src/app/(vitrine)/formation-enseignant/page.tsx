@@ -57,8 +57,6 @@ const formations = [
 export default function FormationEnseignantPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-green selection:text-white">
-      <Navbar />
-      
       {/* --- HERO SECTION --- */}
       <section className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden">
         <ArabicBackground />
@@ -73,7 +71,7 @@ export default function FormationEnseignantPage() {
               className="text-5xl md:text-8xl font-black text-ishes-dark leading-[1.02] tracking-tight mb-10 uppercase"
             >
               Devenez <br />
-              <span className="text-ishes-green italic">enseignant</span> certifié.
+              <span className="text-[#c8a96e] italic">enseignant</span> certifié.
             </motion.h1>
             
             <motion.p 
@@ -209,8 +207,6 @@ export default function FormationEnseignantPage() {
           </div>
         </div>
       </section>
- 
-      <Footer />
     </div>
   );
 }

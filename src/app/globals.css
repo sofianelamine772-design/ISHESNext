@@ -139,6 +139,10 @@
   * {
     @apply border-border outline-ring/50;
   }
+  *::selection {
+    background-color: #c8a96e !important;
+    color: #ffffff !important;
+  }
   body {
     @apply bg-background text-foreground;
   }

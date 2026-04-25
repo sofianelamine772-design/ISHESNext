@@ -17,8 +17,8 @@ export function HeroSection() {
         className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-7"
       >
         <h1 className="text-[38px] sm:text-[52px] md:text-[72px] lg:text-[84px] font-black text-ishes-dark leading-[1.08] tracking-tight">
-          L'excellence de <span className="text-ishes-green italic">la</span><br />
-          <span className="text-ishes-green italic">langue arabe</span> à votre<br />
+          L'excellence de <span className="text-[#c8a96e] italic">la</span><br />
+          <span className="text-[#c8a96e] italic">langue arabe</span> à votre<br />
           portée.
         </h1>
 
@@ -27,11 +27,11 @@ export function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-          <button className="group flex items-center gap-3 bg-ishes-green hover:bg-ishes-green-hover text-white px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-xl shadow-ishes-green/20">
+          <button className="group flex items-center gap-3 bg-[#c8a96e] hover:bg-[#b0935b] text-white px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-xl shadow-[#c8a96e]/20">
             Voir nos cours
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
           </button>
-          <button className="flex items-center justify-center bg-white border-2 border-ishes-green/20 text-ishes-green hover:border-ishes-green hover:bg-ishes-green/5 px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-sm">
+          <button className="flex items-center justify-center bg-white border-2 border-[#c8a96e]/20 text-[#c8a96e] hover:border-[#c8a96e] hover:bg-[#c8a96e]/5 px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-sm">
             Pré-inscription
           </button>
         </div>

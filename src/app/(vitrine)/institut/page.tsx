@@ -1,39 +1,87 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Navigation, GraduationCap, Users, Calendar, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { MapPin, Navigation, GraduationCap, Users, Calendar, ArrowRight, ShieldCheck, Sparkles, Clock, BookOpen, Award, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import Image from "next/image";
 
-const presentielCourses = [
+const presentielPrograms = [
   {
-    title: "LANGUE ARABE",
-    audience: "Adultes & Enfants",
-    desc: "Apprenez à parler, lire et écrire l'arabe littéraire dans des classes à taille humaine propices à l'échange.",
-    schedule: "Mercredi & Samedi"
+    id: "tajwid_standard",
+    title: "Tajwid (Standard)",
+    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid. Méthode progressive.",
+    tagText: "STANDARD",
+    tagColor: "bg-green-50 text-green-700 border-green-100",
+    durationText: "8 mois",
+    features: [
+      "Lecture correcte",
+      "Application des règles",
+      "Fluidité & Prononciation",
+      "Suivi WhatsApp"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    link: "/fr/cours-lecture-tajwid"
   },
   {
-    title: "CORAN & TAJWID",
-    audience: "Tous niveaux",
-    desc: "Perfectionnez votre récitation en présentiel avec des enseignants qualifiés appliquant la méthode Nour Al Bayan.",
-    schedule: "Samedi & Dimanche"
+    id: "arabe_adulte",
+    title: "Arabe Littéraire (Adulte)",
+    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation courante. Méthode immersive.",
+    tagText: "LANGUE",
+    tagColor: "bg-blue-50 text-blue-700 border-blue-100",
+    durationText: "9 mois",
+    features: [
+      "Lecture & Écriture",
+      "Conversation réelle",
+      "Grammaire & Syntaxe",
+      "Immersion totale"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    link: "/fr/cours-arabe-adulte"
   },
   {
-    title: "TARBYA ISLAMIYA",
-    audience: "Enfants 6 - 15 ans",
-    desc: "L'éveil spirituel et l'éthique musulmane transmis aux jeunes générations avec bienveillance et pédagogie active.",
-    schedule: "Mercredi"
+    id: "arabe_coran_junior",
+    title: "Arabe & Coran Junior",
+    subtitle: "Immersion totale et pédagogie active en présentiel pour les 6-15 ans à Toulouse.",
+    tagText: "JUNIOR",
+    tagColor: "bg-pink-50 text-pink-700 border-pink-100",
+    durationText: "Annuel",
+    features: [
+      "Enseignement direct",
+      "Activités ludiques",
+      "Vie d'institut",
+      "Ateliers pratiques"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    link: "/fr/cours-arabe-enfant"
+  },
+  {
+    id: "tajwid_enfant",
+    title: "Tajwid (Enfant)",
+    subtitle: "Apprends à lire le Coran correctement dès le plus jeune âge. Méthode ludique.",
+    tagText: "ENFANT",
+    tagColor: "bg-green-50 text-green-700 border-green-100",
+    durationText: "Annuel",
+    features: [
+      "Lecture correcte",
+      "Pédagogie adaptée",
+      "Mémorisation facile",
+      "Suivi parents"
+    ],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    link: "/fr/cours-arabe-enfant"
   }
 ];
 
 export default function InstitutPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-green selection:text-white">
-      <Navbar />
-
       {/* --- HERO CINEMATIC --- */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
         <ArabicBackground />
@@ -57,12 +105,12 @@ export default function InstitutPage() {
           >
             <h1 className="text-5xl sm:text-7xl md:text-[100px] font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
               L'INSTITUT <br />
-              <span className="text-ishes-green italic">présentiel.</span>
+              <span className="text-[#c8a96e] italic">présentiel.</span>
             </h1>
             <p className="text-xl text-white/80 font-medium leading-relaxed max-w-2xl mx-auto mb-10">
               Un lieu d'apprentissage privilégié à Toulouse pour approfondir vos connaissances et cheminer ensemble.
             </p>
-            <a href="#formations" className="inline-flex items-center gap-3 bg-[#008953] text-white px-10 py-5 rounded-2xl font-black tracking-widest uppercase text-xs hover:bg-[#007044] transition-all hover:-translate-y-1 shadow-2xl shadow-[#008953]/20">
+            <a href="#formations" className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black tracking-widest uppercase text-xs hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-2xl shadow-[#c8a96e]/20">
               Explorer nos cours
             </a>
           </motion.div>
@@ -87,30 +135,86 @@ export default function InstitutPage() {
           </div>
 
           {/* Formations Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-24">
-            {presentielCourses.map((c, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
+            {presentielPrograms.map((program, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between"
+                className="flex flex-col relative rounded-[2rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-2"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-8">
-                    <span className="text-[10px] font-black text-ishes-green uppercase tracking-widest bg-ishes-green/5 px-3 py-1 rounded-md">
-                      {c.audience}
+                <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                  {/* TAGS ROW */}
+                  <div className="flex items-center justify-between mb-6">
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border ${program.tagColor}`}>
+                      {program.tagText}
                     </span>
-                    <GraduationCap className="w-6 h-6 text-gray-300" />
+                    <span className="text-[10px] font-black text-gray-400">
+                      {program.durationText}
+                    </span>
                   </div>
-                  <h3 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight uppercase">{c.title}</h3>
-                  <p className="text-gray-500 font-bold leading-relaxed text-sm mb-6">{c.desc}</p>
-                </div>
-                
-                <div className="pt-6 border-t border-gray-50 flex items-center justify-between text-xs font-black text-ishes-dark">
-                  <span className="uppercase tracking-wider opacity-40">Horaires</span>
-                  <span className="italic text-ishes-green">{c.schedule}</span>
+
+                  {/* TITLE & DESC */}
+                  <h2 className="text-xl font-black text-[#101828] mb-3 tracking-tight">{program.title}</h2>
+                  <p className="text-xs text-gray-500 leading-relaxed min-h-[50px] mb-6 font-bold">
+                    {program.subtitle}
+                  </p>
+
+                  {/* ICONS GRID */}
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-[#c8a96e]" />
+                      <span className="text-[9px] font-bold text-gray-400">1h30/sem</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-[#c8a96e]" />
+                      <span className="text-[9px] font-bold text-gray-400">Manuel inclus</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-[#c8a96e]" />
+                      <span className="text-[9px] font-bold text-gray-400">Max 12</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-[#c8a96e]" />
+                      <span className="text-[9px] font-bold text-gray-400 uppercase">Certifié</span>
+                    </div>
+                  </div>
+
+                  {/* FEATURES LIST */}
+                  <div className="space-y-3 mb-8 flex-1">
+                    {program.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-[#c8a96e] shrink-0 mt-0.5" />
+                        <span className="text-xs text-gray-700 font-bold">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* PRICE & CTA */}
+                  <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-gray-50">
+                    <div>
+                      <div className="text-2xl font-black text-[#101828] tracking-tight">{program.price}</div>
+                      <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-0.5">
+                        {program.priceSub}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 font-black text-[9px] tracking-widest uppercase">
+                      <Link 
+                        href={program.link}
+                        className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-3 rounded-xl transition-all shadow-sm"
+                      >
+                        Info
+                      </Link>
+                      <Link 
+                        href={`/inscription?plan=${program.id}`}
+                        className="flex items-center justify-center bg-[#c8a96e] text-white hover:bg-[#b0935b] py-3 rounded-xl shadow-md transition-all"
+                      >
+                        S'inscrire
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -141,7 +245,7 @@ export default function InstitutPage() {
                      href="https://maps.google.com/?q=41+Boulevard+de+Thibaud+31100+Toulouse" 
                      target="_blank" 
                      rel="noopener noreferrer" 
-                     className="bg-[#008953] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all hover:-translate-y-1 shadow-xl shadow-[#008953]/20 flex items-center justify-center gap-3"
+                     className="bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-xl shadow-[#c8a96e]/20 flex items-center justify-center gap-3"
                    >
                       Lancer l'itinéraire <MapPin className="w-4 h-4 text-white" />
                    </a>
@@ -172,8 +276,6 @@ export default function InstitutPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

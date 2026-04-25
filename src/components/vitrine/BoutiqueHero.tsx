@@ -17,7 +17,7 @@ export function BoutiqueHero() {
         >
           <h1 className="ishes-heading text-4xl sm:text-5xl md:text-8xl text-ishes-dark mb-6">
             LA BOUTIQUE <br />
-            <span className="text-ishes-green italic">spirituelle.</span>
+            <span className="text-[#c8a96e] italic">spirituelle.</span>
           </h1>
           <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
             Des supports pédagogiques et inspirants pour accompagner votre cheminement et celui de vos enfants.

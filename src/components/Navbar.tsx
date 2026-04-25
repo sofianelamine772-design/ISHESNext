@@ -22,7 +22,7 @@ export function Navbar() {
   return (
     <>
       <header className="w-full fixed top-0 lg:top-4 z-50 px-0 lg:px-4 pointer-events-none">
-        <div className="max-w-[1200px] mx-auto pointer-events-auto bg-white/90 backdrop-blur-md h-20 lg:h-[72px] flex items-center justify-between px-6 lg:px-6 lg:rounded-full border-b lg:border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.08)] transition-all">
+        <div className="max-w-[1200px] mx-auto pointer-events-auto bg-white h-20 lg:h-[72px] flex items-center justify-between px-6 lg:px-6 lg:rounded-full border-b lg:border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.08)] transition-all">
 
           <div className="flex-shrink-0">
             <Link href="/" className="group flex items-center transition-transform hover:scale-105 active:scale-95">

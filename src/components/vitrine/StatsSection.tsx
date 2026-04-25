@@ -4,6 +4,14 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 export function StatsSection() {
+  const avatars = [
+    "https://images.unsplash.com/photo-1534308143481-c5509e24d271?auto=format&fit=crop&w=100&h=100&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80",
+    "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=100&h=100&q=80",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80",
+    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=100&h=100&q=80"
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -28,9 +36,9 @@ export function StatsSection() {
 
       <div className="flex flex-col items-center md:items-end justify-center w-full">
         <div className="flex -space-x-3">
-          {[...Array(5)].map((_, i) => (
+          {avatars.map((url, i) => (
             <div key={i} className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden relative shadow-sm hover:scale-110 transition-transform cursor-pointer z-10 hover:z-20">
-              <Image src={`https://i.pravatar.cc/100?img=${i + 31}`} alt="Avatar étudiant" fill className="object-cover" sizes="44px" />
+              <Image src={url} alt="Avatar étudiant" fill className="object-cover" sizes="44px" />
             </div>
           ))}
         </div>
