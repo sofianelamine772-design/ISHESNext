@@ -34,8 +34,8 @@ export default function Home() {
       {/* Stats */}
       <StatsSection />
 
-      {/* ===== MINI FORMATION SECTION (ONLY WHITE) ===== */}
-      <section className="bg-white py-12 border-b border-gray-100">
+      {/* ===== MINI FORMATION SECTION ===== */}
+      <section className="bg-[#fafafa] py-12 border-b border-gray-100/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-[#fafafa] border border-gray-100 rounded-[2.5rem] p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 hover:shadow-xl hover:shadow-gray-200/20 transition-all duration-500">
             <div className="max-w-2xl text-center lg:text-left">
@@ -125,8 +125,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TÉMOIGNAGES SECTION (ONLY WHITE) ===== */}
-      <section className="bg-white py-20 border-y border-gray-100">
+      {/* ===== TÉMOIGNAGES SECTION ===== */}
+      <section className="bg-[#fafafa] py-20 border-y border-gray-100/30">
         <TestimonialsMarquee />
       </section>
 

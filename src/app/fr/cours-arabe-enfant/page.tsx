@@ -227,7 +227,7 @@ export default function CoursArabeEnfantPage() {
 
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
                 <Link 
-                  href="/inscription" 
+                  href="/inscription?plan=arabe_coran_junior" 
                   className="w-full sm:w-auto bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1 active:scale-95"
                 >
                   INSCRIPTION COURS ENFANT
@@ -462,7 +462,7 @@ export default function CoursArabeEnfantPage() {
                      Les groupes sont limités à 12 enfants pour garantir une qualité d'apprentissage optimale.
                    </p>
                    <Link 
-                     href="/inscription" 
+                     href="/inscription?plan=arabe_coran_junior" 
                      className="block w-full text-center bg-white text-ishes-green py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg"
                    >
                      S'inscrire

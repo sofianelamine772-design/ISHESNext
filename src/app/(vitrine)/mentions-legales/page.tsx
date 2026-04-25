@@ -65,7 +65,7 @@ export default function MentionsLegales() {
             <span className="ishes-label text-ishes-green mb-4 block">Transparence & Conformité</span>
             <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
               Mentions<br />
-              <span className="text-ishes-green italic font-serif">légales.</span>
+              <span className="text-ishes-green italic">légales.</span>
             </h1>
             <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
               <Shield className="w-4 h-4 text-ishes-green" />

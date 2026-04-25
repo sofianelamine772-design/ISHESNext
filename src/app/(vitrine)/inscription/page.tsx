@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { ChevronRight, CheckCircle2, ArrowRight, MessageSquareText } from "lucide-react";
@@ -24,6 +24,27 @@ function InscriptionForm() {
   });
 
   const [registrationType, setRegistrationType] = useState<"self" | "child">("self");
+  const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "" }]);
+
+  const handleChildInputChange = (index: number, field: string, value: string) => {
+    setChildrenList(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const childFormations = ['arabe_coran_junior', 'tarbiya_islamiya', 'tajwid_enfant'];
+
+  useEffect(() => {
+    if (planId) {
+      if (childFormations.includes(planId)) {
+        setRegistrationType("child");
+      } else {
+        setRegistrationType("self");
+      }
+    }
+  }, [planId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -36,19 +57,44 @@ function InscriptionForm() {
   const saveToSupabase = async () => {
     try {
       const { registerStudentAction } = await import("@/app/actions/students");
-      const result = await registerStudentAction({
-        prenom: formData.prenom,
-        nom: formData.nom,
-        email: formData.email,
-        telephone: formData.telephone,
-        niveau: formData.niveau,
-        planId: planId || 'formation_generale',
-        parentPrenom: formData.parentPrenom,
-        parentNom: formData.parentNom
-      });
       
-      if (!result.success) {
-        console.error("Error saving student:", result.error);
+      if (registrationType === 'child') {
+        for (let i = 0; i < childrenList.length; i++) {
+          const child = childrenList[i];
+          const childEmail = i === 0 
+            ? formData.email 
+            : formData.email.includes("@") 
+              ? formData.email.replace("@", `+${child.prenom.toLowerCase().replace(/\s+/g, '')}@`)
+              : `${formData.email}+${child.prenom.toLowerCase().replace(/\s+/g, '')}`;
+              
+          const result = await registerStudentAction({
+            prenom: child.prenom,
+            nom: child.nom,
+            email: childEmail,
+            telephone: formData.telephone,
+            niveau: child.niveau,
+            planId: planId || 'arabe_coran_junior',
+            parentPrenom: formData.parentPrenom,
+            parentNom: formData.parentNom
+          });
+          if (!result.success) {
+            console.error("Error saving student:", result.error);
+          }
+        }
+      } else {
+        const result = await registerStudentAction({
+          prenom: formData.prenom,
+          nom: formData.nom,
+          email: formData.email,
+          telephone: formData.telephone,
+          niveau: formData.niveau,
+          planId: planId || 'formation_generale',
+          parentPrenom: formData.parentPrenom,
+          parentNom: formData.parentNom
+        });
+        if (!result.success) {
+          console.error("Error saving student:", result.error);
+        }
       }
     } catch (err) {
       console.error("Action import error:", err);
@@ -158,65 +204,188 @@ function InscriptionForm() {
 
               {/* Registration Type Selection */}
               <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <button
-                  onClick={() => setRegistrationType("self")}
-                  className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${
-                    registrationType === "self"
-                      ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
-                      : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200"
-                  }`}
-                >
-                  <span className="text-xl">🙋‍♂️</span> Je souhaite m'inscrire
-                </button>
-                <button
-                  onClick={() => setRegistrationType("child")}
-                  className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${
-                    registrationType === "child"
-                      ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
-                      : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200"
-                  }`}
-                >
-                  <span className="text-xl">👶</span> Inscrire mon enfant
-                </button>
+                {(!planId || !childFormations.includes(planId)) && (
+                  <button
+                    onClick={() => setRegistrationType("self")}
+                    className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${
+                      registrationType === "self"
+                        ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
+                        : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200"
+                    }`}
+                  >
+                    <span className="text-xl">🙋‍♂️</span> Je souhaite m'inscrire
+                  </button>
+                )}
+                {(!planId || childFormations.includes(planId)) && (
+                  <button
+                    onClick={() => setRegistrationType("child")}
+                    className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${
+                      registrationType === "child"
+                        ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
+                        : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200"
+                    }`}
+                  >
+                    <span className="text-xl">👶</span> Inscrire mon enfant
+                  </button>
+                )}
               </div>
 
               <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Prenom */}
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                      <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">👤</span>
-                      {registrationType === 'self' ? 'Prénom *' : "Prénom de l'enfant *"}
-                    </label>
-                    <input 
-                      type="text" 
-                      name="prenom"
-                      value={formData.prenom}
-                      onChange={handleInputChange}
-                      placeholder={registrationType === 'self' ? "Mohamed" : "Prénom de l'enfant"}
-                      className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
-                      required
-                    />
-                  </div>
+                {registrationType === 'child' ? (
+                  <div className="space-y-8">
+                    {childrenList.map((child, index) => (
+                      <div key={index} className="p-6 bg-gray-50 border border-gray-100 rounded-3xl space-y-6 relative">
+                        {childrenList.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => setChildrenList(prev => prev.filter((_, i) => i !== index))}
+                            className="absolute top-6 right-6 text-[10px] font-black text-red-500 hover:text-red-700 uppercase tracking-widest bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm transition-all hover:border-red-200 hover:bg-red-50/50"
+                          >
+                            Supprimer
+                          </button>
+                        )}
+                        <h3 className="text-xs font-black text-[#008953] uppercase tracking-widest flex items-center gap-2">
+                           <span>👶</span> ENFANT N°{index + 1}
+                        </h3>
 
-                  {/* Nom */}
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                      <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">👤</span>
-                      {registrationType === 'self' ? 'Nom *' : "Nom de l'enfant *"}
-                    </label>
-                    <input 
-                      type="text" 
-                      name="nom"
-                      value={formData.nom}
-                      onChange={handleInputChange}
-                      placeholder={registrationType === 'self' ? "Dubair" : "Nom de l'enfant"}
-                      className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
-                      required
-                    />
-                  </div>
-                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Prenom */}
+                          <div className="space-y-2">
+                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                              <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">👤</span>
+                              Prénom de l'enfant *
+                            </label>
+                            <input 
+                              type="text" 
+                              value={child.prenom}
+                              onChange={(e) => handleChildInputChange(index, 'prenom', e.target.value)}
+                              placeholder="Prénom"
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                              required
+                            />
+                          </div>
 
+                          {/* Nom */}
+                          <div className="space-y-2">
+                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                              <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">👤</span>
+                              Nom de l'enfant *
+                            </label>
+                            <input 
+                              type="text" 
+                              value={child.nom}
+                              onChange={(e) => handleChildInputChange(index, 'nom', e.target.value)}
+                              placeholder="Nom"
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {/* Niveau */}
+                        <div className="space-y-2">
+                          <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                            <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                            Niveau Actuel de l'élève *
+                          </label>
+                          <select 
+                            value={child.niveau}
+                            onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
+                            className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                          >
+                            <option value="">— Sélectionner son niveau —</option>
+                            <optgroup label="Enfants - Maternel">
+                              <option value="maternel_1">Maternel 1</option>
+                              <option value="maternel_2">Maternel 2</option>
+                            </optgroup>
+                            <optgroup label="Enfants - Elémentaire">
+                              <option value="elementaire_1">Elémentaire 1</option>
+                              <option value="elementaire_1_plus">Elémentaire 1+</option>
+                              <option value="elementaire_2">Elémentaire 2</option>
+                              <option value="elementaire_2_plus">Elémentaire 2+</option>
+                              <option value="elementaire_3">Elémentaire 3</option>
+                              <option value="elementaire_3_plus">Elémentaire 3+</option>
+                              <option value="elementaire_4">Elémentaire 4</option>
+                              <option value="elementaire_5">Elémentaire 5</option>
+                              <option value="elementaire_6">Elémentaire 6</option>
+                              <option value="elementaire_7">Elémentaire 7</option>
+                            </optgroup>
+                          </select>
+                        </div>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "" }])}
+                      className="w-full py-4 px-6 border-2 border-dashed border-gray-200 rounded-2xl text-xs font-black text-[#008953] hover:border-[#008953] hover:bg-[#008953]/5 transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-sm"
+                    >
+                      <span>➕</span> Inscrire un autre enfant
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Prenom */}
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                        <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">👤</span>
+                        Prénom *
+                      </label>
+                      <input 
+                        type="text" 
+                        name="prenom"
+                        value={formData.prenom}
+                        onChange={handleInputChange}
+                        placeholder="Mohamed"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        required
+                      />
+                    </div>
+
+                    {/* Nom */}
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                        <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">👤</span>
+                        Nom *
+                      </label>
+                      <input 
+                        type="text" 
+                        name="nom"
+                        value={formData.nom}
+                        onChange={handleInputChange}
+                        placeholder="Dubair"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        required
+                      />
+                    </div>
+
+                    {/* Niveau */}
+                    <div className="space-y-2 pb-6 md:col-span-2">
+                      <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                        <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                        Niveau Actuel
+                      </label>
+                      <select 
+                        name="niveau"
+                        value={formData.niveau}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                      >
+                        <option value="">— Sélectionner votre niveau —</option>
+                        <optgroup label="Adultes (Femmes)">
+                          <option value="femme_debutante">Femme Débutante</option>
+                          <option value="femme_intermediaire">Femme Intermédiaire</option>
+                        </optgroup>
+                        <optgroup label="Standard (Distanciel)">
+                          <option value="debutant">Débutant (Autre)</option>
+                          <option value="intermediaire">Intermédiaire (Autre)</option>
+                          <option value="avance">Avancé (Autre)</option>
+                        </optgroup>
+                      </select>
+                    </div>
+                  </div>
+                )}
+                {/* Informations du parent / représentant (SI ENFANT) */}
                 {registrationType === 'child' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                     <div className="md:col-span-2">
@@ -234,6 +403,7 @@ function InscriptionForm() {
                         onChange={handleInputChange}
                         placeholder="Prénom"
                         className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        required
                       />
                     </div>
                     {/* Nom Représentant */}
@@ -248,6 +418,7 @@ function InscriptionForm() {
                         onChange={handleInputChange}
                         placeholder="Nom"
                         className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        required
                       />
                     </div>
                   </div>
@@ -287,51 +458,16 @@ function InscriptionForm() {
                   />
                 </div>
 
-                {/* Niveau */}
-                <div className="space-y-2 pb-6">
-                  <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                    <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
-                    Niveau Actuel de l'élève
-                  </label>
-                  <select 
-                    name="niveau"
-                    value={formData.niveau}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                  >
-                    <option value="">— Sélectionner son niveau —</option>
-                    <optgroup label="Enfants - Maternel">
-                      <option value="maternel_1">Maternel 1</option>
-                      <option value="maternel_2">Maternel 2</option>
-                    </optgroup>
-                    <optgroup label="Enfants - Elémentaire">
-                      <option value="elementaire_1">Elémentaire 1</option>
-                      <option value="elementaire_1_plus">Elémentaire 1+</option>
-                      <option value="elementaire_2">Elémentaire 2</option>
-                      <option value="elementaire_2_plus">Elémentaire 2+</option>
-                      <option value="elementaire_3">Elémentaire 3</option>
-                      <option value="elementaire_3_plus">Elémentaire 3+</option>
-                      <option value="elementaire_4">Elémentaire 4</option>
-                      <option value="elementaire_5">Elémentaire 5</option>
-                      <option value="elementaire_6">Elémentaire 6</option>
-                      <option value="elementaire_7">Elémentaire 7</option>
-                    </optgroup>
-                    <optgroup label="Adultes (Femmes)">
-                      <option value="femme_debutante">Femme Débutante</option>
-                      <option value="femme_intermediaire">Femme Intermédiaire</option>
-                    </optgroup>
-                    <optgroup label="Standard (Distanciel)">
-                      <option value="debutant">Débutant (Autre)</option>
-                      <option value="intermediaire">Intermédiaire (Autre)</option>
-                      <option value="avance">Avancé (Autre)</option>
-                    </optgroup>
-                  </select>
-                </div>
-
                 {/* Submit Button */}
                 <button 
                   onClick={nextStep}
-                  disabled={!formData.email || !formData.prenom}
+                  disabled={
+                    !formData.email || 
+                    (registrationType === 'child' 
+                      ? (!formData.parentPrenom || !formData.parentNom || childrenList.some(c => !c.prenom || !c.nom || !c.niveau)) 
+                      : (!formData.prenom || !formData.nom)
+                    )
+                  }
                   className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   Continuer <ChevronRight className="w-5 h-5" />
@@ -424,18 +560,33 @@ function InscriptionForm() {
                  </p>
                </div>
 
-               <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 mb-10 max-w-md mx-auto">
+                <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 mb-10 max-w-md mx-auto">
                   <div className="flex justify-between items-center mb-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
                     <span>Total à régler</span>
-                    <span className="text-ishes-dark">150,00 €</span>
+                    <span className="text-ishes-dark">
+                      {registrationType === 'child' 
+                        ? (planId === 'tarbiya_islamiya' ? 249 : 349) * childrenList.length 
+                        : (planId === 'tajwid_intensif' || planId === 'sciences_islamiques' ? 150 : 150)
+                      },00 €
+                    </span>
                   </div>
                   <div className="h-[1px] bg-gray-200 mb-4" />
+                  {registrationType === 'child' && childrenList.length > 1 && (
+                    <div className="text-left text-xs font-bold text-gray-500 mb-6 bg-green-50/50 border border-green-100/50 p-4 rounded-xl">
+                      <span className="text-[#008953]">Multi-inscription ({childrenList.length} enfants) :</span>
+                      <ul className="mt-2 space-y-1 text-gray-600 font-medium list-disc list-inside">
+                        {childrenList.map((c, i) => (
+                          <li key={i}>{c.prenom} {c.nom}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   <p className="text-[10px] text-gray-400 font-bold uppercase leading-relaxed mb-8">
                     En cliquant sur le bouton ci-dessous, vous serez redirigé vers notre plateforme de paiement sécurisée puis vers la création de mot de passe.
                   </p>
                   
                   <Link 
-                    href={`/sign-up?email_address=${encodeURIComponent(formData.email)}&first_name=${encodeURIComponent(formData.prenom)}&last_name=${encodeURIComponent(formData.nom)}`}
+                    href={`/sign-up?email_address=${encodeURIComponent(formData.email)}&first_name=${encodeURIComponent(registrationType === 'child' ? childrenList[0].prenom : formData.prenom)}&last_name=${encodeURIComponent(registrationType === 'child' ? childrenList[0].nom : formData.nom)}`}
                     className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20"
                    >
                     Payer & Créer mon compte <ArrowRight className="w-4 h-4" />
@@ -468,13 +619,6 @@ export default function InscriptionPage() {
       }>
         <InscriptionForm />
       </Suspense>
-
-      {/* Floating Dark WhatsApp CTA */}
-      <div className="fixed bottom-6 right-6 z-50">
-         <a href="#" className="flex items-center justify-center bg-[#152233] text-white px-6 py-3.5 rounded-full shadow-2xl text-[10px] font-bold tracking-[0.15em] transition-transform hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(21,34,51,0.3)]">
-            CONTACTEZ-NOUS SUR WHATSAPP
-         </a>
-      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export function ContactContent() {
         <span className="ishes-label text-ishes-green mb-5 block">Nous contacter</span>
         <h1 className="ishes-heading text-6xl md:text-[90px] text-ishes-dark leading-none mb-8">
           PARLONS-<br />
-          <span className="text-ishes-green italic font-serif">nous.</span>
+          <span className="text-ishes-green italic">nous.</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.
@@ -34,9 +34,6 @@ export function ContactContent() {
       >
         {/* PRÉSENTIEL */}
         <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-          <div className="mb-8">
-            <span className="ishes-label text-[10px] text-ishes-green bg-ishes-green/5 px-3 py-1 rounded-md">Présentiel — Toulouse</span>
-          </div>
           <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">Institut ISHES</h2>
           <p className="ishes-heading text-xl text-ishes-green mb-6">PRÉSENTIEL</p>
           
@@ -75,9 +72,6 @@ export function ContactContent() {
 
         {/* DISTANCE (WhatsApp) */}
         <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-          <div className="mb-8">
-            <span className="ishes-label text-[10px] text-white bg-ishes-dark px-3 py-1 rounded-md">Distance — 24h/24h</span>
-          </div>
           <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">Institut ISHES</h2>
           <p className="ishes-heading text-xl text-ishes-green mb-6">DISTANCE</p>
           

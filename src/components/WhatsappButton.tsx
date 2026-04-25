@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export function WhatsappButton() {
   const [showWaTooltip, setShowWaTooltip] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname?.startsWith("/inscription")) return;
     // Affiche le tooltip pendant 3s, toutes les 8s
     const show = () => {
       setShowWaTooltip(true);
@@ -15,6 +18,10 @@ export function WhatsappButton() {
     const interval = setInterval(show, 8000);
     return () => clearInterval(interval);
   }, []);
+
+  if (pathname?.startsWith("/inscription")) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 z-50">

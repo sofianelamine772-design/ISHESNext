@@ -74,7 +74,7 @@ export default function PackAccompagnementPage() {
 
            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-8">
              Maximisez votre <br />
-             <span className="text-ishes-green italic font-serif">potentiel</span>.
+             <span className="text-ishes-green italic">potentiel</span>.
            </h1>
 
            <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed mb-10">

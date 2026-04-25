@@ -44,7 +44,7 @@ export function InstitutHero() {
               className="block"
             >
               L'INSTITUT <br /> 
-              <span className="text-ishes-green italic font-serif">notre essence.</span>
+              <span className="text-ishes-green italic">notre essence.</span>
             </motion.span>
           </h1>
           <motion.p 
