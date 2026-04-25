@@ -160,41 +160,41 @@ export default function CoursTajwidPage() {
   const currentLevel = LEVELS_DATA[activeTab];
 
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-[#008953] selection:text-white">
+    <div className="min-h-screen bg-white font-sans selection:bg-[#c8a96e] selection:text-white">
       <Navbar />
 
       {/* ─── HERO SECTION ─── */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-[#fafafa]">
+      <section className="relative pt-32 pb-6 px-6 overflow-hidden bg-[#fafafa]">
         {/* Background Gradients */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#008953]/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#c8a96e]/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-50 rounded-full blur-[100px] -ml-24 -mb-24 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10 pt-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="flex-1 space-y-8 text-center lg:text-left">
               <nav className="flex items-center justify-center lg:justify-start gap-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">
-                <Link href="/" className="hover:text-ishes-green transition-colors">Accueil</Link>
+                <Link href="/" className="hover:text-[#c8a96e] transition-colors">Accueil</Link>
                 <ChevronRight className="w-3 h-3" />
-                <span className="text-ishes-green">Cours Tajwid</span>
+                <span className="text-[#c8a96e]">Cours Tajwid</span>
               </nav>
               
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-ishes-green/10 rounded-full shadow-sm mb-2">
-                <BookOpen className="w-4 h-4 text-ishes-green" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-ishes-green">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#c8a96e]/10 rounded-full shadow-sm mb-2">
+                <BookOpen className="w-4 h-4 text-[#c8a96e]" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#c8a96e]">
                   Récitation & Science du Tajwid
                 </span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
-                Cours de <br />
-                <span className="text-ishes-green italic">récitation du Coran</span>.
+                Cours de <span className="text-[#c8a96e]">récitation</span> <br />
+                <span className="text-[#c8a96e] italic">du Coran</span>.
               </h1>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <div className="flex flex-col gap-3 w-full sm:w-auto">
                   <Link 
                     href="/inscription" 
-                    className="w-full bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1 active:scale-95 text-center"
+                    className="w-full bg-[#c8a96e] hover:bg-[#c8a96e]-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-[#c8a96e]/20 hover:-translate-y-1 active:scale-95 text-center"
                   >
                     INSCRIPTION ENFANT & ADULTE
                   </Link>
@@ -209,17 +209,17 @@ export default function CoursTajwidPage() {
                 </div>
                 <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-gray-100">
                    <p className="text-sm font-black text-ishes-dark uppercase tracking-widest">Possibilité de régler</p>
-                   <p className="text-ishes-green text-lg font-black italic text-nowrap">jusqu'à 10x sans frais</p>
+                   <p className="text-[#c8a96e] text-lg font-black italic text-nowrap">jusqu'à 10x sans frais</p>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-ishes-green" />
+                  <MapPin className="w-5 h-5 text-[#c8a96e]" />
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Présentiel</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Monitor className="w-5 h-5 text-ishes-green" />
+                  <Monitor className="w-5 h-5 text-[#c8a96e]" />
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">À distance</span>
                 </div>
                 <a href="https://www.youtube.com/@institutishes" target="_blank" className="flex items-center gap-2 group">
@@ -246,7 +246,7 @@ export default function CoursTajwidPage() {
       </section>
 
       {/* ─── LEVEL SELECTOR ─── */}
-      <section className="py-12 bg-white sticky top-20 lg:top-24 z-40 border-b border-gray-100">
+      <section className="py-2 bg-white sticky top-[80px] lg:top-[76px] z-40 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 overflow-x-auto no-scrollbar">
           <div className="flex items-center justify-center min-w-max gap-2 p-1 bg-gray-50 rounded-2xl">
             {[
@@ -259,7 +259,7 @@ export default function CoursTajwidPage() {
                 onClick={() => setActiveTab(tab.id as keyof typeof LEVELS_DATA)}
                 className={`px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all ${
                   activeTab === tab.id 
-                    ? 'bg-white text-ishes-green shadow-lg ring-1 ring-gray-100' 
+                    ? 'bg-white text-[#c8a96e] shadow-lg ring-1 ring-gray-100' 
                     : 'text-gray-400 hover:text-gray-600'
                 }`}
               >
@@ -296,13 +296,13 @@ export default function CoursTajwidPage() {
                 <div className="grid sm:grid-cols-2 gap-12">
                    <div className="space-y-6">
                       <h3 className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
-                        <div className="w-1.5 h-8 bg-ishes-green rounded-full" />
+                        <div className="w-1.5 h-8 bg-[#c8a96e] rounded-full" />
                         Objectifs
                       </h3>
                       <ul className="space-y-4">
                         {currentLevel.objectives.map((obj, i) => (
                           <li key={i} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-5 h-5 text-[#c8a96e] shrink-0 mt-0.5" />
                             <span className="text-gray-700 font-bold leading-relaxed">{obj}</span>
                           </li>
                         ))}
@@ -311,13 +311,13 @@ export default function CoursTajwidPage() {
 
                    <div className="space-y-6">
                       <h3 className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
-                        <div className="w-1.5 h-8 bg-ishes-green rounded-full" />
+                        <div className="w-1.5 h-8 bg-[#c8a96e] rounded-full" />
                         Pédagogie
                       </h3>
                       <ul className="space-y-4">
                         {currentLevel.pedagogy.map((item, i) => (
                           <li key={i} className="flex items-start gap-3">
-                            <div className="w-2 h-2 rounded-full bg-ishes-green shrink-0 mt-2" />
+                            <div className="w-2 h-2 rounded-full bg-[#c8a96e] shrink-0 mt-2" />
                             <span className="text-gray-700 font-bold leading-relaxed">{item}</span>
                           </li>
                         ))}
@@ -328,16 +328,16 @@ export default function CoursTajwidPage() {
 
               <div className="lg:col-span-5 space-y-8">
                 <div className="bg-[#101828] text-white rounded-[3rem] p-10 shadow-2xl relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-green/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-ishes-green/40 transition-all duration-500" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#c8a96e]/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#c8a96e]/40 transition-all duration-500" />
                   <div className="relative z-10 space-y-8">
                     <div className="flex items-center gap-3">
-                      <GraduationCap className="w-6 h-6 text-ishes-green" />
+                      <GraduationCap className="w-6 h-6 text-[#c8a96e]" />
                       <h3 className="text-lg font-black uppercase tracking-widest">Prérequis</h3>
                     </div>
                     <ul className="space-y-4">
                       {currentLevel.prerequisites.map((p, i) => (
                         <li key={i} className="flex items-center gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-ishes-green" />
+                          <CheckCircle2 className="w-5 h-5 text-[#c8a96e]" />
                           <span className="text-white/80 font-bold">{p}</span>
                         </li>
                       ))}
@@ -347,14 +347,14 @@ export default function CoursTajwidPage() {
 
                 <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm space-y-8">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-6 h-6 text-ishes-green" />
+                    <Calendar className="w-6 h-6 text-[#c8a96e]" />
                     <h3 className="text-lg font-black text-ishes-dark uppercase tracking-widest">Horaires</h3>
                   </div>
 
                   <div className="space-y-8">
                     {currentLevel.schedules.presentiel && (
                       <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-ishes-green">
+                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#c8a96e]">
                           <MapPin className="w-3 h-3" /> En présentiel
                         </div>
                         <div className="space-y-3">
@@ -394,20 +394,20 @@ export default function CoursTajwidPage() {
       <section className="py-24 bg-[#fafafa] border-t border-gray-100">
          <div className="max-w-7xl mx-auto px-6">
             <div className="bg-white rounded-[4rem] p-12 md:p-20 border border-gray-100 shadow-xl shadow-gray-200/20 relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-64 h-64 bg-ishes-green/5 rounded-full blur-3xl -mr-32 -mt-32" />
+               <div className="absolute top-0 right-0 w-64 h-64 bg-[#c8a96e]/5 rounded-full blur-3xl -mr-32 -mt-32" />
                <div className="relative z-10 grid lg:grid-cols-2 gap-16 items-center">
                   <div className="space-y-8">
-                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-ishes-green/10 text-ishes-green rounded-full text-[10px] font-black uppercase tracking-widest">
+                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#c8a96e]/10 text-[#c8a96e] rounded-full text-[10px] font-black uppercase tracking-widest">
                        Offre Spéciale Junior
                      </div>
                      <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-tight">
                        Arabe & Tajwid <br />
-                       <span className="text-ishes-green italic">pour enfant</span>.
+                       <span className="text-[#c8a96e] italic">pour enfant</span>.
                      </h2>
                      <p className="text-lg text-gray-500 font-medium leading-relaxed">
                         Un programme complet combinant l'apprentissage de la langue et de la récitation. Idéal pour une progression équilibrée et durable.
                      </p>
-                     <Link href="/inscription" className="inline-flex items-center gap-3 bg-ishes-green text-white px-10 py-5 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-ishes-green/20">
+                     <Link href="/inscription" className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#c8a96e]/20">
                         Inscrire mon enfant
                      </Link>
                   </div>
@@ -421,7 +421,7 @@ export default function CoursTajwidPage() {
                              "Mercredi : 13h30 - 16h30"
                            ].map((h, i) => (
                              <li key={i} className="flex items-center gap-3 font-bold text-gray-700 text-sm">
-                               <div className="w-1.5 h-1.5 rounded-full bg-ishes-green" />
+                               <div className="w-1.5 h-1.5 rounded-full bg-[#c8a96e]" />
                                {h}
                              </li>
                            ))}
@@ -437,9 +437,9 @@ export default function CoursTajwidPage() {
       <section className="py-24 bg-white">
          <div className="max-w-7xl mx-auto px-6">
             <div className="bg-[#101828] rounded-[4rem] p-12 md:p-24 text-center text-white relative overflow-hidden">
-               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-ishes-green/5 blur-3xl rounded-full" />
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#c8a96e]/5 blur-3xl rounded-full" />
                <div className="relative z-10 space-y-10">
-                  <div className="w-20 h-20 bg-ishes-green rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-ishes-green/40 rotate-6 hover:rotate-0 transition-transform duration-500">
+                  <div className="w-20 h-20 bg-[#c8a96e] rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-[#c8a96e]/40 rotate-6 hover:rotate-0 transition-transform duration-500">
                     <MessageCircle className="w-10 h-10 text-white" />
                   </div>
                   <h2 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
@@ -456,7 +456,7 @@ export default function CoursTajwidPage() {
                       Cliquez ici
                     </Link>
                     <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-8 py-5 rounded-2xl">
-                       <Heart className="w-5 h-5 text-ishes-green" />
+                       <Heart className="w-5 h-5 text-[#c8a96e]" />
                        <span className="text-sm font-black uppercase tracking-widest">On vous rappelle</span>
                     </div>
                   </div>

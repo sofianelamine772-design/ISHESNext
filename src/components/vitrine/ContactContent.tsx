@@ -15,10 +15,10 @@ export function ContactContent() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-24"
       >
-        <span className="ishes-label text-[#c8a96e] mb-5 block">Nous contacter</span>
+        <span className="ishes-label text-ishes-green mb-5 block">Nous contacter</span>
         <h1 className="ishes-heading text-6xl md:text-[90px] text-ishes-dark leading-none mb-8">
           PARLONS-<br />
-          <span className="text-[#c8a96e] italic">nous.</span>
+          <span className="text-ishes-green italic">nous.</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.

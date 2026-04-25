@@ -71,7 +71,7 @@ export default function FormationEnseignantPage() {
               className="text-5xl md:text-8xl font-black text-ishes-dark leading-[1.02] tracking-tight mb-10 uppercase"
             >
               Devenez <br />
-              <span className="text-[#c8a96e] italic">enseignant</span> certifié.
+              <span className="text-ishes-green italic">enseignant</span> certifié.
             </motion.h1>
             
             <motion.p 

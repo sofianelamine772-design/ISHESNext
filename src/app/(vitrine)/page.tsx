@@ -130,13 +130,8 @@ export default function Home() {
         <TestimonialsMarquee />
       </section>
 
-      {/* ===== RÉSEAUX SOCIAUX SECTION (HAS ARABIC TEXT) ===== */}
-      <section className="relative bg-[#fafafa] py-24 overflow-hidden">
-        <ArabicBackground />
-        <div className="relative z-10">
-          <SocialSection />
-        </div>
-      </section>
+      {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
+      <SocialSection />
 
     </div>
   );
