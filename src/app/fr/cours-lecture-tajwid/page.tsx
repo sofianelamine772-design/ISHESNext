@@ -193,7 +193,7 @@ export default function CoursTajwidPage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <div className="flex flex-col gap-3 w-full sm:w-auto">
                   <Link 
-                    href="/inscription" 
+                    href="/inscription?plan=tajwid_standard" 
                     className="w-full bg-[#c8a96e] hover:bg-[#c8a96e]-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-[#c8a96e]/20 hover:-translate-y-1 active:scale-95 text-center"
                   >
                     INSCRIPTION ENFANT & ADULTE
@@ -407,7 +407,7 @@ export default function CoursTajwidPage() {
                      <p className="text-lg text-gray-500 font-medium leading-relaxed">
                         Un programme complet combinant l'apprentissage de la langue et de la récitation. Idéal pour une progression équilibrée et durable.
                      </p>
-                     <Link href="/inscription" className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#c8a96e]/20">
+                     <Link href="/inscription?plan=arabe_coran_junior" className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#c8a96e]/20">
                         Inscrire mon enfant
                      </Link>
                   </div>

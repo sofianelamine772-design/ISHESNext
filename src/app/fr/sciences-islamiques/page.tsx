@@ -67,7 +67,7 @@ export default function SciencesIslamiquesPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
-                  href="/inscription" 
+                  href="/inscription?plan=sciences_islamiques" 
                   className="w-full sm:w-auto bg-[#101828] text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl hover:-translate-y-1 active:scale-95"
                 >
                   S'INSCRIRE AU CURSUS
@@ -169,7 +169,7 @@ export default function SciencesIslamiquesPage() {
                        <p className="text-2xl font-black">Direct Zoom</p>
                     </div>
                  </div>
-                 <Link href="/inscription" className="block w-full bg-ishes-green text-white py-5 rounded-2xl font-black text-center shadow-xl shadow-ishes-green/20">
+                 <Link href="/inscription?plan=sciences_islamiques" className="block w-full bg-ishes-green text-white py-5 rounded-2xl font-black text-center shadow-xl shadow-ishes-green/20">
                     Réserver ma place
                  </Link>
               </div>

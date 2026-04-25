@@ -16,23 +16,54 @@ export async function registerStudentAction(formData: {
   console.log("Starting registration for:", formData.email, "Plan:", formData.planId);
   try {
     // 1. Enregistre/Met à jour l'étudiant
-    const studentId = `temp_${Date.now()}`;
-    const { error: studentError } = await supabaseAdmin
-      .from('etudiants')
-      .upsert({
-        id: studentId,
-        email: formData.email,
-        first_name: formData.prenom,
-        last_name: formData.nom,
-        phone: formData.telephone,
-        parent_first_name: formData.parentPrenom,
-        parent_last_name: formData.parentNom,
-        status: 'en_attente'
-      }, { onConflict: 'email' });
+    let studentId = `temp_${Date.now()}`;
     
-    if (studentError) {
-      console.error("Student Upsert Error:", studentError);
-      throw studentError;
+    const { data: existingStudent, error: fetchError } = await supabaseAdmin
+      .from('etudiants')
+      .select('id')
+      .eq('email', formData.email)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error("Fetch existing student error:", fetchError);
+    }
+
+    if (existingStudent) {
+      studentId = existingStudent.id;
+      const { error: updateError } = await supabaseAdmin
+        .from('etudiants')
+        .update({
+          first_name: formData.prenom,
+          last_name: formData.nom,
+          phone: formData.telephone,
+          parent_first_name: formData.parentPrenom,
+          parent_last_name: formData.parentNom,
+          status: 'en_attente'
+        })
+        .eq('id', studentId);
+
+      if (updateError) {
+        console.error("Student Update Error:", updateError);
+        throw updateError;
+      }
+    } else {
+      const { error: insertError } = await supabaseAdmin
+        .from('etudiants')
+        .insert({
+          id: studentId,
+          email: formData.email,
+          first_name: formData.prenom,
+          last_name: formData.nom,
+          phone: formData.telephone,
+          parent_first_name: formData.parentPrenom,
+          parent_last_name: formData.parentNom,
+          status: 'en_attente'
+        });
+
+      if (insertError) {
+        console.error("Student Insert Error:", insertError);
+        throw insertError;
+      }
     }
 
     // 2. Récupère ou crée la formation
@@ -69,16 +100,32 @@ export async function registerStudentAction(formData: {
     
     if (isPresentiel) {
       console.log("Presentiel selected: Waiting for secretary assignment");
-      // Pour le présentiel, on enregistre seulement l'intérêt pour la formation sans classe fixe
-      const { error: insError } = await supabaseAdmin
-        .from('inscriptions')
-        .upsert({
-          etudiant_id: studentId,
-          formation_id: formation!.id, // On stocke la formation souhaitée
-          status: 'en_attente_daffectation'
-        }, { onConflict: 'etudiant_id, formation_id' });
       
-      if (insError) throw insError;
+      const { data: existingIns, error: insFetchError } = await supabaseAdmin
+        .from('inscriptions')
+        .select('id')
+        .eq('etudiant_id', studentId)
+        .eq('formation_id', formation!.id)
+        .maybeSingle();
+
+      if (insFetchError) console.error("Inscription Fetch Error:", insFetchError);
+
+      if (existingIns) {
+        const { error: insError } = await supabaseAdmin
+          .from('inscriptions')
+          .update({ status: 'en_attente_daffectation' })
+          .eq('id', existingIns.id);
+        if (insError) throw insError;
+      } else {
+        const { error: insError } = await supabaseAdmin
+          .from('inscriptions')
+          .insert({
+            etudiant_id: studentId,
+            formation_id: formation!.id,
+            status: 'en_attente_daffectation'
+          });
+        if (insError) throw insError;
+      }
     } else {
       // 3. Distanciel: Récupère la classe la plus récente pour cette formation
       let { data: classe, error: cFetchError } = await supabaseAdmin
@@ -112,17 +159,30 @@ export async function registerStudentAction(formData: {
       }
 
       // 4. Inscrit l'élève à la classe
-      const { error: insError } = await supabaseAdmin
+      const { data: existingIns, error: insFetchError } = await supabaseAdmin
         .from('inscriptions')
-        .upsert({
-          etudiant_id: studentId,
-          class_id: classe!.id,
-          status: 'en_attente'
-        }, { onConflict: 'etudiant_id, class_id' });
-      
-      if (insError) {
-         console.error("Inscription Upsert Error:", insError);
-         throw insError;
+        .select('id')
+        .eq('etudiant_id', studentId)
+        .eq('class_id', classe!.id)
+        .maybeSingle();
+
+      if (insFetchError) console.error("Inscription Fetch Error:", insFetchError);
+
+      if (existingIns) {
+        const { error: insError } = await supabaseAdmin
+          .from('inscriptions')
+          .update({ status: 'en_attente' })
+          .eq('id', existingIns.id);
+        if (insError) throw insError;
+      } else {
+        const { error: insError } = await supabaseAdmin
+          .from('inscriptions')
+          .insert({
+            etudiant_id: studentId,
+            class_id: classe!.id,
+            status: 'en_attente'
+          });
+        if (insError) throw insError;
       }
     }
 

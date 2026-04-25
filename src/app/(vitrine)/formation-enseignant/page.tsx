@@ -92,97 +92,96 @@ export default function FormationEnseignantPage() {
           <div className="flex flex-col gap-24">
             
             {formations.map((f, idx) => (
-              <motion.div 
+              <motion.div
                 key={f.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: idx * 0.1 }}
-                className="grid lg:grid-cols-2 gap-12 items-start"
+                className="bg-white/70 backdrop-blur-md rounded-[3rem] p-8 md:p-16 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] grid lg:grid-cols-12 gap-16 items-start"
               >
-                {/* Visual / Info Left */}
-                <div className="space-y-8 bg-white/60 backdrop-blur-md p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <span className={`text-[10px] font-black uppercase tracking-[.25em] px-3 py-1 rounded-md ${f.badgeColor}`}>
-                        {f.subtitle}
-                      </span>
-                      {f.availableRemote && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-3 py-1 rounded-md border border-gray-100">
-                          <Monitor className="w-3.5 h-3.5" /> En distanciel
+                  {/* Left Column (span 5) */}
+                  <div className="lg:col-span-5 space-y-8">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[10px] font-black uppercase tracking-[.25em] px-3 py-1 rounded-md ${f.badgeColor}`}>
+                          {f.subtitle}
+                        </span>
+                        {f.availableRemote && (
+                          <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-3 py-1 rounded-md border border-gray-100">
+                            <Monitor className="w-3.5 h-3.5" /> En distanciel
+                          </div>
+                        )}
+                      </div>
+                      <h2 className="text-3xl md:text-5xl font-black text-ishes-dark tracking-tight leading-tight uppercase">
+                        {f.title}
+                      </h2>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                         {f.tags.map(tag => (
+                           <span key={tag} className="text-[10px] font-bold text-gray-400 border border-gray-100 px-3 py-1 rounded-full uppercase tracking-widest">{tag}</span>
+                         ))}
+                      </div>
+                    </div>
+ 
+                    <p className="text-gray-500 text-lg leading-relaxed font-medium bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                      {f.description}
+                    </p>
+ 
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
+                        <CreditCard className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
+                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Flexibilité</div>
+                        <div className="text-sm font-black text-ishes-dark">{f.paymentTerms}</div>
+                      </div>
+                      <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
+                        <FileText className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
+                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Investissement</div>
+                        <div className="text-sm font-black text-ishes-dark uppercase tracking-wide">{f.pricing}</div>
+                      </div>
+                    </div>
+ 
+                    <Link 
+                      href="/contact" 
+                      className="flex items-center justify-center gap-3 bg-[#008953] hover:bg-[#007044] text-white px-10 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all hover:-translate-y-1 shadow-xl shadow-[#008953]/20 group w-full"
+                    >
+                      Demander un devis personnalisé
+                      <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </div>
+ 
+                  {/* Right Column (span 7) */}
+                  <div className="lg:col-span-7 space-y-12 bg-gray-50/30 p-8 md:p-12 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 text-ishes-green">
+                      <GraduationCap className="w-32 h-32" strokeWidth={1} />
+                    </div>
+ 
+                    {f.deroulement && (
+                      <div className="mb-12 relative z-10">
+                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>
+                        <div className="space-y-6">
+                          {f.deroulement.map((item, i) => (
+                             <div key={i} className="flex gap-4 items-start">
+                               <div className="w-8 h-8 rounded-xl bg-ishes-green/10 flex items-center justify-center shrink-0 text-xs font-black text-ishes-green">{i + 1}</div>
+                               <p className="text-[15px] font-bold text-gray-600 leading-snug">{item}</p>
+                             </div>
+                          ))}
                         </div>
-                      )}
-                    </div>
-                    <h2 className="text-3xl md:text-5xl font-black text-ishes-dark tracking-tight leading-tight uppercase">
-                      {f.title}
-                    </h2>
-                    <div className="flex flex-wrap gap-2 pt-2">
-                       {f.tags.map(tag => (
-                         <span key={tag} className="text-[10px] font-bold text-gray-400 border border-gray-100 px-3 py-1 rounded-full uppercase tracking-widest">{tag}</span>
-                       ))}
-                    </div>
-                  </div>
+                      </div>
+                    )}
  
-                  <p className="text-gray-500 text-lg leading-relaxed font-medium bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
-                    {f.description}
-                  </p>
- 
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
-                      <CreditCard className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Flexibilité</div>
-                      <div className="text-sm font-black text-ishes-dark">{f.paymentTerms}</div>
-                    </div>
-                    <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
-                      <FileText className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Investissement</div>
-                      <div className="text-sm font-black text-ishes-dark uppercase tracking-wide">{f.pricing}</div>
-                    </div>
-                  </div>
- 
-                  <Link 
-                    href="/contact" 
-                    className="flex items-center justify-center gap-3 bg-ishes-dark hover:bg-black text-white px-10 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all hover:-translate-y-1 shadow-xl shadow-ishes-dark/10 group w-full"
-                  >
-                    Demander un devis personnalisé
-                    <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </div>
- 
-                {/* Content / Objectives Right */}
-                <div className="bg-ishes-dark rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden group shadow-2xl">
-                  <div className="absolute top-0 right-0 p-8 opacity-20 transition-transform group-hover:scale-110 group-hover:rotate-6">
-                    <GraduationCap className="w-32 h-32" strokeWidth={1} />
-                  </div>
- 
-                  {f.deroulement && (
-                    <div className="mb-12 relative z-10">
-                      <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>
-                      <div className="space-y-6">
-                        {f.deroulement.map((item, i) => (
-                           <div key={i} className="flex gap-4 items-start">
-                             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-xs font-black">{i + 1}</div>
-                             <p className="text-[15px] font-bold text-white/80 leading-snug">{item}</p>
-                           </div>
+                    <div className="relative z-10">
+                      <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Objectifs de la formation</h3>
+                      <div className="space-y-4">
+                        {f.objectifs.map((obj, i) => (
+                          <div key={i} className="flex gap-4 items-start py-4 border-b border-gray-100/50 last:border-0">
+                            <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0 mt-0.5" />
+                            <p className="text-base font-black text-ishes-dark leading-snug">{obj}</p>
+                          </div>
                         ))}
                       </div>
                     </div>
-                  )}
- 
-                  <div className="relative z-10">
-                    <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Objectifs de la formation</h3>
-                    <div className="space-y-4">
-                      {f.objectifs.map((obj, i) => (
-                        <div key={i} className="flex gap-4 items-start py-4 border-b border-white/5 last:border-0 translate-x-0 transition-transform hover:translate-x-2">
-                          <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0 mt-0.5" />
-                          <p className="text-base font-black leading-snug">{obj}</p>
-                        </div>
-                      ))}
-                    </div>
                   </div>
-                </div>
- 
-              </motion.div>
+               </motion.div>
             ))}
  
           </div>

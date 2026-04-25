@@ -53,8 +53,8 @@ export default function Home() {
                 Nous proposons des formations basées sur Toulouse. Certaines formations sont disponibles en <strong className="text-ishes-dark">présentiel</strong> sur Toulouse, d'autres en <strong className="text-ishes-dark">distanciel</strong>.
               </p>
             </div>
-            <Link 
-              href="/program" 
+            <Link
+              href="/program"
               className="group flex items-center gap-3 bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-bold transition-all shadow-xl shadow-ishes-green/20 shrink-0 hover:-translate-y-1"
             >
               Voir nos formations
@@ -69,12 +69,12 @@ export default function Home() {
         <ArabicBackground />
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            
+
             {/* Visual Column */}
             <div className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
-              <Image 
-                src="/images/home-hero.png" 
-                alt="Institut ISHES" 
+              <Image
+                src="/images/home-hero.png"
+                alt="Institut ISHES"
                 fill
                 priority
                 className="object-cover transition-transform duration-700 group-hover:scale-105"

@@ -90,7 +90,7 @@ export default function CoursTajwidIntensifPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
-                  href="/inscription" 
+                  href="/inscription?plan=tajwid_intensif" 
                   className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-orange-500/20 hover:-translate-y-1 active:scale-95"
                 >
                   INSCRIPTION COURS ADULTE
@@ -346,7 +346,7 @@ export default function CoursTajwidIntensifPage() {
                      Rejoignez un petit groupe de 8 personnes et maîtrisez le Tajwid en un temps record.
                    </p>
                    <Link 
-                     href="/inscription" 
+                     href="/inscription?plan=tajwid_intensif" 
                      className="block w-full bg-white text-orange-500 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg"
                    >
                      M'inscrire au cursus

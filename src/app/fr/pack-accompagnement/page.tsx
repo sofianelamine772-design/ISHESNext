@@ -153,7 +153,7 @@ export default function PackAccompagnementPage() {
                          </li>
                        ))}
                     </ul>
-                    <Link href="/inscription" className="block w-full bg-ishes-green text-white py-5 rounded-2xl font-black text-center shadow-xl shadow-ishes-green/20">
+                    <Link href="/inscription?plan=pack_accompagnement" className="block w-full bg-ishes-green text-white py-5 rounded-2xl font-black text-center shadow-xl shadow-ishes-green/20">
                        Activer mon Pack
                     </Link>
                  </div>

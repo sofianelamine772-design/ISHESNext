@@ -66,7 +66,7 @@ export default function FiqhMalikitePage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
-                  href="/inscription" 
+                  href="/inscription?plan=fiqh_malikite" 
                   className="w-full sm:w-auto bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1 active:scale-95"
                 >
                   S'INSCRIRE AU CURSUS
@@ -201,7 +201,7 @@ export default function FiqhMalikitePage() {
                       </div>
                    </div>
                    <Link 
-                     href="/inscription" 
+                     href="/inscription?plan=fiqh_malikite" 
                      className="block w-full bg-ishes-green text-white py-5 rounded-2xl font-black text-center hover:bg-ishes-green-hover transition-all"
                    >
                      M'inscrire maintenant

@@ -417,7 +417,7 @@ export function ProgramContent() {
                 {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
                 <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
                   <Image 
-                    src="/images/clean_manga_bubble.png" 
+                    src="/images/clean_manga_bubble_v2.png" 
                     alt="Manga Bubble" 
                     fill 
                     className="object-contain"
@@ -520,9 +520,9 @@ export function ProgramContent() {
                       </div>
                    )}
 
-                   <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                   <div className="p-5 sm:p-6 flex-1 flex flex-col">
                       {/* TAGS ROW */}
-                      <div className="flex items-center justify-between mb-8">
+                      <div className="flex items-center justify-between mb-4">
                          <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase ${program.tagColor}`}>
                             {program.tagText}
                          </span>
@@ -532,13 +532,13 @@ export function ProgramContent() {
                       </div>
 
                       {/* TITLE & DESC */}
-                      <h2 className="text-xl sm:text-2xl font-black text-[#101828] mb-4 tracking-tight">{program.title}</h2>
-                      <p className="text-xs sm:text-sm text-gray-500 leading-relaxed min-h-[60px] mb-8 font-medium">
+                      <h2 className="text-xl font-black text-[#101828] mb-2 tracking-tight">{program.title}</h2>
+                      <p className="text-xs sm:text-sm text-gray-500 leading-relaxed min-h-auto mb-4 font-medium">
                          {program.subtitle}
                       </p>
 
                       {/* ICONS GRID */}
-                      <div className="grid grid-cols-2 gap-4 mb-8">
+                      <div className="grid grid-cols-2 gap-3 mb-5">
                          <div className="flex items-center gap-2">
                             <Clock className={`w-4 h-4 ${accentColor}`} />
                             <span className="text-[10px] font-bold text-gray-400">1h30/sem</span>
@@ -558,17 +558,17 @@ export function ProgramContent() {
                       </div>
 
                       {/* FEATURES LIST */}
-                      <div className="space-y-4 mb-10 flex-1">
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
                          {program.features.map((feature, idx) => (
-                            <div key={idx} className="flex items-start gap-3">
-                               <CheckCircle2 className={`w-5 h-5 ${accentColor} shrink-0`} />
-                               <span className="text-sm text-gray-700 font-bold">{feature}</span>
+                            <div key={idx} className="flex items-start gap-2">
+                               <CheckCircle2 className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                               <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">{feature}</span>
                             </div>
                          ))}
                       </div>
 
                       {/* PRICE & CTA */}
-                      <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-gray-50">
+                      <div className="flex flex-col gap-3 mt-auto pt-3 border-t border-gray-50">
                          <div className="flex items-end justify-between mb-1">
                             <div>
                                <div className="text-3xl font-black text-[#101828] tracking-tight">{program.price}</div>
