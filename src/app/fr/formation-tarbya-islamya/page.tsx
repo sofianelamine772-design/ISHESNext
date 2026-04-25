@@ -19,7 +19,8 @@ import {
   Search,
   MessageCircle,
   Theater,
-  ScrollText
+  ScrollText,
+  GraduationCap
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Navbar } from "@/components/Navbar";

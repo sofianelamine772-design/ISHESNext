@@ -28,7 +28,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 export default function CoursAsSirahPage() {
-  const [activePeriod, setActivePeriod] = useState('mecquoise');
+  const [activePeriod, setActivePeriod] = useState<'pre' | 'mecquoise' | 'medinoise'>('mecquoise');
 
   const periods = {
     pre: {
@@ -159,7 +159,7 @@ export default function CoursAsSirahPage() {
                 ].map((p) => (
                   <button
                     key={p.id}
-                    onClick={() => setActivePeriod(p.id)}
+                    onClick={() => setActivePeriod(p.id as 'pre' | 'mecquoise' | 'medinoise')}
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activePeriod === p.id ? 'bg-white text-ishes-green shadow-md border border-gray-100' : 'text-gray-400 hover:text-gray-600'}`}
                   >
                     {p.icon}
