@@ -1,4 +1,10 @@
-
+-- =====================================================================================
+-- FICHIER : MESSAGES_SCHEMA.sql
+-- UTILITÉ : Crée la table qui gère la messagerie interne entre l'administration
+--           (Mr et Mme Latreche) et les élèves. Elle gère le contenu des messages,
+--           l'expéditeur, le destinataire et le statut "lu/non lu".
+-- À UTILISER QUAND : Pour activer la fonctionnalité "Messagerie" dans l'espace membre.
+-- =====================================================================================
 -- TABLE DES MESSAGES POUR LA COMMUNICATION ADMIN/ÉLÈVES
 CREATE TABLE IF NOT EXISTS public.messages (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

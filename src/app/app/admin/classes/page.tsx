@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText, Loader2 } from "lucide-react";
 import { LogoutButton } from "@/components/LogoutButton";
 
 // Types
@@ -109,9 +109,16 @@ export default function AdminDashboard() {
         </header>
 
         {/* Dashboard Content - 2 Column Layout */}
-        <div className="flex-1 overflow-hidden flex">
+        <div className="flex-1 overflow-hidden flex relative">
+          {loading && (
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+              <Loader2 className="w-10 h-10 text-ishes-green animate-spin mb-4" />
+              <p className="ishes-label animate-pulse">Chargement des classes...</p>
+            </div>
+          )}
+
           {/* Left Pane - Classes List */}
-          <div className="w-80 bg-white border-r border-gray-200 flex flex-col shrink-0">
+          <div className="w-80 bg-white border-r border-gray-200 flex flex-col shrink-0 relative z-0">
             <div className="p-4 border-b border-gray-100">
               <div className="relative">
                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />

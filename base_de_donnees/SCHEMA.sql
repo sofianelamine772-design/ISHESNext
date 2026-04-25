@@ -1,5 +1,11 @@
--- SCHEMA DATABASE ISHEECOLE PRO
--- Copiez-collez ce contenu dans l'éditeur SQL de Supabase
+-- =====================================================================================
+-- FICHIER : SCHEMA.sql
+-- UTILITÉ : C'est le fichier PRINCIPAL (la colonne vertébrale) de votre base de données.
+--           Il crée toutes les tables essentielles (étudiants, formations, classes, 
+--           inscriptions, paiements), définit les règles de sécurité (RLS) et insère 
+--           le catalogue complet des formations. 
+-- À UTILISER QUAND : Vous voulez créer ou recréer la base de données ISHEECOLE de zéro.
+-- =====================================================================================
 
 -- 1. EXTENSIONS (Optionnel mais recommandé)
 create extension if not exists "uuid-ossp";

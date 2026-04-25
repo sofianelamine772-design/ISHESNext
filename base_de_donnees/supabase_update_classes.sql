@@ -1,9 +1,12 @@
-
--- ==========================================
--- ISHEECOLE - MISE À JOUR SYSTÈME DES CLASSES
--- Date : 19/04/2024
--- Objectif : Introduire la gestion des classes et automatiser l'affectation des élèves.
--- ==========================================
+-- =====================================================================================
+-- FICHIER : supabase_update_classes.sql
+-- UTILITÉ : C'était un fichier de transition. Il a été utilisé pendant le développement
+--           pour détruire les anciennes tables (inscriptions/paiements) et introduire
+--           la notion de "Classes" (groupes d'élèves rattachés à une formation).
+--           **NOTE : Ce fichier est désormais obsolète** car son contenu a été intégré
+--           dans SCHEMA.sql et FIX_DATABASE.sql. Il est conservé uniquement pour l'historique.
+-- À UTILISER QUAND : JAMAIS. Ne l'exécutez plus. 
+-- =====================================================================================
 
 -- 1. NETTOYAGE (Pour éviter les conflits lors de la mise à jour)
 -- On utilise CASCADE car 'paiements' dépend de 'inscriptions'

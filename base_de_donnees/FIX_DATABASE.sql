@@ -1,7 +1,12 @@
-
--- MISE À JOUR CRITIQUE : Support de l'affectation manuelle et des statuts
--- À exécuter dans l'éditeur SQL de Supabase
-
+-- =====================================================================================
+-- FICHIER : FIX_DATABASE.sql
+-- UTILITÉ : C'est un fichier de "Mise à Jour" (Patch). Il vient modifier le schéma 
+--           principal pour rajouter des fonctionnalités (comme les noms des parents,
+--           la création de toutes les classes présentielles "Maternel, Élémentaire",
+--           et la gestion des étudiants "en attente d'affectation").
+-- À UTILISER QUAND : Seulement si vous avez déjà exécuté SCHEMA.sql et que vous voulez
+--                    appliquer les dernières mises à jour du système d'administration.
+-- =====================================================================================
 -- 1. Ajout de la colonne formation_id à la table inscriptions
 -- Utile pour les élèves qui ne sont pas encore affectés à une classe
 ALTER TABLE public.inscriptions ADD COLUMN IF NOT EXISTS formation_id uuid REFERENCES public.formations(id) ON DELETE SET NULL;
