@@ -47,7 +47,7 @@ export default function Home() {
                 ))}
               </div>
               <h3 className="text-ishes-dark font-black text-2xl md:text-3xl mb-4 leading-tight">
-                Formation à <span className="text-ishes-green italic">Toulouse</span> & <span className="text-ishes-dark italic">à distance</span>.
+                Formation à <span className="text-ishes-green italic">Toulouse</span> & <span className="text-[#c8a96e] italic">à distance</span>.
               </h3>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">
                 Nous proposons des formations basées sur Toulouse. Certaines formations sont disponibles en <strong className="text-ishes-dark">présentiel</strong> sur Toulouse, d'autres en <strong className="text-ishes-dark">distanciel</strong>.

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 export function HeroSection() {
@@ -27,13 +28,13 @@ export function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-          <button className="group flex items-center gap-3 bg-[#c8a96e] hover:bg-[#b0935b] text-white px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-xl shadow-[#c8a96e]/20">
+          <Link href="/program" className="group flex items-center gap-3 bg-[#c8a96e] hover:bg-[#b0935b] text-white px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-xl shadow-[#c8a96e]/20">
             Voir nos cours
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
-          </button>
-          <button className="flex items-center justify-center bg-white border-2 border-[#c8a96e]/20 text-[#c8a96e] hover:border-[#c8a96e] hover:bg-[#c8a96e]/5 px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-sm">
+          </Link>
+          <Link href="/inscription" className="flex items-center justify-center bg-white border-2 border-[#c8a96e]/20 text-[#c8a96e] hover:border-[#c8a96e] hover:bg-[#c8a96e]/5 px-8 py-4 rounded-full text-[15px] font-bold transition-all hover:-translate-y-0.5 shadow-sm">
             Pré-inscription
-          </button>
+          </Link>
         </div>
       </motion.div>
     </main>

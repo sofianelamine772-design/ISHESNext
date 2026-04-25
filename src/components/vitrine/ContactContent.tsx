@@ -72,8 +72,8 @@ export function ContactContent() {
 
         {/* DISTANCE (WhatsApp) */}
         <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-          <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">Institut ISHES</h2>
-          <p className="ishes-heading text-xl text-ishes-green mb-6">DISTANCE</p>
+          <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">E-Learning</h2>
+          <p className="ishes-heading text-xl text-[#c8a96e] mb-6">DISTANCE</p>
           
           <a href="tel:+33666033519" className="flex items-center gap-4 mb-8 group/phone">
             <div className="w-16 h-16 rounded-2xl bg-ishes-dark flex items-center justify-center shrink-0 shadow-lg shadow-ishes-dark/20 group-hover/phone:scale-110 transition-transform">
