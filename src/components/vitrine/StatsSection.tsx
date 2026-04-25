@@ -17,7 +17,7 @@ export function StatsSection() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-5xl mx-auto mt-[-20vh] md:mt-[-15vh] mb-20 md:mb-28 pt-12 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 items-center"
+      className="relative z-10 w-full max-w-5xl mx-auto mb-20 md:mb-28 pt-6 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 items-center"
     >
       <div className="flex flex-col items-center md:items-start text-center md:text-left">
         <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">1300+</span>
