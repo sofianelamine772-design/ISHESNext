@@ -1,7 +1,37 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
+
+function CountUp({ end, duration = 2, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (!inView) return;
+
+    let startTime: number | null = null;
+
+    const updateCount = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const elapsed = (currentTime - startTime) / 1000;
+      
+      if (elapsed < duration) {
+        const progress = 1 - Math.pow(1 - elapsed / duration, 4);
+        setCount(Math.floor(progress * end));
+        requestAnimationFrame(updateCount);
+      } else {
+        setCount(end);
+      }
+    };
+
+    requestAnimationFrame(updateCount);
+  }, [inView, end, duration]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+}
 
 export function StatsSection() {
   const avatars = [
@@ -17,20 +47,26 @@ export function StatsSection() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-5xl mx-auto mb-20 md:mb-28 pt-6 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 items-center"
+      className="relative z-10 w-full max-w-5xl mx-auto mb-8 md:mb-12 pt-6 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 items-center"
     >
       <div className="flex flex-col items-center md:items-start text-center md:text-left">
-        <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">1300+</span>
+        <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">
+          <CountUp end={1300} suffix="+" />
+        </span>
         <span className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase">Étudiants</span>
       </div>
 
       <div className="flex flex-col items-center md:items-start text-center md:text-left">
-        <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">12</span>
+        <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">
+          <CountUp end={12} />
+        </span>
         <span className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase">Enseignants</span>
       </div>
 
       <div className="flex flex-col items-center md:items-start text-center md:text-left">
-        <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">15 ans</span>
+        <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">
+          <CountUp end={15} suffix=" ans" />
+        </span>
         <span className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase">Expertise</span>
       </div>
 

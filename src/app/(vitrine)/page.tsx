@@ -35,7 +35,7 @@ export default function Home() {
       <StatsSection />
 
       {/* ===== MINI FORMATION SECTION ===== */}
-      <section className="bg-[#fafafa] py-12 border-b border-gray-100/30">
+      <section className="bg-[#fafafa] py-4 border-b border-gray-100/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-[#fafafa] border border-gray-100 rounded-[2.5rem] p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 hover:shadow-xl hover:shadow-gray-200/20 transition-all duration-500">
             <div className="max-w-2xl text-center lg:text-left">
@@ -65,23 +65,10 @@ export default function Home() {
       </section>
 
       {/* ===== NOTRE INSTITUT SECTION (HAS ARABIC TEXT) ===== */}
-      <section className="relative bg-[#fafafa] overflow-hidden py-24 md:py-32">
+      <section className="relative bg-[#fafafa] overflow-hidden pt-10 md:pt-14 pb-24 md:pb-32">
         <ArabicBackground />
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-            {/* Visual Column */}
-            <div className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
-              <Image
-                src="/images/home-hero.png"
-                alt="Institut ISHES"
-                fill
-                priority
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-ishes-green/10 mix-blend-overlay" />
-            </div>
 
             {/* Content Column */}
             <div>
@@ -119,6 +106,19 @@ export default function Home() {
                   <div className="text-xs text-gray-400 font-bold">Fondateurs de l'ISHES</div>
                 </div>
               </div>
+            </div>
+
+            {/* Visual Column */}
+            <div className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
+              <Image
+                src="/images/home-hero.png"
+                alt="Institut ISHES"
+                fill
+                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-ishes-green/10 mix-blend-overlay" />
             </div>
 
           </div>
