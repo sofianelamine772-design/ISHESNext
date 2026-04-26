@@ -5,11 +5,11 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] p-6 pt-20">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-           <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Créer un compte</h1>
-           <p className="text-gray-500 font-medium">Rejoignez l'institut ISHES dès aujourd'hui</p>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Créer un compte</h1>
+          <p className="text-gray-500 font-medium">Rejoignez l'institut ISHES dès aujourd'hui</p>
         </div>
-        
-        <SignUp 
+
+        <SignUp
           appearance={{
             elements: {
               rootBox: "mx-auto w-full",

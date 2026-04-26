@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby } from "lucide-react";
 
 type Program = {
@@ -403,6 +404,7 @@ const PROGRAMS: Program[] = [
 ];
 
 export function ProgramContent() {
+  const router = useRouter();
   const [activeMode, setActiveMode] = useState<"presentiel" | "distanciel">("distanciel");
   const [activeAudience, setActiveAudience] = useState<"adulte" | "enfant">("adulte");
 
@@ -504,10 +506,30 @@ export function ProgramContent() {
                const accentColor = isPresentiel ? "text-[#c8a96e]" : "text-[#008953]";
                const btnColor = isPresentiel ? "bg-[#c8a96e] hover:bg-[#b0935b]" : "bg-[#008953] hover:bg-[#007044]";
 
+               const infoUrl = 
+                 program.id === 'arabe_coran_junior' ? '/fr/cours-arabe-enfant' : 
+                 program.id === 'tajwid_standard' ? '/fr/cours-lecture-tajwid' : 
+                 program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
+                 program.id === 'arabe_adulte' ? '/fr/cours-arabe-adulte' : 
+                 program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
+                 program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
+                 program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
+                 program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
+                 program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
+                 program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
+                 program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
+                 program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
+                 program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
+                 program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
+                 program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
+                 program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
+                 `/program/${program.id}`;
+
                return (
                 <div 
                    key={program.id} 
-                   className={`flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-xl ${
+                   onClick={() => router.push(infoUrl)}
+                   className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${
                       program.isRecommended 
                          ? "border-[3px] border-[#00603A] shadow-md" 
                          : "border border-gray-100 shadow-sm"
@@ -579,31 +601,15 @@ export function ProgramContent() {
                          </div>
                          <div className="grid grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
                             <Link 
-                               href={
-                                 program.id === 'arabe_coran_junior' ? '/fr/cours-arabe-enfant' : 
-                                 program.id === 'tajwid_standard' ? '/fr/cours-lecture-tajwid' : 
-                                 program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
-                                 program.id === 'arabe_adulte' ? '/fr/cours-arabe-adulte' : 
-                                 program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
-                                 program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
-                                 program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
-                                 program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
-                                 program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
-                                 program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
-                                 program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
-                                 program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
-                                 program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
-                                 program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
-                                 program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
-                                 program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                                 `/program/${program.id}`
-                               }
+                               href={infoUrl}
+                               onClick={(e) => e.stopPropagation()}
                                className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-3.5 rounded-xl transition-all shadow-sm"
                             >
                                Info
                             </Link>
                             <Link 
                                href={`/inscription?plan=${program.id}`}
+                               onClick={(e) => e.stopPropagation()}
                                className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
                             >
                                S'inscrire
