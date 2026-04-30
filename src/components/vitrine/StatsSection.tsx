@@ -35,7 +35,7 @@ function CountUp({ end, duration = 2, suffix = "" }: { end: number; duration?: n
 
 export function StatsSection() {
   const avatars = [
-    "https://images.unsplash.com/photo-1534308143481-c5509e24d271?auto=format&fit=crop&w=100&h=100&q=80",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80",
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80",
     "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=100&h=100&q=80",
     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80",
