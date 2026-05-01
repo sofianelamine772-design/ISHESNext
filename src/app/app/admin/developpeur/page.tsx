@@ -9,6 +9,8 @@ import {
   CheckCircle2, AlertCircle, ExternalLink, Globe, Database, Settings
 } from "lucide-react";
 import { LogoutButton } from "@/components/LogoutButton";
+import { AdminSidebar } from "@/components/AdminSidebar";
+import { cn } from "@/lib/utils";
 
 export default function DeveloperPage() {
   const [isTesting, setIsTesting] = useState(false);
@@ -41,57 +43,25 @@ export default function DeveloperPage() {
 
   return (
     <div className="h-screen bg-[#F8FAFC] flex overflow-hidden">
-      {/* Sidebar - Admin */}
-      <aside className="w-64 bg-[#152233] text-white flex flex-col flex-shrink-0 h-full">
-        <div className="h-20 flex items-center px-6 border-b border-white/10 shrink-0">
-          <Link href="/app" className="flex items-center gap-2">
-            <span className="text-xl font-black italic tracking-tight text-white">
-              ISHEECOLE <span className="text-ishes-green text-sm not-italic align-top">PRO</span>
-            </span>
-          </Link>
-        </div>
-
-        <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto custom-scrollbar">
-          <Link href="/app/admin" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <LayoutDashboard className="w-4 h-4" /> Vue d'ensemble
-          </Link>
-          <Link href="/app/admin/classes" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <BookOpen className="w-4 h-4" /> Formations & Classes
-          </Link>
-          <Link href="/app/admin/etudiants" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <Users className="w-4 h-4" /> Tous les Étudiants
-          </Link>
-          <Link href="/app/admin/facturation" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <CreditCard className="w-4 h-4" /> Facturation
-          </Link>
-          <Link href="/app/admin/administratif" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <FileText className="w-4 h-4" /> Administratif
-          </Link>
-          <Link href="/app/admin/developpeur" className="flex items-center gap-3 px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-sm font-semibold transition-colors">
-            <Terminal className="w-4 h-4 text-ishes-green" /> Développeur
-          </Link>
-        </nav>
-
-        <div className="p-4 border-t border-white/10 shrink-0">
-          <LogoutButton />
-        </div>
-      </aside>
+      <AdminSidebar />
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0 z-10">
+        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl ishes-heading text-ishes-dark">Centre de Diagnostic</h1>
+            <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Centre de Diagnostic</h1>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="ishes" size="sm" onClick={runAllTests} disabled={isTesting}>
-              <RefreshCw className={`w-4 h-4 mr-2 ${isTesting ? 'animate-spin' : ''}`} />
-              Lancer les tests
+            <Button variant="ishes" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4">
+              <RefreshCw className={`w-4 h-4 md:mr-2 ${isTesting ? 'animate-spin' : ''}`} />
+              <span className="hidden md:inline">Lancer les tests</span>
+              <span className="md:hidden">Tester</span>
             </Button>
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-8">
             
 

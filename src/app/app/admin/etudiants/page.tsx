@@ -7,6 +7,8 @@ import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal } from "lucide-react";
 import { fetchStudentsAction, createStudentManualAction, updateStudentAction, fetchClassesAction, assignStudentToClassAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
+import { AdminSidebar } from "@/components/AdminSidebar";
+import { cn } from "@/lib/utils";
 
 // Types
 type StudentDetail = {
@@ -196,59 +198,26 @@ function EtudiantsContent() {
 
   return (
     <div className="h-screen bg-[#F8FAFC] flex overflow-hidden">
-      {/* Sidebar - Admin */}
-      <aside className="w-64 bg-[#152233] text-white flex flex-col flex-shrink-0 h-full">
-        <div className="h-20 flex items-center px-6 border-b border-white/10 shrink-0">
-          <Link href="/app" className="flex items-center gap-2">
-            <span className="text-xl font-black italic tracking-tight text-white">
-              ISHEECOLE <span className="text-ishes-green text-sm not-italic align-top">PRO</span>
-            </span>
-          </Link>
-        </div>
-
-        <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto custom-scrollbar">
-          <Link href="/app/admin" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <LayoutDashboard className="w-4 h-4" /> Vue d'ensemble
-          </Link>
-          <Link href="/app/admin/classes" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <BookOpen className="w-4 h-4" /> Formations & Classes
-          </Link>
-          <Link href="/app/admin/etudiants" className="flex items-center gap-3 px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-sm font-semibold transition-colors">
-            <Users className="w-4 h-4 text-ishes-green" /> Tous les Étudiants
-          </Link>
-          <Link href="/app/admin/facturation" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <CreditCard className="w-4 h-4" /> Facturation
-          </Link>
-          <Link href="/app/admin/administratif" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <FileText className="w-4 h-4" /> Administratif
-          </Link>
-          <Link href="/app/admin/developpeur" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-            <Terminal className="w-4 h-4" /> Développeur
-          </Link>
-
-        </nav>
-
-        <div className="p-4 border-t border-white/10 shrink-0">
-          <LogoutButton />
-        </div>
-      </aside>
+      <AdminSidebar />
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 h-full">
         {/* Top Header */}
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0 z-10">
+        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl ishes-heading text-ishes-dark">Base Étudiants</h1>
-            <span className="px-3 py-1 bg-gray-50 text-ishes-dark text-[10px] font-black italic rounded-full border border-gray-100">
+            <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Base Étudiants</h1>
+            <span className="hidden sm:inline-block px-3 py-1 bg-gray-50 text-ishes-dark text-[10px] font-black italic rounded-full border border-gray-100">
               {students.length} INSCRITS
             </span>
           </div>
-          <div className="flex items-center gap-6">
-            <Button variant="ishes" size="sm" className="h-10" onClick={() => setShowAddModal(true)}>
-              <Plus className="w-4 h-4 mr-1" /> Inscrire Élève
+          <div className="flex items-center gap-3 md:gap-6">
+            <Button variant="ishes" size="sm" className="h-10 px-4 md:px-6" onClick={() => setShowAddModal(true)}>
+              <Plus className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Inscrire Élève</span>
+              <span className="md:hidden">Inscrire</span>
             </Button>
-            <div className="w-10 h-10 rounded-full border-2 border-ishes-green p-[2px] bg-white cursor-pointer shadow-lg shadow-ishes-green/10">
-              <div className="w-full h-full bg-gray-50 rounded-full flex items-center justify-center font-black italic text-ishes-dark text-sm">
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-ishes-green p-[2px] bg-white cursor-pointer shadow-lg shadow-ishes-green/10">
+              <div className="w-full h-full bg-gray-50 rounded-full flex items-center justify-center font-black italic text-ishes-dark text-xs md:text-sm">
                 AD
               </div>
             </div>
@@ -265,7 +234,10 @@ function EtudiantsContent() {
           )}
 
           {/* Left Pane - Students List */}
-          <div className="w-[400px] bg-white border-r border-gray-50 flex flex-col shrink-0 relative z-0">
+          <div className={cn(
+            "w-full lg:w-[400px] bg-white border-r border-gray-50 flex flex-col shrink-0 relative z-0 transition-all duration-300",
+            selectedStudentId && "hidden lg:flex"
+          )}>
             <div className="p-4 border-b border-gray-50 bg-white/50 backdrop-blur-md sticky top-0 z-10">
               <div className="relative">
                 <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -325,7 +297,10 @@ function EtudiantsContent() {
           </div>
 
           {/* Right Pane - Profile Detail */}
-          <div className="flex-1 bg-gray-50/50 flex flex-col p-6 overflow-hidden relative">
+          <div className={cn(
+            "flex-1 bg-gray-50/50 flex flex-col p-4 md:p-6 overflow-hidden relative transition-all duration-300",
+            !selectedStudentId && "hidden lg:flex"
+          )}>
             {selectedStudent ? (
               <div className="h-full bg-white rounded-3xl shadow-sm border border-gray-200 overflow-y-auto flex flex-col relative custom-scrollbar">
 
@@ -333,100 +308,100 @@ function EtudiantsContent() {
                 <div className="h-24 bg-[#152233] relative rounded-t-[2.5rem] overflow-hidden shrink-0">
                    <div className="absolute inset-0 bg-gradient-to-r from-ishes-green/10 to-transparent"></div>
                   {/* Status Badge Top Right */}
-                  <div className="absolute top-6 right-8 flex gap-2">
+                  <div className="absolute top-6 right-6 md:right-8 flex gap-2">
                     {selectedStudent.status === 'actif' && (
-                      <span className="bg-ishes-green/10 backdrop-blur-md border border-ishes-green/20 text-ishes-green px-3 py-1.5 rounded-xl text-[9px] font-black tracking-widest shadow-sm flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3 h-3" /> DOSSIER VALIDÉ
+                      <span className="bg-ishes-green/10 backdrop-blur-md border border-ishes-green/20 text-ishes-green px-2 md:px-3 py-1 md:py-1.5 rounded-xl text-[8px] md:text-[9px] font-black tracking-widest shadow-sm flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3 h-3" /> <span className="hidden sm:inline">DOSSIER VALIDÉ</span>
                       </span>
                     )}
                     {selectedStudent.status !== 'actif' && (
-                      <span className="bg-amber-400/10 backdrop-blur-md border border-amber-400/20 text-amber-400 px-3 py-1.5 rounded-xl text-[9px] font-black tracking-widest shadow-sm flex items-center gap-1.5">
-                        <Calendar className="w-3 h-3" /> EN ATTENTE
+                      <span className="bg-amber-400/10 backdrop-blur-md border border-amber-400/20 text-amber-400 px-2 md:px-3 py-1 md:py-1.5 rounded-xl text-[8px] md:text-[9px] font-black tracking-widest shadow-sm flex items-center gap-1.5">
+                        <Calendar className="w-3 h-3" /> <span className="hidden sm:inline">EN ATTENTE</span>
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="px-8 pb-8 flex-1">
+                <div className="px-6 md:px-8 pb-8 flex-1">
                   {/* Identity Header */}
-                  <div className="flex flex-col md:flex-row md:items-end justify-between -mt-20 mb-12 gap-6 relative z-10">
-                    <div className="flex items-end gap-6">
-                      <div className="w-28 h-28 rounded-[2rem] bg-white p-1.5 shadow-2xl shadow-[#152233]/10 border border-gray-100">
-                        <div className="w-full h-full bg-[#152233] rounded-[1.8rem] flex items-center justify-center text-3xl font-black italic text-white">
+                  <div className="flex flex-col md:flex-row md:items-end justify-between -mt-16 md:-mt-20 mb-10 md:mb-12 gap-6 relative z-10">
+                    <div className="flex items-end gap-4 md:gap-6">
+                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-2xl shadow-[#152233]/10 border border-gray-100">
+                        <div className="w-full h-full bg-[#152233] rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-white">
                           {selectedStudent.avatar}
                         </div>
                       </div>
-                      <div className="pb-2">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 mb-2 block">Documentation Élève</span>
-                        <h2 className="text-4xl font-black text-white tracking-tight leading-none">{selectedStudent.name}</h2>
-                        <p className="text-[10px] font-black tracking-widest text-ishes-green mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
+                      <div className="pb-1 md:pb-2">
+                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/60 mb-1 md:mb-2 block">Documentation Élève</span>
+                        <h2 className="text-2xl md:text-4xl font-black text-white md:text-ishes-dark tracking-tight leading-none truncate max-w-[200px] md:max-w-none">{selectedStudent.name}</h2>
+                        <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-green mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>
-                    <div className="flex gap-3 pb-2">
-                      <Button variant="ishes-outline" size="sm" className="h-11" onClick={openEditModal}>
-                        MODIFIER INFOS
+                    <div className="flex gap-2 md:gap-3 pb-1 md:pb-2">
+                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-[10px] md:text-xs" onClick={openEditModal}>
+                        MODIFIER
                       </Button>
-                      <Button variant="ishes" size="sm" className="h-11 shadow-ishes-green/20">
-                        <Mail className="w-4 h-4 mr-2" /> Message
+                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 md:h-11 shadow-ishes-green/20 text-[10px] md:text-xs">
+                        <Mail className="w-4 h-4 mr-1 md:mr-2" /> Message
                       </Button>
                     </div>
                   </div>
 
                   {/* Information Grid */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
 
                     {/* Contact Info Card */}
                     <div className="flex flex-col">
-                      <div className="flex items-center gap-3 mb-8">
+                      <div className="flex items-center gap-3 mb-6 md:mb-8">
                          <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                         <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-ishes-green">Coordonnées</h3>
+                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-green">Coordonnées</h3>
                       </div>
-                      <div className="space-y-6">
+                      <div className="space-y-4 md:space-y-6">
                         {selectedStudent.parentName && (
                           <div className="flex flex-col p-4 bg-ishes-green/5 border border-ishes-green/10 rounded-2xl mb-2">
-                            <span className="text-[9px] font-black text-ishes-green uppercase tracking-widest mb-1">Responsable Légal (Parent)</span>
-                            <span className="ishes-heading text-lg text-ishes-dark">{selectedStudent.parentName}</span>
+                            <span className="text-[8px] md:text-[9px] font-black text-ishes-green uppercase tracking-widest mb-1">Responsable Légal (Parent)</span>
+                            <span className="ishes-heading text-base md:text-lg text-ishes-dark">{selectedStudent.parentName}</span>
                           </div>
                         )}
                         <div className="flex flex-col">
-                          <span className="ishes-label text-[9px] opacity-40 mb-1">Email Personnel</span>
-                          <span className="ishes-heading text-lg text-ishes-dark">{selectedStudent.email}</span>
+                          <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Email Personnel</span>
+                          <span className="ishes-heading text-base md:text-lg text-ishes-dark truncate">{selectedStudent.email}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="ishes-label text-[9px] opacity-40 mb-1">Téléphone</span>
-                          <span className="ishes-heading text-lg text-ishes-dark font-mono">{selectedStudent.phone}</span>
+                          <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Téléphone</span>
+                          <span className="ishes-heading text-base md:text-lg text-ishes-dark font-mono">{selectedStudent.phone}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="ishes-label text-[9px] opacity-40 mb-1">Adresse de résidence</span>
-                          <span className="ishes-heading text-sm text-ishes-dark">{selectedStudent.address.toUpperCase()}</span>
+                          <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Adresse de résidence</span>
+                          <span className="ishes-heading text-xs md:text-sm text-ishes-dark leading-relaxed">{selectedStudent.address.toUpperCase()}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Scolarité Info Card */}
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-3 mb-8">
+                    <div className="flex flex-col mt-4 lg:mt-0">
+                      <div className="flex items-center gap-3 mb-6 md:mb-8">
                          <div className="w-1 h-4 bg-[#152233] rounded-full"></div>
-                         <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-[#152233]">Scolarité</h3>
+                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#152233]">Scolarité</h3>
                       </div>
-                      <div className="space-y-6">
+                      <div className="space-y-4 md:space-y-6">
                         <div className="flex items-center justify-between group">
                            <div className="flex flex-col">
-                             <span className="ishes-label text-[9px] opacity-40 mb-1">Formation Actuelle</span>
-                             <span className="ishes-heading text-lg text-ishes-green">{selectedStudent.enrolledClass}</span>
+                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Formation Actuelle</span>
+                             <span className="ishes-heading text-base md:text-lg text-ishes-green">{selectedStudent.enrolledClass}</span>
                            </div>
-                           <Button variant="ghost" size="sm" className="ishes-label text-[10px] hover:bg-ishes-green/5 text-ishes-green" onClick={openScolariteModal}>MODIFIER</Button>
+                           <Button variant="ghost" size="sm" className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green" onClick={openScolariteModal}>MODIFIER</Button>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                            <div className="flex flex-col">
-                             <span className="ishes-label text-[9px] opacity-40 mb-1">Dernier Règlement</span>
-                             <span className="ishes-heading text-sm text-ishes-dark">{selectedStudent.lastPayment}</span>
+                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Dernier Règlement</span>
+                             <span className="ishes-heading text-xs md:text-sm text-ishes-dark">{selectedStudent.lastPayment}</span>
                            </div>
                            <div className="flex flex-col">
-                             <span className="ishes-label text-[9px] opacity-40 mb-1">Statut Financier</span>
-                             <span className={`ishes-label text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-green' : 'text-red-500'}`}>
-                               {selectedStudent.paymentStatus === 'a_jour' ? 'COMPTE À JOUR' : 'IMPAYÉ'}
+                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Statut Financier</span>
+                             <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-green' : 'text-red-500'}`}>
+                               {selectedStudent.paymentStatus === 'a_jour' ? 'À JOUR' : 'IMPAYÉ'}
                              </span>
                            </div>
                         </div>
@@ -436,14 +411,14 @@ function EtudiantsContent() {
                   </div>
 
                   {/* Accès Rapides Actions */}
-                  <div className="mt-16 pt-12 border-t border-gray-100">
-                    <h3 className="ishes-label opacity-40 mb-6">Actions Administratives</h3>
-                    <div className="flex flex-wrap gap-4">
-                      <Button variant="ishes-outline" className="h-12 px-6">
-                        <Download className="w-4 h-4 mr-2" /> Certificat Scolarité
+                  <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-100">
+                    <h3 className="ishes-label opacity-40 mb-6 text-[10px]">Actions Administratives</h3>
+                    <div className="flex flex-wrap gap-3 md:gap-4">
+                      <Button variant="ishes-outline" className="flex-1 sm:flex-none h-11 md:h-12 px-4 md:px-6 text-[10px] md:text-xs">
+                        <Download className="w-4 h-4 mr-2" /> <span className="hidden sm:inline">Certificat</span> Scolarité
                       </Button>
-                      <Button variant="ishes-outline" className="h-12 px-6">
-                        <CreditCard className="w-4 h-4 mr-2" /> Envoyer Lien Paiement
+                      <Button variant="ishes-outline" className="flex-1 sm:flex-none h-11 md:h-12 px-4 md:px-6 text-[10px] md:text-xs">
+                        <CreditCard className="w-4 h-4 mr-2" /> <span className="hidden sm:inline">Lien de</span> Paiement
                       </Button>
                     </div>
                   </div>
@@ -452,19 +427,19 @@ function EtudiantsContent() {
               </div>
             ) : (
               <div className="h-full flex flex-col items-center justify-center bg-white rounded-3xl shadow-sm border border-gray-100 text-center p-8">
-                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner">
-                  <Users className="w-10 h-10 text-gray-200" />
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                  <Users className="w-8 h-8 md:w-10 md:h-10 text-gray-200" />
                 </div>
-                <h3 className="text-2xl ishes-heading text-ishes-dark mb-2">Profil Étudiant</h3>
-                <p className="ishes-label opacity-40 max-w-sm">Sélectionnez un étudiant pour visualiser son dossier complet.</p>
+                <h3 className="text-xl md:text-2xl ishes-heading text-ishes-dark mb-2">Profil Étudiant</h3>
+                <p className="ishes-label text-[10px] md:text-xs opacity-40 max-w-[200px] md:max-w-sm">Sélectionnez un étudiant pour visualiser son dossier complet.</p>
               </div>
             )}
 
-            {/* Mobile close button if needed */}
-            {selectedStudent && (
+            {/* Mobile close button / back button */}
+            {selectedStudentId && (
               <button
                 onClick={() => setSelectedStudentId(null)}
-                className="lg:hidden absolute top-8 right-8 w-10 h-10 bg-ishes-dark text-white rounded-full flex items-center justify-center shadow-xl"
+                className="lg:hidden absolute top-6 right-6 w-10 h-10 bg-ishes-dark text-white rounded-full flex items-center justify-center shadow-xl z-20 active:scale-90 transition-transform"
               >
                 <X className="w-5 h-5" />
               </button>

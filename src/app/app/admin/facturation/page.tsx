@@ -6,6 +6,8 @@ import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, AlertCircle, TrendingDown, ArrowUpRight, CheckCircle2, ChevronRight, Download, MailWarning, Phone, Mail, History, Calendar, X, GraduationCap, Terminal } from "lucide-react";
 import { LogoutButton } from "@/components/LogoutButton";
 import { fetchPaymentsAction } from "@/app/actions/students";
+import { AdminSidebar } from "@/components/AdminSidebar";
+import { cn } from "@/lib/utils";
 
 // Types
 type Payment = {
@@ -74,62 +76,28 @@ export default function FacturationPage() {
 
    return (
       <div className="min-h-screen bg-[#F8FAFC] flex relative overflow-hidden">
-         {/* Sidebar - Admin */}
-         <aside className="w-64 bg-[#152233] text-white flex flex-col flex-shrink-0 z-20">
-            <div className="h-20 flex items-center px-6 border-b border-white/10">
-               <Link href="/app" className="flex items-center gap-2">
-                  <span className="text-xl font-black italic tracking-tight text-white">
-                     ISHEECOLE <span className="text-ishes-green text-sm not-italic align-top">PRO</span>
-                  </span>
-               </Link>
-            </div>
-
-            <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
-               <Link href="/app/admin" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-                  <LayoutDashboard className="w-4 h-4" /> Vue d'ensemble
-               </Link>
-               <Link href="/app/admin/classes" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-                  <BookOpen className="w-4 h-4" /> Gestion des Classes
-               </Link>
-               <Link href="/app/admin/etudiants" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-                  <Users className="w-4 h-4" /> Tous les Étudiants
-               </Link>
-               <Link href="/app/admin/facturation" className="flex items-center gap-3 px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-sm font-semibold transition-colors">
-                  <CreditCard className="w-4 h-4 text-ishes-green" /> Facturation
-               </Link>
-               <Link href="/app/admin/administratif" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-                  <FileText className="w-4 h-4" /> Administratif
-               </Link>
-               <Link href="/app/admin/developpeur" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
-                  <Terminal className="w-4 h-4" /> Développeur
-               </Link>
-
-            </nav>
-
-            <div className="p-4 border-t border-white/10 shrink-0">
-               <LogoutButton />
-            </div>
-         </aside>
+         <AdminSidebar />
 
          {/* Main Content */}
-         <main className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto z-10">
-            <header className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0 shadow-sm sticky top-0 z-10">
+         <main className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto z-10 custom-scrollbar">
+            <header className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-6 md:px-8 flex-shrink-0 shadow-sm sticky top-0 z-10">
                <div className="flex items-center gap-4">
-                  <h1 className="text-2xl font-black text-gray-800 tracking-tight">Facturation & Paiements</h1>
+                  <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
+                  <h1 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight truncate">Facturation & Paiements</h1>
                </div>
-               <div className="flex items-center gap-6">
-                  <Button variant="outline" className="rounded-full shadow-sm font-semibold border-gray-200 bg-white hover:bg-gray-50 flex items-center gap-2">
-                     <Download className="w-4 h-4" /> Exporter Csv
+               <div className="flex items-center gap-3 md:gap-6">
+                  <Button variant="outline" className="hidden sm:flex rounded-full shadow-sm font-semibold border-gray-200 bg-white hover:bg-gray-50 items-center gap-2">
+                     <Download className="w-4 h-4" /> Exporter <span className="hidden md:inline">Csv</span>
                   </Button>
-                  <div className="w-10 h-10 rounded-full border-2 border-ishes-green p-[2px] bg-white cursor-pointer">
-                     <div className="w-full h-full bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-600 text-sm">
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-ishes-green p-[2px] bg-white cursor-pointer">
+                     <div className="w-full h-full bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-600 text-xs md:text-sm">
                         AD
                      </div>
                   </div>
                </div>
             </header>
 
-            <div className="p-8">
+            <div className="p-4 md:p-8">
                <div className="max-w-7xl mx-auto space-y-8">
 
                   {/* Filters & Table */}
