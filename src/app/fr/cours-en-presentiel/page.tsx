@@ -1,51 +1,111 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { 
+  CheckCircle2, 
+  MapPin, 
+  Users, 
+  Award, 
+  ChevronRight,
+  Coffee,
+  Calendar,
+  Building2
+} from 'lucide-react';
 
-export const metadata = {
-  title: 'Cours en presentiel | ISHES',
-  description: 'Page en construction pour Cours en presentiel. Retrouvez bientôt tout le contenu.',
-};
-
-export default function CoursEnPresentielPage() {
+export default function CoursPresentielPage() {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#fafafa]">
-      {/* Background decoration */}
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-ishes-green/5 blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-white font-sans selection:bg-[#008953] selection:text-white pb-20">
       
-      {/* Very simple minimal header to link back easily */}
-      <header className="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 shadow-sm/50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center">
-          <Link href="/" className="flex items-center gap-2 text-ishes-dark hover:text-ishes-green transition-colors font-semibold">
-            <ArrowLeft className="w-5 h-5" />
-            Retour à l'accueil
-          </Link>
-        </div>
-      </header>
+      {/* ─── HERO SECTION ─── */}
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-[#fafafa]">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-400/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto relative z-10 pt-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div className="flex-1 space-y-8 text-center lg:text-left">
+              <nav className="flex items-center justify-center lg:justify-start gap-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">
+                <Link href="/" className="hover:text-ishes-green transition-colors">Accueil</Link>
+                <ChevronRight className="w-3 h-3" />
+                <span className="text-ishes-green">Cours en Présentiel</span>
+              </nav>
+              
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-400/10 rounded-full shadow-sm mb-2">
+                <MapPin className="w-4 h-4 text-amber-600" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">
+                  Institut ISHES Toulouse
+                </span>
+              </div>
 
-      <main className="flex-1 flex flex-col items-center justify-center relative z-10 px-4 py-24 text-center">
-        <div className="w-full max-w-3xl mx-auto bg-white p-12 md:p-16 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 space-y-6">
-          <div className="w-16 h-16 bg-ishes-green/10 text-ishes-green rounded-full flex items-center justify-center mx-auto mb-8">
-            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-            </svg>
-          </div>
-          
-          <h1 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight">
-            Cours en presentiel
-          </h1>
-          
-          <p className="text-lg text-gray-500 font-medium">
-            Cette page (<strong>/fr/cours-en-presentiel</strong>) a été conservée pour préserver votre référencement SEO. Elle est actuellement en cours de développement.
-          </p>
-          
-          <div className="pt-8">
-            <Link href="/" className="inline-flex items-center gap-2 bg-ishes-green hover:bg-ishes-green-hover text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-ishes-green/20">
-              Retourner à l'accueil
-            </Link>
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+                Vivez l'Institut <br />
+                <span className="text-ishes-green italic">en Direct.</span>
+              </h1>
+
+              <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0">
+                L'apprentissage en présentiel offre une immersion totale et un contact direct avec vos professeurs. Rejoignez nos locaux à Toulouse pour une expérience humaine et spirituelle unique.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                <Link 
+                  href="/program" 
+                  className="w-full sm:w-auto bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1 active:scale-95"
+                >
+                  DÉCOUVRIR LES COURS SUR PLACE
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex-1 w-full max-w-[500px] aspect-square relative">
+               <div className="absolute inset-0 bg-amber-400/5 rounded-[3rem] rotate-3 -z-10" />
+               <div className="w-full h-full bg-white rounded-[3rem] shadow-2xl border border-gray-100 p-8 flex flex-col justify-center items-center gap-8 relative overflow-hidden group">
+                  <div className="absolute top-0 left-0 w-full h-2 bg-amber-500" />
+                  <Building2 className="w-32 h-32 text-amber-500/20 group-hover:scale-110 transition-transform duration-500" />
+                  <div className="text-center space-y-4 px-6">
+                    <h3 className="text-2xl font-black text-ishes-dark italic">"La proximité est la clé de la transmission du cœur."</h3>
+                    <p className="text-gray-500 font-medium text-sm">Des locaux équipés et une ambiance fraternelle.</p>
+                  </div>
+               </div>
+            </div>
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* ─── FEATURES SECTION ─── */}
+      <section className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              { icon: <Users />, title: "Vie de Groupe", desc: "Étudiez au sein d'une communauté soudée et encourageante." },
+              { icon: <Calendar />, title: "Horaires Fixes", desc: "Un cadre structuré pour une assiduité et une progression garanties." },
+              { icon: <Coffee />, title: "Moments Fraternels", desc: "Échangez avec les professeurs et élèves lors des pauses conviviales." }
+            ].map((feature, i) => (
+              <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all">
+                <div className="w-14 h-14 bg-amber-400/10 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-black text-ishes-dark mb-4">{feature.title}</h3>
+                <p className="text-gray-500 font-medium text-sm leading-relaxed">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FOOTER SEO MARQUEE ─── */}
+      <section className="py-8 bg-[#fafafa] overflow-hidden opacity-30 mb-20">
+        <div className="flex whitespace-nowrap gap-12 animate-marquee">
+          {[
+            "ishes toulouse", "cours arabe toulouse", "tajwid presentiel", "institut islamique toulouse", 
+            "école arabe toulouse", "coran toulouse", "sciences islamiques toulouse"
+          ].map((kw, i) => (
+            <span key={i} className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
+              {kw}
+            </span>
+          ))}
+        </div>
+      </section>
+
     </div>
   );
 }

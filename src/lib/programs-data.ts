@@ -125,18 +125,20 @@ export const PROGRAMS_DATA: Record<string, any> = {
     tag: "Authenticité & Verbe Prophétique",
     price: "349 €",
     hook: "Comprendre comment la parole du dernier Messager d'ALLAH (ﷺ) est arrivée jusqu'à nous.",
-    description: "Ce cursus approfondi explore les mécanismes de préservation et d'authentification de la parole prophétique. Vous découvrirez les efforts monumentaux des savants pour distinguer le vrai du faux et les bases scientifiques de la critique des textes.",
+    description: "La science du hadith est la discipline qui a pour intérêt la parole du prophète Mohamed (ﷺ). C'est à travers elle que l'on comprendra comment et de quelle manière la parole du dernier Messager d'ALLAH (ﷺ) est arrivée jusqu'à nous. Nous découvrirons ensemble quelles sont les différentes catégories de hadith et également quels efforts nos grands savants ont déployé afin de préserver l'authenticité du verbe prophétique.",
     features: [
-      { t: "Authentification", d: "Apprendre les méthodes de vérification des chaînes de transmission." },
-      { t: "Histoire de la Sunnah", d: "De l'enregistrement oral à la compilation dans les recueils majeurs." },
-      { t: "Terminologie", d: "Maîtriser les termes techniques (Sahih, Hassan, Da'if, Morsal...)." },
-      { t: "Jarh wa Ta'dil", d: "Introduction à la science de la critique des rapporteurs." }
+      { t: "La Sunnah du Prophète (ﷺ)", d: "Définition technique, étymologique et étude de la Sunnah comme terme technique." },
+      { t: "Composantes de la Sunnah", d: "Étude des paroles, des actes, de leurs interprétations et de l'approbation tacite." },
+      { t: "Législation & Transmission", d: "La Sunnah comme source de pensée. L'enregistrement des hadiths et la lutte contre les inventions." },
+      { t: "Sunnah vs Coran", d: "Rapport entre les deux sources : particularisation, restriction de l'absolu et abrogation." },
+      { t: "Science des Rapporteurs", d: "Étude du besoin de cette science, qualités requises et le Jarh wa Ta'dil (critique des rapporteurs)." },
+      { t: "Classification & Division", d: "Classification selon la continuité de la chaîne, les récits (morsal) et résolution des oppositions." }
     ],
     whyMe: [
-      "Programme académique rigoureux",
-      "Étude des sources fondamentales",
-      "Cours interactifs avec replays",
-      "Possibilité de régler en 10 fois sans frais"
+      "Programme académique complet et structuré",
+      "Étude approfondie de la transmission (Isnad)",
+      "Analyse des rapports entre Sunnah et Coran",
+      "Maîtrise de la terminologie technique des savants"
     ]
   },
   "tarbiya_islamiya": {
