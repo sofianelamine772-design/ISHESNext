@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, AlertCircle, TrendingDown, ArrowUpRight, CheckCircle2, ChevronRight, Download, MailWarning, Phone, Mail, History, Calendar, X, GraduationCap } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, AlertCircle, TrendingDown, ArrowUpRight, CheckCircle2, ChevronRight, Download, MailWarning, Phone, Mail, History, Calendar, X, GraduationCap, Terminal } from "lucide-react";
 import { LogoutButton } from "@/components/LogoutButton";
+import { fetchPaymentsAction } from "@/app/actions/students";
 
 // Types
 type Payment = {
@@ -21,50 +22,55 @@ type Payment = {
    history: { date: string; amount: string; status: string }[];
 };
 
-// Mock Data
-const MOCK_PAYMENTS: Payment[] = [
-   {
-      id: "inv_1", studentName: "Karim Yeles", studentAvatar: "KY", email: "kyeles@email.com", phone: "+33 6 34 56 78 90", course: "Arabe Niveau 1", amount: "150,00 €", date: "15 Avr 2024", status: "refuse", reason: "Fonds insuffisants",
-      history: [
-         { date: "15 Mar 2024", amount: "150,00 €", status: "paye" },
-         { date: "15 Fev 2024", amount: "150,00 €", status: "paye" }
-      ]
-   },
-   {
-      id: "inv_2", studentName: "Nassim Ziani", studentAvatar: "NZ", email: "nassim.z@email.com", phone: "+33 6 78 90 12 34", course: "Coran Débutant", amount: "75,00 €", date: "12 Avr 2024", status: "refuse", reason: "Carte expirée",
-      history: [
-         { date: "12 Mar 2024", amount: "75,00 €", status: "paye" }
-      ]
-   },
-   {
-      id: "inv_3", studentName: "Sonia B.", studentAvatar: "SB", email: "sonia.b@email.com", phone: "+33 6 11 22 33 44", course: "Tarbiya Enfant", amount: "120,00 €", date: "10 Avr 2024", status: "refuse", reason: "Plafond atteint",
-      history: [
-         { date: "10 Mar 2024", amount: "120,00 €", status: "paye" },
-         { date: "10 Fev 2024", amount: "120,00 €", status: "paye" },
-         { date: "10 Jan 2024", amount: "120,00 €", status: "paye" }
-      ]
-   },
-   {
-      id: "inv_5", studentName: "Ali Dupont", studentAvatar: "AD", email: "ali.dupont@email.com", phone: "+33 6 12 34 56 78", course: "Arabe Niveau 1", amount: "150,00 €", date: "18 Avr 2024", status: "paye",
-      history: [
-         { date: "18 Mar 2024", amount: "150,00 €", status: "paye" }
-      ]
-   },
-];
 
 export default function FacturationPage() {
    const [searchQuery, setSearchQuery] = useState("");
    const [activeTab, setActiveTab] = useState<"refuse" | "tous">("refuse");
    const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
+   const [payments, setPayments] = useState<Payment[]>([]);
+   const [loading, setLoading] = useState(true);
 
-   const filteredPayments = MOCK_PAYMENTS.filter(p => {
+   useEffect(() => {
+      const loadPayments = async () => {
+         const result = await fetchPaymentsAction();
+         if (result.success && result.data) {
+            const formatted = result.data.map((p: any) => {
+               // Handle Supabase potential array responses for joins
+               const etudiant = Array.isArray(p.etudiants) ? p.etudiants[0] : p.etudiants;
+               const inscription = Array.isArray(p.inscriptions) ? p.inscriptions[0] : p.inscriptions;
+               const formation = Array.isArray(inscription?.classes) 
+                  ? (Array.isArray(inscription.classes[0]?.formations) ? inscription.classes[0].formations[0] : inscription.classes[0]?.formations)
+                  : (Array.isArray(inscription?.classes?.formations) ? inscription?.classes?.formations[0] : inscription?.classes?.formations);
+
+               return {
+                  id: p.id.slice(0, 8),
+                  studentName: `${etudiant?.first_name || ''} ${etudiant?.last_name || ''}`.trim() || 'Inconnu',
+                  studentAvatar: (etudiant?.first_name?.[0] || '') + (etudiant?.last_name?.[0] || '') || '?',
+                  email: etudiant?.email || '',
+                  phone: etudiant?.phone || '',
+                  course: formation?.title || 'Formation',
+                  amount: p.amount + " €",
+                  date: new Date(p.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
+                  status: p.status === 'succeeded' ? 'paye' : p.status === 'failed' ? 'refuse' : 'en_attente',
+                  reason: p.error_message || undefined,
+                  history: []
+               };
+            });
+            setPayments(formatted as Payment[]);
+         }
+         setLoading(false);
+      };
+      loadPayments();
+   }, []);
+
+   const filteredPayments = payments.filter(p => {
       const matchesSearch = p.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
          p.id.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesTab = activeTab === "tous" || p.status === "refuse";
       return matchesSearch && matchesTab;
    });
 
-   const totalRefused = MOCK_PAYMENTS.filter(p => p.status === "refuse").length;
+   const totalRefused = payments.filter(p => p.status === "refuse").length;
 
    return (
       <div className="min-h-screen bg-[#F8FAFC] flex relative overflow-hidden">
@@ -93,6 +99,9 @@ export default function FacturationPage() {
                </Link>
                <Link href="/app/admin/administratif" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
                   <FileText className="w-4 h-4" /> Administratif
+               </Link>
+               <Link href="/app/admin/developpeur" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
+                  <Terminal className="w-4 h-4" /> Développeur
                </Link>
 
             </nav>
@@ -170,7 +179,16 @@ export default function FacturationPage() {
                               </tr>
                            </thead>
                            <tbody className="divide-y divide-gray-100">
-                              {filteredPayments.length > 0 ? (
+                              {loading ? (
+                                 <tr>
+                                    <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
+                                       <div className="flex flex-col items-center gap-2">
+                                          <div className="w-8 h-8 border-4 border-ishes-green border-t-transparent rounded-full animate-spin"></div>
+                                          <p className="font-bold text-gray-500">Chargement des transactions...</p>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              ) : filteredPayments.length > 0 ? (
                                  filteredPayments.map((payment) => (
                                     <tr key={payment.id} className="hover:bg-gray-50/50 transition-colors">
                                        <td className="px-6 py-5 text-sm font-semibold text-gray-500">#{payment.id}</td>
@@ -248,31 +266,52 @@ export default function FacturationPage() {
                   onClick={() => setSelectedPayment(null)}
                />
                {/* Slide-Over Drawer */}
-               <div className="fixed inset-y-0 right-0 w-[450px] bg-white shadow-2xl z-50 transform flex flex-col transition-transform duration-300 ease-in-out border-l border-gray-200">
+               <div className="fixed inset-y-0 right-0 w-[500px] bg-white shadow-2xl z-50 transform flex flex-col transition-transform duration-300 ease-in-out border-l border-gray-200">
                   {/* Drawer Header */}
-                  <div className="h-24 bg-black text-white flex items-start justify-between p-6 relative">
-                     <button onClick={() => setSelectedPayment(null)} className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors">
-                        <X className="w-5 h-5 text-white" />
+                  <div className="bg-[#152233] text-white p-8 relative overflow-hidden">
+                     {/* Decorative Background Element */}
+                     <div className="absolute -top-24 -right-24 w-64 h-64 bg-ishes-green/10 blur-[80px] rounded-full" />
+                     
+                     <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-8">
+                           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ishes-green">Documentation élève</span>
+                           <div className="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                              <Calendar className="w-3.5 h-3.5 text-yellow-500" />
+                              <span className="text-[10px] font-black text-yellow-500 uppercase tracking-widest">
+                                 {selectedPayment.status === 'paye' ? 'Complété' : selectedPayment.status === 'refuse' ? 'Échoué' : 'En attente'}
+                              </span>
+                           </div>
+                        </div>
+
+                        <div className="flex items-end gap-6">
+                           <div className="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-2xl">
+                              <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 rounded-[1.8rem] flex items-center justify-center font-black text-3xl text-[#152233]">
+                                 {selectedPayment.studentAvatar}
+                              </div>
+                           </div>
+                           <div className="flex-1 pb-2">
+                              <h2 className="text-3xl font-black text-white tracking-tight mb-1">{selectedPayment.studentName}</h2>
+                              <p className="text-white/50 text-xs font-bold uppercase tracking-widest">ID Facture #{selectedPayment.id}</p>
+                           </div>
+                        </div>
+
+                        <div className="flex gap-3 mt-8">
+                           <Button variant="outline" className="flex-1 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
+                              Modifier Infos
+                           </Button>
+                           <Button className="flex-1 bg-white text-[#152233] hover:bg-gray-100 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11 flex items-center gap-2">
+                              <Mail className="w-3.5 h-3.5" /> Message
+                           </Button>
+                        </div>
+                     </div>
+
+                     <button onClick={() => setSelectedPayment(null)} className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors z-20">
+                        <X className="w-5 h-5 text-white/40" />
                      </button>
                   </div>
 
-                  {/* Negative margin Avatar */}
-                  <div className="px-8 relative -mt-10 mb-4">
-                     <div className="w-20 h-20 rounded-2xl bg-white p-1 border border-gray-100 shadow-md">
-                        <div className="w-full h-full bg-gradient-to-tr from-gray-100 to-gray-200 rounded-xl flex items-center justify-center font-black text-2xl text-gray-700">
-                           {selectedPayment.studentAvatar}
-                        </div>
-                     </div>
-                  </div>
-
                   {/* Drawer Content */}
-                  <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-8">
-                     {/* Student Identity */}
-                     <div>
-                        <h2 className="text-2xl font-black text-gray-900">{selectedPayment.studentName}</h2>
-                        <p className="text-gray-500 font-medium">Facture {selectedPayment.id}</p>
-                     </div>
-
+                  <div className="flex-1 overflow-y-auto px-8 py-10 space-y-8">
                      {/* Contact Details */}
                      <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 space-y-4">
                         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Coordonnées de l'élève</h3>

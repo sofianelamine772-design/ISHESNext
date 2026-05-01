@@ -135,7 +135,7 @@ export default function InstitutPage() {
           </div>
 
           {/* Formations Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 mb-24 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-24 max-w-6xl mx-auto">
             {presentielPrograms.map((program, i) => (
               <motion.div
                 key={i}
@@ -143,73 +143,93 @@ export default function InstitutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="flex flex-col relative rounded-[2.5rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-2"
+                className="group relative flex flex-col rounded-[3rem] bg-white border border-gray-100 shadow-sm hover:shadow-[0_30px_60px_-15px_rgba(200,169,110,0.15)] transition-all duration-500 hover:-translate-y-2 overflow-hidden"
               >
-                <div className="p-8 sm:p-10 flex-1 flex flex-col">
+                {/* Visual Accent */}
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#c8a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                {/* Overlay Link for the whole card - Top Layer but behind buttons */}
+                <Link href={program.link} className="absolute inset-0 z-10 rounded-[3rem]" />
+                
+                <div className="p-10 sm:p-12 flex-1 flex flex-col relative">
                   {/* TAGS ROW */}
-                  <div className="flex items-center justify-between mb-8">
-                    <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase border ${program.tagColor}`}>
+                  <div className="flex items-center justify-between mb-10 relative z-20">
+                    <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase border ${program.tagColor}`}>
                       {program.tagText}
                     </span>
-                    <span className="text-xs font-black text-gray-400">
-                      {program.durationText}
-                    </span>
+                    <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                       <Clock className="w-3.5 h-3.5" /> {program.durationText}
+                    </div>
                   </div>
 
                   {/* TITLE & DESC */}
-                  <h2 className="text-3xl font-black text-[#101828] mb-4 tracking-tight">{program.title}</h2>
-                  <p className="text-sm text-gray-500 leading-relaxed min-h-[60px] mb-8 font-bold">
-                    {program.subtitle}
-                  </p>
+                  <div className="relative z-20">
+                    <h2 className="text-3xl md:text-4xl font-black text-[#152233] mb-5 tracking-tight leading-[1.1]">
+                      {program.title}
+                    </h2>
+                    <p className="text-base text-gray-500 leading-relaxed mb-10 font-medium">
+                      {program.subtitle}
+                    </p>
+                  </div>
 
                   {/* ICONS GRID */}
-                  <div className="grid grid-cols-2 gap-4 mb-8">
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-[#c8a96e]" />
-                      <span className="text-xs font-bold text-gray-400">1h30/sem</span>
+                  <div className="grid grid-cols-2 gap-6 mb-10 relative z-20">
+                    <div className="flex items-center gap-3 group/icon">
+                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <Clock className="w-5 h-5 text-[#c8a96e]" />
+                      </div>
+                      <span className="text-xs font-bold text-gray-500">1h30/sem</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <BookOpen className="w-5 h-5 text-[#c8a96e]" />
-                      <span className="text-xs font-bold text-gray-400">Manuel inclus</span>
+                    <div className="flex items-center gap-3 group/icon">
+                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <BookOpen className="w-5 h-5 text-[#c8a96e]" />
+                      </div>
+                      <span className="text-xs font-bold text-gray-500">Manuel inclus</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Users className="w-5 h-5 text-[#c8a96e]" />
-                      <span className="text-xs font-bold text-gray-400">Max 12</span>
+                    <div className="flex items-center gap-3 group/icon">
+                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <Users className="w-5 h-5 text-[#c8a96e]" />
+                      </div>
+                      <span className="text-xs font-bold text-gray-500">Max 12</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Award className="w-5 h-5 text-[#c8a96e]" />
-                      <span className="text-xs font-bold text-gray-400 uppercase">Certifié</span>
+                    <div className="flex items-center gap-3 group/icon">
+                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <Award className="w-5 h-5 text-[#c8a96e]" />
+                      </div>
+                      <span className="text-xs font-bold text-gray-500 uppercase">Certifié</span>
                     </div>
                   </div>
 
                   {/* FEATURES LIST */}
-                  <div className="space-y-4 mb-10 flex-1">
+                  <div className="space-y-4 mb-12 flex-1 relative z-20">
                     {program.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-[#c8a96e] shrink-0 mt-0.5" />
-                        <span className="text-base text-gray-700 font-bold">{feature}</span>
+                      <div key={idx} className="flex items-start gap-3 py-1">
+                        <div className="mt-1 w-5 h-5 rounded-full bg-[#c8a96e]/10 flex items-center justify-center shrink-0">
+                           <CheckCircle2 className="w-3.5 h-3.5 text-[#c8a96e]" />
+                        </div>
+                        <span className="text-[15px] text-gray-600 font-bold">{feature}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* PRICE & CTA */}
-                  <div className="flex flex-col gap-4 mt-auto pt-8 border-t border-gray-50">
-                    <div>
-                      <div className="text-4xl font-black text-[#101828] tracking-tight">{program.price}</div>
-                      <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">
+                  <div className="flex flex-col gap-6 mt-auto pt-10 border-t border-gray-100 relative z-20">
+                    <div className="flex items-baseline gap-2">
+                      <div className="text-5xl font-black text-[#152233] tracking-tighter">{program.price}</div>
+                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                         {program.priceSub}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 font-black text-xs tracking-widest uppercase">
+                    <div className="grid grid-cols-2 gap-4">
                       <Link 
                         href={program.link}
-                        className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-4 rounded-xl transition-all shadow-sm"
+                        className="flex items-center justify-center bg-gray-50 text-gray-600 hover:bg-gray-100 py-4.5 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest"
                       >
-                        Info
+                        En savoir plus
                       </Link>
                       <Link 
                         href={`/inscription?plan=${program.id}`}
-                        className="flex items-center justify-center bg-[#c8a96e] text-white hover:bg-[#b0935b] py-4 rounded-xl shadow-md transition-all"
+                        className="flex items-center justify-center bg-[#c8a96e] text-white hover:bg-[#b0935b] py-4.5 rounded-2xl shadow-lg shadow-[#c8a96e]/20 transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95"
                       >
                         S'inscrire
                       </Link>

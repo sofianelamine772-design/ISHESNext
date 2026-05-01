@@ -1,4 +1,5 @@
-import { SignUp } from "@clerk/nextjs";
+import { SignUp, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 
 export default function SignUpPage() {
   return (
@@ -9,22 +10,31 @@ export default function SignUpPage() {
           <p className="text-gray-500 font-medium">Rejoignez l'institut ISHES dès aujourd'hui</p>
         </div>
 
-        <SignUp
-          appearance={{
-            elements: {
-              rootBox: "mx-auto w-full",
-              card: "shadow-xl border border-gray-100 rounded-[2.5rem] p-8",
-              headerTitle: "hidden",
-              headerSubtitle: "hidden",
-              socialButtonsBlockButton: "rounded-xl border-gray-200 hover:bg-gray-50 transition-all font-bold",
-              formButtonPrimary: "bg-[#008953] hover:bg-[#007044] text-white font-bold py-3 rounded-xl shadow-md transition-all h-12 uppercase tracking-widest text-xs",
-              formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-[#008953]/20 focus:border-[#008953] transition-all",
-              footerActionLink: "text-[#008953] font-bold hover:text-[#007044]",
-              identityPreviewEditButton: "text-[#008953]",
-              formFieldLabel: "font-bold text-gray-700 text-xs mb-2 uppercase tracking-wide",
-            }
-          }}
-        />
+        <ClerkLoading>
+          <div className="flex flex-col items-center justify-center p-12 bg-white shadow-xl border border-gray-100 rounded-[2.5rem]">
+            <Loader2 className="w-10 h-10 text-ishes-green animate-spin mb-4" />
+            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Initialisation...</p>
+          </div>
+        </ClerkLoading>
+
+        <ClerkLoaded>
+          <SignUp
+            appearance={{
+              elements: {
+                rootBox: "mx-auto w-full",
+                card: "shadow-xl border border-gray-100 rounded-[2.5rem] p-8",
+                headerTitle: "hidden",
+                headerSubtitle: "hidden",
+                socialButtonsBlockButton: "rounded-xl border-gray-200 hover:bg-gray-50 transition-all font-bold",
+                formButtonPrimary: "bg-[#008953] hover:bg-[#007044] text-white font-bold py-3 rounded-xl shadow-md transition-all h-12 uppercase tracking-widest text-xs",
+                formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-[#008953]/20 focus:border-[#008953] transition-all",
+                footerActionLink: "text-[#008953] font-bold hover:text-[#007044]",
+                identityPreviewEditButton: "text-[#008953]",
+                formFieldLabel: "font-bold text-gray-700 text-xs mb-2 uppercase tracking-wide",
+              }
+            }}
+          />
+        </ClerkLoaded>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ChevronRight, CheckCircle2, ArrowRight, MessageSquareText } from "lucide-react";
 import Link from "next/link";
@@ -10,7 +10,15 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const planId = searchParams?.get("plan");
+
+  // Redirection if no plan selected
+  useEffect(() => {
+    if (!planId) {
+      router.replace("/program");
+    }
+  }, [planId, router]);
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -25,6 +33,56 @@ function InscriptionForm() {
 
   const [registrationType, setRegistrationType] = useState<"self" | "child">("self");
   const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "" }]);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+
+  const getPrice = () => {
+    if (registrationType === 'child') {
+      return (planId === 'tarbiya_islamiya' ? 249 : 349) * childrenList.length;
+    }
+    return 150; // Follows the logic in step 4
+  };
+
+  const handleCheckout = async () => {
+    setLoadingCheckout(true);
+    try {
+      console.log("Starting checkout process...");
+      const totalPrice = getPrice();
+      console.log("Total price:", totalPrice);
+
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          planId: planId || "formation_generale",
+          title: planName || "Formation ISHES",
+          price: totalPrice + " €",
+          mode: planId === 'tajwid_standard' ? "presentiel" : "distanciel",
+          email: formData.email,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Response from API:", data);
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur serveur");
+      }
+
+      if (data.url) {
+        console.log("Redirecting to:", data.url);
+        window.location.href = data.url;
+      } else {
+        throw new Error("Pas d'URL de redirection reçue");
+      }
+    } catch (error: any) {
+      console.error("DEBUG CHECKOUT ERROR:", error);
+      alert("ERREUR DÉTAILLÉE : " + (error.stack || error.message || error));
+    } finally {
+      setLoadingCheckout(false);
+    }
+  };
 
   const handleChildInputChange = (index: number, field: string, value: string) => {
     setChildrenList(prev => {
@@ -592,7 +650,7 @@ function InscriptionForm() {
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
               <div className="mb-10">
                 <div className="w-24 h-24 bg-green-50 text-ishes-green rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
-                  <Suspense fallback={null}><CheckCircle2 className="w-12 h-12" /></Suspense>
+                  <CheckCircle2 className="w-12 h-12" />
                 </div>
                 <h2 className="text-3xl font-black text-ishes-dark mb-4 tracking-tight">Dernière étape !</h2>
                 <p className="text-gray-500 font-medium max-w-lg mx-auto leading-relaxed">
@@ -626,12 +684,13 @@ function InscriptionForm() {
                   En cliquant sur le bouton ci-dessous, vous serez redirigé vers notre plateforme de paiement sécurisée puis vers la création de mot de passe.
                 </p>
 
-                <Link
-                  href={`/sign-up?email_address=${encodeURIComponent(formData.email)}&first_name=${encodeURIComponent(registrationType === 'child' ? childrenList[0].prenom : formData.prenom)}&last_name=${encodeURIComponent(registrationType === 'child' ? childrenList[0].nom : formData.nom)}`}
-                  className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20"
+                <button
+                  onClick={handleCheckout}
+                  disabled={loadingCheckout}
+                  className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20 disabled:opacity-70"
                 >
-                  Payer & Créer mon compte <ArrowRight className="w-4 h-4" />
-                </Link>
+                  {loadingCheckout ? "Redirection..." : "Payer & Créer mon compte"} <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
 
               <button

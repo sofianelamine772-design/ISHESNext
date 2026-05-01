@@ -21,7 +21,7 @@ type Program = {
   audience: "adulte" | "enfant";
 };
 
-const PROGRAMS: Program[] = [
+export const PROGRAMS: Program[] = [
   {
     id: "tajwid_standard",
     title: "Tajwid (Standard)",

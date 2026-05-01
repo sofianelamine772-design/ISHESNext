@@ -148,8 +148,8 @@ export function Footer() {
               ["Cours en Présentiel", "/fr/cours-en-presentiel"],["Cours Fiqh Malikite", "/fr/cours-fiqh-malikite"],["Cours Lecture Tajwid", "/fr/cours-lecture-tajwid"],
               ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers-coran"],["Sciences du Coran", "/fr/cours-sciences-coran"],
               ["Sciences du Hadith", "/fr/cours-sciences-hadith"],["Tajwid Enfant", "/fr/cours-tajwid-enfant"],["Tajwid Intensif", "/fr/cours-tajwid-intensif"],
-              ["Formation Nour Al Bayane", "/fr/formation-nour-al-bayane"],["Formation Tarbya Islamya", "/fr/formation-tarbya-islamya"],
-              ["Plateforme Inscription", "/fr/plateforme-inscription"],["Questions Spiritualité", "/conseil-spiritualite"],["Spiritualité Islam", "/fr/spiritualite-islam"],
+               ["Formation Tarbya Islamya", "/fr/formation-tarbya-islamya"],
+               ["Questions Spiritualité", "/conseil-spiritualite"],["Spiritualité Islam", "/fr/spiritualite-islam"],
             ].map(([label, href]) => (
               <Link key={href} href={href} className="text-xs text-gray-500 hover:text-[#008953] transition-colors leading-tight">{label}</Link>
             ))}

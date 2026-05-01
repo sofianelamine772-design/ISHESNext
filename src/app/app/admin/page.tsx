@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, TrendingUp, Wallet, ArrowUpRight, ArrowDownRight, UserPlus, FileCheck } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, TrendingUp, Wallet, ArrowUpRight, ArrowDownRight, UserPlus, FileCheck, Terminal } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { LogoutButton } from "@/components/LogoutButton";
@@ -38,6 +38,9 @@ export default async function AdminOverview() {
           </Link>
           <Link href="/app/admin/administratif" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
             <FileText className="w-4 h-4" /> Administratif
+          </Link>
+          <Link href="/app/admin/developpeur" className="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 rounded-lg text-sm font-semibold transition-colors">
+            <Terminal className="w-4 h-4" /> Développeur
           </Link>
 
         </nav>
@@ -123,81 +126,59 @@ export default async function AdminOverview() {
 
             {/* Middle Section: Recent Activity / Payments */}
             {/* Middle Section: Recent Activity / Payments */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8">
-              <div className="lg:col-span-3 flex flex-col">
-                <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-2xl ishes-heading text-ishes-dark">Derniers paiements</h3>
-                  <Link href="/app/admin/facturation" className="ishes-label text-ishes-green hover:underline">Voir tout</Link>
+            {/* Sales Overview Chart Section */}
+            <div className="bg-white rounded-[2.5rem] border border-gray-100 p-10 shadow-sm">
+              <div className="flex flex-col mb-12">
+                <h3 className="text-2xl ishes-heading text-ishes-dark">Aperçu des Ventes</h3>
+                <p className="text-sm font-medium text-gray-400 mt-1">Visualisation de vos revenus ce mois-ci.</p>
+              </div>
+
+              {/* Chart Container */}
+              <div className="relative h-64 w-full mt-8">
+                <div className="absolute inset-0 flex items-end justify-between gap-4">
+                  {[
+                    { month: 'Jan', value: 35 },
+                    { month: 'Fev', value: 55 },
+                    { month: 'Mar', value: 42 },
+                    { month: 'Avr', value: 78 },
+                    { month: 'Mai', value: 85 },
+                    { month: 'Jun', value: 68 },
+                    { month: 'Jul', value: 48 },
+                    { month: 'Aou', value: 58 },
+                    { month: 'Sep', value: 72 },
+                    { month: 'Oct', value: 52 },
+                    { month: 'Nov', value: 64 },
+                    { month: 'Dec', value: 80 },
+                  ].map((item, index) => (
+                    <div key={index} className="flex-1 flex flex-col items-center gap-4 group">
+                      {/* Tooltip on hover */}
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 px-2 py-1 bg-ishes-dark text-white text-[10px] font-bold rounded shadow-xl pointer-events-none">
+                        {item.value}K€
+                      </div>
+                      
+                      {/* Bar */}
+                      <div 
+                        className="w-full bg-[#E0E7FF] group-hover:bg-[#C7D2FE] transition-all duration-500 rounded-t-xl rounded-b-lg relative overflow-hidden"
+                        style={{ height: `${item.value}%` }}
+                      >
+                        {/* Shimmer effect */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
+                      
+                      {/* Label */}
+                      <span className="text-[10px] font-black uppercase tracking-tight text-gray-400 group-hover:text-ishes-dark transition-colors">
+                        {item.month}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr className="border-b border-ishes-dark/10">
-                        <th className="ishes-label py-4 pr-6">Élève</th>
-                        <th className="ishes-label py-4 px-6">Date</th>
-                        <th className="ishes-label py-4 px-6 text-right">Montant</th>
-                        <th className="ishes-label py-4 pl-6 text-right">Statut</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                      {/* Row 1 */}
-                      <tr className="group hover:bg-ishes-green/5 transition-colors">
-                        <td className="py-5 pr-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-ishes-dark text-white flex items-center justify-center font-black italic text-xs shadow-lg shadow-ishes-dark/10">AD</div>
-                            <span className="ishes-heading text-sm text-ishes-dark">Ali Dupont</span>
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 font-medium text-gray-400 text-sm">18 AVR 2024</td>
-                        <td className="py-5 px-6 font-black italic text-ishes-dark text-right">150,00 €</td>
-                        <td className="py-5 pl-6 text-right">
-                          <span className="ishes-label text-[10px] bg-ishes-green text-white px-2.5 py-1 rounded-md">Complété</span>
-                        </td>
-                      </tr>
-                      {/* Row 2 */}
-                      <tr className="group hover:bg-ishes-green/5 transition-colors">
-                        <td className="py-5 pr-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-ishes-dark text-white flex items-center justify-center font-black italic text-xs shadow-lg shadow-ishes-dark/10">SM</div>
-                            <span className="ishes-heading text-sm text-ishes-dark">Sarah Martin</span>
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 font-medium text-gray-400 text-sm">17 AVR 2024</td>
-                        <td className="py-5 px-6 font-black italic text-ishes-dark text-right">450,00 €</td>
-                        <td className="py-5 pl-6 text-right">
-                          <span className="ishes-label text-[10px] bg-ishes-green text-white px-2.5 py-1 rounded-md">Complété</span>
-                        </td>
-                      </tr>
-                      {/* Row 3 */}
-                      <tr className="group hover:bg-ishes-green/5 transition-colors">
-                        <td className="py-5 pr-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-ishes-dark text-white flex items-center justify-center font-black italic text-xs shadow-lg shadow-ishes-dark/10">KY</div>
-                            <span className="ishes-heading text-sm text-ishes-dark">Karim Yeles</span>
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 font-medium text-gray-400 text-sm">15 AVR 2024</td>
-                        <td className="py-5 px-6 font-black italic text-ishes-dark text-right">150,00 €</td>
-                        <td className="py-5 pl-6 text-right">
-                          <span className="ishes-label text-[10px] bg-gray-200 text-gray-600 px-2.5 py-1 rounded-md">En attente</span>
-                        </td>
-                      </tr>
-                      {/* Row 4 */}
-                      <tr className="group hover:bg-ishes-green/5 transition-colors">
-                        <td className="py-5 pr-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-ishes-dark text-white flex items-center justify-center font-black italic text-xs shadow-lg shadow-ishes-dark/10">FL</div>
-                            <span className="ishes-heading text-sm text-ishes-dark">Fatima Larbi</span>
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 font-medium text-gray-400 text-sm">14 AVR 2024</td>
-                        <td className="py-5 px-6 font-black italic text-ishes-dark text-right">220,00 €</td>
-                        <td className="py-5 pl-6 text-right">
-                          <span className="ishes-label text-[10px] bg-ishes-green text-white px-2.5 py-1 rounded-md">Complété</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                
+                {/* Horizontal lines (Background) */}
+                <div className="absolute inset-0 -z-10 flex flex-col justify-between pointer-events-none opacity-20">
+                  <div className="w-full border-t border-dashed border-gray-300"></div>
+                  <div className="w-full border-t border-dashed border-gray-300"></div>
+                  <div className="w-full border-t border-dashed border-gray-300"></div>
+                  <div className="w-full border-t border-dashed border-gray-300"></div>
                 </div>
               </div>
             </div>

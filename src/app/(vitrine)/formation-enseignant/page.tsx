@@ -58,7 +58,7 @@ export default function FormationEnseignantPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-green selection:text-white">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden">
+      <section className="relative pt-44 pb-32 md:pt-56 md:pb-48 overflow-hidden">
         <ArabicBackground />
         <div className="absolute top-0 right-1/2 translate-x-1/2 w-[800px] h-[600px] bg-ishes-green/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
@@ -87,7 +87,7 @@ export default function FormationEnseignantPage() {
       </section>
  
       {/* --- FORMATIONS SECTION --- */}
-      <section className="pb-32 relative z-10">
+      <section className="pt-20 md:pt-32 pb-32 relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col gap-24">
             
