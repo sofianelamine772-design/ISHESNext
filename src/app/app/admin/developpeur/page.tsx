@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { 
-  LayoutDashboard, Users, BookOpen, CreditCard, FileText, 
   Terminal, ShieldCheck, Activity, Zap, RefreshCw, 
-  CheckCircle2, AlertCircle, ExternalLink, Globe, Database, Settings
+  CheckCircle2, AlertCircle, ExternalLink, Database, 
+  ChevronRight, Settings
 } from "lucide-react";
-import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/nextjs";
 
 export default function DeveloperPage() {
   const [isTesting, setIsTesting] = useState(false);
@@ -24,7 +23,6 @@ export default function DeveloperPage() {
   const runAllTests = async () => {
     setIsTesting(true);
     
-    // Simuler des tests pour l'exemple (on pourrait appeler une action serveur réelle)
     for (let i = 0; i < tests.length; i++) {
       const updatedTests = [...tests];
       updatedTests[i].status = 'loading';
@@ -32,7 +30,7 @@ export default function DeveloperPage() {
       
       await new Promise(r => setTimeout(r, 1000));
       
-      const success = Math.random() > 0.1; // 90% de succès pour la démo
+      const success = Math.random() > 0.1; 
       updatedTests[i].status = success ? 'success' : 'error';
       updatedTests[i].message = success ? 'Vérification réussie' : 'Erreur de configuration détectée';
       setTests([...updatedTests]);
@@ -46,80 +44,118 @@ export default function DeveloperPage() {
       <AdminSidebar />
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10">
+      <main className="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#F8FAFC]">
+        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
-            <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
+            <div className="w-10 lg:hidden" />
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Centre de Diagnostic</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ishes" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4">
+          <div className="flex items-center gap-3 md:gap-6">
+            <Button variant="ishes" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4 rounded-xl border-none shadow-lg shadow-ishes-green/20">
               <RefreshCw className={`w-4 h-4 md:mr-2 ${isTesting ? 'animate-spin' : ''}`} />
               <span className="hidden md:inline">Lancer les tests</span>
               <span className="md:hidden">Tester</span>
             </Button>
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                }
+              }}
+            />
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-8">
             
+            {/* Status Banner */}
+            <div className="bg-ishes-dark rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-2xl shadow-ishes-dark/20">
+              <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-ishes-green blur-[100px] rounded-full" />
+              </div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                    <ShieldCheck className="w-5 h-5 text-ishes-green" />
+                  </div>
+                  <span className="text-[11px] font-black uppercase tracking-[0.3em] text-ishes-green">État du système</span>
+                </div>
+                <h2 className="text-3xl ishes-heading text-white mb-2">Vérification des Services</h2>
+                <p className="text-white/50 text-sm font-medium">Assurez-vous que toutes les briques techniques de l'ISHES sont opérationnelles.</p>
+              </div>
+            </div>
 
             {/* Test Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {tests.map((test) => (
-                    <div key={test.id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                    <div key={test.id} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-4">
+                                <div className={cn(
+                                    "w-12 h-12 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110",
                                     test.status === 'success' ? 'bg-ishes-green/10 text-ishes-green' :
                                     test.status === 'error' ? 'bg-red-50 text-red-500' :
                                     test.status === 'loading' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'
-                                }`}>
+                                )}>
                                     {test.id === 'api' && <Zap className="w-5 h-5" />}
                                     {test.id === 'webhooks' && <Activity className="w-5 h-5" />}
                                     {test.id === 'products' && <Database className="w-5 h-5" />}
                                     {test.id === 'env' && <Settings className="w-5 h-5" />}
                                 </div>
-                                <h4 className="font-black italic text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
+                                <div>
+                                  <h4 className="font-black italic text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
+                                  <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">{test.id}</p>
+                                </div>
                             </div>
                             {test.status === 'success' && <CheckCircle2 className="w-5 h-5 text-ishes-green" />}
                             {test.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
                             {test.status === 'loading' && <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />}
                         </div>
-                        <p className="text-xs font-medium text-gray-400 mb-4">{test.message}</p>
+                        
+                        <div className="bg-gray-50/50 rounded-xl p-3 mb-4">
+                          <p className="text-[10px] font-bold text-gray-400 italic">"{test.message}"</p>
+                        </div>
+
                         <div className="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden">
-                            <div className={`h-full transition-all duration-500 ${
+                            <div className={cn(
+                                "h-full transition-all duration-1000",
                                 test.status === 'success' ? 'w-full bg-ishes-green' :
                                 test.status === 'error' ? 'w-full bg-red-500' :
                                 test.status === 'loading' ? 'w-1/2 bg-blue-500 animate-pulse' : 'w-0'
-                            }`}></div>
+                            )}></div>
                         </div>
                     </div>
                 ))}
             </div>
 
             {/* Extra Info */}
-            <div className="bg-white rounded-3xl border border-gray-100 p-8">
-                <h4 className="ishes-heading text-ishes-dark mb-6">Liens de débogage</h4>
+            <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm">
+                <h4 className="text-xl ishes-heading text-ishes-dark mb-8">Ressources Externes</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-ishes-green/5 transition-colors group">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm">
-                                <ExternalLink className="w-4 h-4" />
+                    <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
+                                <ExternalLink className="w-5 h-5" />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-ishes-dark">Logs Stripe</span>
+                            <div>
+                              <span className="text-[11px] font-black uppercase tracking-widest text-ishes-dark block">Logs Stripe</span>
+                              <span className="text-[9px] font-bold text-gray-400">Suivi des requêtes</span>
+                            </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-gray-300" />
+                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
                     </a>
-                    <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-ishes-green/5 transition-colors group">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm">
-                                <Zap className="w-4 h-4" />
+                    <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
+                                <Zap className="w-5 h-5" />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-ishes-dark">Webhooks Config</span>
+                            <div>
+                              <span className="text-[11px] font-black uppercase tracking-widest text-ishes-dark block">Webhooks</span>
+                              <span className="text-[9px] font-bold text-gray-400">Config des événements</span>
+                            </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-gray-300" />
+                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
                     </a>
                 </div>
             </div>
@@ -129,23 +165,4 @@ export default function DeveloperPage() {
       </main>
     </div>
   );
-}
-
-function ChevronRight(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  )
 }

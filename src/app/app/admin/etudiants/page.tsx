@@ -9,6 +9,7 @@ import { fetchStudentsAction, createStudentManualAction, updateStudentAction, fe
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/nextjs";
 
 // Types
 type StudentDetail = {
@@ -203,24 +204,26 @@ function EtudiantsContent() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 h-full">
         {/* Top Header */}
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10">
+        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Base Étudiants</h1>
-            <span className="hidden sm:inline-block px-3 py-1 bg-gray-50 text-ishes-dark text-[10px] font-black italic rounded-full border border-gray-100">
+            <span className="hidden sm:inline-block px-3 py-1 bg-ishes-green/5 text-ishes-green text-[10px] font-black italic rounded-full border border-ishes-green/10">
               {students.length} INSCRITS
             </span>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes" size="sm" className="h-10 px-4 md:px-6" onClick={() => setShowAddModal(true)}>
+            <Button variant="ishes" size="sm" className="h-10 px-4 md:px-6 rounded-xl border-none shadow-lg shadow-ishes-green/20" onClick={() => setShowAddModal(true)}>
               <Plus className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Inscrire Élève</span>
               <span className="md:hidden">Inscrire</span>
             </Button>
-            <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-ishes-green p-[2px] bg-white cursor-pointer shadow-lg shadow-ishes-green/10">
-              <div className="w-full h-full bg-gray-50 rounded-full flex items-center justify-center font-black italic text-ishes-dark text-xs md:text-sm">
-                AD
-              </div>
-            </div>
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                }
+              }}
+            />
           </div>
         </header>
 
