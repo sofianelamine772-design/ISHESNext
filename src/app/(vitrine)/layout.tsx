@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsappButton } from "@/components/WhatsappButton";
+import { DynamicWhatsappButton } from "@/components/DynamicWhatsappButton";
 
 export default function VitrineLayout({
   children,
@@ -10,14 +10,11 @@ export default function VitrineLayout({
   return (
     <>
       <Navbar />
-      {/* 
-        Le main content est enveloppé pour s'assurer que Navbar s'affiche proprement par dessus.
-      */}
       <div className="flex-1 flex flex-col min-h-screen">
         {children}
       </div>
       <Footer />
-      <WhatsappButton />
+      <DynamicWhatsappButton />
     </>
   );
 }

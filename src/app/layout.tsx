@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 import { ClerkProvider } from "@clerk/nextjs";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <body className="font-sans min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-green selection:text-white">
           {children}
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>

@@ -1,7 +1,6 @@
-// Composant de fond avec calligraphie arabe dispersée sur toute la page
-// Utiliser dans chaque page vitrine
+import React from "react";
 
-export function ArabicBackground() {
+export const ArabicBackground = React.memo(function ArabicBackground() {
   const texts = [
     { text: "ﷻ", size: "text-[380px]", top: "top-[5%]", left: "left-[2%]", rotate: "rotate-[-12deg]", opacity: "opacity-[0.06]" },
     { text: "علم", size: "text-[260px]", top: "top-[15%]", left: "left-[60%]", rotate: "rotate-[8deg]", opacity: "opacity-[0.05]" },
@@ -28,4 +27,4 @@ export function ArabicBackground() {
       ))}
     </div>
   );
-}
+});

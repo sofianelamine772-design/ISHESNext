@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ArrowRight, Heart } from "lucide-react";
 import { HeroSection } from "@/components/vitrine/HeroSection";
 import { StatsSection } from "@/components/vitrine/StatsSection";
-import { TestimonialsMarquee } from "@/components/vitrine/TestimonialsMarquee";
 import { SocialSection } from "@/components/vitrine/SocialSection";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { DynamicTestimonials } from "@/components/vitrine/DynamicTestimonials";
 
 export const metadata: Metadata = {
   title: "ISHES - L'excellence de la langue arabe à Toulouse",
@@ -127,7 +127,7 @@ export default function Home() {
 
       {/* ===== TÉMOIGNAGES SECTION ===== */}
       <section className="bg-[#fafafa] py-20 border-y border-gray-100/30">
-        <TestimonialsMarquee />
+        <DynamicTestimonials />
       </section>
 
       {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
