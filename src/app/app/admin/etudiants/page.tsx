@@ -70,11 +70,18 @@ function EtudiantsContent() {
             phone: s.phone || "Non renseigné",
             avatar: (s.first_name?.[0] || "") + (s.last_name?.[0] || ""),
             dateJoined: new Date(s.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }),
-            enrolledClass: (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) || 
-                           (Array.isArray(latestInscription?.formations) ? latestInscription?.formations[0]?.title : latestInscription?.formations?.title) || 
-                           "Non affecté",
+            enrolledClass: 
+              (Array.isArray(latestInscription?.formations) ? latestInscription?.formations[0]?.title : latestInscription?.formations?.title) || 
+              (Array.isArray(latestInscription?.classes) 
+                ? (Array.isArray(latestInscription.classes[0]?.formations) ? latestInscription.classes[0].formations[0]?.title : latestInscription.classes[0]?.formations?.title)
+                : (Array.isArray(latestInscription?.classes?.formations) ? latestInscription.classes.formations[0]?.title : latestInscription?.classes?.formations?.title)
+              ) ||
+              (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) || 
+              "Non affecté",
             classType: "distanciel" as const,
-            status: latestInscription?.status || s.status || "en_attente",
+            status: (latestInscription?.status === 'valide' || latestInscription?.status === 'actif' || latestInscription?.status === 'en_attente_daffectation' || latestInscription?.formation_id) 
+              ? 'actif' 
+              : (latestInscription?.status || s.status || "en_attente"),
             parentName: s.parent_first_name ? `${s.parent_first_name} ${s.parent_last_name || ''}`.trim() : null,
             address: s.address || "Adresse non renseignée",
             lastPayment: "N/A",
@@ -274,13 +281,13 @@ function EtudiantsContent() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-0.5">
                           <h3 className={`ishes-heading text-sm truncate ${selectedStudentId === student.id ? 'text-white' : 'text-ishes-dark'}`}>{student.name}</h3>
-                          {student.status === "actif" && <span className="w-2 h-2 rounded-full bg-ishes-green"></span>}
-                          {student.status !== "actif" && <span className="w-2 h-2 rounded-full bg-amber-400"></span>}
+                          {(student.status === "en_attente") && <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/20" />}
+                          {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-green shadow-lg shadow-ishes-green/20" />}
                         </div>
                         <p className={`text-[10px] font-medium tracking-wider truncate mb-1 opacity-60 uppercase ${selectedStudentId === student.id ? 'text-white' : 'text-ishes-dark'}`}>{student.email}</p>
                         <div className="flex items-center gap-2">
                           <span className={`ishes-label text-[8px] px-2 py-0.5 rounded-md truncate ${selectedStudentId === student.id ? 'bg-white/10 text-white' : 'bg-gray-50 text-gray-400'}`}>
-                            {student.enrolledClass}
+                            {student.enrolledClass || "Non assigné"}
                           </span>
                         </div>
                       </div>
@@ -312,12 +319,12 @@ function EtudiantsContent() {
                    <div className="absolute inset-0 bg-gradient-to-r from-ishes-green/10 to-transparent"></div>
                   {/* Status Badge Top Right */}
                   <div className="absolute top-6 right-6 md:right-8 flex gap-2">
-                    {selectedStudent.status === 'actif' && (
+                    {(selectedStudent.status === 'actif' || selectedStudent.status === 'valide') && (
                       <span className="bg-ishes-green/10 backdrop-blur-md border border-ishes-green/20 text-ishes-green px-2 md:px-3 py-1 md:py-1.5 rounded-xl text-[8px] md:text-[9px] font-black tracking-widest shadow-sm flex items-center gap-1.5">
                         <CheckCircle2 className="w-3 h-3" /> <span className="hidden sm:inline">DOSSIER VALIDÉ</span>
                       </span>
                     )}
-                    {selectedStudent.status !== 'actif' && (
+                    {selectedStudent.status === 'en_attente' && (
                       <span className="bg-amber-400/10 backdrop-blur-md border border-amber-400/20 text-amber-400 px-2 md:px-3 py-1 md:py-1.5 rounded-xl text-[8px] md:text-[9px] font-black tracking-widest shadow-sm flex items-center gap-1.5">
                         <Calendar className="w-3 h-3" /> <span className="hidden sm:inline">EN ATTENTE</span>
                       </span>
@@ -336,7 +343,7 @@ function EtudiantsContent() {
                       </div>
                       <div className="pb-1 md:pb-2">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/60 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <h2 className="text-2xl md:text-4xl font-black text-white md:text-ishes-dark tracking-tight leading-none truncate max-w-[200px] md:max-w-none">{selectedStudent.name}</h2>
+                        <h2 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-none truncate max-w-[200px] md:max-w-none">{selectedStudent.name}</h2>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-green mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>

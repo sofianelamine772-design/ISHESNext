@@ -211,7 +211,10 @@ export async function fetchStudentsAction() {
           formation_id,
           class_id,
           formations (title),
-          classes (name)
+          classes (
+            name,
+            formations (title)
+          )
         )
       `)
       .order('created_at', { ascending: false });

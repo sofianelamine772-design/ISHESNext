@@ -69,22 +69,7 @@ export default function DeveloperPage() {
         <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-8">
             
-            {/* Status Banner */}
-            <div className="bg-ishes-dark rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-2xl shadow-ishes-dark/20">
-              <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-ishes-green blur-[100px] rounded-full" />
-              </div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                    <ShieldCheck className="w-5 h-5 text-ishes-green" />
-                  </div>
-                  <span className="text-[11px] font-black uppercase tracking-[0.3em] text-ishes-green">État du système</span>
-                </div>
-                <h2 className="text-3xl ishes-heading text-white mb-2">Vérification des Services</h2>
-                <p className="text-white/50 text-sm font-medium">Assurez-vous que toutes les briques techniques de l'ISHES sont opérationnelles.</p>
-              </div>
-            </div>
+
 
             {/* Test Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -154,8 +154,8 @@ export default function AdminDashboard() {
     }
   };
 
-  const distancielClasses = classes.filter((c) => c.type === "distanciel");
-  const presentielClasses = classes.filter((c) => c.type === "presentiel");
+  const distancielClasses = classes.filter((c) => c.type === "distanciel" && c.students.length > 0);
+  const presentielClasses = classes.filter((c) => c.type === "presentiel" && c.students.length > 0);
 
   const filteredDistancielClasses = distancielClasses.filter(c =>
     (c.name + (c.formationTitle || '')).toLowerCase().includes(classSearchQuery.toLowerCase())

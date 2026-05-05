@@ -125,33 +125,29 @@ export default function FacturationPage() {
                         <h3 className="text-2xl ishes-heading text-ishes-dark">{payments.length}</h3>
                       </div>
                     </div>
-                    <div className="bg-ishes-dark p-6 rounded-3xl shadow-xl shadow-ishes-dark/10 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-ishes-green">
-                        <Filter className="w-6 h-6" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Filtrer par statut</p>
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => setActiveTab("refuse")}
-                            className={cn(
-                              "px-3 py-1 rounded-lg text-[10px] font-bold transition-all",
-                              activeTab === "refuse" ? "bg-ishes-green text-white" : "bg-white/5 text-white/60 hover:bg-white/10"
-                            )}
-                          >
-                            REFUSÉS
-                          </button>
-                          <button 
-                            onClick={() => setActiveTab("tous")}
-                            className={cn(
-                              "px-3 py-1 rounded-lg text-[10px] font-bold transition-all",
-                              activeTab === "tous" ? "bg-ishes-green text-white" : "bg-white/5 text-white/60 hover:bg-white/10"
-                            )}
-                          >
-                            TOUS
-                          </button>
-                        </div>
-                      </div>
+                    <div className="flex items-center justify-center md:justify-end gap-3 p-2">
+                      <button 
+                        onClick={() => setActiveTab("refuse")}
+                        className={cn(
+                          "px-6 py-3 rounded-2xl text-[11px] font-black tracking-widest transition-all",
+                          activeTab === "refuse" 
+                            ? "bg-ishes-green text-white shadow-xl shadow-ishes-green/20 scale-105" 
+                            : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-green/20 hover:text-ishes-dark"
+                        )}
+                      >
+                        REFUSÉS
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab("tous")}
+                        className={cn(
+                          "px-6 py-3 rounded-2xl text-[11px] font-black tracking-widest transition-all",
+                          activeTab === "tous" 
+                            ? "bg-ishes-green text-white shadow-xl shadow-ishes-green/20 scale-105" 
+                            : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-green/20 hover:text-ishes-dark"
+                        )}
+                      >
+                        TOUS
+                      </button>
                     </div>
                   </div>
 

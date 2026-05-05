@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, UserPlus } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { stripe } from "@/lib/stripe";
 import { AdminSidebar } from "@/components/AdminSidebar";
 
 export default async function AdminOverview() {
@@ -9,6 +10,44 @@ export default async function AdminOverview() {
   const { count: totalStudents } = await supabaseAdmin
     .from('etudiants')
     .select('*', { count: 'exact', head: true });
+
+  // Stripe Revenue Data
+  let monthlyRevenue = 0;
+  let yearlyRevenue = 0;
+
+  try {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    
+    const startOfMonthTimestamp = Math.floor(startOfMonth.getTime() / 1000);
+    const startOfYearTimestamp = Math.floor(startOfYear.getTime() / 1000);
+
+    // Get monthly revenue (limit 100 for simplicity)
+    const monthPIs = await stripe.paymentIntents.list({
+      created: { gte: startOfMonthTimestamp },
+      limit: 100,
+    });
+    monthlyRevenue = monthPIs.data
+      .filter(pi => pi.status === 'succeeded')
+      .reduce((acc, pi) => acc + (pi.amount_received / 100), 0);
+
+    // Get yearly revenue (limit 100)
+    const yearPIs = await stripe.paymentIntents.list({
+      created: { gte: startOfYearTimestamp },
+      limit: 100,
+    });
+    yearlyRevenue = yearPIs.data
+      .filter(pi => pi.status === 'succeeded')
+      .reduce((acc, pi) => acc + (pi.amount_received / 100), 0);
+  } catch (err) {
+    console.error("Stripe Fetch Error:", err);
+  }
+
+  const formatRevenue = (val: number) => {
+    if (val >= 1000) return (val / 1000).toFixed(1) + "K€";
+    return val.toFixed(0) + "€";
+  };
 
   return (
     <div className="h-screen bg-[#F8FAFC] flex overflow-hidden">
@@ -60,7 +99,7 @@ export default async function AdminOverview() {
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-green mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">42,5K€</h3>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(monthlyRevenue)}</h3>
                     <span className="text-[10px] font-black italic text-ishes-green bg-ishes-green/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
@@ -72,7 +111,7 @@ export default async function AdminOverview() {
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-green mb-1 text-[10px] md:text-xs">Revenus (Année)</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">385K€</h3>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(yearlyRevenue)}</h3>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-green rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
