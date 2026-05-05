@@ -1,18 +1,20 @@
 import { clerkMiddleware, createRouteMatcher, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+import { isAdminEmail } from "@/lib/auth-utils";
+
 const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)', 
-  '/sign-up(.*)', 
-  '/', 
-  '/program(.*)', 
-  '/contact(.*)', 
-  '/api/webhooks(.*)', 
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/',
+  '/program(.*)',
+  '/contact(.*)',
+  '/api/webhooks(.*)',
   '/api/checkout(.*)',
-  '/mentions-legales(.*)', 
-  '/formation-enseignant(.*)', 
-  '/campus(.*)', 
-  '/conseil-spiritualite(.*)', 
+  '/mentions-legales(.*)',
+  '/formation-enseignant(.*)',
+  '/campus(.*)',
+  '/conseil-spiritualite(.*)',
   '/fr(.*)',
   '/institut(.*)',
   '/boutique(.*)',
@@ -34,7 +36,7 @@ export default clerkMiddleware(async (auth, request) => {
     const user = await client.users.getUser(userId);
     const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress;
 
-    const isAdmin = userEmail === process.env.ADMIN_EMAIL;
+    const isAdmin = isAdminEmail(userEmail);
 
     // Si pas admin et essaie d'accéder au dashboard admin -> Redirection vers l'espace élève
     if (!isAdmin) {

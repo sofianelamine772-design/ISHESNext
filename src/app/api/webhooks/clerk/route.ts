@@ -2,6 +2,7 @@ import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { isAdminEmail } from '@/lib/auth-utils';
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
     const phone = phone_numbers[0]?.phone_number;
 
     // 1. Vérifie si l'utilisateur est l'admin
-    const isAdmin = email === process.env.ADMIN_EMAIL;
+    const isAdmin = isAdminEmail(email);
 
     // 2. Vérifie si l'e-mail existe déjà dans notre table 'etudiants' (inscrit via vitrine)
     const { data: existingStudent, error: fetchError } = await supabaseAdmin

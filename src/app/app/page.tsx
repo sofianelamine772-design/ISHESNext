@@ -1,5 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { isAdminEmail } from "@/lib/auth-utils";
 
 export default async function AppDispatcher() {
   const { userId } = await auth();
@@ -15,7 +16,7 @@ export default async function AppDispatcher() {
   if (userEmail) {
     try {
       const { supabase } = await import("@/lib/supabase");
-      
+
       // On cherche si un profil existe déjà avec cet email (ex: via le formulaire d'inscription vitrine)
       const { data: existingUser } = await supabase
         .from('etudiants')
@@ -27,7 +28,7 @@ export default async function AppDispatcher() {
         // Si il existe, on met à jour l'ID temporaire par le vrai ID Clerk
         await supabase
           .from('etudiants')
-          .update({ 
+          .update({
             id: userId,
             first_name: user.firstName,
             last_name: user.lastName,
@@ -45,7 +46,7 @@ export default async function AppDispatcher() {
             first_name: user.firstName,
             last_name: user.lastName,
             photo_url: user.imageUrl,
-            role: userEmail === process.env.ADMIN_EMAIL ? 'admin' : 'eleve',
+            role: isAdminEmail(userEmail) ? 'admin' : 'eleve',
             status: 'actif'
           });
       }
@@ -55,7 +56,7 @@ export default async function AppDispatcher() {
   }
   // --- END SYNC ---
 
-  const isAdmin = userEmail === process.env.ADMIN_EMAIL;
+  const isAdmin = isAdminEmail(userEmail);
 
   if (isAdmin) {
     redirect("/app/admin");
