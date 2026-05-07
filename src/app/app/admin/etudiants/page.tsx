@@ -21,7 +21,7 @@ type StudentDetail = {
   dateJoined: string;
   enrolledClass: string;
   classType: "distanciel" | "presentiel";
-  status: "actif" | "inactif" | "en_attente" | "en_attente_daffectation";
+  status: "actif" | "inactif" | "en_attente" | "en_attente_daffectation" | "valide";
   parentName: string | null;
   address: string;
   lastPayment: string;
