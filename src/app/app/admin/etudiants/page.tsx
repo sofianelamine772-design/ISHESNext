@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send } from "lucide-react";
 import { fetchStudentsAction, createStudentManualAction, updateStudentAction, fetchClassesAction, assignStudentToClassAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
@@ -41,6 +41,13 @@ function EtudiantsContent() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showScolariteModal, setShowScolariteModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messageContent, setMessageContent] = useState("");
+  const [messageSending, setMessageSending] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
   const [classes, setClasses] = useState<any[]>([]);
   const [classSearchQuery, setClassSearchQuery] = useState("");
   const [targetClassId, setTargetClassId] = useState("");
@@ -155,6 +162,63 @@ function EtudiantsContent() {
       console.error(err);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const fetchChatHistory = async (studentId: string) => {
+    setChatLoading(true);
+    try {
+      const res = await fetch(`/api/messages?type=chat&clerkId=${studentId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setChatHistory(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      console.error("Erreur chargement chat:", err);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  const openChat = (student: StudentDetail) => {
+    setSelectedStudentId(student.id);
+    setMessageContent("");
+    setMessageSent(false);
+    setChatHistory([]);
+    setShowMessageModal(true);
+    fetchChatHistory(student.id);
+  };
+
+  const handleSendMessageToStudent = async () => {
+    if (!selectedStudent || !messageContent.trim()) return;
+    setMessageSending(true);
+    const content = messageContent.trim();
+    setMessageContent("");
+    // Affichage optimiste immédiat
+    const optimistic = { id: `tmp-${Date.now()}`, sender_id: 'admin_system', receiver_id: selectedStudent.id, content, created_at: new Date().toISOString(), type: 'private' };
+    setChatHistory(prev => [...prev, optimistic]);
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender_id: 'admin_system',
+          receiver_id: selectedStudent.id,
+          content,
+          type: 'private',
+        }),
+      });
+      if (res.ok) {
+        // Rafraîchir le vrai historique
+        fetchChatHistory(selectedStudent.id);
+      } else {
+        setChatHistory(prev => prev.filter(m => m.id !== optimistic.id));
+      }
+    } catch (err) {
+      console.error("Erreur envoi:", err);
+      setChatHistory(prev => prev.filter(m => m.id !== optimistic.id));
+    } finally {
+      setMessageSending(false);
     }
   };
 
@@ -351,7 +415,7 @@ function EtudiantsContent() {
                       <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-[10px] md:text-xs" onClick={openEditModal}>
                         MODIFIER
                       </Button>
-                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 md:h-11 shadow-ishes-green/20 text-[10px] md:text-xs">
+                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 md:h-11 shadow-ishes-green/20 text-[10px] md:text-xs" onClick={() => openChat(selectedStudent)}>
                         <Mail className="w-4 h-4 mr-1 md:mr-2" /> Message
                       </Button>
                     </div>
@@ -729,6 +793,158 @@ function EtudiantsContent() {
                 <Button variant="ishes" className="flex-[2] h-12 rounded-2xl" disabled={isSubmitting || !targetClassId} onClick={handleUpdateScolarite}>
                   {isSubmitting ? "Mise à jour..." : "Confirmer le changement"}
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MESSAGE MODAL */}
+      {showMessageModal && selectedStudent && (
+        <div className="fixed inset-0 bg-ishes-dark/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100">
+            <div className="p-8 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#086b51]/10 rounded-2xl flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-[#086b51]" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-ishes-dark tracking-tight">Message à {selectedStudent.name}</h3>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{selectedStudent.email}</p>
+                </div>
+              </div>
+              <button onClick={() => setShowMessageModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-8 space-y-6">
+              {messageSent ? (
+                <div className="flex flex-col items-center py-10 gap-4">
+                  <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center">
+                    <CheckCircle2 className="w-8 h-8 text-[#086b51]" />
+                  </div>
+                  <p className="font-black text-[#086b51] uppercase tracking-widest text-sm">Message envoyé !</p>
+                  <p className="text-xs text-gray-400 font-medium">{selectedStudent.name} le recevra dans sa messagerie.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Votre message</label>
+                    <textarea
+                      rows={5}
+                      value={messageContent}
+                      onChange={(e) => setMessageContent(e.target.value)}
+                      placeholder={`Écrivez votre message à ${selectedStudent.name}...`}
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-[#086b51]/30 focus:ring-2 focus:ring-[#086b51]/10 transition-all text-sm font-medium resize-none"
+                      autoFocus
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <Button variant="ishes-outline" className="flex-1 h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]" onClick={() => setShowMessageModal(false)}>Annuler</Button>
+                    <Button
+                      variant="ishes"
+                      className="flex-[2] h-12 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-[#086b51]/20"
+                      disabled={messageSending || !messageContent.trim()}
+                      onClick={handleSendMessageToStudent}
+                    >
+                      {messageSending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Envoi...</> : <><Mail className="w-4 h-4 mr-2" />Envoyer</>}
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CHAT DRAWER */}
+      {showMessageModal && selectedStudent && (
+        <div className="fixed inset-0 z-[60] flex">
+          {/* Overlay */}
+          <div className="flex-1 bg-ishes-dark/40 backdrop-blur-sm" onClick={() => setShowMessageModal(false)} />
+          
+          {/* Drawer */}
+          <div className="w-full max-w-md bg-white flex flex-col h-full shadow-2xl">
+            {/* Header */}
+            <div className="p-6 bg-white border-b border-gray-100 flex items-center gap-4 shrink-0">
+              <div className="w-10 h-10 bg-[#086b51]/10 rounded-xl flex items-center justify-center shrink-0">
+                <span className="text-sm font-black text-[#086b51]">{selectedStudent.avatar}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-black text-ishes-dark tracking-tight truncate">{selectedStudent.name}</h3>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Élève · {selectedStudent.enrolledClass}</span>
+                </div>
+              </div>
+              <button onClick={() => setShowMessageModal(false)} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors text-gray-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/30">
+              {chatLoading ? (
+                <div className="flex items-center justify-center h-full">
+                  <Loader2 className="w-8 h-8 animate-spin text-[#086b51]" />
+                </div>
+              ) : chatHistory.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-300">
+                  <Mail className="w-12 h-12 opacity-20" />
+                  <p className="text-[10px] font-black uppercase tracking-widest">Aucun échange pour le moment</p>
+                  <p className="text-xs font-medium text-gray-400">Commencez la conversation ci-dessous</p>
+                </div>
+              ) : (
+                chatHistory.map((msg, idx) => {
+                  const isAdmin = msg.sender_id === 'admin_system';
+                  return (
+                    <div key={msg.id || idx} className={`flex gap-2.5 ${isAdmin ? 'flex-row-reverse' : 'flex-row'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black shrink-0 self-end ${
+                        isAdmin ? 'bg-[#086b51] text-white' : 'bg-gray-200 text-gray-600'
+                      }`}>
+                        {isAdmin ? 'A' : selectedStudent.avatar}
+                      </div>
+                      <div className={`max-w-[75%]`}>
+                        <div className={`px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed ${
+                          isAdmin 
+                            ? 'bg-[#086b51] text-white rounded-br-md shadow-md shadow-[#086b51]/20' 
+                            : 'bg-white text-gray-700 border border-gray-100 rounded-bl-md shadow-sm'
+                        }`}>
+                          {msg.content}
+                        </div>
+                        <span className={`text-[9px] font-bold text-gray-300 uppercase tracking-widest mt-1 block px-1 ${
+                          isAdmin ? 'text-right' : 'text-left'
+                        }`}>
+                          {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="p-4 bg-white border-t border-gray-100 shrink-0">
+              <div className="bg-gray-50 rounded-2xl px-4 py-2 flex items-center gap-3 border border-gray-100 focus-within:border-[#086b51]/30 focus-within:ring-2 focus-within:ring-[#086b51]/10 transition-all">
+                <input
+                  type="text"
+                  value={messageContent}
+                  onChange={(e) => setMessageContent(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessageToStudent()}
+                  placeholder={`Message à ${selectedStudent.name.split(' ')[0]}...`}
+                  className="flex-1 bg-transparent border-none focus:ring-0 text-sm font-medium py-2 placeholder:text-gray-400"
+                  autoFocus
+                />
+                <button
+                  onClick={handleSendMessageToStudent}
+                  disabled={messageSending || !messageContent.trim()}
+                  className="w-9 h-9 bg-[#086b51] text-white rounded-xl flex items-center justify-center shadow-md shadow-[#086b51]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shrink-0"
+                >
+                  {messageSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                </button>
               </div>
             </div>
           </div>

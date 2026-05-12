@@ -1,80 +1,59 @@
-import { NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { stripe } from "@/lib/stripe";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-10-16',
+});
+
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = (await headers()).get("Stripe-Signature") as string;
+  const signature = headers().get('stripe-signature') as string;
 
-  let event;
+  let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET || ""
-    );
-  } catch (error: any) {
-    console.error(`Webhook Error: ${error.message}`);
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+  } catch (err: any) {
+    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  const session = event.data.object as any;
-  const metadata = session.metadata;
-  let studentId = metadata?.studentId;
+  const session = event.data.object as Stripe.Checkout.Session;
 
-  // Si on n'a pas d'ID mais qu'on a l'email (cas de l'inscription), on cherche l'étudiant par email
-  if (!studentId && metadata?.email) {
-    const { data: student } = await supabaseAdmin
-      .from('etudiants')
-      .select('id')
-      .eq('email', metadata.email)
-      .maybeSingle();
-    if (student) studentId = student.id;
-  }
+  if (event.type === 'checkout.session.completed') {
+    const clerkUserId = session.metadata?.clerkUserId;
+    const formationId = session.metadata?.formationId;
 
-  if (event.type === "checkout.session.completed") {
-    const subscription = session.subscription;
-    const customerId = session.customer;
-    const metadata = session.metadata;
+    if (clerkUserId) {
+      // 1. Récupérer l'ID de l'étudiant via son Clerk ID
+      const { data: etudiant } = await supabaseAdmin
+        .from('etudiants')
+        .select('id')
+        .eq('clerk_id', clerkUserId)
+        .single();
 
-    console.log("Payment Succeeded for session:", session.id);
+      if (etudiant) {
+        // 2. Mettre à jour ou créer l'inscription
+        const { error } = await supabaseAdmin
+          .from('inscriptions')
+          .upsert({
+            etudiant_id: etudiant.id,
+            formation_id: formationId,
+            status: 'valide', // Statut après paiement
+            updated_at: new Date().toISOString(),
+          }, {
+            onConflict: 'etudiant_id, formation_id'
+          });
 
-    // Update payment in database
-    const { error: pError } = await supabaseAdmin
-      .from('paiements')
-      .insert({
-        stripe_session_id: session.id,
-        amount: session.amount_total / 100,
-        currency: session.currency,
-        status: 'succeeded',
-        etudiant_id: studentId || null,
-      });
-
-    if (pError) console.error("Database Payment Error:", pError);
-
-    // Update inscription status if needed
-    if (metadata?.planId && metadata?.email) {
-       // Logic to activate account or update inscription
+        if (error) {
+          console.error('[WEBHOOK_DB_ERROR]', error);
+          return new NextResponse('Database Error', { status: 500 });
+        }
+      }
     }
-  }
-
-  if (event.type === "payment_intent.payment_failed") {
-    console.log("Payment Failed for intent:", session.id);
-    
-    const { error: pError } = await supabaseAdmin
-      .from('paiements')
-      .insert({
-        stripe_session_id: session.id,
-        amount: session.amount_received / 100,
-        currency: session.currency,
-        status: 'failed',
-        error_message: session.last_payment_error?.message || "Payment refused",
-        etudiant_id: studentId || null,
-      });
-
-    if (pError) console.error("Database Payment Failure Error:", pError);
   }
 
   return new NextResponse(null, { status: 200 });

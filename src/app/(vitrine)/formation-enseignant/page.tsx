@@ -63,15 +63,15 @@ export default function FormationEnseignantPage() {
         <div className="absolute top-0 right-1/2 translate-x-1/2 w-[800px] h-[600px] bg-ishes-green/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-8xl font-black text-ishes-dark leading-[1.02] tracking-tight mb-10 uppercase"
+              className="text-5xl md:text-7xl lg:text-[95px] font-black text-ishes-dark leading-[0.9] tracking-tighter mb-10 uppercase"
             >
-              Devenez <br />
-              <span className="text-ishes-green italic">enseignant</span> certifié.
+              <span className="block">Devenez</span>
+              <span className="text-ishes-green italic whitespace-nowrap">Enseignant certifié.</span>
             </motion.h1>
             
             <motion.p 

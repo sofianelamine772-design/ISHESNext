@@ -148,8 +148,8 @@ export default function InstitutPage() {
                 {/* Visual Accent */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#c8a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                {/* Overlay Link for the whole card - Top Layer but behind buttons */}
-                <Link href={program.link} className="absolute inset-0 z-10 rounded-[3rem]" />
+                {/* Overlay Link for the whole card - NOW TOP LAYER but below buttons */}
+                <Link href={program.link} className="absolute inset-0 z-25 rounded-[3rem]" />
                 
                 <div className="p-10 sm:p-12 flex-1 flex flex-col relative">
                   {/* TAGS ROW */}
@@ -193,7 +193,7 @@ export default function InstitutPage() {
                       <span className="text-xs font-bold text-gray-500">Max 12</span>
                     </div>
                     <div className="flex items-center gap-3 group/icon">
-                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                      <div className="w-10 h-10 rounded-xl bg-ishes-dark flex items-center justify-center">
                         <Award className="w-5 h-5 text-[#c8a96e]" />
                       </div>
                       <span className="text-xs font-bold text-gray-500 uppercase">Certifié</span>
@@ -213,7 +213,7 @@ export default function InstitutPage() {
                   </div>
 
                   {/* PRICE & CTA */}
-                  <div className="flex flex-col gap-6 mt-auto pt-10 border-t border-gray-100 relative z-20">
+                  <div className="flex flex-col gap-6 mt-auto pt-10 border-t border-gray-100 relative z-30">
                     <div className="flex items-baseline gap-2">
                       <div className="text-5xl font-black text-[#152233] tracking-tighter">{program.price}</div>
                       <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
@@ -243,24 +243,50 @@ export default function InstitutPage() {
         </div>
       </section>
 
-      {/* --- THE CALL TO VISIT --- */}
+      {/* --- THE CALL TO VISIT & MAP --- */}
       <section className="pb-32 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-ishes-dark rounded-[3.5rem] p-10 md:p-20 flex flex-col lg:flex-row items-center gap-16 overflow-hidden relative shadow-2xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-ishes-dark rounded-[3.5rem] p-4 md:p-8 flex flex-col lg:flex-row items-stretch gap-8 overflow-hidden relative shadow-2xl"
+          >
+             {/* Background Decoration */}
              <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-               <span className="absolute -top-10 -right-10 text-[280px] leading-none font-bold">ﷻ</span>
+               <span className="absolute -top-10 -right-10 text-[400px] leading-none font-bold text-white">ﷻ</span>
              </div>
              
-             <div className="max-w-xl relative z-10 text-white">
-                <span className="text-#c8a96e font-black uppercase tracking-[0.3em] text-[10px] mb-6 block">Prendre rendez-vous</span>
+             {/* Content Column */}
+             <div className="relative z-10 flex-1 p-8 md:p-12 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-[1px] bg-[#c8a96e]"></div>
+                  <span className="text-[#c8a96e] font-black uppercase tracking-[0.3em] text-[10px]">Prendre rendez-vous</span>
+                </div>
+
                 <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
-                   NOTRE <br /> <span className="text-#c8a96e italic">institut.</span>
+                   NOTRE <br /> <span className="text-[#c8a96e] italic">institut.</span>
                 </h2>
-                <p className="text-xl text-white/60 font-medium mb-12">
-                   Situé au <strong className="text-white">41 Boulevard de Thibaud, 31100 Toulouse</strong>, notre espace de formation est ouvert sur rendez-vous.
-                </p>
+
+                <div className="space-y-6 mb-12">
+                   <p className="text-xl text-white/60 font-medium">
+                      Situé au <strong className="text-white">41 Boulevard de Thibaud, 31100 Toulouse</strong>, notre espace de formation est ouvert sur rendez-vous.
+                   </p>
+                   
+                   {/* Opening Hours Minimalist */}
+                   <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm max-w-md">
+                      <div className="grid grid-cols-2 gap-4 text-[11px] font-bold tracking-wider uppercase">
+                         <div className="text-white/40">Mercredi</div>
+                         <div className="text-[#c8a96e] text-right">14h — 17h</div>
+                         <div className="text-white/40">Samedi</div>
+                         <div className="text-[#c8a96e] text-right">9h — 12h / 13h30 — 16h30</div>
+                         <div className="text-white/40">Dimanche</div>
+                         <div className="text-[#c8a96e] text-right">11h30 — 15h</div>
+                      </div>
+                   </div>
+                </div>
                 
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 mt-auto">
                    <a 
                      href="https://maps.google.com/?q=41+Boulevard+de+Thibaud+31100+Toulouse" 
                      target="_blank" 
@@ -275,25 +301,22 @@ export default function InstitutPage() {
                 </div>
              </div>
 
-             <div className="relative z-10 flex-1 grid grid-cols-2 gap-6 w-full lg:w-auto">
-                <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/5 text-white">
-                   <h6 className="font-black text-#c8a96e text-xs uppercase tracking-widest mb-6 opacity-80">Horaires d'ouverture</h6>
-                   <ul className="space-y-4 text-xs font-bold text-white/80">
-                      <li className="flex justify-between border-b border-white/5 pb-2"><span>MERCREDI</span> <span className="italic text-#c8a96e">14h — 17h</span></li>
-                      <li className="flex justify-between border-b border-white/5 pb-2"><span>SAMEDI</span> <span className="italic text-#c8a96e">9h — 12h<br/>13h30 — 16h30</span></li>
-                      <li className="flex justify-between"><span>DIMANCHE</span> <span className="italic text-#c8a96e">11h30 — 15h</span></li>
-                   </ul>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/5 text-white flex flex-col justify-between">
-                   <Navigation className="w-8 h-8 text-#c8a96e opacity-80" />
-                   <div>
-                      <p className="text-[9px] font-black uppercase tracking-widest opacity-60 mb-2">ACCÈS DIRECT</p>
-                      <p className="text-base font-black leading-tight uppercase tracking-tight">Zone <br /> Thibaud</p>
-                   </div>
-                </div>
+             {/* Map Column */}
+             <div className="relative z-10 lg:flex-[1.2] min-h-[500px] lg:min-h-auto rounded-[2.5rem] overflow-hidden border border-white/5">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2891.8761405060413!2d1.38550137683402!3d43.54660305924716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aeb7a7e937d53d%3A0xe7a5c86c125e1975!2s41%20Bd%20de%20Thibaud%2C%2031100%20Toulouse!5e0!3m2!1sfr!2sfr!4v1715367800000!5m2!1sfr!2sfr"
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0, filter: 'grayscale(0.2) contrast(1.1) brightness(0.9)' }} 
+                  allowFullScreen={true} 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0"
+                ></iframe>
+                {/* Map Overlay Frame */}
+                <div className="absolute inset-0 pointer-events-none border-[12px] border-ishes-dark/20 rounded-[2.5rem]"></div>
              </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

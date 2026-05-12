@@ -16,9 +16,8 @@ export function ContactContent() {
         className="text-center mb-24"
       >
         <span className="ishes-label text-ishes-green mb-5 block">Nous contacter</span>
-        <h1 className="ishes-heading text-6xl md:text-[90px] text-ishes-dark leading-none mb-8">
-          PARLONS-<br />
-          <span className="text-ishes-green italic">nous.</span>
+        <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-dark leading-none mb-8 uppercase tracking-tighter">
+          Parlons-<span className="text-ishes-green italic">nous.</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.
@@ -72,7 +71,7 @@ export function ContactContent() {
 
         {/* DISTANCE (WhatsApp) */}
         <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-          <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">E-Learning</h2>
+          <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">ISHES DISTANCIEL</h2>
           <p className="ishes-heading text-xl text-[#c8a96e] mb-6">DISTANCE</p>
           
           <a href="tel:+33666033519" className="flex items-center gap-4 mb-8 group/phone">
@@ -163,34 +162,71 @@ export function ContactContent() {
         ))}
       </motion.div>
 
-      {/* ═══════ ADRESSE ═══════ */}
+      {/* ═══════ ADRESSE & CARTE ═══════ */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="bg-ishes-dark rounded-[2.5rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 relative overflow-hidden"
+        className="bg-ishes-dark rounded-[3rem] p-4 md:p-8 flex flex-col lg:flex-row items-stretch gap-8 relative overflow-hidden shadow-2xl shadow-ishes-dark/20"
       >
-        <div className="absolute inset-0 opacity-5 pointer-events-none">
-          <span className="absolute -top-10 -right-10 text-[280px] leading-none font-serif">ﷻ</span>
+        {/* Decorative Arabic Text in Background */}
+        <div className="absolute inset-0 opacity-5 pointer-events-none select-none overflow-hidden">
+          <span className="absolute -top-20 -left-10 text-[400px] leading-none font-serif text-white">ﷻ</span>
         </div>
-        <div className="relative z-10">
-          <span className="ishes-label text-ishes-green mb-3 block">Nous trouver</span>
-          <h2 className="ishes-heading text-4xl md:text-5xl text-white leading-none mb-4">
-            TOULOUSE
+
+        {/* Info Column */}
+        <div className="relative z-10 lg:flex-1 p-8 md:p-12 flex flex-col justify-center">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-[1px] bg-ishes-green"></div>
+            <span className="ishes-label text-ishes-green uppercase tracking-[0.3em] text-[10px]">Nous trouver</span>
+          </div>
+          
+          <h2 className="ishes-heading text-5xl md:text-7xl text-white leading-none mb-6">
+            TOULOUSE<br />
+            <span className="text-ishes-green italic">Institut.</span>
           </h2>
-          <p className="text-white/40 font-medium text-lg">41 Boulevard de Thibaud, 31100 Toulouse</p>
+          
+          <div className="space-y-4 mb-10">
+            <p className="text-white/60 font-medium text-lg md:text-xl flex items-start gap-3">
+              <svg className="w-6 h-6 text-ishes-green shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              41 Boulevard de Thibaud,<br />31100 Toulouse
+            </p>
+          </div>
+
+          <a
+            href="https://maps.google.com/?q=41+Boulevard+de+Thibaud+Toulouse"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-center lg:justify-start gap-4 bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:shadow-2xl hover:shadow-ishes-green/40 hover:-translate-y-1 w-full sm:w-fit"
+          >
+            Ouvrir dans Google Maps
+            <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </div>
+          </a>
         </div>
-        <a
-          href="https://maps.google.com/?q=41+Boulevard+de+Thibaud+Toulouse"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-10 shrink-0 flex items-center gap-3 bg-ishes-green hover:bg-ishes-green/90 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all hover:shadow-xl hover:shadow-ishes-green/30 hover:-translate-y-1"
-        >
-          Ouvrir dans Maps
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-          </svg>
-        </a>
+
+        {/* Map Column */}
+        <div className="relative z-10 lg:flex-[1.5] min-h-[600px] rounded-[2rem] overflow-hidden border border-white/5 shadow-inner">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2891.8761405060413!2d1.38550137683402!3d43.54660305924716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aeb7a7e937d53d%3A0xe7a5c86c125e1975!2s41%20Bd%20de%20Thibaud%2C%2031100%20Toulouse!5e0!3m2!1sfr!2sfr!4v1715367800000!5m2!1sfr!2sfr"
+            width="100%" 
+            height="100%" 
+            style={{ border: 0, filter: 'grayscale(0.2) contrast(1.1) brightness(0.9)' }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            className="absolute inset-0"
+          ></iframe>
+          
+          {/* Map Overlay for Premium Look */}
+          <div className="absolute inset-0 pointer-events-none border-[12px] border-ishes-dark/20 rounded-[2rem]"></div>
+        </div>
       </motion.div>
     </div>
   );

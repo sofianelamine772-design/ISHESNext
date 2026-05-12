@@ -111,5 +111,39 @@ create policy "Élèves : Voir son propre profil" on public.etudiants for select
 create policy "Élèves : Voir ses inscriptions" on public.inscriptions for select using (auth.uid()::text = etudiant_id);
 create policy "Élèves : Voir ses paiements" on public.paiements for select using (auth.uid()::text = etudiant_id);
 
--- Politique : L'Admin peut TOUT faire (Via le Service Role utilisé par l'API)
--- Le Service Role bypass déjà le RLS, donc pas besoin de politique spécifique ici.
+-- 9. TABLE DES MESSAGES (Messagerie interne Admin/Élèves)
+CREATE TABLE IF NOT EXISTS public.messages (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    sender_id text NOT NULL REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    receiver_id text REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    type text DEFAULT 'private' CHECK (type IN ('private', 'class', 'global')),
+    title text, -- Titre de l'annonce (pour les mails généraux)
+    content text NOT NULL,
+    target_class_id uuid REFERENCES public.classes(id) ON DELETE CASCADE,
+    is_read boolean DEFAULT false,
+    created_at timestamp WITH time zone DEFAULT now()
+);
+
+-- Index pour la performance de la messagerie
+CREATE INDEX IF NOT EXISTS idx_messages_sender ON public.messages(sender_id);
+CREATE INDEX IF NOT EXISTS idx_messages_receiver ON public.messages(receiver_id);
+CREATE INDEX IF NOT EXISTS idx_messages_type ON public.messages(type);
+CREATE INDEX IF NOT EXISTS idx_messages_class ON public.messages(target_class_id);
+
+-- RLS pour la Messagerie
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+
+-- Politique : Voir ses messages (Privés, Classe, ou Globaux)
+CREATE POLICY "Voir ses messages et annonces" ON public.messages 
+FOR SELECT USING (
+    auth.uid()::text = sender_id 
+    OR auth.uid()::text = receiver_id 
+    OR type = 'global'
+    OR (type = 'class' AND target_class_id IN (
+        SELECT class_id FROM inscriptions WHERE etudiant_id = auth.uid()::text
+    ))
+);
+
+-- Politique : Envoyer des messages (Élèves et Admin)
+CREATE POLICY "Envoi de messages" ON public.messages 
+FOR INSERT WITH CHECK (auth.uid()::text = sender_id);

@@ -71,17 +71,12 @@ export function BoutiqueProducts() {
                   className="object-cover group-hover:scale-110 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 30vw, 20vw"
                 />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="bg-ishes-dark text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
-                    {product.tag}
-                  </span>
-                </div>
               </div>
 
               {/* Product Content */}
               <div className="flex-1 flex flex-col h-full justify-between py-2">
                 <div>
-                  <h2 className="ishes-heading text-2xl text-ishes-dark mb-2 group-hover:text-ishes-green transition-colors leading-tight">
+                  <h2 className="ishes-heading text-2xl text-ishes-gold mb-2 transition-colors leading-tight">
                     {product.title}
                   </h2>
                   <p className="ishes-label text-[10px] text-ishes-green mb-4 leading-tight opacity-80">
@@ -92,12 +87,12 @@ export function BoutiqueProducts() {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50">
-                  <span className="ishes-heading text-xl text-ishes-dark">
+                <div className="flex items-center justify-between gap-8 mt-auto pt-6 border-t border-gray-50">
+                  <span className="ishes-heading text-xl text-ishes-dark whitespace-nowrap">
                     {product.price}
                   </span>
-                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer">
-                    <Button variant="ishes" className="h-12 px-6 gap-2">
+                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="shrink-0">
+                    <Button variant="ishes-gold" className="h-12 px-6 gap-2">
                       Acheter en ligne <ShoppingBag className="w-4 h-4" />
                     </Button>
                   </a>

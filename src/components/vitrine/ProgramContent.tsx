@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby } from "lucide-react";
 
 type Program = {
@@ -405,8 +405,16 @@ export const PROGRAMS: Program[] = [
 
 export function ProgramContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [activeMode, setActiveMode] = useState<"presentiel" | "distanciel">("distanciel");
   const [activeAudience, setActiveAudience] = useState<"adulte" | "enfant">("adulte");
+
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "presentiel" || mode === "distanciel") {
+      setActiveMode(mode);
+    }
+  }, [searchParams]);
 
   const filteredPrograms = PROGRAMS.filter((p) => p.type === activeMode && p.audience === activeAudience);
 
@@ -544,10 +552,7 @@ export function ProgramContent() {
 
                    <div className="p-5 sm:p-6 flex-1 flex flex-col">
                       {/* TAGS ROW */}
-                      <div className="flex items-center justify-between mb-4">
-                         <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase ${program.tagColor}`}>
-                            {program.tagText}
-                         </span>
+                      <div className="flex items-center justify-end mb-4">
                          <span className="text-[10px] font-bold text-gray-400">
                             {program.durationText}
                          </span>

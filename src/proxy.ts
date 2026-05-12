@@ -27,6 +27,10 @@ export default clerkMiddleware(async (auth, request) => {
 
   // Protection de base pour les routes privées
   if (!userId && !isPublicRoute(request)) {
+    // Si c'est un appel API, on renvoie une 401 au lieu d'une redirection
+    if (request.nextUrl.pathname.startsWith('/api')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     return (await auth()).redirectToSignIn();
   }
 

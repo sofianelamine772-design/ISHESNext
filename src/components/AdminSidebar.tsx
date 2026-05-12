@@ -9,6 +9,7 @@ import {
   CreditCard, 
   FileText, 
   Terminal,
+  MessageSquare,
   Menu
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ import { useState } from "react";
 const navItems = [
   { label: "Vue d'ensemble", href: "/app/admin", icon: LayoutDashboard },
   { label: "Formations & Classes", href: "/app/admin/classes", icon: BookOpen },
+  { label: "Messagerie & Com.", href: "/app/admin/communication", icon: MessageSquare },
   { label: "Tous les Étudiants", href: "/app/admin/etudiants", icon: Users },
   { label: "Facturation", href: "/app/admin/facturation", icon: CreditCard },
   { label: "Administratif", href: "/app/admin/administratif", icon: FileText },
