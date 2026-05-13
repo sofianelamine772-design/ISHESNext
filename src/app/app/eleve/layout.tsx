@@ -67,7 +67,6 @@ export default function EleveLayout({
           <div className="flex items-center justify-between bg-gray-50 rounded-2xl p-4 transition-all hover:bg-gray-100/50">
             <div className="flex items-center gap-3 min-w-0">
               <UserButton 
-                afterSignOutUrl="/" 
                 appearance={{
                   elements: {
                     userButtonAvatarBox: "w-10 h-10 rounded-xl shadow-sm border-2 border-white hover:scale-105 transition-transform",
