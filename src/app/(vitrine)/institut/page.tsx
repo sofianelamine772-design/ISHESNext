@@ -170,7 +170,7 @@ export default function InstitutPage() {
                   </div>
 
                   {/* ICONS GRID */}
-                  <div className="grid grid-cols-2 gap-6 mb-10 relative z-20">
+                  <div className="grid grid-cols-2 gap-6 mb-6 relative z-20">
                     <div className="flex items-center gap-3 group/icon">
                       <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
                         <Clock className="w-5 h-5 text-[#c8a96e]" />
@@ -210,7 +210,7 @@ export default function InstitutPage() {
                   </div>
 
                   {/* PRICE & CTA */}
-                  <div className="flex flex-col gap-6 mt-auto pt-10 border-t border-gray-100 relative z-30">
+                  <div className="flex flex-col gap-4 mt-auto pt-6 border-t border-gray-100 relative z-30">
                     <div className="flex items-baseline gap-2">
                       <div className="text-3xl font-black text-[#152233] tracking-tighter">{program.price}</div>
                       <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
