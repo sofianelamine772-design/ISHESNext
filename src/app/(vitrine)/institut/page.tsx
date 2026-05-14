@@ -17,10 +17,11 @@ const presentielPrograms = [
     subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid.",
     durationText: "Lundi 19h00",
     day: "Lundi",
+    audience: "adulte",
     features: ["Lecture correcte", "Application des règles", "Fluidité", "Suivi WhatsApp"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/fr/cours-lecture-tajwid"
+    link: "/inscription?plan=presentiel-global&slot=lundi"
   },
   {
     id: "arabe-adulte",
@@ -29,46 +30,28 @@ const presentielPrograms = [
     subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation.",
     durationText: "Mardi 19h00",
     day: "Mardi",
+    audience: "adulte",
     features: ["Lecture & Écriture", "Conversation", "Grammaire", "Immersion"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/fr/cours-arabe-adulte"
+    link: "/inscription?plan=presentiel-global&slot=mardi"
   },
   {
-    id: "enfant-mercredi",
+    id: "scolarite-enfants",
     formationId: "presentiel-global",
     title: "Scolarité Enfants",
-    subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
-    durationText: "Mercredi 14h-17h",
-    day: "Mercredi",
+    subtitle: "Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans dans un cadre fraternel.",
+    durationText: "Plusieurs créneaux",
+    audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/fr/cours-arabe-enfant"
-  },
-  {
-    id: "enfant-samedi",
-    formationId: "presentiel-global",
-    title: "Scolarité Enfants",
-    subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
-    durationText: "Samedi 09h-12h",
-    day: "Samedi",
-    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
-    price: "349 €",
-    priceSub: "/ SESSION",
-    link: "/fr/cours-arabe-enfant"
-  },
-  {
-    id: "enfant-dimanche",
-    formationId: "presentiel-global",
-    title: "Scolarité Enfants",
-    subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
-    durationText: "Dimanche 11h30-14h30",
-    day: "Dimanche",
-    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
-    price: "349 €",
-    priceSub: "/ SESSION",
-    link: "/fr/cours-arabe-enfant"
+    link: "/inscription?plan=presentiel-global",
+    slots: [
+      { id: "mercredi", day: "Mercredi", time: "14h00 - 17h00" },
+      { id: "samedi", day: "Samedi", time: "09h00 - 12h00" },
+      { id: "dimanche", day: "Dimanche", time: "11h30 - 14h30" }
+    ]
   }
 ];
 
@@ -94,7 +77,9 @@ export default function InstitutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-#c8a96e selection:text-white">
+    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-[#c8a96e] selection:text-white">
+      <Navbar />
+
       {/* --- HERO CINEMATIC --- */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
         <ArabicBackground />
@@ -137,10 +122,10 @@ export default function InstitutPage() {
           
           {/* Section Header */}
           <div className="max-w-3xl mb-16">
-            <span className="text-#c8a96e font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
+            <span className="text-[#c8a96e] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
             <h2 className="text-4xl md:text-6xl font-black text-ishes-dark leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
-              <span className="text-#c8a96e italic">en direct.</span>
+              <span className="text-[#c8a96e] italic">en direct.</span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
               Pour ceux qui privilégient le contact direct avec l'enseignant, l'émulation collective et la rigueur d'un cadre académique moderne.
@@ -161,19 +146,19 @@ export default function InstitutPage() {
                 {/* Visual Accent */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#c8a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                {/* Overlay Link for the whole card - NOW TOP LAYER but below buttons */}
-                <Link href={program.link} className="absolute inset-0 z-25 rounded-[2rem]" />
+                {/* Overlay Link - only for non-enfant or as a secondary layer */}
+                <Link href={program.link} className="absolute inset-0 z-10 rounded-[2rem]" />
                 
-                <div className="p-5 sm:p-6 flex-1 flex flex-col relative">
+                <div className="p-5 sm:p-6 flex-1 flex flex-col relative z-20">
                   {/* TAGS ROW */}
-                  <div className="flex items-center justify-end mb-4 relative z-20">
+                  <div className="flex items-center justify-end mb-4">
                     <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                        <Clock className="w-3.5 h-3.5" /> {program.durationText}
                     </div>
                   </div>
 
                   {/* TITLE & DESC */}
-                  <div className="relative z-20">
+                  <div>
                     <h2 className="text-xl font-black text-[#152233] mb-2 tracking-tight leading-[1.1]">
                       {program.title}
                     </h2>
@@ -183,7 +168,7 @@ export default function InstitutPage() {
                   </div>
 
                   {/* ICONS GRID */}
-                  <div className="grid grid-cols-2 gap-3 mb-5 relative z-20">
+                  <div className="grid grid-cols-2 gap-3 mb-5">
                     <div className="flex items-center gap-2 group/icon">
                       <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
                         <Clock className="w-4 h-4 text-[#c8a96e]" />
@@ -211,7 +196,7 @@ export default function InstitutPage() {
                   </div>
 
                   {/* FEATURES LIST */}
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4 relative z-20">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
                     {program.features.map((feature, idx) => (
                       <div key={idx} className="flex items-start gap-2 py-1">
                         <div className="mt-1 w-3.5 h-3.5 rounded-full bg-[#c8a96e]/10 flex items-center justify-center shrink-0">
@@ -223,8 +208,8 @@ export default function InstitutPage() {
                   </div>
 
                   {/* SLOT SELECTION (Only for Children) */}
-                  {program.isEnfant && (
-                    <div className="mb-8 relative z-20">
+                  {program.audience === 'enfant' && (
+                    <div className="mb-8 relative z-30">
                       <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Choisir un créneau :</p>
                       <div className="space-y-2">
                         {program.slots?.map(slot => {
@@ -236,7 +221,11 @@ export default function InstitutPage() {
                             <button
                               key={slot.id}
                               disabled={isFull}
-                              onClick={() => setSelectedSlots(prev => ({ ...prev, [program.id]: slot.id }))}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setSelectedSlots(prev => ({ ...prev, [program.id]: slot.id }));
+                              }}
                               className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all text-left ${
                                 isFull 
                                   ? "bg-gray-50 border-gray-100 opacity-60 cursor-not-allowed" 
@@ -271,21 +260,22 @@ export default function InstitutPage() {
                         {program.priceSub}
                       </div>
                     </div>
-
-                    {/* STATUS PLEIN / DISPONIBLE */}
-                    <div className="mb-2">
-                      {getSlotStatus(program.day)?.est_plein ? (
-                        <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
-                          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                          Session Complète
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl">
-                          <div className="w-2 h-2 rounded-full bg-green-500" />
-                          Places Disponibles
-                        </div>
-                      )}
-                    </div>
+                    
+                    {program.audience === 'adulte' && (
+                      <div className="mb-2">
+                        {getSlotStatus(program.day)?.est_plein ? (
+                          <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
+                            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                            Session Complète
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl">
+                            <div className="w-2 h-2 rounded-full bg-green-500" />
+                            Places Disponibles
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-3">
                       <Link 
@@ -295,12 +285,17 @@ export default function InstitutPage() {
                         Infos
                       </Link>
                       <Link 
-                        href={`/inscription?plan=${program.formationId}&slot=${program.day.toLowerCase()}`}
-                        className={`flex items-center justify-center bg-[#c8a96e] text-white hover:bg-[#b0935b] py-3.5 rounded-2xl shadow-lg shadow-[#c8a96e]/20 transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
-                          getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                        href={program.audience === 'enfant' 
+                          ? `/inscription?plan=${program.formationId}&slot=${selectedSlots[program.id] || ''}`
+                          : `/inscription?plan=${program.formationId}&slot=${program.day?.toLowerCase() || ''}`
+                        }
+                        className={`flex items-center justify-center py-3.5 rounded-2xl shadow-lg transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
+                          (program.audience === 'enfant' && !selectedSlots[program.id]) || (program.audience === 'adulte' && getSlotStatus(program.day)?.est_plein)
+                            ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 
+                            : "bg-[#c8a96e] text-white hover:bg-[#b0935b] shadow-[#c8a96e]/20"
                         }`}
                       >
-                        {getSlotStatus(program.day)?.est_plein ? "COMPLET" : "S'inscrire"}
+                        {program.audience === 'enfant' ? "Inscrire" : (getSlotStatus(program.day)?.est_plein ? "COMPLET" : "S'inscrire")}
                       </Link>
                     </div>
                   </div>
@@ -308,7 +303,6 @@ export default function InstitutPage() {
               </motion.div>
             ))}
           </div>
-
         </div>
       </section>
 
@@ -388,6 +382,8 @@ export default function InstitutPage() {
           </motion.div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
