@@ -2,9 +2,10 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { ChevronRight, CheckCircle2, ArrowRight, MessageSquareText } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText } from "lucide-react";
 import Link from "next/link";
+import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
