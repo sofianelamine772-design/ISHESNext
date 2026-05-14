@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 // Types
 type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string };
-type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string };
+type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number };
 
 export default function AdminDashboard() {
   const [classes, setClasses] = useState<ClassDetails[]>([]);
@@ -154,8 +154,8 @@ export default function AdminDashboard() {
     }
   };
 
-  const distancielClasses = classes.filter((c) => c.type === "distanciel" && c.students.length > 0);
-  const presentielClasses = classes.filter((c) => c.type === "presentiel" && c.students.length > 0);
+  const distancielClasses = classes.filter((c) => c.type === "distanciel");
+  const presentielClasses = classes.filter((c) => c.type === "presentiel");
 
   const filteredDistancielClasses = distancielClasses.filter(c =>
     (c.name + (c.formationTitle || '')).toLowerCase().includes(classSearchQuery.toLowerCase())
@@ -278,8 +278,23 @@ export default function AdminDashboard() {
                         }`}
                     >
                       <div className="font-semibold text-gray-800 mb-1 text-sm">{c.name}</div>
-                      <div className="flex items-center text-[10px] text-gray-500 gap-1.5">
-                        <Users className="w-3.5 h-3.5" /> {c.students.length} élèves inscrits
+                      <div className="flex items-center justify-between text-[10px] text-gray-500 gap-1.5">
+                        <div className="flex items-center gap-1">
+                          <Users className="w-3.5 h-3.5" /> {c.students.length} inscrits
+                        </div>
+                        <div className="font-black italic text-ishes-green">
+                          {c.students.length}/{c.capacity_limit}
+                        </div>
+                      </div>
+                      {/* Capacity Bar */}
+                      <div className="w-full h-1 bg-gray-100 rounded-full mt-2 overflow-hidden">
+                        <div 
+                          className={cn(
+                            "h-full transition-all duration-500",
+                            (c.students.length / c.capacity_limit) > 0.9 ? "bg-red-500" : "bg-ishes-green"
+                          )}
+                          style={{ width: `${Math.min(100, (c.students.length / c.capacity_limit) * 100)}%` }}
+                        />
                       </div>
                     </button>
                   ))}
@@ -309,6 +324,9 @@ export default function AdminDashboard() {
                            <span className={`text-[8px] md:text-[10px] font-black uppercase italic px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-green-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
                             Mode {selectedClass.type}
+                          </span>
+                          <span className="text-[10px] font-black text-ishes-dark italic bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
+                            Capacité : {selectedClass.students.length} / {selectedClass.capacity_limit}
                           </span>
                         </div>
                       </div>

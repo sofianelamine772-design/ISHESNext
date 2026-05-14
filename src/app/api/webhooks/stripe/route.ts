@@ -11,13 +11,15 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = (await headers()).get('stripe-signature') as string;
+  const headerList = await headers();
+  const signature = headerList.get('stripe-signature') as string;
 
   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
+    console.error(`Webhook Error: ${err.message}`);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
@@ -26,33 +28,72 @@ export async function POST(req: Request) {
   if (event.type === 'checkout.session.completed') {
     const clerkUserId = session.metadata?.clerkUserId;
     const formationId = session.metadata?.formationId;
+    const parentEmail = session.metadata?.email;
+    const slot = session.metadata?.slot;
+
+    // 1. Identifier les élèves à valider
+    let etudiantsToValidate: { id: string }[] = [];
 
     if (clerkUserId) {
-      // 1. Récupérer l'ID de l'étudiant via son Clerk ID
       const { data: etudiant } = await supabaseAdmin
         .from('etudiants')
         .select('id')
         .eq('clerk_id', clerkUserId)
-        .single();
+        .maybeSingle();
+      if (etudiant) etudiantsToValidate.push(etudiant);
+    } 
+    
+    // On cherche aussi par email si on a un parentEmail, même si on a un clerkUserId
+    if (parentEmail && parentEmail.includes('@')) {
+      const [emailBase, emailDomain] = parentEmail.split('@');
 
-      if (etudiant) {
-        // 2. Mettre à jour ou créer l'inscription
-        const { error } = await supabaseAdmin
-          .from('inscriptions')
-          .upsert({
-            etudiant_id: etudiant.id,
-            formation_id: formationId,
-            status: 'valide', // Statut après paiement
-            updated_at: new Date().toISOString(),
-          }, {
-            onConflict: 'etudiant_id, formation_id'
-          });
-
-        if (error) {
-          console.error('[WEBHOOK_DB_ERROR]', error);
-          return new NextResponse('Database Error', { status: 500 });
-        }
+      const { data: etudiants } = await supabaseAdmin
+        .from('etudiants')
+        .select('id')
+        .or(`email.eq."${parentEmail}",email.ilike."${emailBase}+%@${emailDomain}"`);
+      
+      if (etudiants) {
+        // Fusionner les listes sans doublons
+        const existingIds = new Set(etudiantsToValidate.map(e => e.id));
+        etudiants.forEach(e => {
+          if (!existingIds.has(e.id)) etudiantsToValidate.push(e);
+        });
       }
+    }
+
+    // 2. Pour chaque élève trouvé, on crée/valide l'inscription
+    for (const etudiant of etudiantsToValidate) {
+      let classId = null;
+
+      // Recherche de la classe pour le créneau présentiel
+      if (slot) {
+        const { data: classe } = await supabaseAdmin
+          .from('classes')
+          .select('id')
+          .ilike('day_of_week', slot)
+          .maybeSingle();
+        if (classe) classId = classe.id;
+      }
+
+      const { error } = await supabaseAdmin
+        .from('inscriptions')
+        .upsert({
+          etudiant_id: etudiant.id,
+          formation_id: formationId,
+          class_id: classId,
+          status: 'valide',
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'etudiant_id, formation_id'
+        });
+
+      if (error) console.error('[WEBHOOK_DB_ERROR]', error);
+      
+      // On passe aussi le statut de l'étudiant à 'actif'
+      await supabaseAdmin
+        .from('etudiants')
+        .update({ status: 'actif' })
+        .eq('id', etudiant.id);
     }
   }
 

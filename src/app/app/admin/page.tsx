@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { FileText, UserPlus } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { stripe } from "@/lib/stripe";
 import { AdminSidebar } from "@/components/AdminSidebar";
+import { stripe } from "@/lib/stripe";
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminOverview() {
   // Fetch stats directly on the server (much faster)

@@ -49,6 +49,8 @@ export async function POST(req: Request) {
       metadata: {
         clerkUserId: userId || '',
         formationId,
+        slot: body.slot || '',
+        email: body.email || '', // Email de référence pour l'inscription
         type: 'inscription',
       },
     });

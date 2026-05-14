@@ -34,5 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# ISHESNext
-# ISHESNext
+# ISHES - Institut Supérieur des Humanités et de l'Excellence Spirituelle
+
+## 🛠 Gestion des Créneaux Présentiels (Nouveau)
+
+Le système de gestion des inscriptions en présentiel repose sur une limite stricte de **20 élèves par créneau**.
+
+### 1. Logique Technique
+- **Formation** : Représente le cursus global (ex: "Scolarité Enfants").
+- **Classe/Créneau** : Chaque formation présentielle est divisée en "Classes" qui correspondent à des créneaux horaires spécifiques.
+- **Capacité** : Chaque classe possède une colonne `capacity_limit` (défaut à 20).
+- **Affichage** : Si le nombre d'inscriptions validées pour une classe atteint la limite, le créneau est marqué comme **PLEIN** sur le site et les inscriptions sont bloquées.
+
+### 2. Mise à jour de la Base de Données
+Pour appliquer ces changements, exécutez le script suivant dans votre console SQL Supabase :
+- `base_de_donnees/UPDATE_PRESENTIEL_CRENEAUX.sql`
+
+### 3. Requête pour vérifier l'état des créneaux
+Vous pouvez utiliser la vue SQL créée pour voir les places restantes en temps réel :
+```sql
+SELECT * FROM vue_etat_creneaux;
+```
+
+---
+
+## Getting Started
+First, run the development server:
+...

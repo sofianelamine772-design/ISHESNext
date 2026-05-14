@@ -12,6 +12,7 @@ function InscriptionForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const planId = searchParams?.get("plan");
+  const slot = searchParams?.get("slot");
 
   // Redirection if no plan selected
   useEffect(() => {
@@ -34,6 +35,7 @@ function InscriptionForm() {
   const [registrationType, setRegistrationType] = useState<"self" | "child">("self");
   const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "" }]);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const getPrice = () => {
     if (registrationType === 'child') {
@@ -58,7 +60,8 @@ function InscriptionForm() {
           planId: planId || "formation_generale",
           title: planName || "Formation ISHES",
           price: totalPrice + " €",
-          mode: planId === 'tajwid_standard' ? "presentiel" : "distanciel",
+          mode: (planId === 'tajwid_standard' || planId === 'presentiel-global') ? "presentiel" : "distanciel",
+          slot: slot || "",
           email: formData.email,
         }),
       });
@@ -95,14 +98,15 @@ function InscriptionForm() {
   const childFormations = ['arabe_coran_junior', 'tarbiya_islamiya', 'tajwid_enfant'];
 
   useEffect(() => {
+    const kidsSlots = ['mercredi', 'samedi', 'dimanche'];
     if (planId) {
-      if (childFormations.includes(planId)) {
+      if (childFormations.includes(planId) || (planId === 'presentiel-global' && slot && kidsSlots.includes(slot.toLowerCase()))) {
         setRegistrationType("child");
       } else {
         setRegistrationType("self");
       }
     }
-  }, [planId]);
+  }, [planId, slot]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -178,7 +182,7 @@ function InscriptionForm() {
     }
   };
 
-  const planName = getPlanName(planId);
+  const planName = getPlanName(planId) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -252,9 +256,9 @@ function InscriptionForm() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <h2 className="text-2xl font-black text-[#101828] mb-8">Vos informations</h2>
 
-              {/* Registration Type Selection */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                {(!planId || !childFormations.includes(planId)) && (
+              {/* Registration Type Selection - Only show if not already forced by planId/slot */}
+              {!(childFormations.includes(planId || "") || (planId === 'presentiel-global' && slot && ['mercredi', 'samedi', 'dimanche'].includes(slot.toLowerCase()))) && (
+                <div className="flex flex-col sm:flex-row gap-4 mb-10">
                   <button
                     onClick={() => setRegistrationType("self")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "self"
@@ -264,8 +268,6 @@ function InscriptionForm() {
                   >
                     <span className="text-xl">🙋‍♂️</span> Je souhaite m'inscrire
                   </button>
-                )}
-                {(!planId || childFormations.includes(planId)) && (
                   <button
                     onClick={() => setRegistrationType("child")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "child"
@@ -275,8 +277,17 @@ function InscriptionForm() {
                   >
                     <span className="text-xl">👶</span> Inscrire mon enfant
                   </button>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Force Child title if forced */}
+              {(childFormations.includes(planId || "") || (planId === 'presentiel-global' && slot && ['mercredi', 'samedi', 'dimanche'].includes(slot.toLowerCase()))) && (
+                 <div className="mb-8 p-4 bg-green-50 rounded-2xl border border-green-100">
+                    <h3 className="text-sm font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
+                       <span>👶</span> INSCRIPTION ENFANT (SCOLARITÉ)
+                    </h3>
+                 </div>
+              )}
 
               <div className="space-y-6">
                 {registrationType === 'child' ? (
@@ -680,14 +691,28 @@ function InscriptionForm() {
                     </ul>
                   </div>
                 )}
-                <p className="text-[10px] text-gray-400 font-bold uppercase leading-relaxed mb-8">
-                  En cliquant sur le bouton ci-dessous, vous serez redirigé vers notre plateforme de paiement sécurisée puis vers la création de mot de passe.
-                </p>
+                <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6 text-left">
+                  <h4 className="text-[10px] font-black text-blue-700 uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Monitor className="w-3.5 h-3.5" /> Accès au logiciel ISHEECOLE
+                  </h4>
+                  <p className="text-xs text-blue-900 font-medium leading-relaxed">
+                    Dès la validation de votre paiement, vous recevrez un email pour créer votre mot de passe. Votre espace vous permettra de suivre vos cours, vos absences, vos notes et de communiquer avec vos professeurs.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 mb-8 text-left group cursor-pointer" onClick={() => setAcceptedTerms(!acceptedTerms)}>
+                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-ishes-green border-ishes-green' : 'border-gray-300 bg-white group-hover:border-ishes-green'}`}>
+                    {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                  </div>
+                  <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
+                    J'accepte les <Link href="/cgv" className="text-ishes-green underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation de 14 jours conformément à la loi.
+                  </p>
+                </div>
 
                 <button
                   onClick={handleCheckout}
-                  disabled={loadingCheckout}
-                  className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20 disabled:opacity-70"
+                  disabled={loadingCheckout || !acceptedTerms}
+                  className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loadingCheckout ? "Redirection..." : "Payer & Créer mon compte"} <ArrowRight className="w-4 h-4" />
                 </button>

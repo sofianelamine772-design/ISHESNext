@@ -7,72 +7,65 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 const presentielPrograms = [
   {
-    id: "tajwid_standard",
+    id: "tajwid-standard",
+    formationId: "presentiel-global",
     title: "Tajwid (Standard)",
-    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid. Méthode progressive.",
-    tagText: "STANDARD",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e] border-[#c8a96e]/20",
-    durationText: "8 mois",
-    features: [
-      "Lecture correcte",
-      "Application des règles",
-      "Fluidité & Prononciation",
-      "Suivi WhatsApp"
-    ],
+    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid.",
+    durationText: "Lundi 19h00",
+    day: "Lundi",
+    features: ["Lecture correcte", "Application des règles", "Fluidité", "Suivi WhatsApp"],
     price: "349 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-lecture-tajwid"
   },
   {
-    id: "arabe_adulte",
-    title: "Arabe Littéraire (Adulte)",
-    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation courante. Méthode immersive.",
-    tagText: "LANGUE",
-    tagColor: "bg-blue-50 text-blue-700 border-blue-100",
-    durationText: "9 mois",
-    features: [
-      "Lecture & Écriture",
-      "Conversation réelle",
-      "Grammaire & Syntaxe",
-      "Immersion totale"
-    ],
+    id: "arabe-adulte",
+    formationId: "presentiel-global",
+    title: "Arabe Littéraire",
+    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation.",
+    durationText: "Mardi 19h00",
+    day: "Mardi",
+    features: ["Lecture & Écriture", "Conversation", "Grammaire", "Immersion"],
     price: "349 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-arabe-adulte"
   },
   {
-    id: "arabe_coran_junior",
-    title: "Arabe & Coran Junior",
-    subtitle: "Immersion totale et pédagogie active en présentiel pour les 6-15 ans à Toulouse.",
-    tagText: "JUNIOR",
-    tagColor: "bg-pink-50 text-pink-700 border-pink-100",
-    durationText: "Annuel",
-    features: [
-      "Enseignement direct",
-      "Activités ludiques",
-      "Vie d'institut",
-      "Ateliers pratiques"
-    ],
+    id: "enfant-mercredi",
+    formationId: "presentiel-global",
+    title: "Scolarité Enfants",
+    subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
+    durationText: "Mercredi 14h-17h",
+    day: "Mercredi",
+    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-arabe-enfant"
   },
   {
-    id: "tajwid_enfant",
-    title: "Tajwid (Enfant)",
-    subtitle: "Apprends à lire le Coran correctement dès le plus jeune âge. Méthode ludique.",
-    tagText: "ENFANT",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e] border-[#c8a96e]/20",
-    durationText: "Annuel",
-    features: [
-      "Lecture correcte",
-      "Pédagogie adaptée",
-      "Mémorisation facile",
-      "Suivi parents"
-    ],
+    id: "enfant-samedi",
+    formationId: "presentiel-global",
+    title: "Scolarité Enfants",
+    subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
+    durationText: "Samedi 09h-12h",
+    day: "Samedi",
+    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    link: "/fr/cours-arabe-enfant"
+  },
+  {
+    id: "enfant-dimanche",
+    formationId: "presentiel-global",
+    title: "Scolarité Enfants",
+    subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
+    durationText: "Dimanche 11h30-14h30",
+    day: "Dimanche",
+    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-arabe-enfant"
@@ -80,6 +73,26 @@ const presentielPrograms = [
 ];
 
 export default function InstitutPage() {
+  const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>({});
+  const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/classes/status');
+        const data = await res.json();
+        if (!data.error) setSlotsStatus(data);
+      } catch (err) {
+        console.error("Failed to fetch slots status", err);
+      }
+    };
+    fetchStatus();
+  }, []);
+
+  const getSlotStatus = (day: string) => {
+    return slotsStatus.find(s => s.day_of_week === day);
+  };
+
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-#c8a96e selection:text-white">
       {/* --- HERO CINEMATIC --- */}
@@ -153,7 +166,7 @@ export default function InstitutPage() {
                 
                 <div className="p-5 sm:p-6 flex-1 flex flex-col relative">
                   {/* TAGS ROW */}
-                  <div className="flex items-center justify-end mb-10 relative z-20">
+                  <div className="flex items-center justify-end mb-4 relative z-20">
                     <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                        <Clock className="w-3.5 h-3.5" /> {program.durationText}
                     </div>
@@ -170,44 +183,85 @@ export default function InstitutPage() {
                   </div>
 
                   {/* ICONS GRID */}
-                  <div className="grid grid-cols-2 gap-6 mb-6 relative z-20">
-                    <div className="flex items-center gap-3 group/icon">
-                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                        <Clock className="w-5 h-5 text-[#c8a96e]" />
+                  <div className="grid grid-cols-2 gap-3 mb-5 relative z-20">
+                    <div className="flex items-center gap-2 group/icon">
+                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <Clock className="w-4 h-4 text-[#c8a96e]" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500">1h30/sem</span>
                     </div>
-                    <div className="flex items-center gap-3 group/icon">
-                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                        <BookOpen className="w-5 h-5 text-[#c8a96e]" />
+                    <div className="flex items-center gap-2 group/icon">
+                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <BookOpen className="w-4 h-4 text-[#c8a96e]" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500">Manuel inclus</span>
                     </div>
-                    <div className="flex items-center gap-3 group/icon">
-                      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                        <Users className="w-5 h-5 text-[#c8a96e]" />
+                    <div className="flex items-center gap-2 group/icon">
+                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                        <Users className="w-4 h-4 text-[#c8a96e]" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500">Max 12</span>
                     </div>
-                    <div className="flex items-center gap-3 group/icon">
-                      <div className="w-10 h-10 rounded-xl bg-ishes-dark flex items-center justify-center">
-                        <Award className="w-5 h-5 text-[#c8a96e]" />
+                    <div className="flex items-center gap-2 group/icon">
+                      <div className="w-9 h-9 rounded-xl bg-ishes-dark flex items-center justify-center">
+                        <Award className="w-4 h-4 text-[#c8a96e]" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500 uppercase">Certifié</span>
                     </div>
                   </div>
 
                   {/* FEATURES LIST */}
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-6 relative z-20">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4 relative z-20">
                     {program.features.map((feature, idx) => (
                       <div key={idx} className="flex items-start gap-2 py-1">
-                        <div className="mt-1 w-4 h-4 rounded-full bg-[#c8a96e]/10 flex items-center justify-center shrink-0">
-                           <CheckCircle2 className="w-3 h-3 text-[#c8a96e]" />
+                        <div className="mt-1 w-3.5 h-3.5 rounded-full bg-[#c8a96e]/10 flex items-center justify-center shrink-0">
+                           <CheckCircle2 className="w-2.5 h-2.5 text-[#c8a96e]" />
                         </div>
-                        <span className="text-[11px] sm:text-xs text-gray-600 font-bold leading-tight">{feature}</span>
+                        <span className="text-[10px] sm:text-xs text-gray-600 font-bold leading-tight">{feature}</span>
                       </div>
                     ))}
                   </div>
+
+                  {/* SLOT SELECTION (Only for Children) */}
+                  {program.isEnfant && (
+                    <div className="mb-8 relative z-20">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Choisir un créneau :</p>
+                      <div className="space-y-2">
+                        {program.slots?.map(slot => {
+                          const status = getSlotStatus(slot.day);
+                          const isFull = status?.est_plein;
+                          const isSelected = selectedSlots[program.id] === slot.id;
+
+                          return (
+                            <button
+                              key={slot.id}
+                              disabled={isFull}
+                              onClick={() => setSelectedSlots(prev => ({ ...prev, [program.id]: slot.id }))}
+                              className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all text-left ${
+                                isFull 
+                                  ? "bg-gray-50 border-gray-100 opacity-60 cursor-not-allowed" 
+                                  : isSelected
+                                    ? "bg-[#c8a96e]/10 border-[#c8a96e] ring-1 ring-[#c8a96e]"
+                                    : "bg-white border-gray-100 hover:border-[#c8a96e]/50"
+                              }`}
+                            >
+                              <div>
+                                <p className={`text-xs font-bold ${isSelected ? "text-[#c8a96e]" : "text-ishes-dark"}`}>{slot.day}</p>
+                                <p className="text-[10px] text-gray-400">{slot.time}</p>
+                              </div>
+                              {isFull ? (
+                                <span className="bg-red-50 text-red-500 text-[8px] font-black uppercase px-2 py-1 rounded-lg">Plein</span>
+                              ) : (
+                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${isSelected ? "border-[#c8a96e] bg-[#c8a96e]" : "border-gray-100"}`}>
+                                  {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                                </div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   {/* PRICE & CTA */}
                   <div className="flex flex-col gap-4 mt-auto pt-6 border-t border-gray-100 relative z-30">
@@ -217,18 +271,36 @@ export default function InstitutPage() {
                         {program.priceSub}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+
+                    {/* STATUS PLEIN / DISPONIBLE */}
+                    <div className="mb-2">
+                      {getSlotStatus(program.day)?.est_plein ? (
+                        <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
+                          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                          Session Complète
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl">
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                          Places Disponibles
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
                       <Link 
                         href={program.link}
-                        className="flex items-center justify-center bg-gray-50 text-gray-600 hover:bg-gray-100 py-4.5 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest"
+                        className="flex items-center justify-center bg-gray-50 text-gray-600 hover:bg-gray-100 py-3.5 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest"
                       >
-                        En savoir plus
+                        Infos
                       </Link>
                       <Link 
-                        href={`/inscription?plan=${program.id}`}
-                        className="flex items-center justify-center bg-[#c8a96e] text-white hover:bg-[#b0935b] py-4.5 rounded-2xl shadow-lg shadow-[#c8a96e]/20 transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95"
+                        href={`/inscription?plan=${program.formationId}&slot=${program.day.toLowerCase()}`}
+                        className={`flex items-center justify-center bg-[#c8a96e] text-white hover:bg-[#b0935b] py-3.5 rounded-2xl shadow-lg shadow-[#c8a96e]/20 transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
+                          getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                        }`}
                       >
-                        S'inscrire
+                        {getSlotStatus(program.day)?.est_plein ? "COMPLET" : "S'inscrire"}
                       </Link>
                     </div>
                   </div>

@@ -19,26 +19,86 @@ type Program = {
   isRecommended?: boolean;
   type: "presentiel" | "distanciel";
   audience: "adulte" | "enfant";
+  day?: string;
+  formationId?: string;
+  slotId?: string;
 };
 
 export const PROGRAMS: Program[] = [
   {
-    id: "tajwid_standard",
+    id: "tajwid-standard-presentiel",
+    formationId: "presentiel-global",
     title: "Tajwid (Standard)",
-    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid. Méthode progressive.",
-    tagText: "STANDARD",
-    tagColor: "bg-green-100 text-green-700",
-    durationText: "8 mois",
-    features: [
-      "Lecture correcte",
-      "Application des règles",
-      "Fluidité & Prononciation",
-      "Suivi WhatsApp"
-    ],
+    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid en présentiel.",
+    tagText: "PRÉSENTIEL",
+    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    durationText: "Lundi 19h00",
+    features: ["Lecture correcte", "Application des règles", "Fluidité", "Suivi WhatsApp"],
     price: "349 €",
     priceSub: "/ SESSION",
     type: "presentiel",
-    audience: "adulte"
+    audience: "adulte",
+    day: "Lundi"
+  },
+  {
+    id: "arabe-adulte-presentiel",
+    formationId: "presentiel-global",
+    title: "Arabe Littéraire",
+    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation en présentiel.",
+    tagText: "PRÉSENTIEL",
+    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    durationText: "Mardi 19h00",
+    features: ["Lecture & Écriture", "Conversation", "Grammaire", "Immersion"],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "adulte",
+    day: "Mardi"
+  },
+  {
+    id: "enfant-mercredi-presentiel",
+    formationId: "presentiel-global",
+    title: "Scolarité Enfants",
+    subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
+    tagText: "PRÉSENTIEL",
+    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    durationText: "Mercredi 14h-17h",
+    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "enfant",
+    day: "Mercredi"
+  },
+  {
+    id: "enfant-samedi-presentiel",
+    formationId: "presentiel-global",
+    title: "Scolarité Enfants",
+    subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
+    tagText: "PRÉSENTIEL",
+    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    durationText: "Samedi 09h-12h",
+    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "enfant",
+    day: "Samedi"
+  },
+  {
+    id: "enfant-dimanche-presentiel",
+    formationId: "presentiel-global",
+    title: "Scolarité Enfants",
+    subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
+    tagText: "PRÉSENTIEL",
+    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    durationText: "Dimanche 11h30-14h30",
+    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    price: "349 €",
+    priceSub: "/ SESSION",
+    type: "presentiel",
+    audience: "enfant",
+    day: "Dimanche"
   },
   {
     id: "tajwid_standard",
@@ -275,42 +335,8 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "enfant"
   },
-  {
-    id: "arabe_coran_junior",
-    title: "Arabe & Coran Junior",
-    subtitle: "Immersion totale et pédagogie active en présentiel pour les 6-15 ans à Toulouse.",
-    tagText: "JUNIOR",
-    tagColor: "bg-pink-100 text-pink-700",
-    durationText: "Annuel",
-    features: [
-      "Enseignement direct",
-      "Activités ludiques",
-      "Vie d'institut",
-      "Ateliers pratiques"
-    ],
-    price: "349 €",
-    priceSub: "/ SESSION",
-    type: "presentiel",
-    audience: "enfant"
-  },
-  {
-    id: "tajwid_standard",
-    title: "Tajwid (Enfant)",
-    subtitle: "Apprends à lire le Coran correctement dès le plus jeune âge. Méthode ludique.",
-    tagText: "ENFANT",
-    tagColor: "bg-green-100 text-green-700",
-    durationText: "Annuel",
-    features: [
-      "Lecture correcte",
-      "Pédagogie adaptée",
-      "Mémorisation facile",
-      "Suivi parents"
-    ],
-    price: "349 €",
-    priceSub: "/ SESSION",
-    type: "presentiel",
-    audience: "enfant"
-  },
+
+
   {
     id: "tajwid_standard",
     title: "Tajwid (Enfant)",
@@ -347,24 +373,7 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "enfant"
   },
-  {
-    id: "arabe_adulte",
-    title: "Arabe Littéraire (Adulte)",
-    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation courante. Méthode immersive.",
-    tagText: "LANGUE",
-    tagColor: "bg-blue-100 text-blue-700",
-    durationText: "9 mois",
-    features: [
-      "Lecture & Écriture",
-      "Conversation réelle",
-      "Grammaire & Syntaxe",
-      "Immersion totale"
-    ],
-    price: "349 €",
-    priceSub: "/ SESSION",
-    type: "presentiel",
-    audience: "adulte"
-  },
+
   {
     id: "arabe_adulte",
     title: "Arabe Littéraire (Adulte)",
@@ -408,6 +417,25 @@ export function ProgramContent() {
   const searchParams = useSearchParams();
   const [activeMode, setActiveMode] = useState<"presentiel" | "distanciel">("distanciel");
   const [activeAudience, setActiveAudience] = useState<"adulte" | "enfant">("adulte");
+  const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/classes/status');
+        const data = await res.json();
+        if (!data.error) setSlotsStatus(data);
+      } catch (err) {
+        console.error("Failed to fetch slots status", err);
+      }
+    };
+    fetchStatus();
+  }, []);
+
+  const getSlotStatus = (day?: string) => {
+    if (!day) return null;
+    return slotsStatus.find(s => s.day_of_week === day);
+  };
 
   useEffect(() => {
     const mode = searchParams.get("mode");
@@ -514,24 +542,24 @@ export function ProgramContent() {
                const accentColor = isPresentiel ? "text-[#c8a96e]" : "text-[#008953]";
                const btnColor = isPresentiel ? "bg-[#c8a96e] hover:bg-[#b0935b]" : "bg-[#008953] hover:bg-[#007044]";
 
-               const infoUrl = 
-                 program.id === 'arabe_coran_junior' ? '/fr/cours-arabe-enfant' : 
-                 program.id === 'tajwid_standard' ? '/fr/cours-lecture-tajwid' : 
-                 program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
-                 program.id === 'arabe_adulte' ? '/fr/cours-arabe-adulte' : 
-                 program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
-                 program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
-                 program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
-                 program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
-                 program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
-                 program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
-                 program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
-                 program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
-                 program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
-                 program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
-                 program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
-                 program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                 `/program/${program.id}`;
+                const infoUrl = 
+                  (program.id === 'tajwid_standard' || program.id === 'tajwid-standard-presentiel') ? '/fr/cours-lecture-tajwid' : 
+                  program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
+                  (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' : 
+                  (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' : 
+                  program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
+                  program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
+                  program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
+                  program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
+                  program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
+                  program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
+                  program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
+                  program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
+                  program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
+                  program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
+                  program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
+                  program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
+                  `/program/${program.id}`;
 
                return (
                 <div 
@@ -567,19 +595,19 @@ export function ProgramContent() {
                       {/* ICONS GRID */}
                       <div className="grid grid-cols-2 gap-3 mb-5">
                          <div className="flex items-center gap-2">
-                            <Clock className={`w-4 h-4 ${accentColor}`} />
-                            <span className="text-[10px] font-bold text-gray-400">1h30/sem</span>
+                            <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
+                            <span className="text-[10px] font-bold text-gray-400">{isPresentiel ? program.durationText : "1h30/sem"}</span>
                          </div>
                          <div className="flex items-center gap-2">
-                            <BookOpen className={`w-4 h-4 ${accentColor}`} />
+                            <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
                             <span className="text-[10px] font-bold text-gray-400">Manuel inclus</span>
                          </div>
                          <div className="flex items-center gap-2">
-                            <Users className={`w-4 h-4 ${accentColor}`} />
-                            <span className="text-[10px] font-bold text-gray-400">Max 12</span>
+                            <Users className={`w-3.5 h-3.5 ${accentColor}`} />
+                            <span className="text-[10px] font-bold text-gray-400">Max 20</span>
                          </div>
                          <div className="flex items-center gap-2">
-                            <Award className={`w-4 h-4 ${accentColor}`} />
+                            <Award className={`w-3.5 h-3.5 ${accentColor}`} />
                             <span className="text-[10px] font-bold text-gray-400 uppercase">Certifié</span>
                          </div>
                       </div>
@@ -602,6 +630,21 @@ export function ProgramContent() {
                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
                                   {program.priceSub}
                                </div>
+                                {isPresentiel && (
+                                 <div className="mb-2 mt-2">
+                                   {getSlotStatus(program.day)?.est_plein ? (
+                                     <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl border border-red-100">
+                                       <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                                       Session Complète
+                                     </div>
+                                   ) : (
+                                     <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl border border-green-100">
+                                       <div className="w-2 h-2 rounded-full bg-green-500" />
+                                       Places Disponibles
+                                     </div>
+                                   )}
+                                 </div>
+                               )}
                             </div>
                          </div>
                          <div className="grid grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
@@ -612,13 +655,28 @@ export function ProgramContent() {
                             >
                                Info
                             </Link>
-                            <Link 
-                               href={`/inscription?plan=${program.id}`}
-                               onClick={(e) => e.stopPropagation()}
-                               className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
-                            >
-                               S'inscrire
-                            </Link>
+                            {isPresentiel ? (
+                              <Link 
+                                href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${
+                                  getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                                }`}
+                              >
+                                {getSlotStatus(program.day)?.est_plein 
+                                  ? "COMPLET" 
+                                  : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
+                                }
+                              </Link>
+                            ) : (
+                              <Link 
+                                href={`/inscription?plan=${program.id}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                              >
+                                S'inscrire
+                              </Link>
+                            )}
                          </div>
                       </div>
                    </div>

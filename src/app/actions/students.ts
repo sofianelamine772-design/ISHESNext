@@ -270,6 +270,7 @@ export async function fetchClassesAction() {
       id: c.id,
       name: c.name,
       type: c.type,
+      capacity_limit: c.capacity_limit || 23,
       formationTitle: c.formations?.title,
       students: c.inscriptions.map((i: any) => ({
         id: i.etudiant_id,
