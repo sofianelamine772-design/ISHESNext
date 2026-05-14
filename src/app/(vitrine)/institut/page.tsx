@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Navigation, GraduationCap, Users, Calendar, ArrowRight, ShieldCheck, Sparkles, Clock, BookOpen, Award, CheckCircle2 } from "lucide-react";
+import { MapPin, GraduationCap, Users, Clock, BookOpen, Award, CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -9,7 +9,29 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-const presentielPrograms = [
+// Définition rigoureuse du type pour éviter les erreurs TypeScript
+interface ProgramSlot {
+  id: string;
+  day: string;
+  time: string;
+}
+
+interface PresentielProgram {
+  id: string;
+  formationId: string;
+  title: string;
+  subtitle: string;
+  durationText: string;
+  day?: string; // Optionnel pour les enfants
+  audience: 'adulte' | 'enfant';
+  features: string[];
+  price: string;
+  priceSub: string;
+  link: string;
+  slots?: ProgramSlot[]; // Optionnel pour les adultes
+}
+
+const presentielPrograms: PresentielProgram[] = [
   {
     id: "tajwid-standard",
     formationId: "presentiel-global",
@@ -72,8 +94,9 @@ export default function InstitutPage() {
     fetchStatus();
   }, []);
 
-  const getSlotStatus = (day: string) => {
-    return slotsStatus.find(s => s.day_of_week === day);
+  const getSlotStatus = (day?: string) => {
+    if (!day) return null;
+    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
   };
 
   return (
@@ -143,11 +166,7 @@ export default function InstitutPage() {
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="group relative flex flex-col rounded-[2rem] bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 overflow-hidden"
               >
-                {/* Visual Accent */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#c8a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                {/* Overlay Link - only for non-enfant or as a secondary layer */}
-                <Link href={program.link} className="absolute inset-0 z-10 rounded-[2rem]" />
                 
                 <div className="p-5 sm:p-6 flex-1 flex flex-col relative z-20">
                   {/* TAGS ROW */}
@@ -208,11 +227,11 @@ export default function InstitutPage() {
                   </div>
 
                   {/* SLOT SELECTION (Only for Children) */}
-                  {program.audience === 'enfant' && (
+                  {program.audience === 'enfant' && program.slots && (
                     <div className="mb-8 relative z-30">
                       <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Choisir un créneau :</p>
                       <div className="space-y-2">
-                        {program.slots?.map(slot => {
+                        {program.slots.map(slot => {
                           const status = getSlotStatus(slot.day);
                           const isFull = status?.est_plein;
                           const isSelected = selectedSlots[program.id] === slot.id;
@@ -261,7 +280,7 @@ export default function InstitutPage() {
                       </div>
                     </div>
                     
-                    {program.audience === 'adulte' && (
+                    {program.audience === 'adulte' && program.day && (
                       <div className="mb-2">
                         {getSlotStatus(program.day)?.est_plein ? (
                           <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
@@ -315,12 +334,10 @@ export default function InstitutPage() {
             viewport={{ once: true }}
             className="bg-ishes-dark rounded-[3.5rem] p-4 md:p-8 flex flex-col lg:flex-row items-stretch gap-8 overflow-hidden relative shadow-2xl"
           >
-             {/* Background Decoration */}
              <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
                <span className="absolute -top-10 -right-10 text-[400px] leading-none font-bold text-white">ﷻ</span>
              </div>
              
-             {/* Content Column */}
              <div className="relative z-10 flex-1 p-8 md:p-12 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-[1px] bg-[#c8a96e]"></div>
@@ -335,8 +352,6 @@ export default function InstitutPage() {
                    <p className="text-xl text-white/60 font-medium">
                       Situé au <strong className="text-white">41 Boulevard de Thibaud, 31100 Toulouse</strong>, notre espace de formation est ouvert sur rendez-vous.
                    </p>
-                   
-                   {/* Opening Hours Minimalist */}
                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm max-w-md">
                       <div className="grid grid-cols-2 gap-4 text-[11px] font-bold tracking-wider uppercase">
                          <div className="text-white/40">Mercredi</div>
@@ -364,7 +379,6 @@ export default function InstitutPage() {
                 </div>
              </div>
 
-             {/* Map Column */}
              <div className="relative z-10 lg:flex-[1.2] min-h-[500px] lg:min-h-auto rounded-[2.5rem] overflow-hidden border border-white/5">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2891.8761405060413!2d1.38550137683402!3d43.54660305924716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aeb7a7e937d53d%3A0xe7a5c86c125e1975!2s41%20Bd%20de%20Thibaud%2C%2031100%20Toulouse!5e0!3m2!1sfr!2sfr!4v1715367800000!5m2!1sfr!2sfr"
@@ -376,7 +390,6 @@ export default function InstitutPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                   className="absolute inset-0"
                 ></iframe>
-                {/* Map Overlay Frame */}
                 <div className="absolute inset-0 pointer-events-none border-[12px] border-ishes-dark/20 rounded-[2.5rem]"></div>
              </div>
           </motion.div>
