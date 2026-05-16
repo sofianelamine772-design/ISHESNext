@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "rm -rf .next/dev/cache/turbopack && next dev --webpack",
+    "dev:turbo": "next dev --turbo",
+    "clean": "rm -rf .next && npm run dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

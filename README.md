@@ -20,9 +20,17 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## 🛠 Dépannage & Stabilité
 
-To learn more about Next.js, take a look at the following resources:
+### Problèmes de Cache (Turbopack)
+Si vous rencontrez des erreurs de type `MODULE_NOT_FOUND`, `corrupted database` ou `SST file missing`, c'est que le cache de Turbopack est corrompu.
+
+**Solutions :**
+1. **Le Reset Ultime** : Lancez `npm run clean`. Cela supprimera le dossier `.next` et relancera le serveur proprement.
+2. **Mode Ultra-Stable** : Si les erreurs persistent, utilisez `npm run dev` (qui est maintenant configuré avec `--webpack` pour éviter ces bugs) ou forcez le mode stable avec `npm run dev:stable`.
+
+### Icônes & PWA
+Les icônes Apple et le favicon sont générés et stockés dans `/public`. Si le navigateur affiche des erreurs 404 sur `apple-touch-icon.png`, vérifiez que les fichiers sont bien présents dans le dossier `public`.
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.

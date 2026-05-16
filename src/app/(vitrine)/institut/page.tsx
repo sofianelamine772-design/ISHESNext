@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, GraduationCap, Users, Clock, BookOpen, Award, CheckCircle2, ArrowRight } from "lucide-react";
+import { MapPin, GraduationCap, Users, Clock, BookOpen, Award, CheckCircle2, ArrowRight, Sparkles, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -322,6 +322,37 @@ export default function InstitutPage() {
               </motion.div>
             ))}
           </div>
+
+          {/* TEST DE POSITIONNEMENT CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto bg-white rounded-[3rem] p-8 md:p-12 border border-ishes-dark/5 shadow-2xl shadow-ishes-dark/5 relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#c8a96e]/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-[#c8a96e]/10 transition-colors duration-700" />
+            
+            <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-[#c8a96e]/10 rounded-[2.5rem] flex items-center justify-center shrink-0">
+                <Sparkles className="w-10 h-10 md:w-14 md:h-14 text-[#c8a96e]" />
+              </div>
+              
+              <div className="flex-1 text-center md:text-left">
+                <span className="text-[#c8a96e] font-black uppercase tracking-[0.2em] text-[10px] mb-3 block">Orientation pédagogique</span>
+                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de positionnement <span className="text-[#c8a96e] italic">Enfants</span></h3>
+                <p className="text-gray-500 font-medium leading-relaxed mb-8">
+                  Un doute sur le niveau de votre enfant ? Notre test interactif vous aide à choisir entre le niveau <strong className="text-ishes-dark">Débutant</strong> ou <strong className="text-ishes-dark">1+</strong> en moins de 2 minutes.
+                </p>
+                <Link 
+                  href="/test-positionnement" 
+                  className="inline-flex items-center gap-3 bg-ishes-dark text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-black transition-all hover:-translate-y-1 shadow-xl shadow-ishes-dark/20"
+                >
+                  Démarrer le test gratuit <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
       </section>
 
