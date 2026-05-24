@@ -34,6 +34,7 @@ function InscriptionForm() {
   const [registrationType, setRegistrationType] = useState<"self" | "child">("self");
   const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "" }]);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const getPrice = () => {
     if (registrationType === 'child') {
@@ -692,14 +693,19 @@ function InscriptionForm() {
                     </ul>
                   </div>
                 )}
-                <p className="text-[10px] text-gray-400 font-bold uppercase leading-relaxed mb-8">
-                  En cliquant sur le bouton ci-dessous, vous serez redirigé vers notre plateforme de paiement sécurisée puis vers la création de mot de passe.
-                </p>
+                <div className="flex items-start gap-3 mb-8 text-left group cursor-pointer" onClick={() => setAcceptedTerms(!acceptedTerms)}>
+                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-[#008953] border-[#008953]' : 'border-gray-300 bg-white group-hover:border-[#008953]'}`}>
+                    {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                  </div>
+                  <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
+                    J'accepte les <Link href="/cgv" className="text-[#008953] underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
+                  </p>
+                </div>
 
                 <button
                   onClick={handleCheckout}
-                  disabled={loadingCheckout}
-                  className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20 disabled:opacity-70"
+                  disabled={loadingCheckout || !acceptedTerms}
+                  className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loadingCheckout ? "Redirection..." : "Payer & Créer mon compte"} <ArrowRight className="w-4 h-4" />
                 </button>

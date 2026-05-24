@@ -718,7 +718,7 @@ function InscriptionForm() {
                     {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
-                    J'accepte les <Link href="/cgv" className="text-ishes-green underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation de 14 jours conformément à la loi.
+                    J'accepte les <Link href="/cgv" className="text-ishes-green underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
                   </p>
                 </div>
 
