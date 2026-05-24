@@ -94,7 +94,7 @@ export default function EleveDashboard() {
 
           <div className="relative aspect-square rounded-[2.5rem] overflow-hidden shadow-inner border border-white/5">
             <Image 
-              src="/images/iphone-tutorial.png"
+              src="/images/tutoriel-installation-application-ishes.png"
               alt="Tutoriel iPhone PWA"
               fill
               className="object-cover"

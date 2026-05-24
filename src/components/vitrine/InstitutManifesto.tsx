@@ -7,7 +7,7 @@ export function InstitutManifesto() {
   return (
     <section className="bg-white py-32 relative overflow-hidden">
       <div className="absolute top-0 right-0 p-20 opacity-[0.03] pointer-events-none">
-         <Image src="/logo.png" width={600} height={200} className="grayscale" alt="" />
+         <Image src="/logo-ishes-institut-arabe.png" width={600} height={200} className="grayscale" alt="" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6">

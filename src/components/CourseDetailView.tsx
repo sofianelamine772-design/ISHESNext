@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar } from "lucide-react";
+import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X } from "lucide-react";
 
 interface CourseDetailViewProps {
   course: any;
@@ -9,6 +10,8 @@ interface CourseDetailViewProps {
 }
 
 export function CourseDetailView({ course, id }: CourseDetailViewProps) {
+  const [isFlyerOpen, setIsFlyerOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white font-sans text-[#101828]">
       {/* Hero Section */}
@@ -27,17 +30,28 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-2xl">
                   {course.hook}
                </p>
-               <div className="flex flex-wrap gap-4 pt-4">
-                  <Link 
-                     href={`/inscription?plan=${id}`}
-                     className="px-10 py-5 bg-[#008953] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#008953]/20 hover:bg-[#007044] transition-all flex items-center gap-3 active:scale-95"
-                  >
-                     S'inscrire maintenant <ArrowRight className="w-6 h-6" />
-                  </Link>
-                  <button className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3">
-                     <Play className="w-5 h-5 fill-current" /> Voir le teaser
-                  </button>
-               </div>
+                <div className="flex flex-wrap gap-4 pt-4 text-center items-center">
+                   <Link 
+                      href={`/inscription?plan=${id}`}
+                      className="px-10 py-5 bg-[#008953] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#008953]/20 hover:bg-[#007044] transition-all flex items-center gap-3 active:scale-95"
+                   >
+                      S'inscrire maintenant <ArrowRight className="w-6 h-6" />
+                   </Link>
+                   {course.videoUrl && (
+                      <button className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3">
+                         <Play className="w-5 h-5 fill-current" /> Voir le teaser
+                      </button>
+                   )}
+                   {course.flyerUrl && (
+                      <button 
+                         onClick={() => setIsFlyerOpen(true)}
+                         className="px-10 py-5 bg-gradient-to-r from-[#c8a96e] to-[#b8985d] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#c8a96e]/20 hover:from-[#b8985d] hover:to-[#a8884d] transition-all flex items-center gap-3 active:scale-95"
+                      >
+                         <Eye className="w-5 h-5" /> 
+                         {course.flyerUrl.toLowerCase().endsWith('.pdf') ? "Voir le Programme PDF" : "Voir le Flyer"}
+                      </button>
+                   )}
+                </div>
                <div className="flex items-center gap-10 pt-4">
                   <div className="flex items-center gap-2">
                      <Users className="w-5 h-5 text-gray-400" />
@@ -120,7 +134,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
                   Pourquoi ce programme <br /> va tout <span className="text-[#008953]">changer.</span>
                </h2>
-               <p className="text-lg text-gray-500 font-medium leading-relaxed">
+               <p className="text-lg text-gray-500 font-medium leading-relaxed whitespace-pre-wrap">
                   {course.description}
                </p>
                <div className="space-y-6">
@@ -149,6 +163,149 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                ))}
             </div>
          </div>
+
+         {/* Full Program & Schedule (Conditional) */}
+         {(course.fullProgram || course.horaires) && (
+            <div className="mt-24 max-w-7xl mx-auto space-y-16">
+               <div className="h-px bg-gray-100 w-full"></div>
+               
+               <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                  {/* Left: Program */}
+                  <div className="lg:col-span-8 space-y-12">
+                     <div className="inline-flex items-center gap-3 px-4 py-2 bg-ishes-green/5 text-ishes-green rounded-xl border border-ishes-green/10">
+                        <BookOpen className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Programme Détaillé</span>
+                     </div>
+
+                     <div className="grid md:grid-cols-1 gap-12">
+                        {course.fullProgram?.preIslamique && (
+                           <div className="space-y-6">
+                              <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">01</span>
+                                 La Période Pré-Islamique
+                              </h3>
+                              <div className="grid sm:grid-cols-2 gap-4">
+                                 {course.fullProgram.preIslamique.map((item: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
+                                       <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                       <span className="text-sm font-bold text-gray-600">{item}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+
+                        {course.fullProgram?.mecquoise && (
+                           <div className="space-y-6">
+                              <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">02</span>
+                                 La Période Mécquoise
+                              </h3>
+                              <div className="grid sm:grid-cols-2 gap-4">
+                                 {course.fullProgram.mecquoise.map((item: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
+                                       <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                       <span className="text-sm font-bold text-gray-600">{item}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+
+                        {course.fullProgram?.medinoise && (
+                           <div className="space-y-6">
+                              <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">03</span>
+                                 La Période Médinoise
+                              </h3>
+                              <div className="grid sm:grid-cols-2 gap-4">
+                                 {course.fullProgram.medinoise.map((item: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
+                                       <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                       <span className="text-sm font-bold text-gray-600">{item}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+                        {course.fullProgram?.fondamentaux && (
+                           <div className="space-y-6">
+                              <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">★</span>
+                                 Les Principes Fondamentaux
+                              </h3>
+                              <div className="grid sm:grid-cols-2 gap-4">
+                                 {course.fullProgram.fondamentaux.map((item: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
+                                       <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                       <span className="text-sm font-bold text-gray-600">{item}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+                        {course.fullProgram?.deroulement && (
+                           <div className="space-y-6">
+                              <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">🚀</span>
+                                 Déroulement de la Formation
+                              </h3>
+                              <div className="space-y-4">
+                                 {course.fullProgram.deroulement.map((item: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-gray-50 shadow-sm">
+                                       <div className="w-6 h-6 rounded-full bg-ishes-green/10 flex items-center justify-center text-[10px] font-black text-ishes-green">{i+1}</div>
+                                       <span className="text-base font-bold text-gray-600">{item}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+
+                        {course.fullProgram?.objectifs && (
+                           <div className="space-y-6">
+                              <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">🎯</span>
+                                 Objectifs Pédagogiques
+                              </h3>
+                              <div className="grid sm:grid-cols-1 gap-4">
+                                 {course.fullProgram.objectifs.map((item: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
+                                       <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0" />
+                                       <span className="text-base font-black text-ishes-dark">{item}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+                     </div>
+                  </div>
+
+                  {/* Right: Schedule */}
+                  <div className="lg:col-span-4">
+                     {course.horaires && (
+                        <div className="sticky top-32 p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-xl space-y-8">
+                           <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#c8a96e]/10 text-[#c8a96e] rounded-xl border border-[#c8a96e]/10">
+                              <Calendar className="w-4 h-4" />
+                              <span className="text-[10px] font-black uppercase tracking-widest">Horaires</span>
+                           </div>
+                           <h3 className="text-2xl font-black text-ishes-dark">Sessions disponibles</h3>
+                           <div className="space-y-4">
+                              {course.horaires.map((h: string, i: number) => (
+                                 <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
+                                    <span className="text-sm font-black text-gray-700">{h}</span>
+                                    <div className="w-2 h-2 rounded-full bg-ishes-green animate-pulse"></div>
+                                 </div>
+                              ))}
+                           </div>
+                           <p className="text-xs text-gray-400 font-medium leading-relaxed italic">
+                              Les horaires sont donnés à titre indicatif et peuvent être ajustés selon les groupes.
+                           </p>
+                        </div>
+                     )}
+                  </div>
+               </div>
+            </div>
+         )}
       </section>
 
       <section className="py-24 px-6">
@@ -174,6 +331,32 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
             </div>
          </div>
       </section>
+      {/* Lightbox Modal for Flyer */}
+      {isFlyerOpen && course.flyerUrl && (
+         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="relative max-w-4xl w-full h-[85vh] bg-transparent rounded-3xl overflow-hidden flex flex-col items-center justify-center">
+               <button 
+                  onClick={() => setIsFlyerOpen(false)}
+                  className="absolute top-4 right-4 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full transition-colors cursor-pointer"
+               >
+                  <X className="w-6 h-6" />
+               </button>
+                {course.flyerUrl.toLowerCase().endsWith('.pdf') ? (
+                   <iframe 
+                      src={course.flyerUrl} 
+                      className="w-[90vw] md:w-full h-[75vh] md:h-full rounded-2xl border-0 bg-white"
+                      title="Descriptif de la formation PDF"
+                   ></iframe>
+                ) : (
+                   <img 
+                      src={course.flyerUrl} 
+                      alt="Flyer de la formation" 
+                      className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
+                   />
+                )}
+            </div>
+         </div>
+      )}
     </div>
   );
 }

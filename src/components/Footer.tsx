@@ -14,7 +14,7 @@ export function Footer() {
           {/* Logo + réseaux */}
           <div className="lg:col-span-1">
             <Link href="/" className="mb-6 inline-block transition-transform hover:scale-105 active:scale-95">
-              <img src="/logo.png" alt="ISHES Logo" className="h-14 w-auto object-contain" />
+              <img src="/logo-ishes-institut-arabe.png" alt="ISHES Logo" className="h-14 w-auto object-contain" />
             </Link>
             <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">
               L'excellence de la langue arabe et des sciences islamiques à votre portée.

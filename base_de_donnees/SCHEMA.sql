@@ -82,7 +82,7 @@ create index idx_inscriptions_status on public.inscriptions(status);
 insert into public.formations (title, slug, description, price, duration, type) values
 ('Cours Particuliers', 'cours_particuliers', 'Accompagnement individuel pour adultes et enfants.', 0, 'À la carte', 'distanciel'),
 ('Correction al Fatiha', 'correction_fatiha', 'Maîtrisez la récitation de la Fatiha et des 3 dernières sourates.', 0, 'Session', 'distanciel'),
-('Spiritualité Musulmane', 'spiritualite_islam', 'Éducation de l''âme et préceptes profonds de l''Islam.', 0, 'Continu', 'distanciel'),
+('Spiritualité Musulmane', 'spiritualite_islam', 'Éducation de l''âme et préceptes profonds de l''Islam.', 399, '4 mois', 'distanciel'),
 ('Sîrah An-Nabawiyya', 'as_sirah', 'La vie de la meilleure des créatures.', 250, 'Annuel', 'distanciel'),
 ('Al-Aqîda', 'al_aqida', 'Étude de la foi sunnite à travers la Tahawiya.', 250, '9 mois', 'distanciel'),
 ('Mémorisation du Coran', 'memoriser_coran', 'Accompagnement personnalisé pour le Hifz.', 349, 'Annuel', 'distanciel'),
@@ -93,7 +93,7 @@ insert into public.formations (title, slug, description, price, duration, type) 
 ('Tajwid Intensif', 'tajwid_intensif', '3 mois pour transformer votre lecture du Coran.', 649, '3 mois', 'distanciel'),
 ('Fiqh Mâlikite', 'fiqh_malikite', 'Étude approfondie du rite malikite (Matn Ibn Achir).', 349, '9 mois', 'distanciel'),
 ('Sciences Islamiques', 'sciences_islamiques', 'Socle de connaissances solide (Fiqh, Sîrah, Coran).', 349, '8 mois', 'distanciel'),
-('Sciences du Coran', 'sciences_du_coran', 'Histoire, compilation et transmission du Livre Saint.', 249, '5 mois', 'distanciel'),
+('Sciences du Coran', 'sciences_du_coran', 'Histoire, compilation et transmission du Livre Saint.', 399, '5 mois', 'distanciel'),
 ('Cours d''arabe enfant', 'arabe_coran_junior', 'Méthode immersive pour les 4-15 ans.', 349, 'Annuel', 'distanciel'),
 ('Scolarité Présentiel', 'presentiel-global', 'Accès global aux cursus de l''Institut en présentiel.', 150, 'Annuel', 'presentiel');
 

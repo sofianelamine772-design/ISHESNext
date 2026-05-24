@@ -174,11 +174,23 @@ function InscriptionForm() {
   // Derived Title
   const getPlanName = (id: string | null) => {
     switch (id) {
+      case "presentiel-global": return "Cours en Présentiel / Direct";
       case "tajwid_intensif": return "Tajwid Intensif (Distanciel)";
       case "sciences_islamiques": return "Sciences Islamiques (Distanciel)";
       case "arabe_coran_junior": return "Arabe & Coran Junior";
       case "pack_accompagnement": return "Pack Accompagnement";
       case "tajwid_standard": return "Tajwid Standard (Présentiel)";
+      case "sciences_du_coran": return "Sciences du Coran (Distanciel)";
+      case "sciences_hadith": return "Sciences du Hadith (Distanciel)";
+      case "memoriser_coran": return "Mémorisation du Coran (Distanciel)";
+      case "as_sirah": return "Sîrah An-Nabawiyya (Distanciel)";
+      case "al_aqida": return "Al-Aqîda (Distanciel)";
+      case "fiqh_malikite": return "Fiqh Mâlikite (Distanciel)";
+      case "arabe_adulte": return "Arabe Littéraire (Adulte) (Distanciel)";
+      case "tarbiya_islamiya": return "Tarbiya Islamiya (Distanciel)";
+      case "spiritualite_islam": return "Spiritualité Musulmane (Distanciel)";
+      case "correction_fatiha": return "Correction al Fatiha (Distanciel)";
+      case "cours_particuliers": return "Cours Particuliers (Distanciel)";
       default: return "";
     }
   };
@@ -542,7 +554,7 @@ function InscriptionForm() {
                 {/* Mascot Image */}
                 <div className="w-full max-w-[320px] relative">
                   <img
-                    src="/images/mascotte-ville.png"
+                    src="/images/mascotte-ishes-toulouse.png"
                     alt="Mascotte ISHES"
                     className="w-full h-auto drop-shadow-2xl"
                   />

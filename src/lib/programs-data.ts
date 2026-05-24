@@ -1,11 +1,11 @@
 export const PROGRAMS_DATA: Record<string, any> = {
   "cours_particuliers": {
-    title: "Cours Particuliers",
+    title: "Cours Particuliers de Coran & Tajwid",
     duration: "À la carte",
     tag: "Sur-mesure",
     price: "Sur Devis",
     hook: "L'excellence d'un accompagnement individuel pour adultes et enfants.",
-    description: "Nos cours particuliers de Coran et Tajwid sont conçus pour s'adapter à votre niveau et vos objectifs personnels. Travaillez en tête-à-tête avec un enseignant qualifié pour une progression rapide et rigoureuse.",
+    description: "Vous cherchez à apprendre les règles du Tajwid pour vous permettre de lire le Noble Coran ? Nous proposons des cours particuliers d'apprentissage du Coran et de Tajwid destinés aux adultes et enfants de tous niveaux (à partir du niveau débutant).\n\nNos cours sont dispensés par des enseignants expérimentés et qualifiés, qui travaillent avec chaque étudiant individuellement pour créer un programme personnalisé qui répond à leurs besoins et à leurs objectifs.\n\nVous recevrez un certificat à la fin de la formation validant vos connaissances en matière de Tajwid.\n\nLes cours sont dispensés à un rythme adapté et convenu avec l'étudiant(e).\n\nContactez-nous dès maintenant pour organiser avec l'enseignant, votre parcours d'apprentissage du Coran et de Tajwid.",
     features: [
       { t: "Personnalisation", d: "Programme unique créé selon vos besoins et votre rythme." },
       { t: "Flexibilité", d: "Calendrier convenu avec l'enseignant pour s'adapter à vos contraintes." },
@@ -41,23 +41,27 @@ export const PROGRAMS_DATA: Record<string, any> = {
   },
   "spiritualite_islam": {
     title: "Spiritualité Musulmane",
-    duration: "Continu",
-    tag: "Éducation de l'âme",
-    price: "0 €",
-    hook: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam.",
-    description: "Ce cours offert explore le noyau de l'Islam : l'âme (Rouh). À travers une introduction pratique, vous découvrirez comment cultiver l'harmonie intérieure, développer une relation sincère avec le Créateur et vivre dans la bienveillance.",
+    duration: "4 mois",
+    tag: "Éducation de l'Âme",
+    price: "399 €",
+    hook: "L’éducation de l’âme et le rapprochement d’ALLAH.",
+    flyerUrl: "/images/spiritualite-musulmane-flyer.jpeg",
+    description: "La spiritualité musulmane représente le cœur vivant de l’Islam.\n\nElle est ce qui nourrit l’âme, apaise le cœur et donne du sens à notre relation avec ALLAH.\n\nDans un monde où beaucoup ressentent un vide intérieur malgré les distractions, ce cours propose un retour à l’essentiel : apprendre à connaître ALLAH, purifier son cœur et travailler sur soi pour cheminer spirituellement.",
+    horaires: [
+      "Chaque samedi à 10h30"
+    ],
     features: [
-      { t: "Cœur & Âme", d: "Comprendre l'essence de l'être humain (Rouh) et son éducation." },
-      { t: "Piliers profonds", d: "Vivre les piliers de l'Islam et de la Foi au-delà de la surface." },
-      { t: "Paix intérieure", d: "Cultiver l'harmonie entre le corps et l'esprit au quotidien." },
-      { t: "Accessible", d: "Ouvert à tous, quel que soit le niveau de connaissances initial." }
+      { t: "Voyage Intérieur", d: "Découvrez les bienfaits du rappel d'ALLAH, de la recherche de science et des piliers de la foi." },
+      { t: "Purifier son cœur", d: "Développez une relation sincère avec ALLAH et cultivez la paix intérieure." },
+      { t: "Approche Équilibrée", d: "Alliez science religieuse, spiritualité, réflexion personnelle et travail concret sur soi." },
+      { t: "Formation Diplômante", d: "Professeure diplômée en Sciences islamiques. Certificat de fin de parcours ISHES." }
     ],
     whyMe: [
-      "Cursus entièrement gratuit pour tous",
-      "Enseignante diplômée et expérimentée",
-      "Sessions séparées pour Hommes et Femmes",
-      "Approche inclusive et bienveillante"
-    ]
+       "Apprendre à purifier son cœur tout en vivant dans ce monde",
+       "Comprendre le sens profond des actes d’adoration et des piliers",
+       "Accompagnement par une enseignante diplômée en sciences islamiques",
+       "Des outils concrets pour travailler sur ses défauts et s'améliorer"
+     ]
   },
   "as_sirah": {
     title: "Sîrah An-Nabawiyya",
@@ -65,15 +69,57 @@ export const PROGRAMS_DATA: Record<string, any> = {
     tag: "Vie du Prophète ﷺ",
     price: "250 €",
     hook: "Découvrir la vie de la meilleure des créatures pour éclairer notre cheminement.",
-    description: "Ce cursus retrace la biographie du Prophète Mohamed ﷺ depuis la période pré-islamique jusqu'à la fin de sa mission à Médine. L'objectif est de créer un lien spirituel fort et de tirer des enseignements concrets pour notre quotidien.",
+    description: "Le Prophète Mohamed ﷺ est la meilleure créature que la Terre ai portée.\n\nDepuis le jour où il naquit et jusqu'à la fin des temps, sa vie regorge d’enseignements et de vertus. Elle ne cesse de susciter admiration et respect aussi bien dans le monde musulman que chez les non musulmans.\n\nIl est donc de notre devoir, petit ou grand de connaître sa vie qui nous servira de lanterne dans notre cheminement et permettra de créer un lien spirituel avec lui.\n\nTout au long de notre existence, nous devons nous référer à sa « Sirah » et l’étudier encore et encore. Afin que nous trouvions un écho entre les événements de la vie du meilleur des hommes et ceux de notre propres vies.",
+    fullProgram: {
+      preIslamique: [
+        "La période pré islamique",
+        "Mariage des parents du Prophète ﷺ",
+        "Un enfant bénit",
+        "Mort des parents de Mohamed ﷺ",
+        "Voyage en Syrie et rencontre du moine Bahira",
+        "Jeunesse de Mohamed ﷺ avant la prophétie",
+        "Mariage de Mohamed ﷺ et Khadija"
+      ],
+      mecquoise: [
+        "La révélation",
+        "L'appelle à ALLAH en secret & les premiers musulmans",
+        "L'appel à ALLAH en publique et ses conséquences",
+        "La conversion de 'Umar et de Hamza",
+        "Le boycott",
+        "L'année de la tristesse",
+        "L'invitation des tribus à l’Islam",
+        "Les deux serments de l'Aqabah",
+        "L'émigration à Médine",
+        "L'arrivée et les premiers jours à Médine"
+      ],
+      medinoise: [
+        "La cohabitation avec les tribus juives et les hypocrites",
+        "La bataille de Badr",
+        "L'expulsion des Benou Qaynouqa'",
+        "La bataille de Ohoud",
+        "Les expéditions",
+        "Le pacte de Houdeybiya",
+        "La diffusion de la prophétie de Mohamed ﷺ aux grands empires",
+        "La conversion Khalid Ibn Walid et ses deux amis",
+        "L'appel à ALLAH du Prophète ﷺ aux gens de Ta-if",
+        "L'expédition de Tabuk",
+        "Le pèlerinage d'adieu & le sermon",
+        "L'envoie des délégations",
+        "La maladie et la sortie de l’âme du corps du Prophète Mohamed ﷺ"
+      ]
+    },
+    horaires: [
+      "Sirah 1 : samedi à 10h",
+      "Sirah 2 : samedi à 11h"
+    ],
     features: [
       { t: "Période Mécquoise", d: "La révélation, l'appel secret et public, les persécutions et la Hijra." },
       { t: "Période Médinoise", d: "La construction de la société, les grandes batailles et l'organisation de la communauté." },
       { t: "Lien spirituel", d: "Ancrer l'amour du Prophète ﷺ à travers la connaissance de ses vertus." },
-      { t: "Guide pratique", d: "Tirer des leçons de vie à partir des événements historiques majeurs." }
+      { t: "Horaires", d: "Samedi matin (10h ou 11h selon le niveau)." }
     ],
     whyMe: [
-      "Programme complet et structuré en 3 grandes périodes",
+      "Programme complet de la naissance à la mort du Prophète ﷺ",
       "Approche à la fois historique et spirituelle",
       "Possibilité de régler en 10 fois sans frais",
       "Sessions interactives chaque samedi"
@@ -144,21 +190,22 @@ export const PROGRAMS_DATA: Record<string, any> = {
   "tarbiya_islamiya": {
     title: "Tarbiya Islamiya",
     duration: "Annuel",
-    tag: "Éveil & Spiritualité",
+    tag: "Éveil du Cœur",
     price: "249 €",
-    hook: "Préserver la Fitra de l'enfant par l'éveil des cœurs et l'amour d'Allah.",
-    description: "Ce cours d'éducation à la spiritualité musulmane est enseigné par une professeure diplômée et certifiée. Le but est d'accompagner l'enfant dans la connaissance de son Créateur à travers une pédagogie ludique et profonde.",
+    hook: "Éduquer le cœur, préserver la Fitra, aimer ALLAH et Le satisfaire.",
+    flyerUrl: "/images/tarbiya-islamiya-descriptif.pdf",
+    description: "Dans un monde où les enfants grandissent entourés de distractions, de doutes et de modèles parfois éloignés des valeurs musulmanes, la Tarbiya Islamiya a pour objectif de préserver ce qu’ALLAH a placé de pur dans leur cœur : la Fitra, cette nature saine avec laquelle chaque enfant vient au monde.\n\nCe cours ne se limite pas à transmettre des informations religieuses.\n\nIl cherche avant tout à éveiller les cœurs, nourrir l’amour d’ALLAH, développer le bon comportement et aider l’enfant à construire une relation saine avec son Créateur.",
     features: [
-      { t: "Fitra", d: "Préserver la nature saine de l'enfant par l'éveil spirituel." },
-      { t: "Pédagogie active", d: "Histoires racontées, mises en scène théâtrales et jeux." },
-      { t: "Morale (Adab)", d: "Ancrer le bon comportement et l'éthique musulmane." },
-      { t: "Histoire (Sira)", d: "Découvrir la vie du Prophète (PSL) et des Sahaba." }
+      { t: "Pédagogie active", d: "Les enfants apprennent à travers des récits vivants, des échanges interactifs et des mises en scène." },
+      { t: "Éveil spirituel", d: "Nourrir l'amour d'ALLAH, du Prophète ﷺ et développer le bon comportement (Adab)." },
+      { t: "Enseignante experte", d: "Professeure diplômée en sciences islamiques avec Ijaza dans la méthode Nour Al Bayan." },
+      { t: "Groupes adaptés", d: "À partir de 6 ans, avec des groupes adaptés selon les âges et les niveaux." }
     ],
     whyMe: [
-      "Professeure diplômée (IESH & Arab El Coran Caire)",
-      "Programme adapté aux 6-15 ans",
-      "Possibilité de régler en 10 fois sans frais",
-      "Immersion dans les valeurs universelles de l'Islam"
+       "Éduquer le cœur pour faire aimer la religion et donner envie de progresser",
+       "Pédagogie active basée sur des récits et des exemples concrets du quotidien",
+       "Enseignement dispensé par une professeure diplômée et expérimentée (Caire/Nour Al Bayan)",
+       "Un cadre éducatif positif, motivant et bienveillant pour votre enfant"
     ]
   },
   "arabe_adulte": {
@@ -262,22 +309,23 @@ export const PROGRAMS_DATA: Record<string, any> = {
   "sciences_du_coran": {
     title: "Sciences du Coran",
     duration: "5 mois",
-    tag: "Histoire & Étude",
-    price: "249 €",
-    hook: "La passionnante histoire de la révélation, de la compilation et de la transmission du Livre Saint.",
-    description: "Ce cours est dédié à la compréhension de la manière dont le Coran a été révélé, retranscrit, compilé et transmis jusqu'à nous. Un module fondamental pour tout étudiant souhaitant approfondir sa relation avec le texte sacré.",
+    tag: "Histoire & Révélation",
+    price: "399 €",
+    hook: "Découvre l’histoire vivante du Livre d’ALLAH.",
+    description: "Le Coran n’est pas simplement un livre récité depuis plus de 1400 ans.\n\nC’est une révélation descendue du ciel, préservée génération après génération, transmise par les cœurs avant les pages.\n\nMais comment ce Livre nous est-il réellement parvenu ?\nComment a-t-il été révélé au Prophète ﷺ ?\nComment les Compagnons l’ont-ils appris, mémorisé, écrit et transmis ?\n\nPourquoi le Coran que nous lisons aujourd’hui est-il identique à celui récité par le Messager d’ALLAH ﷺ ?\nEt en quoi cette préservation constitue-t-elle un miracle unique dans l’histoire de l’humanité ?",
     videoUrl: "https://www.youtube.com/embed/NGiWynfi1ac",
+    flyerUrl: "/images/sciences-du-coran-descriptif.pdf",
     features: [
-      { t: "Histoire de la Révélation", d: "Comprendre le contexte et les étapes de la descente du Coran." },
-      { t: "Compilation & Assemblage", d: "Le travail monumental des compagnons pour préserver le Livre." },
-      { t: "Variantes de Lecture", d: "Étude des 7 'harf' et des différentes qira-at." },
-      { t: "Exégèse (Tafsir)", d: "Introduction aux méthodologies de compréhension du texte." }
+      { t: "Voyage unique", d: "Découvrez les circonstances de la révélation et le rôle des Compagnons dans sa mémorisation." },
+      { t: "Préservation Divine", d: "Explorez les étapes de la compilation du Moushaf, de la transmission orale et écrite." },
+      { t: "Miracle Historique", d: "Comprenez en quoi cette préservation constitue un miracle unique et renforcez votre certitude." },
+      { t: "Zéro prérequis", d: "Aucun niveau avancé en arabe n'est requis. Conçu pour être clair, vivant et accessible." }
     ],
     whyMe: [
-       "Formation diplômante ISHES (examen final)",
-       "Accès aux sources historiques authentiques",
-       "Comprendre l'inimitabilité (I'jaz) du Coran",
-       "Horaires adaptés : Dimanche 9h30 - 10h30"
+       "Une preuve vivante de la parole d’ALLAH",
+       "Un héritage transmis avec précision par une chaîne humaine",
+       "Un miracle historique, linguistique et spirituel",
+       "Une lumière dont la préservation témoigne de son origine divine"
     ]
   },
   "arabe_coran_junior": {

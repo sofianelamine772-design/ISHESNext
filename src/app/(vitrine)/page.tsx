@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ISHES - Institut des Sciences Humaines et Spirituelles",
     description: "Apprenez l'arabe et les sciences islamiques avec une pédagogie d'excellence à Toulouse et à distance.",
-    images: ["/images/home-hero.png"],
+    images: ["/images/institut-ishes-accueil-hero.png"],
   },
 };
 
@@ -111,7 +111,7 @@ export default function Home() {
             {/* Visual Column */}
             <div className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
               <Image
-                src="/images/home-hero.png"
+                src="/images/institut-ishes-accueil-hero.png"
                 alt="Institut ISHES"
                 fill
                 priority

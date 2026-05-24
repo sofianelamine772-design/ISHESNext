@@ -28,7 +28,7 @@ export function Navbar() {
             <Link href="/" className="group flex items-center transition-transform hover:scale-105 active:scale-95">
               <div className="relative h-10 md:h-12 w-32 md:w-36">
                 <Image
-                  src="/logo.png"
+                  src="/logo-ishes-institut-arabe.png"
                   alt="ISHES Logo"
                   fill
                   priority

@@ -168,7 +168,7 @@ export const PROGRAMS: Program[] = [
       "Lectures & Lecteurs",
       "Inimitabilité (I'jaz)"
     ],
-    price: "249 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -267,17 +267,17 @@ export const PROGRAMS: Program[] = [
     id: "spiritualite_islam",
     title: "Spiritualité Musulmane",
     subtitle: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam.",
-    tagText: "OFFERT",
-    tagColor: "bg-green-100 text-green-700",
-    durationText: "Continu",
+    tagText: "ÉDUCATION",
+    tagColor: "bg-purple-100 text-purple-700",
+    durationText: "4 mois",
     features: [
       "Éducation de l'âme",
-      "Piliers de la foi",
-      "Quête de sens",
-      "Cursus gratuit"
+      "Purification du cœur",
+      "Session de 4 mois",
+      "Paiement en 4 fois"
     ],
-    price: "0 €",
-    priceSub: "GRATUIT",
+    price: "399 €",
+    priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
   },
@@ -455,7 +455,7 @@ export function ProgramContent() {
                 {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
                 <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
                   <Image 
-                    src="/images/clean_manga_bubble_v2.png" 
+                    src="/images/bulle-manga-pedagogique-ishes.png" 
                     alt="Manga Bubble" 
                     fill 
                     className="object-contain"
