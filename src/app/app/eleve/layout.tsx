@@ -24,6 +24,7 @@ export default function EleveLayout({
 
   const navItems = [
     { href: "/app/eleve", label: "Tableau de bord", icon: LayoutDashboard },
+    { href: "/app/eleve/emploi-du-temps", label: "Emploi du temps", icon: CalendarDays },
     { href: "/app/eleve/messagerie", label: "Messagerie", icon: MessageSquareText },
     { href: "/app/eleve/reinscription", label: "Réinscription", icon: UserPlus },
   ];

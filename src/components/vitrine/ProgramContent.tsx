@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby } from "lucide-react";
+import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays } from "lucide-react";
+import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
+
 
 type Program = {
   id: string;
@@ -418,6 +420,8 @@ export function ProgramContent() {
   const [activeMode, setActiveMode] = useState<"presentiel" | "distanciel">("distanciel");
   const [activeAudience, setActiveAudience] = useState<"adulte" | "enfant">("adulte");
   const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+  const [selectedDayFilter, setSelectedDayFilter] = useState<string>("tous");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -434,7 +438,7 @@ export function ProgramContent() {
 
   const getSlotStatus = (day?: string) => {
     if (!day) return null;
-    return slotsStatus.find(s => s.day_of_week === day);
+    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
   };
 
   useEffect(() => {
@@ -445,6 +449,27 @@ export function ProgramContent() {
   }, [searchParams]);
 
   const filteredPrograms = PROGRAMS.filter((p) => p.type === activeMode && p.audience === activeAudience);
+
+  useEffect(() => {
+    setSelectedDayFilter("tous");
+    setSearchQuery("");
+  }, [activeAudience, activeMode]);
+
+  const filteredPresentielClasses = PRESENTIEL_CLASSES.filter(c => {
+    if (c.audience !== activeAudience) return false;
+
+    if (selectedDayFilter !== "tous" && c.jour !== selectedDayFilter) return false;
+
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      const matchNiveau = c.niveau.toLowerCase().includes(query);
+      const matchHoraire = c.horaire.toLowerCase().includes(query);
+      const matchAge = c.ageCondition.toLowerCase().includes(query);
+      return matchNiveau || matchHoraire || matchAge;
+    }
+
+    return true;
+  });
 
   return (
     <>
@@ -695,6 +720,8 @@ export function ProgramContent() {
             </div>
          )}
       </section>
+
+
     </>
   );
 }

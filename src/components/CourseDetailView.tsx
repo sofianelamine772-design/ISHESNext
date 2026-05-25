@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X } from "lucide-react";
+import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X, CalendarDays, Search } from "lucide-react";
+import { PRESENTIEL_CLASSES, PresentielClass } from "@/lib/presentiel-data";
+
 
 interface CourseDetailViewProps {
   course: any;
@@ -11,6 +13,86 @@ interface CourseDetailViewProps {
 
 export function CourseDetailView({ course, id }: CourseDetailViewProps) {
   const [isFlyerOpen, setIsFlyerOpen] = useState(false);
+  const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+  const [selectedDayFilter, setSelectedDayFilter] = useState<string>("tous");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/classes/status');
+        const data = await res.json();
+        if (!data.error) setSlotsStatus(data);
+      } catch (err) {
+        console.error("Failed to fetch slots status", err);
+      }
+    };
+    fetchStatus();
+  }, []);
+
+  const getSlotStatus = (day?: string) => {
+    if (!day) return null;
+    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
+  };
+
+  const getPresentielClassesForCourse = (): PresentielClass[] => {
+    if (id === "arabe_coran_junior") {
+      return PRESENTIEL_CLASSES.filter(c => c.audience === "enfant");
+    }
+    if (id === "tajwid_standard") {
+      return [
+        {
+          id: 0,
+          niveau: "Tajwid (Standard) - Classe Générale",
+          ageCondition: "Adulte",
+          horaire: "Lundi 19h00",
+          audience: "adulte",
+          type: "mixte",
+          jour: "lundi",
+          periode: "soir",
+          planId: "presentiel-global",
+          slotKey: "lundi",
+          niveauKey: "debutant"
+        },
+        ...PRESENTIEL_CLASSES.filter(c => c.audience === "adulte" && c.niveau.toLowerCase().includes("tajwid"))
+      ];
+    }
+    if (id === "arabe_adulte") {
+      return [
+        {
+          id: 0,
+          niveau: "Arabe Littéraire - Classe Générale",
+          ageCondition: "Adulte",
+          horaire: "Mardi 19h00",
+          audience: "adulte",
+          type: "mixte",
+          jour: "mardi",
+          periode: "soir",
+          planId: "presentiel-global",
+          slotKey: "mardi",
+          niveauKey: "debutant"
+        },
+        ...PRESENTIEL_CLASSES.filter(c => c.audience === "adulte" && c.niveau.toLowerCase().includes("arabe"))
+      ];
+    }
+    return [];
+  };
+
+  const presentielClasses = getPresentielClassesForCourse();
+
+  const filteredClasses = presentielClasses.filter(c => {
+    if (selectedDayFilter !== "tous" && c.jour !== selectedDayFilter) return false;
+
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      const matchNiveau = c.niveau.toLowerCase().includes(query);
+      const matchHoraire = c.horaire.toLowerCase().includes(query);
+      const matchAge = c.ageCondition.toLowerCase().includes(query);
+      return matchNiveau || matchHoraire || matchAge;
+    }
+
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-white font-sans text-[#101828]">
@@ -307,6 +389,147 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
             </div>
          )}
       </section>
+
+      {/* DETAILED PRESENTIEL SCHEDULER SECTION */}
+      {presentielClasses.length > 0 && (
+        <section className="max-w-7xl mx-auto px-6 py-12">
+          <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50/50 rounded-[3rem] p-8 md:p-12 border border-gray-100 shadow-xl overflow-hidden">
+            {/* Background ornaments */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#c8a96e]/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-500/5 rounded-full blur-3xl -ml-24 -mb-24 pointer-events-none" />
+
+            {/* Header info */}
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#c8a96e]/10 text-[#c8a96e] rounded-xl border border-[#c8a96e]/10 mb-4">
+                  <CalendarDays className="w-4 h-4" />
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    Planning & Créneaux
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight tracking-tight uppercase">
+                  Organisation de la <br />
+                  <span className="text-[#c8a96e] italic">formation en présentiel.</span>
+                </h2>
+                <p className="text-sm text-gray-400 font-medium mt-2 max-w-xl">
+                  {id === "arabe_coran_junior"
+                    ? "Voici l'organisation détaillée de nos 25 classes pour enfants (4 à 15 ans) à Toulouse. Filtrez par jour ou recherchez le niveau de votre enfant."
+                    : "Voici l'organisation de nos classes en présentiel pour adultes à Toulouse, y compris les sessions du week-end dédiées aux Femmes."
+                  }
+                </p>
+              </div>
+
+              {/* Day filter tabs */}
+              <div className="flex flex-wrap gap-2 bg-gray-100/80 p-1.5 rounded-2xl border border-gray-200/50 self-start lg:self-end">
+                {(id === "arabe_coran_junior"
+                  ? ["tous", "mercredi", "samedi", "dimanche"]
+                  : ["tous", "lundi", "mardi", "samedi", "dimanche"]
+                ).map((day) => (
+                  <button
+                    key={day}
+                    onClick={() => setSelectedDayFilter(day)}
+                    className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                      selectedDayFilter === day
+                        ? "bg-white text-[#c8a96e] shadow-sm font-bold"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    {day === "tous" ? "Tous" : day}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Search filter bar */}
+            <div className="relative z-10 mb-8">
+              <div className="relative w-full max-w-md">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Rechercher une classe, un niveau, un âge..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c8a96e]/20 focus:border-[#c8a96e] text-sm font-medium transition-all shadow-sm"
+                />
+              </div>
+            </div>
+
+            {/* Results Grid */}
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredClasses.map((c) => {
+                const status = getSlotStatus(c.slotKey);
+                const isFull = status?.est_plein;
+                const regUrl = `/inscription?plan=${c.planId}&slot=${c.slotKey}&classId=${c.id}`;
+
+                return (
+                  <div
+                    key={c.id}
+                    className={`group relative flex flex-col justify-between p-6 bg-white border rounded-[2rem] transition-all hover:shadow-xl hover:-translate-y-1 duration-300 ${
+                      isFull 
+                        ? "border-gray-100 opacity-80" 
+                        : "border-gray-100/80 hover:border-[#c8a96e]/40 shadow-sm"
+                    }`}
+                  >
+                    {/* Badge index */}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[10px] font-black text-gray-300 tracking-wider">
+                        {c.id === 0 ? "CLASSE GÉNÉRALE" : `CLASSE N°${c.id < 10 ? `0${c.id}` : c.id}`}
+                      </span>
+                      {isFull ? (
+                        <div className="flex items-center gap-1.5 text-red-500 font-black uppercase text-[8px] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100">
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                          Complet
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 text-green-600 font-black uppercase text-[8px] bg-green-50 px-2.5 py-1 rounded-lg border border-green-100">
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                          Disponible
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Level and details */}
+                    <div className="mb-6">
+                      <h4 className="text-lg font-black text-ishes-dark leading-snug tracking-tight mb-2 group-hover:text-[#c8a96e] transition-colors">
+                        {c.niveau}
+                      </h4>
+                      <div className="flex flex-wrap gap-2 text-[10px] font-bold text-gray-400">
+                        <span className="bg-gray-50 border border-gray-100 px-2 py-1 rounded-md">
+                          👶 {c.ageCondition}
+                        </span>
+                        <span className="bg-[#c8a96e]/5 border border-[#c8a96e]/10 text-[#c8a96e] px-2 py-1 rounded-md uppercase tracking-wider font-extrabold">
+                          ⏰ {c.horaire}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Registration button */}
+                    <Link
+                      href={regUrl}
+                      className={`w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-center shadow-md transition-all ${
+                        isFull
+                          ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
+                          : "bg-[#c8a96e] text-white hover:bg-[#b0935b] shadow-[#c8a96e]/10"
+                      }`}
+                    >
+                      {isFull ? "Session Complète" : (c.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")}
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Empty state within scheduler */}
+            {filteredClasses.length === 0 && (
+              <div className="relative z-10 text-center py-16 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                <p className="text-gray-400 font-medium text-sm">
+                  Aucune classe trouvée pour vos critères de recherche.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       <section className="py-24 px-6">
          <div className="max-w-5xl mx-auto bg-gradient-to-br from-[#101828] to-[#1a2b42] rounded-[4rem] p-12 md:p-24 text-center text-white relative overflow-hidden">

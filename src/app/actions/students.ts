@@ -12,6 +12,7 @@ export async function registerStudentAction(formData: {
   planId: string;
   parentPrenom?: string;
   parentNom?: string;
+  classId?: string;
 }) {
   console.log("Starting registration for:", formData.email, "Plan:", formData.planId);
   try {
@@ -104,8 +105,36 @@ export async function registerStudentAction(formData: {
     // 3. Gestion de l'affectation (Auto pour Distanciel, Manuel pour Présentiel)
     const isPresentiel = formData.planId.toLowerCase().includes('standard') || formData.planId.toLowerCase().includes('presentiel');
     
+    // Résolution de l'UUID de classe réel dans la base de données
+    let dbClassId: string | null = null;
+    if (formData.classId) {
+      if (formData.classId.includes('-')) {
+        // Déjà un UUID
+        dbClassId = formData.classId;
+      } else {
+        // ID statique de PRESENTIEL_CLASSES (ex: "1", "26")
+        const parsedId = parseInt(formData.classId);
+        if (!isNaN(parsedId)) {
+          const { PRESENTIEL_CLASSES } = await import("@/lib/presentiel-data");
+          const staticClass = PRESENTIEL_CLASSES.find(c => c.id === parsedId);
+          if (staticClass) {
+            console.log("Mapping static class:", staticClass.niveau, "on day:", staticClass.jour);
+            const { data: matchedClass } = await supabaseAdmin
+              .from('classes')
+              .select('id')
+              .ilike('day_of_week', staticClass.jour)
+              .maybeSingle();
+            if (matchedClass) {
+              dbClassId = matchedClass.id;
+              console.log("Resolved static class ID", formData.classId, "to database UUID class ID:", dbClassId);
+            }
+          }
+        }
+      }
+    }
+
     if (isPresentiel) {
-      console.log("Presentiel selected: Waiting for secretary assignment");
+      console.log("Presentiel selected: Waiting for secretary assignment. Resolved Class ID:", dbClassId);
       
       const { data: existingIns, error: insFetchError } = await supabaseAdmin
         .from('inscriptions')
@@ -119,7 +148,10 @@ export async function registerStudentAction(formData: {
       if (existingIns) {
         const { error: insError } = await supabaseAdmin
           .from('inscriptions')
-          .update({ status: 'en_attente_daffectation' })
+          .update({ 
+            status: 'en_attente_daffectation',
+            class_id: dbClassId
+          })
           .eq('id', existingIns.id);
         if (insError) throw insError;
       } else {
@@ -128,40 +160,47 @@ export async function registerStudentAction(formData: {
           .insert({
             etudiant_id: studentId,
             formation_id: formation!.id,
+            class_id: dbClassId,
             status: 'en_attente_daffectation'
           });
         if (insError) throw insError;
       }
     } else {
-      // 3. Distanciel: Récupère la classe la plus récente pour cette formation
-      let { data: classe, error: cFetchError } = await supabaseAdmin
-        .from('classes')
-        .select('id')
-        .eq('formation_id', formation!.id)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (cFetchError) console.error("Class Fetch Error:", cFetchError);
-
-      if (!classe) {
-        console.log("Class not found for formation, creating default class");
-        const { data: newClass, error: cError } = await supabaseAdmin
+      // 3. Distanciel: Utilise la classe passée ou récupère la classe la plus récente pour cette formation
+      let finalClassId = dbClassId;
+      
+      if (!finalClassId) {
+        let { data: classe, error: cFetchError } = await supabaseAdmin
           .from('classes')
-          .insert({
-            formation_id: formation!.id,
-            name: `Session ${new Date().getFullYear()}`,
-            type: 'distanciel'
-          })
-          .select()
-          .single();
-        
-        if (cError) {
-          console.error("Class Creation Error:", cError);
-          throw cError;
+          .select('id')
+          .eq('formation_id', formation!.id)
+          .eq('is_active', true)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (cFetchError) console.error("Class Fetch Error:", cFetchError);
+
+        if (!classe) {
+          console.log("Class not found for formation, creating default class");
+          const { data: newClass, error: cError } = await supabaseAdmin
+            .from('classes')
+            .insert({
+              formation_id: formation!.id,
+              name: `Session ${new Date().getFullYear()}`,
+              type: 'distanciel'
+            })
+            .select()
+            .single();
+          
+          if (cError || !newClass) {
+            console.error("Class Creation Error:", cError);
+            throw cError || new Error("Failed to create default class");
+          }
+          finalClassId = newClass.id;
+        } else {
+          finalClassId = classe.id;
         }
-        classe = newClass;
       }
 
       // 4. Inscrit l'élève à la classe
@@ -169,7 +208,7 @@ export async function registerStudentAction(formData: {
         .from('inscriptions')
         .select('id')
         .eq('etudiant_id', studentId)
-        .eq('class_id', classe!.id)
+        .eq('class_id', finalClassId)
         .maybeSingle();
 
       if (insFetchError) console.error("Inscription Fetch Error:", insFetchError);
@@ -185,7 +224,7 @@ export async function registerStudentAction(formData: {
           .from('inscriptions')
           .insert({
             etudiant_id: studentId,
-            class_id: classe!.id,
+            class_id: finalClassId,
             status: 'en_attente'
           });
         if (insError) throw insError;
@@ -524,5 +563,82 @@ export async function fetchPaymentsAction() {
   } catch (err) {
     console.error("Fetch Payments Error:", err);
     return { success: false, error: "Failed to fetch payments" };
+  }
+}
+
+export async function fetchStudentTimetableAction(clerkUserId: string, email?: string) {
+  try {
+    let query = supabaseAdmin.from('etudiants').select('id');
+    if (clerkUserId) {
+      query = query.eq('clerk_id', clerkUserId);
+    } else if (email) {
+      query = query.eq('email', email);
+    }
+    const { data: etudiant, error: eError } = await query.maybeSingle();
+    if (eError || !etudiant) {
+      console.log("Student not found for timetable query:", clerkUserId, email);
+      return { success: true, data: [] };
+    }
+
+    const { data: inscriptions, error: iError } = await supabaseAdmin
+      .from('inscriptions')
+      .select(`
+        status,
+        classes (
+          id,
+          name,
+          type,
+          day_of_week,
+          capacity_limit
+        ),
+        formations (
+          title
+        )
+      `)
+      .eq('etudiant_id', etudiant.id)
+      .eq('status', 'valide');
+
+    if (iError) throw iError;
+
+    // Formater pour l'emploi du temps
+    const formattedEvents = inscriptions
+      .filter((ins: any) => ins.classes)
+      .map((ins: any) => {
+        const c = ins.classes;
+        const dayMap: Record<string, string> = {
+          lundi: "Lun",
+          mardi: "Mar",
+          mercredi: "Mer",
+          jeudi: "Jeu",
+          vendredi: "Ven",
+          samedi: "Sam",
+          dimanche: "Dim"
+        };
+        const dayOfWeek = c.day_of_week?.toLowerCase() || "";
+        const mappedDay = dayMap[dayOfWeek] || "Lun";
+
+        let timeSlot = "18:30 - 20:00"; // valeur par défaut
+        if (dayOfWeek === "mercredi") timeSlot = "14:00 - 17:00";
+        else if (dayOfWeek === "samedi") {
+          timeSlot = c.name?.toLowerCase().includes("après") || c.name?.toLowerCase().includes("a-m") ? "13:30 - 16:30" : "09:00 - 12:00";
+        }
+        else if (dayOfWeek === "dimanche") {
+          timeSlot = c.name?.toLowerCase().includes("après") || c.name?.toLowerCase().includes("a-m") ? "13:30 - 16:30" : "11:30 - 14:30";
+        }
+        else if (dayOfWeek === "lundi" || dayOfWeek === "mardi") timeSlot = "19:00 - 20:30";
+
+        return {
+          day: mappedDay,
+          time: timeSlot,
+          title: ins.formations?.title || c.name,
+          type: c.type === "presentiel" ? "Présentiel (Salle ISHES)" : "Distanciel (Zoom)",
+          color: c.type === "presentiel" ? "bg-[#086b51]/10 border-[#086b51]/20 text-[#086b51]" : "bg-blue-50 border-blue-100 text-blue-700"
+        };
+      });
+
+    return { success: true, data: formattedEvents };
+  } catch (err) {
+    console.error("Fetch Student Timetable Error:", err);
+    return { success: false, error: "Failed to fetch student timetable" };
   }
 }

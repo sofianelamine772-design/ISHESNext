@@ -2,16 +2,22 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { ChevronRight, CheckCircle2, ArrowRight, MessageSquareText } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText } from "lucide-react";
 import Link from "next/link";
+import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const planId = searchParams?.get("plan");
+  const slot = searchParams?.get("slot");
+  const level = searchParams?.get("level");
+  const classIdParam = searchParams?.get("classId");
+  const selectedClass = classIdParam ? PRESENTIEL_CLASSES.find(c => c.id === parseInt(classIdParam)) : null;
 
   // Redirection if no plan selected
   useEffect(() => {
@@ -27,14 +33,47 @@ function InscriptionForm() {
     email: "",
     telephone: "",
     niveau: "",
+    slot: "",
+    horaire: "",
+    classId: "",
     parentPrenom: "",
     parentNom: ""
   });
 
   const [registrationType, setRegistrationType] = useState<"self" | "child">("self");
-  const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "" }]);
+  const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }]);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/classes/status');
+        const data = await res.json();
+        if (!data.error) setSlotsStatus(data);
+      } catch (err) {
+        console.error("Failed to fetch slots status", err);
+      }
+    };
+    fetchStatus();
+  }, []);
+
+  const getSlotStatus = (day?: string) => {
+    if (!day) return null;
+    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
+  };
+
+  const isLevelAvailableOnDay = (niveauKey: string, audience: "enfant" | "adulte", type?: "femme") => {
+    if (planId !== 'presentiel-global' || !slot) return true;
+    return PRESENTIEL_CLASSES.some(c => 
+      c.planId === 'presentiel-global' &&
+      c.audience === audience &&
+      (type ? c.type === type : true) &&
+      c.niveauKey === niveauKey &&
+      c.slotKey?.toLowerCase() === slot.toLowerCase()
+    );
+  };
 
   const getPrice = () => {
     if (registrationType === 'child') {
@@ -59,7 +98,8 @@ function InscriptionForm() {
           planId: planId || "formation_generale",
           title: planName || "Formation ISHES",
           price: totalPrice + " €",
-          mode: planId === 'tajwid_standard' ? "presentiel" : "distanciel",
+          mode: (planId === 'tajwid_standard' || planId === 'presentiel-global') ? "presentiel" : "distanciel",
+          slot: (registrationType === 'child' ? childrenList[0]?.slot : formData.slot) || slot || "",
           email: formData.email,
         }),
       });
@@ -88,7 +128,48 @@ function InscriptionForm() {
   const handleChildInputChange = (index: number, field: string, value: string) => {
     setChildrenList(prev => {
       const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
+      const child = { ...updated[index], [field]: value };
+
+      if (planId === 'presentiel-global') {
+        const slotVal = child.slot || (slot ? slot.toLowerCase() : "");
+        if (field === 'slot') {
+          child.niveau = "";
+          child.horaire = "";
+          child.classId = "";
+        } else if (field === 'niveau') {
+          child.horaire = "";
+          child.classId = "";
+          
+          if (slotVal && child.niveau) {
+            const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
+              c.planId === 'presentiel-global' &&
+              c.audience === 'enfant' &&
+              c.slotKey === slotVal.toLowerCase() &&
+              c.niveauKey === child.niveau
+            );
+            if (matchingClasses.length === 1) {
+              child.classId = matchingClasses[0].id.toString();
+              child.horaire = matchingClasses[0].horaire;
+            }
+          }
+        } else if (field === 'classId') {
+          if (value) {
+            const matchingClass = PRESENTIEL_CLASSES.find(c => c.id === parseInt(value));
+            if (matchingClass) {
+              child.classId = value;
+              child.horaire = matchingClass.horaire;
+            } else {
+              child.classId = "";
+              child.horaire = "";
+            }
+          } else {
+            child.classId = "";
+            child.horaire = "";
+          }
+        }
+      }
+
+      updated[index] = child;
       return updated;
     });
   };
@@ -96,18 +177,103 @@ function InscriptionForm() {
   const childFormations = ['arabe_coran_junior', 'tarbiya_islamiya', 'tajwid_enfant'];
 
   useEffect(() => {
+    const kidsSlots = ['mercredi', 'samedi', 'dimanche'];
     if (planId) {
-      if (childFormations.includes(planId)) {
+      if (childFormations.includes(planId) || (planId === 'presentiel-global' && slot && kidsSlots.includes(slot.toLowerCase()))) {
         setRegistrationType("child");
       } else {
         setRegistrationType("self");
       }
     }
-  }, [planId]);
+  }, [planId, slot]);
+
+  useEffect(() => {
+    if (selectedClass) {
+      setFormData(prev => ({ ...prev, niveau: selectedClass.niveauKey, slot: selectedClass.slotKey, horaire: selectedClass.horaire, classId: selectedClass.id.toString() }));
+      setChildrenList(prev => prev.map(c => ({ ...c, niveau: selectedClass.niveauKey, slot: selectedClass.slotKey, horaire: selectedClass.horaire, classId: selectedClass.id.toString() })));
+    } else {
+      let initSlot = slot ? slot.toLowerCase() : "";
+      let initNiveau = level || "";
+      let initHoraire = "";
+      let initClassId = "";
+
+      if (planId === 'presentiel-global' && initSlot && initNiveau) {
+        const aud = registrationType === 'child' ? 'enfant' : 'adulte';
+        const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
+          c.planId === 'presentiel-global' &&
+          c.audience === aud &&
+          c.slotKey === initSlot &&
+          c.niveauKey === initNiveau
+        );
+        if (matchingClasses.length === 1) {
+          initHoraire = matchingClasses[0].horaire;
+          initClassId = matchingClasses[0].id.toString();
+        }
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        niveau: initNiveau,
+        slot: initSlot,
+        horaire: initHoraire,
+        classId: initClassId
+      }));
+      setChildrenList(prev => prev.map(c => ({
+        ...c,
+        niveau: initNiveau,
+        slot: initSlot,
+        horaire: initHoraire,
+        classId: initClassId
+      })));
+    }
+  }, [selectedClass, level, slot, registrationType, planId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+
+      if (planId === 'presentiel-global') {
+        const slotVal = updated.slot || (slot ? slot.toLowerCase() : "");
+        if (name === 'slot') {
+          updated.niveau = "";
+          updated.horaire = "";
+          updated.classId = "";
+        } else if (name === 'niveau') {
+          updated.horaire = "";
+          updated.classId = "";
+          
+          if (slotVal && updated.niveau) {
+            const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
+              c.planId === 'presentiel-global' &&
+              c.audience === 'adulte' &&
+              c.type === 'femme' &&
+              c.slotKey === slotVal.toLowerCase() &&
+              c.niveauKey === updated.niveau
+            );
+            if (matchingClasses.length === 1) {
+              updated.classId = matchingClasses[0].id.toString();
+              updated.horaire = matchingClasses[0].horaire;
+            }
+          }
+        } else if (name === 'classId') {
+          if (value) {
+            const matchingClass = PRESENTIEL_CLASSES.find(c => c.id === parseInt(value));
+            if (matchingClass) {
+              updated.classId = value;
+              updated.horaire = matchingClass.horaire;
+            } else {
+              updated.classId = "";
+              updated.horaire = "";
+            }
+          } else {
+            updated.classId = "";
+            updated.horaire = "";
+          }
+        }
+      }
+      return updated;
+    });
   };
 
   const nextStep = () => setStep(prev => prev + 1);
@@ -134,7 +300,8 @@ function InscriptionForm() {
             niveau: child.niveau,
             planId: planId || 'arabe_coran_junior',
             parentPrenom: formData.parentPrenom,
-            parentNom: formData.parentNom
+            parentNom: formData.parentNom,
+            classId: child.classId
           });
           if (!result.success) {
             console.error("Error saving student:", result.error);
@@ -149,7 +316,8 @@ function InscriptionForm() {
           niveau: formData.niveau,
           planId: planId || 'formation_generale',
           parentPrenom: formData.parentPrenom,
-          parentNom: formData.parentNom
+          parentNom: formData.parentNom,
+          classId: formData.classId
         });
         if (!result.success) {
           console.error("Error saving student:", result.error);
@@ -191,7 +359,27 @@ function InscriptionForm() {
     }
   };
 
-  const planName = getPlanName(planId);
+  const getLevelLabel = (lvl: string | null) => {
+    if (!lvl) return "";
+    switch (lvl.toLowerCase()) {
+      case "maternel_1": return "Préparatoire 1ère année";
+      case "maternel_2": return "Préparatoire 2ème année";
+      case "elementaire_1": return "Élémentaire Débutant 1";
+      case "elementaire_1_plus": return "Élémentaire 1+";
+      case "elementaire_2": return "Élémentaire 2";
+      case "elementaire_2_plus": return "Élémentaire 2+";
+      case "elementaire_3": return "Élémentaire 3";
+      case "elementaire_3_plus": return "Élémentaire 3+";
+      case "elementaire_4": return "Élémentaire 4";
+      case "elementaire_5": return "Élémentaire 5";
+      case "femme_debutante": return "Femme Débutante";
+      case "femme_intermediaire": return "Femme Intermédiaire";
+      default: return lvl;
+    }
+  };
+
+  const levelLabel = selectedClass ? selectedClass.niveau : getLevelLabel(level);
+  const planName = (levelLabel ? levelLabel : getPlanName(planId)) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -265,9 +453,9 @@ function InscriptionForm() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <h2 className="text-2xl font-black text-[#101828] mb-8">Vos informations</h2>
 
-              {/* Registration Type Selection */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                {(!planId || !childFormations.includes(planId)) && (
+              {/* Registration Type Selection - Only show if not already forced by planId/slot */}
+              {!(childFormations.includes(planId || "") || (planId === 'presentiel-global' && slot && ['mercredi', 'samedi', 'dimanche'].includes(slot.toLowerCase()))) && (
+                <div className="flex flex-col sm:flex-row gap-4 mb-10">
                   <button
                     onClick={() => setRegistrationType("self")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "self"
@@ -277,8 +465,6 @@ function InscriptionForm() {
                   >
                     <span className="text-xl">🙋‍♂️</span> Je souhaite m'inscrire
                   </button>
-                )}
-                {(!planId || childFormations.includes(planId)) && (
                   <button
                     onClick={() => setRegistrationType("child")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "child"
@@ -288,8 +474,17 @@ function InscriptionForm() {
                   >
                     <span className="text-xl">👶</span> Inscrire mon enfant
                   </button>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Force Child title if forced */}
+              {(childFormations.includes(planId || "") || (planId === 'presentiel-global' && slot && ['mercredi', 'samedi', 'dimanche'].includes(slot.toLowerCase()))) && (
+                 <div className="mb-8 p-4 bg-green-50 rounded-2xl border border-green-100">
+                    <h3 className="text-sm font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
+                       <span>👶</span> INSCRIPTION ENFANT (SCOLARITÉ)
+                    </h3>
+                 </div>
+              )}
 
               <div className="space-y-6">
                 {registrationType === 'child' ? (
@@ -343,42 +538,132 @@ function InscriptionForm() {
                           </div>
                         </div>
 
-                        {/* Niveau */}
-                        <div className="space-y-2">
-                          <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                            <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
-                            Niveau Actuel de l'élève *
-                          </label>
-                          <select
-                            value={child.niveau}
-                            onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
-                            className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                          >
-                            <option value="">— Sélectionner son niveau —</option>
-                            <optgroup label="Enfants - Maternel">
-                              <option value="maternel_1">Maternel 1</option>
-                              <option value="maternel_2">Maternel 2</option>
-                            </optgroup>
-                            <optgroup label="Enfants - Elémentaire">
-                              <option value="elementaire_1">Elémentaire 1</option>
-                              <option value="elementaire_1_plus">Elémentaire 1+</option>
-                              <option value="elementaire_2">Elémentaire 2</option>
-                              <option value="elementaire_2_plus">Elémentaire 2+</option>
-                              <option value="elementaire_3">Elémentaire 3</option>
-                              <option value="elementaire_3_plus">Elémentaire 3+</option>
-                              <option value="elementaire_4">Elémentaire 4</option>
-                              <option value="elementaire_5">Elémentaire 5</option>
-                              <option value="elementaire_6">Elémentaire 6</option>
-                              <option value="elementaire_7">Elémentaire 7</option>
-                            </optgroup>
-                          </select>
-                        </div>
+                        {/* Niveau / Créneau */}
+                        {planId === 'presentiel-global' ? (() => {
+                          const slotVal = child.slot || (slot ? slot.toLowerCase() : "");
+                          return (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
+                              {/* Jour select */}
+                              <div className="space-y-2">
+                                <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                                  <span>📅</span> Jour souhaité *
+                                </label>
+                                <select
+                                  value={slotVal}
+                                  disabled={!!slot}
+                                  onChange={(e) => handleChildInputChange(index, 'slot', e.target.value)}
+                                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                                >
+                                  <option value="">— Choisir un jour —</option>
+                                  <option value="mercredi">Mercredi</option>
+                                  <option value="samedi">Samedi</option>
+                                  <option value="dimanche">Dimanche</option>
+                                </select>
+                              </div>
+
+                              {/* Niveau select */}
+                              <div className="space-y-2">
+                                <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                                  <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                                  Niveau de l'élève *
+                                </label>
+                                <select
+                                  value={child.niveau}
+                                  disabled={!slotVal}
+                                  onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
+                                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                >
+                                  <option value="">
+                                    {!slotVal ? "— Choisir d'abord le jour —" : "— Choisir un niveau —"}
+                                  </option>
+                                  {slotVal && (() => {
+                                    const uniqueLevels: any[] = [];
+                                    const seenKeys = new Set();
+                                    PRESENTIEL_CLASSES.filter(c =>
+                                      c.planId === 'presentiel-global' &&
+                                      c.audience === 'enfant' &&
+                                      c.slotKey === slotVal.toLowerCase()
+                                    ).forEach(c => {
+                                      if (!seenKeys.has(c.niveauKey)) {
+                                        seenKeys.add(c.niveauKey);
+                                        uniqueLevels.push(c);
+                                      }
+                                    });
+                                    return uniqueLevels.map(c => (
+                                      <option key={c.id} value={c.niveauKey}>
+                                        {c.niveau} ({c.ageCondition})
+                                      </option>
+                                    ));
+                                  })()}
+                                </select>
+                              </div>
+
+                              {/* Horaire select */}
+                              <div className="space-y-2">
+                                <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                                  <span>⏰</span> Horaire disponible *
+                                </label>
+                                <select
+                                  value={child.classId}
+                                  disabled={!child.niveau}
+                                  onChange={(e) => handleChildInputChange(index, 'classId', e.target.value)}
+                                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                >
+                                  <option value="">
+                                    {!child.niveau ? "— Choisir d'abord le niveau —" : "— Choisir un horaire —"}
+                                  </option>
+                                  {slotVal && child.niveau && PRESENTIEL_CLASSES.filter(c =>
+                                    c.planId === 'presentiel-global' &&
+                                    c.audience === 'enfant' &&
+                                    c.slotKey === slotVal.toLowerCase() &&
+                                    c.niveauKey === child.niveau
+                                  ).map(c => (
+                                    <option key={c.id} value={c.id.toString()}>
+                                      {c.horaire}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          );
+                        })() : (
+                          /* Distanciel levels selection as originally */
+                          <div className="space-y-2 md:col-span-2">
+                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                              <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                              Niveau Actuel de l'élève *
+                            </label>
+                            <select
+                              value={child.niveau}
+                              onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                            >
+                              <option value="">— Sélectionner son niveau —</option>
+                              <optgroup label="Enfants - Maternel">
+                                <option value="maternel_1">Maternel 1</option>
+                                <option value="maternel_2">Maternel 2</option>
+                              </optgroup>
+                              <optgroup label="Enfants - Elémentaire">
+                                <option value="elementaire_1">Elémentaire 1</option>
+                                <option value="elementaire_1_plus">Elémentaire 1+</option>
+                                <option value="elementaire_2">Elémentaire 2</option>
+                                <option value="elementaire_2_plus">Elémentaire 2+</option>
+                                <option value="elementaire_3">Elémentaire 3</option>
+                                <option value="elementaire_3_plus">Elémentaire 3+</option>
+                                <option value="elementaire_4">Elémentaire 4</option>
+                                <option value="elementaire_5">Elémentaire 5</option>
+                                <option value="elementaire_6">Elémentaire 6</option>
+                                <option value="elementaire_7">Elémentaire 7</option>
+                              </optgroup>
+                            </select>
+                          </div>
+                        )}
                       </div>
                     ))}
 
                     <button
                       type="button"
-                      onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "" }])}
+                      onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }])}
                       className="w-full py-4 px-6 border-2 border-dashed border-gray-200 rounded-2xl text-xs font-black text-[#008953] hover:border-[#008953] hover:bg-[#008953]/5 transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-sm"
                     >
                       <span>➕</span> Inscrire un autre enfant
@@ -420,30 +705,120 @@ function InscriptionForm() {
                       />
                     </div>
 
-                    {/* Niveau */}
-                    <div className="space-y-2 pb-6 md:col-span-2">
-                      <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                        <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
-                        Niveau Actuel
-                      </label>
-                      <select
-                        name="niveau"
-                        value={formData.niveau}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                      >
-                        <option value="">— Sélectionner votre niveau —</option>
-                        <optgroup label="Adultes (Femmes)">
-                          <option value="femme_debutante">Femme Débutante</option>
-                          <option value="femme_intermediaire">Femme Intermédiaire</option>
-                        </optgroup>
-                        <optgroup label="Standard (Distanciel)">
-                          <option value="debutant">Débutant (Autre)</option>
-                          <option value="intermediaire">Intermédiaire (Autre)</option>
-                          <option value="avance">Avancé (Autre)</option>
-                        </optgroup>
-                      </select>
-                    </div>
+                    {/* Niveau / Créneau */}
+                    {planId === 'presentiel-global' ? (() => {
+                      const slotVal = formData.slot || (slot ? slot.toLowerCase() : "");
+                      return (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
+                          {/* Jour select */}
+                          <div className="space-y-2">
+                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                              <span>📅</span> Jour souhaité *
+                            </label>
+                            <select
+                              name="slot"
+                              value={slotVal}
+                              disabled={!!slot}
+                              onChange={handleInputChange}
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                            >
+                              <option value="">— Choisir un jour —</option>
+                              <option value="samedi">Samedi</option>
+                              <option value="dimanche">Dimanche</option>
+                            </select>
+                          </div>
+
+                          {/* Niveau select */}
+                          <div className="space-y-2">
+                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                              <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                              Niveau Actuel *
+                            </label>
+                            <select
+                              name="niveau"
+                              value={formData.niveau}
+                              disabled={!slotVal}
+                              onChange={handleInputChange}
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                            >
+                              <option value="">
+                                {!slotVal ? "— Choisir d'abord le jour —" : "— Choisir un niveau —"}
+                              </option>
+                              {slotVal && (() => {
+                                const uniqueLevels: any[] = [];
+                                const seenKeys = new Set();
+                                PRESENTIEL_CLASSES.filter(c =>
+                                  c.planId === 'presentiel-global' &&
+                                  c.audience === 'adulte' &&
+                                  c.type === 'femme' &&
+                                  c.slotKey === slotVal.toLowerCase()
+                                ).forEach(c => {
+                                  if (!seenKeys.has(c.niveauKey)) {
+                                    seenKeys.add(c.niveauKey);
+                                    uniqueLevels.push(c);
+                                  }
+                                });
+                                return uniqueLevels.map(c => (
+                                  <option key={c.id} value={c.niveauKey}>
+                                    {c.niveauKey === 'femme_debutante' ? 'Femme Débutante' : 'Femme Intermédiaire'}
+                                  </option>
+                                ));
+                              })()}
+                            </select>
+                          </div>
+
+                          {/* Option / Horaire select */}
+                          <div className="space-y-2">
+                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                              <span>⏰</span> Horaire disponible *
+                            </label>
+                            <select
+                              name="classId"
+                              value={formData.classId}
+                              disabled={!formData.niveau}
+                              onChange={handleInputChange}
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                            >
+                              <option value="">
+                                {!formData.niveau ? "— Choisir d'abord le niveau —" : "— Choisir un horaire —"}
+                              </option>
+                              {slotVal && formData.niveau && PRESENTIEL_CLASSES.filter(c =>
+                                c.planId === 'presentiel-global' &&
+                                c.audience === 'adulte' &&
+                                c.type === 'femme' &&
+                                c.slotKey === slotVal.toLowerCase() &&
+                                c.niveauKey === formData.niveau
+                              ).map(c => (
+                                <option key={c.id} value={c.id.toString()}>
+                                  {c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} ({c.horaire})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      );
+                    })() : (
+                      /* Distanciel levels selection as originally */
+                      <div className="space-y-2 md:col-span-2">
+                        <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                          <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                          Niveau Actuel
+                        </label>
+                        <select
+                          name="niveau"
+                          value={formData.niveau}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                        >
+                          <option value="">— Sélectionner votre niveau —</option>
+                          <optgroup label="Standard (Distanciel)">
+                            <option value="debutant">Débutant (Autre)</option>
+                            <option value="intermediaire">Intermédiaire (Autre)</option>
+                            <option value="avance">Avancé (Autre)</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                    )}
                   </div>
                 )}
                 {/* Informations du parent / représentant (SI ENFANT) */}
@@ -519,20 +894,36 @@ function InscriptionForm() {
                   />
                 </div>
 
-                {/* Submit Button */}
-                <button
-                  onClick={nextStep}
-                  disabled={
-                    !formData.email ||
-                    (registrationType === 'child'
-                      ? (!formData.parentPrenom || !formData.parentNom || childrenList.some(c => !c.prenom || !c.nom || !c.niveau))
-                      : (!formData.prenom || !formData.nom)
-                    )
-                  }
-                  className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
-                >
-                  Continuer <ChevronRight className="w-5 h-5" />
-                </button>
+                 {/* Submit Button */}
+                 <button
+                   onClick={nextStep}
+                   disabled={
+                     !formData.email ||
+                     (registrationType === 'child'
+                       ? (
+                           !formData.parentPrenom ||
+                           !formData.parentNom ||
+                           childrenList.some(c => 
+                             !c.prenom || 
+                             !c.nom || 
+                             (planId === 'presentiel-global'
+                               ? !c.classId
+                               : !c.niveau)
+                           )
+                         )
+                       : (
+                           !formData.prenom ||
+                           !formData.nom ||
+                           (planId === 'presentiel-global'
+                             ? !formData.classId
+                             : !formData.niveau)
+                         )
+                     )
+                   }
+                   className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                 >
+                   Continuer <ChevronRight className="w-5 h-5" />
+                 </button>
               </div>
             </motion.div>
           )}
@@ -693,12 +1084,21 @@ function InscriptionForm() {
                     </ul>
                   </div>
                 )}
+                <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6 text-left">
+                  <h4 className="text-[10px] font-black text-blue-700 uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Monitor className="w-3.5 h-3.5" /> Accès au logiciel ISHEECOLE
+                  </h4>
+                  <p className="text-xs text-blue-900 font-medium leading-relaxed">
+                    Dès la validation de votre paiement, vous recevrez un email pour créer votre mot de passe. Votre espace vous permettra de suivre vos cours, vos absences, vos notes et de communiquer avec vos professeurs.
+                  </p>
+                </div>
+
                 <div className="flex items-start gap-3 mb-8 text-left group cursor-pointer" onClick={() => setAcceptedTerms(!acceptedTerms)}>
-                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-[#008953] border-[#008953]' : 'border-gray-300 bg-white group-hover:border-[#008953]'}`}>
+                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-ishes-green border-ishes-green' : 'border-gray-300 bg-white group-hover:border-ishes-green'}`}>
                     {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
-                    J'accepte les <Link href="/cgv" className="text-[#008953] underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
+                    J'accepte les <Link href="/cgv" className="text-ishes-green underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
                   </p>
                 </div>
 
