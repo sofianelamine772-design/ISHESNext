@@ -604,12 +604,19 @@ export function ProgramContent() {
                    )}
 
                    <div className="p-5 sm:p-6 flex-1 flex flex-col">
-                      {/* TAGS ROW */}
-                      <div className="flex items-center justify-end mb-4">
-                         <span className="text-[10px] font-bold text-gray-400">
-                            {program.durationText}
-                         </span>
-                      </div>
+                       {/* TAGS ROW */}
+                       <div className="flex items-center justify-between mb-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase ${program.tagColor || "bg-[#008953]/10 text-[#008953]"}`}>
+                             {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
+                          </span>
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${
+                            isPresentiel 
+                              ? "bg-[#00603A]/10 text-[#00603A] border-[#00603A]/20" 
+                              : "bg-blue-50 text-blue-700 border-blue-100"
+                          }`}>
+                             <span>📅</span> {program.durationText}
+                          </span>
+                       </div>
 
                       {/* TITLE & DESC */}
                       <h2 className="text-xl font-black text-[#101828] mb-2 tracking-tight">{program.title}</h2>
