@@ -106,28 +106,28 @@ export async function registerStudentAction(formData: {
     const isPresentiel = formData.planId.toLowerCase().includes('standard') || formData.planId.toLowerCase().includes('presentiel');
     
     // Résolution de l'UUID de classe réel dans la base de données
+    // On utilise external_id pour une correspondance exacte 1-to-1 avec le frontend
     let dbClassId: string | null = null;
     if (formData.classId) {
       if (formData.classId.includes('-')) {
-        // Déjà un UUID
+        // Déjà un UUID Supabase → on l'utilise directement
         dbClassId = formData.classId;
       } else {
-        // ID statique de PRESENTIEL_CLASSES (ex: "1", "26")
+        // ID numérique de PRESENTIEL_CLASSES (ex: "1", "26")
+        // On le mappe sur external_id en base de données
         const parsedId = parseInt(formData.classId);
         if (!isNaN(parsedId)) {
-          const { PRESENTIEL_CLASSES } = await import("@/lib/presentiel-data");
-          const staticClass = PRESENTIEL_CLASSES.find(c => c.id === parsedId);
-          if (staticClass) {
-            console.log("Mapping static class:", staticClass.niveau, "on day:", staticClass.jour);
-            const { data: matchedClass } = await supabaseAdmin
-              .from('classes')
-              .select('id')
-              .ilike('day_of_week', staticClass.jour)
-              .maybeSingle();
-            if (matchedClass) {
-              dbClassId = matchedClass.id;
-              console.log("Resolved static class ID", formData.classId, "to database UUID class ID:", dbClassId);
-            }
+          const { data: matchedClass } = await supabaseAdmin
+            .from('classes')
+            .select('id')
+            .eq('external_id', parsedId)
+            .maybeSingle();
+
+          if (matchedClass) {
+            dbClassId = matchedClass.id;
+            console.log(`✅ Resolved external_id ${parsedId} → DB UUID: ${dbClassId}`);
+          } else {
+            console.warn(`⚠️ No class found with external_id=${parsedId}. Student will be placed manually.`);
           }
         }
       }
@@ -289,6 +289,22 @@ export async function fetchStudentByIdAction(id: string) {
   }
 }
 
+// Met à jour le lien WhatsApp d'une classe (admin uniquement)
+export async function updateClassWhatsappAction(classId: string, whatsappLink: string) {
+  try {
+    const { error } = await supabaseAdmin
+      .from('classes')
+      .update({ whatsapp_link: whatsappLink || null })
+      .eq('id', classId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err: any) {
+    console.error("Update Class WhatsApp Error:", err);
+    return { success: false, error: err.message };
+  }
+}
+
 export async function fetchClassesAction() {
   try {
     // On récupère les classes avec les infos de formation
@@ -311,6 +327,7 @@ export async function fetchClassesAction() {
       type: c.type,
       capacity_limit: c.capacity_limit || 23,
       formationTitle: c.formations?.title,
+      whatsappLink: c.whatsapp_link || null,
       students: c.inscriptions.map((i: any) => ({
         id: i.etudiant_id,
         name: `${i.etudiants?.first_name || ''} ${i.etudiants?.last_name || ''}`.trim(),
@@ -589,7 +606,12 @@ export async function fetchStudentTimetableAction(clerkUserId: string, email?: s
           name,
           type,
           day_of_week,
-          capacity_limit
+          periode,
+          niveau,
+          age_condition,
+          capacity_limit,
+          whatsapp_link,
+          external_id
         ),
         formations (
           title
@@ -616,21 +638,24 @@ export async function fetchStudentTimetableAction(clerkUserId: string, email?: s
         };
         const dayOfWeek = c.day_of_week?.toLowerCase() || "";
         const mappedDay = dayMap[dayOfWeek] || "Lun";
+        const isMatin = c.periode === "matin";
 
-        let timeSlot = "18:30 - 20:00"; // valeur par défaut
+        let timeSlot = "18:30 - 20:00";
         if (dayOfWeek === "mercredi") timeSlot = "14:00 - 17:00";
-        else if (dayOfWeek === "samedi") {
-          timeSlot = c.name?.toLowerCase().includes("après") || c.name?.toLowerCase().includes("a-m") ? "13:30 - 16:30" : "09:00 - 12:00";
-        }
-        else if (dayOfWeek === "dimanche") {
-          timeSlot = c.name?.toLowerCase().includes("après") || c.name?.toLowerCase().includes("a-m") ? "13:30 - 16:30" : "11:30 - 14:30";
-        }
+        else if (dayOfWeek === "samedi") timeSlot = isMatin ? "09:00 - 12:00" : "13:30 - 16:30";
+        else if (dayOfWeek === "dimanche") timeSlot = isMatin ? "11:30 - 14:30" : "13:30 - 16:30";
         else if (dayOfWeek === "lundi" || dayOfWeek === "mardi") timeSlot = "19:00 - 20:30";
 
         return {
           day: mappedDay,
           time: timeSlot,
           title: ins.formations?.title || c.name,
+          className: c.name,
+          niveau: c.niveau,
+          ageCondition: c.age_condition,
+          dayOfWeek: c.day_of_week,
+          periode: c.periode,
+          whatsappLink: c.whatsapp_link || null,
           type: c.type === "presentiel" ? "Présentiel (Salle ISHES)" : "Distanciel (Zoom)",
           color: c.type === "presentiel" ? "bg-[#086b51]/10 border-[#086b51]/20 text-[#086b51]" : "bg-blue-50 border-blue-100 text-blue-700"
         };
@@ -642,3 +667,62 @@ export async function fetchStudentTimetableAction(clerkUserId: string, email?: s
     return { success: false, error: "Failed to fetch student timetable" };
   }
 }
+
+// Récupère les infos de classe pour la carte "Ma Classe" dans le dashboard élève
+export async function fetchStudentClassInfoAction(clerkUserId: string, email?: string) {
+  try {
+    let query = supabaseAdmin.from('etudiants').select('id, first_name');
+    if (clerkUserId) query = query.eq('clerk_id', clerkUserId);
+    else if (email) query = query.eq('email', email);
+    const { data: etudiant } = await query.maybeSingle();
+    if (!etudiant) return { success: true, data: null };
+
+    const { data: inscription } = await supabaseAdmin
+      .from('inscriptions')
+      .select(`
+        status,
+        classes (
+          id, name, type, day_of_week, periode,
+          niveau, age_condition, whatsapp_link, external_id
+        ),
+        formations (title)
+      `)
+      .eq('etudiant_id', etudiant.id)
+      .in('status', ['valide', 'actif', 'en_attente_daffectation'])
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!inscription) return { success: true, data: null };
+
+    const c = inscription.classes as any;
+    const dayOfWeek = c?.day_of_week?.toLowerCase() || "";
+    const isMatin = c?.periode === "matin";
+
+    let timeSlot = "18:30 - 20:00";
+    if (dayOfWeek === "mercredi") timeSlot = "14:00 - 17:00";
+    else if (dayOfWeek === "samedi") timeSlot = isMatin ? "09:00 - 12:00" : "13:30 - 16:30";
+    else if (dayOfWeek === "dimanche") timeSlot = isMatin ? "11:30 - 14:30" : "13:30 - 16:30";
+    else if (dayOfWeek === "lundi" || dayOfWeek === "mardi") timeSlot = "19:00 - 20:30";
+
+    return {
+      success: true,
+      data: {
+        status: inscription.status,
+        formationTitle: (inscription.formations as any)?.title || null,
+        className: c?.name || null,
+        niveau: c?.niveau || null,
+        ageCondition: c?.age_condition || null,
+        dayOfWeek: c?.day_of_week || null,
+        periode: c?.periode || null,
+        timeSlot,
+        whatsappLink: c?.whatsapp_link || null,
+        isPresentiel: c?.type === "presentiel",
+      }
+    };
+  } catch (err) {
+    console.error("Fetch Student Class Info Error:", err);
+    return { success: false, error: "Failed to fetch class info" };
+  }
+}
+
