@@ -128,12 +128,24 @@ export function Footer() {
             <h4 className="font-bold text-gray-900 mb-4 text-[11px] uppercase tracking-widest">Nous Trouver</h4>
             <ul className="space-y-3">
               <li className="flex gap-2 items-start">
-                <MapPin className="w-4 h-4 text-[#008953] shrink-0" />
-                <span className="text-[12px] text-gray-500 font-medium">31000 Toulouse</span>
+                <MapPin className="w-4 h-4 text-[#008953] shrink-0 mt-0.5" />
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=41+Bd+de+Thibaud+31100+Toulouse"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[12px] text-gray-500 font-medium hover:text-[#008953] transition-colors"
+                >
+                  41 Bd de Thibaud<br />31100 Toulouse
+                </a>
               </li>
               <li className="flex gap-2 items-center">
                 <Phone className="w-4 h-4 text-[#008953] shrink-0" />
-                <span className="text-[12px] text-gray-500 font-medium">06 12 34 56 78</span>
+                <a
+                  href="tel:+33612345678"
+                  className="text-[12px] text-gray-500 font-medium hover:text-[#008953] transition-colors"
+                >
+                  06 12 34 56 78
+                </a>
               </li>
             </ul>
           </div>
