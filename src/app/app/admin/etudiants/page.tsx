@@ -277,7 +277,10 @@ function EtudiantsContent() {
       phone: s.phone,
       parent_first_name: s.parentName?.split(' ')[0] || "",
       parent_last_name: s.parentName?.split(' ').slice(1).join(' ') || "",
-      address: s.address
+      address: s.address,
+      payment_status: s.status === 'actif' ? 'a_jour' : 'en_attente',
+      payment_method: "virement",
+      amount_paid: "150"
     });
     setShowEditModal(true);
   };
