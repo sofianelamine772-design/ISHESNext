@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText, Loader2, X, Mail, Phone, Calendar, GraduationCap, AlertCircle, History, Download, Trash2, CheckCircle2, Terminal, MessageSquare, ExternalLink, Save } from "lucide-react";
-import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction } from "@/app/actions/students";
+import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction, createStudentManualAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,19 @@ export default function AdminDashboard() {
   const [classes, setClasses] = useState<ClassDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
+  const [showAddStudentManualModal, setShowAddStudentManualModal] = useState(false);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    parent_first_name: "",
+    parent_last_name: "",
+    address: "",
+    payment_status: "en_attente",
+    payment_method: "virement",
+    amount_paid: "150"
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [classSearchQuery, setClassSearchQuery] = useState("");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
@@ -40,6 +53,44 @@ export default function AdminDashboard() {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [studentToTransfer, setStudentToTransfer] = useState<{ id: string, name: string } | null>(null);
   const [targetClassId, setTargetClassId] = useState<string>("");
+
+  const resetForm = () => {
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      parent_first_name: "",
+      parent_last_name: "",
+      address: "",
+      payment_status: "en_attente",
+      payment_method: "virement",
+      amount_paid: "150"
+    });
+  };
+
+  const handleCreateStudentManual = async () => {
+    if (!formData.first_name || !formData.last_name || !formData.email || !selectedClassId) return;
+    setIsSubmitting(true);
+    try {
+      // 1. On crée le dossier élève manuellement
+      const result = await createStudentManualAction(formData);
+      if (result.success && result.data) {
+        // 2. On l'affecte directement à la classe sélectionnée
+        const assignResult = await assignStudentToClassAction(result.data.id, selectedClassId);
+        if (assignResult.success) {
+          setShowAddStudentManualModal(false);
+          resetForm();
+          // 3. On rafraîchit les classes pour afficher le nouvel élève
+          await fetchClasses();
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const fetchClasses = async () => {
     setLoading(true);
@@ -367,9 +418,13 @@ export default function AdminDashboard() {
                       <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={handleExportPDF}>
                         <Download className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Exporter</span>
                       </Button>
-                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={openAddStudentModal}>
-                        <Plus className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Ajouter Élève</span>
-                        <span className="sm:hidden text-[10px]">Ajouter</span>
+                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={openAddStudentModal}>
+                        <Users className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Affecter Élève</span>
+                        <span className="sm:hidden text-[10px]">Affecter</span>
+                      </Button>
+                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
+                        <Plus className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Créer Élève</span>
+                        <span className="sm:hidden text-[10px]">Créer</span>
                       </Button>
                     </div>
                   </div>
@@ -569,9 +624,11 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="flex gap-3 mt-8">
-                      <Button variant="outline" className="flex-1 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
-                        Accéder au Profil
-                      </Button>
+                      <Link href={`/app/admin/etudiants?id=${selectedStudentId}`} className="flex-1">
+                        <Button variant="outline" className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
+                          Accéder au Profil
+                        </Button>
+                      </Link>
                       <Button className="flex-1 bg-white text-[#152233] hover:bg-gray-100 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11 flex items-center gap-2">
                         <Mail className="w-3.5 h-3.5" /> Message
                       </Button>
@@ -816,6 +873,173 @@ export default function AdminDashboard() {
                   {isSubmitting ? "Transfert..." : "Confirmer le transfert"}
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MANUAL STUDENT REGISTRATION MODAL */}
+      {showAddStudentManualModal && (
+        <div className="fixed inset-0 bg-ishes-dark/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
+            <div className="p-8 border-b border-gray-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-black text-ishes-dark tracking-tight">Nouveau Dossier Élève</h3>
+                <p className="text-xs font-medium text-gray-400 mt-1">Créez et inscrivez un élève directement dans cette classe.</p>
+              </div>
+              <button onClick={() => setShowAddStudentManualModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+              {/* Personal Info */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                   <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Informations Personnelles</h4>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prénom</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: Omar"
+                      value={formData.first_name}
+                      onChange={(e) => setFormData({...formData, first_name: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: Diallo"
+                      value={formData.last_name}
+                      onChange={(e) => setFormData({...formData, last_name: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Email</label>
+                    <input 
+                      type="email" 
+                      placeholder="omar@exemple.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Téléphone</label>
+                    <input 
+                      type="tel" 
+                      placeholder="06 XX XX XX XX"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Legal Representative */}
+              <div className="space-y-6 pt-4 border-t border-gray-50">
+                <div className="flex items-center gap-3">
+                   <div className="w-1 h-4 bg-ishes-dark rounded-full"></div>
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-dark">Responsable Légal (Optionnel)</h4>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prénom du parent</label>
+                    <input 
+                      type="text" 
+                      value={formData.parent_first_name}
+                      onChange={(e) => setFormData({...formData, parent_first_name: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom du parent</label>
+                    <input 
+                      type="text" 
+                      value={formData.parent_last_name}
+                      onChange={(e) => setFormData({...formData, parent_last_name: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Address */}
+              <div className="space-y-2 pt-4 border-t border-gray-50">
+                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Adresse complète</label>
+                <input 
+                  type="text" 
+                  placeholder="123 Rue de la Paix, Paris"
+                  value={formData.address}
+                  onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                />
+              </div>
+
+              {/* Règlement Manuel Section */}
+              <div className="space-y-6 pt-4 border-t border-gray-50">
+                <div className="flex items-center gap-3">
+                   <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Statut du Règlement & Paiement</h4>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Statut Financier</label>
+                    <select
+                      value={formData.payment_status}
+                      onChange={(e) => setFormData({...formData, payment_status: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                    >
+                      <option value="en_attente">En attente de paiement</option>
+                      <option value="a_jour">Règlement Effectué (Payé)</option>
+                    </select>
+                  </div>
+
+                  {formData.payment_status === 'a_jour' && (
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Moyen de paiement</label>
+                      <select
+                        value={formData.payment_method}
+                        onChange={(e) => setFormData({...formData, payment_method: e.target.value})}
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                      >
+                        <option value="virement">🏦 Virement bancaire</option>
+                        <option value="liquide">💵 Espèces / Liquide</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {formData.payment_status === 'a_jour' && (
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant perçu (EUR)</label>
+                    <input 
+                      type="number" 
+                      placeholder="Ex: 150"
+                      value={formData.amount_paid}
+                      onChange={(e) => setFormData({...formData, amount_paid: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="p-8 bg-gray-50/50 border-t border-gray-100 flex gap-4">
+              <Button variant="ishes-outline" className="flex-1 h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]" onClick={() => setShowAddStudentManualModal(false)}>Annuler</Button>
+              <Button variant="ishes" className="flex-[2] h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]" disabled={isSubmitting} onClick={handleCreateStudentManual}>
+                {isSubmitting ? "Création..." : "Enregistrer et affecter"}
+              </Button>
             </div>
           </div>
         </div>

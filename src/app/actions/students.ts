@@ -504,8 +504,12 @@ export async function createStudentManualAction(data: {
   parent_first_name?: string;
   parent_last_name?: string;
   address?: string;
+  payment_status?: string;
+  payment_method?: string;
+  amount_paid?: string;
 }) {
   try {
+    const status = data.payment_status === 'a_jour' ? 'actif' : 'en_attente';
     const studentId = `manual_${Date.now()}`;
     const { data: newStudent, error } = await supabaseAdmin
       .from('etudiants')
@@ -517,12 +521,28 @@ export async function createStudentManualAction(data: {
         phone: data.phone,
         parent_first_name: data.parent_first_name,
         parent_last_name: data.parent_last_name,
-        status: 'en_attente' // Utilisation du statut correct pour la table etudiants
+        status: status,
+        address: data.address
       })
       .select()
       .single();
 
     if (error) throw error;
+
+    // Si paiement manuel effectué, on l'enregistre dans 'paiements'
+    if (data.payment_status === 'a_jour') {
+      const amount = parseFloat(data.amount_paid || '150') || 150;
+      const methodLabel = data.payment_method === 'liquide' ? 'Liquide' : 'Virement';
+      await supabaseAdmin.from('paiements').insert({
+        etudiant_id: studentId,
+        stripe_session_id: `manual_${data.payment_method || 'virement'}_${Date.now()}`,
+        amount: amount,
+        currency: 'EUR',
+        status: 'succeeded',
+        error_message: `Paiement Manuel (${methodLabel})`
+      });
+    }
+
     return { success: true, data: newStudent };
   } catch (err) {
     console.error("Manual Student Creation Error:", err);
@@ -723,6 +743,82 @@ export async function fetchStudentClassInfoAction(clerkUserId: string, email?: s
   } catch (err) {
     console.error("Fetch Student Class Info Error:", err);
     return { success: false, error: "Failed to fetch class info" };
+  }
+}
+
+export async function fetchPaymentsByStudentAction(studentId: string) {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('paiements')
+      .select(`
+        *,
+        inscriptions (
+          formations (title),
+          classes (name)
+        )
+      `)
+      .eq('etudiant_id', studentId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return { success: true, data };
+  } catch (err) {
+    console.error("Fetch Student Payments Error:", err);
+    return { success: false, error: "Failed to fetch student payments" };
+  }
+}
+
+export async function fetchStudentCertificateDataAction(clerkUserId: string) {
+  try {
+    const { data: etudiant, error: eError } = await supabaseAdmin
+      .from('etudiants')
+      .select('*')
+      .eq('id', clerkUserId)
+      .maybeSingle();
+    
+    if (eError || !etudiant) {
+      console.error("Student not found for certificate:", clerkUserId, eError);
+      return { success: false, error: "Étudiant non trouvé" };
+    }
+
+    const { data: inscription, error: iError } = await supabaseAdmin
+      .from('inscriptions')
+      .select(`
+        id,
+        status,
+        created_at,
+        formations (title),
+        classes (name, type)
+      `)
+      .eq('etudiant_id', etudiant.id)
+      .in('status', ['valide', 'actif'])
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (iError || !inscription) {
+      console.error("No active inscription found for certificate:", etudiant.id, iError);
+      return { success: false, error: "Aucune inscription active trouvée" };
+    }
+
+    return {
+      success: true,
+      data: {
+        id: etudiant.id,
+        firstName: etudiant.first_name || '',
+        lastName: etudiant.last_name || '',
+        email: etudiant.email,
+        dateJoined: etudiant.created_at,
+        inscriptionId: inscription.id,
+        inscriptionDate: inscription.created_at,
+        formationTitle: (inscription.formations as any)?.title || 'FORMATION ISHES',
+        className: (inscription.classes as any)?.name || 'Session Standard',
+        classType: (inscription.classes as any)?.type || 'distanciel',
+      }
+    };
+  } catch (err: any) {
+    console.error("Certificate Data Error:", err);
+    return { success: false, error: "Erreur lors de la récupération des données du certificat" };
   }
 }
 

@@ -19,7 +19,8 @@ const isPublicRoute = createRouteMatcher([
   '/institut(.*)',
   '/boutique(.*)',
   '/inscription(.*)',
-  '/test-positionnement(.*)'
+  '/test-positionnement(.*)',
+  '/unauthorized(.*)'
 ]);
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 

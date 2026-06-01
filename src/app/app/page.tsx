@@ -37,18 +37,23 @@ export default async function AppDispatcher() {
           })
           .eq('email', userEmail);
       } else {
-        // Sinon on crée un nouveau profil élève
-        await supabase
-          .from('etudiants')
-          .insert({
-            id: userId,
-            email: userEmail,
-            first_name: user.firstName,
-            last_name: user.lastName,
-            photo_url: user.imageUrl,
-            role: isAdminEmail(userEmail) ? 'admin' : 'eleve',
-            status: 'actif'
-          });
+        // Sinon, si c'est un administrateur, on autorise la création de son compte
+        if (isAdminEmail(userEmail)) {
+          await supabase
+            .from('etudiants')
+            .insert({
+              id: userId,
+              email: userEmail,
+              first_name: user.firstName,
+              last_name: user.lastName,
+              photo_url: user.imageUrl,
+              role: 'admin',
+              status: 'actif'
+            });
+        } else {
+          // Sinon (élève non inscrit / n'ayant pas payé et non invité) -> Bloqué et redirigé !
+          redirect("/unauthorized");
+        }
       }
     } catch (err) {
       console.error("Supabase Sync Error:", err);

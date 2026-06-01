@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send } from "lucide-react";
-import { fetchStudentsAction, createStudentManualAction, updateStudentAction, fetchClassesAction, assignStudentToClassAction } from "@/app/actions/students";
+import { fetchStudentsAction, createStudentManualAction, updateStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -36,6 +36,8 @@ function EtudiantsContent() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [payments, setPayments] = useState<any[]>([]);
+  const [loadingPayments, setLoadingPayments] = useState(false);
 
   // Modal State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -60,7 +62,10 @@ function EtudiantsContent() {
     phone: "",
     parent_first_name: "",
     parent_last_name: "",
-    address: ""
+    address: "",
+    payment_status: "en_attente",
+    payment_method: "virement",
+    amount_paid: "150"
   });
 
   const fetchStudents = async () => {
@@ -115,6 +120,30 @@ function EtudiantsContent() {
   useEffect(() => {
     fetchStudents();
   }, []);
+
+  useEffect(() => {
+    if (selectedStudentId) {
+      const fetchStudentPayments = async () => {
+        setLoadingPayments(true);
+        try {
+          const result = await fetchPaymentsByStudentAction(selectedStudentId);
+          if (result.success && result.data) {
+            setPayments(result.data);
+          } else {
+            setPayments([]);
+          }
+        } catch (err) {
+          console.error("Failed to load payments", err);
+          setPayments([]);
+        } finally {
+          setLoadingPayments(false);
+        }
+      };
+      fetchStudentPayments();
+    } else {
+      setPayments([]);
+    }
+  }, [selectedStudentId]);
 
   const handleCreateStudent = async () => {
     if (!formData.first_name || !formData.last_name || !formData.email) return;
@@ -230,7 +259,10 @@ function EtudiantsContent() {
       phone: "",
       parent_first_name: "",
       parent_last_name: "",
-      address: ""
+      address: "",
+      payment_status: "en_attente",
+      payment_method: "virement",
+      amount_paid: "150"
     });
   };
 
@@ -284,10 +316,6 @@ function EtudiantsContent() {
             </span>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes" size="sm" className="h-10 px-4 md:px-6 rounded-xl border-none shadow-lg shadow-ishes-green/20" onClick={() => setShowAddModal(true)}>
-              <Plus className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Inscrire Élève</span>
-              <span className="md:hidden">Inscrire</span>
-            </Button>
             <UserButton
               appearance={{
                 elements: {
@@ -497,6 +525,86 @@ function EtudiantsContent() {
                     </div>
                   </div>
 
+                  {/* Facturation & Règlements */}
+                  <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-100">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
+                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-green flex items-center gap-2">
+                        <CreditCard className="w-4 h-4" /> Facturation & Historique des règlements
+                      </h3>
+                    </div>
+
+                    {loadingPayments ? (
+                      <div className="flex items-center justify-center py-8">
+                        <Loader2 className="w-6 h-6 text-ishes-green animate-spin mr-2" />
+                        <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Chargement des paiements...</span>
+                      </div>
+                    ) : payments.length > 0 ? (
+                      <div className="space-y-3">
+                        {payments.map((payment) => {
+                          const paymentDate = new Date(payment.created_at).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          });
+                          const amountFormatted = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: payment.currency || 'EUR' }).format(payment.amount);
+                          
+                          return (
+                            <div key={payment.id} className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                              <div className="flex items-start gap-3">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${
+                                  payment.status === 'succeeded' 
+                                    ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10' 
+                                    : 'bg-red-50 text-red-500 border border-red-100'
+                                }`}>
+                                  <CreditCard className="w-5 h-5" />
+                                </div>
+                                <div>
+                                  <div className="text-xs font-black text-ishes-dark mb-0.5">
+                                    {payment.inscriptions?.formations?.title || payment.inscriptions?.classes?.name || "Règlement Formation"}
+                                  </div>
+                                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                                    Reçu le {paymentDate}
+                                  </div>
+                                  {payment.error_message && (
+                                    <div className="text-[9px] text-red-500 mt-1 font-mono italic">
+                                      Erreur: {payment.error_message}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between sm:justify-end gap-4">
+                                <div className="text-left sm:text-right">
+                                  <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
+                                  <div className="text-[9px] text-gray-400 font-mono tracking-widest uppercase truncate max-w-[120px] sm:max-w-none" title={payment.stripe_session_id}>
+                                    ID: {payment.stripe_session_id?.slice(0, 15)}...
+                                  </div>
+                                </div>
+
+                                <span className={`px-2.5 py-1 text-[9px] font-black uppercase rounded-lg tracking-wider shrink-0 ${
+                                  payment.status === 'succeeded' 
+                                    ? 'bg-ishes-green/10 text-ishes-green' 
+                                    : 'bg-red-100 text-red-600'
+                                }`}>
+                                  {payment.status === 'succeeded' ? 'Payé' : 'Échoué'}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="bg-gray-50/50 border border-dashed border-gray-200 rounded-2xl p-8 text-center text-gray-400">
+                        <CreditCard className="w-10 h-10 mx-auto mb-3 opacity-30 text-gray-400" />
+                        <p className="font-bold text-gray-600 text-xs uppercase tracking-wider">Aucun règlement enregistré</p>
+                        <p className="text-[10px] text-gray-400 mt-1">Cet élève n'a pas encore effectué de paiements via Stripe ou de manière manuelle.</p>
+                      </div>
+                    )}
+                  </div>
+
                 </div>
               </div>
             ) : (
@@ -628,6 +736,55 @@ function EtudiantsContent() {
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
                 />
+              </div>
+
+              {/* Règlement Manuel Section */}
+              <div className="space-y-6 pt-4 border-t border-gray-50">
+                <div className="flex items-center gap-3">
+                   <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Statut du Règlement & Paiement</h4>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Statut Financier</label>
+                    <select
+                      value={formData.payment_status}
+                      onChange={(e) => setFormData({...formData, payment_status: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                    >
+                      <option value="en_attente">En attente de paiement</option>
+                      <option value="a_jour">Règlement Effectué (Payé)</option>
+                    </select>
+                  </div>
+
+                  {formData.payment_status === 'a_jour' && (
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Moyen de paiement</label>
+                      <select
+                        value={formData.payment_method}
+                        onChange={(e) => setFormData({...formData, payment_method: e.target.value})}
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                      >
+                        <option value="virement">🏦 Virement bancaire</option>
+                        <option value="liquide">💵 Espèces / Liquide</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {formData.payment_status === 'a_jour' && (
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant perçu (EUR)</label>
+                    <input 
+                      type="number" 
+                      placeholder="Ex: 150"
+                      value={formData.amount_paid}
+                      onChange={(e) => setFormData({...formData, amount_paid: e.target.value})}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
