@@ -363,25 +363,25 @@ function EtudiantsContent() {
                     key={student.id}
                     onClick={() => setSelectedStudentId(student.id)}
                     className={`w-full text-left p-4 rounded-3xl transition-all border block mb-2 ${selectedStudentId === student.id
-                      ? "bg-ishes-dark text-white shadow-xl shadow-ishes-dark/20 border-ishes-dark"
+                      ? "bg-ishes-gold text-ishes-dark shadow-xl shadow-ishes-gold/20 border-ishes-gold"
                       : "bg-white border-gray-50 hover:border-ishes-green/20 hover:shadow-lg hover:shadow-black/5"
                       }`}
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-2xl flex flex-shrink-0 items-center justify-center font-black italic text-sm shadow-sm
-                        ${selectedStudentId === student.id ? 'bg-white text-ishes-dark' : 'bg-ishes-dark text-white'}
+                        ${selectedStudentId === student.id ? 'bg-ishes-dark text-white' : 'bg-ishes-dark/10 text-ishes-dark'}
                       `}>
                         {student.avatar}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-0.5">
-                          <h3 className={`ishes-heading text-sm truncate ${selectedStudentId === student.id ? 'text-white' : 'text-ishes-dark'}`}>{student.name}</h3>
+                          <h3 className="ishes-heading text-sm truncate text-ishes-dark">{student.name}</h3>
                           {(student.status === "en_attente") && <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/20" />}
                           {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-green shadow-lg shadow-ishes-green/20" />}
                         </div>
-                        <p className={`text-[10px] font-medium tracking-wider truncate mb-1 opacity-60 uppercase ${selectedStudentId === student.id ? 'text-white' : 'text-ishes-dark'}`}>{student.email}</p>
+                        <p className="text-[10px] font-medium tracking-wider truncate mb-1 opacity-65 uppercase text-ishes-dark">{student.email}</p>
                         <div className="flex items-center gap-2">
-                          <span className={`ishes-label text-[8px] px-2 py-0.5 rounded-md truncate ${selectedStudentId === student.id ? 'bg-white/10 text-white' : 'bg-gray-50 text-gray-400'}`}>
+                          <span className={`ishes-label text-[8px] px-2 py-0.5 rounded-md truncate ${selectedStudentId === student.id ? 'bg-ishes-dark/10 text-ishes-dark' : 'bg-gray-50 text-gray-400'}`}>
                             {student.enrolledClass || "Non assigné"}
                           </span>
                         </div>
@@ -410,7 +410,7 @@ function EtudiantsContent() {
               <div className="h-full bg-white rounded-3xl shadow-sm border border-gray-200 overflow-y-auto flex flex-col relative custom-scrollbar">
 
                 {/* Profile Cover & Header */}
-                <div className="h-24 bg-[#152233] relative rounded-t-[2.5rem] overflow-hidden shrink-0">
+                <div className="h-24 bg-ishes-gold relative rounded-t-[2.5rem] overflow-hidden shrink-0">
                    <div className="absolute inset-0 bg-gradient-to-r from-ishes-green/10 to-transparent"></div>
                   {/* Status Badge Top Right */}
                   <div className="absolute top-6 right-6 md:right-8 flex gap-2">
@@ -431,14 +431,14 @@ function EtudiantsContent() {
                   {/* Identity Header */}
                   <div className="flex flex-col md:flex-row md:items-end justify-between -mt-16 md:-mt-20 mb-10 md:mb-12 gap-6 relative z-10">
                     <div className="flex items-end gap-4 md:gap-6">
-                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-2xl shadow-[#152233]/10 border border-gray-100">
-                        <div className="w-full h-full bg-[#152233] rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-white">
+                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-2xl shadow-ishes-gold/20 border border-gray-100">
+                        <div className="w-full h-full bg-ishes-gold rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-ishes-dark">
                           {selectedStudent.avatar}
                         </div>
                       </div>
                       <div className="pb-1 md:pb-2">
-                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/60 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <h2 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-none truncate max-w-[200px] md:max-w-none">{selectedStudent.name}</h2>
+                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
+                        <h2 className="text-2xl md:text-4xl font-black text-ishes-dark tracking-tight leading-none truncate max-w-[200px] md:max-w-none">{selectedStudent.name}</h2>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-green mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>
@@ -486,8 +486,8 @@ function EtudiantsContent() {
                     {/* Scolarité Info Card */}
                     <div className="flex flex-col mt-4 lg:mt-0">
                       <div className="flex items-center gap-3 mb-6 md:mb-8">
-                         <div className="w-1 h-4 bg-[#152233] rounded-full"></div>
-                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#152233]">Scolarité</h3>
+                         <div className="w-1 h-4 bg-ishes-gold rounded-full"></div>
+                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-dark">Scolarité</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">
                         <div className="flex items-center justify-between group">

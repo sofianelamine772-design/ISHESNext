@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { 
-  Search, Download, ChevronRight, CheckCircle2, 
+  Search, ChevronRight, CheckCircle2, 
   Calendar, X, Phone, Mail, History, GraduationCap, 
   AlertCircle, CreditCard, Filter
 } from "lucide-react";
@@ -88,10 +88,7 @@ export default function FacturationPage() {
                   <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Facturation & Paiements</h1>
                </div>
                <div className="flex items-center gap-3 md:gap-6">
-                  <Button variant="ishes-outline" size="sm" className="hidden sm:flex h-10">
-                     <Download className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Exporter Rapport</span>
-                     <span className="md:hidden">Export</span>
-                  </Button>
+
                   <UserButton
                     appearance={{
                       elements: {

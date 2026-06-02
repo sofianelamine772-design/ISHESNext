@@ -141,7 +141,7 @@ export async function POST(req: Request) {
           amount: amount,
           currency: (invoice.currency || 'eur').toUpperCase(),
           status: status,
-          error_message: invoice.last_payment_error?.message || null
+          error_message: (invoice as any).last_payment_error?.message || null
         });
 
         if (error) {

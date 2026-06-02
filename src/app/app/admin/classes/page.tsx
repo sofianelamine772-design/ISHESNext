@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText, Loader2, X, Mail, Phone, Calendar, GraduationCap, AlertCircle, History, Download, Trash2, CheckCircle2, Terminal, MessageSquare, ExternalLink, Save } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText, Loader2, X, Mail, Phone, Calendar, GraduationCap, AlertCircle, History, Trash2, CheckCircle2, Terminal, MessageSquare, ExternalLink, Save } from "lucide-react";
 import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction, createStudentManualAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
@@ -173,11 +173,6 @@ export default function AdminDashboard() {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const handleExportPDF = () => {
-    if (!selectedClass) return;
-    window.print();
   };
 
   const handleSaveWhatsapp = async () => {
@@ -415,9 +410,6 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={handleExportPDF}>
-                        <Download className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Exporter</span>
-                      </Button>
                       <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={openAddStudentModal}>
                         <Users className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Affecter Élève</span>
                         <span className="sm:hidden text-[10px]">Affecter</span>
@@ -596,7 +588,7 @@ export default function AdminDashboard() {
             ) : studentDetail && (
               <>
                 {/* Drawer Header */}
-                <div className="bg-[#152233] text-white p-8 relative overflow-hidden">
+                <div className="bg-ishes-gold text-ishes-dark p-8 relative overflow-hidden">
                   {/* Decorative Background Element */}
                   <div className="absolute -top-24 -right-24 w-64 h-64 bg-ishes-green/10 blur-[80px] rounded-full" />
 
@@ -612,31 +604,31 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="flex items-end gap-6">
-                      <div className="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-2xl">
-                        <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 rounded-[1.8rem] flex items-center justify-center font-black text-3xl text-[#152233]">
+                      <div className="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-2xl shadow-ishes-gold/20">
+                        <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 rounded-[1.8rem] flex items-center justify-center font-black text-3xl text-ishes-dark">
                           {(studentDetail.first_name?.[0] || '') + (studentDetail.last_name?.[0] || '')}
                         </div>
                       </div>
                       <div className="flex-1 pb-2">
-                        <h2 className="text-3xl font-black text-white tracking-tight mb-1">{studentDetail.first_name} {studentDetail.last_name}</h2>
-                        <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest italic">Membre depuis le {new Date(studentDetail.created_at).toLocaleDateString()}</p>
+                        <h2 className="text-3xl font-black text-ishes-dark tracking-tight mb-1">{studentDetail.first_name} {studentDetail.last_name}</h2>
+                        <p className="text-ishes-dark/70 text-[10px] font-bold uppercase tracking-widest italic">Membre depuis le {new Date(studentDetail.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
 
                     <div className="flex gap-3 mt-8">
                       <Link href={`/app/admin/etudiants?id=${selectedStudentId}`} className="flex-1">
-                        <Button variant="outline" className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
+                        <Button variant="outline" className="w-full bg-ishes-dark/5 border-ishes-dark/10 text-ishes-dark hover:bg-ishes-dark/10 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
                           Accéder au Profil
                         </Button>
                       </Link>
-                      <Button className="flex-1 bg-white text-[#152233] hover:bg-gray-100 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11 flex items-center gap-2">
+                      <Button className="flex-1 bg-ishes-dark text-white hover:bg-ishes-dark/90 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11 flex items-center gap-2">
                         <Mail className="w-3.5 h-3.5" /> Message
                       </Button>
                     </div>
                   </div>
 
-                  <button onClick={() => { setSelectedStudentId(null); setStudentDetail(null); }} className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors z-20">
-                    <X className="w-5 h-5 text-white/40" />
+                  <button onClick={() => { setSelectedStudentId(null); setStudentDetail(null); }} className="absolute top-4 right-4 p-2 hover:bg-ishes-dark/10 rounded-full transition-colors z-20">
+                    <X className="w-5 h-5 text-ishes-dark/45" />
                   </button>
                 </div>
 

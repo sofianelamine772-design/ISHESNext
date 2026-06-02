@@ -64,10 +64,6 @@ export default async function AdminOverview() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Vue d'ensemble</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes-outline" size="sm" className="hidden sm:flex h-10">
-              <FileText className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Exporter Rapport</span>
-              <span className="md:hidden">Export</span>
-            </Button>
             <UserButton
               appearance={{
                 elements: {
