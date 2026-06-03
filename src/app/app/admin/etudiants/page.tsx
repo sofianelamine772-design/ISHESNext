@@ -515,18 +515,7 @@ function EtudiantsContent() {
 
                   </div>
 
-                  {/* Accès Rapides Actions */}
-                  <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-100">
-                    <h3 className="ishes-label opacity-40 mb-6 text-[10px]">Actions Administratives</h3>
-                    <div className="flex flex-wrap gap-3 md:gap-4">
-                      <Button variant="ishes-outline" className="flex-1 sm:flex-none h-11 md:h-12 px-4 md:px-6 text-[10px] md:text-xs">
-                        <Download className="w-4 h-4 mr-2" /> <span className="hidden sm:inline">Certificat</span> Scolarité
-                      </Button>
-                      <Button variant="ishes-outline" className="flex-1 sm:flex-none h-11 md:h-12 px-4 md:px-6 text-[10px] md:text-xs">
-                        <CreditCard className="w-4 h-4 mr-2" /> <span className="hidden sm:inline">Lien de</span> Paiement
-                      </Button>
-                    </div>
-                  </div>
+
 
                   {/* Facturation & Règlements */}
                   <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-100">
