@@ -8,6 +8,8 @@ import Link from "next/link";
 import { fetchStudentCertificateDataAction } from "@/app/actions/students";
 import { Button } from "@/components/ui/button";
 
+// The getCertificateHtml function has been removed as we now use html-to-image directly on the DOM element.
+
 export default function EleveDashboard() {
   const { user } = useUser();
   const [certData, setCertData] = useState<any | null>(null);
@@ -48,56 +50,91 @@ export default function EleveDashboard() {
     }
   }, [user]);
 
-  const loadHtml2Pdf = () => {
-    return new Promise<any>((resolve, reject) => {
-      if ((window as any).html2pdf) {
-        resolve((window as any).html2pdf);
-        return;
-      }
-      const script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
-      script.onload = () => {
-        resolve((window as any).html2pdf);
-      };
-      script.onerror = () => {
-        reject(new Error("Failed to load html2pdf.js"));
-      };
-      document.head.appendChild(script);
-    });
-  };
-
   const handleDownloadPDF = async () => {
     if (isGeneratingPdf) return;
     setIsGeneratingPdf(true);
     try {
-      const html2pdf = await loadHtml2Pdf();
+      const { toPng } = await import('html-to-image');
+      const { jsPDF } = await import('jspdf');
+
       const element = document.getElementById("print-certificate-wrapper");
-      if (!element) return;
+      if (!element) {
+        throw new Error("Certificate element not found");
+      }
 
-      const opt = {
-        margin: 0,
-        filename: `Certificat_Scolarite_${certData?.firstName || "Eleve"}_${certData?.lastName || ""}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2.5, 
-          useCORS: true, 
-          letterRendering: true,
-          logging: false
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      await html2pdf().from(element).set(opt).save();
+      // Convert the specific DOM element to an image
+      // Using pixelRatio > 1 for high-res PDF rendering
+      const dataUrl = await toPng(element, { quality: 1, pixelRatio: 2 });
+      
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+      
+      pdf.addImage(dataUrl, 'PNG', 0, 0, 210, 297);
+      pdf.save(`Certificat_Scolarite_${certData?.firstName || "Eleve"}_${certData?.lastName || ""}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("Une erreur est survenue lors de la génération du PDF. Veuillez utiliser l'option d'impression classique.");
+      alert("Une erreur est survenue lors de la génération du PDF. Veuillez vérifier votre connexion ou utiliser l'option d'impression.");
     } finally {
       setIsGeneratingPdf(false);
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    if (isGeneratingPdf) return;
+    setIsGeneratingPdf(true);
+    try {
+      const { toPng } = await import('html-to-image');
+      const element = document.getElementById("print-certificate-wrapper");
+      if (!element) return;
+      
+      // Convert to image for perfect print fidelity (bypasses CSS print quirks)
+      const dataUrl = await toPng(element, { quality: 1, pixelRatio: 2 });
+      
+      const iframe = document.createElement("iframe");
+      iframe.style.position = "fixed";
+      iframe.style.right = "0";
+      iframe.style.bottom = "0";
+      iframe.style.width = "0";
+      iframe.style.height = "0";
+      iframe.style.border = "0";
+      document.body.appendChild(iframe);
+      
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (!doc) return;
+      
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body { margin: 0; padding: 0; display: flex; justify-content: center; background: white; }
+              img { width: 210mm; height: 297mm; }
+              @page { size: A4 portrait; margin: 0; }
+            </style>
+          </head>
+          <body>
+            <img src="${dataUrl}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+      
+      // Give the image a moment to render in the iframe
+      setTimeout(() => {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+        setTimeout(() => document.body.removeChild(iframe), 2000);
+      }, 500);
+    } catch (error) {
+      console.error("Error during printing:", error);
+      window.print();
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   return (

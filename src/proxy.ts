@@ -38,15 +38,21 @@ export default clerkMiddleware(async (auth, request) => {
 
   // Logique de rôle par email
   if (userId && isAdminRoute(request)) {
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress;
+    try {
+      const client = await clerkClient();
+      const user = await client.users.getUser(userId);
+      const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress;
 
-    const isAdmin = isAdminEmail(userEmail);
+      const isAdmin = isAdminEmail(userEmail);
 
-    // Si pas admin et essaie d'accéder au dashboard admin -> Redirection vers l'espace élève
-    if (!isAdmin) {
-      return NextResponse.redirect(new URL("/app/eleve", request.url));
+      // Si pas admin et essaie d'accéder au dashboard admin -> Redirection vers l'espace élève
+      if (!isAdmin) {
+        return NextResponse.redirect(new URL("/app/eleve", request.url));
+      }
+    } catch (error) {
+      console.error("Clerk API Response Error in proxy.ts:", error);
+      // If user fetch fails (e.g., user deleted in Clerk but cookie remains), redirect to sign-in
+      return (await auth()).redirectToSignIn();
     }
   }
 });
