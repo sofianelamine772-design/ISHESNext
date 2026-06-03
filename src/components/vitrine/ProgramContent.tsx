@@ -689,7 +689,7 @@ export function ProgramContent() {
                             </Link>
                             {isPresentiel ? (
                               <Link 
-                                href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}`}
+                                href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
                                 onClick={(e) => e.stopPropagation()}
                                 className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${
                                   getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
@@ -702,7 +702,7 @@ export function ProgramContent() {
                               </Link>
                             ) : (
                               <Link 
-                                href={`/inscription?plan=${program.id}`}
+                                href={`/inscription?plan=${program.id}&audience=${program.audience}`}
                                 onClick={(e) => e.stopPropagation()}
                                 className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
                               >

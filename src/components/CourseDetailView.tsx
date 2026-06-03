@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X, CalendarDays, Search } from "lucide-react";
 import { PRESENTIEL_CLASSES, PresentielClass } from "@/lib/presentiel-data";
 
@@ -12,10 +13,14 @@ interface CourseDetailViewProps {
 }
 
 export function CourseDetailView({ course, id }: CourseDetailViewProps) {
+  const pathname = usePathname();
   const [isFlyerOpen, setIsFlyerOpen] = useState(false);
   const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
   const [selectedDayFilter, setSelectedDayFilter] = useState<string>("tous");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const isEnfant = pathname?.includes("enfant") || id === "arabe_coran_junior" || id === "tarbiya_islamiya";
+  const audience = isEnfant ? "enfant" : "adulte";
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -114,10 +119,10 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                </p>
                 <div className="flex flex-wrap gap-4 pt-4 text-center items-center">
                    <Link 
-                      href={`/inscription?plan=${id}`}
+                      href={`/inscription?plan=${id}&audience=${audience}`}
                       className="px-10 py-5 bg-[#008953] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#008953]/20 hover:bg-[#007044] transition-all flex items-center gap-3 active:scale-95"
                    >
-                      S'inscrire maintenant <ArrowRight className="w-6 h-6" />
+                      {audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant"} <ArrowRight className="w-6 h-6" />
                    </Link>
                    {course.videoUrl && (
                       <button className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3">
@@ -459,7 +464,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
               {filteredClasses.map((c) => {
                 const status = getSlotStatus(c.slotKey);
                 const isFull = status?.est_plein;
-                const regUrl = `/inscription?plan=${c.planId}&slot=${c.slotKey}&classId=${c.id}`;
+                const regUrl = `/inscription?plan=${c.planId}&slot=${c.slotKey}&classId=${c.id}&audience=${c.audience}`;
 
                 return (
                   <div
@@ -542,10 +547,10 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                </p>
                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                   <Link 
-                     href={`/inscription?plan=${id}`}
+                     href={`/inscription?plan=${id}&audience=${audience}`}
                      className="px-12 py-6 bg-[#008953] text-white font-black text-xl rounded-2xl shadow-2xl shadow-[#008953]/20 hover:scale-105 active:scale-95 transition-all"
                   >
-                     Je m'inscris maintenant
+                     {audience === 'enfant' ? "Inscrire mon enfant" : "Je m'inscris maintenant"}
                   </Link>
                   <p className="text-white/40 text-sm font-black uppercase tracking-[0.2em]">
                      Prix de la session: {course.price}

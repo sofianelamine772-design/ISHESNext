@@ -15,13 +15,22 @@ export default function EleveDashboard() {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [certError, setCertError] = useState<string | null>(null);
 
+  const currentYear = new Date().getFullYear();
+  const academicYear = new Date().getMonth() >= 7 ? `${currentYear}-${currentYear + 1}` : `${currentYear - 1}-${currentYear}`;
+
   useEffect(() => {
     if (user?.id) {
       const loadCertData = async () => {
         setLoadingCert(true);
         setCertError(null);
         try {
-          const res = await fetchStudentCertificateDataAction(user.id);
+          const res = await fetchStudentCertificateDataAction({
+            clerkUserId: user.id,
+            email: user.primaryEmailAddress?.emailAddress || "",
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+            phone: user.primaryPhoneNumber?.phoneNumber || ""
+          });
           if (res.success && res.data) {
             setCertData(res.data);
           } else {
@@ -67,7 +76,7 @@ export default function EleveDashboard() {
       </div>
 
       {/* ─── QUICK STATUS ─── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
             <div className="w-20 h-20 bg-emerald-50 text-[#086b51] rounded-[2rem] flex items-center justify-center shrink-0">
                <ShieldCheck className="w-10 h-10" />
@@ -77,16 +86,55 @@ export default function EleveDashboard() {
                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Statut du dossier</div>
             </div>
          </div>
-         <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
-            <div className="w-20 h-20 bg-orange-50 text-orange-600 rounded-[2rem] flex items-center justify-center shrink-0">
-               <PlusSquare className="w-10 h-10" />
+          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
+             <div className="w-20 h-20 bg-orange-50 text-orange-600 rounded-[2rem] flex items-center justify-center shrink-0">
+                <PlusSquare className="w-10 h-10" />
+             </div>
+             <div>
+                <div className="text-4xl font-black text-gray-900">{academicYear}</div>
+                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Année académique</div>
+             </div>
+          </div>
+          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
+             <div className="w-20 h-20 bg-emerald-50/50 text-[#086b51] rounded-[2rem] flex items-center justify-center shrink-0">
+                <GraduationCap className="w-10 h-10" />
+             </div>
+             <div className="min-w-0">
+                <div className="text-xl font-black text-gray-900 truncate" title={loadingCert ? "Chargement..." : certData?.formationTitle || "Aucune classe"}>
+                  {loadingCert ? "..." : certData?.formationTitle || "Non Inscrit"}
+                </div>
+                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1 truncate" title={loadingCert ? "..." : certData?.className || ""}>
+                  {loadingCert ? "..." : certData?.className || "Aucun groupe"}
+                </div>
+             </div>
+          </div>
+      </div>
+
+      {/* ─── WHATSAPP GROUP LINK ─── */}
+      {certData?.whatsappLink && (
+        <div className="bg-[#086b51]/5 border border-[#086b51]/10 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 bg-[#25D366]/10 text-[#25D366] rounded-[2rem] flex items-center justify-center shrink-0">
+              <svg className="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+              </svg>
             </div>
             <div>
-               <div className="text-4xl font-black text-gray-900">2024</div>
-               <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Année académique</div>
+              <h3 className="text-xl font-black text-gray-900 tracking-tight">Rejoindre le WhatsApp de la classe</h3>
+              <p className="text-gray-400 text-xs font-semibold mt-1">Accédez aux dernières annonces et restez en contact avec votre classe : <span className="text-[#086b51] font-bold">{certData.className}</span></p>
             </div>
-         </div>
-      </div>
+          </div>
+          <a
+            href={certData.whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#25D366] hover:bg-[#20ba56] text-white px-8 py-4 rounded-[1.8rem] font-black uppercase tracking-widest text-[10px] flex items-center gap-2.5 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#25D366]/20 cursor-pointer text-center md:self-center shrink-0"
+          >
+            Rejoindre le Groupe
+          </a>
+        </div>
+      )}
+
 
       {/* ─── DOCUMENTS SECTION ─── */}
       <div className="bg-white p-10 md:p-12 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
@@ -298,7 +346,7 @@ export default function EleveDashboard() {
                         Certificat de Scolarité
                       </h2>
                       <p className="text-[11px] font-sans font-bold text-gray-500 uppercase tracking-widest">
-                        Année Académique 2025 - 2026
+                        Année Académique {academicYear.replace('-', ' - ')}
                       </p>
                     </div>
                   </div>

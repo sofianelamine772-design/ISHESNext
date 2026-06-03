@@ -288,7 +288,7 @@ export default function InstitutPage() {
                         Infos
                       </Link>
                       <Link 
-                        href={`/inscription?plan=${program.formationId}&slot=${program.day?.toLowerCase() || ''}`}
+                        href={`/inscription?plan=${program.formationId}&slot=${program.day?.toLowerCase() || ''}&audience=${program.audience}`}
                         onClick={(e) => e.stopPropagation()}
                         className={`flex items-center justify-center py-3.5 rounded-2xl shadow-lg transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
                           getSlotStatus(program.day)?.est_plein

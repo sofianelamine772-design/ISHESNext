@@ -471,7 +471,7 @@ export default function FormationTarbyaPage() {
 
             <div className="pt-8 flex flex-col items-center gap-4">
               <Link 
-                href={`/inscription?plan=${id}`}
+                href={`/inscription?plan=${id}&audience=enfant`}
                 className="px-10 py-5 bg-[#008953] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#008953]/30 hover:bg-[#007044] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3"
               >
                 👉 Je découvre le cours de Tarbiya Islamiya <ArrowRight className="w-5 h-5" />

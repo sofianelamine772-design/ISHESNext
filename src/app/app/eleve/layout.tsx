@@ -29,6 +29,9 @@ export default function EleveLayout({
     { href: "/app/eleve/reinscription", label: "Réinscription", icon: UserPlus },
   ];
 
+  const currentYear = new Date().getFullYear();
+  const academicYear = new Date().getMonth() >= 7 ? `${currentYear}-${currentYear + 1}` : `${currentYear - 1}-${currentYear}`;
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar - Etudiant */}
@@ -108,7 +111,7 @@ export default function EleveLayout({
           </div>
           <div className="flex items-center gap-4">
              <div className="bg-[#086b51]/5 text-[#086b51] px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-[#086b51]/10">
-                Année 2024-2025
+                Année {academicYear}
              </div>
           </div>
         </header>

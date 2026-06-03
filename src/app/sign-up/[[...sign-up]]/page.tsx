@@ -3,13 +3,21 @@ import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Inscription | Espace Membre ISHES",
   description: "Créez votre compte étudiant pour rejoindre l'Institut ISHES et débuter vos formations.",
 };
 
-export default function SignUpPage() {
+export default async function SignUpPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ email_address?: string }>;
+}) {
+  const params = await searchParams;
+  const email = params.email_address;
+
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-[#FAFAFA] p-6 pt-20 overflow-hidden">
       {/* Background decorations */}
@@ -43,6 +51,7 @@ export default function SignUpPage() {
 
         <ClerkLoaded>
           <SignUp
+            initialValues={email ? { emailAddress: email } : undefined}
             appearance={{
               elements: {
                 rootBox: "mx-auto w-full",

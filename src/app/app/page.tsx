@@ -21,7 +21,7 @@ export default async function AppDispatcher() {
       const { data: existingUser } = await supabase
         .from('etudiants')
         .select('id')
-        .eq('email', userEmail)
+        .ilike('email', userEmail)
         .single();
 
       if (existingUser) {
@@ -35,7 +35,7 @@ export default async function AppDispatcher() {
             photo_url: user.imageUrl,
             status: 'actif'
           })
-          .eq('email', userEmail);
+          .ilike('email', userEmail);
       } else {
         // Sinon, si c'est un administrateur, on autorise la création de son compte
         if (isAdminEmail(userEmail)) {

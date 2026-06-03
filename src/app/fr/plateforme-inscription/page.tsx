@@ -18,6 +18,7 @@ function InscriptionForm() {
   const level = searchParams?.get("level");
   const classIdParam = searchParams?.get("classId");
   const selectedClass = classIdParam ? PRESENTIEL_CLASSES.find(c => c.id === parseInt(classIdParam)) : null;
+  const audienceParam = searchParams?.get("audience");
 
   // Redirection if no plan selected
   useEffect(() => {
@@ -174,18 +175,38 @@ function InscriptionForm() {
     });
   };
 
-  const childFormations = ['arabe_coran_junior', 'tarbiya_islamiya', 'tajwid_enfant'];
+  const childFormations = [
+    'arabe_coran_junior',
+    'arabe-coran-junior',
+    'tarbiya_islamiya',
+    'tajwid_enfant',
+    'presentiel-enfant'
+  ];
+
+  const isForcedChild = 
+    childFormations.includes(planId || "") || 
+    audienceParam === "enfant" ||
+    (selectedClass && selectedClass.audience === 'enfant') ||
+    (planId === 'presentiel-global' && slot && slot.toLowerCase() === 'mercredi') ||
+    (planId === 'tajwid_standard' && audienceParam === 'enfant');
+
+  const isForcedSelf = 
+    audienceParam === "adulte" ||
+    (selectedClass && selectedClass.audience === 'adulte') ||
+    (planId === 'presentiel-global' && slot && ['lundi', 'mardi'].includes(slot.toLowerCase())) ||
+    (planId === 'tajwid_standard' && audienceParam === 'adulte');
 
   useEffect(() => {
-    const kidsSlots = ['mercredi', 'samedi', 'dimanche'];
     if (planId) {
-      if (childFormations.includes(planId) || (planId === 'presentiel-global' && slot && kidsSlots.includes(slot.toLowerCase()))) {
+      if (isForcedChild) {
         setRegistrationType("child");
+      } else if (isForcedSelf) {
+        setRegistrationType("self");
       } else {
         setRegistrationType("self");
       }
     }
-  }, [planId, slot]);
+  }, [planId, slot, audienceParam, isForcedChild, isForcedSelf]);
 
   useEffect(() => {
     if (selectedClass) {
@@ -453,8 +474,8 @@ function InscriptionForm() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <h2 className="text-2xl font-black text-[#101828] mb-8">Vos informations</h2>
 
-              {/* Registration Type Selection - Only show if not already forced by planId/slot */}
-              {!(childFormations.includes(planId || "") || (planId === 'presentiel-global' && slot && ['mercredi', 'samedi', 'dimanche'].includes(slot.toLowerCase()))) && (
+              {/* Registration Type Selection - Only show if not already forced */}
+              {!(isForcedChild || isForcedSelf) && (
                 <div className="flex flex-col sm:flex-row gap-4 mb-10">
                   <button
                     onClick={() => setRegistrationType("self")}
@@ -478,7 +499,7 @@ function InscriptionForm() {
               )}
 
               {/* Force Child title if forced */}
-              {(childFormations.includes(planId || "") || (planId === 'presentiel-global' && slot && ['mercredi', 'samedi', 'dimanche'].includes(slot.toLowerCase()))) && (
+              {isForcedChild && (
                  <div className="mb-8 p-4 bg-green-50 rounded-2xl border border-green-100">
                     <h3 className="text-sm font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
                        <span>👶</span> INSCRIPTION ENFANT (SCOLARITÉ)

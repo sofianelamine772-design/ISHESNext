@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     const { data: existingStudent, error: fetchError } = await supabaseAdmin
       .from('etudiants')
       .select('id, status')
-      .eq('email', email)
+      .ilike('email', email)
       .maybeSingle();
 
     if (fetchError) {
@@ -78,24 +78,93 @@ export async function POST(req: Request) {
     }
 
     // 4. Synchronisation : Mise à jour de l'étudiant existant avec son ID Clerk réel
-    const { error: syncError } = await supabaseAdmin
-      .from('etudiants')
-      .upsert({
-        id: id, // On remplace l'ID temporaire par le vrai ID Clerk
-        email: email,
-        first_name: first_name || '',
-        last_name: last_name || '',
-        phone: phone || '',
-        role: isAdmin ? 'admin' : 'eleve',
-        status: existingStudent?.status || 'actif'
-      }, { onConflict: 'email' });
+    if (existingStudent && existingStudent.id !== id) {
+      const oldId = existingStudent.id;
+      
+      // Temporairement renommer l'email de l'ancien étudiant pour libérer la contrainte unique
+      const tempEmail = `migrating_${Date.now()}_${email}`;
+      const { error: renameError } = await supabaseAdmin
+        .from('etudiants')
+        .update({ email: tempEmail })
+        .eq('id', oldId);
 
-    if (syncError) {
-      console.error('Sync Error:', syncError);
-      return new Response('Error: Internal Server Error', { status: 500 });
+      if (renameError) {
+        console.error('Migration Rename Error:', renameError);
+        return new Response('Error: Migration Rename Error', { status: 500 });
+      }
+
+      // Insérer le nouvel étudiant avec le vrai ID Clerk et le bon email
+      const { error: insertError } = await supabaseAdmin
+        .from('etudiants')
+        .insert({
+          id: id,
+          email: email,
+          first_name: first_name || '',
+          last_name: last_name || '',
+          phone: phone || '',
+          role: isAdmin ? 'admin' : 'eleve',
+          status: existingStudent.status || 'actif'
+        });
+
+      if (insertError) {
+        console.error('Migration Insert Error:', insertError);
+        // Rollback rename
+        await supabaseAdmin
+          .from('etudiants')
+          .update({ email: email })
+          .eq('id', oldId);
+        return new Response('Error: Migration Insert Error', { status: 500 });
+      }
+
+      // Transférer les inscriptions
+      await supabaseAdmin
+        .from('inscriptions')
+        .update({ etudiant_id: id })
+        .eq('etudiant_id', oldId);
+
+      // Transférer les paiements
+      await supabaseAdmin
+        .from('paiements')
+        .update({ etudiant_id: id })
+        .eq('etudiant_id', oldId);
+
+      // Transférer les messages
+      await supabaseAdmin
+        .from('messages')
+        .update({ sender_id: id })
+        .eq('sender_id', oldId);
+      await supabaseAdmin
+        .from('messages')
+        .update({ receiver_id: id })
+        .eq('receiver_id', oldId);
+
+      // Supprimer l'ancien étudiant temporaire
+      await supabaseAdmin
+        .from('etudiants')
+        .delete()
+        .eq('id', oldId);
+
+      console.log(`Utilisateur synchronisé via migration d'ID : ${email} (${oldId} -> ${id})`);
+    } else {
+      // Cas par défaut (si déjà synchronisé ou si c'est un admin n'existant pas encore)
+      const { error: syncError } = await supabaseAdmin
+        .from('etudiants')
+        .upsert({
+          id: id,
+          email: email,
+          first_name: first_name || '',
+          last_name: last_name || '',
+          phone: phone || '',
+          role: isAdmin ? 'admin' : 'eleve',
+          status: 'actif'
+        }, { onConflict: 'email' });
+
+      if (syncError) {
+        console.error('Sync Error:', syncError);
+        return new Response('Error: Internal Server Error', { status: 500 });
+      }
+      console.log(`Utilisateur synchronisé standard : ${email}`);
     }
-
-    console.log(`Utilisateur synchronisé : ${email} (Role: ${isAdmin ? 'admin' : 'eleve'})`);
   }
 
   if (eventType === 'user.updated') {
