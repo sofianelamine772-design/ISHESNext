@@ -14,6 +14,7 @@ export default function EleveDashboard() {
   const [loadingCert, setLoadingCert] = useState(true);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [certError, setCertError] = useState<string | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const currentYear = new Date().getFullYear();
   const academicYear = new Date().getMonth() >= 7 ? `${currentYear}-${currentYear + 1}` : `${currentYear - 1}-${currentYear}`;
@@ -46,6 +47,54 @@ export default function EleveDashboard() {
       loadCertData();
     }
   }, [user]);
+
+  const loadHtml2Pdf = () => {
+    return new Promise<any>((resolve, reject) => {
+      if ((window as any).html2pdf) {
+        resolve((window as any).html2pdf);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+      script.onload = () => {
+        resolve((window as any).html2pdf);
+      };
+      script.onerror = () => {
+        reject(new Error("Failed to load html2pdf.js"));
+      };
+      document.head.appendChild(script);
+    });
+  };
+
+  const handleDownloadPDF = async () => {
+    if (isGeneratingPdf) return;
+    setIsGeneratingPdf(true);
+    try {
+      const html2pdf = await loadHtml2Pdf();
+      const element = document.getElementById("print-certificate-wrapper");
+      if (!element) return;
+
+      const opt = {
+        margin: 0,
+        filename: `Certificat_Scolarite_${certData?.firstName || "Eleve"}_${certData?.lastName || ""}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2.5, 
+          useCORS: true, 
+          letterRendering: true,
+          logging: false
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      await html2pdf().from(element).set(opt).save();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Une erreur est survenue lors de la génération du PDF. Veuillez utiliser l'option d'impression classique.");
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -245,8 +294,20 @@ export default function EleveDashboard() {
       {/* ─── CERTIFICATE MODAL ─── */}
       {showPreviewModal && certData && (
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 overflow-y-auto">
-          {/* Print specific CSS override injected directly */}
+          {/* Print & Web Typography specific CSS override injected directly */}
           <style dangerouslySetInnerHTML={{ __html: `
+            @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
+            
+            .font-amiri {
+              font-family: 'Amiri', serif;
+            }
+            .font-cinzel {
+              font-family: 'Cinzel', serif;
+            }
+            .font-playfair {
+              font-family: 'Playfair Display', serif;
+            }
+
             @media print {
               body > * {
                 display: none !important;
@@ -255,6 +316,8 @@ export default function EleveDashboard() {
                 height: 100% !important;
                 overflow: hidden !important;
                 background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
               }
               #print-certificate-wrapper {
                 display: block !important;
@@ -264,7 +327,7 @@ export default function EleveDashboard() {
                 width: 210mm !important;
                 height: 297mm !important;
                 z-index: 99999999 !important;
-                background: white !important;
+                background: #FAF8F5 !important;
                 box-sizing: border-box !important;
               }
               @page {
@@ -282,16 +345,31 @@ export default function EleveDashboard() {
                 </h3>
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Format officiel A4 prêt pour impression ou export PDF</p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownloadPDF}
+                  disabled={isGeneratingPdf}
+                  className="bg-[#086b51] hover:bg-[#075943] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-md shadow-[#086b51]/10 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {isGeneratingPdf ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" /> Génération...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-3.5 h-3.5" /> Télécharger PDF
+                    </>
+                  )}
+                </button>
                 <button
                   onClick={handlePrint}
-                  className="bg-[#086b51] hover:bg-[#075943] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-md shadow-[#086b51]/10 flex items-center gap-2 cursor-pointer"
+                  className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
                 >
-                  <Download className="w-3.5 h-3.5" /> Imprimer / Enregistrer PDF
+                  <FileText className="w-3.5 h-3.5" /> Imprimer
                 </button>
                 <button
                   onClick={() => setShowPreviewModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 cursor-pointer"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 cursor-pointer ml-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -301,15 +379,30 @@ export default function EleveDashboard() {
             {/* Scrollable Preview Area */}
             <div className="flex-1 bg-gray-100 p-8 overflow-y-auto max-h-[70vh] flex justify-center">
               {/* Printable Wrapper */}
-              <div id="print-certificate-wrapper" className="bg-white w-[210mm] h-[297mm] p-[20mm] border border-gray-300 shadow-lg relative flex flex-col justify-between select-none shrink-0 font-serif text-[#1c2e28] overflow-hidden">
+              <div id="print-certificate-wrapper" className="bg-[#FAF8F5] w-[210mm] h-[297mm] p-[20mm] border border-gray-300 shadow-lg relative flex flex-col justify-between select-none shrink-0 text-[#1c2e28] overflow-hidden" style={{ printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}>
                 
-                {/* Translucent Background Watermark Logo */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-                  <svg className="w-[120mm] h-[120mm]" viewBox="0 0 100 100" fill="currentColor">
-                    <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="2" fill="none" />
-                    <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="1" fill="none" strokeDasharray="2,2" />
-                    <path d="M50,15 L60,40 L85,40 L65,55 L75,80 L50,65 L25,80 L35,55 L15,40 L40,40 Z" />
-                  </svg>
+                {/* Translucent Background Watermark Logo & Arabic Text */}
+                <div className="absolute inset-0 flex flex-col items-center justify-between py-28 pointer-events-none select-none z-0">
+                  {/* Top Arabic Text Watermark */}
+                  <div className="text-center font-amiri text-[42px] text-[#086b51] opacity-[0.02] rotate-[-10deg] tracking-wider font-bold select-none w-full whitespace-nowrap">
+                    مَعْهَدُ الْعُلُومِ الْإِنْسَانِيَّةِ وَالرُّوحِيَّةِ
+                  </div>
+                  {/* Center Medallion Watermark */}
+                  <div className="flex items-center justify-center opacity-[0.025] my-auto">
+                    <svg className="w-[110mm] h-[110mm] text-[#086b51]" viewBox="0 0 100 100" fill="currentColor">
+                      <circle cx="50" cy="50" r="46" stroke="currentColor" strokeWidth="0.8" fill="none" />
+                      <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="0.4" fill="none" strokeDasharray="1,1" />
+                      {/* 8-pointed Islamic Star */}
+                      <path d="M50,4 L64,36 L96,50 L64,64 L50,96 L36,64 L4,50 L36,36 Z" fill="none" stroke="currentColor" strokeWidth="0.8" />
+                      <path d="M50,15 L59,41 L85,50 L59,59 L50,85 L41,59 L15,50 L41,41 Z" fill="none" stroke="currentColor" strokeWidth="0.4" />
+                      {/* Center Arabic calligraphic representation "العلم" */}
+                      <text x="50" y="55" fontSize="16" fontFamily="'Amiri', serif" fontWeight="bold" textAnchor="middle" fill="currentColor">العلم</text>
+                    </svg>
+                  </div>
+                  {/* Bottom Arabic Text Watermark */}
+                  <div className="text-center font-amiri text-[56px] text-[#086b51] opacity-[0.02] rotate-[10deg] tracking-wider font-bold select-none w-full whitespace-nowrap">
+                    وَقُلْ رَبِّ زِدْنِي عِلْمًا
+                  </div>
                 </div>
 
                 {/* Double Border Frame */}
@@ -318,60 +411,99 @@ export default function EleveDashboard() {
                 {/* Inner gold border */}
                 <div className="absolute inset-6 border-[2px] border-[#c8a96e] pointer-events-none"></div>
 
+                {/* Corner Ornaments */}
+                {/* Top Left */}
+                <div className="absolute top-7 left-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80">
+                  <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
+                    <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
+                    <circle cx="20" cy="20" r="8" />
+                  </svg>
+                </div>
+                {/* Top Right */}
+                <div className="absolute top-7 right-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80 rotate-90">
+                  <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
+                    <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
+                    <circle cx="20" cy="20" r="8" />
+                  </svg>
+                </div>
+                {/* Bottom Left */}
+                <div className="absolute bottom-7 left-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80 -rotate-90">
+                  <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
+                    <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
+                    <circle cx="20" cy="20" r="8" />
+                  </svg>
+                </div>
+                {/* Bottom Right */}
+                <div className="absolute bottom-7 right-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80 rotate-180">
+                  <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
+                    <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
+                    <circle cx="20" cy="20" r="8" />
+                  </svg>
+                </div>
+
                 <div className="relative z-10 flex flex-col justify-between h-full p-4">
                   {/* Certificate Header */}
                   <div className="text-center space-y-4">
-                    {/* Emblem */}
-                    <div className="flex justify-center">
-                      <div className="w-16 h-16 rounded-full border-2 border-[#086b51] p-[2px] flex items-center justify-center bg-white shadow-sm">
-                        <div className="w-full h-full bg-[#086b51] rounded-full flex items-center justify-center text-white font-black italic text-sm">
-                          I
-                        </div>
-                      </div>
+                    {/* Logo ISHES */}
+                    <div className="flex justify-center select-none pt-2">
+                      <img 
+                        src="/logo-ishes-institut-arabe.png" 
+                        alt="Logo ISHES" 
+                        className="h-20 w-auto object-contain"
+                      />
                     </div>
                     
                     <div className="space-y-1">
-                      <h1 className="text-[15px] font-bold tracking-[0.2em] font-sans text-gray-900 uppercase">
+                      <h1 className="text-[16px] font-bold tracking-[0.25em] font-cinzel text-gray-900 uppercase">
                         Institut des Sciences Humaines & Spirituelles
                       </h1>
-                      <p className="text-[9px] font-sans font-bold tracking-widest text-[#c8a96e] uppercase">
+                      <p className="text-[12px] font-amiri font-bold text-[#c8a96e] tracking-wide">
+                        مَعْهَدُ الْعُلُومِ الْإِنْسَانِيَّةِ وَالرُّوحِيَّةِ
+                      </p>
+                      <p className="text-[8px] font-sans font-bold tracking-widest text-gray-400 uppercase mt-0.5">
                         Établissement d'Enseignement Privé
                       </p>
                     </div>
 
-                    <div className="w-24 h-[1px] bg-[#c8a96e] mx-auto my-3"></div>
+                    <div className="flex items-center justify-center gap-4 my-2 select-none">
+                      <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#c8a96e]"></div>
+                      <div className="text-[#c8a96e] text-xs">◆</div>
+                      <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#c8a96e]"></div>
+                    </div>
 
                     <div className="space-y-1">
-                      <h2 className="text-[28px] font-black tracking-widest text-[#086b51] uppercase font-sans">
+                      <h2 className="text-[30px] font-bold tracking-[0.18em] text-[#086b51] uppercase font-cinzel">
                         Certificat de Scolarité
                       </h2>
-                      <p className="text-[11px] font-sans font-bold text-gray-500 uppercase tracking-widest">
-                        Année Académique {academicYear.replace('-', ' - ')}
+                      <p className="text-[11px] font-playfair italic font-medium text-gray-500 tracking-wider">
+                        Attestation officielle d'inscription pour l'année académique {academicYear.replace('-', ' - ')}
                       </p>
                     </div>
                   </div>
 
                   {/* Certificate Body */}
-                  <div className="my-10 space-y-8 px-6 text-center text-[13px] leading-relaxed">
-                    <p className="italic text-gray-600">
+                  <div className="my-6 space-y-6 px-8 text-center leading-relaxed">
+                    <p className="font-playfair italic text-gray-600 text-[14px]">
                       Le Secrétariat Académique de l'Institut des Sciences Humaines et Spirituelles (ISHES) certifie par la présente que :
                     </p>
 
-                    <div className="space-y-1 py-4">
+                    <div className="space-y-1 py-2">
                       <p className="text-gray-400 font-sans text-[10px] font-black uppercase tracking-[0.25em]">Élève inscrit(e)</p>
-                      <h3 className="text-3xl font-black text-gray-900 tracking-wide font-serif capitalize">
-                        M. / Mme {certData.firstName} {certData.lastName}
+                      <h3 className="text-3xl font-bold text-gray-900 tracking-wide font-playfair capitalize">
+                        {certData.firstName} {certData.lastName}
                       </h3>
-                      <p className="text-[10px] font-sans text-gray-400 font-bold font-mono tracking-wider lowercase mt-1">{certData.email}</p>
+                      <p className="text-[10px] font-sans text-gray-400 font-semibold tracking-wider lowercase mt-0.5">{certData.email}</p>
                     </div>
 
-                    <p className="text-gray-600 leading-loose">
-                      est inscrit(e) et suit régulièrement les enseignements théoriques et pratiques dispensés au sein de notre établissement pour la formation d'excellence :
+                    <p className="font-playfair text-gray-600 text-[14px] leading-relaxed">
+                      est inscrit(e) et suit régulièrement les enseignements théoriques et pratiques dispensés au sein de notre établissement pour le cursus d'excellence :
                     </p>
 
-                    <div className="bg-[#086b51]/5 border border-[#086b51]/10 rounded-2xl p-6 mx-auto max-w-lg space-y-2">
-                      <span className="text-[9px] font-sans font-black text-[#086b51] uppercase tracking-widest">Cursus Validé</span>
-                      <h4 className="text-lg font-black text-gray-900 tracking-wide font-serif uppercase text-[#086b51]">
+                    <div className="bg-[#FAF8F5]/80 backdrop-blur-sm border border-[#c8a96e]/30 rounded-2xl p-6 mx-auto max-w-xl shadow-sm space-y-2 relative">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#086b51] text-[#FAF8F5] text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-full whitespace-nowrap">
+                        Cursus Validé
+                      </div>
+                      <h4 className="text-lg font-bold text-[#086b51] tracking-wide font-cinzel pt-1">
                         {certData.formationTitle}
                       </h4>
                       <div className="flex items-center justify-center gap-4 text-[10px] font-sans font-black text-gray-500 uppercase tracking-widest pt-1">
@@ -381,26 +513,26 @@ export default function EleveDashboard() {
                       </div>
                     </div>
 
-                    <p className="italic text-gray-500 text-[11px]">
+                    <p className="font-playfair italic text-gray-500 text-[11px] pt-1">
                       Ce certificat est délivré pour servir et valoir ce que de droit.
                     </p>
                   </div>
 
                   {/* Certificate Footer */}
-                  <div className="flex items-end justify-between border-t border-gray-100 pt-6">
+                  <div className="flex items-end justify-between border-t border-[#c8a96e]/20 pt-5 select-none">
                     {/* Official Seal / Stamp */}
                     <div className="flex flex-col items-center space-y-1">
                       <div className="w-20 h-20 text-[#c8a96e] opacity-90 relative flex items-center justify-center">
                         {/* Elegant stamp SVG representation */}
                         <svg className="w-full h-full" viewBox="0 0 100 100">
-                          <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="2" strokeDasharray="3,3" fill="none" />
-                          <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                          <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,3" fill="none" />
+                          <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="1" fill="none" />
                           <circle cx="50" cy="50" r="32" stroke="currentColor" strokeWidth="0.5" fill="none" />
                           {/* Inner star emblem */}
                           <path d="M50,38 L54,46 L62,46 L56,52 L58,60 L50,55 L42,60 L44,52 L38,46 L46,46 Z" fill="currentColor" opacity="0.3" />
                           {/* Circular seal text */}
                           <path id="seal-text-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="none" />
-                          <text fontSize="5.5" fontWeight="bold" fill="currentColor" letterSpacing="1">
+                          <text fontSize="5.2" fontWeight="bold" fill="currentColor" letterSpacing="0.8">
                             <textPath href="#seal-text-path" startOffset="0%">
                               • INSTITUT ISHES TOULOUSE • SCELLÉ DE L'ADMINISTRATION
                             </textPath>
@@ -412,24 +544,24 @@ export default function EleveDashboard() {
 
                     {/* Authenticity Identifier */}
                     <div className="text-center space-y-1 flex flex-col items-center">
-                      <span className="text-[10px] font-sans font-bold text-gray-700 italic">
+                      <span className="text-[10px] font-playfair font-bold text-gray-700 italic">
                         Fait à Toulouse, le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </span>
-                      <span className="text-[8px] font-sans font-bold font-mono text-[#c8a96e] uppercase tracking-wider bg-gray-50 border border-gray-100 px-3 py-1 rounded-md">
+                      <span className="text-[8px] font-sans font-bold font-mono text-[#c8a96e] uppercase tracking-wider bg-[#FAF8F5] border border-[#c8a96e]/20 px-3 py-1 rounded-md">
                         N° CERT-ISHES-2026-{certData.inscriptionId?.slice(-8).toUpperCase()}
                       </span>
                     </div>
 
                     {/* Signature */}
-                    <div className="text-center flex flex-col items-center space-y-2">
+                    <div className="text-center flex flex-col items-center space-y-1">
                       <span className="text-[9px] font-sans font-black text-gray-400 tracking-widest uppercase">Pour le Secrétariat Académique</span>
                       <div className="h-10 w-24 relative flex items-center justify-center">
                         {/* A beautiful calligraphic vector path representing the director signature */}
-                        <svg className="w-full h-full text-[#086b51] opacity-80" viewBox="0 0 100 40" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="w-full h-full text-[#086b51] opacity-80" viewBox="0 0 100 40" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M10,25 C25,25 35,5 45,25 C55,45 65,15 75,25 C80,30 90,30 95,20 M20,15 C35,15 45,15 50,30" />
                         </svg>
                       </div>
-                      <span className="text-[9px] font-serif font-black text-gray-800 italic">Direction de l'Enseignement</span>
+                      <span className="text-[9px] font-playfair font-bold text-gray-800 italic">Direction de l'Enseignement</span>
                     </div>
                   </div>
 
@@ -445,10 +577,25 @@ export default function EleveDashboard() {
                 Fermer
               </button>
               <button
-                onClick={handlePrint}
-                className="bg-[#086b51] hover:bg-[#075943] text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#086b51]/10 flex items-center gap-2 cursor-pointer"
+                onClick={handleDownloadPDF}
+                disabled={isGeneratingPdf}
+                className="bg-[#086b51] hover:bg-[#075943] text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#086b51]/10 flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Download className="w-3.5 h-3.5" /> Imprimer / PDF
+                {isGeneratingPdf ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Génération PDF...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-3.5 h-3.5" /> Télécharger PDF
+                  </>
+                )}
+              </button>
+              <button
+                onClick={handlePrint}
+                className="bg-[#c8a96e] hover:bg-[#b2935b] text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#c8a96e]/10 flex items-center gap-2 cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5" /> Imprimer
               </button>
             </div>
           </div>
