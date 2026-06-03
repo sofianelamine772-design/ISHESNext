@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/private/',
+      disallow: ['/private/', '/app/', '/api/'],
     },
     sitemap: 'https://www.ishes.fr/sitemap.xml',
   };

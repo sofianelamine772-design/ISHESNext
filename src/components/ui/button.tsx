@@ -18,7 +18,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
-        ishes: "bg-ishes-dark text-white rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-ishes-dark/20 hover:scale-[1.02] active:scale-[0.98] px-8",
+        ishes: "bg-gradient-to-br from-[#f3e3c3] via-[#cca862] to-[#ab843c] text-ishes-dark border border-ishes-dark/10 rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-ishes-gold/25 hover:scale-[1.02] active:scale-[0.98] px-8",
         "ishes-gold": "bg-gradient-to-br from-ishes-gold to-[#b0935b] text-white rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-ishes-gold/30 hover:scale-[1.02] active:scale-[0.98] px-8",
         "ishes-dark-gold": "bg-ishes-dark text-white border-2 border-ishes-gold rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-ishes-gold/20 hover:scale-[1.02] active:scale-[0.98] px-8",
         "ishes-outline": "bg-white text-ishes-dark border-2 border-ishes-dark rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-black/5 hover:scale-[1.02] active:scale-[0.98] px-8",

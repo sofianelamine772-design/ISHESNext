@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // Définition rigoureuse du type pour éviter les erreurs TypeScript
 interface ProgramSlot {
@@ -43,7 +44,7 @@ const presentielPrograms: PresentielProgram[] = [
     features: ["Lecture correcte", "Application des règles", "Fluidité", "Suivi WhatsApp"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/inscription?plan=presentiel-global&slot=lundi"
+    link: "/fr/cours-lecture-tajwid"
   },
   {
     id: "arabe-adulte",
@@ -56,7 +57,7 @@ const presentielPrograms: PresentielProgram[] = [
     features: ["Lecture & Écriture", "Conversation", "Grammaire", "Immersion"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/inscription?plan=presentiel-global&slot=mardi"
+    link: "/fr/cours-arabe-adulte"
   },
   {
     id: "enfant-mercredi-presentiel",
@@ -69,7 +70,7 @@ const presentielPrograms: PresentielProgram[] = [
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/inscription?plan=presentiel-global&slot=mercredi"
+    link: "/fr/cours-arabe-enfant"
   },
   {
     id: "enfant-samedi-presentiel",
@@ -82,7 +83,7 @@ const presentielPrograms: PresentielProgram[] = [
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/inscription?plan=presentiel-global&slot=samedi"
+    link: "/fr/cours-arabe-enfant"
   },
   {
     id: "enfant-dimanche-presentiel",
@@ -95,11 +96,12 @@ const presentielPrograms: PresentielProgram[] = [
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/inscription?plan=presentiel-global&slot=dimanche"
+    link: "/fr/cours-arabe-enfant"
   }
 ];
 
 export default function InstitutPage() {
+  const router = useRouter();
   const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>({});
   const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
 
@@ -186,7 +188,8 @@ export default function InstitutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="group relative flex flex-col rounded-[2rem] bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 overflow-hidden"
+                onClick={() => router.push(program.link)}
+                className="cursor-pointer group relative flex flex-col rounded-[2rem] bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 overflow-hidden"
               >
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#c8a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
@@ -279,12 +282,14 @@ export default function InstitutPage() {
                     <div className="grid grid-cols-2 gap-3">
                       <Link 
                         href={program.link}
+                        onClick={(e) => e.stopPropagation()}
                         className="flex items-center justify-center bg-gray-50 text-gray-600 hover:bg-gray-100 py-3.5 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest"
                       >
                         Infos
                       </Link>
                       <Link 
                         href={`/inscription?plan=${program.formationId}&slot=${program.day?.toLowerCase() || ''}`}
+                        onClick={(e) => e.stopPropagation()}
                         className={`flex items-center justify-center py-3.5 rounded-2xl shadow-lg transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
                           getSlotStatus(program.day)?.est_plein
                             ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 

@@ -390,15 +390,15 @@ export default function AdminDashboard() {
               <div className="h-full flex flex-col overflow-hidden">
                 {/* Class Header */}
                 <div className="pb-6 md:pb-8 mb-4 border-b border-gray-100">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform ${selectedClass.type === 'distanciel' ? 'bg-ishes-dark text-white shadow-ishes-dark/20' : 'bg-ishes-green text-white shadow-ishes-green/20'}`}>
+                  <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-6 md:mb-8 gap-6">
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform shrink-0 ${selectedClass.type === 'distanciel' ? 'bg-ishes-dark text-white shadow-ishes-dark/20' : 'bg-ishes-green text-white shadow-ishes-green/20'}`}>
                         {selectedClass.type === 'distanciel' ? <Monitor className="w-6 h-6 md:w-7 md:h-7" /> : <School className="w-6 h-6 md:w-7 md:h-7" />}
                       </div>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <span className="ishes-label mb-1 block text-[10px]">Gestion de classe</span>
-                        <h2 className="text-xl md:text-3xl ishes-heading text-ishes-dark leading-none truncate max-w-[200px] md:max-w-none">{selectedClass.name}</h2>
-                        <div className="flex items-center gap-3 mt-2">
+                        <h2 className="text-xl md:text-2xl xl:text-3xl ishes-heading text-ishes-dark leading-snug break-words">{selectedClass.name}</h2>
+                        <div className="flex flex-wrap items-center gap-3 mt-2">
                           <span className={`text-[8px] md:text-[10px] font-black uppercase italic px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-green-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
                             Mode {selectedClass.type}
@@ -409,7 +409,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 shrink-0">
                       <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={openAddStudentModal}>
                         <Users className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Affecter Élève</span>
                         <span className="sm:hidden text-[10px]">Affecter</span>

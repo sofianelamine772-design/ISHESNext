@@ -429,20 +429,20 @@ function EtudiantsContent() {
 
                 <div className="px-6 md:px-8 pb-8 flex-1">
                   {/* Identity Header */}
-                  <div className="flex flex-col md:flex-row md:items-end justify-between -mt-16 md:-mt-20 mb-10 md:mb-12 gap-6 relative z-10">
-                    <div className="flex items-end gap-4 md:gap-6">
-                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-2xl shadow-ishes-gold/20 border border-gray-100">
+                  <div className="flex flex-col xl:flex-row xl:items-end justify-between -mt-16 md:-mt-20 mb-10 md:mb-12 gap-6 relative z-10">
+                    <div className="flex items-end gap-4 md:gap-6 flex-1 min-w-0">
+                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-2xl shadow-ishes-gold/20 border border-gray-100 shrink-0">
                         <div className="w-full h-full bg-ishes-gold rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-ishes-dark">
                           {selectedStudent.avatar}
                         </div>
                       </div>
-                      <div className="pb-1 md:pb-2">
+                      <div className="pb-1 md:pb-2 min-w-0 flex-1">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <h2 className="text-2xl md:text-4xl font-black text-ishes-dark tracking-tight leading-none truncate max-w-[200px] md:max-w-none">{selectedStudent.name}</h2>
+                        <h2 className="text-2xl md:text-4xl font-black text-ishes-dark tracking-tight leading-snug break-words">{selectedStudent.name}</h2>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-green mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>
-                    <div className="flex gap-2 md:gap-3 pb-1 md:pb-2">
+                    <div className="flex gap-2 md:gap-3 pb-1 md:pb-2 shrink-0">
                       <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-[10px] md:text-xs" onClick={openEditModal}>
                         MODIFIER
                       </Button>

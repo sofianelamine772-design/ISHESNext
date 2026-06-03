@@ -3,9 +3,17 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.ishes.fr';
 
-  // Liste exhaustive de vos anciennes URL pour préserver le référencement
+  // Liste exhaustive de toutes les pages (root vitrine et pages fr) pour optimiser le SEO
   const routes = [
     '',
+    '/program',
+    '/formation-enseignant',
+    '/institut',
+    '/boutique',
+    '/contact',
+    '/test-positionnement',
+    '/conseil-spiritualite',
+    '/mentions-legales',
     '/fr',
     '/fr/boutique',
     '/fr/civilisation-arabo-musulmane',
@@ -22,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/cours-fiqh-malikite',
     '/fr/cours-lecture-tajwid',
     '/fr/cours-memoriser-coran',
+    '/fr/cours-particuliers',
     '/fr/cours-particuliers-coran',
     '/fr/cours-sciences-coran',
     '/fr/cours-sciences-hadith',
@@ -29,17 +38,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/cours-tajwid-intensif',
     '/fr/formation-nour-al-bayane',
     '/fr/formation-tarbya-islamya',
+    '/fr/pack-accompagnement',
     '/fr/plateforme-inscription',
     '/fr/question-spiritualite-islam',
+    '/fr/sciences-islamiques',
     '/fr/spiritualite-islam'
   ];
 
-  return routes.map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    // Les pages principales sont scannées plus souvent
-    changeFrequency: route === '' || route === '/fr' ? 'weekly' : 'monthly',
-    // Priorité plus élevée pour l'accueil
-    priority: route === '' || route === '/fr' ? 1 : 0.8,
-  }));
+  return routes.map((route) => {
+    const isMain = route === '' || route === '/fr' || route === '/program' || route === '/institut' || route === '/boutique';
+    return {
+      url: `${baseUrl}${route}`,
+      lastModified: new Date(),
+      changeFrequency: isMain ? 'weekly' : 'monthly',
+      priority: route === '' || route === '/fr' ? 1.0 : (isMain ? 0.9 : 0.8),
+    };
+  });
 }

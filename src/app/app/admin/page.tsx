@@ -46,6 +46,42 @@ export default async function AdminOverview() {
     console.error("Stripe Fetch Error:", err);
   }
 
+  // Fetch successful payments from Supabase directly
+  const { data: dbPayments } = await supabaseAdmin
+    .from('paiements')
+    .select('amount, created_at, status')
+    .eq('status', 'succeeded');
+
+  const monthlyData = [
+    { month: 'Jan', value: 0 },
+    { month: 'Fev', value: 0 },
+    { month: 'Mar', value: 0 },
+    { month: 'Avr', value: 0 },
+    { month: 'Mai', value: 0 },
+    { month: 'Jun', value: 0 },
+    { month: 'Jul', value: 0 },
+    { month: 'Aou', value: 0 },
+    { month: 'Sep', value: 0 },
+    { month: 'Oct', value: 0 },
+    { month: 'Nov', value: 0 },
+    { month: 'Dec', value: 0 },
+  ];
+
+  if (dbPayments) {
+    const currentYear = new Date().getFullYear();
+    dbPayments.forEach(p => {
+      const date = new Date(p.created_at);
+      if (date.getFullYear() === currentYear) {
+        const monthIndex = date.getMonth();
+        if (monthIndex >= 0 && monthIndex < 12) {
+          monthlyData[monthIndex].value += Number(p.amount || 0);
+        }
+      }
+    });
+  }
+
+  const maxRevenueValue = Math.max(...monthlyData.map(d => d.value), 1);
+
   const formatRevenue = (val: number) => {
     if (val >= 1000) return (val / 1000).toFixed(1) + "K€";
     return val.toFixed(0) + "€";
@@ -135,54 +171,53 @@ export default async function AdminOverview() {
                 <p className="text-xs md:text-sm font-medium text-gray-400 mt-1">Visualisation de vos revenus ce mois-ci.</p>
               </div>
 
-              {/* Chart Container */}
+               {/* Chart Container */}
               <div className="relative h-64 w-full mt-8 overflow-x-auto custom-scrollbar pb-4">
-                <div className="min-w-[600px] h-full relative">
-                  <div className="absolute inset-0 flex items-end justify-between gap-2 md:gap-4">
-                    {[
-                      { month: 'Jan', value: 35 },
-                      { month: 'Fev', value: 55 },
-                      { month: 'Mar', value: 42 },
-                      { month: 'Avr', value: 78 },
-                      { month: 'Mai', value: 85 },
-                      { month: 'Jun', value: 68 },
-                      { month: 'Jul', value: 48 },
-                      { month: 'Aou', value: 58 },
-                      { month: 'Sep', value: 72 },
-                      { month: 'Oct', value: 52 },
-                      { month: 'Nov', value: 64 },
-                      { month: 'Dec', value: 80 },
-                    ].map((item, index) => (
-                      <div key={index} className="flex-1 flex flex-col items-center gap-4 group relative">
-                        {/* Tooltip on hover */}
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 px-2 py-1 bg-ishes-dark text-white text-[10px] font-bold rounded shadow-xl pointer-events-none z-20">
-                          {item.value}K€
-                        </div>
-                        
-                        {/* Bar */}
-                        <div 
-                          className="w-full bg-[#E0E7FF] group-hover:bg-[#C7D2FE] transition-all duration-500 rounded-t-xl rounded-b-lg relative overflow-hidden"
-                          style={{ height: `${item.value}%` }}
-                        >
-                          {/* Shimmer effect */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </div>
-                        
-                        {/* Label */}
-                        <span className="text-[10px] font-black uppercase tracking-tight text-gray-400 group-hover:text-ishes-dark transition-colors">
-                          {item.month}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="min-w-[600px] h-full relative flex flex-col justify-end">
                   
-                  {/* Horizontal lines (Background) */}
-                  <div className="absolute inset-0 -z-10 flex flex-col justify-between pointer-events-none opacity-20">
-                    <div className="w-full border-t border-dashed border-gray-300"></div>
-                    <div className="w-full border-t border-dashed border-gray-300"></div>
-                    <div className="w-full border-t border-dashed border-gray-300"></div>
-                    <div className="w-full border-t border-dashed border-gray-300"></div>
+                  {/* Grid Lines behind the bars */}
+                  <div className="absolute inset-x-0 top-4 bottom-10 flex flex-col justify-between pointer-events-none z-0 opacity-40">
+                    <div className="w-full border-t border-dashed border-gray-200"></div>
+                    <div className="w-full border-t border-dashed border-gray-200"></div>
+                    <div className="w-full border-t border-dashed border-gray-200"></div>
+                    <div className="w-full border-t border-dashed border-gray-200"></div>
                   </div>
+
+                  {/* Bars Row */}
+                  <div className="h-[210px] w-full flex items-end justify-between gap-2 md:gap-4 relative z-10">
+                    {monthlyData.map((item, index) => {
+                      const percentHeight = maxRevenueValue > 0 ? (item.value / maxRevenueValue) * 100 : 0;
+                      return (
+                        <div key={index} className="flex-1 flex flex-col items-center justify-end h-full group relative">
+                          
+                          {/* Value text above the bar - ALWAYS VISIBLE */}
+                          <span className="text-[10px] font-black text-ishes-dark mb-1.5 opacity-90 transition-transform duration-300 group-hover:scale-110 group-hover:text-ishes-green shrink-0">
+                            {formatRevenue(item.value)}
+                          </span>
+                          
+                          {/* Bar Track (Transparent Grey Background) & Interactive Bar */}
+                          <div className="w-full h-full max-h-[155px] bg-gray-100/50 rounded-t-xl rounded-b-lg relative overflow-hidden flex items-end shadow-inner border border-gray-200/20">
+                            
+                            {/* Green Gradient Bar */}
+                            <div 
+                              className="w-full bg-gradient-to-t from-[#065440] via-ishes-green to-[#0ea880] rounded-t-xl rounded-b-lg transition-all duration-700 ease-out relative group-hover:brightness-105"
+                              style={{ height: `${percentHeight}%` }}
+                            >
+                              {/* Shimmer overlay on hover */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+
+                          </div>
+                          
+                          {/* Month Label */}
+                          <span className="text-[10px] font-black uppercase tracking-tight text-gray-400 mt-2 group-hover:text-ishes-dark transition-colors shrink-0">
+                            {item.month}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
                 </div>
               </div>
             </div>
