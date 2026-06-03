@@ -144,56 +144,12 @@ export default function EleveDashboard() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-            Assalamou alaykoum,<br />
-            <span className="text-[#086b51] italic">
-              {user?.firstName} {user?.lastName}
-            </span>
+            Assalamou alaykoum, <span className="text-[#086b51] italic">{user?.firstName} {user?.lastName}</span>
           </h2>
           <p className="text-gray-400 font-medium mt-4 text-lg">
             Heureux de vous retrouver pour votre apprentissage.
           </p>
         </div>
-        <Link 
-          href="/app/eleve/reinscription"
-          className="bg-[#086b51] text-white px-10 py-5 rounded-[2rem] font-black uppercase tracking-widest text-xs flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-[#086b51]/20"
-        >
-          Finaliser ma réinscription <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
-
-      {/* ─── QUICK STATUS ─── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-         <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
-            <div className="w-20 h-20 bg-emerald-50 text-[#086b51] rounded-[2rem] flex items-center justify-center shrink-0">
-               <ShieldCheck className="w-10 h-10" />
-            </div>
-            <div>
-               <div className="text-4xl font-black text-gray-900">Validé</div>
-               <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Statut du dossier</div>
-            </div>
-         </div>
-          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
-             <div className="w-20 h-20 bg-orange-50 text-orange-600 rounded-[2rem] flex items-center justify-center shrink-0">
-                <PlusSquare className="w-10 h-10" />
-             </div>
-             <div>
-                <div className="text-4xl font-black text-gray-900">{academicYear}</div>
-                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Année académique</div>
-             </div>
-          </div>
-          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 flex items-center gap-8 shadow-sm">
-             <div className="w-20 h-20 bg-emerald-50/50 text-[#086b51] rounded-[2rem] flex items-center justify-center shrink-0">
-                <GraduationCap className="w-10 h-10" />
-             </div>
-             <div className="min-w-0">
-                <div className="text-xl font-black text-gray-900 truncate" title={loadingCert ? "Chargement..." : certData?.formationTitle || "Aucune classe"}>
-                  {loadingCert ? "..." : certData?.formationTitle || "Non Inscrit"}
-                </div>
-                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1 truncate" title={loadingCert ? "..." : certData?.className || ""}>
-                  {loadingCert ? "..." : certData?.className || "Aucun groupe"}
-                </div>
-             </div>
-          </div>
       </div>
 
       {/* ─── WHATSAPP GROUP LINK ─── */}
@@ -231,7 +187,7 @@ export default function EleveDashboard() {
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <div className="border border-gray-100 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-lg hover:shadow-black/5 transition-all">
             <div className="flex items-center gap-5">
               <div className="w-14 h-14 bg-emerald-50 text-[#086b51] rounded-2xl flex items-center justify-center shrink-0">
@@ -259,21 +215,6 @@ export default function EleveDashboard() {
                 <Download className="w-3.5 h-3.5" /> Générer / Imprimer
               </button>
             )}
-          </div>
-
-          <div className="border border-gray-100 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 opacity-60 bg-gray-50/50">
-            <div className="flex items-center gap-5">
-              <div className="w-14 h-14 bg-gray-100 text-gray-400 rounded-2xl flex items-center justify-center shrink-0">
-                <FileText className="w-7 h-7" />
-              </div>
-              <div>
-                <h4 className="font-black text-gray-600 text-base md:text-lg">Fiches d'Évaluation</h4>
-                <p className="text-gray-400 text-xs font-medium mt-1">Relevés de notes et bulletins semestriels.</p>
-              </div>
-            </div>
-            <button disabled className="bg-gray-200 text-gray-400 rounded-2xl px-6 py-4 font-black text-[10px] uppercase tracking-widest shrink-0 h-12 cursor-not-allowed">
-              Non disponible
-            </button>
           </div>
         </div>
       </div>
