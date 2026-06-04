@@ -672,13 +672,35 @@ export async function deleteStudentAction(id: string) {
       }
     }
 
-    // 2. Delete related records in Supabase to avoid Foreign Key constraint errors
-    await supabaseAdmin.from('inscriptions').delete().eq('etudiant_id', id);
-    await supabaseAdmin.from('paiements').delete().eq('etudiant_id', id);
-    await supabaseAdmin.from('messages').delete().eq('sender_id', id);
-    await supabaseAdmin.from('messages').delete().eq('receiver_id', id);
+    // 2. Find all children if this student is a parent
+    const { data: children } = await supabaseAdmin
+      .from('etudiants')
+      .select('id')
+      .eq('parent_id', id);
 
-    // 3. Delete the student
+    const idsToDelete = [id];
+    if (children && children.length > 0) {
+      children.forEach(c => idsToDelete.push(c.id));
+    }
+
+    // 3. Delete related records in Supabase for the student AND all their children
+    // Using .in('etudiant_id', idsToDelete) to cover everything in one go
+    await supabaseAdmin.from('inscriptions').delete().in('etudiant_id', idsToDelete);
+    await supabaseAdmin.from('paiements').delete().in('etudiant_id', idsToDelete);
+    
+    // For messages, we only care about the parent ID usually, but let's cover all
+    for (const studentId of idsToDelete) {
+      await supabaseAdmin.from('messages').delete().eq('sender_id', studentId);
+      await supabaseAdmin.from('messages').delete().eq('receiver_id', studentId);
+    }
+
+    // 4. Delete the children first (to avoid foreign key parent_id errors if no CASCADE)
+    if (children && children.length > 0) {
+      const childIds = children.map(c => c.id);
+      await supabaseAdmin.from('etudiants').delete().in('id', childIds);
+    }
+
+    // 5. Delete the main student (parent)
     const { error } = await supabaseAdmin
       .from('etudiants')
       .delete()
