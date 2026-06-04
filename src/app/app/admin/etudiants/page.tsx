@@ -10,6 +10,7 @@ import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
+import { getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
 
 // Types
 type StudentDetail = {
@@ -38,6 +39,12 @@ function EtudiantsContent() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [payments, setPayments] = useState<any[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
+  
+  // Only current and next academic year
+  const currentAcademicYear = getCurrentAcademicYear();
+  const nextAcademicYear = getNextAcademicYear();
+  const academicYearOptions = [currentAcademicYear, nextAcademicYear];
+  const [selectedYear, setSelectedYear] = useState<string>(currentAcademicYear);
 
   // Modal State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -78,7 +85,7 @@ function EtudiantsContent() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const result = await fetchStudentsAction();
+      const result = await fetchStudentsAction(selectedYear);
       if (result.success && result.data) {
         const formatted = result.data.map((s: any) => {
           const latestInscription = s.inscriptions?.[0];
@@ -126,7 +133,7 @@ function EtudiantsContent() {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [selectedYear]);
 
   useEffect(() => {
     if (selectedStudentId) {
@@ -409,6 +416,16 @@ function EtudiantsContent() {
                   placeholder="Rechercher..."
                   className="w-full bg-gray-50 border border-gray-50 rounded-full pl-12 pr-6 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-green/5 shadow-sm transition-all font-medium"
                 />
+              </div>
+              <div className="mt-3">
+                <select 
+                  value={selectedYear} 
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                >
+                  <option value={currentAcademicYear}>Année Scolaire {currentAcademicYear}</option>
+                  <option value={nextAcademicYear}>Année Scolaire {nextAcademicYear}</option>
+                </select>
               </div>
             </div>
 

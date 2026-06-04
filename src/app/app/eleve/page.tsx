@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, BookOpen, ShieldCheck, FileText, Download, Loader2, X, AlertCircle } from "lucide-react";
+import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import Link from "next/link";
 import { fetchStudentCertificateDataAction } from "@/app/actions/students";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +11,8 @@ import { Button } from "@/components/ui/button";
 
 export default function EleveDashboard() {
   const { user } = useUser();
-  const [certData, setCertData] = useState<any | null>(null);
+  const [childrenData, setChildrenData] = useState<any[]>([]);
+  const [activeChildId, setActiveChildId] = useState<string | null>(null);
   const [loadingCert, setLoadingCert] = useState(true);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [certError, setCertError] = useState<string | null>(null);
@@ -34,8 +34,9 @@ export default function EleveDashboard() {
             lastName: user.lastName || "",
             phone: user.primaryPhoneNumber?.phoneNumber || ""
           });
-          if (res.success && res.data) {
-            setCertData(res.data);
+          if (res.success && res.data && res.data.length > 0) {
+            setChildrenData(res.data);
+            setActiveChildId(res.data[0]?.id || null);
           } else {
             setCertError(res.error || "Aucune inscription active trouvée.");
           }
@@ -49,6 +50,8 @@ export default function EleveDashboard() {
       loadCertData();
     }
   }, [user]);
+
+  const certData = childrenData.find(c => c.id === activeChildId);
 
   const handleDownloadPDF = async () => {
     if (isGeneratingPdf) return;
@@ -151,6 +154,30 @@ export default function EleveDashboard() {
           </p>
         </div>
       </div>
+
+      {/* ─── CHILDREN SELECTOR (FRATRIE) ─── */}
+      {childrenData.length > 1 && (
+        <div className="flex flex-wrap gap-3">
+          {childrenData.map((child) => (
+            <button
+              key={child.id}
+              onClick={() => setActiveChildId(child.id)}
+              className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 ${
+                activeChildId === child.id 
+                  ? "bg-[#086b51] text-white" 
+                  : "bg-white text-gray-500 hover:bg-gray-50 border border-gray-100"
+              }`}
+            >
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${
+                activeChildId === child.id ? "bg-white/20" : "bg-gray-100 text-gray-400"
+              }`}>
+                {child.firstName?.[0] || ""}
+              </div>
+              {child.firstName}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* ─── WHATSAPP GROUP LINK ─── */}
       {certData?.whatsappLink && (

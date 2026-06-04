@@ -6,6 +6,7 @@ import Stripe from "stripe";
 import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
+import { getCurrentAcademicYear } from "@/lib/utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -35,6 +36,8 @@ export async function registerStudentAction(formData: {
       .from('etudiants')
       .select('id')
       .ilike('email', formData.email)
+      .ilike('first_name', formData.prenom)
+      .ilike('last_name', formData.nom)
       .maybeSingle();
 
     if (fetchError) {
@@ -169,7 +172,8 @@ export async function registerStudentAction(formData: {
             etudiant_id: studentId,
             formation_id: formation!.id,
             class_id: dbClassId,
-            status: 'en_attente_daffectation'
+            status: 'en_attente_daffectation',
+            academic_year: getCurrentAcademicYear()
           });
         if (insError) throw insError;
       }
@@ -196,7 +200,8 @@ export async function registerStudentAction(formData: {
             .insert({
               formation_id: formation!.id,
               name: `Session ${new Date().getFullYear()}`,
-              type: 'distanciel'
+              type: 'distanciel',
+              academic_year: getCurrentAcademicYear()
             })
             .select()
             .single();
@@ -233,7 +238,8 @@ export async function registerStudentAction(formData: {
           .insert({
             etudiant_id: studentId,
             class_id: finalClassId,
-            status: 'en_attente'
+            status: 'en_attente',
+            academic_year: getCurrentAcademicYear()
           });
         if (insError) throw insError;
       }
@@ -247,9 +253,9 @@ export async function registerStudentAction(formData: {
   }
 }
 
-export async function fetchStudentsAction() {
+export async function fetchStudentsAction(academicYear?: string) {
   try {
-    const { data, error } = await supabaseAdmin
+    let query = supabaseAdmin
       .from('etudiants')
       .select(`
         *,
@@ -257,6 +263,7 @@ export async function fetchStudentsAction() {
           status,
           formation_id,
           class_id,
+          academic_year,
           formations (title),
           classes (
             name,
@@ -266,7 +273,25 @@ export async function fetchStudentsAction() {
       `)
       .order('created_at', { ascending: false });
     
+    // If we want to filter students by academic year, we'd ideally filter on inscriptions
+    // For now, we'll fetch all students and filter later or let the frontend do it if complex, 
+    // but we can filter by querying inscriptions specifically if needed.
+    // If we want to filter students by academic year, we filter on inscriptions
+    let { data, error } = await query;
+    
     if (error) throw error;
+    
+    if (data && academicYear) {
+      data = data.filter((student: any) => 
+        student.inscriptions && student.inscriptions.some((ins: any) => ins.academic_year === academicYear)
+      );
+    }
+    
+    // Filtrer les étudiants "en_attente" (non payés) pour qu'ils n'apparaissent pas dans le logiciel
+    if (data) {
+      data = data.filter((student: any) => student.status !== 'en_attente');
+    }
+    
     return { success: true, data };
   } catch (err) {
     console.error("Fetch Action Error:", err);
@@ -282,6 +307,7 @@ export async function fetchStudentByIdAction(id: string) {
         *,
         inscriptions (
           status,
+          academic_year,
           formations (title),
           classes (name)
         )
@@ -313,19 +339,25 @@ export async function updateClassWhatsappAction(classId: string, whatsappLink: s
   }
 }
 
-export async function fetchClassesAction() {
+export async function fetchClassesAction(academicYear?: string) {
   try {
-    // On récupère les classes avec les infos de formation
-    const { data: classes, error: cError } = await supabaseAdmin
+    let query = supabaseAdmin
       .from('classes')
       .select(`
         *,
         formations (title),
         inscriptions (
+          status,
           etudiant_id,
-          etudiants (first_name, last_name, email, created_at)
+          etudiants (first_name, last_name, email, created_at, status)
         )
       `);
+    
+    if (academicYear) {
+      query = query.eq('academic_year', academicYear);
+    }
+    
+    const { data: classes, error: cError } = await query;
     
     if (cError) throw cError;
 
@@ -336,13 +368,15 @@ export async function fetchClassesAction() {
       capacity_limit: c.capacity_limit || 23,
       formationTitle: c.formations?.title,
       whatsappLink: c.whatsapp_link || null,
-      students: c.inscriptions.map((i: any) => ({
-        id: i.etudiant_id,
-        name: `${i.etudiants?.first_name || ''} ${i.etudiants?.last_name || ''}`.trim(),
-        email: i.etudiants?.email,
-        avatar: (i.etudiants?.first_name?.[0] || '') + (i.etudiants?.last_name?.[0] || ''),
-        dateJoined: new Date(i.etudiants?.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
-      }))
+      students: c.inscriptions
+        .filter((i: any) => i.status !== 'en_attente' && i.etudiants?.status !== 'en_attente')
+        .map((i: any) => ({
+          id: i.etudiant_id,
+          name: `${i.etudiants?.first_name || ''} ${i.etudiants?.last_name || ''}`.trim(),
+          email: i.etudiants?.email,
+          avatar: (i.etudiants?.first_name?.[0] || '') + (i.etudiants?.last_name?.[0] || ''),
+          dateJoined: new Date(i.etudiants?.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+        }))
     }));
 
     return { success: true, data: formatted };
@@ -392,7 +426,8 @@ export async function assignStudentToClassAction(studentId: string, classId: str
           etudiant_id: studentId,
           class_id: classId,
           formation_id: classe.formation_id,
-          status: 'actif'
+          status: 'actif',
+          academic_year: getCurrentAcademicYear()
         });
       
       if (error) throw error;
@@ -442,7 +477,8 @@ export async function createClassAction(data: { name: string, type: 'distanciel'
         name: data.name,
         type: data.type,
         formation_id: data.formation_id,
-        is_active: true
+        is_active: true,
+        academic_year: getCurrentAcademicYear()
       })
       .select()
       .single();
@@ -477,10 +513,13 @@ export async function fetchStudentsWaitingAssignmentAction() {
 
     // Filtrer côté serveur pour simplifier : 
     // On garde ceux qui n'ont AUCUNE inscription OU au moins une inscription sans class_id
-    const filtered = data.filter((s: any) => {
+    let filtered = data.filter((s: any) => {
       if (!s.inscriptions || s.inscriptions.length === 0) return true;
       return s.inscriptions.some((i: any) => !i.class_id || i.status === 'en_attente_daffectation');
     });
+
+    // Ne pas afficher les étudiants "en_attente" (non payés)
+    filtered = filtered.filter((s: any) => s.status !== 'en_attente');
 
     return { success: true, data: filtered };
   } catch (err) {
@@ -851,116 +890,65 @@ export async function syncStudentStateOnLogin(profile: {
       .maybeSingle();
 
     if (!etudiant) {
-      // 2. Check if a temp student exists under their email
-      const { data: tempEtudiant } = await supabaseAdmin
+      // 2. The user is logging in for the first time.
+      // Find all students created manually or via Stripe with this email
+      const { data: tempEtudiants, error: fetchErr } = await supabaseAdmin
         .from('etudiants')
         .select('*')
-        .ilike('email', email)
-        .maybeSingle();
+        .ilike('email', email);
 
-      if (tempEtudiant) {
-        const oldId = tempEtudiant.id;
-        console.log(`[SYNC ON LOGIN] Migrating student ${email} (${oldId} -> ${clerkUserId})`);
+      const isAdmin = isAdminEmail(email);
 
-        // Rename old email to release the unique constraint
-        const tempEmail = `migrating_${Date.now()}_${email}`;
-        await supabaseAdmin
-          .from('etudiants')
-          .update({ email: tempEmail })
-          .eq('id', oldId);
+      // We create a "Parent" or "Admin" profile with the Clerk ID
+      const { data: newParent, error: insertError } = await supabaseAdmin
+        .from('etudiants')
+        .insert({
+          id: clerkUserId,
+          email: email,
+          first_name: firstName || '',
+          last_name: lastName || '',
+          phone: phone || '',
+          role: isAdmin ? 'admin' : (tempEtudiants && tempEtudiants.length > 0 ? 'parent' : 'eleve'),
+          status: 'actif'
+        })
+        .select('*')
+        .single();
 
-        // Insert new student with Clerk ID
-        const { error: insertError } = await supabaseAdmin
-          .from('etudiants')
-          .insert({
-            id: clerkUserId,
-            email: email,
-            first_name: firstName || '',
-            last_name: lastName || '',
-            phone: phone || '',
-            role: tempEtudiant.role || 'eleve',
-            status: tempEtudiant.status || 'actif',
-            parent_first_name: tempEtudiant.parent_first_name,
-            parent_last_name: tempEtudiant.parent_last_name
-          });
+      if (insertError) {
+        console.error('[SYNC ON LOGIN] Auto-create parent/student error:', insertError);
+        return { success: false, error: "Erreur lors de la création du profil" };
+      }
 
-        if (insertError) {
-          console.error('[SYNC ON LOGIN] Migration insert error:', insertError);
-          // Rollback rename
-          await supabaseAdmin
-            .from('etudiants')
-            .update({ email: email })
-            .eq('id', oldId);
-          return { success: false, error: "Erreur lors de la création du profil" };
-        }
+      etudiant = newParent;
 
-        // Transfer relationships
-        await supabaseAdmin
-          .from('inscriptions')
-          .update({ etudiant_id: clerkUserId })
-          .eq('etudiant_id', oldId);
-
-        await supabaseAdmin
-          .from('paiements')
-          .update({ etudiant_id: clerkUserId })
-          .eq('etudiant_id', oldId);
-
-        await supabaseAdmin
-          .from('messages')
-          .update({ sender_id: clerkUserId })
-          .eq('sender_id', oldId);
-
-        await supabaseAdmin
-          .from('messages')
-          .update({ receiver_id: clerkUserId })
-          .eq('receiver_id', oldId);
-
-        // Delete temporary record
-        await supabaseAdmin
-          .from('etudiants')
-          .delete()
-          .eq('id', oldId);
-
-        // Reload the migrated student record
-        const { data: migrated } = await supabaseAdmin
-          .from('etudiants')
-          .select('*')
-          .eq('id', clerkUserId)
-          .maybeSingle();
-        
-        etudiant = migrated;
-      } else {
-        // If they don't exist in DB at all, auto-create them
-        const isAdmin = isAdminEmail(email);
-
-        const { data: newEtudiant, error: insertError } = await supabaseAdmin
-          .from('etudiants')
-          .insert({
-            id: clerkUserId,
-            email: email,
-            first_name: firstName || '',
-            last_name: lastName || '',
-            phone: phone || '',
-            role: isAdmin ? 'admin' : 'eleve',
-            status: 'actif'
-          })
-          .select('*')
-          .single();
-
-        if (insertError) {
-          console.error('[SYNC ON LOGIN] Auto-create student error:', insertError);
-        } else {
-          etudiant = newEtudiant;
+      // 3. Link all children to this parent
+      if (tempEtudiants && tempEtudiants.length > 0) {
+        console.log(`[SYNC ON LOGIN] Found ${tempEtudiants.length} children for ${email}. Linking to parent ${clerkUserId}`);
+        for (const child of tempEtudiants) {
+          if (child.id !== clerkUserId) {
+            await supabaseAdmin
+              .from('etudiants')
+              .update({ parent_id: clerkUserId })
+              .eq('id', child.id);
+          }
         }
       }
     }
 
-    // 3. Check for unpaid inscriptions to sync Stripe payments
+    // 4. Sync Stripe payments for all children of this parent
     if (etudiant) {
+      // Find all children IDs (or just the parent ID if they have no separate children records)
+      const { data: children } = await supabaseAdmin
+        .from('etudiants')
+        .select('id')
+        .or(`id.eq.${clerkUserId},parent_id.eq.${clerkUserId}`);
+      
+      const familyIds = children ? children.map(c => c.id) : [clerkUserId];
+
       const { data: inscriptions } = await supabaseAdmin
         .from('inscriptions')
         .select('*')
-        .eq('etudiant_id', clerkUserId);
+        .in('etudiant_id', familyIds);
 
       const hasUnpaid = inscriptions?.some(ins => ins.paid_status === 'impaye' || ins.status === 'en_attente' || ins.status === 'en_attente_daffectation');
 
@@ -1041,7 +1029,8 @@ export async function syncStudentStateOnLogin(profile: {
                     formation_id: formationUuid,
                     class_id: classId,
                     status: 'valide',
-                    paid_status: 'paye'
+                    paid_status: 'paye',
+                    academic_year: getCurrentAcademicYear()
                   })
                   .select('id')
                   .single();
@@ -1175,7 +1164,8 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
                       formation_id: formationUuid,
                       class_id: classId,
                       status: 'valide',
-                      paid_status: 'paye'
+                      paid_status: 'paye',
+                      academic_year: getCurrentAcademicYear()
                     })
                     .select('id')
                     .single();
@@ -1248,52 +1238,68 @@ export async function fetchStudentCertificateDataAction(profile: {
     // Sync student state on login (handles missing Clerk ID migrations and Stripe webhook delays)
     await syncStudentStateOnLogin(profile);
 
-    const { data: etudiant, error: eError } = await supabaseAdmin
+    const { data: familyMembers, error: familyError } = await supabaseAdmin
       .from('etudiants')
       .select('*')
-      .eq('id', clerkUserId)
-      .maybeSingle();
+      .or(`id.eq.${clerkUserId},parent_id.eq.${clerkUserId}`);
     
-    if (eError || !etudiant) {
-      console.error("Student not found for certificate:", clerkUserId, eError);
+    if (familyError || !familyMembers || familyMembers.length === 0) {
+      console.error("No family members found for certificate:", clerkUserId, familyError);
       return { success: false, error: "Étudiant non trouvé" };
     }
 
-    const { data: inscription, error: iError } = await supabaseAdmin
+    const familyIds = familyMembers.map((m: any) => m.id);
+
+    const { data: inscriptions, error: iError } = await supabaseAdmin
       .from('inscriptions')
       .select(`
         id,
+        etudiant_id,
         status,
         created_at,
         formations (title),
         classes (name, type, whatsapp_link)
       `)
-      .eq('etudiant_id', etudiant.id)
+      .in('etudiant_id', familyIds)
       .in('status', ['valide', 'actif'])
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .order('created_at', { ascending: false });
 
-    if (iError || !inscription) {
-      console.error("No active inscription found for certificate:", etudiant.id, iError);
+    if (iError) {
+      console.error("Error fetching active inscriptions for family:", familyIds, iError);
       return { success: false, error: "Aucune inscription active trouvée" };
+    }
+
+    // Map each child to their latest active inscription
+    const childrenData = familyMembers
+      .map((member: any) => {
+        const memberInscriptions = inscriptions?.filter((i: any) => i.etudiant_id === member.id) || [];
+        const latestInscription = memberInscriptions[0]; // Already ordered by created_at DESC
+        
+        if (!latestInscription) return null;
+
+        return {
+          id: member.id,
+          firstName: member.first_name || '',
+          lastName: member.last_name || '',
+          email: member.email,
+          dateJoined: member.created_at,
+          inscriptionId: latestInscription.id,
+          inscriptionDate: latestInscription.created_at,
+          formationTitle: (latestInscription.formations as any)?.title || 'FORMATION ISHES',
+          className: (latestInscription.classes as any)?.name || 'Session Standard',
+          classType: (latestInscription.classes as any)?.type || 'distanciel',
+          whatsappLink: (latestInscription.classes as any)?.whatsapp_link || null,
+        };
+      })
+      .filter(Boolean); // Remove family members without active inscriptions
+
+    if (childrenData.length === 0) {
+      return { success: false, error: "Aucune inscription active trouvée pour cette famille." };
     }
 
     return {
       success: true,
-      data: {
-        id: etudiant.id,
-        firstName: etudiant.first_name || '',
-        lastName: etudiant.last_name || '',
-        email: etudiant.email,
-        dateJoined: etudiant.created_at,
-        inscriptionId: inscription.id,
-        inscriptionDate: inscription.created_at,
-        formationTitle: (inscription.formations as any)?.title || 'FORMATION ISHES',
-        className: (inscription.classes as any)?.name || 'Session Standard',
-        classType: (inscription.classes as any)?.type || 'distanciel',
-        whatsappLink: (inscription.classes as any)?.whatsapp_link || null,
-      }
+      data: childrenData
     };
   } catch (err: any) {
     console.error("Certificate Data Error:", err);

@@ -7,7 +7,7 @@ import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Se
 import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction, createStudentManualAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
-import { cn } from "@/lib/utils";
+import { cn, getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
 
 // Types
 type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string };
@@ -35,6 +35,7 @@ export default function AdminDashboard() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [studentDetail, setStudentDetail] = useState<any | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
+  const [selectedYear, setSelectedYear] = useState<string>(getCurrentAcademicYear());
 
   // New states for modals
   const [showNewClassModal, setShowNewClassModal] = useState(false);
@@ -95,7 +96,7 @@ export default function AdminDashboard() {
   const fetchClasses = async () => {
     setLoading(true);
     try {
-      const result = await fetchClassesAction();
+      const result = await fetchClassesAction(selectedYear);
       if (result.success && result.data) {
         setClasses(result.data);
         if (result.data.length > 0 && !selectedClassId) setSelectedClassId(result.data[0].id);
@@ -112,7 +113,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchClasses();
-  }, []);
+  }, [selectedYear]);
 
   const handleCreateClass = async () => {
     if (!newClassData.name || !newClassData.formation_id) return;
@@ -300,6 +301,16 @@ export default function AdminDashboard() {
                   placeholder="Rechercher une classe..."
                   className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green transition-all"
                 />
+              </div>
+              <div className="mt-3">
+                <select 
+                  value={selectedYear} 
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                >
+                  <option value={getCurrentAcademicYear()}>Année Scolaire {getCurrentAcademicYear()}</option>
+                  <option value={getNextAcademicYear()}>Année Scolaire {getNextAcademicYear()}</option>
+                </select>
               </div>
             </div>
 

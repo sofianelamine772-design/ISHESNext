@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { getCurrentAcademicYear } from '@/lib/utils';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as any, // Suppression de l'erreur TS
@@ -142,7 +143,8 @@ export async function POST(req: Request) {
               formation_id: formationUuid,
               class_id: classId,
               status: 'valide',
-              paid_status: 'paye'
+              paid_status: 'paye',
+              academic_year: getCurrentAcademicYear()
             })
             .select('id')
             .single();
