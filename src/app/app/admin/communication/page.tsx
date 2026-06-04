@@ -33,7 +33,16 @@ export default function AdminCommunicationPage() {
   useEffect(() => {
     fetchStudentsAndClasses();
     fetchConversations();
-  }, []);
+    
+    // Auto-refresh pour simuler le temps réel
+    const interval = setInterval(() => {
+      if (activeTab === "inbox") {
+        fetchConversations();
+      }
+    }, 15000); // toutes les 15 secondes
+    
+    return () => clearInterval(interval);
+  }, [activeTab]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -178,7 +187,7 @@ export default function AdminCommunicationPage() {
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0 z-10 sticky top-0">
           <h1 className="text-2xl ishes-heading text-ishes-dark font-black uppercase tracking-tight">Communication</h1>
           <div className="flex p-1 bg-gray-100 rounded-2xl">
-            <button onClick={() => setActiveTab("inbox")} className={`flex items-center gap-2 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "inbox" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
+            <button onClick={() => { setActiveTab("inbox"); fetchConversations(); }} className={`flex items-center gap-2 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "inbox" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
               <Inbox className="w-4 h-4" /> Boîte de réception
             </button>
             <button onClick={() => setActiveTab("send")} className={`flex items-center gap-2 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "send" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>

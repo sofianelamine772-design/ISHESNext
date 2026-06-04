@@ -69,7 +69,7 @@ export async function POST(req: Request) {
             .eq('etudiant_id', receiver_id);
           if (data) pushSubs = data;
         } 
-        else if (type === 'announcement') {
+        else if (type === 'global') {
           // Message global : tout le monde
           const { data } = await supabaseAdmin
             .from('push_subscriptions')
@@ -234,8 +234,7 @@ export async function GET(req: Request) {
         .from('messages')
         .update({ is_read: true })
         .eq('sender_id', clerkId)
-        .eq('receiver_id', 'admin_system')
-        .eq('is_read', false);
+        .eq('receiver_id', 'admin_system');
 
       // 2. Récupérer la conversation
       const { data, error } = await supabaseAdmin
