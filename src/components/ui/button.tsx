@@ -22,6 +22,7 @@ const buttonVariants = cva(
         "ishes-gold": "bg-gradient-to-br from-ishes-gold to-[#b0935b] text-white rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-ishes-gold/30 hover:scale-[1.02] active:scale-[0.98] px-8",
         "ishes-dark-gold": "bg-ishes-dark text-white border-2 border-ishes-gold rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-ishes-gold/20 hover:scale-[1.02] active:scale-[0.98] px-8",
         "ishes-outline": "bg-white text-ishes-dark border-2 border-ishes-dark rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-black/5 hover:scale-[1.02] active:scale-[0.98] px-8",
+        "ishes-green": "bg-gradient-to-br from-[#10b981] to-[#059669] text-white border border-[#059669]/20 rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-[#059669]/25 hover:scale-[1.02] active:scale-[0.98] px-8",
       },
       size: {
         default:

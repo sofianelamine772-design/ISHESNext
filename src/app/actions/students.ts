@@ -3,7 +3,7 @@
 
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import Stripe from "stripe";
-import { currentUser, auth } from "@clerk/nextjs/server";
+import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 
@@ -555,6 +555,19 @@ export async function createStudentManualAction(data: {
       await sendWelcomeEmail(data.email, data.first_name || 'Élève');
     } catch (mailErr) {
       console.error("Failed to send welcome email:", mailErr);
+    }
+
+    // Création de l'invitation Clerk
+    try {
+      const client = await clerkClient();
+      await client.invitations.createInvitation({
+        emailAddress: data.email,
+        publicMetadata: { role: 'etudiant' },
+        ignoreExisting: true // Évite une erreur si l'utilisateur a déjà été invité
+      });
+      console.log(`Clerk invitation sent to ${data.email}`);
+    } catch (clerkErr) {
+      console.error("Failed to create Clerk invitation:", clerkErr);
     }
 
     return { success: true, data: newStudent };

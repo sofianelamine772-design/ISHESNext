@@ -264,7 +264,7 @@ export default function AdminDashboard() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Formations & Classes</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes" size="sm" className="h-10 px-4 md:px-6" onClick={openNewClassModal}>
+            <Button variant="ishes-green" size="sm" className="h-10 px-4 md:px-6" onClick={openNewClassModal}>
               <Plus className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Nouvelle Classe</span>
               <span className="md:hidden">Nouv.</span>
             </Button>
@@ -414,7 +414,7 @@ export default function AdminDashboard() {
                         <Users className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Affecter Élève</span>
                         <span className="sm:hidden text-[10px]">Affecter</span>
                       </Button>
-                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
+                      <Button variant="ishes-green" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
                         <Plus className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Créer Élève</span>
                         <span className="sm:hidden text-[10px]">Créer</span>
                       </Button>
@@ -566,23 +566,14 @@ export default function AdminDashboard() {
             ) : studentDetail && (
               <>
                 {/* Drawer Header */}
-                <div className="bg-ishes-gold text-ishes-dark p-8 relative overflow-hidden">
+                <div className="bg-white border-b border-gray-100 text-ishes-dark p-8 relative overflow-hidden">
                   {/* Decorative Background Element */}
-                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-ishes-green/10 blur-[80px] rounded-full" />
+                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-gray-50 blur-[80px] rounded-full" />
 
                   <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-8">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ishes-green">Dossier Académique</span>
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-ishes-green/10 border border-ishes-green/20 rounded-lg">
-                        <span className="w-1.5 h-1.5 bg-ishes-green rounded-full animate-pulse"></span>
-                        <span className="text-[10px] font-black text-ishes-green uppercase tracking-widest">
-                          {studentDetail.status === 'actif' ? 'Inscrit' : 'En attente'}
-                        </span>
-                      </div>
-                    </div>
 
                     <div className="flex items-end gap-6">
-                      <div className="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-2xl shadow-ishes-gold/20">
+                      <div className="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-xl shadow-black/5 border border-gray-100">
                         <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 rounded-[1.8rem] flex items-center justify-center font-black text-3xl text-ishes-dark">
                           {(studentDetail.first_name?.[0] || '') + (studentDetail.last_name?.[0] || '')}
                         </div>
@@ -595,13 +586,10 @@ export default function AdminDashboard() {
 
                     <div className="flex gap-3 mt-8">
                       <Link href={`/app/admin/etudiants?id=${selectedStudentId}`} className="flex-1">
-                        <Button variant="outline" className="w-full bg-ishes-dark/5 border-ishes-dark/10 text-ishes-dark hover:bg-ishes-dark/10 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
+                        <Button variant="outline" className="w-full bg-white border border-gray-200 text-ishes-dark hover:bg-gray-50 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11">
                           Accéder au Profil
                         </Button>
                       </Link>
-                      <Button className="flex-1 bg-ishes-dark text-white hover:bg-ishes-dark/90 rounded-xl font-bold text-[10px] uppercase tracking-widest h-11 flex items-center gap-2">
-                        <Mail className="w-3.5 h-3.5" /> Message
-                      </Button>
                     </div>
                   </div>
 

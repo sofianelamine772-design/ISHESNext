@@ -33,14 +33,14 @@ export default function AdminCommunicationPage() {
   useEffect(() => {
     fetchStudentsAndClasses();
     fetchConversations();
-    
+
     // Auto-refresh pour simuler le temps réel
     const interval = setInterval(() => {
       if (activeTab === "inbox") {
         fetchConversations();
       }
     }, 15000); // toutes les 15 secondes
-    
+
     return () => clearInterval(interval);
   }, [activeTab]);
 
@@ -81,10 +81,10 @@ export default function AdminCommunicationPage() {
     setSelectedChat(student);
     setChatLoading(true);
     setChatMessages([]);
-    
-    // Mettre à jour l'UI localement pour enlever le point non lu
-    setConversations(prev => prev.map(c => 
-      c.id === student.id ? { ...c, has_unread: false } : c
+
+    // Mettre à jour l'UI localement pour enlever le badge non lu
+    setConversations(prev => prev.map(c =>
+      c.id === student.id ? { ...c, unread_count: 0 } : c
     ));
 
     try {
@@ -215,21 +215,33 @@ export default function AdminCommunicationPage() {
                       <p className="text-gray-300 text-[9px] font-medium mt-1">Les élèves qui vous écrivent apparaîtront ici</p>
                     </div>
                   ) : (
-                    conversations.map((conv) => (
-                      <button
-                        key={conv.id}
-                        onClick={() => openChat(conv)}
-                        className={`w-full p-5 flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-all text-left border-l-4 ${selectedChat?.id === conv.id ? 'bg-emerald-50/30 border-[#086b51]' : 'border-transparent'}`}
-                      >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-black text-sm ${selectedChat?.id === conv.id ? 'bg-[#086b51] text-white' : 'bg-gray-100 text-gray-500'}`}>
-                          {(conv.first_name?.[0] || '') + (conv.last_name?.[0] || '')}
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className="text-sm font-black text-ishes-dark truncate uppercase tracking-tight">{conv.first_name} {conv.last_name}</h4>
-                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Élève</p>
-                        </div>
-                      </button>
-                    ))
+                    conversations.map((conv) => {
+                      const displayName = [conv.first_name, conv.last_name].filter(Boolean).join(' ') || conv.email || "Utilisateur sans nom";
+                      const initials = (conv.first_name?.[0] || conv.email?.[0] || '?').toUpperCase();
+
+                      return (
+                        <button
+                          key={conv.id}
+                          onClick={() => openChat(conv)}
+                          className={`w-full p-5 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-all text-left border-l-4 ${selectedChat?.id === conv.id ? 'bg-emerald-50/30 border-[#086b51]' : 'border-transparent'}`}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-black text-sm ${selectedChat?.id === conv.id ? 'bg-[#086b51] text-white' : 'bg-gray-100 text-gray-500'}`}>
+                              {initials}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h4 className={`text-sm font-black truncate uppercase tracking-tight ${(conv.unread_count > 0 || conv.has_unread) ? 'text-black' : 'text-ishes-dark'}`}>{displayName}</h4>
+                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Élève</p>
+                            </div>
+                          </div>
+                          {(conv.unread_count > 0 || conv.has_unread) && (
+                            <div className="bg-emerald-100 text-[#086b51] border border-emerald-200 text-[9px] font-black px-2 py-0.5 rounded-full shadow-sm shrink-0 uppercase tracking-widest">
+                              {conv.unread_count > 0 ? `${conv.unread_count} message${conv.unread_count > 1 ? 's' : ''}` : 'Nouveau'}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })
                   )}
                 </div>
               </div>
@@ -240,10 +252,12 @@ export default function AdminCommunicationPage() {
                   <>
                     <div className="p-5 bg-white border-b border-gray-100 flex items-center gap-4 shrink-0">
                       <div className="w-10 h-10 bg-[#086b51] text-white rounded-xl flex items-center justify-center font-black text-sm">
-                        {(selectedChat.first_name?.[0] || '') + (selectedChat.last_name?.[0] || '')}
+                        {(selectedChat.first_name?.[0] || selectedChat.email?.[0] || '?').toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="text-sm font-black text-ishes-dark uppercase tracking-tight">{selectedChat.first_name} {selectedChat.last_name}</h3>
+                        <h3 className="text-sm font-black text-ishes-dark uppercase tracking-tight">
+                          {[selectedChat.first_name, selectedChat.last_name].filter(Boolean).join(' ') || selectedChat.email || "Utilisateur sans nom"}
+                        </h3>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
                           <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Élève ISHES</span>

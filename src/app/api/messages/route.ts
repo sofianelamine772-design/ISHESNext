@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     if (sender_id === 'admin_system') {
       try {
         let pushSubs: any[] = [];
-        
+
         if (type === 'private' && receiver_id && receiver_id !== 'admin_system') {
           // Message privé : un seul élève
           const { data } = await supabaseAdmin
@@ -68,21 +68,21 @@ export async function POST(req: Request) {
             .select('*')
             .eq('etudiant_id', receiver_id);
           if (data) pushSubs = data;
-        } 
+        }
         else if (type === 'global') {
           // Message global : tout le monde
           const { data } = await supabaseAdmin
             .from('push_subscriptions')
             .select('*');
           if (data) pushSubs = data;
-        } 
+        }
         else if (type === 'class' && target_class_id) {
           // Message par classe : récupérer d'abord les élèves de la classe
           const { data: inscriptions } = await supabaseAdmin
             .from('inscriptions')
             .select('student_id')
             .eq('class_id', target_class_id);
-            
+
           if (inscriptions && inscriptions.length > 0) {
             const studentIds = inscriptions.map((i: any) => i.student_id);
             const { data } = await supabaseAdmin
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
 
         if (pushSubs && pushSubs.length > 0) {
           const payload = JSON.stringify({
-            title: title || (type === 'private' ? 'Nouveau message de l\'administration' : 'Nouvelle annonce ISHES'),
+            title: title || 'ISHES',
             body: content.length > 50 ? content.substring(0, 50) + '...' : content,
             url: type === 'private' ? '/app/eleve/messagerie' : '/app/eleve'
           });
@@ -146,30 +146,33 @@ export async function GET(req: Request) {
         .select('sender_id, receiver_id, created_at, is_read')
         .eq('type', 'private')
         .order('created_at', { ascending: false });
-      
+
       if (msgError) {
         console.error('[CONVERSATIONS_ERROR]', msgError);
         return NextResponse.json({ error: msgError.message }, { status: 500 });
       }
 
       // Map pour garder la trace du dernier message et des non-lus
-      const studentInfo = new Map<string, { last_message_at: string, has_unread: boolean }>();
-      
+      const studentInfo = new Map<string, { last_message_at: string, unread_count: number, has_unread: boolean }>();
+
       messages?.forEach(m => {
         const studentId = m.sender_id === 'admin_system' ? m.receiver_id : m.sender_id;
         if (!studentId || studentId === 'admin_system') return;
-        
+
         const isUnreadToAdmin = m.sender_id === studentId && m.receiver_id === 'admin_system' && !m.is_read;
-        
+
         if (!studentInfo.has(studentId)) {
-          studentInfo.set(studentId, { 
-            last_message_at: m.created_at, 
-            has_unread: isUnreadToAdmin 
+          studentInfo.set(studentId, {
+            last_message_at: m.created_at,
+            unread_count: isUnreadToAdmin ? 1 : 0,
+            has_unread: isUnreadToAdmin
           });
         } else {
-          // Si on trouve un message non lu plus ancien, on met à jour
+          // On additionne les messages non lus
           if (isUnreadToAdmin) {
-            studentInfo.get(studentId)!.has_unread = true;
+            const info = studentInfo.get(studentId)!;
+            info.unread_count += 1;
+            info.has_unread = true;
           }
         }
       });
@@ -178,7 +181,7 @@ export async function GET(req: Request) {
 
       const { data: stds, error: stdError } = await supabaseAdmin
         .from('etudiants')
-        .select('id, first_name, last_name')
+        .select('id, first_name, last_name, email')
         .in('id', Array.from(studentInfo.keys()));
 
       if (stdError) {
@@ -191,8 +194,10 @@ export async function GET(req: Request) {
         ...std,
         ...studentInfo.get(std.id)
       })).sort((a, b) => {
-        if (a.has_unread && !b.has_unread) return -1;
-        if (!a.has_unread && b.has_unread) return 1;
+        const aHasUnread = (a.unread_count || 0) > 0 || a.has_unread;
+        const bHasUnread = (b.unread_count || 0) > 0 || b.has_unread;
+        if (aHasUnread && !bHasUnread) return -1;
+        if (!aHasUnread && bHasUnread) return 1;
         return new Date(b.last_message_at || 0).getTime() - new Date(a.last_message_at || 0).getTime();
       });
 
@@ -206,7 +211,7 @@ export async function GET(req: Request) {
         .select('class_id')
         .eq('etudiant_id', queryUserId || '')
         .limit(1);
-      
+
       const classId = inscriptions?.[0]?.class_id;
 
       const { data: anns, error: annError } = await supabaseAdmin

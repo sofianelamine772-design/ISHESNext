@@ -420,8 +420,8 @@ function EtudiantsContent() {
                       key={student.id}
                       onClick={() => setSelectedStudentId(student.id)}
                       className={`w-full text-left p-4 rounded-3xl transition-all border block mb-2 ${selectedStudentId === student.id
-                        ? "bg-ishes-gold text-ishes-dark shadow-xl shadow-ishes-gold/20 border-ishes-gold"
-                        : "bg-white border-gray-50 hover:border-ishes-green/20 hover:shadow-lg hover:shadow-black/5"
+                        ? "bg-white text-ishes-dark shadow-lg shadow-black/5 border-gray-200 ring-1 ring-gray-900/5"
+                        : "bg-white border-gray-50 hover:border-gray-200 hover:shadow-md hover:shadow-black/5"
                         }`}
                     >
                       <div className="flex items-center gap-4">
@@ -479,7 +479,7 @@ function EtudiantsContent() {
               <div className="h-full bg-white rounded-3xl shadow-sm border border-gray-200 overflow-y-auto flex flex-col relative custom-scrollbar">
 
                 {/* Profile Cover & Header */}
-                <div className="h-24 bg-ishes-gold relative rounded-t-[2.5rem] overflow-hidden shrink-0">
+                <div className="h-24 bg-white border-b border-gray-50 relative rounded-t-[2.5rem] overflow-hidden shrink-0">
                   <div className="absolute inset-0 bg-gradient-to-r from-ishes-green/10 to-transparent"></div>
                 </div>
 
@@ -487,8 +487,8 @@ function EtudiantsContent() {
                   {/* Identity Header */}
                   <div className="flex flex-col xl:flex-row xl:items-end justify-between -mt-16 md:-mt-20 mb-10 md:mb-12 gap-6 relative z-10">
                     <div className="flex items-end gap-4 md:gap-6 flex-1 min-w-0">
-                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-2xl shadow-ishes-gold/20 border border-gray-100 shrink-0">
-                        <div className="w-full h-full bg-ishes-gold rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-ishes-dark">
+                      <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-xl shadow-black/5 border border-gray-100 shrink-0">
+                        <div className="w-full h-full bg-gray-50 border border-gray-100 rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-ishes-dark">
                           {selectedStudent.avatar}
                         </div>
                       </div>
@@ -508,7 +508,7 @@ function EtudiantsContent() {
                       <Button variant="outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-amber-600 border-amber-200 hover:bg-amber-50 hover:text-amber-700 text-[10px] md:text-xs" onClick={handleSendPaymentReminder} disabled={isSendingReminder}>
                         {isSendingReminder ? <Loader2 className="w-4 h-4 mr-1 md:mr-2 animate-spin" /> : <AlertCircle className="w-4 h-4 mr-1 md:mr-2" />} Relance
                       </Button>
-                      <Button variant="ishes" size="sm" className="flex-1 md:flex-none h-10 md:h-11 shadow-ishes-green/20 text-[10px] md:text-xs" onClick={() => openChat(selectedStudent)}>
+                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 shadow-black/5 text-[10px] md:text-xs" onClick={() => openChat(selectedStudent)}>
                         <Mail className="w-4 h-4 mr-1 md:mr-2" /> Message
                       </Button>
                     </div>
@@ -548,7 +548,7 @@ function EtudiantsContent() {
                     {/* Scolarité Info Card */}
                     <div className="flex flex-col mt-4 lg:mt-0">
                       <div className="flex items-center gap-3 mb-6 md:mb-8">
-                        <div className="w-1 h-4 bg-ishes-gold rounded-full"></div>
+                        <div className="w-1 h-4 bg-gray-300 rounded-full"></div>
                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-dark">Scolarité</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">

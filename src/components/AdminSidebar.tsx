@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  Users, 
-  BookOpen, 
-  CreditCard, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  CreditCard,
+  FileText,
   Terminal,
   MessageSquare,
   Menu
@@ -40,7 +40,7 @@ export function AdminSidebar() {
     ];
 
     return (
-      <div className="flex flex-col h-full bg-gradient-to-b from-[#f3e3c3] via-[#cca862] to-[#ab843c] text-ishes-dark relative overflow-hidden">
+      <div className="flex flex-col h-full bg-white text-ishes-dark relative overflow-hidden">
         {/* Arabic letters background watermark */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           {arabicWatermarks.map((t, i) => (
@@ -75,8 +75,8 @@ export function AdminSidebar() {
                 onClick={() => setIsOpen(false)}
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors",
-                  isActive 
-                    ? "bg-ishes-dark/10 border border-ishes-dark/15 text-ishes-dark shadow-sm" 
+                  isActive
+                    ? "bg-ishes-dark/10 border border-ishes-dark/15 text-ishes-dark shadow-sm"
                     : "text-ishes-dark/70 hover:bg-ishes-dark/5 hover:text-ishes-dark"
                 )}
               >
@@ -99,9 +99,9 @@ export function AdminSidebar() {
       {/* Mobile Menu Trigger */}
       <div className="lg:hidden fixed top-5 left-6 z-[60]">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger 
+          <SheetTrigger
             render={
-              <button className="p-2.5 bg-gradient-to-br from-[#eed4a6] to-[#a38346] text-ishes-dark rounded-xl shadow-xl shadow-ishes-gold/25 active:scale-95 transition-transform">
+              <button className="p-2.5 bg-white border border-gray-200 text-ishes-dark rounded-xl shadow-sm active:scale-95 transition-transform">
                 <Menu className="w-5 h-5" />
               </button>
             }
@@ -113,7 +113,7 @@ export function AdminSidebar() {
       </div>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 bg-gradient-to-b from-[#f3e3c3] via-[#cca862] to-[#ab843c] text-ishes-dark flex-col flex-shrink-0 h-full">
+      <aside className="hidden lg:flex w-64 bg-white border-r border-gray-100 text-ishes-dark flex-col flex-shrink-0 h-full">
         <SidebarContent />
       </aside>
     </>

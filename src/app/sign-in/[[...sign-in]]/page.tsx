@@ -43,6 +43,8 @@ export default function SignInPage() {
 
         <ClerkLoaded>
           <SignIn 
+            forceRedirectUrl="/app"
+            fallbackRedirectUrl="/app"
             appearance={{
               elements: {
                 rootBox: "mx-auto w-full",
