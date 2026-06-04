@@ -77,11 +77,26 @@ export function PushNotificationManager() {
   const subscribeToPush = async () => {
     setLoading(true);
     try {
-      const registration = await navigator.serviceWorker.ready;
-      const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+      // iOS exige que la demande de permission soit explicite avant toute chose
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        alert("Vous devez autoriser les notifications pour utiliser cette fonctionnalité.");
+        setLoading(false);
+        return;
+      }
+
+      // S'assurer que le service worker est enregistré
+      let registration = await navigator.serviceWorker.getRegistration();
+      if (!registration) {
+        registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      }
       
+      await navigator.serviceWorker.ready;
+
+      const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
       if (!vapidPublicKey) {
         console.error("VAPID public key not found");
+        alert("Erreur de configuration (VAPID key manquante)");
         setLoading(false);
         return;
       }
@@ -95,12 +110,8 @@ export function PushNotificationManager() {
       await saveSubscriptionToDatabase(sub);
       alert("Notifications activées avec succès !");
     } catch (err: any) {
-      if (Notification.permission === 'denied') {
-        alert("Les notifications sont bloquées. Veuillez les autoriser dans les paramètres de votre navigateur.");
-      } else {
-        console.error('Subscription failed:', err);
-        alert("Erreur lors de l'activation des notifications: " + (err.message || "Erreur inconnue"));
-      }
+      console.error('Subscription failed:', err);
+      alert("Erreur lors de l'activation des notifications: " + (err.message || "Erreur inconnue"));
     } finally {
       setLoading(false);
     }
