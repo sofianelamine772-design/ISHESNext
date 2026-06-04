@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "ISHES - L'excellence de la langue arabe à votre portée",
   description: "Institut de référence à Toulouse. Pédagogie certifiée CECRL pour une maîtrise complète, du niveau débutant à l'expertise.",
+  manifest: "/manifest.json",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",

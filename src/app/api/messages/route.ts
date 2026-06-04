@@ -2,6 +2,17 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { auth } from '@clerk/nextjs/server';
 
+import webPush from 'web-push';
+
+// Configuration web-push
+if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webPush.setVapidDetails(
+    process.env.VAPID_SUBJECT || 'mailto:contact@ishes.com',
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+}
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
@@ -44,6 +55,48 @@ export async function POST(req: Request) {
     }
 
     console.log('[MESSAGES_POST_OK]', JSON.stringify(data));
+
+    // Envoi de Notification Push
+    // On notifie seulement si l'admin envoie un message (privé) à un étudiant
+    if (sender_id === 'admin_system' && receiver_id && receiver_id !== 'admin_system' && type === 'private') {
+      try {
+        const { data: subs } = await supabaseAdmin
+          .from('push_subscriptions')
+          .select('*')
+          .eq('etudiant_id', receiver_id);
+
+        if (subs && subs.length > 0) {
+          const payload = JSON.stringify({
+            title: 'Nouveau message de l\'administration',
+            body: content.length > 50 ? content.substring(0, 50) + '...' : content,
+            url: '/app/eleve/messagerie'
+          });
+
+          await Promise.all(subs.map(async (sub) => {
+            const pushSubscription = {
+              endpoint: sub.endpoint,
+              keys: {
+                p256dh: sub.p256dh,
+                auth: sub.auth
+              }
+            };
+            try {
+              await webPush.sendNotification(pushSubscription, payload);
+            } catch (e: any) {
+              // Si la subscription a expiré (status 410), on peut la supprimer
+              if (e.statusCode === 410 || e.statusCode === 404) {
+                await supabaseAdmin.from('push_subscriptions').delete().eq('id', sub.id);
+              } else {
+                console.error('[PUSH_SEND_ERROR]', e);
+              }
+            }
+          }));
+        }
+      } catch (pushError) {
+        console.error('[PUSH_FETCH_ERROR]', pushError);
+      }
+    }
+
     return NextResponse.json({ success: true, data });
   } catch (err: any) {
     console.error('[MESSAGES_POST_CRASH]', err?.message);

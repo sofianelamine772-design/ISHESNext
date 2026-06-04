@@ -161,3 +161,9 @@
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0); }
 }
+
+/* Masquer le lien d'inscription de Clerk */
+.cl-footerAction,
+.cl-footer {
+  display: none !important;
+}

@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     // 2. Vérifie si l'e-mail existe déjà dans notre table 'etudiants' (inscrit via vitrine)
     const { data: existingStudent, error: fetchError } = await supabaseAdmin
       .from('etudiants')
-      .select('id, status')
+      .select('*')
       .ilike('email', email)
       .maybeSingle();
 
@@ -94,16 +94,17 @@ export async function POST(req: Request) {
         return new Response('Error: Migration Rename Error', { status: 500 });
       }
 
-      // Insérer le nouvel étudiant avec le vrai ID Clerk et le bon email
+      // Conserver toutes les données existantes, mais utiliser le nouvel ID, email, et récupérer depuis Clerk si existant
       const { error: insertError } = await supabaseAdmin
         .from('etudiants')
         .insert({
+          ...existingStudent,
           id: id,
           email: email,
-          first_name: first_name || '',
-          last_name: last_name || '',
-          phone: phone || '',
-          role: isAdmin ? 'admin' : 'eleve',
+          first_name: first_name || existingStudent.first_name || '',
+          last_name: last_name || existingStudent.last_name || '',
+          phone: phone || existingStudent.phone || '',
+          role: isAdmin ? 'admin' : (existingStudent.role || 'eleve'),
           status: existingStudent.status || 'actif'
         });
 

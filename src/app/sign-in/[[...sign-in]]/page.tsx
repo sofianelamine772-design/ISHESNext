@@ -52,8 +52,9 @@ export default function SignInPage() {
                 socialButtonsBlockButton: "rounded-xl border-gray-200 hover:bg-gray-50 transition-all font-bold",
                 formButtonPrimary: "bg-[#c8a96e] hover:bg-[#b0935b] text-white font-bold py-3 rounded-xl shadow-lg shadow-[#c8a96e]/10 transition-all h-12 uppercase tracking-widest text-xs",
                 formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-[#c8a96e]/20 focus:border-[#c8a96e] transition-all",
-                footerAction: "hidden",
-                footerActionLink: "text-[#c8a96e] font-bold hover:text-[#b0935b]",
+                footerAction: "!hidden",
+                footer: "!hidden",
+                footerActionLink: "!hidden",
                 identityPreviewEditButton: "text-[#c8a96e]",
                 formFieldLabel: "font-bold text-gray-700 text-xs mb-2 uppercase tracking-wide",
               }

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useUser, SignOutButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
+import { PushNotificationManager } from "@/components/PushNotificationManager";
 
 export default function EleveLayout({
   children,
@@ -125,6 +126,7 @@ export default function EleveLayout({
         </header>
 
         <div className="p-4 md:p-10 flex-1">
+          <PushNotificationManager />
           {children}
         </div>
       </main>
