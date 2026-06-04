@@ -77,10 +77,10 @@ function EtudiantsContent() {
           const latestInscription = s.inscriptions?.[0];
           return {
             id: s.id,
-            name: `${s.first_name || ''} ${s.last_name || ''}`.trim() || 'Sans nom',
+            name: `${s.first_name || ''} ${s.last_name || ''}`.trim() || (s.email ? s.email.split('@')[0] : 'Sans nom'),
             email: s.email,
             phone: s.phone || "Non renseigné",
-            avatar: (s.first_name?.[0] || "") + (s.last_name?.[0] || ""),
+            avatar: ((s.first_name?.[0] || "") + (s.last_name?.[0] || "")).toUpperCase() || (s.email ? s.email[0].toUpperCase() : "?"),
             dateJoined: new Date(s.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }),
             enrolledClass: 
               (Array.isArray(latestInscription?.formations) ? latestInscription?.formations[0]?.title : latestInscription?.formations?.title) || 

@@ -528,8 +528,7 @@ export async function createStudentManualAction(data: {
         phone: data.phone,
         parent_first_name: data.parent_first_name,
         parent_last_name: data.parent_last_name,
-        status: status,
-        address: data.address
+        status: status
       })
       .select()
       .single();
@@ -567,8 +566,7 @@ export async function updateStudentAction(id: string, data: any) {
         email: data.email,
         phone: data.phone,
         parent_first_name: data.parent_first_name,
-        parent_last_name: data.parent_last_name,
-        address: data.address
+        parent_last_name: data.parent_last_name
       })
       .eq('id', id);
 
