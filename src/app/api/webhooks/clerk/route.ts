@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { isAdminEmail } from '@/lib/auth-utils';
+import { sendWelcomeEmail } from '@/lib/mail';
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -164,6 +165,13 @@ export async function POST(req: Request) {
         return new Response('Error: Internal Server Error', { status: 500 });
       }
       console.log(`Utilisateur synchronisé standard : ${email}`);
+    }
+
+    try {
+      await sendWelcomeEmail(email, first_name || 'Élève');
+      console.log(`Email de bienvenue envoyé à : ${email}`);
+    } catch (err) {
+      console.error(`Erreur envoi email bienvenue à ${email}:`, err);
     }
   }
 

@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import Stripe from "stripe";
 import { currentUser, auth } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
+import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -549,10 +550,37 @@ export async function createStudentManualAction(data: {
       });
     }
 
+    // Envoi de l'email de bienvenue
+    try {
+      await sendWelcomeEmail(data.email, data.first_name || 'Élève');
+    } catch (mailErr) {
+      console.error("Failed to send welcome email:", mailErr);
+    }
+
     return { success: true, data: newStudent };
   } catch (err) {
     console.error("Manual Student Creation Error:", err);
     return { success: false, error: "Failed to create student profile" };
+  }
+}
+
+export async function sendPaymentReminderAction(studentId: string) {
+  try {
+    const { data: student, error } = await supabaseAdmin
+      .from('etudiants')
+      .select('email, first_name')
+      .eq('id', studentId)
+      .single();
+
+    if (error || !student) throw new Error("Student not found");
+
+    const result = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
+    if (!result.success) return { success: false, error: (result.error as any)?.message || "Failed to send email" };
+
+    return { success: true };
+  } catch (err: any) {
+    console.error("Payment Reminder Error:", err);
+    return { success: false, error: err.message || "Failed to send payment reminder" };
   }
 }
 
@@ -575,6 +603,41 @@ export async function updateStudentAction(id: string, data: any) {
   } catch (err) {
     console.error("Update Student Error:", err);
     return { success: false, error: "Failed to update student profile" };
+  }
+}
+
+export async function deleteStudentAction(id: string) {
+  try {
+    // 1. Delete from Clerk if it's a real user
+    if (!id.startsWith('manual_') && !id.startsWith('temp_')) {
+      const { clerkClient } = await import("@clerk/nextjs/server");
+      try {
+        const client = await clerkClient();
+        await client.users.deleteUser(id);
+        console.log(`Clerk user ${id} deleted successfully.`);
+      } catch (clerkErr) {
+        console.error(`Failed to delete Clerk user ${id}:`, clerkErr);
+      }
+    }
+
+    // 2. Delete related records in Supabase to avoid Foreign Key constraint errors
+    await supabaseAdmin.from('inscriptions').delete().eq('etudiant_id', id);
+    await supabaseAdmin.from('paiements').delete().eq('etudiant_id', id);
+    await supabaseAdmin.from('messages').delete().eq('sender_id', id);
+    await supabaseAdmin.from('messages').delete().eq('receiver_id', id);
+
+    // 3. Delete the student
+    const { error } = await supabaseAdmin
+      .from('etudiants')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error("Delete Student Error:", err);
+    return { success: false, error: err.message || "Failed to delete student" };
   }
 }
 
