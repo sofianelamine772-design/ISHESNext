@@ -72,6 +72,12 @@ export default function AdminCommunicationPage() {
     setSelectedChat(student);
     setChatLoading(true);
     setChatMessages([]);
+    
+    // Mettre à jour l'UI localement pour enlever le point non lu
+    setConversations(prev => prev.map(c => 
+      c.id === student.id ? { ...c, has_unread: false } : c
+    ));
+
     try {
       const res = await fetch(`/api/messages?type=chat&clerkId=${student.id}`);
       if (res.ok) {

@@ -57,33 +57,57 @@ export async function POST(req: Request) {
     console.log('[MESSAGES_POST_OK]', JSON.stringify(data));
 
     // Envoi de Notification Push
-    // On notifie seulement si l'admin envoie un message (privé) à un étudiant
-    if (sender_id === 'admin_system' && receiver_id && receiver_id !== 'admin_system' && type === 'private') {
+    if (sender_id === 'admin_system') {
       try {
-        const { data: subs } = await supabaseAdmin
-          .from('push_subscriptions')
-          .select('*')
-          .eq('etudiant_id', receiver_id);
+        let pushSubs: any[] = [];
+        
+        if (type === 'private' && receiver_id && receiver_id !== 'admin_system') {
+          // Message privé : un seul élève
+          const { data } = await supabaseAdmin
+            .from('push_subscriptions')
+            .select('*')
+            .eq('etudiant_id', receiver_id);
+          if (data) pushSubs = data;
+        } 
+        else if (type === 'announcement') {
+          // Message global : tout le monde
+          const { data } = await supabaseAdmin
+            .from('push_subscriptions')
+            .select('*');
+          if (data) pushSubs = data;
+        } 
+        else if (type === 'class' && target_class_id) {
+          // Message par classe : récupérer d'abord les élèves de la classe
+          const { data: inscriptions } = await supabaseAdmin
+            .from('inscriptions')
+            .select('student_id')
+            .eq('class_id', target_class_id);
+            
+          if (inscriptions && inscriptions.length > 0) {
+            const studentIds = inscriptions.map((i: any) => i.student_id);
+            const { data } = await supabaseAdmin
+              .from('push_subscriptions')
+              .select('*')
+              .in('etudiant_id', studentIds);
+            if (data) pushSubs = data;
+          }
+        }
 
-        if (subs && subs.length > 0) {
+        if (pushSubs && pushSubs.length > 0) {
           const payload = JSON.stringify({
-            title: 'Nouveau message de l\'administration',
+            title: title || (type === 'private' ? 'Nouveau message de l\'administration' : 'Nouvelle annonce ISHES'),
             body: content.length > 50 ? content.substring(0, 50) + '...' : content,
-            url: '/app/eleve/messagerie'
+            url: type === 'private' ? '/app/eleve/messagerie' : '/app/eleve'
           });
 
-          await Promise.all(subs.map(async (sub) => {
+          await Promise.all(pushSubs.map(async (sub) => {
             const pushSubscription = {
               endpoint: sub.endpoint,
-              keys: {
-                p256dh: sub.p256dh,
-                auth: sub.auth
-              }
+              keys: { p256dh: sub.p256dh, auth: sub.auth }
             };
             try {
               await webPush.sendNotification(pushSubscription, payload);
             } catch (e: any) {
-              // Si la subscription a expiré (status 410), on peut la supprimer
               if (e.statusCode === 410 || e.statusCode === 404) {
                 await supabaseAdmin.from('push_subscriptions').delete().eq('id', sub.id);
               } else {
@@ -119,7 +143,7 @@ export async function GET(req: Request) {
       // Récupérer tous les messages privés envoyés ou reçus par l'admin
       const { data: messages, error: msgError } = await supabaseAdmin
         .from('messages')
-        .select('sender_id, receiver_id, created_at')
+        .select('sender_id, receiver_id, created_at, is_read')
         .eq('type', 'private')
         .order('created_at', { ascending: false });
       
@@ -128,25 +152,51 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: msgError.message }, { status: 500 });
       }
 
-      const studentIds = new Set<string>();
+      // Map pour garder la trace du dernier message et des non-lus
+      const studentInfo = new Map<string, { last_message_at: string, has_unread: boolean }>();
+      
       messages?.forEach(m => {
-        if (m.sender_id && m.sender_id !== 'admin_system') studentIds.add(m.sender_id);
-        if (m.receiver_id && m.receiver_id !== 'admin_system') studentIds.add(m.receiver_id);
+        const studentId = m.sender_id === 'admin_system' ? m.receiver_id : m.sender_id;
+        if (!studentId || studentId === 'admin_system') return;
+        
+        const isUnreadToAdmin = m.sender_id === studentId && m.receiver_id === 'admin_system' && !m.is_read;
+        
+        if (!studentInfo.has(studentId)) {
+          studentInfo.set(studentId, { 
+            last_message_at: m.created_at, 
+            has_unread: isUnreadToAdmin 
+          });
+        } else {
+          // Si on trouve un message non lu plus ancien, on met à jour
+          if (isUnreadToAdmin) {
+            studentInfo.get(studentId)!.has_unread = true;
+          }
+        }
       });
 
-      if (studentIds.size === 0) return NextResponse.json([]);
+      if (studentInfo.size === 0) return NextResponse.json([]);
 
       const { data: stds, error: stdError } = await supabaseAdmin
         .from('etudiants')
         .select('id, first_name, last_name')
-        .in('id', Array.from(studentIds));
+        .in('id', Array.from(studentInfo.keys()));
 
       if (stdError) {
         console.error('[STUDENTS_ERROR]', stdError);
         return NextResponse.json({ error: stdError.message }, { status: 500 });
       }
 
-      return NextResponse.json(stds || []);
+      // Attacher les infos et trier (non lus en premier, puis par date)
+      const enrichedStds = (stds || []).map(std => ({
+        ...std,
+        ...studentInfo.get(std.id)
+      })).sort((a, b) => {
+        if (a.has_unread && !b.has_unread) return -1;
+        if (!a.has_unread && b.has_unread) return 1;
+        return new Date(b.last_message_at || 0).getTime() - new Date(a.last_message_at || 0).getTime();
+      });
+
+      return NextResponse.json(enrichedStds);
     }
 
     // Annonces pour un élève spécifique
@@ -179,6 +229,15 @@ export async function GET(req: Request) {
 
     // Chat entre admin et un élève spécifique
     if (type === 'chat' && clerkId) {
+      // 1. Marquer comme lus les messages envoyés par l'élève à l'admin
+      await supabaseAdmin
+        .from('messages')
+        .update({ is_read: true })
+        .eq('sender_id', clerkId)
+        .eq('receiver_id', 'admin_system')
+        .eq('is_read', false);
+
+      // 2. Récupérer la conversation
       const { data, error } = await supabaseAdmin
         .from('messages')
         .select('*')
