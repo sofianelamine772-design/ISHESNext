@@ -36,6 +36,7 @@ export default function AdminDashboard() {
   const [studentDetail, setStudentDetail] = useState<any | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [selectedYear, setSelectedYear] = useState<string>(getCurrentAcademicYear());
+  const [selectedClassType, setSelectedClassType] = useState<string>("tout");
 
   // New states for modals
   const [showNewClassModal, setShowNewClassModal] = useState(false);
@@ -302,20 +303,30 @@ export default function AdminDashboard() {
                   className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green transition-all"
                 />
               </div>
-              <div className="mt-3">
+              <div className="mt-3 flex gap-2">
                 <select 
                   value={selectedYear} 
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                  className="w-1/2 bg-white border border-gray-200 rounded-lg px-2 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
                 >
                   <option value={getCurrentAcademicYear()}>Année Scolaire {getCurrentAcademicYear()}</option>
                   <option value={getNextAcademicYear()}>Année Scolaire {getNextAcademicYear()}</option>
+                </select>
+                <select 
+                  value={selectedClassType} 
+                  onChange={(e) => setSelectedClassType(e.target.value)}
+                  className="w-1/2 bg-white border border-gray-200 rounded-lg px-2 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                >
+                  <option value="tout">Tous types</option>
+                  <option value="presentiel">Présentiel</option>
+                  <option value="distanciel">Distanciel</option>
                 </select>
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-8 custom-scrollbar">
               {/* Distanciel Section -> Formations */}
+              {(selectedClassType === "tout" || selectedClassType === "distanciel") && (
               <div>
                 <div className="flex items-center gap-2 mb-4 px-2">
                   <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
@@ -327,25 +338,33 @@ export default function AdminDashboard() {
                   </span>
                 </div>
                 <div className="space-y-2">
-                  {filteredDistancielClasses.map((c) => (
-                    <button
-                      key={c.id}
-                      onClick={() => setSelectedClassId(c.id)}
-                      className={`w-full text-left p-3 rounded-xl transition-all border ${selectedClassId === c.id
-                        ? "bg-gray-100 border-gray-300 shadow-sm"
-                        : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50"
-                        }`}
-                    >
+                  {filteredDistancielClasses.map((c) => {
+                    const n = (c.formationTitle || c.name).toLowerCase();
+                    const isAdult = !(n.includes('enfant') || n.includes('junior') || n.includes('tarbiya') || n.includes('prépa') || n.includes('élémentaire'));
+
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedClassId(c.id)}
+                        className={`w-full text-left p-3 rounded-xl transition-all border ${
+                          selectedClassId === c.id
+                            ? (isAdult ? "bg-ishes-green/10 border-ishes-green/20 shadow-sm" : "bg-gray-100 border-gray-300 shadow-sm")
+                            : (isAdult ? "bg-ishes-green/5 border-ishes-green/10 hover:bg-ishes-green/10 hover:border-ishes-green/20" : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50")
+                          }`}
+                      >
                       <div className="font-semibold text-gray-800 mb-1 text-sm">{c.formationTitle || c.name}</div>
                       <div className="flex items-center text-[10px] text-gray-500 gap-1.5">
                         <Users className="w-3.5 h-3.5" /> {c.students.length} élèves inscrits
                       </div>
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
+              )}
 
               {/* Présentiel Section -> Classes */}
+              {(selectedClassType === "tout" || selectedClassType === "presentiel") && (
               <div>
                 <div className="flex items-center gap-2 mb-4 px-2">
                   <div className="w-8 h-8 rounded-lg bg-ishes-green/10 flex items-center justify-center">
@@ -389,6 +408,7 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               </div>
+              )}
             </div>
           </div>
 

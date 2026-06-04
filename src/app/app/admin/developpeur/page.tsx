@@ -51,7 +51,7 @@ export default function DeveloperPage() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Centre de Diagnostic</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4 rounded-xl border-none shadow-lg shadow-ishes-green/20">
+            <Button variant="ishes-green" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4 rounded-xl border-none shadow-lg shadow-ishes-green/20">
               <RefreshCw className={`w-4 h-4 md:mr-2 ${isTesting ? 'animate-spin' : ''}`} />
               <span className="hidden md:inline">Lancer les tests</span>
               <span className="md:hidden">Tester</span>

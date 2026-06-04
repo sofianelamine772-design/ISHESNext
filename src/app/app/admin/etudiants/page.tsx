@@ -39,7 +39,7 @@ function EtudiantsContent() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [payments, setPayments] = useState<any[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
-  
+
   // Only current and next academic year
   const currentAcademicYear = getCurrentAcademicYear();
   const nextAcademicYear = getNextAcademicYear();
@@ -418,8 +418,8 @@ function EtudiantsContent() {
                 />
               </div>
               <div className="mt-3">
-                <select 
-                  value={selectedYear} 
+                <select
+                  value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
                   className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
                 >
