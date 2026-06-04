@@ -72,13 +72,17 @@ export function PushNotificationManager() {
     }
   };
 
+  const [loading, setLoading] = useState(false);
+
   const subscribeToPush = async () => {
+    setLoading(true);
     try {
       const registration = await navigator.serviceWorker.ready;
       const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
       
       if (!vapidPublicKey) {
         console.error("VAPID public key not found");
+        setLoading(false);
         return;
       }
 
@@ -95,7 +99,10 @@ export function PushNotificationManager() {
         alert("Les notifications sont bloquées. Veuillez les autoriser dans les paramètres de votre navigateur.");
       } else {
         console.error('Subscription failed:', err);
+        alert("Erreur lors de l'activation des notifications: " + (err.message || "Erreur inconnue"));
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,18 +113,19 @@ export function PushNotificationManager() {
   // Afficher une petite bannière pour demander l'activation
   return (
     <div className="bg-[#086b51] text-white p-3 px-4 md:px-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
-      <div className="flex items-center gap-3">
-        <span className="text-xl">🔔</span>
+      <div className="flex items-center gap-3 w-full md:w-auto text-left">
+        <span className="text-2xl md:text-xl shrink-0">🔔</span>
         <div>
           <h4 className="font-bold text-sm">Activez les notifications</h4>
-          <p className="text-xs text-[#086b51]/20 text-white/80">Recevez un avertissement lors d'un nouveau message ou d'une annonce.</p>
+          <p className="text-xs text-white/80">Recevez un avertissement lors d'un nouveau message.</p>
         </div>
       </div>
       <button 
         onClick={subscribeToPush}
-        className="whitespace-nowrap bg-white text-[#086b51] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm"
+        disabled={loading}
+        className="w-full md:w-auto whitespace-nowrap bg-white text-[#086b51] px-4 py-3 md:py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 active:scale-95 transition-all shadow-sm disabled:opacity-70 flex items-center justify-center"
       >
-        Activer
+        {loading ? "Activation..." : "Activer"}
       </button>
     </div>
   );

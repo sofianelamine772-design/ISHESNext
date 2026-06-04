@@ -56,32 +56,15 @@ export default function AdminCommunicationPage() {
 
   async function fetchConversations() {
     try {
-      // Récupérer tous les élèves qui ont envoyé OU reçu un message privé
-      const { data: msgs } = await supabaseAdmin
-        .from('messages')
-        .select('sender_id, receiver_id, created_at')
-        .eq('type', 'private')
-        .order('created_at', { ascending: false });
-
-      if (!msgs) return;
-
-      // Collecter les IDs uniques (côté élève uniquement — pas admin_system)
-      const studentIds = new Set<string>();
-      msgs.forEach(m => {
-        if (m.sender_id !== 'admin_system') studentIds.add(m.sender_id);
-        if (m.receiver_id && m.receiver_id !== 'admin_system') studentIds.add(m.receiver_id);
-      });
-
-      if (studentIds.size === 0) { setConversations([]); return; }
-
-      const { data: stds } = await supabaseAdmin
-        .from('etudiants')
-        .select('id, first_name, last_name')
-        .in('id', Array.from(studentIds));
-
-      setConversations(stds || []);
+      const res = await fetch('/api/messages?type=conversations');
+      if (res.ok) {
+        const data = await res.json();
+        setConversations(data || []);
+      } else {
+        console.error("fetchConversations error:", await res.text());
+      }
     } catch (err) {
-      console.error("fetchConversations error:", err);
+      console.error("fetchConversations catch error:", err);
     }
   }
 
@@ -90,15 +73,15 @@ export default function AdminCommunicationPage() {
     setChatLoading(true);
     setChatMessages([]);
     try {
-      const { data, error } = await supabaseAdmin
-        .from('messages')
-        .select('*')
-        .or(`and(sender_id.eq.${student.id},receiver_id.eq.admin_system),and(sender_id.eq.admin_system,receiver_id.eq.${student.id})`)
-        .order('created_at', { ascending: true });
-
-      if (!error && data) setChatMessages(data);
+      const res = await fetch(`/api/messages?type=chat&clerkId=${student.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setChatMessages(data || []);
+      } else {
+        console.error("openChat error:", await res.text());
+      }
     } catch (err) {
-      console.error("openChat error:", err);
+      console.error("openChat catch error:", err);
     } finally {
       setChatLoading(false);
     }

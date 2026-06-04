@@ -114,12 +114,13 @@ export async function GET(req: Request) {
     const clerkId = searchParams.get('clerkId');
     const queryUserId = searchParams.get('userId');
 
-    // Conversations admin : liste des élèves ayant écrit
+    // Conversations admin : liste des élèves ayant échangé
     if (type === 'conversations') {
+      // Récupérer tous les messages privés envoyés ou reçus par l'admin
       const { data: messages, error: msgError } = await supabaseAdmin
         .from('messages')
-        .select('sender_id, created_at')
-        .eq('receiver_id', 'admin_system')
+        .select('sender_id, receiver_id, created_at')
+        .eq('type', 'private')
         .order('created_at', { ascending: false });
       
       if (msgError) {
@@ -127,13 +128,18 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: msgError.message }, { status: 500 });
       }
 
-      const senderIds = Array.from(new Set(messages?.map(m => m.sender_id) || []));
-      if (senderIds.length === 0) return NextResponse.json([]);
+      const studentIds = new Set<string>();
+      messages?.forEach(m => {
+        if (m.sender_id && m.sender_id !== 'admin_system') studentIds.add(m.sender_id);
+        if (m.receiver_id && m.receiver_id !== 'admin_system') studentIds.add(m.receiver_id);
+      });
+
+      if (studentIds.size === 0) return NextResponse.json([]);
 
       const { data: stds, error: stdError } = await supabaseAdmin
         .from('etudiants')
         .select('id, first_name, last_name')
-        .in('id', senderIds);
+        .in('id', Array.from(studentIds));
 
       if (stdError) {
         console.error('[STUDENTS_ERROR]', stdError);
