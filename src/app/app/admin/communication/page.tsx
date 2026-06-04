@@ -5,6 +5,7 @@ import { AdminSidebar } from "@/components/AdminSidebar";
 import { MessageSquare, Send, User, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { fetchClassesAction, fetchStudentsAction } from "@/app/actions/students";
 
 export default function AdminCommunicationPage() {
   const [activeTab, setActiveTab] = useState<"inbox" | "send">("inbox");
@@ -39,10 +40,18 @@ export default function AdminCommunicationPage() {
   }, [chatMessages]);
 
   async function fetchStudentsAndClasses() {
-    const { data: stds } = await supabaseAdmin.from('etudiants').select('id, first_name, last_name');
-    const { data: clss } = await supabaseAdmin.from('classes').select('id, name');
-    if (stds) setStudents(stds);
-    if (clss) setClasses(clss);
+    try {
+      const classesResult = await fetchClassesAction();
+      if (classesResult.success && classesResult.data) {
+        setClasses(classesResult.data);
+      }
+      const studentsResult = await fetchStudentsAction();
+      if (studentsResult.success && studentsResult.data) {
+        setStudents(studentsResult.data);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
   }
 
   async function fetchConversations() {
@@ -137,9 +146,20 @@ export default function AdminCommunicationPage() {
         content,
         type: broadcastType,
       };
+      if (broadcastType === 'private' && !selectedStudent) {
+        alert('Veuillez sélectionner un élève.');
+        setLoading(false);
+        return;
+      }
+      if (broadcastType === 'class' && !selectedClass) {
+        alert('Veuillez sélectionner une classe.');
+        setLoading(false);
+        return;
+      }
+
       if (broadcastType !== 'private' && title) body.title = title;
-      if (broadcastType === 'private' && selectedStudent) body.receiver_id = selectedStudent;
-      if (broadcastType === 'class' && selectedClass) body.target_class_id = selectedClass;
+      if (broadcastType === 'private') body.receiver_id = selectedStudent;
+      if (broadcastType === 'class') body.target_class_id = selectedClass;
 
       const res = await fetch('/api/messages', {
         method: 'POST',

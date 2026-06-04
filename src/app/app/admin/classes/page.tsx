@@ -506,29 +506,7 @@ export default function AdminDashboard() {
                               <div className="font-black italic text-ishes-dark text-sm">{student.dateJoined.toUpperCase()}</div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <div className="relative group/menu">
-                                <button className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-ishes-dark/20 hover:text-ishes-green hover:bg-ishes-green/5 rounded-full transition-all">
-                                  <MoreVertical className="w-4 h-4 md:w-5 md:h-5" />
-                                </button>
-                                {/* Quick Actions Dropdown */}
-                                <div className="absolute right-0 top-full mt-2 w-40 md:w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-20">
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setStudentToTransfer({ id: student.id, name: student.name });
-                                      setShowTransferModal(true);
-                                    }}
-                                    className="w-full px-4 py-2 text-left text-[10px] md:text-xs font-bold text-ishes-dark hover:bg-ishes-green/5 hover:text-ishes-green flex items-center gap-2"
-                                  >
-                                    <History className="w-3.5 h-3.5" /> Changer de classe
-                                  </button>
-                                  <button
-                                    className="w-full px-4 py-2 text-left text-[10px] md:text-xs font-bold text-red-500 hover:bg-red-50 flex items-center gap-2"
-                                  >
-                                    <Trash2 className="w-3.5 h-3.5" /> Désinscrire
-                                  </button>
-                                </div>
-                              </div>
+
                               <div className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-gray-50 text-gray-300 group-hover:bg-ishes-green group-hover:text-white rounded-full transition-all">
                                 <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
                               </div>
