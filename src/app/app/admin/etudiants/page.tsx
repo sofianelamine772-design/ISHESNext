@@ -366,6 +366,27 @@ function EtudiantsContent() {
 
   const selectedStudent = useMemo(() => students.find(s => s.id === selectedStudentId), [students, selectedStudentId]);
 
+  const getBaseEmail = (email: string) => {
+    if (!email) return "";
+    const parts = email.split('@');
+    if (parts.length !== 2) return email;
+    const username = parts[0].split('+')[0];
+    return `${username}@${parts[1]}`.toLowerCase();
+  };
+
+  const familyMembers = useMemo(() => {
+    if (!selectedStudent) return [];
+    const baseEmail = getBaseEmail(selectedStudent.email);
+    return students.filter(s => 
+      s.id !== selectedStudent.id && 
+      (
+        getBaseEmail(s.email) === baseEmail ||
+        (selectedStudent.parentName && s.parentName && selectedStudent.parentName.toLowerCase() === s.parentName.toLowerCase()) ||
+        (selectedStudent.phone && s.phone && selectedStudent.phone !== "Non renseigné" && selectedStudent.phone === s.phone)
+      )
+    );
+  }, [selectedStudent, students]);
+
   return (
     <div className="h-screen bg-[#F8FAFC] flex overflow-hidden">
       <AdminSidebar />
@@ -594,7 +615,35 @@ function EtudiantsContent() {
 
                   </div>
 
-
+                  {/* Fratrie / Membres de la famille */}
+                  {familyMembers.length > 0 && (
+                    <div className="mt-8">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-1 h-4 bg-purple-500 rounded-full"></div>
+                        <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-purple-600 flex items-center gap-2">
+                          <Users className="w-4 h-4" /> Membres de la famille ({familyMembers.length})
+                        </h3>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {familyMembers.map((member) => (
+                          <div 
+                            key={member.id} 
+                            onClick={() => setSelectedStudentId(member.id)}
+                            className="bg-purple-50 border border-purple-100 rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-purple-100 transition-colors"
+                          >
+                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-black text-purple-700 shadow-sm border border-purple-100 shrink-0">
+                              {member.avatar}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-ishes-dark text-sm truncate">{member.name}</h4>
+                              <p className="text-[10px] text-gray-500 truncate">{member.enrolledClass}</p>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-purple-300" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Facturation & Règlements */}
                   <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-100">

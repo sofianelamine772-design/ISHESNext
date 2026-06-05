@@ -283,14 +283,13 @@ export async function fetchStudentsAction(academicYear?: string) {
     
     if (data && academicYear) {
       data = data.filter((student: any) => 
-        student.inscriptions && student.inscriptions.some((ins: any) => ins.academic_year === academicYear)
+        !student.inscriptions || 
+        student.inscriptions.length === 0 || 
+        student.inscriptions.some((ins: any) => ins.academic_year === academicYear)
       );
     }
     
-    // Filtrer les étudiants "en_attente" (non payés) pour qu'ils n'apparaissent pas dans le logiciel
-    if (data) {
-      data = data.filter((student: any) => student.status !== 'en_attente');
-    }
+    // On ne filtre plus les étudiants "en_attente" pour qu'ils soient visibles par l'administration
     
     return { success: true, data };
   } catch (err) {
@@ -904,6 +903,15 @@ export async function syncStudentStateOnLogin(profile: {
 
     const { clerkUserId, email, firstName, lastName, phone } = profile;
 
+    const getBaseEmail = (e: string) => {
+      if (!e) return "";
+      const parts = e.split('@');
+      if (parts.length !== 2) return e;
+      const username = parts[0].split('+')[0];
+      return `${username}@${parts[1]}`.toLowerCase();
+    };
+    const baseEmail = getBaseEmail(email);
+
     // 1. Check if the student already exists under their clerkUserId
     let { data: etudiant } = await supabaseAdmin
       .from('etudiants')
@@ -911,48 +919,94 @@ export async function syncStudentStateOnLogin(profile: {
       .eq('id', clerkUserId)
       .maybeSingle();
 
-    if (!etudiant) {
-      // 2. The user is logging in for the first time.
-      // Find all students created manually or via Stripe with this email
-      const { data: tempEtudiants, error: fetchErr } = await supabaseAdmin
-        .from('etudiants')
-        .select('*')
-        .ilike('email', email);
+    const emailPattern = `${baseEmail.split('@')[0]}%@${baseEmail.split('@')[1]}`;
+    // 2. Find all students created manually or via Stripe with this email base
+    const { data: potentialStudents, error: fetchErr } = await supabaseAdmin
+      .from('etudiants')
+      .select('*')
+      .ilike('email', emailPattern);
 
+    const tempEtudiants = potentialStudents?.filter(s => getBaseEmail(s.email) === baseEmail) || [];
+
+    if (!etudiant) {
+      // The user is logging in for the first time.
       const isAdmin = isAdminEmail(email);
 
-      // We create a "Parent" or "Admin" profile with the Clerk ID
-      const { data: newParent, error: insertError } = await supabaseAdmin
-        .from('etudiants')
-        .insert({
-          id: clerkUserId,
-          email: email,
-          first_name: firstName || '',
-          last_name: lastName || '',
-          phone: phone || '',
-          role: isAdmin ? 'admin' : (tempEtudiants && tempEtudiants.length > 0 ? 'parent' : 'eleve'),
-          status: 'actif'
-        })
-        .select('*')
-        .single();
+      const exactMatch = tempEtudiants.find(s => s.email.toLowerCase() === email.toLowerCase() && s.id !== clerkUserId && s.id.startsWith('temp_'));
 
-      if (insertError) {
-        console.error('[SYNC ON LOGIN] Auto-create parent/student error:', insertError);
-        return { success: false, error: "Erreur lors de la création du profil" };
+      if (exactMatch) {
+        console.log(`[SYNC ON LOGIN] Migrating exact match temp student ${exactMatch.id} to ${clerkUserId}`);
+        // 1. Temporarily rename email to avoid unique constraint
+        await supabaseAdmin.from('etudiants').update({ email: exactMatch.email + '+migrated_' + Date.now() }).eq('id', exactMatch.id);
+        
+        // 2. Insert newParent
+        const { data: newParent, error: insertError } = await supabaseAdmin
+          .from('etudiants')
+          .insert({
+            id: clerkUserId,
+            email: email,
+            first_name: firstName || exactMatch.first_name || '',
+            last_name: lastName || exactMatch.last_name || '',
+            phone: phone || exactMatch.phone || '',
+            role: isAdmin ? 'admin' : exactMatch.role || 'eleve',
+            status: exactMatch.status || 'actif',
+            parent_first_name: exactMatch.parent_first_name,
+            parent_last_name: exactMatch.parent_last_name
+          })
+          .select('*')
+          .single();
+
+        if (insertError) {
+          console.error('[SYNC ON LOGIN] Auto-create migrated parent error:', insertError);
+          // Restore email just in case
+          await supabaseAdmin.from('etudiants').update({ email: exactMatch.email }).eq('id', exactMatch.id);
+          return { success: false, error: "Erreur lors de la création du profil" };
+        }
+
+        // 3. Migrate references
+        await supabaseAdmin.from('inscriptions').update({ etudiant_id: clerkUserId }).eq('etudiant_id', exactMatch.id);
+        await supabaseAdmin.from('paiements').update({ etudiant_id: clerkUserId }).eq('etudiant_id', exactMatch.id);
+        await supabaseAdmin.from('etudiants').update({ parent_id: clerkUserId }).eq('parent_id', exactMatch.id);
+
+        // 4. Delete old temp
+        await supabaseAdmin.from('etudiants').delete().eq('id', exactMatch.id);
+
+        etudiant = newParent;
+      } else {
+        // We create a "Parent" or "Admin" profile with the Clerk ID
+        const { data: newParent, error: insertError } = await supabaseAdmin
+          .from('etudiants')
+          .insert({
+            id: clerkUserId,
+            email: email,
+            first_name: firstName || '',
+            last_name: lastName || '',
+            phone: phone || '',
+            role: isAdmin ? 'admin' : (tempEtudiants && tempEtudiants.length > 0 ? 'parent' : 'eleve'),
+            status: 'actif'
+          })
+          .select('*')
+          .single();
+
+        if (insertError) {
+          console.error('[SYNC ON LOGIN] Auto-create parent/student error:', insertError);
+          return { success: false, error: "Erreur lors de la création du profil" };
+        }
+
+        etudiant = newParent;
       }
+    }
 
-      etudiant = newParent;
-
-      // 3. Link all children to this parent
-      if (tempEtudiants && tempEtudiants.length > 0) {
-        console.log(`[SYNC ON LOGIN] Found ${tempEtudiants.length} children for ${email}. Linking to parent ${clerkUserId}`);
-        for (const child of tempEtudiants) {
-          if (child.id !== clerkUserId) {
-            await supabaseAdmin
-              .from('etudiants')
-              .update({ parent_id: clerkUserId })
-              .eq('id', child.id);
-          }
+    // 3. Link all children to this parent (runs every login to catch newly added children)
+    if (tempEtudiants && tempEtudiants.length > 0) {
+      const childrenToLink = tempEtudiants.filter(child => child.id !== clerkUserId && child.parent_id !== clerkUserId);
+      if (childrenToLink.length > 0) {
+        console.log(`[SYNC ON LOGIN] Found ${childrenToLink.length} unlinked children for base email ${baseEmail}. Linking to parent ${clerkUserId}`);
+        for (const child of childrenToLink) {
+          await supabaseAdmin
+            .from('etudiants')
+            .update({ parent_id: clerkUserId })
+            .eq('id', child.id);
         }
       }
     }
@@ -973,8 +1027,9 @@ export async function syncStudentStateOnLogin(profile: {
         .in('etudiant_id', familyIds);
 
       const hasUnpaid = inscriptions?.some(ins => ins.paid_status === 'impaye' || ins.status === 'en_attente' || ins.status === 'en_attente_daffectation');
+      const hasNoInscriptions = !inscriptions || inscriptions.length === 0;
 
-      if (hasUnpaid) {
+      if (hasUnpaid || hasNoInscriptions) {
         console.log(`[SYNC ON LOGIN] Checking Stripe checkout sessions for ${email}...`);
         
         // List recent checkout sessions
@@ -985,8 +1040,8 @@ export async function syncStudentStateOnLogin(profile: {
         // Filter sessions by email or metadata or clerkUserId
         const matchingSessions = sessions.data.filter(session => 
           session.payment_status === 'paid' && 
-          (session.customer_details?.email?.toLowerCase() === email.toLowerCase() || 
-           session.metadata?.email?.toLowerCase() === email.toLowerCase() ||
+          (getBaseEmail(session.customer_details?.email || '') === baseEmail || 
+           getBaseEmail(session.metadata?.email || '') === baseEmail ||
            session.metadata?.clerkUserId === clerkUserId)
         );
 
@@ -996,6 +1051,16 @@ export async function syncStudentStateOnLogin(profile: {
           for (const session of matchingSessions) {
             const formationId = session.metadata?.formationId;
             const slot = session.metadata?.slot;
+            const sessionEmail = session.metadata?.email || session.customer_details?.email || '';
+
+            // Find the exact student for this session
+            const { data: targetEtudiant } = await supabaseAdmin
+              .from('etudiants')
+              .select('id')
+              .ilike('email', sessionEmail)
+              .maybeSingle();
+
+            const targetEtudiantId = targetEtudiant?.id || clerkUserId;
 
             // Resolve formation UUID
             let formationUuid = null;
@@ -1028,7 +1093,7 @@ export async function syncStudentStateOnLogin(profile: {
               const { data: existingIns } = await supabaseAdmin
                 .from('inscriptions')
                 .select('id')
-                .eq('etudiant_id', clerkUserId)
+                .eq('etudiant_id', targetEtudiantId)
                 .eq('formation_id', formationUuid)
                 .maybeSingle();
 
@@ -1047,7 +1112,7 @@ export async function syncStudentStateOnLogin(profile: {
                 const { data: newIns } = await supabaseAdmin
                   .from('inscriptions')
                   .insert({
-                    etudiant_id: clerkUserId,
+                    etudiant_id: targetEtudiantId,
                     formation_id: formationUuid,
                     class_id: classId,
                     status: 'valide',
@@ -1063,7 +1128,7 @@ export async function syncStudentStateOnLogin(profile: {
               await supabaseAdmin
                 .from('etudiants')
                 .update({ status: 'actif' })
-                .eq('id', clerkUserId);
+                .eq('id', targetEtudiantId);
 
               // Log payment if not already logged
               if (inscriptionId) {
@@ -1076,7 +1141,7 @@ export async function syncStudentStateOnLogin(profile: {
                 if (!existingPayment) {
                   await supabaseAdmin.from('paiements').insert({
                     inscription_id: inscriptionId,
-                    etudiant_id: clerkUserId,
+                    etudiant_id: targetEtudiantId,
                     stripe_session_id: session.id,
                     amount: (session.amount_total || 0) / 100,
                     currency: (session.currency || 'eur').toUpperCase(),
@@ -1113,8 +1178,9 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
         .eq('etudiant_id', studentId);
 
       const hasUnpaid = inscriptions?.some(ins => ins.paid_status === 'impaye' || ins.status === 'en_attente' || ins.status === 'en_attente_daffectation');
+      const hasNoInscriptions = !inscriptions || inscriptions.length === 0;
 
-      if (hasUnpaid) {
+      if (hasUnpaid || hasNoInscriptions) {
         console.log(`[ADMIN SYNC] Checking Stripe checkout sessions for ${etudiant.email}...`);
         
         try {
@@ -1133,6 +1199,16 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
             for (const session of matchingSessions) {
               const formationId = session.metadata?.formationId;
               const slot = session.metadata?.slot;
+              const sessionEmail = session.metadata?.email || session.customer_details?.email || '';
+
+              // Find the exact student for this session
+              const { data: targetEtudiant } = await supabaseAdmin
+                .from('etudiants')
+                .select('id')
+                .ilike('email', sessionEmail)
+                .maybeSingle();
+
+              const targetEtudiantId = targetEtudiant?.id || studentId;
 
               let formationUuid = null;
               if (formationId) {
@@ -1163,7 +1239,7 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
                 const { data: existingIns } = await supabaseAdmin
                   .from('inscriptions')
                   .select('id')
-                  .eq('etudiant_id', studentId)
+                  .eq('etudiant_id', targetEtudiantId)
                   .eq('formation_id', formationUuid)
                   .maybeSingle();
 
@@ -1182,7 +1258,7 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
                   const { data: newIns } = await supabaseAdmin
                     .from('inscriptions')
                     .insert({
-                      etudiant_id: studentId,
+                      etudiant_id: targetEtudiantId,
                       formation_id: formationUuid,
                       class_id: classId,
                       status: 'valide',
@@ -1197,7 +1273,7 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
                 await supabaseAdmin
                   .from('etudiants')
                   .update({ status: 'actif' })
-                  .eq('id', studentId);
+                  .eq('id', targetEtudiantId);
 
                 if (inscriptionId) {
                   const { data: existingPayment } = await supabaseAdmin
@@ -1209,7 +1285,7 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
                   if (!existingPayment) {
                     await supabaseAdmin.from('paiements').insert({
                       inscription_id: inscriptionId,
-                      etudiant_id: studentId,
+                      etudiant_id: targetEtudiantId,
                       stripe_session_id: session.id,
                       amount: (session.amount_total || 0) / 100,
                       currency: (session.currency || 'eur').toUpperCase(),
