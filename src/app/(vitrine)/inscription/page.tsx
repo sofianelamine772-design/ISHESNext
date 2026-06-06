@@ -1050,10 +1050,34 @@ function InscriptionForm() {
                 </div>
 
                 {registrationType === 'child' && (
-                  <div className="border-t border-gray-200/50 pt-4 text-center">
-                    <p className="text-xs font-bold text-gray-400">
-                      Nombre d'élèves inscrits : <span className="text-[#101828] font-black">{childrenList.length} enfant(s)</span>
+                  <div className="border-t border-gray-200/50 pt-4">
+                    <p className="text-xs font-bold text-gray-400 text-center mb-4">
+                      Élèves inscrits (<span className="text-[#101828] font-black">{childrenList.length}</span>) :
                     </p>
+                    <div className="space-y-3">
+                      {childrenList.map((child, idx) => (
+                        <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-ishes-green/10 text-ishes-green flex items-center justify-center font-black text-xs uppercase">
+                              {(child.prenom?.[0] || "") + (child.nom?.[0] || "")}
+                            </div>
+                            <div>
+                              <p className="text-sm font-black text-ishes-dark">{child.prenom} {child.nom}</p>
+                              {planId === 'presentiel-global' ? (
+                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">
+                                  {child.slot || "Jour non défini"} • {PRESENTIEL_CLASSES.find(c => c.id.toString() === child.classId)?.niveau?.replace("Femme débutante ", "") || child.niveau || "Niveau non défini"}
+                                  {child.horaire && ` (${child.horaire})`}
+                                </p>
+                              ) : (
+                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">
+                                  Niveau : {child.niveau || "Non défini"}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
