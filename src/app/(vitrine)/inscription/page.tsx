@@ -307,16 +307,10 @@ function InscriptionForm() {
       if (registrationType === 'child') {
         for (let i = 0; i < childrenList.length; i++) {
           const child = childrenList[i];
-          const childEmail = i === 0
-            ? formData.email
-            : formData.email.includes("@")
-              ? formData.email.replace("@", `+${child.prenom.toLowerCase().replace(/\s+/g, '')}@`)
-              : `${formData.email}+${child.prenom.toLowerCase().replace(/\s+/g, '')}`;
-
           const result = await registerStudentAction({
             prenom: child.prenom,
             nom: child.nom,
-            email: childEmail,
+            email: formData.email,
             telephone: formData.telephone,
             niveau: child.niveau,
             planId: planId || 'arabe_coran_junior',

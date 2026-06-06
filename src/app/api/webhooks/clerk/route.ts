@@ -58,16 +58,21 @@ export async function POST(req: Request) {
     const isAdmin = isAdminEmail(email);
 
     // 2. Vérifie si l'e-mail existe déjà dans notre table 'etudiants' (inscrit via vitrine)
-    const { data: existingStudent, error: fetchError } = await supabaseAdmin
+    const { data: existingStudents, error: fetchError } = await supabaseAdmin
       .from('etudiants')
       .select('*')
-      .ilike('email', email)
-      .maybeSingle();
+      .ilike('email', email);
 
     if (fetchError) {
       console.error('Fetch Error:', fetchError);
       return new Response('Error: DB Fetch Error', { status: 500 });
     }
+
+    // Prioriser la fiche sans parent_id (= le parent lui-même).
+    // Les enfants (parent_id !== null) ne doivent jamais être migrés vers le compte Clerk du parent.
+    const existingStudent = existingStudents && existingStudents.length > 0
+      ? (existingStudents.find(s => !s.parent_id) || existingStudents[0])
+      : null;
 
     // 3. Restriction : Si ce n'est pas l'admin ET qu'il n'est pas dans notre base vitrine -> Bloquer
     // Note: Pour bloquer proprement, on devrait supprimer le user Clerk ici.
@@ -79,7 +84,8 @@ export async function POST(req: Request) {
     }
 
     // 4. Synchronisation : Mise à jour de l'étudiant existant avec son ID Clerk réel
-    if (existingStudent && existingStudent.id !== id) {
+    // Ne migrer que si c'est bien la fiche du parent (pas d'un enfant)
+    if (existingStudent && existingStudent.id !== id && !existingStudent.parent_id) {
       const oldId = existingStudent.id;
       
       // Temporairement renommer l'email de l'ancien étudiant pour libérer la contrainte unique
@@ -159,7 +165,7 @@ export async function POST(req: Request) {
           phone: phone || '',
           role: isAdmin ? 'admin' : 'eleve',
           status: 'actif'
-        }, { onConflict: 'email' });
+        }, { onConflict: 'id' });
 
       if (syncError) {
         console.error('Sync Error:', syncError);

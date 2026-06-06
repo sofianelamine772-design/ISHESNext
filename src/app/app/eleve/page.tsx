@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle } from "lucide-react";
+import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle, BookOpen, Users, Calendar } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { fetchStudentCertificateDataAction } from "@/app/actions/students";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button";
 
 export default function EleveDashboard() {
   const { user } = useUser();
+  const router = useRouter();
   const [childrenData, setChildrenData] = useState<any[]>([]);
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
   const [loadingCert, setLoadingCert] = useState(true);
@@ -39,6 +41,7 @@ export default function EleveDashboard() {
             setActiveChildId(res.data[0]?.id || null);
           } else {
             setCertError(res.error || "Aucune inscription active trouvée.");
+            router.push("/unauthorized");
           }
         } catch (err) {
           console.error("Error loading certificate:", err);
@@ -49,7 +52,7 @@ export default function EleveDashboard() {
       };
       loadCertData();
     }
-  }, [user]);
+  }, [user, router]);
 
   const certData = childrenData.find(c => c.id === activeChildId);
 
@@ -155,6 +158,116 @@ export default function EleveDashboard() {
         </div>
       </div>
 
+      {/* ─── RÉCAPITULATIF DES CURSUS ─── */}
+      {childrenData.length > 0 && (
+        <div className="bg-white p-8 md:p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="w-1 h-5 bg-[#086b51] rounded-full"></div>
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#086b51]">
+              {childrenData.length > 1 ? "Mes Enfants & Cursus Inscrits" : "Mon Cursus Actif"}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {childrenData.map((child) => (
+              <div 
+                key={child.id} 
+                className={`border rounded-[2rem] p-6 md:p-8 flex flex-col justify-between gap-6 hover:shadow-lg transition-all relative overflow-hidden ${
+                  activeChildId === child.id 
+                    ? "border-[#086b51] bg-[#086b51]/5" 
+                    : "border-gray-100 bg-white"
+                }`}
+              >
+                {activeChildId === child.id && (
+                  <div className="absolute top-0 right-0 bg-[#086b51] text-white text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-bl-2xl">
+                    Sélectionné
+                  </div>
+                )}
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm ${
+                      activeChildId === child.id ? "bg-[#086b51] text-white" : "bg-gray-100 text-[#086b51]"
+                    }`}>
+                      {child.firstName?.[0] || ""}
+                    </div>
+                    <div>
+                      <h4 className="font-black text-gray-900 text-lg">
+                        {child.firstName} {child.lastName}
+                      </h4>
+                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wider">
+                        Élève Inscrit
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400 font-medium">Cursus :</span>
+                      <span className="font-bold text-gray-800 text-right max-w-[70%] truncate" title={child.formationTitle}>
+                        {child.formationTitle}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400 font-medium">Classe :</span>
+                      <span className="font-bold text-gray-800">{child.className}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400 font-medium">Mode :</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        child.classType === 'presentiel' 
+                          ? 'bg-[#086b51]/10 text-[#086b51]' 
+                          : 'bg-blue-50 text-blue-600'
+                      }`}>
+                        {child.classType === 'presentiel' ? 'Présentiel (Salle ISHES)' : 'Distanciel (Zoom)'}
+                      </span>
+                    </div>
+                    {child.inscriptionDate && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-400 font-medium">Inscrit le :</span>
+                        <span className="font-bold text-gray-500">
+                          {new Date(child.inscriptionDate).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+                  <button
+                    onClick={() => setActiveChildId(child.id)}
+                    className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all ${
+                      activeChildId === child.id
+                        ? "bg-[#086b51] text-white hover:bg-[#075943]"
+                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    Sélectionner pour documents
+                  </button>
+                  {child.whatsappLink && (
+                    <a
+                      href={child.whatsappLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 rounded-xl font-bold text-xs bg-[#25D366] text-white hover:bg-[#20ba56] text-center flex items-center justify-center gap-1.5"
+                    >
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+                      </svg>
+                      Rejoindre WhatsApp
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ─── CHILDREN SELECTOR (FRATRIE) ─── */}
       {childrenData.length > 1 && (
         <div className="flex flex-wrap gap-3">
@@ -233,6 +346,10 @@ export default function EleveDashboard() {
             ) : certError ? (
               <div className="flex items-center gap-1.5 text-xs text-red-500 font-bold shrink-0">
                 <AlertCircle className="w-4 h-4 shrink-0" /> {certError}
+              </div>
+            ) : certData?.status === 'en_attente' ? (
+              <div className="flex items-center gap-1.5 text-xs text-amber-600 font-bold shrink-0 bg-amber-50 border border-amber-200 px-4 py-2.5 rounded-2xl">
+                <AlertCircle className="w-4.5 h-4.5 shrink-0 text-amber-500" /> En attente de paiement ou de validation administrative.
               </div>
             ) : (
               <button

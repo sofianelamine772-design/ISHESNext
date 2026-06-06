@@ -660,55 +660,117 @@ function EtudiantsContent() {
                         <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Chargement des paiements...</span>
                       </div>
                     ) : payments.length > 0 ? (
-                      <div className="space-y-3">
-                        {payments.map((payment) => {
+                      <div className="space-y-4">
+                        {payments.map((payment: any) => {
                           const paymentDate = new Date(payment.created_at).toLocaleDateString('fr-FR', {
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
+                            day: 'numeric', month: 'long', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
                           });
-                          const amountFormatted = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: payment.currency || 'EUR' }).format(payment.amount);
+                          const amountFormatted = new Intl.NumberFormat('fr-FR', {
+                            style: 'currency', currency: payment.currency || 'EUR'
+                          }).format(payment.amount);
+                          const isFamily = payment.isFamilyPayment && payment.familyMembers?.length > 0;
+                          const membersCount = payment.familyMembersCount || 1;
 
                           return (
-                            <div key={payment.id} className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                              <div className="flex items-start gap-3">
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${payment.status === 'succeeded'
-                                  ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10'
-                                  : 'bg-red-50 text-red-500 border border-red-100'
+                            <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${
+                              payment.status === 'succeeded'
+                                ? 'bg-ishes-green/[0.03] border-ishes-green/15'
+                                : 'bg-red-50 border-red-100'
+                            }`}>
+                              {/* En-tête */}
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex items-start gap-3">
+                                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${
+                                    payment.status === 'succeeded'
+                                      ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10'
+                                      : 'bg-red-50 text-red-500 border border-red-100'
                                   }`}>
-                                  <CreditCard className="w-5 h-5" />
-                                </div>
-                                <div>
-                                  <div className="text-xs font-black text-ishes-dark mb-0.5">
-                                    {payment.inscriptions?.formations?.title || payment.inscriptions?.classes?.name || "Règlement Formation"}
+                                    <CreditCard className="w-5 h-5" />
                                   </div>
-                                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                                    Reçu le {paymentDate}
-                                  </div>
-                                  {payment.error_message && (
-                                    <div className="text-[9px] text-red-500 mt-1 font-mono italic">
-                                      Erreur: {payment.error_message}
+                                  <div>
+                                    <div className="text-xs font-black text-ishes-dark">
+                                      {payment.inscriptions?.formations?.title || 'Règlement Formation'}
                                     </div>
-                                  )}
+                                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
+                                      Reçu le {paymentDate}
+                                    </div>
+                                    {isFamily && (
+                                      <div className="flex items-center gap-1.5 mt-1.5">
+                                        <Users className="w-3 h-3 text-blue-500" />
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg">
+                                          Règlement familial — {membersCount} élève{membersCount > 1 ? 's' : ''}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="text-right shrink-0">
+                                  <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
+                                  <span className={`inline-block mt-1 px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${
+                                    payment.status === 'succeeded'
+                                      ? 'bg-ishes-green/10 text-ishes-green'
+                                      : 'bg-red-100 text-red-600'
+                                  }`}>
+                                    {payment.status === 'succeeded' ? 'Réglé' : 'Échoué'}
+                                  </span>
                                 </div>
                               </div>
 
-                              <div className="flex items-center justify-between sm:justify-end gap-4">
-                                <div className="text-left sm:text-right">
-                                  <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
-                                  <div className="text-[9px] text-gray-400 font-mono tracking-widest uppercase truncate max-w-[120px] sm:max-w-none" title={payment.stripe_session_id}>
-                                    ID: {payment.stripe_session_id?.slice(0, 15)}...
-                                  </div>
+                              {/* Élèves couverts */}
+                              {isFamily && (
+                                <div className="border-t border-gray-100 pt-3 space-y-2">
+                                  <p className="text-[9px] font-black uppercase tracking-widest text-gray-400">
+                                    Élèves couverts par ce règlement
+                                  </p>
+                                  {payment.familyMembers.map((member: any) => {
+                                    const ins = member.inscription;
+                                    const isResilie = ins?.status === 'resilie' || ins?.status === 'annule';
+                                    const isPaid = ins?.paid_status === 'paye';
+                                    return (
+                                      <div
+                                        key={member.id}
+                                        className={`flex items-center justify-between px-3 py-2 rounded-xl ${
+                                          isResilie ? 'bg-red-50 border border-red-100' : 'bg-white border border-gray-100'
+                                        }`}
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[8px] font-black ${
+                                            isResilie ? 'bg-red-100 text-red-600' : 'bg-ishes-green/10 text-ishes-green'
+                                          }`}>
+                                            {member.firstName?.[0]}{member.lastName?.[0]}
+                                          </div>
+                                          <div>
+                                            <span className="text-[11px] font-bold text-ishes-dark">
+                                              {member.firstName} {member.lastName}
+                                            </span>
+                                            {ins?.formations?.title && (
+                                              <span className="text-[9px] text-gray-400 ml-1">— {ins.formations.title}</span>
+                                            )}
+                                          </div>
+                                        </div>
+                                        <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg ${
+                                          isResilie
+                                            ? 'bg-red-500 text-white'
+                                            : isPaid
+                                              ? 'bg-ishes-green text-white'
+                                              : 'bg-yellow-400 text-white'
+                                        }`}>
+                                          {isResilie ? 'Résilié' : isPaid ? 'Réglé' : 'En attente'}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                  <p className="text-[9px] text-gray-400 italic pt-1 leading-relaxed">
+                                    💡 Ce règlement de <strong>{amountFormatted}</strong> couvre <strong>{membersCount} élève{membersCount > 1 ? 's' : ''}</strong>.
+                                    En cas de résiliation d’un élève, le paiement reste enregistré pour la famille.
+                                  </p>
                                 </div>
+                              )}
 
-                                <span className={`px-2.5 py-1 text-[9px] font-black uppercase rounded-lg tracking-wider shrink-0 ${payment.status === 'succeeded'
-                                  ? 'bg-ishes-green/10 text-ishes-green'
-                                  : 'bg-red-100 text-red-600'
-                                  }`}>
-                                  {payment.status === 'succeeded' ? 'Payé' : 'Échoué'}
-                                </span>
+                              {/* ID Stripe */}
+                              <div className="text-[9px] text-gray-300 font-mono truncate">
+                                ID: {payment.stripe_session_id}
                               </div>
                             </div>
                           );
@@ -718,7 +780,11 @@ function EtudiantsContent() {
                       <div className="bg-gray-50/50 border border-dashed border-gray-200 rounded-2xl p-8 text-center text-gray-400">
                         <CreditCard className="w-10 h-10 mx-auto mb-3 opacity-30 text-gray-400" />
                         <p className="font-bold text-gray-600 text-xs uppercase tracking-wider">Aucun règlement enregistré</p>
-                        <p className="text-[10px] text-gray-400 mt-1">Cet élève n'a pas encore effectué de paiements via Stripe ou de manière manuelle.</p>
+                        <p className="text-[10px] text-gray-400 mt-1">
+                          {(selectedStudent as any)?.parent_id
+                            ? 'Le paiement est géré par le compte parent de cet élève.'
+                            : 'Cet élève n’a pas encore effectué de paiements.'}
+                        </p>
                       </div>
                     )}
                   </div>
