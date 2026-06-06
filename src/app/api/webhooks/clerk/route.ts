@@ -147,6 +147,12 @@ export async function POST(req: Request) {
         .update({ receiver_id: id })
         .eq('receiver_id', oldId);
 
+      // Transférer la liaison des enfants (très important si l'admin a créé une famille manuellement)
+      await supabaseAdmin
+        .from('etudiants')
+        .update({ parent_id: id })
+        .eq('parent_id', oldId);
+
       // Supprimer l'ancien étudiant temporaire
       await supabaseAdmin
         .from('etudiants')
