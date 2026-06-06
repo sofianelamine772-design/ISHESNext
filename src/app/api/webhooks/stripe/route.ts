@@ -73,16 +73,27 @@ export async function POST(req: Request) {
         .order('created_at', { ascending: true }); // Important pour correspondre à l'ordre d'insertion
 
       if (byEmail && byEmail.length > 0) {
+        const sessionCreatedAt = session.created * 1000; // Convert to ms
+        
+        // Sécurité anti-rejeu (très fréquent avec Stripe CLI en local) :
+        // Un étudiant est toujours inséré en base AVANT la génération de la session Stripe.
+        // Si l'étudiant a été créé *après* la session Stripe (marge de 60s), c'est un rejeu d'un vieux paiement.
+        const validStudents = byEmail.filter(m => {
+          const studentCreatedAt = new Date(m.created_at).getTime();
+          // L'étudiant doit avoir été créé avant (ou très peu de temps après) la session.
+          return studentCreatedAt <= sessionCreatedAt + 60000;
+        });
+
         // Lier les enfants "temp_" au parent si le parent existe
         if (parentMember) {
-          for (const m of byEmail) {
+          for (const m of validStudents) {
             if (!m.parent_id && m.id !== parentMember.id && m.id.startsWith('temp_')) {
               await supabaseAdmin.from('etudiants').update({ parent_id: parentMember.id }).eq('id', m.id);
               m.parent_id = parentMember.id;
             }
           }
         }
-        byEmail.forEach(m => familyMembers.push(m));
+        validStudents.forEach(m => familyMembers.push(m));
       }
     }
 
