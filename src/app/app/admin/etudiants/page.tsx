@@ -64,6 +64,7 @@ function EtudiantsContent() {
   const [isSendingReminder, setIsSendingReminder] = useState(false);
   const [isDeletingStudent, setIsDeletingStudent] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [popupMsg, setPopupMsg] = useState<{ title: string, desc: string, type: 'success' | 'error' } | null>(null);
 
   // Pagination for DOM performance
@@ -135,25 +136,26 @@ function EtudiantsContent() {
     fetchStudents();
   }, [selectedYear]);
 
+  const fetchStudentPayments = async (studentId: string) => {
+    setLoadingPayments(true);
+    try {
+      const result = await fetchPaymentsByStudentAction(studentId);
+      if (result.success && result.data) {
+        setPayments(result.data);
+      } else {
+        setPayments([]);
+      }
+    } catch (err) {
+      console.error("Failed to load payments", err);
+      setPayments([]);
+    } finally {
+      setLoadingPayments(false);
+    }
+  };
+
   useEffect(() => {
     if (selectedStudentId) {
-      const fetchStudentPayments = async () => {
-        setLoadingPayments(true);
-        try {
-          const result = await fetchPaymentsByStudentAction(selectedStudentId);
-          if (result.success && result.data) {
-            setPayments(result.data);
-          } else {
-            setPayments([]);
-          }
-        } catch (err) {
-          console.error("Failed to load payments", err);
-          setPayments([]);
-        } finally {
-          setLoadingPayments(false);
-        }
-      };
-      fetchStudentPayments();
+      fetchStudentPayments(selectedStudentId);
     } else {
       setPayments([]);
     }
@@ -184,6 +186,7 @@ function EtudiantsContent() {
       if (result.success) {
         setShowEditModal(false);
         await fetchStudents();
+        await fetchStudentPayments(selectedStudentId);
       }
     } catch (err) {
       console.error(err);
@@ -333,6 +336,7 @@ function EtudiantsContent() {
     const s = students.find(x => x.id === selectedStudentId);
     if (!s) return;
     const names = s.name.split(' ');
+    const hasPaid = payments.some(p => p.status === 'paid' || p.status === 'payé');
     setFormData({
       first_name: names[0] || "",
       last_name: names.slice(1).join(' ') || "",
@@ -341,10 +345,11 @@ function EtudiantsContent() {
       parent_first_name: s.parentName?.split(' ')[0] || "",
       parent_last_name: s.parentName?.split(' ').slice(1).join(' ') || "",
       address: s.address,
-      payment_status: s.status === 'actif' ? 'a_jour' : 'en_attente',
-      payment_method: "virement",
-      amount_paid: "150"
-    });
+      payment_status: hasPaid ? 'a_jour' : 'en_attente',
+      payment_method: "liquide",
+      amount_paid: "150",
+      _original_payment_status: hasPaid ? 'a_jour' : 'en_attente'
+    } as any);
     setShowEditModal(true);
   };
 
@@ -367,6 +372,56 @@ function EtudiantsContent() {
   }, [students, searchQuery]);
 
   const visibleStudents = useMemo(() => filteredStudents.slice(0, visibleCount), [filteredStudents, visibleCount]);
+
+  const handleExportCSV = async () => {
+    setIsExporting(true);
+    try {
+      const { exportAllStudentsDataAction } = await import("@/app/actions/students");
+      const result = await exportAllStudentsDataAction();
+      if (result.success && result.data) {
+        const headers = ["ID", "Prénom", "Nom", "Email", "Téléphone", "Statut", "Rôle", "Prénom Parent", "Nom Parent", "Formations", "Total Payé (€)", "ID Paiements Stripe", "Date d'inscription"];
+        const rows = result.data.map((s: any) => {
+          const formations = Array.isArray(s.inscriptions) ? s.inscriptions.map((i: any) => i.formations?.title).filter(Boolean).join(" | ") : "";
+          const totalPaid = Array.isArray(s.paiements) ? s.paiements.filter((p: any) => p.status === "paid" || p.status === "payé").reduce((acc: number, p: any) => acc + (p.amount || 0), 0) : 0;
+          const stripeIds = Array.isArray(s.paiements) ? s.paiements.map((p: any) => p.stripe_session_id).filter(Boolean).join(" | ") : "";
+          const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('fr-FR') : "";
+
+          return [
+            s.id,
+            s.first_name || "",
+            s.last_name || "",
+            s.email || "",
+            s.phone || "",
+            s.status || "",
+            s.role || "",
+            s.parent_first_name || "",
+            s.parent_last_name || "",
+            formations,
+            totalPaid,
+            stripeIds,
+            dateStr
+          ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(",");
+        });
+
+        const csvContent = "\uFEFF" + headers.join(",") + "\n" + rows.join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `export_etudiants_ishes_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } else {
+        setPopupMsg({ title: "Erreur", desc: "Impossible de récupérer les données pour l'export.", type: "error" });
+      }
+    } catch (err) {
+      console.error(err);
+      setPopupMsg({ title: "Erreur", desc: "Une erreur est survenue lors de l'export.", type: "error" });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const selectedStudent = useMemo(() => students.find(s => s.id === selectedStudentId), [students, selectedStudentId]);
 
@@ -407,6 +462,15 @@ function EtudiantsContent() {
             </span>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
+            <Button
+              onClick={handleExportCSV}
+              disabled={isExporting}
+              variant="outline"
+              className="h-9 text-xs flex items-center gap-2 border-gray-200 text-gray-700 hover:bg-gray-50"
+            >
+              {isExporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+              <span className="hidden md:inline">Exporter (CSV)</span>
+            </Button>
             <UserButton
               appearance={{
                 elements: {
@@ -1066,6 +1130,52 @@ function EtudiantsContent() {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* FACTURATION / PAIEMENT */}
+              <div className="space-y-6 pt-4 border-t border-gray-50">
+                <h4 className="text-[10px] font-black tracking-widest uppercase text-ishes-green">Facturation & Paiement</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Statut du paiement</label>
+                    <select
+                      value={formData.payment_status}
+                      onChange={(e) => setFormData({ ...formData, payment_status: e.target.value })}
+                      disabled={(formData as any)._original_payment_status === 'a_jour'}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none disabled:opacity-50"
+                    >
+                      <option value="en_attente">En attente de paiement</option>
+                      <option value="a_jour">Règlement Effectué (Payé)</option>
+                    </select>
+                  </div>
+
+                  {formData.payment_status === 'a_jour' && (formData as any)._original_payment_status === 'en_attente' && (
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Moyen de paiement</label>
+                      <select
+                        value={formData.payment_method}
+                        onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                      >
+                        <option value="virement">🏦 Virement bancaire</option>
+                        <option value="liquide">💵 Espèces / Liquide</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {formData.payment_status === 'a_jour' && (formData as any)._original_payment_status === 'en_attente' && (
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant perçu (EUR)</label>
+                    <input
+                      type="number"
+                      placeholder="Ex: 150"
+                      value={formData.amount_paid}
+                      onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 

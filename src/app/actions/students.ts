@@ -680,6 +680,23 @@ export async function updateStudentAction(id: string, data: any) {
       .eq('id', id);
 
     if (error) throw error;
+
+    // Check if billing status was just changed to paid
+    if (data.payment_status === 'a_jour' && data._original_payment_status === 'en_attente') {
+      const methodStr = data.payment_method || 'manual';
+      const { error: pError } = await supabaseAdmin
+        .from('paiements')
+        .insert({
+          etudiant_id: id,
+          amount: parseInt(data.amount_paid) || 150,
+          status: 'succeeded',
+          currency: 'EUR',
+          stripe_session_id: `manual_${methodStr}_${Date.now()}`
+        });
+      
+      if (pError) console.error("Failed to add manual payment on update:", pError);
+    }
+
     return { success: true };
   } catch (err) {
     console.error("Update Student Error:", err);
@@ -1449,4 +1466,28 @@ export async function fetchStudentCertificateDataAction(profile: {
   }
 }
 
+export async function exportAllStudentsDataAction() {
+  try {
+    const { data: etudiants, error } = await supabaseAdmin
+      .from('etudiants')
+      .select(`
+        id, first_name, last_name, email, phone, created_at, status, parent_first_name, parent_last_name, role,
+        inscriptions (
+          id, status, paid_status,
+          formations (title),
+          classes (name)
+        ),
+        paiements (
+          id, amount, status, created_at, stripe_session_id
+        )
+      `)
+      .order('created_at', { ascending: false });
 
+    if (error) throw error;
+
+    return { success: true, data: etudiants };
+  } catch (err) {
+    console.error("Export error:", err);
+    return { success: false, error: "Failed to export data" };
+  }
+}
