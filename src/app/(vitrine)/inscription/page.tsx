@@ -258,8 +258,28 @@ function InscriptionForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    let finalValue = value;
+
+    if (name === 'telephone') {
+      if (value === '' || value === '+' || value === '+3' || value === '+33' || value === '+33 ') {
+        // Permettre d'effacer complètement le champ
+        finalValue = '';
+      } else {
+        // Extraire uniquement les chiffres
+        let digits = value.replace(/[^0-9]/g, '');
+        // Gérer les différents formats d'entrée (avec ou sans +33, avec ou sans 0 initial)
+        if (digits.startsWith('33')) {
+          digits = digits.substring(2);
+        } else if (digits.startsWith('0')) {
+          digits = digits.substring(1);
+        }
+        // Limiter à 9 chiffres après le +33
+        finalValue = '+33 ' + digits.substring(0, 9);
+      }
+    }
+
     setFormData(prev => {
-      const updated = { ...prev, [name]: value };
+      const updated = { ...prev, [name]: finalValue };
 
       if (planId === 'presentiel-global') {
         const slotVal = updated.slot || (slot ? slot.toLowerCase() : "");
@@ -308,8 +328,14 @@ function InscriptionForm() {
     });
   };
 
-  const nextStep = () => setStep(prev => prev + 1);
-  const prevStep = () => setStep(prev => prev - 1);
+  const nextStep = () => {
+    setStep(prev => prev + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const prevStep = () => {
+    setStep(prev => prev - 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const saveToSupabase = async () => {
     try {
@@ -924,7 +950,8 @@ function InscriptionForm() {
                  <button
                    onClick={nextStep}
                    disabled={
-                     !formData.email ||
+                     !formData.email || 
+                     !formData.email.includes('@') ||
                      (registrationType === 'child'
                        ? (
                            !formData.parentPrenom ||
@@ -944,7 +971,8 @@ function InscriptionForm() {
                              ? !formData.classId
                              : !formData.niveau)
                          )
-                     )
+                     ) ||
+                     formData.telephone.length < 13 // +33 + espace + 9 chiffres = 13 chars minimum
                    }
                    className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                  >
