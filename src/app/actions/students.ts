@@ -625,8 +625,38 @@ export async function sendPaymentReminderAction(studentId: string) {
 
     if (error || !student) throw new Error("Student not found");
 
+    let clerkInvited = false;
+    
+    // Tenter TOUJOURS d'envoyer l'invitation Clerk si l'ID laisse penser qu'ils n'ont pas de compte
+    // ou qu'on n'est pas sûr.
+    try {
+      const client = await clerkClient();
+      await client.invitations.createInvitation({
+        emailAddress: student.email,
+        ignoreExisting: true, // Si l'invitation ou le compte existe, ça l'ignore au lieu de planter
+      });
+      clerkInvited = true;
+      console.log(`[RELANCE] Invitation Clerk envoyée à ${student.email}`);
+    } catch (inviteErr: any) {
+      if (inviteErr?.errors?.[0]?.code !== 'form_identifier_exists') {
+        console.error('[RELANCE_CLERK_INVITE_ERROR]', inviteErr);
+      }
+    }
+
+    // Tenter l'email de relance standard (Resend)
     const result = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
-    if (!result.success) return { success: false, error: (result.error as any)?.message || "Failed to send email" };
+    
+    // On ignore totalement l'erreur de Resend (domaine non vérifié) pour le moment,
+    // car le plus important pour l'utilisateur est l'envoi de l'invitation Clerk.
+    if (!result.success) {
+      console.warn("[RESEND_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", result.error);
+      return { 
+        success: true, 
+        warning: clerkInvited 
+          ? "Invitation de création de compte Clerk envoyée avec succès !" 
+          : "Aucune action possible (erreur d'envoi classique)." 
+      };
+    }
 
     return { success: true };
   } catch (err: any) {
@@ -1253,30 +1283,28 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
       .maybeSingle();
 
     // ── 2. Construire la liste des membres de la famille couverts ────────
-    const familyMembers: { id: string; firstName: string; lastName: string; inscription: any }[] = [];
+    const allMembers: { id: string; firstName: string; lastName: string; inscriptions: any[] }[] = [];
 
     if (payerProfile) {
-      const ins = Array.isArray(payerProfile.inscriptions) ? payerProfile.inscriptions[0] : payerProfile.inscriptions;
-      familyMembers.push({
+      allMembers.push({
         id: payerProfile.id,
         firstName: payerProfile.first_name || '',
         lastName: payerProfile.last_name || '',
-        inscription: ins || null,
+        inscriptions: Array.isArray(payerProfile.inscriptions) ? payerProfile.inscriptions : (payerProfile.inscriptions ? [payerProfile.inscriptions] : []),
       });
     }
     if (siblings) {
       siblings.forEach((s: any) => {
-        const ins = Array.isArray(s.inscriptions) ? s.inscriptions[0] : s.inscriptions;
-        familyMembers.push({
+        allMembers.push({
           id: s.id,
           firstName: s.first_name || '',
           lastName: s.last_name || '',
-          inscription: ins || null,
+          inscriptions: Array.isArray(s.inscriptions) ? s.inscriptions : (s.inscriptions ? [s.inscriptions] : []),
         });
       });
     }
 
-    const isFamilyAccount = familyMembers.length > 1;
+    const isFamilyAccount = allMembers.length > 1;
 
     // ── 3. Récupérer les paiements du payeur (déduplication par session_id) ──
     const { data: payerPayments, error } = await supabaseAdmin
@@ -1303,13 +1331,27 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
     });
 
     // ── 5. Enrichir chaque paiement avec le contexte familial ───────────
-    const enriched = deduplicated.map((p: any) => ({
-      ...p,
-      isFamilyPayment: isFamilyAccount,
-      familyMembersCount: isFamilyAccount ? familyMembers.length : 1,
-      familyMembers: isFamilyAccount ? familyMembers : [],
-      // Le montant affiché reste le total payé (pas divisé — c'est 1 paiement = 1 famille)
-    }));
+    const enriched = deduplicated.map((p: any) => {
+      const paymentFormationTitle = p.inscriptions?.formations?.title;
+
+      // Trouver l'inscription de l'étudiant correspondant à la formation de ce paiement spécifique
+      const paymentFamilyMembers = allMembers.map(m => {
+        const matchingIns = m.inscriptions.find((i: any) => i.formations?.title === paymentFormationTitle) || m.inscriptions[0];
+        return {
+          id: m.id,
+          firstName: m.firstName,
+          lastName: m.lastName,
+          inscription: matchingIns || null
+        };
+      });
+
+      return {
+        ...p,
+        isFamilyPayment: isFamilyAccount,
+        familyMembersCount: isFamilyAccount ? allMembers.length : 1,
+        familyMembers: isFamilyAccount ? paymentFamilyMembers : [],
+      };
+    });
 
     return { success: true, data: enriched };
   } catch (err) {

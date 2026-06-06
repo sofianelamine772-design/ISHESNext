@@ -198,7 +198,11 @@ function EtudiantsContent() {
     try {
       const result = await sendPaymentReminderAction(selectedStudentId);
       if (result.success) {
-        setPopupMsg({ title: "Succès !", desc: "L'email de relance a été envoyé avec succès à l'étudiant.", type: "success" });
+        if (result.warning) {
+          setPopupMsg({ title: "Invitation Envoyée !", desc: result.warning, type: "success" });
+        } else {
+          setPopupMsg({ title: "Succès !", desc: "L'email de relance (et l'invitation de connexion Clerk si besoin) a été envoyé avec succès à l'étudiant.", type: "success" });
+        }
       } else {
         setPopupMsg({ title: "Erreur d'envoi", desc: result.error || "Avez-vous vérifié votre domaine sur Resend ?", type: "error" });
       }

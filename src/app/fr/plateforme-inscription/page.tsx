@@ -101,7 +101,10 @@ function InscriptionForm() {
           price: totalPrice + " €",
           mode: (planId === 'tajwid_standard' || planId === 'presentiel-global') ? "presentiel" : "distanciel",
           slot: (registrationType === 'child' ? childrenList[0]?.slot : formData.slot) || slot || "",
+          classId: formData.classId || "",
+          classIds: registrationType === 'child' ? childrenList.map(c => c.classId) : [formData.classId],
           email: formData.email,
+          registrationType: registrationType,
         }),
       });
 
@@ -151,6 +154,10 @@ function InscriptionForm() {
             if (matchingClasses.length === 1) {
               child.classId = matchingClasses[0].id.toString();
               child.horaire = matchingClasses[0].horaire;
+            } else {
+              // Si 0 ou plusieurs classes correspondent, on s'assure que rien n'est pré-sélectionné
+              child.classId = "";
+              child.horaire = "";
             }
           }
         } else if (field === 'classId') {
@@ -275,6 +282,10 @@ function InscriptionForm() {
             if (matchingClasses.length === 1) {
               updated.classId = matchingClasses[0].id.toString();
               updated.horaire = matchingClasses[0].horaire;
+            } else {
+              // Reset si on ne trouve pas de match exact
+              updated.classId = "";
+              updated.horaire = "";
             }
           }
         } else if (name === 'classId') {

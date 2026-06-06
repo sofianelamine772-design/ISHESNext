@@ -69,15 +69,16 @@ export async function POST(req: Request) {
     }
 
     // Prioriser la fiche sans parent_id (= le parent lui-même).
-    // Les enfants (parent_id !== null) ne doivent jamais être migrés vers le compte Clerk du parent.
+    // Les enfants (parent_id !== null OU parent_first_name !== null) ne doivent jamais être migrés vers le compte Clerk du parent.
     const existingStudent = existingStudents && existingStudents.length > 0
-      ? (existingStudents.find(s => !s.parent_id) || existingStudents[0])
+      ? (existingStudents.find(s => !s.parent_id && !s.parent_first_name) || null)
       : null;
 
     // 3. Restriction : Si ce n'est pas l'admin ET qu'il n'est pas dans notre base vitrine -> Bloquer
     // Note: Pour bloquer proprement, on devrait supprimer le user Clerk ici.
     // Pour l'instant, on se contente de NE PAS l'ajouter en actif s'il n'existe pas.
-    if (!isAdmin && !existingStudent) {
+    const isEmailKnown = existingStudents && existingStudents.length > 0;
+    if (!isAdmin && !isEmailKnown) {
       console.warn(`Tentative d'inscription non autorisée : ${email}`);
       // Optionnel: On pourrait supprimer le compte Clerk ici via l'API Admin de Clerk
       return new Response('Unauthorized email', { status: 403 });
@@ -154,7 +155,7 @@ export async function POST(req: Request) {
 
       console.log(`Utilisateur synchronisé via migration d'ID : ${email} (${oldId} -> ${id})`);
     } else {
-      // Cas par défaut (si déjà synchronisé ou si c'est un admin n'existant pas encore)
+      // Cas par défaut (si déjà synchronisé ou si c'est un admin n'existant pas encore, ou si c'est un parent avec seulement des enfants)
       const { error: syncError } = await supabaseAdmin
         .from('etudiants')
         .upsert({
@@ -172,6 +173,16 @@ export async function POST(req: Request) {
         return new Response('Error: Internal Server Error', { status: 500 });
       }
       console.log(`Utilisateur synchronisé standard : ${email}`);
+
+      // Si c'est un nouveau parent, relier tous ses enfants (qui n'ont pas encore de parent_id) à son compte
+      if (!existingStudent && existingStudents && existingStudents.length > 0) {
+        for (const child of existingStudents) {
+          if (!child.parent_id) {
+            await supabaseAdmin.from('etudiants').update({ parent_id: id }).eq('id', child.id);
+            console.log(`Enfant ${child.id} relié au nouveau parent ${id}`);
+          }
+        }
+      }
     }
 
     try {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
+import { CLASS_ID_TO_UUID } from '@/lib/presentiel-data';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-04-22.dahlia',
@@ -52,6 +53,14 @@ export async function POST(req: Request) {
         slot: body.slot || '',
         email: body.email || '', // Email de référence pour l'inscription
         type: 'inscription',
+        // Mapping des IDs de la vitrine vers les UUIDs de la base de données
+        classId: body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '',
+        classId_0: body.classIds && body.classIds.length > 0 ? CLASS_ID_TO_UUID[parseInt(body.classIds[0])] || body.classIds[0] : '',
+        classId_1: body.classIds && body.classIds.length > 1 ? CLASS_ID_TO_UUID[parseInt(body.classIds[1])] || body.classIds[1] : '',
+        classId_2: body.classIds && body.classIds.length > 2 ? CLASS_ID_TO_UUID[parseInt(body.classIds[2])] || body.classIds[2] : '',
+        classId_3: body.classIds && body.classIds.length > 3 ? CLASS_ID_TO_UUID[parseInt(body.classIds[3])] || body.classIds[3] : '',
+        classId_4: body.classIds && body.classIds.length > 4 ? CLASS_ID_TO_UUID[parseInt(body.classIds[4])] || body.classIds[4] : '',
+        registrationType: body.registrationType || 'adult', // 'child' or 'adult'
       },
     });
 
