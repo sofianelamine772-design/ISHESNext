@@ -1,4 +1,3 @@
-import { supabaseAdmin } from "../src/app/actions/students"; // Or import directly from lib
 import { supabaseAdmin as dbAdmin } from "../src/lib/supabaseAdmin";
 
 async function simulateWebhook() {

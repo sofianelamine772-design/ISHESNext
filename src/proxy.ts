@@ -12,6 +12,8 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks(.*)',
   '/api/checkout(.*)',
   '/mentions-legales(.*)',
+  '/cgv(.*)',
+  '/politique-de-confidentialite(.*)',
   '/formation-enseignant(.*)',
   '/campus(.*)',
   '/conseil-spiritualite(.*)',
@@ -25,6 +27,11 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 
 export default clerkMiddleware(async (auth, request) => {
+  // Redirection case-sensitive pour /CGV vers /cgv
+  if (request.nextUrl.pathname === '/CGV') {
+    return NextResponse.redirect(new URL('/cgv', request.url), 308);
+  }
+
   const { userId } = await auth();
 
   // Protection de base pour les routes privées

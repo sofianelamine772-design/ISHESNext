@@ -343,12 +343,12 @@ export async function POST(req: Request) {
       const primaryMember = parent || familyMembers?.[0];
 
       if (primaryMember) {
-        // Trouver l'inscription active la plus récente
+        // Trouver l'inscription active la plus récente (valide ou en attente)
         const { data: inscription } = await supabaseAdmin
           .from('inscriptions')
           .select('id')
           .eq('etudiant_id', primaryMember.id)
-          .eq('status', 'valide')
+          .in('status', ['valide', 'en_attente'])
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -381,6 +381,32 @@ export async function POST(req: Request) {
         }
       } else {
         console.warn(`[WEBHOOK] Étudiant non trouvé pour l'email de facture: ${customerEmail}`);
+      }
+    }
+
+    // Gestion de la limite d'échéances pour le paiement en plusieurs fois
+    if (event.type === 'invoice.payment_succeeded' && (invoice as any).subscription) {
+      try {
+        const subscription = await stripe.subscriptions.retrieve((invoice as any).subscription as string);
+        const installmentsTotal = subscription.metadata?.installments_total;
+        if (installmentsTotal) {
+          const total = parseInt(installmentsTotal, 10);
+          const invoices = await stripe.invoices.list({
+            subscription: subscription.id,
+            status: 'paid',
+            limit: 10
+          });
+          const paidCount = invoices.data.length;
+          console.log(`[STRIPE_WEBHOOK] Abonnement ${subscription.id} : ${paidCount}/${total} mensualités payées.`);
+          if (paidCount >= total) {
+            await stripe.subscriptions.update(subscription.id, {
+              cancel_at_period_end: true
+            });
+            console.log(`[STRIPE_WEBHOOK] Abonnement ${subscription.id} configuré pour résiliation (toutes mensualités réglées).`);
+          }
+        }
+      } catch (subErr) {
+        console.error('[STRIPE_WEBHOOK_SUB_CANCEL_ERROR]', subErr);
       }
     }
   }

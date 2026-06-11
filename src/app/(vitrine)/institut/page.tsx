@@ -34,37 +34,37 @@ interface PresentielProgram {
 
 const presentielPrograms: PresentielProgram[] = [
   {
-    id: "tajwid-standard",
+    id: "femme-debutante-presentiel",
     formationId: "presentiel-global",
-    title: "Tajwid (Standard)",
-    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid.",
-    durationText: "Lundi 19h00",
-    day: "Lundi",
+    title: "FEMME DEBUTANTE : Arabe + Tajwid",
+    subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
+    durationText: "Samedi matin 9h-12h",
+    day: "Samedi",
     audience: "adulte",
-    features: ["Lecture correcte", "Application des règles", "Fluidité", "Suivi WhatsApp"],
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Samedi matin (9h-12h)", "Suivi personnalisé"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/fr/cours-lecture-tajwid"
+    link: "/fr/cours-en-presentiel"
   },
   {
-    id: "arabe-adulte",
+    id: "femme-intermediaire-presentiel",
     formationId: "presentiel-global",
-    title: "Arabe Littéraire",
-    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation.",
-    durationText: "Mardi 19h00",
-    day: "Mardi",
+    title: "FEMME INTERMEDIAIRE : Arabe + Tajwid",
+    subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
+    durationText: "Dimanche matin 9h-12h",
+    day: "Dimanche",
     audience: "adulte",
-    features: ["Lecture & Écriture", "Conversation", "Grammaire", "Immersion"],
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Dimanche matin (9h-12h)", "Suivi personnalisé"],
     price: "349 €",
     priceSub: "/ SESSION",
-    link: "/fr/cours-arabe-adulte"
+    link: "/fr/cours-en-presentiel"
   },
   {
     id: "enfant-mercredi-presentiel",
     formationId: "presentiel-global",
     title: "Scolarité Enfants",
     subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
-    durationText: "Mercredi 14h-17h",
+    durationText: "Mercredi 13h30-16h30",
     day: "Mercredi",
     audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
@@ -77,7 +77,7 @@ const presentielPrograms: PresentielProgram[] = [
     formationId: "presentiel-global",
     title: "Scolarité Enfants",
     subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
-    durationText: "Samedi 09h-12h",
+    durationText: "Samedi 9h-12h / 13h30-16h30",
     day: "Samedi",
     audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
@@ -90,7 +90,7 @@ const presentielPrograms: PresentielProgram[] = [
     formationId: "presentiel-global",
     title: "Scolarité Enfants",
     subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
-    durationText: "Dimanche 11h30-14h30",
+    durationText: "Dimanche 9h-12h / 13h30-16h30",
     day: "Dimanche",
     audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
@@ -256,11 +256,18 @@ export default function InstitutPage() {
 
                   {/* PRICE & CTA */}
                   <div className="flex flex-col gap-4 mt-auto pt-6 border-t border-gray-100 relative z-30">
-                    <div className="flex items-baseline gap-2">
-                      <div className="text-3xl font-black text-[#152233] tracking-tighter">{program.price}</div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                        {program.priceSub}
+                    <div className="flex flex-col">
+                      <div className="flex items-baseline gap-2">
+                        <div className="text-3xl font-black text-[#152233] tracking-tighter">{program.price}</div>
+                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          {program.priceSub}
+                        </div>
                       </div>
+                      {program.price !== "0 €" && program.price !== "Sur Devis" && (
+                         <div className="text-[10px] font-bold text-[#c8a96e] uppercase tracking-wide mt-1.5 flex items-center gap-1">
+                            <span>💳</span> Paiement en 1x, 3x ou 5x
+                         </div>
+                      )}
                     </div>
                     
                     {program.day && (
@@ -368,11 +375,11 @@ export default function InstitutPage() {
                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm max-w-md">
                       <div className="grid grid-cols-2 gap-4 text-[11px] font-bold tracking-wider uppercase">
                          <div className="text-white/40">Mercredi</div>
-                         <div className="text-[#c8a96e] text-right">14h — 17h</div>
+                         <div className="text-[#c8a96e] text-right">13h30 — 16h30</div>
                          <div className="text-white/40">Samedi</div>
                          <div className="text-[#c8a96e] text-right">9h — 12h / 13h30 — 16h30</div>
                          <div className="text-white/40">Dimanche</div>
-                         <div className="text-[#c8a96e] text-right">11h30 — 15h</div>
+                         <div className="text-[#c8a96e] text-right">9h — 12h / 13h30 — 16h30</div>
                       </div>
                    </div>
                 </div>

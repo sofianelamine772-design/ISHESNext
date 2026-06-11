@@ -19,16 +19,15 @@ export default function SignInPage() {
 
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="relative h-16 w-48 mx-auto mb-6 bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <Image
-                src="/logo-ishes-institut-arabe.png"
-                alt="ISHES Logo"
-                fill
-                priority
-                className="object-contain"
-              />
-            </div>
+          <div className="mx-auto mb-6 bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center justify-center h-16 w-48">
+            <Image
+              src="/logo-ishes-institut-arabe.png"
+              alt="ISHES Logo"
+              width={192}
+              height={64}
+              priority
+              className="object-contain max-h-full max-w-full"
+            />
           </div>
           <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Bon retour !</h1>
           <p className="text-gray-500 font-medium text-sm">Connectez-vous à votre espace étudiant</p>

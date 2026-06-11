@@ -178,8 +178,8 @@ export function Footer() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             <Link href="/mentions-legales" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Mentions Légales</Link>
-            <Link href="#" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">CGV</Link>
-            <Link href="#" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Politique de confidentialité</Link>
+            <Link href="/cgv" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">CGV</Link>
+            <Link href="/politique-de-confidentialite" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Politique de confidentialité</Link>
           </div>
         </div>
 

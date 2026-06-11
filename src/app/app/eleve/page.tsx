@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle, BookOpen, Users, Calendar } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle, BookOpen, Users, Calendar, MonitorDown } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -19,6 +19,11 @@ export default function EleveDashboard() {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [certError, setCertError] = useState<string | null>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  // PWA Install
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   const currentYear = new Date().getFullYear();
   const academicYear = new Date().getMonth() >= 7 ? `${currentYear}-${currentYear + 1}` : `${currentYear - 1}-${currentYear}`;
@@ -53,6 +58,38 @@ export default function EleveDashboard() {
       loadCertData();
     }
   }, [user, router]);
+
+  // Capture the PWA install prompt event
+  useEffect(() => {
+    // Detect iOS
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    setIsIOS(ios);
+
+    // Check if already installed as standalone
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', () => setIsInstalled(true));
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsInstalled(true);
+      setInstallPrompt(null);
+    }
+  };
 
   const certData = childrenData.find(c => c.id === activeChildId);
 
@@ -363,53 +400,70 @@ export default function EleveDashboard() {
         </div>
       </div>
 
-      {/* ─── IPHONE TUTORIAL SECTION ─── */}
+      {/* ─── INSTALL APP SECTION ─── */}
       <div className="bg-ishes-dark rounded-[3.5rem] overflow-hidden shadow-2xl relative">
+        {/* Background decorative icon */}
         <div className="absolute top-0 right-0 p-12 opacity-5 text-white pointer-events-none">
           <Smartphone className="w-64 h-64" strokeWidth={1} />
         </div>
-        
-        <div className="grid lg:grid-cols-2 gap-12 p-12 md:p-20 items-center">
-          <div className="space-y-8 relative z-10">
+
+        <div className="p-12 md:p-20 space-y-10 relative z-10">
+          {/* Header */}
+          <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-[1px] bg-ishes-green"></div>
-              <span className="text-ishes-green text-[10px] font-black uppercase tracking-[0.3em]">Astuce Mobile</span>
+              <span className="text-ishes-green text-[10px] font-black uppercase tracking-[0.3em]">Application Mobile</span>
             </div>
-            
             <h3 className="text-4xl md:text-5xl font-black text-white leading-tight uppercase tracking-tight">
               Installez l'application<br />
-              <span className="text-ishes-green italic">sur votre iPhone.</span>
+              <span className="text-ishes-green italic">sur votre appareil.</span>
             </h3>
-            
-            <p className="text-white/60 font-medium text-lg leading-relaxed">
-              Accédez à vos cours en un clic, directement depuis votre écran d'accueil, sans passer par Safari.
+            <p className="text-white/60 font-medium text-lg leading-relaxed max-w-xl">
+              Accédez à vos cours en un clic, directement depuis votre écran d'accueil — sans passer par le navigateur.
             </p>
+          </div>
 
-            <div className="space-y-6 pt-4">
-              {[
-                { step: "01", text: "Ouvrez Safari et appuyez sur l'icône de partage (en bas).", icon: Share },
-                { step: "02", text: "Faites défiler et choisissez 'Sur l'écran d'accueil'.", icon: PlusSquare },
-                { step: "03", text: "Appuyez sur 'Ajouter' en haut à droite.", icon: ArrowRight },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-5 group">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-ishes-green font-black text-sm transition-all group-hover:bg-ishes-green group-hover:text-white group-hover:scale-110">
-                    {item.step}
-                  </div>
-                  <p className="text-white/80 font-bold text-sm">{item.text}</p>
-                </div>
-              ))}
+          {/* Install button or status */}
+          {isInstalled ? (
+            <div className="inline-flex items-center gap-3 bg-ishes-green/20 border border-ishes-green/30 text-ishes-green px-8 py-4 rounded-[1.5rem] font-black text-sm">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Application déjà installée ✓
             </div>
-          </div>
+          ) : installPrompt ? (
+            // Android / Chrome / Edge: native install prompt available
+            <button
+              onClick={handleInstallApp}
+              className="inline-flex items-center gap-3 bg-ishes-green hover:bg-[#075943] text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-ishes-green/30 cursor-pointer"
+            >
+              <MonitorDown className="w-5 h-5" />
+              Installer le logiciel
+            </button>
+          ) : (
+            // iOS / Safari: no native prompt — show simple manual instructions
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-400/20 text-amber-300 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider">
+                <Smartphone className="w-4 h-4" />
+                {isIOS ? "Sur iPhone/iPad — ajout manuel requis" : "Ouvrez cette page dans Chrome ou Edge pour installer"}
+              </div>
 
-          <div className="relative aspect-square rounded-[2.5rem] overflow-hidden shadow-inner border border-white/5">
-            <Image 
-              src="/images/tutoriel-installation-application-ishes.png"
-              alt="Tutoriel iPhone PWA"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </div>
+              {isIOS && (
+                <div className="space-y-4 max-w-md">
+                  {[
+                    { step: "01", icon: Share, text: "Appuyez sur l'icône de partage ↑ (barre du bas dans Safari)." },
+                    { step: "02", icon: PlusSquare, text: "Faites défiler et choisissez \"Sur l'écran d'accueil\"." },
+                    { step: "03", icon: ArrowRight, text: "Appuyez sur \"Ajouter\" en haut à droite. C'est tout !" },
+                  ].map((item) => (
+                    <div key={item.step} className="flex items-center gap-5 group">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-ishes-green font-black text-sm shrink-0 transition-all group-hover:bg-ishes-green group-hover:text-white group-hover:scale-110">
+                        {item.step}
+                      </div>
+                      <p className="text-white/80 font-bold text-sm">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

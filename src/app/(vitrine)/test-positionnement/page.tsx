@@ -133,7 +133,7 @@ export default function TestPositionnement() {
                 Orientation Enfants
               </span>
               <h1 className="text-4xl md:text-6xl font-black text-ishes-dark mb-6 uppercase leading-tight">
-                Test de <br /><span className="text-[#c8a96e] italic">Positionnement.</span>
+                Test de <br /><span className="text-[#c8a96e] italic">Niveau.</span>
               </h1>
               <p className="text-gray-500 font-medium mb-12 max-w-xl mx-auto">
                 Ce test rapide nous permet d'orienter au mieux votre enfant pour qu'il progresse sereinement bi idhniLLAH.
@@ -315,11 +315,10 @@ export default function TestPositionnement() {
           )}
           
           {/* Disclaimer Footer */}
-          <div className="mt-12 flex items-start gap-4 p-6 bg-ishes-dark text-white/50 rounded-3xl text-[10px] font-medium leading-relaxed">
-            <AlertCircle className="w-5 h-5 text-[#c8a96e] shrink-0" />
+          <div className="mt-12 flex items-start gap-4 p-6 bg-[#c8a96e]/10 border border-[#c8a96e]/20 text-gray-700 rounded-3xl text-xs font-semibold leading-relaxed">
+            <AlertCircle className="w-5 h-5 text-[#c8a96e] shrink-0 mt-0.5" />
             <p>
-              Ce test est une aide au positionnement. L’objectif n’est pas de “mettre une note” à l’enfant, 
-              mais de l’orienter vers le groupe dans lequel il progressera le mieux bi idhniLLAH.
+              Ce test vous permet de choisir le niveau le plus adapté à votre enfant en cas d’hésitation.
             </p>
           </div>
         </div>

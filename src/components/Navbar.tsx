@@ -26,13 +26,14 @@ export function Navbar() {
 
           <div className="flex-shrink-0">
             <Link href="/" className="group flex items-center transition-transform hover:scale-105 active:scale-95">
-              <div className="relative h-10 md:h-12 w-32 md:w-36">
+              <div className="flex items-center justify-center h-10 md:h-12 w-32 md:w-36">
                 <Image
                   src="/logo-ishes-institut-arabe.png"
                   alt="ISHES Logo"
-                  fill
+                  width={144}
+                  height={48}
                   priority
-                  className="object-contain"
+                  className="object-contain max-h-full max-w-full"
                 />
               </div>
             </Link>

@@ -366,86 +366,60 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     niveauKey: "elementaire_7"
   },
 
-  // --- FEMMES (26 à 31) ---
+  // --- FEMMES (26 et 29) ---
   {
     id: 26,
     niveau: "Femme débutante ARABE + TAJWID",
     ageCondition: "Femme",
-    horaire: "Dimanche matin",
+    horaire: "Samedi matin (09h00 - 12h00)",
     audience: "adulte",
     type: "femme",
-    jour: "dimanche",
+    jour: "samedi",
     periode: "matin",
     planId: "presentiel-global",
-    slotKey: "dimanche",
-    niveauKey: "femme_debutante"
-  },
-  {
-    id: 27,
-    niveau: "Femme débutante TAJWID SEUL",
-    ageCondition: "Femme",
-    horaire: "Dimanche matin",
-    audience: "adulte",
-    type: "femme",
-    jour: "dimanche",
-    periode: "matin",
-    planId: "presentiel-global",
-    slotKey: "dimanche",
-    niveauKey: "femme_debutante"
-  },
-  {
-    id: 28,
-    niveau: "Femme débutante ARABE SEUL",
-    ageCondition: "Femme",
-    horaire: "Dimanche matin",
-    audience: "adulte",
-    type: "femme",
-    jour: "dimanche",
-    periode: "matin",
-    planId: "presentiel-global",
-    slotKey: "dimanche",
+    slotKey: "samedi",
     niveauKey: "femme_debutante"
   },
   {
     id: 29,
-    niveau: "Femme intermédiaire ARABE",
+    niveau: "Femme intermédiaire ARABE + TAJWID",
     ageCondition: "Femme",
-    horaire: "Samedi matin",
+    horaire: "Dimanche matin (09h00 - 12h00)",
     audience: "adulte",
     type: "femme",
-    jour: "samedi",
+    jour: "dimanche",
     periode: "matin",
     planId: "presentiel-global",
-    slotKey: "samedi",
-    niveauKey: "femme_intermediaire"
-  },
-  {
-    id: 30,
-    niveau: "Femme intermédiaire TAJWID",
-    ageCondition: "Femme",
-    horaire: "Samedi matin",
-    audience: "adulte",
-    type: "femme",
-    jour: "samedi",
-    periode: "matin",
-    planId: "presentiel-global",
-    slotKey: "samedi",
-    niveauKey: "femme_intermediaire"
-  },
-  {
-    id: 31,
-    niveau: "Femme intermédiaire ARABE + TAJ",
-    ageCondition: "Femme",
-    horaire: "Samedi après-midi",
-    audience: "adulte",
-    type: "femme",
-    jour: "samedi",
-    periode: "après-midi",
-    planId: "presentiel-global",
-    slotKey: "samedi",
+    slotKey: "dimanche",
     niveauKey: "femme_intermediaire"
   }
 ];
+
+// Standardize children class times to match the user's requirements:
+// - Mercredi après-midi: 13h30-16h30
+// - Samedi matin: 9h-12h
+// - Samedi après-midi: 13h30-16h30
+// - Dimanche matin: 9h-12h
+// - Dimanche après-midi: 13h30-16h30
+PRESENTIEL_CLASSES.forEach(c => {
+  if (c.audience === 'enfant') {
+    if (c.jour === 'mercredi') {
+      c.horaire = "Mercredi après-midi (13h30 - 16h30)";
+    } else if (c.jour === 'samedi') {
+      if (c.periode === 'matin') {
+        c.horaire = "Samedi matin (09h00 - 12h00)";
+      } else {
+        c.horaire = "Samedi après-midi (13h30 - 16h30)";
+      }
+    } else if (c.jour === 'dimanche') {
+      if (c.periode === 'matin') {
+        c.horaire = "Dimanche matin (09h00 - 12h00)";
+      } else {
+        c.horaire = "Dimanche après-midi (13h30 - 16h30)";
+      }
+    }
+  }
+});
 
 export const CLASS_ID_TO_UUID: Record<number, string> = {
   1: 'a7712363-8f5a-475e-848e-d27acff577f7', // Prépa 1 – Mercredi

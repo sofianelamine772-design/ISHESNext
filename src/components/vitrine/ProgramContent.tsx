@@ -28,34 +28,34 @@ type Program = {
 
 export const PROGRAMS: Program[] = [
   {
-    id: "tajwid-standard-presentiel",
+    id: "femme-debutante-presentiel",
     formationId: "presentiel-global",
-    title: "Tajwid (Standard)",
-    subtitle: "Apprends à lire le Coran correctement en respectant les règles de Tajwid en présentiel.",
+    title: "FEMME DEBUTANTE : Arabe + Tajwid",
+    subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Lundi 19h00",
-    features: ["Lecture correcte", "Application des règles", "Fluidité", "Suivi WhatsApp"],
+    durationText: "Samedi matin 9h-12h",
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Niveau Débutante", "Samedi matin (9h-12h)"],
     price: "349 €",
     priceSub: "/ SESSION",
     type: "presentiel",
     audience: "adulte",
-    day: "Lundi"
+    day: "Samedi"
   },
   {
-    id: "arabe-adulte-presentiel",
+    id: "femme-intermediaire-presentiel",
     formationId: "presentiel-global",
-    title: "Arabe Littéraire",
-    subtitle: "Maîtrisez la langue arabe moderne, de l'alphabet à la conversation en présentiel.",
+    title: "FEMME INTERMEDIAIRE : Arabe + Tajwid",
+    subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Mardi 19h00",
-    features: ["Lecture & Écriture", "Conversation", "Grammaire", "Immersion"],
+    durationText: "Dimanche matin 9h-12h",
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Niveau Intermédiaire", "Dimanche matin (9h-12h)"],
     price: "349 €",
     priceSub: "/ SESSION",
     type: "presentiel",
     audience: "adulte",
-    day: "Mardi"
+    day: "Dimanche"
   },
   {
     id: "enfant-mercredi-presentiel",
@@ -64,7 +64,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Mercredi 14h-17h",
+    durationText: "Mercredi 13h30-16h30",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
@@ -79,7 +79,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Samedi 09h-12h",
+    durationText: "Samedi 9h-12h / 13h30-16h30",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
@@ -94,7 +94,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Dimanche 11h30-14h30",
+    durationText: "Dimanche 9h-12h / 13h30-16h30",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
     price: "349 €",
     priceSub: "/ SESSION",
@@ -483,6 +483,7 @@ export function ProgramContent() {
                     src="/images/bulle-manga-pedagogique-ishes.png" 
                     alt="Manga Bubble" 
                     fill 
+                    sizes="240px"
                     className="object-contain"
                   />
                   <div className="absolute inset-0 flex items-center justify-center text-center p-8 pr-10 pb-16 font-sans">
@@ -571,6 +572,7 @@ export function ProgramContent() {
                   (program.id === 'tajwid_standard' || program.id === 'tajwid-standard-presentiel') ? '/fr/cours-lecture-tajwid' : 
                   program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
                   (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' : 
+                  (program.id === 'femme-debutante-presentiel' || program.id === 'femme-intermediaire-presentiel') ? '/fr/cours-en-presentiel' :
                   (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' : 
                   program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
                   program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
@@ -662,6 +664,11 @@ export function ProgramContent() {
                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
                                   {program.priceSub}
                                </div>
+                                {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "GRATUIT" && (
+                                   <div className="text-[10px] font-bold text-[#008953] uppercase tracking-wide mt-1.5 flex items-center gap-1">
+                                      <span>💳</span> Paiement en 1x, 3x ou 5x
+                                   </div>
+                                )}
                                 {isPresentiel && (
                                  <div className="mb-2 mt-2">
                                    {getSlotStatus(program.day)?.est_plein ? (

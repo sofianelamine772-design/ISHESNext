@@ -45,40 +45,10 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
       return PRESENTIEL_CLASSES.filter(c => c.audience === "enfant");
     }
     if (id === "tajwid_standard") {
-      return [
-        {
-          id: 0,
-          niveau: "Tajwid (Standard) - Classe Générale",
-          ageCondition: "Adulte",
-          horaire: "Lundi 19h00",
-          audience: "adulte",
-          type: "mixte",
-          jour: "lundi",
-          periode: "soir",
-          planId: "presentiel-global",
-          slotKey: "lundi",
-          niveauKey: "debutant"
-        },
-        ...PRESENTIEL_CLASSES.filter(c => c.audience === "adulte" && c.niveau.toLowerCase().includes("tajwid"))
-      ];
+      return PRESENTIEL_CLASSES.filter(c => c.audience === "adulte" && c.niveau.toLowerCase().includes("tajwid"));
     }
     if (id === "arabe_adulte") {
-      return [
-        {
-          id: 0,
-          niveau: "Arabe Littéraire - Classe Générale",
-          ageCondition: "Adulte",
-          horaire: "Mardi 19h00",
-          audience: "adulte",
-          type: "mixte",
-          jour: "mardi",
-          periode: "soir",
-          planId: "presentiel-global",
-          slotKey: "mardi",
-          niveauKey: "debutant"
-        },
-        ...PRESENTIEL_CLASSES.filter(c => c.audience === "adulte" && c.niveau.toLowerCase().includes("arabe"))
-      ];
+      return PRESENTIEL_CLASSES.filter(c => c.audience === "adulte" && c.niveau.toLowerCase().includes("arabe"));
     }
     return [];
   };

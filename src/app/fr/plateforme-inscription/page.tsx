@@ -76,12 +76,39 @@ function InscriptionForm() {
     );
   };
 
-  const getPrice = () => {
-    if (registrationType === 'child') {
-      return (planId === 'tarbiya_islamiya' ? 249 : 349) * childrenList.length;
+  const getBasePriceOfPlan = (plan: string | null): number => {
+    if (!plan) return 349;
+    const normalized = plan.toLowerCase();
+    if (normalized === 'tarbiya_islamiya') return 249;
+    if (normalized === 'tajwid_intensif') return 649;
+    if (normalized === 'sciences_du_coran') return 399;
+    if (normalized === 'spiritualite_islam') return 399;
+    if (normalized === 'al_aqida') return 250;
+    if (normalized === 'as_sirah') return 250;
+    if (normalized === 'pack_accompagnement') return 49;
+    if (normalized === 'correction_fatiha') return 0;
+    if (normalized === 'cours_particuliers') return 0;
+    if (normalized === 'presentiel-global') {
+      return 150; // Acompte de 150 € pour le présentiel
     }
-    return 150; // Follows the logic in step 4
+    return 349; // Tarif par défaut (Tajwid standard, Arabe standard, etc.)
   };
+
+  const getPrice = () => {
+    const basePrice = getBasePriceOfPlan(planId);
+    if (registrationType === 'child') {
+      return basePrice * childrenList.length;
+    }
+    return basePrice;
+  };
+
+  const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5>(1);
+
+  useEffect(() => {
+    if (getPrice() < 100) {
+      setSelectedInstallments(1);
+    }
+  }, [childrenList.length, registrationType, planId]);
 
   const handleCheckout = async () => {
     setLoadingCheckout(true);
@@ -105,6 +132,7 @@ function InscriptionForm() {
           classIds: registrationType === 'child' ? childrenList.map(c => c.classId) : [formData.classId],
           email: formData.email,
           registrationType: registrationType,
+          installments: selectedInstallments,
         }),
       });
 
@@ -1093,13 +1121,85 @@ function InscriptionForm() {
                 <div className="flex justify-between items-center mb-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
                   <span>Total à régler</span>
                   <span className="text-ishes-dark">
-                    {registrationType === 'child'
-                      ? (planId === 'tarbiya_islamiya' ? 249 : 349) * childrenList.length
-                      : (planId === 'tajwid_intensif' || planId === 'sciences_islamiques' ? 150 : 150)
-                    },00 €
+                    {getPrice()},00 €
                   </span>
                 </div>
-                <div className="h-[1px] bg-gray-200 mb-4" />
+                <div className="h-[1px] bg-gray-200 mb-6" />
+
+                {/* Sélecteur interactive de mensualités */}
+                {getPrice() > 0 && (
+                  <div className="mb-6 text-left">
+                    <label className="text-[10px] font-black tracking-widest text-gray-400 uppercase block mb-3">
+                      Option de paiement
+                    </label>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {/* Option 1x */}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedInstallments(1)}
+                        className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${
+                          selectedInstallments === 1
+                            ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
+                            : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
+                        }`}
+                      >
+                        <div>
+                          <span className="font-bold text-sm block">En 1 fois</span>
+                          <span className="text-[10px] text-gray-400 font-medium">Règlement unique sans frais</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-bold text-sm text-[#008953]">{getPrice()},00 €</span>
+                        </div>
+                      </button>
+
+                      {/* Option 3x */}
+                      {getPrice() >= 100 && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedInstallments(3)}
+                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${
+                            selectedInstallments === 3
+                              ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
+                              : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
+                        }`}
+                        >
+                          <div>
+                            <span className="font-bold text-sm block">En 3 fois</span>
+                            <span className="text-[10px] text-gray-400 font-medium">3 mensualités</span>
+                          </div>
+                          <div className="text-right flex flex-col">
+                            <span className="font-bold text-sm text-[#008953]">{(getPrice() / 3).toFixed(2)} €</span>
+                            <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
+                          </div>
+                        </button>
+                      )}
+
+                      {/* Option 5x */}
+                      {getPrice() >= 100 && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedInstallments(5)}
+                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${
+                            selectedInstallments === 5
+                              ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
+                              : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
+                        }`}
+                        >
+                          <div>
+                            <span className="font-bold text-sm block">En 5 fois</span>
+                            <span className="text-[10px] text-gray-400 font-medium">5 mensualités</span>
+                          </div>
+                          <div className="text-right flex flex-col">
+                            <span className="font-bold text-sm text-[#008953]">{(getPrice() / 5).toFixed(2)} €</span>
+                            <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
+                          </div>
+                        </button>
+                      )}
+                    </div>
+                    <div className="h-[1px] bg-gray-200 mt-6 mb-6" />
+                  </div>
+                )}
+
                 {registrationType === 'child' && childrenList.length > 1 && (
                   <div className="text-left text-xs font-bold text-gray-500 mb-6 bg-green-50/50 border border-green-100/50 p-4 rounded-xl">
                     <span className="text-[#008953]">Multi-inscription ({childrenList.length} enfants) :</span>

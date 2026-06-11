@@ -23,20 +23,41 @@ export default function DeveloperPage() {
   const runAllTests = async () => {
     setIsTesting(true);
     
-    for (let i = 0; i < tests.length; i++) {
-      const updatedTests = [...tests];
-      updatedTests[i].status = 'loading';
-      setTests(updatedTests);
+    // Set all to loading first
+    setTests(prev => prev.map(t => ({ ...t, status: 'loading', message: 'Vérification en cours...' })));
+
+    try {
+      const res = await fetch('/api/admin/diagnostic');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erreur serveur (code ${res.status})`);
+      }
+      const data = await res.json();
       
-      await new Promise(r => setTimeout(r, 1000));
-      
-      const success = Math.random() > 0.1; 
-      updatedTests[i].status = success ? 'success' : 'error';
-      updatedTests[i].message = success ? 'Vérification réussie' : 'Erreur de configuration détectée';
-      setTests([...updatedTests]);
+      setTests(prev => prev.map(t => {
+        const result = data[t.id];
+        if (result) {
+          return {
+            ...t,
+            status: result.success ? 'success' : 'error',
+            message: result.message
+          };
+        }
+        return {
+          ...t,
+          status: 'error',
+          message: 'Aucune donnée de diagnostic disponible pour ce test.'
+        };
+      }));
+    } catch (err: any) {
+      setTests(prev => prev.map(t => ({
+        ...t,
+        status: 'error',
+        message: `${err.message || err}`
+      })));
+    } finally {
+      setIsTesting(false);
     }
-    
-    setIsTesting(false);
   };
 
   return (
