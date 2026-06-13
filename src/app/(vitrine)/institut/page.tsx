@@ -172,7 +172,7 @@ export default function InstitutPage() {
             <span className="text-[#c8a96e] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
             <h2 className="text-4xl md:text-6xl font-black text-ishes-dark leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
-              <span className="text-[#c8a96e] italic">en direct.</span>
+              <span className="text-[#c8a96e] italic">en présentiel.</span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
               Pour ceux qui privilégient le contact direct avec l'enseignant, l'émulation collective et la rigueur d'un cadre académique moderne.
@@ -328,13 +328,13 @@ export default function InstitutPage() {
               
               <div className="flex-1 text-center md:text-left">
                 <span className="text-[#c8a96e] font-black uppercase tracking-[0.2em] text-[10px] mb-3 block">Orientation pédagogique</span>
-                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de positionnement <span className="text-[#c8a96e] italic">Enfants</span></h3>
+                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de niveau <span className="text-[#c8a96e] italic">Enfants</span></h3>
                 <p className="text-gray-500 font-medium leading-relaxed mb-8">
                   Un doute sur le niveau de votre enfant ? Notre test interactif vous aide à choisir entre le niveau <strong className="text-ishes-dark">Débutant</strong> ou <strong className="text-ishes-dark">1+</strong> en moins de 2 minutes.
                 </p>
                 <Link 
                   href="/test-positionnement" 
-                  className="inline-flex items-center gap-3 bg-ishes-dark text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-black transition-all hover:-translate-y-1 shadow-xl shadow-ishes-dark/20"
+                  className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-xl shadow-[#c8a96e]/20"
                 >
                   Démarrer le test gratuit <ChevronRight className="w-4 h-4" />
                 </Link>

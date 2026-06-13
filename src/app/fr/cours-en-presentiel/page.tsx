@@ -21,12 +21,12 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: "Cours en Présentiel & Direct | Institut ISHES Toulouse",
-  description: "Découvrez nos formations d'excellence à Toulouse et en direct : Tajwid Progressif, Tajwid Accéléré, Tilawa, Hifdh, Sîrah du Prophète ﷺ et langue Arabe. Pédagogie structurée avec supports exclusifs.",
+  title: "Cours en Présentiel | Institut ISHES Toulouse",
+  description: "Découvrez nos formations d'excellence à Toulouse en présentiel : Tajwid Progressif, Tajwid Accéléré, Tilawa, Hifdh, Sîrah du Prophète ﷺ et langue Arabe. Pédagogie structurée avec supports exclusifs.",
   keywords: "cours islam toulouse, cours tajwid presentiel, apprendre arabe toulouse, memorisation coran toulouse, sirah prophète, nour al bayan francophone, habib haffes arabe, institut ishes",
   openGraph: {
-    title: "Cours en Présentiel & Direct | Institut ISHES Toulouse",
-    description: "Formations d'excellence à Toulouse et en direct : Tajwid, Coran, Langue Arabe et Sîrah. Supports exclusifs et suivi personnalisé.",
+    title: "Cours en Présentiel | Institut ISHES Toulouse",
+    description: "Formations d'excellence à Toulouse en présentiel : Tajwid, Coran, Langue Arabe et Sîrah. Supports exclusifs et suivi personnalisé.",
     url: "https://ishes.org/fr/cours-en-presentiel",
     type: "website",
     images: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
         url: "https://images.unsplash.com/photo-1584281723351-93e18cd944f2?auto=format&fit=crop&q=80&w=800",
         width: 1200,
         height: 630,
-        alt: "Cours en Présentiel & Direct - Institut ISHES"
+        alt: "Cours en Présentiel - Institut ISHES"
       }
     ]
   }
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
 const coursesJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  "name": "Formations en Présentiel & Direct - Institut ISHES",
-  "description": "Découvrez notre catalogue exclusif de cours en présentiel et en direct sur Zoom à Toulouse. Apprentissage du Tajwid, mémorisation du Coran, Sîrah et Arabe.",
+  "name": "Formations en Présentiel - Institut ISHES",
+  "description": "Découvrez notre catalogue exclusif de cours en présentiel à Toulouse. Apprentissage du Tajwid, mémorisation du Coran, Sîrah et Arabe.",
   "url": "https://ishes.org/fr/cours-en-presentiel",
   "numberOfItems": 6,
   "itemListElement": [
@@ -156,7 +156,7 @@ export default function CoursPresentielPage() {
       ],
       methodology: "Basé sur notre support exclusif 'Les Clés du Coran', une adaptation francophone inspirée de la méthode Nour Al Bayan.",
       practical: [
-        "Tous les mardis en direct",
+        "Tous les mardis en présentiel",
         "Replays accessibles à vie",
         "Suivi pédagogique personnalisé",
         "Support pédagogique physique inclus"
@@ -270,7 +270,7 @@ export default function CoursPresentielPage() {
       ],
       methodology: "Pédagogie active alliant récits vivants (storytelling), réflexions contemporaines et leçons spirituelles.",
       practical: [
-        "Tous les samedis à 10H30 en direct",
+        "Tous les samedis à 10H30 en présentiel",
         "Replays accessibles pour révision",
         "Supports pédagogiques complets fournis",
         "Enseignement interactif et accessible à tous"
@@ -298,7 +298,7 @@ export default function CoursPresentielPage() {
       ],
       methodology: "S'appuie sur la célèbre méthode de Habib Haffes, réputée pour sa clarté et sa progression fluide pour les francophones.",
       practical: [
-        "Tous les jeudis à 18H30 en direct",
+        "Tous les jeudis à 18H30 en présentiel",
         "Replays interactifs pour réviser à votre rythme",
         "Support pédagogique complet et inclus",
         "Suivi pédagogique régulier par l'enseignant"
@@ -328,13 +328,13 @@ export default function CoursPresentielPage() {
               <nav className="flex items-center justify-center lg:justify-start gap-2 text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
                 <Link href="/" className="hover:text-[#008953] transition-colors">Accueil</Link>
                 <ChevronRight className="w-3 h-3 text-gray-300" />
-                <span className="text-[#008953]">Cours en Présentiel & Direct</span>
+                <span className="text-[#008953]">Cours en Présentiel</span>
               </nav>
               
               <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-amber-200 rounded-full shadow-sm mb-2">
                 <MapPin className="w-4 h-4 text-[#c8a96e]" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#c8a96e]">
-                  Toulouse & Classes en Direct
+                  Toulouse & Classes en présentiel
                 </span>
               </div>
 
@@ -344,7 +344,7 @@ export default function CoursPresentielPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Rejoignez nos locaux à Toulouse ou nos classes interactives en direct. Bénéficiez d'une pédagogie humaine, d'un accompagnement personnalisé par des enseignants qualifiés et de supports d'apprentissage exclusifs.
+                Rejoignez nos locaux à Toulouse pour nos classes interactives en présentiel. Bénéficiez d'une pédagogie humaine, d'un accompagnement personnalisé par des enseignants qualifiés et de supports d'apprentissage exclusifs.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
@@ -417,7 +417,7 @@ export default function CoursPresentielPage() {
               {
                 icon: <Clock className="w-6 h-6" />,
                 title: "Replays & Flexibilité",
-                desc: "Chaque session en direct est enregistrée. Les replays restent accessibles en ligne pour réviser sereinement."
+                desc: "Chaque session en présentiel est enregistrée. Les replays restent accessibles en ligne pour réviser sereinement."
               }
             ].map((benefit, i) => (
               <div key={i} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all">

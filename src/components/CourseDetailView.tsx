@@ -94,6 +94,14 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                    >
                       {audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant"} <ArrowRight className="w-6 h-6" />
                    </Link>
+                    {id === "arabe_coran_junior" && (
+                       <Link 
+                          href="/test-positionnement"
+                          className="px-10 py-5 bg-[#c8a96e] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#c8a96e]/20 hover:bg-[#b0935b] transition-all flex items-center gap-3 active:scale-95"
+                       >
+                          Test de niveau <ArrowRight className="w-6 h-6" />
+                       </Link>
+                    )}
                    {course.videoUrl && (
                       <button className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3">
                          <Play className="w-5 h-5 fill-current" /> Voir le teaser
@@ -506,29 +514,6 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
         </section>
       )}
 
-      <section className="py-24 px-6">
-         <div className="max-w-5xl mx-auto bg-gradient-to-br from-[#101828] to-[#1a2b42] rounded-[4rem] p-12 md:p-24 text-center text-white relative overflow-hidden">
-            <div className="relative z-10 space-y-10">
-               <h2 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
-                  Prêt à commencer <br /> l'aventure ?
-               </h2>
-               <p className="text-xl text-white/60 font-medium max-w-2xl mx-auto">
-                  Rejoignez des centaines d'étudiants et transformez votre relation avec la langue arabe dès aujourd'hui.
-               </p>
-               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                  <Link 
-                     href={`/inscription?plan=${id}&audience=${audience}`}
-                     className="px-12 py-6 bg-[#008953] text-white font-black text-xl rounded-2xl shadow-2xl shadow-[#008953]/20 hover:scale-105 active:scale-95 transition-all"
-                  >
-                     {audience === 'enfant' ? "Inscrire mon enfant" : "Je m'inscris maintenant"}
-                  </Link>
-                  <p className="text-white/40 text-sm font-black uppercase tracking-[0.2em]">
-                     Prix de la session: {course.price}
-                  </p>
-               </div>
-            </div>
-         </div>
-      </section>
       {/* Lightbox Modal for Flyer */}
       {isFlyerOpen && course.flyerUrl && (
          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">

@@ -331,9 +331,9 @@ export const PROGRAMS_DATA: Record<string, any> = {
   "arabe_coran_junior": {
     title: "Cours d'arabe enfant",
     duration: "Annuel",
-    tag: "Junior 4-15 ans",
+    tag: "Présentiel | Junior 4-15 ans",
     price: "349 €",
-    hook: "Une méthode immersive et ludique pour faire aimer la langue arabe à vos enfants.",
+    hook: "Un cadre chaleureux qui vous accueille à Toulouse avec des professeurs compétents en présentiel. Une méthode immersive et ludique pour faire aimer la langue arabe à vos enfants.",
     description: "Nos cours pour enfants sont conçus pour être à la fois pédagogiques et divertissants. Nous utilisons des méthodes modernes, incluant certains principes Montessori, pour garantir une progression naturelle et solide.",
     features: [
       { t: "Pédagogie active", d: "Coloriages, jeux et supports multimédias pour maintenir l'engagement." },
