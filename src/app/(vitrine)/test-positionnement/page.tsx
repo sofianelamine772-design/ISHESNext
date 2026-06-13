@@ -118,13 +118,13 @@ export default function TestPositionnement() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans">
       <Navbar />
-      
+
       <main className="pt-32 pb-20 px-6 relative overflow-hidden">
         <ArabicBackground />
-        
+
         <div className="max-w-3xl mx-auto relative z-10">
           {!testType ? (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
@@ -140,7 +140,7 @@ export default function TestPositionnement() {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button 
+                <button
                   onClick={() => setTestType("arabe")}
                   className="group p-8 rounded-[2.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all text-left flex flex-col"
                 >
@@ -154,7 +154,7 @@ export default function TestPositionnement() {
                   </div>
                 </button>
 
-                <button 
+                <button
                   onClick={() => setTestType("tajwid")}
                   className="group p-8 rounded-[2.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all text-left flex flex-col"
                 >
@@ -177,14 +177,14 @@ export default function TestPositionnement() {
             >
               {/* Progress Bar */}
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gray-100">
-                <motion.div 
+                <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
                   className="h-full bg-[#c8a96e]"
                 />
               </div>
 
-              <button 
+              <button
                 onClick={() => step === 0 ? setTestType(null) : setStep(step - 1)}
                 className="mb-10 flex items-center gap-2 text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:text-ishes-dark transition-colors"
               >
@@ -267,7 +267,7 @@ export default function TestPositionnement() {
                   </p>
                   <Link 
                     href="/inscription?plan=presentiel-global"
-                    className="inline-flex items-center gap-3 bg-ishes-dark text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-black transition-all"
+                    className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all shadow-lg shadow-[#c8a96e]/20"
                   >
                     Inscrire mon enfant <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -282,7 +282,7 @@ export default function TestPositionnement() {
                   </p>
                   <Link 
                     href="/inscription?plan=presentiel-global"
-                    className="inline-flex items-center gap-3 bg-ishes-dark text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-black transition-all"
+                    className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all shadow-lg shadow-[#c8a96e]/20"
                   >
                     Inscrire mon enfant <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -295,7 +295,7 @@ export default function TestPositionnement() {
                   <p className="text-[#c8a96e] font-bold text-lg mb-8 leading-relaxed">
                     Votre enfant semble maîtriser ces compétences. Un test oral est nécessaire pour un niveau plus avancé.
                   </p>
-                  <a 
+                  <a
                     href="https://wa.me/33600000000"
                     target="_blank"
                     className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all"
@@ -305,7 +305,7 @@ export default function TestPositionnement() {
                 </div>
               )}
 
-              <button 
+              <button
                 onClick={() => { setStep(0); setAnswers({}); setIsFinished(false); setTestType(null); }}
                 className="text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:text-ishes-dark transition-colors"
               >
@@ -313,7 +313,7 @@ export default function TestPositionnement() {
               </button>
             </motion.div>
           )}
-          
+
           {/* Disclaimer Footer */}
           <div className="mt-12 flex items-start gap-4 p-6 bg-[#c8a96e]/10 border border-[#c8a96e]/20 text-gray-700 rounded-3xl text-xs font-semibold leading-relaxed">
             <AlertCircle className="w-5 h-5 text-[#c8a96e] shrink-0 mt-0.5" />
@@ -323,7 +323,7 @@ export default function TestPositionnement() {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

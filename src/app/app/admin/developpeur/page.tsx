@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { 
   Terminal, ShieldCheck, Activity, Zap, RefreshCw, 
   CheckCircle2, AlertCircle, ExternalLink, Database, 
-  ChevronRight, Settings
+  ChevronRight, Settings, Mail, Bell
 } from "lucide-react";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -13,15 +13,24 @@ import { UserButton } from "@clerk/nextjs";
 
 export default function DeveloperPage() {
   const [isTesting, setIsTesting] = useState(false);
+  const [logs, setLogs] = useState<string>("");
   const [tests, setTests] = useState([
+    { id: 'env', name: 'Variables d\'environnement', status: 'idle', message: 'Attente du test...' },
+    { id: 'clerk_alignment', name: 'Alignement Clés Clerk', status: 'idle', message: 'Attente du test...' },
+    { id: 'stripe_alignment', name: 'Alignement Clés Stripe', status: 'idle', message: 'Attente du test...' },
+    { id: 'supabase_key_role', name: 'Rôle Clé Supabase', status: 'idle', message: 'Attente du test...' },
     { id: 'api', name: 'Connexion API Stripe', status: 'idle', message: 'Attente du test...' },
     { id: 'webhooks', name: 'Endpoint Webhooks', status: 'idle', message: 'Attente du test...' },
-    { id: 'products', name: 'Synchronisation Produits', status: 'idle', message: 'Attente du test...' },
-    { id: 'env', name: 'Variables d\'environnement', status: 'idle', message: 'Attente du test...' },
+    { id: 'products', name: 'Connexion Supabase', status: 'idle', message: 'Attente du test...' },
+    { id: 'database_schema', name: 'Tables de la base', status: 'idle', message: 'Attente du test...' },
+    { id: 'clerk', name: 'Authentification Clerk', status: 'idle', message: 'Attente du test...' },
+    { id: 'resend', name: 'Serveur E-mails Resend', status: 'idle', message: 'Attente du test...' },
+    { id: 'webpush', name: 'Web Push VAPID', status: 'idle', message: 'Attente du test...' },
   ]);
 
   const runAllTests = async () => {
     setIsTesting(true);
+    setLogs(`[${new Date().toLocaleTimeString()}] Lancement de la suite de diagnostics...\n`);
     
     // Set all to loading first
     setTests(prev => prev.map(t => ({ ...t, status: 'loading', message: 'Vérification en cours...' })));
@@ -34,26 +43,47 @@ export default function DeveloperPage() {
       }
       const data = await res.json();
       
+      let logsReport = `[${new Date().toLocaleTimeString()}] Diagnostic terminé avec succès. Analyse des résultats :\n\n`;
+      let hasErrors = false;
+
       setTests(prev => prev.map(t => {
         const result = data[t.id];
         if (result) {
+          if (result.success) {
+            logsReport += `✅ [${t.name}] : ${result.message}\n`;
+          } else {
+            hasErrors = true;
+            logsReport += `❌ [${t.name}] ERREUR : ${result.message}\n`;
+          }
           return {
             ...t,
             status: result.success ? 'success' : 'error',
             message: result.message
           };
         }
+        hasErrors = true;
+        logsReport += `⚠️ [${t.name}] ERREUR : Aucune donnée de diagnostic disponible.\n`;
         return {
           ...t,
           status: 'error',
           message: 'Aucune donnée de diagnostic disponible pour ce test.'
         };
       }));
+
+      if (hasErrors) {
+        logsReport += `\n⚠️ Attention : Certains diagnostics ont échoué. Veuillez vérifier vos configurations.`;
+      } else {
+        logsReport += `\n🎉 Parfait ! Tous les systèmes et services fonctionnent correctement.`;
+      }
+      setLogs(logsReport);
+
     } catch (err: any) {
+      const errorMsg = err.message || err;
+      setLogs(prev => prev + `❌ [CRITICAL_ERROR] Échec de la récupération des données : ${errorMsg}\n`);
       setTests(prev => prev.map(t => ({
         ...t,
         status: 'error',
-        message: `${err.message || err}`
+        message: `${errorMsg}`
       })));
     } finally {
       setIsTesting(false);
@@ -90,8 +120,6 @@ export default function DeveloperPage() {
         <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-8">
             
-
-
             {/* Test Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {tests.map((test) => (
@@ -104,10 +132,17 @@ export default function DeveloperPage() {
                                     test.status === 'error' ? 'bg-red-50 text-red-500' :
                                     test.status === 'loading' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'
                                 )}>
+                                    {test.id === 'env' && <Settings className="w-5 h-5" />}
                                     {test.id === 'api' && <Zap className="w-5 h-5" />}
                                     {test.id === 'webhooks' && <Activity className="w-5 h-5" />}
                                     {test.id === 'products' && <Database className="w-5 h-5" />}
-                                    {test.id === 'env' && <Settings className="w-5 h-5" />}
+                                    {test.id === 'database_schema' && <ShieldCheck className="w-5 h-5" />}
+                                    {test.id === 'clerk' && <ShieldCheck className="w-5 h-5" />}
+                                    {test.id === 'resend' && <Mail className="w-5 h-5" />}
+                                    {test.id === 'webpush' && <Bell className="w-5 h-5" />}
+                                    {test.id === 'clerk_alignment' && <ShieldCheck className="w-5 h-5" />}
+                                    {test.id === 'stripe_alignment' && <Zap className="w-5 h-5" />}
+                                    {test.id === 'supabase_key_role' && <Database className="w-5 h-5" />}
                                 </div>
                                 <div>
                                   <h4 className="font-black italic text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
@@ -133,6 +168,41 @@ export default function DeveloperPage() {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Console des Logs d'Erreurs */}
+            <div className="bg-[#0B0F19] rounded-[2rem] border border-gray-800 p-6 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-ishes-green"></div>
+              
+              <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+                  <span className="text-xs font-mono text-gray-500 ml-2">console_erreurs.log</span>
+                </div>
+                {logs && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      navigator.clipboard.writeText(logs);
+                    }}
+                    className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-white bg-gray-900 border border-gray-850 hover:border-gray-700 px-3 py-1.5 h-auto rounded-lg transition-all"
+                  >
+                    Copier les logs
+                  </Button>
+                )}
+              </div>
+
+              <div className="font-mono text-xs text-gray-300 leading-relaxed overflow-x-auto min-h-[120px] max-h-[300px] custom-scrollbar whitespace-pre-wrap select-all">
+                {logs ? (
+                  logs
+                ) : (
+                  <span className="text-gray-600 italic">
+                    Console en attente de diagnostic. Cliquez sur "Lancer les tests" ci-dessus pour inspecter les détails et erreurs de l'application.
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Extra Info */}
