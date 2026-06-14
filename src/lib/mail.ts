@@ -1,6 +1,27 @@
 import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
 const resend = new Resend(process.env.RESEND_API_KEY || "fallback_key_for_build");
+
+// Configuration SMTP facultative (Gmail, etc.)
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
+const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
+
+let transporter: any = null;
+if (smtpUser && smtpPass) {
+  transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  });
+  console.log(`[SMTP] Transporter initialisé pour l'utilisateur : ${smtpUser}`);
+}
 
 interface SendEmailParams {
   to: string | string[];
@@ -8,12 +29,38 @@ interface SendEmailParams {
   html: string;
   text?: string;
   from?: string;
+  provider?: 'smtp' | 'resend';
 }
 
-export async function sendEmail({ to, subject, html, text, from }: SendEmailParams) {
+export async function sendEmail({ to, subject, html, text, from, provider }: SendEmailParams) {
   try {
+    // Si SMTP est configuré et :
+    // - soit provider est 'smtp'
+    // - soit on est en mode développement (pour pouvoir tester sans restriction de domaine sandbox)
+    // - soit aucun provider n'est spécifié
+    const useSmtp = !!transporter && (
+      provider === 'smtp' ||
+      process.env.NODE_ENV === 'development' ||
+      !provider
+    );
+
+    if (useSmtp) {
+      const mailOptions = {
+        from: from || `ISHEECOLE <${smtpUser}>`,
+        to: Array.isArray(to) ? to.join(', ') : to,
+        subject,
+        html,
+        text: text || '',
+      };
+      
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
+      return { success: true, data: info };
+    }
+
+    // Sinon, on utilise Resend
     const data = await resend.emails.send({
-      from: from || 'ISHEECOLE <onboarding@resend.dev>', // Replace onboarding@resend.dev with contact@isheecole.fr when domain is verified
+      from: from || 'ISHEECOLE <onboarding@resend.dev>', // Remplacer par contact@isheecole.fr quand le domaine est vérifié
       to,
       subject,
       html,
@@ -76,7 +123,8 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
   return sendEmail({
     to: email,
     subject: "✨ Bienvenue dans la famille ISHEECOLE ! Votre espace vous attend",
-    html
+    html,
+    provider: 'resend'
   });
 }
 
@@ -113,6 +161,50 @@ export async function sendPaymentReminderEmail(email: string, firstName: string)
   return sendEmail({
     to: email,
     subject: "ISHEECOLE - Action requise concernant votre paiement",
-    html
+    html,
+    provider: 'resend'
   });
 }
+
+export async function sendNewMessageEmail({
+  email,
+  firstName,
+  messageContent,
+  title,
+}: {
+  email: string;
+  firstName: string;
+  messageContent: string;
+  title?: string;
+}) {
+  const html = `
+    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      ${emailHeader}
+      <div style="padding: 40px 30px;">
+        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Nouveau message de l'administration ✉️</h2>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Bonjour ${firstName},
+        </p>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Vous avez reçu un nouveau message de la part de l'administration de l'institut <strong>ISHEECOLE</strong>.
+        </p>
+        ${title ? `<p style="color: #333; font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 5px;">Sujet : ${title}</p>` : ''}
+        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: italic;">
+          ${messageContent.replace(/\n/g, '<br />')}
+        </div>
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app" style="${buttonStyle}">Consulter mon espace</a>
+        </div>
+      </div>
+      ${emailFooter}
+    </div>
+  `;
+
+  return sendEmail({
+    to: email,
+    subject: title ? `✉️ ISHEECOLE : ${title}` : "✉️ Nouveau message de l'administration ISHEECOLE",
+    html,
+    provider: 'smtp'
+  });
+}
+

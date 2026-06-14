@@ -57,6 +57,47 @@ export default function AdminDashboard() {
   const [studentToTransfer, setStudentToTransfer] = useState<{ id: string, name: string } | null>(null);
   const [targetClassId, setTargetClassId] = useState<string>("");
 
+  // Contact Class State
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [contactSubject, setContactSubject] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [contactSending, setContactSending] = useState(false);
+  const [contactSuccess, setContactSuccess] = useState(false);
+
+  const handleSendClassEmail = async () => {
+    if (!selectedClassId || !contactMessage.trim()) return;
+    setContactSending(true);
+    setContactSuccess(false);
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sender_id: "admin_system",
+          content: contactMessage.trim(),
+          type: "class",
+          title: contactSubject.trim() || undefined,
+          target_class_id: selectedClassId,
+        }),
+      });
+
+      if (res.ok) {
+        setContactSuccess(true);
+        setContactMessage("");
+        setContactSubject("");
+        setTimeout(() => setShowContactModal(false), 2000);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(`Erreur : ${err.error || "Impossible d'envoyer"}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Une erreur est survenue lors de l'envoi.");
+    } finally {
+      setContactSending(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       first_name: "",
@@ -443,7 +484,18 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 md:flex-none h-10 text-[10px] md:text-xs border-amber-600 text-amber-600 hover:bg-amber-50 hover:text-amber-700 flex items-center gap-1.5"
+                        onClick={() => {
+                          setContactSuccess(false);
+                          setShowContactModal(true);
+                        }}
+                      >
+                        <Mail className="w-4 h-4" /> <span>Contacter la classe</span>
+                      </Button>
                       <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={openAddStudentModal}>
                         <Users className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Affecter Élève</span>
                         <span className="sm:hidden text-[10px]">Affecter</span>
@@ -1032,6 +1084,88 @@ export default function AdminDashboard() {
               <Button variant="ishes" className="flex-[2] h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]" disabled={isSubmitting} onClick={handleCreateStudentManual}>
                 {isSubmitting ? "Création..." : "Enregistrer et affecter"}
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CONTACT CLASS MODAL */}
+      {showContactModal && (
+        <div className="fixed inset-0 bg-ishes-dark/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100 transform transition-all scale-100">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-ishes-dark tracking-tight">Message à la classe</h3>
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+                      Envoyé par e-mail à tous les élèves de la classe
+                    </p>
+                  </div>
+                </div>
+                <button onClick={() => setShowContactModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {selectedClass && (
+                <div className="mb-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Classe destinataire</p>
+                  <p className="text-sm font-bold text-ishes-dark">{selectedClass.name}</p>
+                  <p className="text-[10px] text-gray-500 mt-1 italic">
+                    💡 {selectedClass.students.length} élève{selectedClass.students.length > 1 ? 's' : ''} recevront cet e-mail.
+                  </p>
+                </div>
+              )}
+
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Titre de l'e-mail / Objet</label>
+                  <input
+                    type="text"
+                    placeholder="Ex: Rappel de cours / Changement de salle"
+                    value={contactSubject}
+                    onChange={(e) => setContactSubject(e.target.value)}
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium text-sm"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Contenu du message</label>
+                  <textarea
+                    rows={6}
+                    placeholder="Saisissez votre message ici..."
+                    value={contactMessage}
+                    onChange={(e) => setContactMessage(e.target.value)}
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium text-sm resize-none"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 flex justify-between items-center">
+                {contactSuccess && (
+                  <div className="text-emerald-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" /> E-mails envoyés avec succès !
+                  </div>
+                )}
+                <div className="flex-1" />
+                <div className="flex gap-3 shrink-0">
+                  <Button variant="ishes-outline" className="h-12 rounded-2xl px-6" onClick={() => setShowContactModal(false)}>
+                    Annuler
+                  </Button>
+                  <Button
+                    variant="ishes"
+                    className="h-12 rounded-2xl px-8 bg-amber-600 hover:bg-amber-700 text-white"
+                    disabled={contactSending || !contactMessage.trim()}
+                    onClick={handleSendClassEmail}
+                  >
+                    {contactSending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Envoyer"}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

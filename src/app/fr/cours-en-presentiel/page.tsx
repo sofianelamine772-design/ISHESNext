@@ -161,7 +161,7 @@ export default function CoursPresentielPage() {
         "Suivi pédagogique personnalisé",
         "Support pédagogique physique inclus"
       ],
-      priceText: "349 € / an",
+      priceText: "480 € / an",
       cta: "Découvrir Tajwid Progressif",
       target: "Adultes débutants, personnes ne sachant pas encore lire l'arabe ou souhaitant reprendre les bases correctement."
     },
@@ -189,7 +189,7 @@ export default function CoursPresentielPage() {
         "Replays disponibles et suivi rigoureux",
         "Support de formation inclus"
       ],
-      priceText: "349 € / session",
+      priceText: "480 € / session",
       cta: "S'inscrire au Tajwid Accéléré",
       target: "Élèves motivés sachant déjà lire l'arabe, ou débutants très investis prêts à s'engager sérieusement."
     },
@@ -217,7 +217,7 @@ export default function CoursPresentielPage() {
         "Heure précise convenue selon vos disponibilités",
         "Replays et suivi pédagogique sur-mesure"
       ],
-      priceText: "349 € / module",
+      priceText: "480 € / module",
       cta: "S'inscrire au cours de Tilawa",
       target: "Élèves connaissant déjà les règles de Tajwid (indispensable) et souhaitant parfaire leur récitation.",
       badgeCaution: "Nécessite de connaître le Tajwid"
@@ -246,7 +246,7 @@ export default function CoursPresentielPage() {
         "Rythme et objectifs adaptés à vos capacités",
         "Suivi et révisions régulières"
       ],
-      priceText: "349 € / parcours",
+      priceText: "480 € / parcours",
       cta: "Rejoindre le programme Hifdh",
       target: "Élèves connaissant les règles de Tajwid et souhaitant mémoriser le Coran dans un cadre structuré et sérieux.",
       badgeCaution: "Nécessite de connaître le Tajwid"
@@ -275,7 +275,7 @@ export default function CoursPresentielPage() {
         "Supports pédagogiques complets fournis",
         "Enseignement interactif et accessible à tous"
       ],
-      priceText: "349 € / cursus",
+      priceText: "480 € / cursus",
       cta: "S'inscrire au cours de Sîrah",
       target: "Hommes et femmes, débutants comme initiés, souhaitant découvrir sa vie et s'en inspirer."
     },
@@ -303,7 +303,7 @@ export default function CoursPresentielPage() {
         "Support pédagogique complet et inclus",
         "Suivi pédagogique régulier par l'enseignant"
       ],
-      priceText: "349 € / niveau",
+      priceText: "480 € / niveau",
       cta: "S'inscrire au cours d'Arabe",
       target: "Grands débutants ou francophones souhaitant acquérir des bases académiques et religieuses solides."
     }

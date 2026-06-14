@@ -332,7 +332,7 @@ export const PROGRAMS_DATA: Record<string, any> = {
     title: "Cours d'arabe enfant",
     duration: "Annuel",
     tag: "Présentiel | Junior 4-15 ans",
-    price: "349 €",
+    price: "480 €",
     hook: "Un cadre chaleureux qui vous accueille à Toulouse avec des professeurs compétents en présentiel. Une méthode immersive et ludique pour faire aimer la langue arabe à vos enfants.",
     description: "Nos cours pour enfants sont conçus pour être à la fois pédagogiques et divertissants. Nous utilisons des méthodes modernes, incluant certains principes Montessori, pour garantir une progression naturelle et solide.",
     features: [

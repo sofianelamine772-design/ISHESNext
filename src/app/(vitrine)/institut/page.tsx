@@ -42,7 +42,7 @@ const presentielPrograms: PresentielProgram[] = [
     day: "Samedi",
     audience: "adulte",
     features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Samedi matin (9h-12h)", "Suivi personnalisé"],
-    price: "349 €",
+    price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-en-presentiel"
   },
@@ -55,7 +55,7 @@ const presentielPrograms: PresentielProgram[] = [
     day: "Dimanche",
     audience: "adulte",
     features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Dimanche matin (9h-12h)", "Suivi personnalisé"],
-    price: "349 €",
+    price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-en-presentiel"
   },
@@ -68,7 +68,7 @@ const presentielPrograms: PresentielProgram[] = [
     day: "Mercredi",
     audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
-    price: "349 €",
+    price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-arabe-enfant"
   },
@@ -81,7 +81,7 @@ const presentielPrograms: PresentielProgram[] = [
     day: "Samedi",
     audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
-    price: "349 €",
+    price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-arabe-enfant"
   },
@@ -94,7 +94,7 @@ const presentielPrograms: PresentielProgram[] = [
     day: "Dimanche",
     audience: "enfant",
     features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
-    price: "349 €",
+    price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-arabe-enfant"
   }
