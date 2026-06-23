@@ -4,7 +4,13 @@ import { isAdminEmail } from "@/lib/auth-utils";
 
 export default async function AppDispatcher() {
   const { userId } = await auth();
-  const user = await currentUser();
+  
+  let user = null;
+  try {
+    user = await currentUser();
+  } catch (error) {
+    console.error("Clerk API Response Error in AppDispatcher:", error);
+  }
 
   if (!userId || !user) {
     redirect("/sign-in");

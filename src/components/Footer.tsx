@@ -172,15 +172,15 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col items-center justify-center gap-5 text-center pb-8">
+          <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
+            <Link href="/mentions-legales" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Mentions Légales</Link>
+            <Link href="/cgv" className="bg-ishes-green text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-green-dark transition-colors">CGV</Link>
+            <Link href="/politique-de-confidentialite" className="bg-ishes-green text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-green-dark transition-colors">Politique de confidentialité</Link>
+          </div>
           <p className="text-xs text-gray-400 font-medium">
             © {new Date().getFullYear()} ISHES Institut. Tous droits réservés.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            <Link href="/mentions-legales" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Mentions Légales</Link>
-            <Link href="/cgv" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">CGV</Link>
-            <Link href="/politique-de-confidentialite" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Politique de confidentialité</Link>
-          </div>
         </div>
 
       </div>
