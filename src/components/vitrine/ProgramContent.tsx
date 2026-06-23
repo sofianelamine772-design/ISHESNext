@@ -104,16 +104,16 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tajwid_standard",
-    title: "Tajwid (Standard)",
-    subtitle: "Apprends à lire le Coran à distance avec un suivi personnalisé. Progresser de chez soi.",
+    title: "Tajwid Progressif",
+    subtitle: "Apprendre à lire le Coran correctement, même en partant de zéro. Une méthode étape par étape.",
     tagText: "STANDARD",
     tagColor: "bg-green-100 text-green-700",
-    durationText: "8 mois",
+    durationText: "Annuel",
     features: [
-      "Cours en ligne direct",
-      "Accès aux replays",
-      "Correction audio",
-      "Suivi WhatsApp"
+      "Tous les mardis en direct",
+      "Apprentissage Progressif",
+      "Support exclusif inclus",
+      "Adultes débutants"
     ],
     price: "349 €",
     priceSub: "/ SESSION",
@@ -448,8 +448,19 @@ export function ProgramContent() {
     }
   }, [searchParams]);
 
-  const filteredPrograms = PROGRAMS.filter((p) => p.type === activeMode && p.audience === activeAudience);
+  const filteredPrograms = PROGRAMS.filter((p) => {
+    if (p.type !== activeMode || p.audience !== activeAudience) return false;
 
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      const matchTitle = p.title.toLowerCase().includes(query);
+      const matchSubtitle = p.subtitle.toLowerCase().includes(query);
+      const matchFeatures = p.features.some(f => f.toLowerCase().includes(query));
+      return matchTitle || matchSubtitle || matchFeatures;
+    }
+
+    return true;
+  });
   useEffect(() => {
     setSelectedDayFilter("tous");
     setSearchQuery("");
@@ -475,264 +486,273 @@ export function ProgramContent() {
     <>
       {/* HERO SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 overflow-hidden">
-         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-            <div className="max-w-2xl relative">
-                {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
-                <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
-                  <Image 
-                    src="/images/bulle-manga-pedagogique-ishes.png" 
-                    alt="Manga Bubble" 
-                    fill 
-                    sizes="240px"
-                    className="object-contain"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center text-center p-8 pr-10 pb-16 font-sans">
-                    <p className="text-[#101828] text-xs font-black uppercase tracking-widest leading-relaxed">
-                      Sélectionnez ici <br /> pour choisir <br /> la formation !
-                    </p>
-                  </div>
-                </div>
-
-               <div className={`font-black tracking-widest text-xs uppercase mb-6 ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>
-                  Nos Formations
-               </div>
-               <h1 className="text-[32px] sm:text-5xl md:text-6xl font-black text-[#101828] leading-[1.1] tracking-tight mb-6">
-                  Choisissez votre <br />
-                  <span className={`italic ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>mode d'apprentissage.</span>
-               </h1>
-               <p className="text-lg sm:text-xl text-gray-500 font-medium">
-                  Que vous soyez à Toulouse ou ailleurs, nous avons le programme idéal pour votre progression.
-               </p>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+          <div className="max-w-2xl relative">
+            {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
+            <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
+              <Image
+                src="/images/bulle-manga-pedagogique-ishes.png"
+                alt="Manga Bubble"
+                fill
+                sizes="240px"
+                className="object-contain"
+              />
+              <div className="absolute inset-0 flex items-center justify-center text-center p-8 pr-10 pb-16 font-sans">
+                <p className="text-[#101828] text-xs font-black uppercase tracking-widest leading-relaxed">
+                  Sélectionnez ici <br /> pour choisir <br /> la formation !
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-4 w-full sm:w-auto relative">
-               {/* Mode Toggle Switch (Présentiel / Distanciel) */}
-               <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
-                  <button
-                     onClick={() => setActiveMode("presentiel")}
-                     className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-                        activeMode === "presentiel"
-                           ? "bg-white text-[#c8a96e] shadow-lg shadow-black/5 transform scale-100"
-                           : "text-gray-500 hover:text-gray-700"
-                     }`}
-                  >
-                     <MapPin className="w-4 h-4" /> Présentiel
-                  </button>
-                  <button
-                     onClick={() => setActiveMode("distanciel")}
-                     className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-                        activeMode === "distanciel"
-                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
-                           : "text-gray-500 hover:text-gray-700"
-                     }`}
-                  >
-                     <Monitor className="w-4 h-4" /> Distanciel
-                  </button>
-               </div>
-
-               {/* Audience Toggle Switch (Adulte / Enfant) */}
-               <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
-                  <button
-                     onClick={() => setActiveAudience("adulte")}
-                     className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-                        activeAudience === "adulte"
-                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
-                           : "text-gray-500 hover:text-gray-700"
-                     }`}
-                  >
-                     <User className="w-4 h-4" /> Adulte
-                  </button>
-                  <button
-                     onClick={() => setActiveAudience("enfant")}
-                     className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-                        activeAudience === "enfant"
-                           ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
-                           : "text-gray-500 hover:text-gray-700"
-                     }`}
-                  >
-                     <Baby className="w-4 h-4" /> Enfant
-                  </button>
-               </div>
+            <div className={`font-black tracking-widest text-xs uppercase mb-6 ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>
+              Nos Formations
             </div>
-         </div>
+            <h1 className="text-[32px] sm:text-5xl md:text-6xl font-black text-[#101828] leading-[1.1] tracking-tight mb-6">
+              Choisissez votre <br />
+              <span className={`italic ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>mode d'apprentissage.</span>
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-500 font-medium">
+              Que vous soyez à Toulouse ou ailleurs, nous avons le programme idéal pour votre progression.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-4 w-full sm:w-auto relative">
+            {/* Mode Toggle Switch (Présentiel / Distanciel) */}
+            <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
+              <button
+                onClick={() => setActiveMode("presentiel")}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "presentiel"
+                    ? "bg-white text-[#c8a96e] shadow-lg shadow-black/5 transform scale-100"
+                    : "text-gray-500 hover:text-gray-700"
+                  }`}
+              >
+                <MapPin className="w-4 h-4" /> Présentiel
+              </button>
+              <button
+                onClick={() => setActiveMode("distanciel")}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "distanciel"
+                    ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                    : "text-gray-500 hover:text-gray-700"
+                  }`}
+              >
+                <Monitor className="w-4 h-4" /> Distanciel
+              </button>
+            </div>
+
+            {/* Audience Toggle Switch (Adulte / Enfant) */}
+            <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
+              <button
+                onClick={() => setActiveAudience("adulte")}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "adulte"
+                    ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                    : "text-gray-500 hover:text-gray-700"
+                  }`}
+              >
+                <User className="w-4 h-4" /> Adulte
+              </button>
+              <button
+                onClick={() => setActiveAudience("enfant")}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "enfant"
+                    ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                    : "text-gray-500 hover:text-gray-700"
+                  }`}
+              >
+                <Baby className="w-4 h-4" /> Enfant
+              </button>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* DIVIDER */}
-      <div className="w-full h-px bg-gray-100 max-w-7xl mx-auto mb-16 px-6"></div>
+      <div className="w-full h-px bg-gray-100 max-w-7xl mx-auto mb-10 px-6"></div>
+
+      {/* SEARCH BAR */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
+        <div className="relative max-w-md">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Rechercher une formation..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="block w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all shadow-sm"
+          />
+        </div>
+      </div>
 
       {/* PROGRAMS GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPrograms.map((program) => {
-               const isPresentiel = program.type === "presentiel";
-               const accentColor = isPresentiel ? "text-[#c8a96e]" : "text-[#008953]";
-               const btnColor = isPresentiel ? "bg-[#c8a96e] hover:bg-[#b0935b]" : "bg-[#008953] hover:bg-[#007044]";
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredPrograms.map((program) => {
+            const isPresentiel = program.type === "presentiel";
+            const accentColor = isPresentiel ? "text-[#c8a96e]" : "text-[#008953]";
+            const btnColor = isPresentiel ? "bg-[#c8a96e] hover:bg-[#b0935b]" : "bg-[#008953] hover:bg-[#007044]";
 
-                const infoUrl = 
-                  (program.id === 'tajwid_standard' || program.id === 'tajwid-standard-presentiel') ? '/fr/cours-lecture-tajwid' : 
-                  program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
-                  (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' : 
-                  (program.id === 'femme-debutante-presentiel' || program.id === 'femme-intermediaire-presentiel') ? '/fr/cours-en-presentiel' :
-                  (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' : 
-                  program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
-                  program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
-                  program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
-                  program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
-                  program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
-                  program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
-                  program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
-                  program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
-                  program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
-                  program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
-                  program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
-                  program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                  `/program/${program.id}`;
+            const infoUrl =
+              (program.id === 'tajwid_standard' || program.id === 'tajwid-standard-presentiel') ? '/fr/cours-lecture-tajwid' :
+                program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
+                  (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' :
+                    (program.id === 'femme-debutante-presentiel' || program.id === 'femme-intermediaire-presentiel') ? '/fr/cours-en-presentiel' :
+                      (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
+                        program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
+                          program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
+                            program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
+                              program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
+                                program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
+                                  program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
+                                    program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
+                                      program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
+                                        program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
+                                          program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
+                                            program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
+                                              program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
+                                                `/program/${program.id}`;
 
-               return (
-                <div 
-                   key={program.id} 
-                   onClick={() => router.push(infoUrl)}
-                   className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${
-                      program.isRecommended 
-                         ? "border-[3px] border-[#00603A] shadow-md" 
-                         : "border border-gray-100 shadow-sm"
-                   }`}
-                >
-                   {/* RECOMMENDED BADGE */}
-                   {program.isRecommended && (
-                      <div className="bg-[#00603A] text-white text-xs font-bold uppercase tracking-widest text-center py-2.5 rounded-t-[1.8rem] flex items-center justify-center gap-2">
-                         <Star className="w-3.5 h-3.5 fill-white" /> Recommandé
+            return (
+              <div
+                key={program.id}
+                onClick={() => router.push(infoUrl)}
+                className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${program.isRecommended
+                    ? "border-[3px] border-[#00603A] shadow-md"
+                    : "border border-gray-100 shadow-sm"
+                  }`}
+              >
+                {/* RECOMMENDED BADGE */}
+                {program.isRecommended && (
+                  <div className="bg-[#00603A] text-white text-xs font-bold uppercase tracking-widest text-center py-2.5 rounded-t-[1.8rem] flex items-center justify-center gap-2">
+                    <Star className="w-3.5 h-3.5 fill-white" /> Recommandé
+                  </div>
+                )}
+
+                <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                  {/* TAGS ROW */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase ${program.tagColor || "bg-[#008953]/10 text-[#008953]"}`}>
+                      {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${isPresentiel
+                        ? "bg-[#00603A]/10 text-[#00603A] border-[#00603A]/20"
+                        : "bg-blue-50 text-blue-700 border-blue-100"
+                      }`}>
+                      <span>📅</span> {program.durationText}
+                    </span>
+                  </div>
+
+                  {/* TITLE & DESC */}
+                  <h2 className="text-xl font-black text-[#101828] mb-2 tracking-tight">{program.title}</h2>
+                  <p className="text-xs sm:text-sm text-gray-500 leading-relaxed min-h-auto mb-4 font-medium">
+                    {program.subtitle}
+                  </p>
+
+                  {/* ICONS GRID */}
+                  <div className="grid grid-cols-2 gap-3 mb-5">
+                    <div className="flex items-center gap-2">
+                      <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
+                      <span className="text-[10px] font-bold text-gray-400">{isPresentiel ? program.durationText : "1h30/sem"}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
+                      <span className="text-[10px] font-bold text-gray-400">Manuel inclus</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Users className={`w-3.5 h-3.5 ${accentColor}`} />
+                      <span className="text-[10px] font-bold text-gray-400">Max 20</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Award className={`w-3.5 h-3.5 ${accentColor}`} />
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">Certifié</span>
+                    </div>
+                  </div>
+
+                  {/* FEATURES LIST */}
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
+                    {program.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <CheckCircle2 className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">{feature}</span>
                       </div>
-                   )}
+                    ))}
+                  </div>
 
-                   <div className="p-5 sm:p-6 flex-1 flex flex-col">
-                       {/* TAGS ROW */}
-                       <div className="flex items-center justify-between mb-4">
-                          <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase ${program.tagColor || "bg-[#008953]/10 text-[#008953]"}`}>
-                             {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
-                          </span>
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${
-                            isPresentiel 
-                              ? "bg-[#00603A]/10 text-[#00603A] border-[#00603A]/20" 
-                              : "bg-blue-50 text-blue-700 border-blue-100"
-                          }`}>
-                             <span>📅</span> {program.durationText}
-                          </span>
-                       </div>
-
-                      {/* TITLE & DESC */}
-                      <h2 className="text-xl font-black text-[#101828] mb-2 tracking-tight">{program.title}</h2>
-                      <p className="text-xs sm:text-sm text-gray-500 leading-relaxed min-h-auto mb-4 font-medium">
-                         {program.subtitle}
-                      </p>
-
-                      {/* ICONS GRID */}
-                      <div className="grid grid-cols-2 gap-3 mb-5">
-                         <div className="flex items-center gap-2">
-                            <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
-                            <span className="text-[10px] font-bold text-gray-400">{isPresentiel ? program.durationText : "1h30/sem"}</span>
-                         </div>
-                         <div className="flex items-center gap-2">
-                            <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
-                            <span className="text-[10px] font-bold text-gray-400">Manuel inclus</span>
-                         </div>
-                         <div className="flex items-center gap-2">
-                            <Users className={`w-3.5 h-3.5 ${accentColor}`} />
-                            <span className="text-[10px] font-bold text-gray-400">Max 20</span>
-                         </div>
-                         <div className="flex items-center gap-2">
-                            <Award className={`w-3.5 h-3.5 ${accentColor}`} />
-                            <span className="text-[10px] font-bold text-gray-400 uppercase">Certifié</span>
-                         </div>
-                      </div>
-
-                      {/* FEATURES LIST */}
-                      <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
-                         {program.features.map((feature, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                               <CheckCircle2 className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                               <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">{feature}</span>
-                            </div>
-                         ))}
-                      </div>
-
-                      {/* PRICE & CTA */}
-                      <div className="flex flex-col gap-3 mt-auto pt-3 border-t border-gray-50">
-                         <div className="flex items-end justify-between mb-1">
-                            <div>
-                               <div className="text-3xl font-black text-[#101828] tracking-tight">{program.price}</div>
-                               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
-                                  {program.priceSub}
-                               </div>
-                                {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "GRATUIT" && (
-                                   <div className="text-[10px] font-bold text-[#008953] uppercase tracking-wide mt-1.5 flex items-center gap-1">
-                                      <span>💳</span> Paiement en 1x, 3x ou 5x
-                                   </div>
-                                )}
-                                {isPresentiel && (
-                                 <div className="mb-2 mt-2">
-                                   {getSlotStatus(program.day)?.est_plein ? (
-                                     <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl border border-red-100">
-                                       <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                       Session Complète
-                                     </div>
-                                   ) : (
-                                     <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl border border-green-100">
-                                       <div className="w-2 h-2 rounded-full bg-green-500" />
-                                       Places Disponibles
-                                     </div>
-                                   )}
-                                 </div>
-                               )}
-                            </div>
-                         </div>
-                         <div className="grid grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
-                            <Link 
-                               href={infoUrl}
-                               onClick={(e) => e.stopPropagation()}
-                               className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-3.5 rounded-xl transition-all shadow-sm"
-                            >
-                               Info
-                            </Link>
-                            {isPresentiel ? (
-                              <Link 
-                                href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${
-                                  getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
-                                }`}
-                              >
-                                {getSlotStatus(program.day)?.est_plein 
-                                  ? "COMPLET" 
-                                  : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
-                                }
-                              </Link>
+                  {/* PRICE & CTA */}
+                  <div className="flex flex-col gap-3 mt-auto pt-3 border-t border-gray-50">
+                    <div className="flex items-end justify-between mb-1">
+                      <div>
+                        <div className="text-3xl font-black text-[#101828] tracking-tight">{program.price}</div>
+                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                          {program.priceSub}
+                        </div>
+                        {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "GRATUIT" && (
+                          <div className="text-[10px] font-bold text-[#008953] uppercase tracking-wide mt-1.5 flex items-center gap-1">
+                            <span>💳</span> Paiement en 1x, 3x ou 5x
+                          </div>
+                        )}
+                        {isPresentiel && (
+                          <div className="mb-2 mt-2">
+                            {getSlotStatus(program.day)?.est_plein ? (
+                              <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl border border-red-100">
+                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                                Session Complète
+                              </div>
                             ) : (
-                              <Link 
-                                href={`/inscription?plan=${program.id}&audience=${program.audience}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
-                              >
-                                S'inscrire
-                              </Link>
+                              <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl border border-green-100">
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                Places Disponibles
+                              </div>
                             )}
-                         </div>
+                          </div>
+                        )}
                       </div>
-                   </div>
-
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
+                      <Link
+                        href={infoUrl}
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-3.5 rounded-xl transition-all shadow-sm"
+                      >
+                        Info
+                      </Link>
+                      {isPresentiel ? (
+                        <Link
+                          href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                            }`}
+                        >
+                          {getSlotStatus(program.day)?.est_plein
+                            ? "COMPLET"
+                            : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
+                          }
+                        </Link>
+                      ) : (
+                        <Link
+                          href={`/inscription?plan=${program.id}&audience=${program.audience}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                        >
+                          S'inscrire
+                        </Link>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
-         </div>
-         {filteredPrograms.length === 0 && (
-            <div className="text-center py-20 bg-gray-50 rounded-[2rem] border border-gray-100">
-               <h3 className="text-xl font-bold text-gray-800 mb-2">Aucune formation disponible</h3>
-               <p className="text-gray-500">
-                  Il n'y a pas encore de formation pour le mode {activeMode === "presentiel" ? "Présentiel" : "Distanciel"} 
-                  et le public {activeAudience === "adulte" ? "Adulte" : "Enfant"}.
-               </p>
-            </div>
-         )}
+
+              </div>
+            );
+          })}
+        </div>
+        {filteredPrograms.length === 0 && (
+          <div className="text-center py-20 bg-gray-50 rounded-[2rem] border border-gray-100">
+            <h3 className="text-xl font-bold text-gray-800 mb-2">Aucune formation disponible</h3>
+            <p className="text-gray-500">
+              Il n'y a pas encore de formation pour le mode {activeMode === "presentiel" ? "Présentiel" : "Distanciel"}
+              et le public {activeAudience === "adulte" ? "Adulte" : "Enfant"}.
+            </p>
+          </div>
+        )}
       </section>
 
 

@@ -57,11 +57,11 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Formation Diplômante", d: "Professeure diplômée en Sciences islamiques. Certificat de fin de parcours ISHES." }
     ],
     whyMe: [
-       "Apprendre à purifier son cœur tout en vivant dans ce monde",
-       "Comprendre le sens profond des actes d’adoration et des piliers",
-       "Accompagnement par une enseignante diplômée en sciences islamiques",
-       "Des outils concrets pour travailler sur ses défauts et s'améliorer"
-     ]
+      "Apprendre à purifier son cœur tout en vivant dans ce monde",
+      "Comprendre le sens profond des actes d’adoration et des piliers",
+      "Accompagnement par une enseignante diplômée en sciences islamiques",
+      "Des outils concrets pour travailler sur ses défauts et s'améliorer"
+    ]
   },
   "as_sirah": {
     title: "Sîrah An-Nabawiyya",
@@ -202,10 +202,10 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Groupes adaptés", d: "À partir de 6 ans, avec des groupes adaptés selon les âges et les niveaux." }
     ],
     whyMe: [
-       "Éduquer le cœur pour faire aimer la religion et donner envie de progresser",
-       "Pédagogie active basée sur des récits et des exemples concrets du quotidien",
-       "Enseignement dispensé par une professeure diplômée et expérimentée (Caire/Nour Al Bayan)",
-       "Un cadre éducatif positif, motivant et bienveillant pour votre enfant"
+      "Éduquer le cœur pour faire aimer la religion et donner envie de progresser",
+      "Pédagogie active basée sur des récits et des exemples concrets du quotidien",
+      "Enseignement dispensé par une professeure diplômée et expérimentée (Caire/Nour Al Bayan)",
+      "Un cadre éducatif positif, motivant et bienveillant pour votre enfant"
     ]
   },
   "arabe_adulte": {
@@ -229,23 +229,23 @@ export const PROGRAMS_DATA: Record<string, any> = {
     ]
   },
   "tajwid_standard": {
-    title: "Tajwid (Standard)",
-    duration: "8 mois",
+    title: "Tajwid Progressif (Standard)",
+    duration: "Annuel",
     tag: "Maîtrise de la Lecture",
     price: "349 €",
-    hook: "Apprends à lire le Coran correctement en respectant les règles de Tajwid. Méthode progressive.",
-    description: "Le cours de Tajwid standard est notre programme phare pour acquérir une base solide en récitation. Que vous soyez débutant ou que vous souhaitiez corriger vos erreurs, ce cursus vous guide pas à pas vers une lecture fluide et belle.",
+    hook: "Apprendre à lire le Coran correctement, même en partant de zéro. Une méthode progressive étape par étape.",
+    description: "Apprendre à lire le Coran correctement, même en partant de zéro.\nTu aimerais mieux lire le Coran… mais tu n’as peut-être jamais réellement appris les bases de la lecture arabe ou les règles du Tajwid.\nCertaines lettres te semblent encore difficiles.\nTu hésites parfois sur la prononciation.\nEt lorsque tu ouvres le Coran, certains symboles ou règles restent encore flous pour toi.\nAvec le temps, cette difficulté peut créer une frustration, un manque de confiance ou même une distance avec le Coran.\nLe cours de Tajwid Progressif a été pensé pour t’accompagner étape par étape, même si tu ne sais pas encore lire l’arabe.\nPendant une année complète, tu apprends progressivement :\n• les lettres arabes et leur prononciation,\n• les règles essentielles du Tajwid,\n• les symboles présents dans le Moushaf,\n• ainsi que les bases nécessaires pour lire le Coran correctement.\nL’enseignement s’appuie sur notre support exclusif Les Clés du Coran, une adaptation francophone inspirée de la célèbre méthode Nour Al Bayan, largement utilisée dans le monde arabo-musulman.\n\n✨ UN APPRENTISSAGE PROGRESSIF ET STRUCTURÉ\nL’objectif n’est pas simplement de t’apprendre des règles théoriques.\nL’objectif est de te permettre progressivement :\n• de comprendre les règles du Tajwid,\n• de reconnaître les symboles du Moushaf,\n• de corriger ta récitation,\n• et de gagner en autonomie dans ta lecture du Coran.\nChaque étape est pensée pour rendre l’apprentissage clair, accessible et motivant, même pour les grands débutants.\n\n💛 RETROUVER UNE RELATION AVEC LE CORAN\nAu fil des semaines, tu passes progressivement :\n• de la confusion vers la compréhension,\n• de l’hésitation vers plus d’assurance,\n• et de la peur de te tromper vers une lecture plus sereine.\nCar apprendre à lire correctement le Coran…\nc’est apprendre à honorer la parole d’ALLAH.\n\n🎓 UN ENSEIGNEMENT STRUCTURÉ ET ENCADRÉ\nLe cours allie :\n• pédagogie progressive,\n• corrections régulières,\n• accompagnement personnalisé,\n• et méthodologie adaptée aux francophones.\n\n🎓 DIPLÔME DE FIN DE PARCOURS\nÀ la fin de la formation, un diplôme délivré par l’Institut ISHES est remis aux élèves ayant validé le parcours.\n\n👤 POUR QUI ?\nLe cours est accessible :\n• aux adultes débutants,\n• aux personnes ne sachant pas encore lire l’arabe,\n• aux élèves souhaitant reprendre les bases correctement,\n• ainsi qu’à toute personne désirant apprendre les règles du Tajwid.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Tous les mardis en direct sur Zoom\n• Replays accessibles\n• Suivi pédagogique\n• Progression sur une année complète\n• Support pédagogique inclus\n• Approche progressive adaptée aux francophones",
     features: [
-      { t: "Prononciation (Makharij)", d: "Étude précise du point de sortie de chaque lettre arabe." },
-      { t: "Règles de Tajwid", d: "Apprentissage théorique et pratique des règles de récitation." },
-      { t: "Correction personnalisée", d: "Écoute et retour individuel par le professeur à chaque séance." },
-      { t: "Pédagogie Nour Al Bayan", d: "Une méthode reconnue mondialement pour son efficacité." }
+      { t: "Apprentissage Structuré", d: "Comprendre les règles du Tajwid, reconnaître les symboles du Moushaf et corriger sa récitation." },
+      { t: "Relation avec le Coran", d: "Passer de la confusion vers la compréhension et d'une lecture hésitante à plus d'assurance." },
+      { t: "Enseignement Encadré", d: "Pédagogie progressive, corrections régulières et méthodologie adaptée aux francophones." },
+      { t: "Diplôme de fin de parcours", d: "Un diplôme délivré par l’Institut ISHES est remis aux élèves ayant validé le parcours." }
     ],
     whyMe: [
-      "Programme adapté aux enfants et aux adultes",
-      "Professeurs experts en sciences du Coran",
-      "Possibilité de régler en 10 fois sans frais",
-      "Supports de cours complets (Fath Arrahman)"
+      "Tous les mardis en direct sur Zoom (Replays accessibles)",
+      "Progression sur une année complète avec suivi pédagogique",
+      "Support pédagogique exclusif 'Les Clés du Coran' inclus",
+      "Accessible aux adultes débutants, même sans savoir lire l'arabe"
     ]
   },
   "tajwid_intensif": {
@@ -262,9 +262,9 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Coaching audio", d: "Retours personnalisés sur vos enregistrements par nos experts." }
     ],
     whyMe: [
-       "Gain de temps massif (2 ans de progrès en 12 semaines)",
-       "Accompagnement spirituel et technique",
-       "Certification de fin de niveau ISHEECOLE"
+      "Gain de temps massif (2 ans de progrès en 12 semaines)",
+      "Accompagnement spirituel et technique",
+      "Certification de fin de niveau ISHEECOLE"
     ]
   },
   "fiqh_malikite": {
@@ -282,10 +282,10 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Le Hajj", d: "Préparation technique et spirituelle au pèlerinage à la Mecque." }
     ],
     whyMe: [
-       "Étude du texte de référence : Matn Ibn Achir",
-       "Commentaires de savants reconnus (Al-Mayyarah, Shinqiti...)",
-       "Accès aux preuves (Dalila) du Coran et de la Sunna",
-       "Horaires adaptés : Mercredi de 21h30 à 22h30"
+      "Étude du texte de référence : Matn Ibn Achir",
+      "Commentaires de savants reconnus (Al-Mayyarah, Shinqiti...)",
+      "Accès aux preuves (Dalila) du Coran et de la Sunna",
+      "Horaires adaptés : Mercredi de 21h30 à 22h30"
     ]
   },
   "sciences_islamiques": {
@@ -301,9 +301,9 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Arabe Littéraire", d: "Introduction aux outils linguistiques pour comprendre les textes." }
     ],
     whyMe: [
-       "Programme complet et équilibré",
-       "Professeurs diplômés et pédagogues",
-       "Supports de cours exclusifs"
+      "Programme complet et équilibré",
+      "Professeurs diplômés et pédagogues",
+      "Supports de cours exclusifs"
     ]
   },
   "sciences_du_coran": {
@@ -322,10 +322,10 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Zéro prérequis", d: "Aucun niveau avancé en arabe n'est requis. Conçu pour être clair, vivant et accessible." }
     ],
     whyMe: [
-       "Une preuve vivante de la parole d’ALLAH",
-       "Un héritage transmis avec précision par une chaîne humaine",
-       "Un miracle historique, linguistique et spirituel",
-       "Une lumière dont la préservation témoigne de son origine divine"
+      "Une preuve vivante de la parole d’ALLAH",
+      "Un héritage transmis avec précision par une chaîne humaine",
+      "Un miracle historique, linguistique et spirituel",
+      "Une lumière dont la préservation témoigne de son origine divine"
     ]
   },
   "arabe_coran_junior": {
@@ -342,10 +342,10 @@ export const PROGRAMS_DATA: Record<string, any> = {
       { t: "Suivi parents", d: "Communication régulière via WhatsApp pour suivre les progrès." }
     ],
     whyMe: [
-       "Enseignants spécialisés dans la pédagogie enfant",
-       "Classes en petits groupes (max 12 élèves)",
-       "Possibilité de régler en 10 fois sans frais",
-       "Niveaux adaptés du débutant (4 ans) au supérieur (15 ans)"
+      "Enseignants spécialisés dans la pédagogie enfant",
+      "Classes en petits groupes (max 12 élèves)",
+      "Possibilité de régler en 10 fois sans frais",
+      "Niveaux adaptés du débutant (4 ans) au supérieur (15 ans)"
     ]
   }
 };
