@@ -94,9 +94,9 @@ function InscriptionForm() {
     if (normalized === 'correction_fatiha') return 0;
     if (normalized === 'cours_particuliers') return 0;
     if (normalized === 'presentiel-global') {
-      return 150; // Acompte de 150 € pour le présentiel
+      return 349;
     }
-    return 349; // Tarif par défaut (Tajwid standard, Arabe standard, etc.)
+    return 349; // Tarif par défaut
   };
 
   const getPrice = () => {
