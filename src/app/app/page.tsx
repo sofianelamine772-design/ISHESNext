@@ -20,6 +20,8 @@ export default async function AppDispatcher() {
 
   // --- SYNC WITH SUPABASE ---
   if (userEmail) {
+    let shouldRedirectUnauthorized = false;
+
     try {
       const { supabase } = await import("@/lib/supabase");
 
@@ -58,11 +60,15 @@ export default async function AppDispatcher() {
             });
         } else {
           // Sinon (élève non inscrit / n'ayant pas payé et non invité) -> Bloqué et redirigé !
-          redirect("/unauthorized");
+          shouldRedirectUnauthorized = true;
         }
       }
     } catch (err) {
       console.error("Supabase Sync Error:", err);
+    }
+
+    if (shouldRedirectUnauthorized) {
+      redirect("/unauthorized");
     }
   }
   // --- END SYNC ---

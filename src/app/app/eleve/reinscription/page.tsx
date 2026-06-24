@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserPlus, CheckCircle2, ArrowRight, ShieldCheck, CreditCard, Sparkles, Loader2 } from "lucide-react";
+import { UserPlus, CheckCircle2, ArrowRight, ShieldCheck, CreditCard, Sparkles, Loader2, RotateCcw } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
 
@@ -11,19 +11,25 @@ export default function ReinscriptionPage() {
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
   const [currentCourse, setCurrentCourse] = useState<any>(null);
+  const [courseChoice, setCourseChoice] = useState<"next" | "same">("next");
   const isSuccess = searchParams.get("success") === "true";
 
   useEffect(() => {
     // Simulation de la récupération de la formation actuelle depuis Supabase
     const timer = setTimeout(() => {
-      setCurrentCourse({
+      const fetchedCourse = {
         id: "00000000-0000-0000-0000-000000000001", // ID fictif pour le test
         title: "Arabe Littéraire - Niveau 1",
-        nextLevel: "Arabe Littéraire - Niveau 2",
+        nextLevel: "Arabe Littéraire - Niveau 2", // Peut être null si la formation n'a pas de niveau supérieur
         price: "349€",
-        status: "Terminé avec succès",
-        year: "2023-2024"
-      });
+        status: "En cours",
+        year: "2025-2026",
+        nextYear: "2026-2027"
+      };
+      setCurrentCourse(fetchedCourse);
+      if (!fetchedCourse.nextLevel) {
+         setCourseChoice("same");
+      }
       setLoading(false);
     }, 1500);
     return () => clearTimeout(timer);
@@ -32,13 +38,17 @@ export default function ReinscriptionPage() {
   const handlePayment = async () => {
     try {
       setPaying(true);
+      const chosenTitle = courseChoice === "next" && currentCourse.nextLevel ? currentCourse.nextLevel : currentCourse.title;
+      
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           formationId: currentCourse.id,
           price: currentCourse.price,
-          formationTitle: currentCourse.nextLevel,
+          formationTitle: chosenTitle,
+          year: currentCourse.nextYear,
+          isRenewal: true
         }),
       });
 
@@ -62,7 +72,7 @@ export default function ReinscriptionPage() {
         </div>
         <div className="space-y-4">
           <h2 className="text-4xl font-black text-gray-900 uppercase">Réinscription Réussie !</h2>
-          <p className="text-gray-400 font-medium max-w-md">Bienvenue pour cette nouvelle année à l'ISHES. Votre dossier a été mis à jour automatiquement.</p>
+          <p className="text-gray-400 font-medium max-w-md">Bienvenue pour cette nouvelle année à l'ISHES. Votre dossier a été mis à jour automatiquement pour l'année {currentCourse?.nextYear || 'prochaine'}.</p>
         </div>
         <button 
           onClick={() => window.location.href = '/app/eleve'}
@@ -83,6 +93,8 @@ export default function ReinscriptionPage() {
     );
   }
 
+  const displayedTitle = courseChoice === "next" && currentCourse.nextLevel ? currentCourse.nextLevel : currentCourse.title;
+
   return (
     <div className="max-w-4xl mx-auto space-y-10 pb-20">
       {/* Main Reinscription Card - Premium Redesign */}
@@ -98,13 +110,32 @@ export default function ReinscriptionPage() {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#086b51]/20 border border-[#086b51]/30 text-[#086b51] backdrop-blur-sm">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#20d8a4]">Votre Prochaine Étape</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#20d8a4]">Année {currentCourse.nextYear}</span>
               </div>
               <h3 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] uppercase tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-gray-100 to-gray-500">
-                {currentCourse.nextLevel}
+                {displayedTitle}
               </h3>
             </div>
             
+            {currentCourse.nextLevel && (
+               <div className="flex flex-col sm:flex-row gap-2 p-1.5 bg-white/5 rounded-[1.5rem] border border-white/10 w-full sm:w-max">
+                  <button 
+                    onClick={() => setCourseChoice("next")}
+                    className={`px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${courseChoice === 'next' ? 'bg-[#086b51] text-white shadow-lg shadow-[#086b51]/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                  >
+                    <ArrowRight className="w-3 h-3" />
+                    Niveau Supérieur
+                  </button>
+                  <button 
+                    onClick={() => setCourseChoice("same")}
+                    className={`px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${courseChoice === 'same' ? 'bg-white/10 text-white shadow-lg border border-white/10' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Prolonger la même
+                  </button>
+               </div>
+            )}
+
             <div className="space-y-5">
               <div className="flex items-center gap-4 text-gray-300 transform transition-transform hover:translate-x-2 duration-300">
                 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#086b51] to-[#044a37] flex items-center justify-center shadow-lg shadow-[#086b51]/30 shrink-0">

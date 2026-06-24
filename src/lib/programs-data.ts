@@ -249,22 +249,23 @@ export const PROGRAMS_DATA: Record<string, any> = {
     ]
   },
   "tajwid_intensif": {
-    title: "Tajwid Intensif",
+    title: "Tajwid Intensif (Accéléré)",
     duration: "3 mois",
     tag: "Transformation Rapide",
     price: "649 €",
-    hook: "3 mois pour transformer ta lecture du Coran. Ce que d'autres mettent 2 ans à maîtriser.",
-    description: "Le programme Tajwid Intensif est conçu pour les élèves qui souhaitent une progression fulgurante. À travers une méthodologie rigoureuse et un accompagnement quotidien, vous passerez d'une lecture hésitante à une récitation fluide et conforme aux règles de l'art.",
+    hook: "Apprentissage des règles du Tajwid jusqu’à 3 fois plus rapidement qu’un cursus classique. 3 mois pour transformer ta lecture du Coran.",
+    description: "Apprentissage des règles du Tajwid jusqu’à 3 fois plus rapidement qu’un cursus classique.\nTu souhaites apprendre à lire correctement le Coran, mais tu manques de temps pour t'engager sur une année complète.\nTu as besoin d'une méthode efficace, rapide et rigoureuse.\nTu veux des résultats visibles et rapides pour enfin réciter le Coran avec fluidité et assurance.\nAvec le temps, le manque de progression peut créer une frustration et t'empêcher de construire une relation solide avec le Livre d'ALLAH.\nLe cours de Tajwid Intensif a été pensé pour t’accompagner de manière accélérée, en condensant ce qui s'apprend généralement en 1 à 2 ans, en seulement 12 semaines.\nPendant ces 3 mois, tu apprends de manière intensive :\n• les lettres arabes et leur prononciation exacte,\n• les règles essentielles et avancées du Tajwid,\n• les symboles présents dans le Moushaf,\n• et les automatismes nécessaires pour une lecture autonome et fluide.\n\n✨ UNE MÉTHODOLOGIE INTENSIVE ET RIGOUREUSE\nL’objectif est de t'offrir une progression fulgurante sans sacrifier la qualité.\nCe programme intensif te permet :\n• d'acquérir les règles du Tajwid en un temps record,\n• de corriger tes erreurs de récitation de manière ciblée,\n• de développer une lecture fluide et sans hésitation,\n• et d'atteindre une autonomie totale dans ta lecture.\nChaque semaine est pensée pour maximiser ton apprentissage grâce à une immersion totale.\n\n💛 TRANSFORMER TA RELATION AVEC LE CORAN RAPIDEMENT\nAu fil des 12 semaines, tu passes d'une manière accélérée :\n• d'une lecture hésitante vers une récitation maîtrisée,\n• d'une connaissance partielle vers une maîtrise globale du Tajwid,\n• et de la frustration vers la satisfaction d'une lecture correcte.\nCar lire le Coran avec les bonnes règles, c’est honorer la parole d’ALLAH.\n\n🎓 UN ACCOMPAGNEMENT QUOTIDIEN ET PERSONNALISÉ\nLe cours allie :\n• méthode d'apprentissage accélérée,\n• retours personnalisés et corrections régulières,\n• coaching audio et suivi rigoureux,\n• et accompagnement technique et spirituel.\n\n🎓 DIPLÔME DE FIN DE PARCOURS\nÀ la fin de la formation, un diplôme délivré par l’Institut ISHES est remis aux élèves ayant validé le parcours intensif.\n\n👤 POUR QUI ?\nLe cours est accessible :\n• aux personnes motivées prêtes à s'investir intensément,\n• aux adultes ayant peu de temps sur le long terme,\n• aux élèves souhaitant des résultats très rapides,\n• et à ceux désirant se dépasser pour maîtriser la lecture du Coran.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cours intensifs et immersifs\n• Coaching audio régulier via WhatsApp/Telegram\n• Suivi pédagogique rapproché\n• Progression fulgurante sur 12 semaines\n• Supports pédagogiques optimisés inclus",
     features: [
-      { t: "Méthode intensive", d: "Des cours structurés pour optimiser chaque minute d'apprentissage." },
-      { t: "Lecture rapide", d: "Acquérir les automatismes de lecture en un temps record." },
-      { t: "Autonomie totale", d: "Devenir capable de corriger ses propres erreurs de récitation." },
-      { t: "Coaching audio", d: "Retours personnalisés sur vos enregistrements par nos experts." }
+      { t: "Méthodologie intensive", d: "Des cours structurés pour optimiser chaque minute d'apprentissage." },
+      { t: "Lecture fluide", d: "Acquérir les automatismes de lecture en un temps record de 3 mois." },
+      { t: "Coaching quotidien", d: "Retours personnalisés sur vos enregistrements par nos experts." },
+      { t: "Autonomie totale", d: "Devenir capable de corriger ses propres erreurs de récitation rapidement." }
     ],
     whyMe: [
-      "Gain de temps massif (2 ans de progrès en 12 semaines)",
-      "Accompagnement spirituel et technique",
-      "Certification de fin de niveau ISHEECOLE"
+      "Gain de temps massif (ce que d'autres font en 1 an condensé en 12 semaines)",
+      "Coaching audio et corrections régulières pour une progression ciblée",
+      "Méthode éprouvée pour acquérir des automatismes de lecture rapidement",
+      "Diplôme de fin de parcours délivré par l’Institut ISHES"
     ]
   },
   "fiqh_malikite": {
@@ -346,6 +347,26 @@ export const PROGRAMS_DATA: Record<string, any> = {
       "Classes en petits groupes (max 12 élèves)",
       "Possibilité de régler en 10 fois sans frais",
       "Niveaux adaptés du débutant (4 ans) au supérieur (15 ans)"
+    ]
+  },
+  "tilawa": {
+    title: "Tilawa — Lecture & Récitation",
+    duration: "Annuel",
+    tag: "Lecture & Récitation",
+    price: "349 €",
+    hook: "Transformer les règles du Tajwid en une récitation naturelle, fluide et maîtrisée.",
+    description: "Transformer les règles du Tajwid en une récitation naturelle, fluide et maîtrisée.\nTu connais peut-être déjà les règles du Tajwid… mais au moment de réciter, tu hésites encore.\nTu réfléchis aux règles pendant ta lecture.\nTu t’arrêtes souvent.\nCertaines erreurs reviennent malgré tes efforts.\nEt parfois, tu ressens un décalage entre ce que tu connais “en théorie” et ce qui sort réellement dans ta récitation.\nLe cours de Tilawa a été pensé pour t’aider à transformer les règles apprises en automatismes naturels dans ta lecture du Coran.\n⚠ Ce cours nécessite déjà de connaître les règles de Tajwid.\nL’objectif est de te permettre d’appliquer les règles avec plus d’aisance, jusqu’à ce qu’elles deviennent progressivement naturelles dans ta récitation.\n\n✨ UN ACCOMPAGNEMENT PERSONNALISÉ EN TÊTE À TÊTE\nLe cours se déroule individuellement avec l’enseignant afin de permettre :\n• des corrections précises,\n• un suivi personnalisé,\n• un travail adapté à ton niveau,\n• ainsi qu’une progression plus efficace et plus régulière.\nChaque élève avance à son rythme avec un accompagnement entièrement centré sur sa récitation.\n\n💛 RETROUVER DU PLAISIR DANS LA RÉCITATION\nAu fil des semaines, tu passes progressivement :\n• d’une lecture hésitante vers plus de fluidité,\n• d’une récitation mécanique vers une lecture plus vivante,\n• et d’une application forcée vers une récitation plus naturelle.\nPetit à petit, tu développes plus de confiance, plus de sérénité… et plus de plaisir dans ta lecture du Coran.\n\n🎓 UN ENSEIGNEMENT BASÉ SUR LA PRATIQUE ET LA CORRECTION\nLe cours allie :\n• récitation régulière,\n• corrections détaillées,\n• application concrète des règles,\n• accompagnement pédagogique personnalisé,\n• et progression étape par étape.\nChaque séance est pensée pour t’aider à améliorer concrètement ta récitation du Coran.\n\n🎓 DIPLÔME DE FIN DE PARCOURS\nÀ la fin de la formation, un diplôme délivré par l’Institut ISHES est remis aux élèves ayant validé le parcours.\n\n👤 POUR QUI ?\nLe cours est accessible :\n• aux élèves connaissant déjà les règles de Tajwid,\n• aux personnes souhaitant améliorer leur récitation,\n• aux étudiants désirant gagner en fluidité et en aisance,\n• ainsi qu’à toute personne voulant renforcer sa relation avec le Coran.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cours individuels en tête à tête avec l’enseignant\n• Cours le mercredi soir et le dimanche matin\n• L’heure précise de ton créneau est définie avec l’enseignant après l’inscription\n• Replays accessibles\n• Corrections régulières\n• Accompagnement pédagogique personnalisé\n• Travail pratique de récitation",
+    features: [
+      { t: "Récitation régulière", d: "Pratique encadrée pour assimiler les règles naturellement." },
+      { t: "Corrections détaillées", d: "Reprise des erreurs pour ne plus les reproduire." },
+      { t: "Accompagnement personnalisé", d: "En tête à tête avec un professeur expert." },
+      { t: "Progression étape par étape", d: "Vers une lecture plus vivante et sans hésitation." }
+    ],
+    whyMe: [
+      "Cours individuels en tête à tête avec l’enseignant",
+      "Horaires flexibles (mercredi soir ou dimanche matin)",
+      "Transformez la théorie en automatisme",
+      "Replays accessibles pour s'entraîner"
     ]
   }
 };

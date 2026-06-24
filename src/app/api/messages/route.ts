@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { sender_id, receiver_id, content, type, title, target_class_id } = body;
+    const { sender_id, receiver_id, content, type, title, target_class_id, target_class_ids, format } = body;
 
     if (!content) {
       return NextResponse.json({ error: 'content est requis' }, { status: 400 });
@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     if (type !== undefined) insertData.type = type;
     if (title !== undefined) insertData.title = title;
     if (target_class_id !== undefined) insertData.target_class_id = target_class_id;
+    if (target_class_ids !== undefined && target_class_ids.length > 0) insertData.target_class_id = target_class_ids[0]; // pour la bdd (fallback si besoin)
 
     console.log('[MESSAGES_POST] Inserting:', JSON.stringify(insertData));
 
@@ -87,19 +88,33 @@ export async function POST(req: Request) {
         }
         else if (type === 'global') {
           // Message global : tout le monde
-          const { data: pushData } = await supabaseAdmin
-            .from('push_subscriptions')
-            .select('*');
-          if (pushData) pushSubs = pushData;
-
-          // Tous les élèves actifs
           const { data: students } = await supabaseAdmin
             .from('etudiants')
-            .select('email, first_name')
+            .select('id, email, first_name')
             .eq('status', 'actif');
-          if (students && students.length > 0) {
-            students.forEach((s) => {
-              if (s.email) {
+            
+          let studentIdsToSend = students?.map(s => s.id) || [];
+
+          if (format && format !== 'all') {
+             // Filtrer par format (presentiel ou distanciel)
+             const { data: inscriptions } = await supabaseAdmin
+               .from('inscriptions')
+               .select('etudiant_id, classes!inner(type)')
+               .eq('classes.type', format);
+             
+             const formatStudentIds = inscriptions?.map(i => i.etudiant_id) || [];
+             studentIdsToSend = studentIdsToSend.filter(id => formatStudentIds.includes(id));
+          }
+
+          if (studentIdsToSend.length > 0) {
+            const { data: pushData } = await supabaseAdmin
+              .from('push_subscriptions')
+              .select('*')
+              .in('etudiant_id', studentIdsToSend);
+            if (pushData) pushSubs = pushData;
+
+            students?.forEach((s) => {
+              if (s.email && studentIdsToSend.includes(s.id)) {
                 emailsToSend.push({
                   email: s.email,
                   first_name: s.first_name || 'Élève',
@@ -109,15 +124,16 @@ export async function POST(req: Request) {
             });
           }
         }
-        else if (type === 'class' && target_class_id) {
-          // Message par classe : récupérer d'abord les élèves de la classe
+        else if (type === 'class' && target_class_ids && target_class_ids.length > 0) {
+          // Message par classe : plusieurs classes possibles
           const { data: inscriptions } = await supabaseAdmin
             .from('inscriptions')
             .select('etudiant_id')
-            .eq('class_id', target_class_id);
+            .in('class_id', target_class_ids);
 
           if (inscriptions && inscriptions.length > 0) {
-            const studentIds = inscriptions.map((i: any) => i.etudiant_id).filter(Boolean);
+            // deduplicate
+            const studentIds = Array.from(new Set(inscriptions.map((i: any) => i.etudiant_id).filter(Boolean)));
             
             if (studentIds.length > 0) {
               // Push subscriptions
@@ -136,14 +152,7 @@ export async function POST(req: Request) {
               if (students && students.length > 0) {
                 let displayTitle = title;
                 if (!displayTitle) {
-                  const { data: classe } = await supabaseAdmin
-                    .from('classes')
-                    .select('name')
-                    .eq('id', target_class_id)
-                    .maybeSingle();
-                  if (classe) {
-                    displayTitle = `Annonce pour la classe ${classe.name}`;
-                  }
+                   displayTitle = `Annonce de l'Institut`;
                 }
 
                 students.forEach((s) => {

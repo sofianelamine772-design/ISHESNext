@@ -26,7 +26,10 @@ export default function AdminCommunicationPage() {
   // Send state
   const [broadcastType, setBroadcastType] = useState<"class" | "global" | "private">("global");
   const [selectedStudent, setSelectedStudent] = useState("");
-  const [selectedClass, setSelectedClass] = useState("");
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
+  const [formatFilter, setFormatFilter] = useState<"all" | "presentiel" | "distanciel">("all");
+  const [classSearch, setClassSearch] = useState("");
+  const [classFilterFormat, setClassFilterFormat] = useState<"all" | "presentiel" | "distanciel">("all");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -149,15 +152,20 @@ export default function AdminCommunicationPage() {
         setLoading(false);
         return;
       }
-      if (broadcastType === 'class' && !selectedClass) {
-        alert('Veuillez sélectionner une classe.');
+      if (broadcastType === 'class' && selectedClasses.length === 0) {
+        alert('Veuillez sélectionner au moins une classe.');
         setLoading(false);
         return;
       }
 
       if (broadcastType !== 'private' && title) body.title = title;
       if (broadcastType === 'private') body.receiver_id = selectedStudent;
-      if (broadcastType === 'class') body.target_class_id = selectedClass;
+      if (broadcastType === 'class') {
+        body.target_class_ids = selectedClasses;
+      }
+      if (broadcastType === 'global') {
+        body.format = formatFilter;
+      }
 
       const res = await fetch('/api/messages', {
         method: 'POST',
@@ -167,7 +175,7 @@ export default function AdminCommunicationPage() {
 
       if (res.ok) {
         setSuccess(true);
-        setContent(""); setTitle(""); setSelectedStudent(""); setSelectedClass("");
+        setContent(""); setTitle(""); setSelectedStudent(""); setSelectedClasses([]); setFormatFilter("all");
         setTimeout(() => setSuccess(false), 3000);
         fetchConversations();
       } else {
@@ -355,13 +363,89 @@ export default function AdminCommunicationPage() {
                   ))}
                 </div>
 
-                {broadcastType === 'class' && (
+                {broadcastType === 'global' && (
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Choisir la Classe</label>
-                    <select value={selectedClass} onChange={(e) => setSelectedClass(e.target.value)} className="w-full bg-gray-50 border-gray-100 rounded-2xl py-4 px-6 text-sm font-bold">
-                      <option value="">Sélectionner...</option>
-                      {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Filtre par Format</label>
+                    <select value={formatFilter} onChange={(e) => setFormatFilter(e.target.value as any)} className="w-full bg-gray-50 border-gray-100 rounded-2xl py-4 px-6 text-sm font-bold">
+                      <option value="all">Tous les élèves (Présentiel & Distanciel)</option>
+                      <option value="presentiel">Uniquement les élèves en Présentiel</option>
+                      <option value="distanciel">Uniquement les élèves en Distanciel</option>
                     </select>
+                  </div>
+                )}
+
+                {broadcastType === 'class' && (
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Sélectionnez vos classes</label>
+                    
+                    <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 space-y-4">
+                      {/* Filtres */}
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="relative flex-1">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <input 
+                            type="text" 
+                            placeholder="Rechercher une classe..." 
+                            value={classSearch}
+                            onChange={(e) => setClassSearch(e.target.value)}
+                            className="w-full bg-white border border-gray-200 rounded-xl py-2 pl-10 pr-4 text-xs font-bold focus:ring-2 focus:ring-[#086b51]/20 transition-all" 
+                          />
+                        </div>
+                        <div className="flex bg-white border border-gray-200 rounded-xl p-1 shrink-0">
+                           <button 
+                             onClick={() => setClassFilterFormat("all")}
+                             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${classFilterFormat === 'all' ? 'bg-gray-100 text-gray-900' : 'text-gray-400 hover:text-gray-600'}`}
+                           >Tous</button>
+                           <button 
+                             onClick={() => setClassFilterFormat("presentiel")}
+                             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${classFilterFormat === 'presentiel' ? 'bg-[#086b51] text-white' : 'text-gray-400 hover:text-gray-600'}`}
+                           >Présentiel</button>
+                           <button 
+                             onClick={() => setClassFilterFormat("distanciel")}
+                             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${classFilterFormat === 'distanciel' ? 'bg-[#086b51] text-white' : 'text-gray-400 hover:text-gray-600'}`}
+                           >Distanciel</button>
+                        </div>
+                      </div>
+
+                      {/* Liste des classes avec checkboxes */}
+                      <div className="max-h-60 overflow-y-auto space-y-2 pr-2">
+                        {classes
+                          .filter(c => classFilterFormat === 'all' || c.type === classFilterFormat)
+                          .filter(c => c.name?.toLowerCase().includes(classSearch.toLowerCase()))
+                          .map(c => (
+                            <label key={c.id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedClasses.includes(c.id) ? 'border-[#086b51] bg-emerald-50/30' : 'border-gray-200 bg-white hover:border-[#086b51]/30'}`}>
+                               <div className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all ${selectedClasses.includes(c.id) ? 'bg-[#086b51] border-[#086b51]' : 'border-gray-300 bg-white'}`}>
+                                 {selectedClasses.includes(c.id) && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                               </div>
+                               <input 
+                                 type="checkbox" 
+                                 className="hidden" 
+                                 checked={selectedClasses.includes(c.id)}
+                                 onChange={(e) => {
+                                   if (e.target.checked) setSelectedClasses([...selectedClasses, c.id]);
+                                   else setSelectedClasses(selectedClasses.filter(id => id !== c.id));
+                                 }}
+                               />
+                               <div>
+                                 <div className="text-sm font-bold text-gray-900">{c.name}</div>
+                                 <div className="text-[10px] font-medium text-gray-500 uppercase tracking-widest mt-0.5">{c.type === 'presentiel' ? '🏢 Présentiel' : '💻 Distanciel'}</div>
+                               </div>
+                            </label>
+                        ))}
+                        {classes.filter(c => classFilterFormat === 'all' || c.type === classFilterFormat).filter(c => c.name?.toLowerCase().includes(classSearch.toLowerCase())).length === 0 && (
+                          <div className="text-center p-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                            Aucune classe trouvée
+                          </div>
+                        )}
+                      </div>
+                      
+                      {selectedClasses.length > 0 && (
+                         <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                           <span className="text-[10px] font-bold text-[#086b51] uppercase tracking-widest">{selectedClasses.length} classe{selectedClasses.length > 1 ? 's' : ''} sélectionnée{selectedClasses.length > 1 ? 's' : ''}</span>
+                           <button onClick={() => setSelectedClasses([])} className="text-[10px] font-bold text-gray-400 hover:text-red-500 uppercase tracking-widest transition-colors">Tout désélectionner</button>
+                         </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
