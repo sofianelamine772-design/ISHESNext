@@ -25,6 +25,10 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { sender_id, receiver_id, content, type, title, target_class_id, target_class_ids, format } = body;
 
+    const classesToTarget: string[] = [];
+    if (target_class_ids && target_class_ids.length > 0) classesToTarget.push(...target_class_ids);
+    else if (target_class_id) classesToTarget.push(target_class_id);
+
     if (!content) {
       return NextResponse.json({ error: 'content est requis' }, { status: 400 });
     }
@@ -124,12 +128,12 @@ export async function POST(req: Request) {
             });
           }
         }
-        else if (type === 'class' && target_class_ids && target_class_ids.length > 0) {
+        else if (type === 'class' && classesToTarget.length > 0) {
           // Message par classe : plusieurs classes possibles
           const { data: inscriptions } = await supabaseAdmin
             .from('inscriptions')
             .select('etudiant_id')
-            .in('class_id', target_class_ids);
+            .in('class_id', classesToTarget);
 
           if (inscriptions && inscriptions.length > 0) {
             // deduplicate
