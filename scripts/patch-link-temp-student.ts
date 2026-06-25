@@ -9,8 +9,8 @@ import crypto from 'crypto';
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    !process.env.CLERK_SECRET_KEY) {
+  !process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  !process.env.CLERK_SECRET_KEY) {
   console.error('⚠️  Missing required environment variables.');
   process.exit(1);
 }
@@ -40,7 +40,7 @@ async function main() {
 
   console.log('🔎  Temporary student found →', tempStudent);
 
-  // 2️⃣ Create Clerk invitation user
+  // 2️⃣ Create Clerk invitation frfrfuser
   let clerkUser;
   try {
     const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY! });
