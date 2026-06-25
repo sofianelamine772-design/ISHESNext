@@ -230,7 +230,24 @@ export default function AdminDashboard() {
         // Update local state
         setClasses(prev => prev.map(c => c.id === selectedClass.id ? { ...c, whatsappLink: whatsappInput || null } : c));
         setTimeout(() => setWhatsappSaved(false), 3000);
+
+        // Envoyer un message automatique à toute la classe
+        if (whatsappInput) {
+          await fetch('/api/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sender_id: 'admin_system',
+              type: 'class',
+              target_class_ids: [selectedClass.id],
+              title: "Nouveau lien WhatsApp pour votre classe",
+              content: `As-salâmu 'alaykum,\n\nLe lien d'accès au groupe WhatsApp de votre classe a été mis à jour :\n\n${whatsappInput}\n\nMerci de le rejoindre dès que possible pour ne manquer aucune information importante.`
+            })
+          });
+        }
       }
+    } catch (err) {
+      console.error(err);
     } finally {
       setSavingWhatsapp(false);
     }

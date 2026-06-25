@@ -177,6 +177,13 @@ export async function sendNewMessageEmail({
   messageContent: string;
   title?: string;
 }) {
+  const processedContent = messageContent
+    .replace(/\n/g, '<br />')
+    .replace(
+      /(https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9_-]+)/g,
+      '<div style="text-align: center; margin: 20px 0;"><a href="$1" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-family: sans-serif; font-weight: bold; font-style: normal; text-align: center;">💬 Rejoindre le groupe WhatsApp</a></div>'
+    );
+
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
@@ -190,7 +197,7 @@ export async function sendNewMessageEmail({
         </p>
         ${title ? `<p style="color: #333; font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 5px;">Sujet : ${title}</p>` : ''}
         <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: italic;">
-          ${messageContent.replace(/\n/g, '<br />')}
+          ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
           <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app" style="${buttonStyle}">Consulter mon espace</a>
