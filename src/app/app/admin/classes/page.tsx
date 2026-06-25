@@ -233,6 +233,8 @@ export default function AdminDashboard() {
 
         // Envoyer un message automatique à toute la classe
         if (whatsappInput) {
+          const fullLink = whatsappInput.startsWith('http') ? whatsappInput : `https://chat.whatsapp.com/${whatsappInput}`;
+          
           await fetch('/api/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -241,7 +243,7 @@ export default function AdminDashboard() {
               type: 'class',
               target_class_ids: [selectedClass.id],
               title: "Nouveau lien WhatsApp pour votre classe",
-              content: `As-salâmu 'alaykum,\n\nLe lien d'accès au groupe WhatsApp de votre classe a été mis à jour :\n\n${whatsappInput}\n\nMerci de le rejoindre dès que possible pour ne manquer aucune information importante.`
+              content: `As-salâmu 'alaykum,\n\nLe lien d'accès au groupe WhatsApp de votre classe a été mis à jour :\n\n${fullLink}\n\nMerci de le rejoindre dès que possible pour ne manquer aucune information importante.`
             })
           });
         }
