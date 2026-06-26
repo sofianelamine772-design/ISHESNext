@@ -108,14 +108,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Apprendre à lire le Coran correctement, même en partant de zéro. Une méthode étape par étape.",
     tagText: "STANDARD",
     tagColor: "bg-green-100 text-green-700",
-    durationText: "Annuel",
+    durationText: "8 mois",
     features: [
       "Tous les mardis en direct",
       "Apprentissage Progressif",
       "Support exclusif inclus",
       "Adultes débutants"
     ],
-    price: "349 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -133,7 +133,7 @@ export const PROGRAMS: Program[] = [
       "Autonomie totale",
       "Coaching audio"
     ],
-    price: "649 €",
+    price: "799 €",
     priceSub: "/ SESSION",
     isRecommended: true,
     type: "distanciel",
@@ -145,14 +145,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Maîtrisez les actes d'adoration selon l'école de l'Imam Mâlik. Étude du Matn Ibn Achir.",
     tagText: "DROIT",
     tagColor: "bg-indigo-100 text-indigo-700",
-    durationText: "9 mois",
+    durationText: "4 mois",
     features: [
       "Pureté & Prière",
       "Jeûne & Zakat",
       "Pèlerinage (Hajj)",
       "Preuves (Dalila)"
     ],
-    price: "349 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -163,7 +163,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Découvrez l'histoire de la révélation et de la préservation du Livre Saint. Module passionnant.",
     tagText: "HISTOIRE",
     tagColor: "bg-amber-100 text-amber-700",
-    durationText: "5 mois",
+    durationText: "4 mois",
     features: [
       "Processus de Révélation",
       "Compilation (Mushaf)",
@@ -171,24 +171,6 @@ export const PROGRAMS: Program[] = [
       "Inimitabilité (I'jaz)"
     ],
     price: "399 €",
-    priceSub: "/ SESSION",
-    type: "distanciel",
-    audience: "adulte"
-  },
-  {
-    id: "sciences_islamiques",
-    title: "Sciences Islamiques",
-    subtitle: "Fiqh Malikite, Sîrah, Arabe et Sciences du Coran. Un socle de connaissances solide et authentique.",
-    tagText: "SAVOIR",
-    tagColor: "bg-purple-100 text-purple-700",
-    durationText: "8 mois",
-    features: [
-      "Fiqh & Aqida",
-      "Vie du Prophète (PSL)",
-      "Compréhension du Coran",
-      "Arabe Littéraire"
-    ],
-    price: "349 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -217,14 +199,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Accompagnement personnalisé pour mémoriser le Livre d'Allah à votre rythme.",
     tagText: "HIFZ",
     tagColor: "bg-amber-100 text-amber-700",
-    durationText: "Annuel",
+    durationText: "4 mois",
     features: [
       "Correction lecture",
       "Révision suivie",
       "Progression par Hizb",
       "Soutien spirituel"
     ],
-    price: "349 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -235,14 +217,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Étude de la Tahawiya pour comprendre les fondements de la foi musulmane sunnite.",
     tagText: "FOI",
     tagColor: "bg-green-100 text-green-700",
-    durationText: "9 mois",
+    durationText: "4 mois",
     features: [
       "Étude de la Tahawiya",
       "Fondements de la foi",
       "Monde invisible",
       "Cours hebdomadaire"
     ],
-    price: "250 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -253,14 +235,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Découvrez la vie du Prophète ﷺ, de sa naissance à Médine, un guide pour l'humanité.",
     tagText: "BIOGRAPHIE",
     tagColor: "bg-amber-100 text-amber-700",
-    durationText: "Annuel",
+    durationText: "8 mois",
     features: [
       "Période Mécquoise",
       "Période Médinoise",
       "Enseignements & Vertus",
       "Lien spirituel"
     ],
-    price: "250 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -325,14 +307,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Méthode ludique pour les 6-15 ans. Arabe, Coran, Tajwid et Éducation Islamique.",
     tagText: "JUNIOR",
     tagColor: "bg-pink-100 text-pink-700",
-    durationText: "Annuel",
+    durationText: "8 mois",
     features: [
       "Pédagogie adaptée",
       "Section Ados spécifique",
       "Éducation islamique",
       "WhatsApp parent"
     ],
-    price: "349 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "enfant"
@@ -345,14 +327,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Cours de Tajwid en ligne pour enfants. Apprendre et réciter de chez soi.",
     tagText: "ENFANT",
     tagColor: "bg-green-100 text-green-700",
-    durationText: "Annuel",
+    durationText: "8 mois",
     features: [
       "Cours en direct",
       "Interactivité",
       "Progression douce",
       "Suivi WhatsApp"
     ],
-    price: "349 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "enfant"
@@ -363,14 +345,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Éveil du cœur et amour d'Allah. Un cours pour préserver la Fitra de vos enfants.",
     tagText: "SPIRITUALITÉ",
     tagColor: "bg-amber-100 text-amber-700",
-    durationText: "Annuel",
+    durationText: "8 mois",
     features: [
       "Professeure diplômée",
       "Pédagogie active",
       "Éveil spirituel",
       "À partir de 6 ans"
     ],
-    price: "249 €",
+    price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "enfant"
@@ -382,14 +364,14 @@ export const PROGRAMS: Program[] = [
     subtitle: "Apprenez l'arabe de chez vous avec des professeurs natifs et une méthode interactive.",
     tagText: "LANGUE",
     tagColor: "bg-blue-100 text-blue-700",
-    durationText: "9 mois",
+    durationText: "8 mois",
     features: [
       "Cours en direct",
       "Accès aux replays",
       "Supports numériques",
       "Suivi personnalisé"
     ],
-    price: "349 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -407,7 +389,7 @@ export const PROGRAMS: Program[] = [
       "Cours de spiritualité",
       "Accès Early Bird"
     ],
-    price: "49 €",
+    price: "149 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -726,6 +708,14 @@ export function ProgramContent() {
                             ? "COMPLET"
                             : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
                           }
+                        </Link>
+                      ) : program.id === 'cours_particuliers' ? (
+                        <Link
+                          href="/fr/contact"
+                          onClick={(e) => e.stopPropagation()}
+                          className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                        >
+                          Nous Contacter
                         </Link>
                       ) : (
                         <Link
