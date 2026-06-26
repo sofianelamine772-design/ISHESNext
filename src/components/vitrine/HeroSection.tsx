@@ -25,18 +25,29 @@ export function HeroSection() {
         </h1>
 
         <p className="max-w-[620px] text-base sm:text-lg md:text-[20px] text-gray-500 leading-[1.7] font-medium">
-          Institut de référence à Toulouse. Pédagogie certifiée CECRL pour une maîtrise complète, du niveau débutant à l'expertise.
+          Institut de référence à Toulouse. Pédagogie certifiée pour une maîtrise complète, du niveau débutant à l'expertise.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-0">
-          <Link href="/program?mode=distanciel" className="group flex items-center justify-center gap-3 w-64 bg-ishes-green hover:bg-ishes-green-hover text-white py-5 rounded-full text-[17px] font-bold transition-all hover:-translate-y-0.5 shadow-xl shadow-ishes-green/20">
-            Distanciel
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
-          </Link>
-          <Link href="/program?mode=presentiel" className="group flex items-center justify-center gap-3 w-64 bg-white border-2 border-[#c8a96e]/20 text-[#c8a96e] hover:border-[#c8a96e] hover:bg-[#c8a96e]/5 py-5 rounded-full text-[17px] font-bold transition-all hover:-translate-y-0.5 shadow-sm">
-            Présentiel
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
-          </Link>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-2">
+          <motion.div
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5 }}
+          >
+            <Link href="/program?mode=distanciel" className="group relative flex items-center justify-center gap-3 w-64 bg-ishes-green hover:bg-[#005a35] text-white py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(0,106,66,0.6)] active:scale-95">
+              Distanciel
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: 1 }}
+          >
+            <Link href="/program?mode=presentiel" className="group relative flex items-center justify-center gap-3 w-64 bg-white border-2 border-[#c8a96e]/30 text-[#c8a96e] hover:border-[#c8a96e] hover:bg-[#c8a96e]/5 py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(200,169,110,0.3)] active:scale-95">
+              Présentiel
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
+            </Link>
+          </motion.div>
         </div>
       </motion.div>
     </main>

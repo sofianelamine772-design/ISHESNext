@@ -126,9 +126,7 @@ export default function Home() {
       </section>
 
       {/* ===== TÉMOIGNAGES SECTION ===== */}
-      <section className="bg-[#fafafa] py-20 border-y border-gray-100/30">
-        <DynamicTestimonials />
-      </section>
+      <DynamicTestimonials />
 
       {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
       <SocialSection />

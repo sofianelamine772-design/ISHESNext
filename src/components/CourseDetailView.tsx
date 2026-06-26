@@ -165,7 +165,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   <div className="flex -space-x-3">
                      {[...Array(4)].map((_, i) => (
                         <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-gray-200">
-                           <img src={`https://i.pravatar.cc/100?img=${i + 10}`} className="rounded-full" />
+                           <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${i + 10}&backgroundColor=e2e8f0`} className="rounded-full" />
                         </div>
                      ))}
                   </div>

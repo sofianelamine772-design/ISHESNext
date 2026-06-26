@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays } from "lucide-react";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
@@ -568,7 +569,7 @@ export function ProgramContent() {
       {/* PROGRAMS GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredPrograms.map((program) => {
+          {filteredPrograms.map((program, index) => {
             const isPresentiel = program.type === "presentiel";
             const accentColor = isPresentiel ? "text-[#c8a96e]" : "text-[#008953]";
             const btnColor = isPresentiel ? "bg-[#c8a96e] hover:bg-[#b0935b]" : "bg-[#008953] hover:bg-[#007044]";
@@ -594,8 +595,12 @@ export function ProgramContent() {
                                                 `/program/${program.id}`;
 
             return (
-              <div
+              <motion.div
                 key={program.id}
+                initial={{ scale: 1 }}
+                whileInView={{ scale: [1, 1.08, 1] }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
                 onClick={() => router.push(infoUrl)}
                 className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${program.isRecommended
                     ? "border-[3px] border-[#00603A] shadow-md"
@@ -697,40 +702,45 @@ export function ProgramContent() {
                       >
                         Info
                       </Link>
-                      {isPresentiel ? (
-                        <Link
-                          href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
-                            }`}
-                        >
-                          {getSlotStatus(program.day)?.est_plein
-                            ? "COMPLET"
-                            : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
-                          }
-                        </Link>
-                      ) : program.id === 'cours_particuliers' ? (
-                        <Link
-                          href="/fr/contact"
-                          onClick={(e) => e.stopPropagation()}
-                          className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
-                        >
-                          Nous Contacter
-                        </Link>
-                      ) : (
-                        <Link
-                          href={`/inscription?plan=${program.id}&audience=${program.audience}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className={`flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
-                        >
-                          S'inscrire
-                        </Link>
-                      )}
+                      <motion.div 
+                        animate={{ scale: [1, 1.05, 1] }} 
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: index * 0.5 }}
+                        className="flex"
+                      >
+                        {isPresentiel ? (
+                          <Link
+                            href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                              }`}
+                          >
+                            {getSlotStatus(program.day)?.est_plein
+                              ? "COMPLET"
+                              : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
+                            }
+                          </Link>
+                        ) : program.id === 'cours_particuliers' ? (
+                          <Link
+                            href="/fr/contact"
+                            onClick={(e) => e.stopPropagation()}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                          >
+                            Nous Contacter
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/inscription?plan=${program.id}&audience=${program.audience}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                          >
+                            S'inscrire
+                          </Link>
+                        )}
+                      </motion.div>
                     </div>
                   </div>
                 </div>
-
-              </div>
+              </motion.div>
             );
           })}
         </div>

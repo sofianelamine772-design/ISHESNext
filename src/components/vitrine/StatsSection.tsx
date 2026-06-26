@@ -35,11 +35,11 @@ function CountUp({ end, duration = 2, suffix = "" }: { end: number; duration?: n
 
 export function StatsSection() {
   const avatars = [
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80",
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80",
-    "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=100&h=100&q=80",
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80",
-    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=100&h=100&q=80"
+    "https://api.dicebear.com/7.x/notionists/svg?seed=20&backgroundColor=e2e8f0",
+    "https://api.dicebear.com/7.x/notionists/svg?seed=21&backgroundColor=e2e8f0",
+    "https://api.dicebear.com/7.x/notionists/svg?seed=22&backgroundColor=e2e8f0",
+    "https://api.dicebear.com/7.x/notionists/svg?seed=23&backgroundColor=e2e8f0",
+    "https://api.dicebear.com/7.x/notionists/svg?seed=24&backgroundColor=e2e8f0"
   ];
 
   return (
@@ -74,7 +74,7 @@ export function StatsSection() {
         <div className="flex -space-x-3">
           {avatars.map((url, i) => (
             <div key={i} className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden relative shadow-sm hover:scale-110 transition-transform cursor-pointer z-10 hover:z-20">
-              <Image src={url} alt="Avatar étudiant" fill className="object-cover" sizes="44px" />
+              <img src={url} alt="Avatar étudiant" className="w-full h-full object-cover" />
             </div>
           ))}
         </div>
