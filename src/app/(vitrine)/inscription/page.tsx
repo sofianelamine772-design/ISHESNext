@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText } from "lucide-react";
@@ -51,6 +51,18 @@ function InscriptionForm() {
   const [showAdultHoraireError, setShowAdultHoraireError] = useState(false);
   const [showChildNiveauError, setShowChildNiveauError] = useState<{[key: number]: boolean}>({});
   const [showAdultNiveauError, setShowAdultNiveauError] = useState(false);
+
+  const formContainerRef = useRef<HTMLDivElement>(null);
+
+  // Centrer le formulaire à chaque changement d'étape
+  useEffect(() => {
+    if (formContainerRef.current) {
+      // Utilisation de la méthode native du navigateur pour centrer de façon fiable, peu importe la taille de l'écran ou de l'étape
+      setTimeout(() => {
+        formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    }
+  }, [step]);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -474,7 +486,10 @@ function InscriptionForm() {
       </h1>
 
       {/* Main Container */}
-      <div className="relative z-10 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 md:p-12">
+      <div 
+        ref={formContainerRef}
+        className="relative z-10 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 md:p-12 scroll-mt-24"
+      >
 
         {/* Progress Bar */}
         <div className="flex items-center justify-between mb-16 relative">

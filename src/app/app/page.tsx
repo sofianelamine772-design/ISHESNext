@@ -23,33 +23,43 @@ export default async function AppDispatcher() {
     let shouldRedirectUnauthorized = false;
 
     try {
-      const { supabase } = await import("@/lib/supabase");
+      const { supabaseAdmin } = await import("@/lib/supabaseAdmin");
 
       // On cherche si un profil existe déjà avec cet email (ex: via le formulaire d'inscription vitrine)
-      const { data: existingUser } = await supabase
+      const { data: existingUser } = await supabaseAdmin
         .from('etudiants')
         .select('id')
         .ilike('email', userEmail)
-        .single();
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
       if (existingUser) {
-        // Si il existe, on met à jour l'ID temporaire par le vrai ID Clerk
-        await supabase
+        // Si c'est un ID temporaire, on le migre proprement en évitant les erreurs de clé étrangère
+        if (existingUser.id.startsWith('temp_')) {
+          const { migrateStudentIdInNode } = await import('@/app/actions/students');
+          const { error: migrationError } = await migrateStudentIdInNode(existingUser.id, userId);
+          if (migrationError) {
+            console.error("Migration Error:", migrationError);
+          }
+        }
+        
+        // On met à jour les informations annexes sur le nouvel ID
+        await supabaseAdmin
           .from('etudiants')
           .update({
-            id: userId,
-            first_name: user.firstName,
-            last_name: user.lastName,
-            photo_url: user.imageUrl,
+            ...(user.firstName ? { first_name: user.firstName } : {}),
+            ...(user.lastName ? { last_name: user.lastName } : {}),
+            ...(user.imageUrl ? { photo_url: user.imageUrl } : {}),
             status: 'actif'
           })
-          .ilike('email', userEmail);
+          .eq('id', existingUser.id.startsWith('temp_') ? userId : existingUser.id);
       } else {
         // Sinon, si c'est un administrateur, on autorise la création de son compte
         if (isAdminEmail(userEmail)) {
-          await supabase
+          await supabaseAdmin
             .from('etudiants')
-            .insert({
+            .upsert({
               id: userId,
               email: userEmail,
               first_name: user.firstName,
@@ -57,7 +67,7 @@ export default async function AppDispatcher() {
               photo_url: user.imageUrl,
               role: 'admin',
               status: 'actif'
-            });
+            }, { onConflict: 'id' });
         } else {
           // Sinon (élève non inscrit / n'ayant pas payé et non invité) -> Bloqué et redirigé !
           shouldRedirectUnauthorized = true;

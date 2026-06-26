@@ -526,44 +526,42 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  {/* WhatsApp Group Link Editor – Présentiel only */}
-                  {selectedClass.type === 'presentiel' && (
-                    <div className="mb-6 p-4 bg-[#25D366]/5 border border-[#25D366]/20 rounded-2xl">
-                      <div className="flex items-center gap-2 mb-3">
-                        <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                        <span className="text-[10px] font-black text-[#25D366] uppercase tracking-widest">Groupe WhatsApp de la classe</span>
-                        {selectedClass.whatsappLink && (
-                          <a href={selectedClass.whatsappLink} target="_blank" rel="noopener noreferrer"
-                            className="ml-auto text-[10px] font-bold text-[#25D366] hover:underline flex items-center gap-1">
-                            Voir le groupe <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <input
-                          type="url"
-                          value={whatsappInput !== "" ? whatsappInput : (selectedClassWhatsapp || "")}
-                          onChange={(e) => setWhatsappInput(e.target.value)}
-                          onFocus={(e) => { if (!whatsappInput) setWhatsappInput(selectedClassWhatsapp || ""); }}
-                          placeholder="https://chat.whatsapp.com/..."
-                          className="flex-1 px-3 py-2.5 bg-white border border-[#25D366]/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366]/30 focus:border-[#25D366] font-mono transition-all"
-                        />
-                        <button
-                          onClick={handleSaveWhatsapp}
-                          disabled={savingWhatsapp}
-                          className={cn(
-                            "px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all",
-                            whatsappSaved
-                              ? "bg-[#25D366] text-white"
-                              : "bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white"
-                          )}
-                        >
-                          {savingWhatsapp ? <Loader2 className="w-4 h-4 animate-spin" /> : whatsappSaved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-                          {whatsappSaved ? "Sauvegardé" : "Enregistrer"}
-                        </button>
-                      </div>
+                  {/* WhatsApp Group Link Editor */}
+                  <div className="mb-6 p-4 bg-[#25D366]/5 border border-[#25D366]/20 rounded-2xl">
+                    <div className="flex items-center gap-2 mb-3">
+                      <MessageSquare className="w-4 h-4 text-[#25D366]" />
+                      <span className="text-[10px] font-black text-[#25D366] uppercase tracking-widest">Groupe WhatsApp de la classe</span>
+                      {selectedClass.whatsappLink && (
+                        <a href={selectedClass.whatsappLink} target="_blank" rel="noopener noreferrer"
+                          className="ml-auto text-[10px] font-bold text-[#25D366] hover:underline flex items-center gap-1">
+                          Voir le groupe <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
                     </div>
-                  )}
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        value={whatsappInput !== "" ? whatsappInput : (selectedClassWhatsapp || "")}
+                        onChange={(e) => setWhatsappInput(e.target.value)}
+                        onFocus={(e) => { if (!whatsappInput) setWhatsappInput(selectedClassWhatsapp || ""); }}
+                        placeholder="https://chat.whatsapp.com/..."
+                        className="flex-1 px-3 py-2.5 bg-white border border-[#25D366]/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366]/30 focus:border-[#25D366] font-mono transition-all"
+                      />
+                      <button
+                        onClick={handleSaveWhatsapp}
+                        disabled={savingWhatsapp}
+                        className={cn(
+                          "px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all",
+                          whatsappSaved
+                            ? "bg-[#25D366] text-white"
+                            : "bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white"
+                        )}
+                      >
+                        {savingWhatsapp ? <Loader2 className="w-4 h-4 animate-spin" /> : whatsappSaved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                        {whatsappSaved ? "Sauvegardé" : "Enregistrer"}
+                      </button>
+                    </div>
+                  </div>
 
                   {/* Search within class */}
                   <div className="flex items-center gap-4">

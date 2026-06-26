@@ -25,7 +25,7 @@ export function HeroSection() {
         </h1>
 
         <p className="max-w-[620px] text-base sm:text-lg md:text-[20px] text-gray-500 leading-[1.7] font-medium">
-          Institut de référence à Toulouse. Pédagogie certifiée pour une maîtrise complète, du niveau débutant à l'expertise.
+          Institut des Sciences Humaines et Spirituelles. Pédagogie certifiée pour une maîtrise complète, du niveau débutant à l'expertise.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-2">

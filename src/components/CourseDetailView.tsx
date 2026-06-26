@@ -127,6 +127,25 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Démarrage prochain</span>
                      </div>
                   </div>
+
+                  <div className="flex flex-col sm:flex-row items-start sm:items-stretch gap-5 pt-6 w-full">
+                     {id !== "arabe_coran_junior" && (
+                        <a href="https://www.zoom.com/fr" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-blue-50 rounded-3xl shadow-md hover:shadow-lg hover:border-[#0b5cff]/30 transition-all group">
+                           <img src="/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain group-hover:scale-110 transition-transform" />
+                           <div>
+                              <p className="text-[13px] font-black text-[#0b5cff] uppercase tracking-widest">Cours en direct</p>
+                              <p className="text-xs font-bold text-gray-500 mt-1">Replay vidéo disponible</p>
+                           </div>
+                        </a>
+                     )}
+                     <div className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-green-50 rounded-3xl shadow-md">
+                        <img src="/whatsapp-logo.avif" alt="WhatsApp" className="h-10 w-10 object-cover rounded-full shadow-sm" />
+                        <div>
+                           <p className="text-[13px] font-black text-[#25D366] uppercase tracking-widest">Suivi & Entraide</p>
+                           <p className="text-xs font-bold text-gray-500 mt-1">Groupe WhatsApp par classe</p>
+                        </div>
+                     </div>
+                  </div>
                </div>
 
                <div className="flex-1 w-full max-w-[600px] h-[400px] bg-white rounded-[3rem] shadow-2xl border border-gray-100 relative overflow-hidden group">

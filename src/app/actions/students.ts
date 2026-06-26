@@ -237,6 +237,7 @@ export async function registerStudentAction(formData: {
           .from('inscriptions')
           .insert({
             etudiant_id: studentId,
+            formation_id: formation!.id,
             class_id: finalClassId,
             status: 'en_attente',
             academic_year: getCurrentAcademicYear()
@@ -706,15 +707,42 @@ export async function updateStudentAction(id: string, data: any) {
 
 export async function deleteStudentAction(id: string) {
   try {
-    // 1. Delete from Clerk if it's a real user
+    // 1. Delete from Clerk based on email AND id to guarantee full removal
+    const { data: studentToDelete } = await supabaseAdmin
+      .from('etudiants')
+      .select('email')
+      .eq('id', id)
+      .single();
+
+    const { clerkClient } = await import("@clerk/nextjs/server");
+    const client = await clerkClient();
+
+    // On supprime par ID si c'est un compte Clerk
     if (!id.startsWith('manual_') && !id.startsWith('temp_')) {
-      const { clerkClient } = await import("@clerk/nextjs/server");
       try {
-        const client = await clerkClient();
         await client.users.deleteUser(id);
-        console.log(`Clerk user ${id} deleted successfully.`);
+        console.log(`Clerk user ${id} deleted successfully by ID.`);
       } catch (clerkErr) {
         console.error(`Failed to delete Clerk user ${id}:`, clerkErr);
+      }
+    }
+
+    // On supprime AUSSI par email pour nettoyer les comptes orphelins (invitations ou comptes non liés)
+    if (studentToDelete?.email) {
+      try {
+        const usersList = await client.users.getUserList({
+          emailAddress: [studentToDelete.email]
+        });
+        if (usersList && usersList.data && usersList.data.length > 0) {
+          for (const u of usersList.data) {
+            if (u.id !== id) {
+              await client.users.deleteUser(u.id);
+              console.log(`Clerk user ${u.id} (${studentToDelete.email}) deleted successfully by EMAIL.`);
+            }
+          }
+        }
+      } catch (clerkErr) {
+        console.error(`Failed to delete Clerk user by email ${studentToDelete.email}:`, clerkErr);
       }
     }
 
@@ -1489,5 +1517,98 @@ export async function exportAllStudentsDataAction() {
   } catch (err) {
     console.error("Export error:", err);
     return { success: false, error: "Failed to export data" };
+  }
+}
+
+export async function migrateStudentIdInNode(oldId: string, newId: string) {
+  try {
+    // 1. Fetch old student
+    const { data: oldStudent } = await supabaseAdmin.from('etudiants').select('*').eq('id', oldId).single();
+    if (!oldStudent) return { success: true }; // Already migrated or deleted
+
+    // 2. Insert or Update new student
+    const { error: insertError } = await supabaseAdmin.from('etudiants').upsert({
+      id: newId,
+      email: oldStudent.email,
+      first_name: oldStudent.first_name,
+      last_name: oldStudent.last_name,
+      phone: oldStudent.phone,
+      parent_first_name: oldStudent.parent_first_name,
+      parent_last_name: oldStudent.parent_last_name,
+      role: oldStudent.role,
+      status: oldStudent.status,
+      created_at: oldStudent.created_at,
+      parent_id: oldStudent.parent_id
+    }, { onConflict: 'id' });
+    
+    if (insertError) {
+      console.error("Upsert Error:", insertError);
+      throw insertError;
+    }
+    
+    // 3. Update foreign keys
+    await supabaseAdmin.from('inscriptions').update({ etudiant_id: newId }).eq('etudiant_id', oldId);
+    await supabaseAdmin.from('paiements').update({ etudiant_id: newId }).eq('etudiant_id', oldId);
+    await supabaseAdmin.from('etudiants').update({ parent_id: newId }).eq('parent_id', oldId);
+
+    // 4. Delete old student
+    await supabaseAdmin.from('etudiants').delete().eq('id', oldId);
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Migration Error in Node:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function sendPaymentReminderWithLinkAction(paymentId: string) {
+  try {
+    const { data: paiement } = await supabaseAdmin.from('paiements').select('*, etudiants(*)').eq('id', paymentId).single();
+    if (!paiement) return { success: false, error: "Paiement introuvable" };
+
+    const student = Array.isArray(paiement.etudiants) ? paiement.etudiants[0] : paiement.etudiants;
+    if (!student || !student.email) return { success: false, error: "Étudiant ou email introuvable" };
+
+    const amountInCents = Math.round(parseFloat(paiement.amount) * 100);
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
+    
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: paiement.currency || 'eur',
+            product_data: {
+              name: 'Régularisation de paiement - ISHES',
+            },
+            unit_amount: amountInCents,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${appUrl}/app/eleve?success=true`,
+      cancel_url: `${appUrl}/app/eleve?canceled=true`,
+      metadata: {
+        clerkUserId: student.id,
+        type: 'regularisation',
+        originalPaymentId: paiement.id
+      },
+      customer_email: student.email
+    });
+
+    if (!session.url) return { success: false, error: "Erreur lors de la création du lien de paiement" };
+
+    const { sendPaymentReminderEmail } = await import('@/lib/mail');
+    const result = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève', session.url);
+
+    if (!result.success) {
+      return { success: false, error: String(result.error) };
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("sendPaymentReminderWithLinkAction error:", error);
+    return { success: false, error: String(error) };
   }
 }

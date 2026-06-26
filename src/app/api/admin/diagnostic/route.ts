@@ -305,9 +305,17 @@ export async function GET() {
             message: `Erreur Resend : ${domains.error.message}`
           };
         } else {
+          // Récupérer le nombre d'emails envoyés aujourd'hui
+          const emails = await resend.emails.list();
+          let sentToday = 0;
+          if (!emails.error && emails.data && emails.data.data) {
+             const todayStr = new Date().toISOString().split('T')[0];
+             sentToday = emails.data.data.filter((e: any) => e.created_at && e.created_at.startsWith(todayStr)).length;
+          }
+
           diagnostics['resend'] = {
             success: true,
-            message: `Connexion Resend établie. ${domains.data?.data?.length || 0} domaine(s) configuré(s).`
+            message: `Connexion établie. ${domains.data?.data?.length || 0} domaine(s) configuré(s). ${sentToday} e-mail(s) envoyé(s) aujourd'hui.`
           };
         }
       } catch (err: any) {
@@ -345,6 +353,60 @@ export async function GET() {
       diagnostics['webpush'] = {
         success: false,
         message: 'Clés VAPID (Publique ou Privée) Web Push manquantes.'
+      };
+    }
+
+    // 13. Test Intégrité Formations & Classes (Assignation automatique garantie)
+    try {
+      const { data: formations, error: formErr } = await supabaseAdmin
+        .from('formations')
+        .select('id, slug, title')
+        .eq('is_active', true);
+        
+      if (formErr) throw formErr;
+
+      if (formations && formations.length > 0) {
+        const slugs = formations.map(f => f.slug);
+        const duplicateSlugs = slugs.filter((item, index) => slugs.indexOf(item) !== index);
+        
+        if (duplicateSlugs.length > 0) {
+          diagnostics['formations_classes'] = {
+            success: false,
+            message: `DANGER : Doublons détectés pour les formations suivantes (slugs identiques) : ${duplicateSlugs.join(', ')}. Cela bloquera l'assignation.`
+          };
+        } else {
+          const formationIds = formations.map(f => f.id);
+          const { data: classes, error: classErr } = await supabaseAdmin
+            .from('classes')
+            .select('id, formation_id')
+            .in('formation_id', formationIds);
+
+          if (classErr) throw classErr;
+
+          const formationsSansClasse = formations.filter(f => !classes.some(c => c.formation_id === f.id));
+
+          if (formationsSansClasse.length > 0) {
+            diagnostics['formations_classes'] = {
+              success: false,
+              message: `ATTENTION : ${formationsSansClasse.length} formation(s) sans classe détectée(s) : ${formationsSansClasse.map(f => f.title).join(', ')}. Les élèves n'y seront pas assignés.`
+            };
+          } else {
+            diagnostics['formations_classes'] = {
+              success: true,
+              message: `Intégrité parfaite : ${formations.length} formations actives, toutes liées à au moins une classe et sans aucun doublon. L'assignation automatique est garantie à 100%.`
+            };
+          }
+        }
+      } else {
+        diagnostics['formations_classes'] = {
+          success: true,
+          message: `Aucune formation active à vérifier pour le moment.`
+        };
+      }
+    } catch (err: any) {
+      diagnostics['formations_classes'] = {
+        success: false,
+        message: `Erreur de vérification d'intégrité des formations : ${err.message || err}`
       };
     }
 

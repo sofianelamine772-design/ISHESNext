@@ -85,7 +85,43 @@ export default function FormationEnseignantPage() {
           </div>
         </div>
       </section>
- 
+      {/* --- STORYTELLING : VOCATION, PROBLÈME, SOLUTION --- */}
+      <section className="pt-20 pb-10 relative z-10">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="space-y-8 md:space-y-12">
+            
+            {/* Hook Vocation */}
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-ishes-dark mb-6 tracking-tight leading-tight">
+                Transmettre est <span className="text-ishes-green italic">plus qu'un métier</span>,<br/>c'est une vocation.
+              </h2>
+              <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
+                Apprendre à lire le Coran, éduquer selon les principes islamiques ou transmettre la langue arabe est l'une des missions les plus nobles qui soient.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Problème */}
+              <div className="bg-[#fcfaf7] p-8 md:p-10 rounded-[2rem] border border-[#f5f0e6] shadow-sm">
+                <h3 className="text-2xl font-black text-[#8b7355] mb-4">Savoir ≠ Enseigner</h3>
+                <p className="text-gray-600 font-medium leading-relaxed text-lg">
+                  Avoir des connaissances est une chose. Savoir les transmettre avec pédagogie, capter l'attention de ses élèves et structurer un cours en est une autre. <strong className="text-ishes-dark">Sans une méthode claire, on risque l'échec et le découragement.</strong>
+                </p>
+              </div>
+
+              {/* Solution */}
+              <div className="bg-[#f2f7f4] p-8 md:p-10 rounded-[2rem] border border-[#e0ece5] shadow-sm">
+                <h3 className="text-2xl font-black text-[#4a7c59] mb-4">Méthodologie & Légitimité</h3>
+                <p className="text-gray-600 font-medium leading-relaxed text-lg">
+                  Nos formations vous apportent des méthodes éprouvées (Nour Al Bayan, Tarbya) pour enseigner avec excellence. À l'issue du cursus, une <strong className="text-ishes-dark">certification asseoit votre légitimité</strong> auprès des instituts et des parents.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* --- FORMATIONS SECTION --- */}
       <section className="pt-20 md:pt-32 pb-32 relative z-10">
         <div className="max-w-7xl mx-auto px-6">

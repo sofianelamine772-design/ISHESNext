@@ -31,14 +31,21 @@ export async function POST(req: Request) {
 
     const installments = body.installments ? parseInt(String(body.installments), 10) : 1;
 
+    const isLocal = !process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_APP_URL.includes('localhost');
+
     let sessionParams: Stripe.Checkout.SessionCreateParams;
 
     const metadata = {
       clerkUserId: userId || '',
       formationId,
+      studentId: body.studentId || '',
       slot: body.slot || '',
       email: body.email || '', // Email de référence pour l'inscription
       type: 'inscription',
+      // Paramètres de réinscription
+      isRenewal: body.isRenewal ? 'true' : 'false',
+      renewalYear: body.year || '',
+      nextLevelTitle: body.nextLevelTitle || '',
       // Mapping des IDs de la vitrine vers les UUIDs de la base de données
       classId: body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '',
       classId_0: body.classIds && body.classIds.length > 0 ? CLASS_ID_TO_UUID[parseInt(body.classIds[0])] || body.classIds[0] : '',
@@ -73,7 +80,9 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'subscription',
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
+        success_url: isLocal 
+          ? `http://localhost:3000/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
+          : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
         cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/inscription?canceled=true`,
         metadata: {
           ...metadata,
@@ -103,7 +112,9 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
+        success_url: isLocal 
+          ? `http://localhost:3000/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
+          : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
         cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/inscription?canceled=true`,
         metadata,
       };

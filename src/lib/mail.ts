@@ -128,7 +128,8 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
   });
 }
 
-export async function sendPaymentReminderEmail(email: string, firstName: string) {
+export async function sendPaymentReminderEmail(email: string, firstName: string, paymentLink?: string) {
+  const link = paymentLink || "https://ishees.vercel.app/app";
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
@@ -148,7 +149,7 @@ export async function sendPaymentReminderEmail(email: string, firstName: string)
           Vous pouvez effectuer ce paiement de manière sécurisée directement depuis votre espace personnel.
         </p>
         <div style="text-align: center; margin: 35px 0;">
-          <a href="https://ishees.vercel.app/app" style="${buttonStyle}">Accéder au paiement</a>
+          <a href="${link}" style="${buttonStyle}">Régulariser mon paiement</a>
         </div>
         <p style="color: #777; font-size: 14px; margin-top: 30px;">
           Si vous avez déjà effectué ce paiement récemment, veuillez ignorer cet e-mail.
@@ -212,6 +213,40 @@ export async function sendNewMessageEmail({
     subject: title ? `✉️ ISHEECOLE : ${title}` : "✉️ Nouveau message de l'administration ISHEECOLE",
     html,
     provider: 'smtp'
+  });
+}
+
+export async function sendClassAssignmentEmail(email: string, firstName: string, className: string, whatsappLink: string) {
+  const html = `
+    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      ${emailHeader}
+      <div style="padding: 40px 30px;">
+        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Bienvenue dans votre classe ! 🎉</h2>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Félicitations ${firstName},
+        </p>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Votre inscription a été validée avec succès. Vous avez été affecté(e) à la classe <strong>${className}</strong>.
+        </p>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Pour ne rien manquer (annonces, échanges avec le professeur, suivi), merci de rejoindre dès maintenant le groupe WhatsApp de votre classe en cliquant sur le bouton ci-dessous :
+        </p>
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${whatsappLink}" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif;">💬 Rejoindre le groupe WhatsApp</a>
+        </div>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Nous vous souhaitons une excellente réussite dans votre apprentissage !
+        </p>
+      </div>
+      ${emailFooter}
+    </div>
+  `;
+
+  return sendEmail({
+    to: email,
+    subject: "✅ ISHEECOLE - Votre classe et groupe WhatsApp",
+    html,
+    provider: 'resend'
   });
 }
 
