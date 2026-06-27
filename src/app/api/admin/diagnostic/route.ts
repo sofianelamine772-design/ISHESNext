@@ -410,6 +410,80 @@ export async function GET() {
       };
     }
 
+    // 14. Test Inscriptions sans classe ou avec des incohérences (Formation / Classe)
+    try {
+      const presentielFormationIds = [
+        '00000000-0000-0000-0000-000000000001', // Scolarité Présentiel
+        'f0000000-0000-0000-0000-000000000002', // Scolarité Enfants
+      ];
+
+      // 14.a Inscriptions sans classe
+      const { data: inscriptionsNoClass, error: errNoClass } = await supabaseAdmin
+        .from('inscriptions')
+        .select('id, etudiant_id, formation_id')
+        .is('class_id', null)
+        .in('formation_id', presentielFormationIds);
+
+      if (errNoClass) throw errNoClass;
+
+      let anomalyMessage = "";
+      let hasError = false;
+
+      if (inscriptionsNoClass && inscriptionsNoClass.length > 0) {
+        anomalyMessage += `⚠️ ${inscriptionsNoClass.length} inscription(s) "Présentiel" sans classe assignée. `;
+        hasError = true;
+      }
+
+      // 14.b Incohérence Formation vs Classe
+      const { data: inscriptionsWithClass, error: errWithClass } = await supabaseAdmin
+        .from('inscriptions')
+        .select('id, etudiant_id, formation_id, class_id')
+        .not('class_id', 'is', null);
+
+      if (errWithClass) throw errWithClass;
+
+      if (inscriptionsWithClass && inscriptionsWithClass.length > 0) {
+        const classIds = [...new Set(inscriptionsWithClass.map((i: any) => i.class_id))];
+        const { data: classesList } = await supabaseAdmin
+          .from('classes')
+          .select('id, formation_id')
+          .in('id', classIds);
+          
+        const classToFormation: Record<string, string> = {};
+        (classesList || []).forEach((c: any) => { classToFormation[c.id] = c.formation_id; });
+
+        let mismatchCount = 0;
+        inscriptionsWithClass.forEach((ins: any) => {
+          const expectedFormation = classToFormation[ins.class_id];
+          if (expectedFormation && expectedFormation !== ins.formation_id) {
+            mismatchCount++;
+          }
+        });
+
+        if (mismatchCount > 0) {
+          anomalyMessage += `⚠️ ${mismatchCount} incohérence(s) détectée(s) entre la formation assignée et la formation de la classe. `;
+          hasError = true;
+        }
+      }
+
+      if (hasError) {
+        diagnostics['inscriptions_integrity'] = {
+          success: false,
+          message: anomalyMessage
+        };
+      } else {
+        diagnostics['inscriptions_integrity'] = {
+          success: true,
+          message: 'Parfait : Toutes les inscriptions en présentiel ont une classe, et aucune incohérence entre la formation et la classe n\'a été détectée.'
+        };
+      }
+    } catch (err: any) {
+      diagnostics['inscriptions_integrity'] = {
+        success: false,
+        message: `Erreur de vérification des inscriptions : ${err.message || err}`
+      };
+    }
+
     return NextResponse.json(diagnostics);
   } catch (error: any) {
     console.error('[DIAGNOSTIC_ERROR]', error);

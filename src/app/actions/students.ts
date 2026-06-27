@@ -30,11 +30,11 @@ export async function registerStudentAction(formData: {
 
     // 1. Enregistre/Met à jour l'étudiant
     let studentId = `temp_${Date.now()}`;
-    
+
     console.log("Checking if student exists for email:", formData.email);
     const { data: existingStudent, error: fetchError } = await supabaseAdmin
       .from('etudiants')
-      .select('id')
+      .select('id, status')
       .ilike('email', formData.email)
       .ilike('first_name', formData.prenom)
       .ilike('last_name', formData.nom)
@@ -54,9 +54,8 @@ export async function registerStudentAction(formData: {
           first_name: formData.prenom,
           last_name: formData.nom,
           phone: formData.telephone,
-          parent_first_name: formData.parentPrenom,
-          parent_last_name: formData.parentNom,
-          status: 'en_attente'
+          // Ne pas rétrograder le statut d'un étudiant déjà actif
+          ...(existingStudent.status !== 'actif' && existingStudent.status !== 'valide' && { status: 'en_attente' })
         })
         .eq('id', studentId);
 
@@ -73,8 +72,6 @@ export async function registerStudentAction(formData: {
           first_name: formData.prenom,
           last_name: formData.nom,
           phone: formData.telephone,
-          parent_first_name: formData.parentPrenom,
-          parent_last_name: formData.parentNom,
           status: 'en_attente'
         });
 
@@ -105,7 +102,7 @@ export async function registerStudentAction(formData: {
         })
         .select()
         .single();
-      
+
       if (fError) {
         console.error("Formation Creation Error:", fError);
         throw fError;
@@ -115,7 +112,7 @@ export async function registerStudentAction(formData: {
 
     // 3. Gestion de l'affectation (Auto pour Distanciel, Manuel pour Présentiel)
     const isPresentiel = formData.planId.toLowerCase().includes('standard') || formData.planId.toLowerCase().includes('presentiel');
-    
+
     // Résolution de l'UUID de classe réel dans la base de données
     // On utilise external_id pour une correspondance exacte 1-to-1 avec le frontend
     let dbClassId: string | null = null;
@@ -146,7 +143,7 @@ export async function registerStudentAction(formData: {
 
     if (isPresentiel) {
       console.log("Presentiel selected: Waiting for secretary assignment. Resolved Class ID:", dbClassId);
-      
+
       const { data: existingIns, error: insFetchError } = await supabaseAdmin
         .from('inscriptions')
         .select('id')
@@ -159,7 +156,7 @@ export async function registerStudentAction(formData: {
       if (existingIns) {
         const { error: insError } = await supabaseAdmin
           .from('inscriptions')
-          .update({ 
+          .update({
             status: 'en_attente_daffectation',
             class_id: dbClassId
           })
@@ -180,7 +177,7 @@ export async function registerStudentAction(formData: {
     } else {
       // 3. Distanciel: Utilise la classe passée ou récupère la classe la plus récente pour cette formation
       let finalClassId = dbClassId;
-      
+
       if (!finalClassId) {
         let { data: classe, error: cFetchError } = await supabaseAdmin
           .from('classes')
@@ -205,7 +202,7 @@ export async function registerStudentAction(formData: {
             })
             .select()
             .single();
-          
+
           if (cError || !newClass) {
             console.error("Class Creation Error:", cError);
             throw cError || new Error("Failed to create default class");
@@ -262,6 +259,7 @@ export async function fetchStudentsAction(academicYear?: string) {
         *,
         inscriptions (
           status,
+          paid_status,
           formation_id,
           class_id,
           academic_year,
@@ -273,25 +271,45 @@ export async function fetchStudentsAction(academicYear?: string) {
         )
       `)
       .order('created_at', { ascending: false });
-    
+
     // If we want to filter students by academic year, we'd ideally filter on inscriptions
     // For now, we'll fetch all students and filter later or let the frontend do it if complex, 
     // but we can filter by querying inscriptions specifically if needed.
     // If we want to filter students by academic year, we filter on inscriptions
     let { data, error } = await query;
-    
+
     if (error) throw error;
-    
+
     if (data && academicYear) {
-      data = data.filter((student: any) => 
-        !student.inscriptions || 
-        student.inscriptions.length === 0 || 
+      data = data.filter((student: any) =>
+        !student.inscriptions ||
+        student.inscriptions.length === 0 ||
         student.inscriptions.some((ins: any) => ins.academic_year === academicYear)
       );
     }
-    
-    // On ne filtre plus les étudiants "en_attente" pour qu'ils soient visibles par l'administration
-    
+
+    // MASQUER LES PANIERS ABANDONNÉS (Étudiants n'ayant pas payé)
+    if (data) {
+      data = data.filter((student: any) => {
+        // Les étudiants créés manuellement par l'admin restent toujours visibles
+        if (student.id && String(student.id).startsWith('manual_')) return true;
+        // Si l'étudiant est actif, valide, etc., on le garde
+        if (student.status !== 'en_attente') return true;
+        // S'il est 'en_attente', on vérifie s'il a au moins UNE inscription payée
+        const hasPaidInscription = student.inscriptions?.some((ins: any) =>
+          ins.paid_status === 'paye'
+        );
+        return hasPaidInscription;
+      });
+
+      // MASQUER LES PARENTS (qui n'ont pas d'inscriptions de cours propres mais seulement des enfants inscrits)
+      data = data.filter((student: any) => {
+        const isParentWithoutInscriptions = (!student.inscriptions || student.inscriptions.length === 0) &&
+          !(student.id && String(student.id).startsWith('manual_'));
+        return !isParentWithoutInscriptions;
+      });
+    }
+
     return { success: true, data };
   } catch (err) {
     console.error("Fetch Action Error:", err);
@@ -314,7 +332,7 @@ export async function fetchStudentByIdAction(id: string) {
       `)
       .eq('id', id)
       .single();
-    
+
     if (error) throw error;
     return { success: true, data };
   } catch (err) {
@@ -352,13 +370,13 @@ export async function fetchClassesAction(academicYear?: string) {
           etudiants (first_name, last_name, email, created_at, status)
         )
       `);
-    
+
     if (academicYear) {
       query = query.eq('academic_year', academicYear);
     }
-    
+
     const { data: classes, error: cError } = await query;
-    
+
     if (cError) throw cError;
 
     const formatted = classes.map((c: any) => ({
@@ -411,12 +429,12 @@ export async function assignStudentToClassAction(studentId: string, classId: str
       // Mise à jour de l'inscription existante
       const { error } = await supabaseAdmin
         .from('inscriptions')
-        .update({ 
+        .update({
           class_id: classId,
-          status: 'actif' 
+          status: 'actif'
         })
         .eq('id', existing.id);
-      
+
       if (error) throw error;
     } else {
       // Création d'une nouvelle inscription directe
@@ -429,7 +447,7 @@ export async function assignStudentToClassAction(studentId: string, classId: str
           status: 'actif',
           academic_year: getCurrentAcademicYear()
         });
-      
+
       if (error) throw error;
     }
 
@@ -508,7 +526,7 @@ export async function fetchStudentsWaitingAssignmentAction() {
           class_id
         )
       `);
-    
+
     if (error) throw error;
 
     // Filtrer côté serveur pour simplifier : 
@@ -518,8 +536,15 @@ export async function fetchStudentsWaitingAssignmentAction() {
       return s.inscriptions.some((i: any) => !i.class_id || i.status === 'en_attente_daffectation');
     });
 
-    // Ne pas afficher les étudiants "en_attente" (non payés)
-    filtered = filtered.filter((s: any) => s.status !== 'en_attente');
+    // MASQUER LES PANIERS ABANDONNÉS
+    filtered = filtered.filter((student: any) => {
+      if (student.id && String(student.id).startsWith('manual_')) return true;
+      if (student.status !== 'en_attente') return true;
+      const hasPaidInscription = student.inscriptions?.some((ins: any) =>
+        ins.paid_status === 'paye'
+      );
+      return hasPaidInscription;
+    });
 
     return { success: true, data: filtered };
   } catch (err) {
@@ -534,7 +559,7 @@ export async function fetchFormationsAction() {
       .from('formations')
       .select('*')
       .order('title');
-    
+
     if (error) throw error;
     return { success: true, data };
   } catch (err) {
@@ -548,8 +573,6 @@ export async function createStudentManualAction(data: {
   last_name: string;
   email: string;
   phone: string;
-  parent_first_name?: string;
-  parent_last_name?: string;
   address?: string;
   payment_status?: string;
   payment_method?: string;
@@ -566,8 +589,6 @@ export async function createStudentManualAction(data: {
         last_name: data.last_name,
         email: data.email,
         phone: data.phone,
-        parent_first_name: data.parent_first_name,
-        parent_last_name: data.parent_last_name,
         status: status
       })
       .select()
@@ -627,7 +648,7 @@ export async function sendPaymentReminderAction(studentId: string) {
     if (error || !student) throw new Error("Student not found");
 
     let clerkInvited = false;
-    
+
     // Tenter TOUJOURS d'envoyer l'invitation Clerk si l'ID laisse penser qu'ils n'ont pas de compte
     // ou qu'on n'est pas sûr.
     try {
@@ -646,16 +667,16 @@ export async function sendPaymentReminderAction(studentId: string) {
 
     // Tenter l'email de relance standard (Resend)
     const result = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
-    
+
     // On ignore totalement l'erreur de Resend (domaine non vérifié) pour le moment,
     // car le plus important pour l'utilisateur est l'envoi de l'invitation Clerk.
     if (!result.success) {
       console.warn("[RESEND_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", result.error);
-      return { 
-        success: true, 
-        warning: clerkInvited 
-          ? "Invitation de création de compte Clerk envoyée avec succès !" 
-          : "Aucune action possible (erreur d'envoi classique)." 
+      return {
+        success: true,
+        warning: clerkInvited
+          ? "Invitation de création de compte Clerk envoyée avec succès !"
+          : "Aucune action possible (erreur d'envoi classique)."
       };
     }
 
@@ -668,15 +689,36 @@ export async function sendPaymentReminderAction(studentId: string) {
 
 export async function updateStudentAction(id: string, data: any) {
   try {
+    const { data: currentStudent } = await supabaseAdmin
+      .from('etudiants')
+      .select('email')
+      .eq('id', id)
+      .single();
+
+    let targetEmail = data.email;
+    if (currentStudent && data.email) {
+      const getBaseEmail = (e: string) => {
+        if (!e) return "";
+        const parts = e.split('@');
+        if (parts.length !== 2) return e;
+        return parts[0].split('+')[0].toLowerCase();
+      };
+
+      const currentBase = getBaseEmail(currentStudent.email);
+      const newBase = getBaseEmail(data.email);
+
+      if (currentBase === newBase) {
+        targetEmail = currentStudent.email;
+      }
+    }
+
     const { error } = await supabaseAdmin
       .from('etudiants')
       .update({
         first_name: data.first_name,
         last_name: data.last_name,
-        email: data.email,
-        phone: data.phone,
-        parent_first_name: data.parent_first_name,
-        parent_last_name: data.parent_last_name
+        email: targetEmail,
+        phone: data.phone
       })
       .eq('id', id);
 
@@ -694,7 +736,7 @@ export async function updateStudentAction(id: string, data: any) {
           currency: 'EUR',
           stripe_session_id: `manual_${methodStr}_${Date.now()}`
         });
-      
+
       if (pError) console.error("Failed to add manual payment on update:", pError);
     }
 
@@ -707,81 +749,54 @@ export async function updateStudentAction(id: string, data: any) {
 
 export async function deleteStudentAction(id: string) {
   try {
-    // 1. Delete from Clerk based on email AND id to guarantee full removal
+    // 1. Fetch student
     const { data: studentToDelete } = await supabaseAdmin
       .from('etudiants')
       .select('email')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
-    const { clerkClient } = await import("@clerk/nextjs/server");
-    const client = await clerkClient();
+    if (!studentToDelete) return { success: true };
 
-    // On supprime par ID si c'est un compte Clerk
-    if (!id.startsWith('manual_') && !id.startsWith('temp_')) {
-      try {
-        await client.users.deleteUser(id);
-        console.log(`Clerk user ${id} deleted successfully by ID.`);
-      } catch (clerkErr) {
-        console.error(`Failed to delete Clerk user ${id}:`, clerkErr);
-      }
-    }
+    // On supprime AUSSI par email pour nettoyer les comptes orphelins (invitations ou comptes non liés) si c'est le DERNIER élève avec cet email
+    if (studentToDelete.email) {
+      const { count } = await supabaseAdmin
+        .from('etudiants')
+        .select('*', { count: 'exact', head: true })
+        .eq('email', studentToDelete.email);
 
-    // On supprime AUSSI par email pour nettoyer les comptes orphelins (invitations ou comptes non liés)
-    if (studentToDelete?.email) {
-      try {
-        const usersList = await client.users.getUserList({
-          emailAddress: [studentToDelete.email]
-        });
-        if (usersList && usersList.data && usersList.data.length > 0) {
-          for (const u of usersList.data) {
-            if (u.id !== id) {
+      if (count && count <= 1) {
+        try {
+          const { clerkClient } = await import("@clerk/nextjs/server");
+          const client = await clerkClient();
+          const usersList = await client.users.getUserList({
+            emailAddress: [studentToDelete.email]
+          });
+          if (usersList && usersList.data && usersList.data.length > 0) {
+            for (const u of usersList.data) {
               await client.users.deleteUser(u.id);
-              console.log(`Clerk user ${u.id} (${studentToDelete.email}) deleted successfully by EMAIL.`);
+              console.log(`Clerk user ${u.id} (${studentToDelete.email}) deleted successfully.`);
             }
           }
+        } catch (clerkErr) {
+          console.error(`Failed to delete Clerk user by email ${studentToDelete.email}:`, clerkErr);
         }
-      } catch (clerkErr) {
-        console.error(`Failed to delete Clerk user by email ${studentToDelete.email}:`, clerkErr);
       }
     }
 
-    // 2. Find all children if this student is a parent
-    const { data: children } = await supabaseAdmin
-      .from('etudiants')
-      .select('id')
-      .eq('parent_id', id);
+    // Delete records linked to this specific student row
+    await supabaseAdmin.from('inscriptions').delete().eq('etudiant_id', id);
+    await supabaseAdmin.from('paiements').delete().eq('etudiant_id', id);
+    await supabaseAdmin.from('push_subscriptions').delete().eq('etudiant_id', id);
+    await supabaseAdmin.from('messages').delete().eq('sender_id', id);
+    await supabaseAdmin.from('messages').delete().eq('receiver_id', id);
 
-    const idsToDelete = [id];
-    if (children && children.length > 0) {
-      children.forEach(c => idsToDelete.push(c.id));
-    }
-
-    // 3. Delete related records in Supabase for the student AND all their children
-    // Using .in('etudiant_id', idsToDelete) to cover everything in one go
-    await supabaseAdmin.from('inscriptions').delete().in('etudiant_id', idsToDelete);
-    await supabaseAdmin.from('paiements').delete().in('etudiant_id', idsToDelete);
-    
-    // For messages, we only care about the parent ID usually, but let's cover all
-    for (const studentId of idsToDelete) {
-      await supabaseAdmin.from('messages').delete().eq('sender_id', studentId);
-      await supabaseAdmin.from('messages').delete().eq('receiver_id', studentId);
-    }
-
-    // 4. Delete the children first (to avoid foreign key parent_id errors if no CASCADE)
-    if (children && children.length > 0) {
-      const childIds = children.map(c => c.id);
-      await supabaseAdmin.from('etudiants').delete().in('id', childIds);
-    }
-
-    // 5. Delete the main student (parent)
     const { error } = await supabaseAdmin
       .from('etudiants')
       .delete()
       .eq('id', id);
 
     if (error) throw error;
-    
     return { success: true };
   } catch (err: any) {
     console.error("Delete Student Error:", err);
@@ -800,8 +815,7 @@ export async function fetchPaymentsAction() {
           first_name,
           last_name,
           email,
-          phone,
-          parent_id
+          phone
         ),
         inscriptions (
           id,
@@ -817,20 +831,26 @@ export async function fetchPaymentsAction() {
         )
       `)
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
 
-    // ── Enrichissement familial ──────────────────────────────────────────
-    // Pour chaque paiement, on récupère tous les enfants couverts
-    // (liés au payeur via parent_id) avec leurs inscriptions.
+    const getBaseEmail = (e: string) => {
+      if (!e) return '';
+      const [local, domain] = e.toLowerCase().split('@');
+      if (!domain) return e.toLowerCase();
+      return `${local.split('+')[0]}@${domain}`;
+    };
+
+    // Enrichissement familial
+    // Pour chaque paiement, on récupère tous les autres membres de la famille (même email de base)
     const enriched = await Promise.all((data || []).map(async (p: any) => {
       const payer = Array.isArray(p.etudiants) ? p.etudiants[0] : p.etudiants;
       if (!payer) return { ...p, familyMembers: [] };
 
-      const payerId = payer.id;
+      const baseEmail = getBaseEmail(payer.email);
 
-      // Chercher tous les enfants du payeur
-      const { data: children } = await supabaseAdmin
+      // Chercher tous les étudiants ayant le même email de base
+      const { data: family } = await supabaseAdmin
         .from('etudiants')
         .select(`
           id, first_name, last_name, email,
@@ -840,9 +860,9 @@ export async function fetchPaymentsAction() {
             classes ( name, type )
           )
         `)
-        .eq('parent_id', payerId);
+        .eq('email', baseEmail);
 
-      const familyMembers = (children || []).map((c: any) => ({
+      const familyMembers = (family || []).map((c: any) => ({
         id: c.id,
         firstName: c.first_name,
         lastName: c.last_name,
@@ -1003,6 +1023,13 @@ export async function fetchStudentClassInfoAction(clerkUserId: string, email?: s
   }
 }
 
+/**
+ * Synchronise l'état d'un utilisateur Clerk lors de son login.
+ * Nouvelle architecture simple :
+ * - Cherche tous les étudiants avec le même email de base
+ * - Met à jour leur clerk_user_id
+ * - Crée un profil Supabase minimal si nécessaire (espace vide)
+ */
 export async function syncStudentStateOnLogin(profile: {
   clerkUserId: string;
   email: string;
@@ -1013,346 +1040,116 @@ export async function syncStudentStateOnLogin(profile: {
   try {
     const { userId } = await auth();
     if (!userId || userId !== profile.clerkUserId) {
-      console.warn("[SYNC ON LOGIN] Clerk ID mismatch or not authenticated");
       return { success: false, error: "Non autorisé" };
     }
 
     const { clerkUserId, email, firstName, lastName, phone } = profile;
+    const baseEmail = email.toLowerCase().split('@').length === 2
+      ? `${email.toLowerCase().split('@')[0].split('+')[0]}@${email.toLowerCase().split('@')[1]}`
+      : email.toLowerCase();
 
-    const getBaseEmail = (e: string) => {
-      if (!e) return "";
-      const parts = e.split('@');
-      if (parts.length !== 2) return e;
-      const username = parts[0].split('+')[0];
-      return `${username}@${parts[1]}`.toLowerCase();
-    };
-    const baseEmail = getBaseEmail(email);
-
-    // 1. Check if the student already exists under their clerkUserId
-    let { data: etudiant } = await supabaseAdmin
+    // Chercher tous les étudiants ayant cet email de base
+    const { data: familyStudents } = await supabaseAdmin
       .from('etudiants')
-      .select('*')
-      .eq('id', clerkUserId)
-      .maybeSingle();
+      .select('id, clerk_user_id')
+      .eq('email', baseEmail);
 
-    const emailPattern = `${baseEmail.split('@')[0]}%@${baseEmail.split('@')[1]}`;
-    // 2. Find all students created manually or via Stripe with this email base
-    const { data: potentialStudents, error: fetchErr } = await supabaseAdmin
-      .from('etudiants')
-      .select('*')
-      .ilike('email', emailPattern);
-
-    const tempEtudiants = potentialStudents?.filter(s => getBaseEmail(s.email) === baseEmail) || [];
-
-    if (!etudiant) {
-      // The user is logging in for the first time.
+    if (familyStudents && familyStudents.length > 0) {
+      // Mettre à jour clerk_user_id pour tous les élèves de cette famille
+      for (const student of familyStudents) {
+        if (student.clerk_user_id !== clerkUserId) {
+          await supabaseAdmin
+            .from('etudiants')
+            .update({ clerk_user_id: clerkUserId })
+            .eq('id', student.id);
+        }
+      }
+      console.log(`[SYNC_LOGIN] ${familyStudents.length} student(s) linked to ${clerkUserId} for ${baseEmail}`);
+    } else {
+      // Aucun élève trouvé pour cet email :
+      // Cas admin ou parent dont les enfants ont été désinscrit.
       const isAdmin = isAdminEmail(email);
 
-      // On ne migre QUE la fiche temp qui appartient au parent lui-même (pas de parent_id)
-      // Les enfants (qui ont un parent_id) sont déjà bien liés et ne doivent pas être migrés vers le Clerk ID parent.
-      const exactMatch = tempEtudiants.find(s =>
-        s.email.toLowerCase() === email.toLowerCase() &&
-        s.id !== clerkUserId &&
-        s.id.startsWith('temp_') &&
-        !s.parent_id // ← Seulement si c'est le parent lui-même (pas un enfant)
-      );
+      // Vérifier s'il existe déjà un profil avec ce Clerk ID (cas reconnexion)
+      const { data: existingByClerkId } = await supabaseAdmin
+        .from('etudiants')
+        .select('id')
+        .eq('clerk_user_id', clerkUserId)
+        .maybeSingle();
 
-      if (exactMatch) {
-        console.log(`[SYNC ON LOGIN] Migrating exact match temp student ${exactMatch.id} to ${clerkUserId}`);
-        // 1. Temporarily rename email to avoid unique constraint
-        await supabaseAdmin.from('etudiants').update({ email: exactMatch.email + '+migrated_' + Date.now() }).eq('id', exactMatch.id);
-        
-        // 2. Insert newParent
-        const { data: newParent, error: insertError } = await supabaseAdmin
-          .from('etudiants')
-          .insert({
-            id: clerkUserId,
-            email: email,
-            first_name: firstName || exactMatch.first_name || '',
-            last_name: lastName || exactMatch.last_name || '',
-            phone: phone || exactMatch.phone || '',
-            role: isAdmin ? 'admin' : exactMatch.role || 'eleve',
-            status: exactMatch.status || 'actif',
-            parent_first_name: exactMatch.parent_first_name,
-            parent_last_name: exactMatch.parent_last_name
-          })
-          .select('*')
-          .single();
-
-        if (insertError) {
-          console.error('[SYNC ON LOGIN] Auto-create migrated parent error:', insertError);
-          // Restore email just in case
-          await supabaseAdmin.from('etudiants').update({ email: exactMatch.email }).eq('id', exactMatch.id);
-          return { success: false, error: "Erreur lors de la création du profil" };
+      if (!existingByClerkId) {
+        if (!isAdmin) {
+          console.warn(`[SYNC_LOGIN] Attempted unauthorized login for non-admin: ${email}`);
+          return { success: false, error: "Non autorisé (aucun élève associé à cet email)" };
         }
 
-        // 3. Migrate references
-        await supabaseAdmin.from('inscriptions').update({ etudiant_id: clerkUserId }).eq('etudiant_id', exactMatch.id);
-        await supabaseAdmin.from('paiements').update({ etudiant_id: clerkUserId }).eq('etudiant_id', exactMatch.id);
-        await supabaseAdmin.from('etudiants').update({ parent_id: clerkUserId }).eq('parent_id', exactMatch.id);
-
-        // 4. Delete old temp
-        await supabaseAdmin.from('etudiants').delete().eq('id', exactMatch.id);
-
-        etudiant = newParent;
-      } else {
-        // Si l'utilisateur n'est pas admin et qu'aucune inscription temporaire/manuelle n'existe pour cet email,
-        // on ne crée pas de profil (cas d'un élève désinscrit/supprimé).
-        if (!isAdmin && (!tempEtudiants || tempEtudiants.length === 0)) {
-          console.warn(`[SYNC ON LOGIN] Connexion non autorisée ou élève désinscrit : ${email}`);
-          return { success: false, error: "Profil non trouvé ou désinscrit" };
-        }
-
-        // We create a "Parent" or "Admin" profile with the Clerk ID
-        const { data: newParent, error: insertError } = await supabaseAdmin
+        const { error: insertError } = await supabaseAdmin
           .from('etudiants')
           .insert({
-            id: clerkUserId,
-            email: email,
+            id: crypto.randomUUID(),
+            email: baseEmail,
             first_name: firstName || '',
             last_name: lastName || '',
             phone: phone || '',
-            role: isAdmin ? 'admin' : 'parent',
-            status: 'actif'
-          })
-          .select('*')
-          .single();
+            role: 'admin',
+            status: 'actif',
+            clerk_user_id: clerkUserId,
+          });
 
         if (insertError) {
-          console.error('[SYNC ON LOGIN] Auto-create parent/student error:', insertError);
-          return { success: false, error: "Erreur lors de la création du profil" };
-        }
-
-        etudiant = newParent;
-      }
-    }
-
-    // 3. Link all children to this parent (runs every login to catch newly added children)
-    if (tempEtudiants && tempEtudiants.length > 0) {
-      const childrenToLink = tempEtudiants.filter(child => child.id !== clerkUserId && child.parent_id !== clerkUserId);
-      if (childrenToLink.length > 0) {
-        console.log(`[SYNC ON LOGIN] Found ${childrenToLink.length} unlinked children for base email ${baseEmail}. Linking to parent ${clerkUserId}`);
-        for (const child of childrenToLink) {
-          await supabaseAdmin
-            .from('etudiants')
-            .update({ parent_id: clerkUserId })
-            .eq('id', child.id);
-        }
-      }
-    }
-
-    // 4. Sync Stripe payments for all children of this parent
-    if (etudiant) {
-      // Find all children IDs (or just the parent ID if they have no separate children records)
-      const { data: children } = await supabaseAdmin
-        .from('etudiants')
-        .select('id')
-        .or(`id.eq.${clerkUserId},parent_id.eq.${clerkUserId}`);
-      
-      const familyIds = children ? children.map(c => c.id) : [clerkUserId];
-
-      const { data: inscriptions } = await supabaseAdmin
-        .from('inscriptions')
-        .select('*')
-        .in('etudiant_id', familyIds);
-
-      const hasUnpaid = inscriptions?.some(ins => ins.paid_status === 'impaye' || ins.status === 'en_attente' || ins.status === 'en_attente_daffectation');
-      const hasNoInscriptions = !inscriptions || inscriptions.length === 0;
-
-      if (hasUnpaid || hasNoInscriptions) {
-        console.log(`[SYNC ON LOGIN] Checking Stripe checkout sessions for ${email}...`);
-        
-        // List recent checkout sessions
-        const sessions = await stripe.checkout.sessions.list({
-          limit: 50
-        });
-
-        // Filter sessions by email or metadata or clerkUserId
-        const matchingSessions = sessions.data.filter(session => 
-          session.payment_status === 'paid' && 
-          (getBaseEmail(session.customer_details?.email || '') === baseEmail || 
-           getBaseEmail(session.metadata?.email || '') === baseEmail ||
-           session.metadata?.clerkUserId === clerkUserId)
-        );
-
-        if (matchingSessions.length > 0) {
-          console.log(`[SYNC ON LOGIN] Found ${matchingSessions.length} paid sessions. Syncing...`);
-          
-          for (const session of matchingSessions) {
-            const formationId = session.metadata?.formationId;
-            const slot = session.metadata?.slot;
-            const sessionEmail = session.metadata?.email || session.customer_details?.email || '';
-
-
-            // Resolve formation UUID
-            let formationUuid = null;
-            if (formationId) {
-              const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formationId);
-              if (isUuid) {
-                formationUuid = formationId;
-              } else {
-                const { data: formation } = await supabaseAdmin
-                  .from('formations')
-                  .select('id')
-                  .eq('slug', formationId)
-                  .maybeSingle();
-                if (formation) formationUuid = formation.id;
-              }
-            }
-
-            if (formationUuid) {
-              let classId = null;
-              if (slot) {
-                const { data: classe } = await supabaseAdmin
-                  .from('classes')
-                  .select('id')
-                  .ilike('day_of_week', slot)
-                  .maybeSingle();
-                if (classe) classId = classe.id;
-              }
-
-              // ── Récupérer tous les membres de la famille ────────────────
-              // Parent (clerkUserId) + tous les enfants (parent_id = clerkUserId)
-              const { data: allChildren } = await supabaseAdmin
-                .from('etudiants')
-                .select('id')
-                .eq('parent_id', clerkUserId);
-
-              const memberIds: string[] = [clerkUserId];
-              if (allChildren) memberIds.push(...allChildren.map((c: any) => c.id));
-
-              // Vérifier si le paiement a déjà été enregistré
-              const { data: existingPayment } = await supabaseAdmin
-                .from('paiements')
-                .select('id')
-                .eq('stripe_session_id', session.id)
-                .maybeSingle();
-              let paymentLogged = !!existingPayment;
-
-              // ── Valider les inscriptions de TOUS les membres ────────────
-              for (const memberId of memberIds) {
-                const { data: existingIns } = await supabaseAdmin
-                  .from('inscriptions')
-                  .select('id')
-                  .eq('etudiant_id', memberId)
-                  .eq('formation_id', formationUuid)
-                  .maybeSingle();
-
-                let inscriptionId = null;
-                if (existingIns) {
-                  inscriptionId = existingIns.id;
-                  await supabaseAdmin
-                    .from('inscriptions')
-                    .update({
-                      class_id: classId || undefined,
-                      status: 'valide',
-                      paid_status: 'paye'
-                    })
-                    .eq('id', inscriptionId);
-                } else {
-                  const { data: newIns } = await supabaseAdmin
-                    .from('inscriptions')
-                    .insert({
-                      etudiant_id: memberId,
-                      formation_id: formationUuid,
-                      class_id: classId,
-                      status: 'valide',
-                      paid_status: 'paye',
-                      academic_year: getCurrentAcademicYear()
-                    })
-                    .select('id')
-                    .single();
-                  if (newIns) inscriptionId = newIns.id;
-                }
-
-                // Marquer actif
-                await supabaseAdmin
-                  .from('etudiants')
-                  .update({ status: 'actif' })
-                  .eq('id', memberId);
-
-                // Log le paiement UNE SEULE FOIS (sur le premier membre)
-                if (!paymentLogged && inscriptionId) {
-                  await supabaseAdmin.from('paiements').insert({
-                    inscription_id: inscriptionId,
-                    etudiant_id: memberId,
-                    stripe_session_id: session.id,
-                    amount: (session.amount_total || 0) / 100,
-                    currency: (session.currency || 'eur').toUpperCase(),
-                    status: 'succeeded'
-                  });
-                  paymentLogged = true;
-                  console.log(`[SYNC ON LOGIN] Logged payment for family (member: ${memberId}): ${session.id}`);
-                }
-              }
-            }
-          }
+          console.warn('[SYNC_LOGIN] Profile creation error:', insertError.message);
+        } else {
+          console.log(`[SYNC_LOGIN] Created minimal profile for ${baseEmail} (${clerkUserId})`);
         }
       }
     }
 
     return { success: true };
-  } catch (error) {
-    console.error("[SYNC ON LOGIN ERROR]", error);
-    return { success: false, error: String(error) };
+  } catch (err: any) {
+    console.error('[SYNC_LOGIN] Error:', err);
+    return { success: false, error: err.message };
   }
 }
 
+
+
 export async function fetchPaymentsByStudentAction(studentId: string) {
   try {
-    // ── 1. Récupérer l'étudiant et son contexte familial ────────────────
+    // Récupérer l'étudiant pour obtenir son email
     const { data: etudiant } = await supabaseAdmin
       .from('etudiants')
-      .select('id, email, parent_id, first_name, last_name')
+      .select('id, email')
       .eq('id', studentId)
       .maybeSingle();
 
     if (!etudiant) return { success: true, data: [] };
 
-    // Déterminer l'ID du compte payeur (parent ou soi-même si pas d'enfants)
-    // Si l'étudiant a un parent_id → le payeur est le parent
-    // Sinon → le payeur c'est l'étudiant lui-même
-    const payerId = etudiant.parent_id || etudiant.id;
+    const getBaseEmail = (e: string) => {
+      if (!e) return '';
+      const [local, domain] = e.toLowerCase().split('@');
+      if (!domain) return e.toLowerCase();
+      return `${local.split('+')[0]}@${domain}`;
+    };
 
-    // Récupérer tous les enfants du payeur (fratrie)
-    const { data: siblings } = await supabaseAdmin
+    const baseEmail = getBaseEmail(etudiant.email);
+
+    // Récupérer tous les membres de la famille (même email de base)
+    const { data: familyStudents } = await supabaseAdmin
       .from('etudiants')
       .select('id, first_name, last_name, inscriptions(id, status, paid_status, formations(title), classes(name))')
-      .eq('parent_id', payerId);
+      .eq('email', baseEmail);
 
-    // Récupérer le profil du payeur
-    const { data: payerProfile } = await supabaseAdmin
-      .from('etudiants')
-      .select('id, first_name, last_name, inscriptions(id, status, paid_status, formations(title), classes(name))')
-      .eq('id', payerId)
-      .maybeSingle();
+    const allMembers = (familyStudents || []).map((s: any) => ({
+      id: s.id,
+      firstName: s.first_name || '',
+      lastName: s.last_name || '',
+      inscriptions: Array.isArray(s.inscriptions) ? s.inscriptions : (s.inscriptions ? [s.inscriptions] : []),
+    }));
 
-    // ── 2. Construire la liste des membres de la famille couverts ────────
-    const allMembers: { id: string; firstName: string; lastName: string; inscriptions: any[] }[] = [];
+    const familyIds = allMembers.map(m => m.id);
 
-    if (payerProfile) {
-      allMembers.push({
-        id: payerProfile.id,
-        firstName: payerProfile.first_name || '',
-        lastName: payerProfile.last_name || '',
-        inscriptions: Array.isArray(payerProfile.inscriptions) ? payerProfile.inscriptions : (payerProfile.inscriptions ? [payerProfile.inscriptions] : []),
-      });
-    }
-    if (siblings) {
-      siblings.forEach((s: any) => {
-        allMembers.push({
-          id: s.id,
-          firstName: s.first_name || '',
-          lastName: s.last_name || '',
-          inscriptions: Array.isArray(s.inscriptions) ? s.inscriptions : (s.inscriptions ? [s.inscriptions] : []),
-        });
-      });
-    }
-
-    const isFamilyAccount = allMembers.length > 1;
-
-    // ── 3. Récupérer les paiements du payeur (déduplication par session_id) ──
-    const { data: payerPayments, error } = await supabaseAdmin
+    // Récupérer les paiements de toute la famille
+    const { data: payments, error } = await supabaseAdmin
       .from('paiements')
       .select(`
         *,
@@ -1361,49 +1158,46 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
           classes (name)
         )
       `)
-      .eq('etudiant_id', payerId)
+      .in('etudiant_id', familyIds)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
 
-    // ── 4. Dédupliquer par stripe_session_id (évite les doublons de syncs) ─
+    // Dédupliquer par stripe_session_id
     const seen = new Set<string>();
-    const deduplicated = (payerPayments || []).filter((p: any) => {
+    const deduplicated = (payments || []).filter((p: any) => {
       const key = p.stripe_session_id || p.id;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
 
-    // ── 5. Enrichir chaque paiement avec le contexte familial ───────────
+    // Enrichir avec le contexte familial
     const enriched = deduplicated.map((p: any) => {
       const paymentFormationTitle = p.inscriptions?.formations?.title;
+      const paymentFamilyMembers = allMembers
+        .map(m => {
+          const matchingIns = m.inscriptions.find((i: any) => i.formations?.title === paymentFormationTitle) || m.inscriptions[0];
+          return { id: m.id, firstName: m.firstName, lastName: m.lastName, inscription: matchingIns || null };
+        })
+        .filter(member => member.inscription !== null);
 
-      // Trouver l'inscription de l'étudiant correspondant à la formation de ce paiement spécifique
-      const paymentFamilyMembers = allMembers.map(m => {
-        const matchingIns = m.inscriptions.find((i: any) => i.formations?.title === paymentFormationTitle) || m.inscriptions[0];
-        return {
-          id: m.id,
-          firstName: m.firstName,
-          lastName: m.lastName,
-          inscription: matchingIns || null
-        };
-      });
-
+      const activeFamilyCount = paymentFamilyMembers.length;
       return {
         ...p,
-        isFamilyPayment: isFamilyAccount,
-        familyMembersCount: isFamilyAccount ? allMembers.length : 1,
-        familyMembers: isFamilyAccount ? paymentFamilyMembers : [],
+        isFamilyPayment: activeFamilyCount > 1,
+        familyMembersCount: activeFamilyCount,
+        familyMembers: activeFamilyCount > 1 ? paymentFamilyMembers : [],
       };
     });
 
     return { success: true, data: enriched };
   } catch (err) {
-    console.error("Fetch Student Payments Error:", err);
-    return { success: false, error: "Failed to fetch student payments" };
+    console.error('Fetch Student Payments Error:', err);
+    return { success: false, error: 'Failed to fetch student payments' };
   }
 }
+
 
 export async function fetchStudentCertificateDataAction(profile: {
   clerkUserId: string;
@@ -1413,29 +1207,34 @@ export async function fetchStudentCertificateDataAction(profile: {
   phone?: string;
 }) {
   try {
-    const { clerkUserId } = profile;
+    const { clerkUserId, email } = profile;
+    const baseEmail = email.toLowerCase().split('@').length === 2
+      ? `${email.toLowerCase().split('@')[0].split('+')[0]}@${email.toLowerCase().split('@')[1]}`
+      : email.toLowerCase();
 
-    // Sync student state on login (handles missing Clerk ID migrations and Stripe webhook delays)
+    // Sync (créer le profil si absent, lier le clerk_user_id)
     await syncStudentStateOnLogin(profile);
 
-    const { data: familyMembers, error: familyError } = await supabaseAdmin
+    // Récupérer tous les élèves de cette famille (même email)
+    const { data: familyMembers } = await supabaseAdmin
       .from('etudiants')
       .select('*')
-      .or(`id.eq.${clerkUserId},parent_id.eq.${clerkUserId}`);
-    
-    if (familyError || !familyMembers || familyMembers.length === 0) {
-      console.error("No family members found for certificate:", clerkUserId, familyError);
-      return { success: false, error: "Étudiant non trouvé" };
+      .eq('email', baseEmail);
+
+    if (!familyMembers || familyMembers.length === 0) {
+      return { success: true, data: [], isParentOnly: true };
     }
 
     const familyIds = familyMembers.map((m: any) => m.id);
 
-    const { data: inscriptions, error: iError } = await supabaseAdmin
+    // Récupérer les inscriptions actives et payées
+    const { data: inscriptions } = await supabaseAdmin
       .from('inscriptions')
       .select(`
         id,
         etudiant_id,
         status,
+        paid_status,
         created_at,
         formations (title),
         classes (name, type, whatsapp_link)
@@ -1444,24 +1243,22 @@ export async function fetchStudentCertificateDataAction(profile: {
       .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation'])
       .order('created_at', { ascending: false });
 
-    if (iError) {
-      console.error("Error fetching active inscriptions for family:", familyIds, iError);
-      return { success: false, error: "Aucune inscription active trouvée" };
-    }
-
-    // Map each child to their latest active inscription
+    // Mapper chaque élève à son inscription la plus récente
     const childrenData = familyMembers
       .map((member: any) => {
-        const memberInscriptions = inscriptions?.filter((i: any) => i.etudiant_id === member.id) || [];
-        const latestInscription = memberInscriptions[0]; // Already ordered by created_at DESC
-        
+        const isManual = member.id && String(member.id).startsWith('manual_');
+        const memberInscriptions = (inscriptions || []).filter((i: any) =>
+          i.etudiant_id === member.id &&
+          (i.paid_status === 'paye' || i.paid_status === 'exonere' || isManual)
+        );
+        const latestInscription = memberInscriptions[0];
         if (!latestInscription) return null;
 
         const className = latestInscription.status === 'en_attente_daffectation'
-          ? 'En attente d\'affectation'
-          : (latestInscription.status === 'en_attente'
+          ? "En attente d'affectation"
+          : latestInscription.status === 'en_attente'
             ? 'En attente de validation'
-            : ((latestInscription.classes as any)?.name || 'Session Standard'));
+            : ((latestInscription.classes as any)?.name || 'Session Standard');
 
         return {
           id: member.id,
@@ -1472,25 +1269,19 @@ export async function fetchStudentCertificateDataAction(profile: {
           inscriptionId: latestInscription.id,
           inscriptionDate: latestInscription.created_at,
           formationTitle: (latestInscription.formations as any)?.title || 'FORMATION ISHES',
-          className: className,
+          className,
           classType: (latestInscription.classes as any)?.type || 'distanciel',
           whatsappLink: (latestInscription.classes as any)?.whatsapp_link || null,
           status: latestInscription.status,
         };
       })
-      .filter(Boolean); // Remove family members without active inscriptions
+      .filter(Boolean);
 
-    if (childrenData.length === 0) {
-      return { success: false, error: "Aucune inscription active trouvée pour cette famille." };
-    }
-
-    return {
-      success: true,
-      data: childrenData
-    };
+    // Un compte peut exister sans inscription active (parent dont les enfants sont désinscrit)
+    return { success: true, data: childrenData, isParentOnly: childrenData.length === 0 };
   } catch (err: any) {
-    console.error("Certificate Data Error:", err);
-    return { success: false, error: "Erreur lors de la récupération des données du certificat" };
+    console.error('fetchStudentCertificateDataAction error:', err);
+    return { success: false, error: 'Erreur lors du chargement du profil' };
   }
 }
 
@@ -1499,7 +1290,7 @@ export async function exportAllStudentsDataAction() {
     const { data: etudiants, error } = await supabaseAdmin
       .from('etudiants')
       .select(`
-        id, first_name, last_name, email, phone, created_at, status, parent_first_name, parent_last_name, role,
+        id, first_name, last_name, email, phone, created_at, status, role,
         inscriptions (
           id, status, paid_status,
           formations (title),
@@ -1512,52 +1303,10 @@ export async function exportAllStudentsDataAction() {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-
     return { success: true, data: etudiants };
   } catch (err) {
-    console.error("Export error:", err);
-    return { success: false, error: "Failed to export data" };
-  }
-}
-
-export async function migrateStudentIdInNode(oldId: string, newId: string) {
-  try {
-    // 1. Fetch old student
-    const { data: oldStudent } = await supabaseAdmin.from('etudiants').select('*').eq('id', oldId).single();
-    if (!oldStudent) return { success: true }; // Already migrated or deleted
-
-    // 2. Insert or Update new student
-    const { error: insertError } = await supabaseAdmin.from('etudiants').upsert({
-      id: newId,
-      email: oldStudent.email,
-      first_name: oldStudent.first_name,
-      last_name: oldStudent.last_name,
-      phone: oldStudent.phone,
-      parent_first_name: oldStudent.parent_first_name,
-      parent_last_name: oldStudent.parent_last_name,
-      role: oldStudent.role,
-      status: oldStudent.status,
-      created_at: oldStudent.created_at,
-      parent_id: oldStudent.parent_id
-    }, { onConflict: 'id' });
-    
-    if (insertError) {
-      console.error("Upsert Error:", insertError);
-      throw insertError;
-    }
-    
-    // 3. Update foreign keys
-    await supabaseAdmin.from('inscriptions').update({ etudiant_id: newId }).eq('etudiant_id', oldId);
-    await supabaseAdmin.from('paiements').update({ etudiant_id: newId }).eq('etudiant_id', oldId);
-    await supabaseAdmin.from('etudiants').update({ parent_id: newId }).eq('parent_id', oldId);
-
-    // 4. Delete old student
-    await supabaseAdmin.from('etudiants').delete().eq('id', oldId);
-
-    return { success: true };
-  } catch (error: any) {
-    console.error("Migration Error in Node:", error);
-    return { success: false, error: error.message };
+    console.error('Export error:', err);
+    return { success: false, error: 'Failed to export data' };
   }
 }
 
@@ -1571,7 +1320,7 @@ export async function sendPaymentReminderWithLinkAction(paymentId: string) {
 
     const amountInCents = Math.round(parseFloat(paiement.amount) * 100);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
-    
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [

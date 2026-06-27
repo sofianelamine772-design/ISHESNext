@@ -5,6 +5,13 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { isAdminEmail } from '@/lib/auth-utils';
 import { sendWelcomeEmail } from '@/lib/mail';
 
+function getBaseEmail(email: string): string {
+  if (!email) return '';
+  const [local, domain] = email.toLowerCase().split('@');
+  if (!domain) return email.toLowerCase();
+  return `${local.split('+')[0]}@${domain}`;
+}
+
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
@@ -54,143 +61,57 @@ export async function POST(req: Request) {
     const email = email_addresses[0]?.email_address;
     const phone = phone_numbers[0]?.phone_number;
 
-    // 1. Vérifie si l'utilisateur est l'admin
+    if (!email) {
+      return new Response('Error: No email provided', { status: 400 });
+    }
+
+    const baseEmail = getBaseEmail(email);
     const isAdmin = isAdminEmail(email);
 
-    // 2. Vérifie si l'e-mail existe déjà dans notre table 'etudiants' (inscrit via vitrine)
+    // 1. Chercher tous les étudiants avec cet email de base
     const { data: existingStudents, error: fetchError } = await supabaseAdmin
       .from('etudiants')
       .select('*')
-      .ilike('email', email);
+      .eq('email', baseEmail);
 
     if (fetchError) {
       console.error('Fetch Error:', fetchError);
       return new Response('Error: DB Fetch Error', { status: 500 });
     }
 
-    // Prioriser la fiche sans parent_id (= le parent lui-même).
-    // Les enfants (parent_id !== null OU parent_first_name !== null) ne doivent jamais être migrés vers le compte Clerk du parent.
-    const existingStudent = existingStudents && existingStudents.length > 0
-      ? (existingStudents.find(s => !s.parent_id && !s.parent_first_name) || null)
-      : null;
-
-    // 3. Restriction : Si ce n'est pas l'admin ET qu'il n'est pas dans notre base vitrine -> Bloquer
-    // Note: Pour bloquer proprement, on devrait supprimer le user Clerk ici.
-    // Pour l'instant, on se contente de NE PAS l'ajouter en actif s'il n'existe pas.
-    const isEmailKnown = existingStudents && existingStudents.length > 0;
-    if (!isAdmin && !isEmailKnown) {
+    // 2. Restriction de sécurité : Si ce n'est pas un admin et qu'aucune inscription n'existe
+    if (!isAdmin && (!existingStudents || existingStudents.length === 0)) {
       console.warn(`Tentative d'inscription non autorisée : ${email}`);
-      // Optionnel: On pourrait supprimer le compte Clerk ici via l'API Admin de Clerk
       return new Response('Unauthorized email', { status: 403 });
     }
 
-    // 4. Synchronisation : Mise à jour de l'étudiant existant avec son ID Clerk réel
-    // Ne migrer que si c'est bien la fiche du parent (pas d'un enfant)
-    if (existingStudent && existingStudent.id !== id && !existingStudent.parent_id) {
-      const oldId = existingStudent.id;
-      
-      // Temporairement renommer l'email de l'ancien étudiant pour libérer la contrainte unique
-      const tempEmail = `migrating_${Date.now()}_${email}`;
-      const { error: renameError } = await supabaseAdmin
-        .from('etudiants')
-        .update({ email: tempEmail })
-        .eq('id', oldId);
-
-      if (renameError) {
-        console.error('Migration Rename Error:', renameError);
-        return new Response('Error: Migration Rename Error', { status: 500 });
-      }
-
-      // Conserver toutes les données existantes, mais utiliser le nouvel ID, email, et récupérer depuis Clerk si existant
-      const { error: insertError } = await supabaseAdmin
-        .from('etudiants')
-        .insert({
-          ...existingStudent,
-          id: id,
-          email: email,
-          first_name: first_name || existingStudent.first_name || '',
-          last_name: last_name || existingStudent.last_name || '',
-          phone: phone || existingStudent.phone || '',
-          role: isAdmin ? 'admin' : (existingStudent.role || 'eleve'),
-          status: existingStudent.status || 'actif'
-        });
-
-      if (insertError) {
-        console.error('Migration Insert Error:', insertError);
-        // Rollback rename
+    // 3. Liaison par clerk_user_id
+    if (existingStudents && existingStudents.length > 0) {
+      for (const student of existingStudents) {
         await supabaseAdmin
           .from('etudiants')
-          .update({ email: email })
-          .eq('id', oldId);
-        return new Response('Error: Migration Insert Error', { status: 500 });
+          .update({ clerk_user_id: id })
+          .eq('id', student.id);
       }
-
-      // Transférer les inscriptions
-      await supabaseAdmin
-        .from('inscriptions')
-        .update({ etudiant_id: id })
-        .eq('etudiant_id', oldId);
-
-      // Transférer les paiements
-      await supabaseAdmin
-        .from('paiements')
-        .update({ etudiant_id: id })
-        .eq('etudiant_id', oldId);
-
-      // Transférer les messages
-      await supabaseAdmin
-        .from('messages')
-        .update({ sender_id: id })
-        .eq('sender_id', oldId);
-      await supabaseAdmin
-        .from('messages')
-        .update({ receiver_id: id })
-        .eq('receiver_id', oldId);
-
-      // Transférer la liaison des enfants (très important si l'admin a créé une famille manuellement)
+      console.log(`[CLERK_WEBHOOK] Linked ${existingStudents.length} student(s) to ${id} for email ${baseEmail}`);
+    } else if (isAdmin) {
+      // Créer un profil admin minimal
       await supabaseAdmin
         .from('etudiants')
-        .update({ parent_id: id })
-        .eq('parent_id', oldId);
-
-      // Supprimer l'ancien étudiant temporaire
-      await supabaseAdmin
-        .from('etudiants')
-        .delete()
-        .eq('id', oldId);
-
-      console.log(`Utilisateur synchronisé via migration d'ID : ${email} (${oldId} -> ${id})`);
-    } else {
-      // Cas par défaut (si déjà synchronisé ou si c'est un admin n'existant pas encore, ou si c'est un parent avec seulement des enfants)
-      const { error: syncError } = await supabaseAdmin
-        .from('etudiants')
-        .upsert({
-          id: id,
-          email: email,
+        .insert({
+          id: crypto.randomUUID(),
+          email: baseEmail,
           first_name: first_name || '',
           last_name: last_name || '',
           phone: phone || '',
-          role: isAdmin ? 'admin' : 'eleve',
-          status: 'actif'
-        }, { onConflict: 'id' });
-
-      if (syncError) {
-        console.error('Sync Error:', syncError);
-        return new Response('Error: Internal Server Error', { status: 500 });
-      }
-      console.log(`Utilisateur synchronisé standard : ${email}`);
-
-      // Si c'est un nouveau parent, relier tous ses enfants (qui n'ont pas encore de parent_id) à son compte
-      if (!existingStudent && existingStudents && existingStudents.length > 0) {
-        for (const child of existingStudents) {
-          if (!child.parent_id) {
-            await supabaseAdmin.from('etudiants').update({ parent_id: id }).eq('id', child.id);
-            console.log(`Enfant ${child.id} relié au nouveau parent ${id}`);
-          }
-        }
-      }
+          role: 'admin',
+          status: 'actif',
+          clerk_user_id: id,
+        });
+      console.log(`[CLERK_WEBHOOK] Created admin profile for ${baseEmail} (${id})`);
     }
 
+    // Envoyer l'email de bienvenue
     try {
       await sendWelcomeEmail(email, first_name || 'Élève');
       console.log(`Email de bienvenue envoyé à : ${email}`);
@@ -200,18 +121,17 @@ export async function POST(req: Request) {
   }
 
   if (eventType === 'user.updated') {
-    const { id, first_name, last_name, email_addresses, phone_numbers } = evt.data;
-    const email = email_addresses[0]?.email_address;
+    const { id, phone_numbers } = evt.data;
     const phone = phone_numbers[0]?.phone_number;
 
-    await supabaseAdmin
-      .from('etudiants')
-      .update({
-        first_name: first_name || '',
-        last_name: last_name || '',
-        phone: phone || ''
-      })
-      .eq('id', id);
+    if (phone) {
+      // Mettre à jour uniquement le numéro de téléphone pour tous les profils de la famille
+      await supabaseAdmin
+        .from('etudiants')
+        .update({ phone })
+        .eq('clerk_user_id', id);
+      console.log(`[CLERK_WEBHOOK] Updated phone for clerk_user_id: ${id}`);
+    }
   }
 
   return new Response('Webhook received', { status: 200 });

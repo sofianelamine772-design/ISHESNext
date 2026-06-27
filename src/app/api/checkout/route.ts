@@ -35,26 +35,43 @@ export async function POST(req: Request) {
 
     let sessionParams: Stripe.Checkout.SessionCreateParams;
 
-    const metadata = {
+    const registrationType = body.registrationType || 'adult';
+
+    const metadata: Record<string, string> = {
       clerkUserId: userId || '',
       formationId,
       studentId: body.studentId || '',
       slot: body.slot || '',
       email: body.email || '', // Email de référence pour l'inscription
+      telephone: body.telephone || '',
       type: 'inscription',
       // Paramètres de réinscription
       isRenewal: body.isRenewal ? 'true' : 'false',
       renewalYear: body.year || '',
       nextLevelTitle: body.nextLevelTitle || '',
-      // Mapping des IDs de la vitrine vers les UUIDs de la base de données
-      classId: body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '',
-      classId_0: body.classIds && body.classIds.length > 0 ? CLASS_ID_TO_UUID[parseInt(body.classIds[0])] || body.classIds[0] : '',
-      classId_1: body.classIds && body.classIds.length > 1 ? CLASS_ID_TO_UUID[parseInt(body.classIds[1])] || body.classIds[1] : '',
-      classId_2: body.classIds && body.classIds.length > 2 ? CLASS_ID_TO_UUID[parseInt(body.classIds[2])] || body.classIds[2] : '',
-      classId_3: body.classIds && body.classIds.length > 3 ? CLASS_ID_TO_UUID[parseInt(body.classIds[3])] || body.classIds[3] : '',
-      classId_4: body.classIds && body.classIds.length > 4 ? CLASS_ID_TO_UUID[parseInt(body.classIds[4])] || body.classIds[4] : '',
-      registrationType: body.registrationType || 'adult', // 'child' or 'adult'
+      registrationType,
     };
+
+    if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
+      metadata.parent_first_name = body.parentPrenom || '';
+      metadata.parent_last_name = body.parentNom || '';
+      metadata.childrenCount = String(body.childrenList.length);
+      
+      body.childrenList.forEach((child: any, idx: number) => {
+        metadata[`child_${idx}_first`] = child.prenom || '';
+        metadata[`child_${idx}_last`] = child.nom || '';
+        metadata[`child_${idx}_classId`] = child.classId 
+          ? CLASS_ID_TO_UUID[parseInt(child.classId)] || child.classId 
+          : '';
+        metadata[`child_${idx}_niveau`] = child.niveau || '';
+      });
+    } else {
+      // Adult
+      metadata.first_name = body.prenom || '';
+      metadata.last_name = body.nom || '';
+      metadata.classId = body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '';
+      metadata.niveau = body.niveau || '';
+    }
 
     if (installments === 3 || installments === 5) {
       const installmentAmount = Math.round(unitAmount / installments);

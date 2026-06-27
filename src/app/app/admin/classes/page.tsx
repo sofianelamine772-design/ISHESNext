@@ -24,8 +24,6 @@ export default function AdminDashboard() {
     last_name: "",
     email: "",
     phone: "",
-    parent_first_name: "",
-    parent_last_name: "",
     address: "",
     payment_status: "en_attente",
     payment_method: "virement",
@@ -104,8 +102,6 @@ export default function AdminDashboard() {
       last_name: "",
       email: "",
       phone: "",
-      parent_first_name: "",
-      parent_last_name: "",
       address: "",
       payment_status: "en_attente",
       payment_method: "virement",
@@ -703,18 +699,7 @@ export default function AdminDashboard() {
 
                 {/* Drawer Content */}
                 <div className="flex-1 overflow-y-auto px-8 py-10 space-y-8 custom-scrollbar">
-                  {/* Parent Information if exists */}
-                  {(studentDetail.parent_first_name || studentDetail.parent_last_name) && (
-                    <div className="bg-ishes-green/5 rounded-2xl p-5 border border-ishes-green/10 space-y-4">
-                      <h3 className="text-[10px] font-black text-ishes-green uppercase tracking-widest">Responsable Légal</h3>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-ishes-green/10">
-                          <Users className="w-4 h-4 text-ishes-green" />
-                        </div>
-                        <span className="text-sm font-bold text-ishes-dark italic">{studentDetail.parent_first_name} {studentDetail.parent_last_name}</span>
-                      </div>
-                    </div>
-                  )}
+
 
                   {/* Contact Details */}
                   <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 space-y-4">
@@ -1006,33 +991,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* Legal Representative */}
-              <div className="space-y-6 pt-4 border-t border-gray-50">
-                <div className="flex items-center gap-3">
-                   <div className="w-1 h-4 bg-ishes-dark rounded-full"></div>
-                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-dark">Responsable Légal (Optionnel)</h4>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prénom du parent</label>
-                    <input 
-                      type="text" 
-                      value={formData.parent_first_name}
-                      onChange={(e) => setFormData({...formData, parent_first_name: e.target.value})}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom du parent</label>
-                    <input 
-                      type="text" 
-                      value={formData.parent_last_name}
-                      onChange={(e) => setFormData({...formData, parent_last_name: e.target.value})}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
-                    />
-                  </div>
-                </div>
-              </div>
+
 
               {/* Address */}
               <div className="space-y-2 pt-4 border-t border-gray-50">

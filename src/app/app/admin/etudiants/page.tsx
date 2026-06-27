@@ -75,8 +75,6 @@ function EtudiantsContent() {
     last_name: "",
     email: "",
     phone: "",
-    parent_first_name: "",
-    parent_last_name: "",
     address: "",
     payment_status: "en_attente",
     payment_method: "virement",
@@ -90,10 +88,19 @@ function EtudiantsContent() {
       if (result.success && result.data) {
         const formatted = result.data.map((s: any) => {
           const latestInscription = s.inscriptions?.[0];
+          
+          const getCleanEmail = (e: string) => {
+            if (!e) return "";
+            const parts = e.split('@');
+            if (parts.length !== 2) return e;
+            const username = parts[0].split('+')[0];
+            return `${username}@${parts[1]}`;
+          };
+
           return {
             id: s.id,
             name: `${s.first_name || ''} ${s.last_name || ''}`.trim() || (s.email ? s.email.split('@')[0] : 'Sans nom'),
-            email: s.email,
+            email: s.email ? getCleanEmail(s.email) : "",
             phone: s.phone || "Non renseigné",
             avatar: ((s.first_name?.[0] || "") + (s.last_name?.[0] || "")).toUpperCase() || (s.email ? s.email[0].toUpperCase() : "?"),
             dateJoined: new Date(s.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -106,13 +113,11 @@ function EtudiantsContent() {
               (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) ||
               "Non affecté",
             classType: "distanciel" as const,
-            status: (latestInscription?.status === 'valide' || latestInscription?.status === 'actif' || latestInscription?.status === 'en_attente_daffectation' || latestInscription?.formation_id)
-              ? 'actif'
-              : (latestInscription?.status || s.status || "en_attente"),
-            parentName: s.parent_first_name ? `${s.parent_first_name} ${s.parent_last_name || ''}`.trim() : null,
+            status: s.status || "en_attente",
+            parentName: null,
             address: s.address || "Adresse non renseignée",
-            lastPayment: "N/A",
-            paymentStatus: "a_jour" as const
+            lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
+            paymentStatus: (latestInscription?.paid_status === 'paye' || s.id.startsWith('manual_')) ? "a_jour" as const : "en_retard" as const
           };
         });
 
@@ -323,8 +328,6 @@ function EtudiantsContent() {
       last_name: "",
       email: "",
       phone: "",
-      parent_first_name: "",
-      parent_last_name: "",
       address: "",
       payment_status: "en_attente",
       payment_method: "virement",
@@ -342,8 +345,6 @@ function EtudiantsContent() {
       last_name: names.slice(1).join(' ') || "",
       email: s.email,
       phone: s.phone,
-      parent_first_name: s.parentName?.split(' ')[0] || "",
-      parent_last_name: s.parentName?.split(' ').slice(1).join(' ') || "",
       address: s.address,
       payment_status: hasPaid ? 'a_jour' : 'en_attente',
       payment_method: "liquide",
@@ -379,10 +380,10 @@ function EtudiantsContent() {
       const { exportAllStudentsDataAction } = await import("@/app/actions/students");
       const result = await exportAllStudentsDataAction();
       if (result.success && result.data) {
-        const headers = ["ID", "Prénom", "Nom", "Email", "Téléphone", "Statut", "Rôle", "Prénom Parent", "Nom Parent", "Formations", "Total Payé (€)", "ID Paiements Stripe", "Date d'inscription"];
+        const headers = ["ID", "Prénom", "Nom", "Email", "Téléphone", "Statut", "Rôle", "Formations", "Total Payé (€)", "ID Paiements Stripe", "Date d'inscription"];
         const rows = result.data.map((s: any) => {
           const formations = Array.isArray(s.inscriptions) ? s.inscriptions.map((i: any) => i.formations?.title).filter(Boolean).join(" | ") : "";
-          const totalPaid = Array.isArray(s.paiements) ? s.paiements.filter((p: any) => p.status === "paid" || p.status === "payé").reduce((acc: number, p: any) => acc + (p.amount || 0), 0) : 0;
+          const totalPaid = Array.isArray(s.paiements) ? s.paiements.filter((p: any) => p.status === "paid" || p.status === "payé" || p.status === "succeeded").reduce((acc: number, p: any) => acc + (p.amount || 0), 0) : 0;
           const stripeIds = Array.isArray(s.paiements) ? s.paiements.map((p: any) => p.stripe_session_id).filter(Boolean).join(" | ") : "";
           const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('fr-FR') : "";
 
@@ -394,8 +395,6 @@ function EtudiantsContent() {
             s.phone || "",
             s.status || "",
             s.role || "",
-            s.parent_first_name || "",
-            s.parent_last_name || "",
             formations,
             totalPaid,
             stripeIds,
@@ -440,8 +439,7 @@ function EtudiantsContent() {
       s.id !== selectedStudent.id && 
       (
         getBaseEmail(s.email) === baseEmail ||
-        (selectedStudent.parentName && s.parentName && selectedStudent.parentName.toLowerCase() === s.parentName.toLowerCase()) ||
-        (selectedStudent.phone && s.phone && selectedStudent.phone !== "Non renseigné" && selectedStudent.phone === s.phone)
+        (selectedStudent.phone && s.phone && s.phone !== "Non renseigné" && selectedStudent.phone === s.phone)
       )
     );
   }, [selectedStudent, students]);
@@ -630,10 +628,17 @@ function EtudiantsContent() {
                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-green">Coordonnées</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">
-                        {selectedStudent.parentName && (
-                          <div className="flex flex-col p-4 bg-ishes-green/5 border border-ishes-green/10 rounded-2xl mb-2">
-                            <span className="text-[8px] md:text-[9px] font-black text-ishes-green uppercase tracking-widest mb-1">Responsable Légal (Parent)</span>
-                            <span className="ishes-heading text-base md:text-lg text-ishes-dark">{selectedStudent.parentName}</span>
+                        {familyMembers.length > 0 && (
+                          <div className="flex flex-col p-4 bg-gray-50 border border-gray-100 rounded-2xl mb-2">
+                            <span className="text-[8px] md:text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Membres de la Famille</span>
+                            <div className="space-y-1">
+                              {familyMembers.map((m) => (
+                                <div key={m.id} className="text-xs font-bold text-ishes-dark flex items-center justify-between">
+                                  <span>{m.name}</span>
+                                  <span className="text-[9px] font-normal text-gray-400 font-mono">({m.enrolledClass})</span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         )}
                         <div className="flex flex-col">
@@ -849,9 +854,7 @@ function EtudiantsContent() {
                         <CreditCard className="w-10 h-10 mx-auto mb-3 opacity-30 text-gray-400" />
                         <p className="font-bold text-gray-600 text-xs uppercase tracking-wider">Aucun règlement enregistré</p>
                         <p className="text-[10px] text-gray-400 mt-1">
-                          {(selectedStudent as any)?.parent_id
-                            ? 'Le paiement est géré par le compte parent de cet élève.'
-                            : 'Cet élève n’a pas encore effectué de paiements.'}
+                          Cet élève n’a pas encore effectué de paiements.
                         </p>
                       </div>
                     )}
@@ -950,33 +953,7 @@ function EtudiantsContent() {
                 </div>
               </div>
 
-              {/* Legal Representative */}
-              <div className="space-y-6 pt-4 border-t border-gray-50">
-                <div className="flex items-center gap-3">
-                  <div className="w-1 h-4 bg-ishes-dark rounded-full"></div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-dark">Responsable Légal (Optionnel)</h4>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prénom du parent</label>
-                    <input
-                      type="text"
-                      value={formData.parent_first_name}
-                      onChange={(e) => setFormData({ ...formData, parent_first_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom du parent</label>
-                    <input
-                      type="text"
-                      value={formData.parent_last_name}
-                      onChange={(e) => setFormData({ ...formData, parent_last_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
-                    />
-                  </div>
-                </div>
-              </div>
+
 
               {/* Address */}
               <div className="space-y-2 pt-4 border-t border-gray-50">
@@ -1108,29 +1085,7 @@ function EtudiantsContent() {
                 </div>
               </div>
 
-              {/* Legal Representative */}
-              <div className="space-y-6 pt-4 border-t border-gray-50">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prénom du parent</label>
-                    <input
-                      type="text"
-                      value={formData.parent_first_name}
-                      onChange={(e) => setFormData({ ...formData, parent_first_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom du parent</label>
-                    <input
-                      type="text"
-                      value={formData.parent_last_name}
-                      onChange={(e) => setFormData({ ...formData, parent_last_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-dark transition-all text-sm font-bold"
-                    />
-                  </div>
-                </div>
-              </div>
+
 
               {/* FACTURATION / PAIEMENT */}
               <div className="space-y-6 pt-4 border-t border-gray-50">

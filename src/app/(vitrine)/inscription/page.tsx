@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText } from "lucide-react";
 import Link from "next/link";
@@ -47,9 +48,9 @@ function InscriptionForm() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
 
-  const [showChildHoraireError, setShowChildHoraireError] = useState<{[key: number]: boolean}>({});
+  const [showChildHoraireError, setShowChildHoraireError] = useState<{ [key: number]: boolean }>({});
   const [showAdultHoraireError, setShowAdultHoraireError] = useState(false);
-  const [showChildNiveauError, setShowChildNiveauError] = useState<{[key: number]: boolean}>({});
+  const [showChildNiveauError, setShowChildNiveauError] = useState<{ [key: number]: boolean }>({});
   const [showAdultNiveauError, setShowAdultNiveauError] = useState(false);
 
   const formContainerRef = useRef<HTMLDivElement>(null);
@@ -84,7 +85,7 @@ function InscriptionForm() {
 
   const isLevelAvailableOnDay = (niveauKey: string, audience: "enfant" | "adulte", type?: "femme") => {
     if (planId !== 'presentiel-global' || !slot) return true;
-    return PRESENTIEL_CLASSES.some(c => 
+    return PRESENTIEL_CLASSES.some(c =>
       c.planId === 'presentiel-global' &&
       c.audience === audience &&
       (type ? c.type === type : true) &&
@@ -96,6 +97,22 @@ function InscriptionForm() {
   const getBasePriceOfPlan = (plan: string | null): number => {
     if (!plan) return 349;
     const normalized = plan.toLowerCase();
+
+    // 1. Lire le prix exact depuis la source de vérité (PROGRAMS_DATA)
+    const program = PROGRAMS_DATA[normalized];
+    if (program && program.price) {
+      // Ex: "480 €" -> 480
+      const parsedPrice = parseInt(program.price.replace(/\D/g, ''));
+      if (!isNaN(parsedPrice) && parsedPrice > 0) return parsedPrice;
+    }
+
+    // 2. Si le plan n'est pas dans PROGRAMS_DATA (ex: presentiel-global)
+    // On vérifie si c'est pour un enfant (Scolarité Enfant = 480€)
+    if (normalized === 'presentiel-global' || (normalized === 'tajwid_standard' && audienceParam === 'enfant')) {
+      if (registrationType === 'child') return 480; // Tarif Scolarité Enfants
+      return 349; // Tarif Adulte par défaut
+    }
+
     if (normalized === 'tarbiya_islamiya') return 249;
     if (normalized === 'tajwid_intensif') return 649;
     if (normalized === 'sciences_du_coran') return 399;
@@ -105,10 +122,8 @@ function InscriptionForm() {
     if (normalized === 'pack_accompagnement') return 49;
     if (normalized === 'correction_fatiha') return 0;
     if (normalized === 'cours_particuliers') return 0;
-    if (normalized === 'presentiel-global') {
-      return 349;
-    }
-    return 349; // Tarif par défaut
+
+    return 349; // Tarif de secours
   };
 
   const getPrice = () => {
@@ -128,11 +143,25 @@ function InscriptionForm() {
   }, [childrenList.length, registrationType, planId]);
 
   const handleCheckout = async () => {
+    // === VALIDATION AVANT PAIEMENT (Correction du bug à la source) ===
+    if (registrationType === 'child' && (planId === 'presentiel-global' || (planId === 'tajwid_standard' && audienceParam === 'enfant'))) {
+      const missingClass = childrenList.find(c => !c.classId);
+      if (missingClass) {
+        alert("Veuillez sélectionner le niveau et l'horaire pour chaque enfant avant de procéder au paiement.");
+        return;
+      }
+    }
+
     setLoadingCheckout(true);
     try {
       console.log("Starting checkout process...");
       const totalPrice = getPrice();
       console.log("Total price:", totalPrice);
+
+      // CORRECTION DÉFINITIVE: Si c'est un enfant inscrit en Tajwid Standard, on le bascule de force sur "presentiel-global"
+      // car les horaires affichés et choisis sont ceux du présentiel !
+      const isChildTajwidError = registrationType === 'child' && planId === 'tajwid_standard' && audienceParam === 'enfant';
+      const finalPlanIdToSend = isChildTajwidError ? 'presentiel-global' : (planId || "formation_generale");
 
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -140,22 +169,34 @@ function InscriptionForm() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          planId: planId || "formation_generale",
+          planId: finalPlanIdToSend,
           title: planName || "Formation ISHES",
           price: totalPrice + " €",
-          mode: (planId === 'tajwid_standard' || planId === 'presentiel-global') ? "presentiel" : "distanciel",
+          mode: (finalPlanIdToSend === 'tajwid_standard' || finalPlanIdToSend === 'presentiel-global') ? "presentiel" : "distanciel",
           slot: (registrationType === 'child' ? childrenList[0]?.slot : formData.slot) || slot || "",
           classId: formData.classId || "",
           classIds: registrationType === 'child' ? childrenList.map(c => c.classId) : [formData.classId],
           email: formData.email,
+          telephone: formData.telephone,
           registrationType: registrationType,
           installments: selectedInstallments,
+          prenom: formData.prenom,
+          nom: formData.nom,
+          niveau: formData.niveau,
+          parentPrenom: formData.parentPrenom,
+          parentNom: formData.parentNom,
+          childrenList: registrationType === 'child' ? childrenList.map(c => ({
+            prenom: c.prenom,
+            nom: c.nom,
+            classId: c.classId,
+            niveau: c.niveau
+          })) : []
         }),
       });
 
       const data = await response.json();
       console.log("Response from API:", data);
-      
+
       if (!response.ok) {
         throw new Error(data.error || "Erreur serveur");
       }
@@ -188,7 +229,7 @@ function InscriptionForm() {
         } else if (field === 'niveau') {
           child.horaire = "";
           child.classId = "";
-          
+
           if (slotVal && child.niveau) {
             const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
               c.planId === 'presentiel-global' &&
@@ -235,14 +276,14 @@ function InscriptionForm() {
     'presentiel-enfant'
   ];
 
-  const isForcedChild = 
-    childFormations.includes(planId || "") || 
+  const isForcedChild =
+    childFormations.includes(planId || "") ||
     audienceParam === "enfant" ||
     (selectedClass && selectedClass.audience === 'enfant') ||
     (planId === 'presentiel-global' && slot && slot.toLowerCase() === 'mercredi') ||
     (planId === 'tajwid_standard' && audienceParam === 'enfant');
 
-  const isForcedSelf = 
+  const isForcedSelf =
     audienceParam === "adulte" ||
     (selectedClass && selectedClass.audience === 'adulte') ||
     (planId === 'presentiel-global' && slot && ['lundi', 'mardi'].includes(slot.toLowerCase())) ||
@@ -335,7 +376,7 @@ function InscriptionForm() {
         } else if (name === 'niveau') {
           updated.horaire = "";
           updated.classId = "";
-          
+
           if (slotVal && updated.niveau) {
             const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
               c.planId === 'presentiel-global' &&
@@ -382,55 +423,7 @@ function InscriptionForm() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const saveToSupabase = async () => {
-    try {
-      const { registerStudentAction } = await import("@/app/actions/students");
 
-      if (registrationType === 'child') {
-        for (let i = 0; i < childrenList.length; i++) {
-          const child = childrenList[i];
-          const result = await registerStudentAction({
-            prenom: child.prenom,
-            nom: child.nom,
-            email: formData.email,
-            telephone: formData.telephone,
-            niveau: child.niveau,
-            planId: planId || 'arabe_coran_junior',
-            parentPrenom: formData.parentPrenom,
-            parentNom: formData.parentNom,
-            classId: child.classId
-          });
-          if (!result.success) {
-            console.error("Error saving student:", result.error);
-          }
-        }
-      } else {
-        const result = await registerStudentAction({
-          prenom: formData.prenom,
-          nom: formData.nom,
-          email: formData.email,
-          telephone: formData.telephone,
-          niveau: formData.niveau,
-          planId: planId || 'formation_generale',
-          parentPrenom: formData.parentPrenom,
-          parentNom: formData.parentNom,
-          classId: formData.classId
-        });
-        if (!result.success) {
-          console.error("Error saving student:", result.error);
-        }
-      }
-    } catch (err) {
-      console.error("Action import error:", err);
-    }
-  };
-
-  const handleNextWithSave = async () => {
-    if (step === 3) {
-      await saveToSupabase();
-    }
-    nextStep();
-  };
 
   // Derived Title
   const getPlanName = (id: string | null) => {
@@ -486,7 +479,7 @@ function InscriptionForm() {
       </h1>
 
       {/* Main Container */}
-      <div 
+      <div
         ref={formContainerRef}
         className="relative z-10 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 md:p-12 scroll-mt-24"
       >
@@ -559,8 +552,8 @@ function InscriptionForm() {
                   <button
                     onClick={() => setRegistrationType("self")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "self"
-                        ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
-                        : "border-gray-100 bg-white text-gray-400 hover:border-gray-200"
+                      ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
+                      : "border-gray-100 bg-white text-gray-400 hover:border-gray-200"
                       }`}
                   >
                     <span className="text-xl">🙋‍♂️</span> Je souhaite m'inscrire
@@ -568,8 +561,8 @@ function InscriptionForm() {
                   <button
                     onClick={() => setRegistrationType("child")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "child"
-                        ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
-                        : "border-gray-100 bg-white text-gray-400 hover:border-gray-200"
+                      ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
+                      : "border-gray-100 bg-white text-gray-400 hover:border-gray-200"
                       }`}
                   >
                     <span className="text-xl">👶</span> Inscrire mon enfant
@@ -579,11 +572,11 @@ function InscriptionForm() {
 
               {/* Force Child title if forced */}
               {isForcedChild && (
-                 <div className="mb-8 p-4 bg-green-50 rounded-2xl border border-green-100">
-                    <h3 className="text-sm font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
-                       <span>👶</span> INSCRIPTION ENFANT (SCOLARITÉ)
-                    </h3>
-                 </div>
+                <div className="mb-8 p-4 bg-green-50 rounded-2xl border border-green-100">
+                  <h3 className="text-sm font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
+                    <span>👶</span> INSCRIPTION ENFANT (SCOLARITÉ)
+                  </h3>
+                </div>
               )}
 
               <div className="space-y-6">
@@ -698,9 +691,9 @@ function InscriptionForm() {
                                     })()}
                                   </select>
                                   {!slotVal && (
-                                    <div 
-                                      className="absolute inset-0 z-10 cursor-not-allowed" 
-                                      onClick={() => setShowChildNiveauError(prev => ({...prev, [index]: true}))} 
+                                    <div
+                                      className="absolute inset-0 z-10 cursor-not-allowed"
+                                      onClick={() => setShowChildNiveauError(prev => ({ ...prev, [index]: true }))}
                                     />
                                   )}
                                 </div>
@@ -736,9 +729,9 @@ function InscriptionForm() {
                                     ))}
                                   </select>
                                   {!child.niveau && (
-                                    <div 
-                                      className="absolute inset-0 z-10 cursor-not-allowed" 
-                                      onClick={() => setShowChildHoraireError(prev => ({...prev, [index]: true}))} 
+                                    <div
+                                      className="absolute inset-0 z-10 cursor-not-allowed"
+                                      onClick={() => setShowChildHoraireError(prev => ({ ...prev, [index]: true }))}
                                     />
                                   )}
                                 </div>
@@ -889,9 +882,9 @@ function InscriptionForm() {
                                 })()}
                               </select>
                               {!slotVal && (
-                                <div 
-                                  className="absolute inset-0 z-10 cursor-not-allowed" 
-                                  onClick={() => setShowAdultNiveauError(true)} 
+                                <div
+                                  className="absolute inset-0 z-10 cursor-not-allowed"
+                                  onClick={() => setShowAdultNiveauError(true)}
                                 />
                               )}
                             </div>
@@ -929,9 +922,9 @@ function InscriptionForm() {
                                 ))}
                               </select>
                               {!formData.niveau && (
-                                <div 
-                                  className="absolute inset-0 z-10 cursor-not-allowed" 
-                                  onClick={() => setShowAdultHoraireError(true)} 
+                                <div
+                                  className="absolute inset-0 z-10 cursor-not-allowed"
+                                  onClick={() => setShowAdultHoraireError(true)}
                                 />
                               )}
                             </div>
@@ -1019,6 +1012,12 @@ function InscriptionForm() {
                     className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
                     required
                   />
+                  <div className="flex gap-2.5 p-3.5 bg-amber-50/70 border border-amber-100 rounded-2xl mt-2 select-none">
+                    <span className="text-amber-600 text-xs shrink-0 mt-0.5">💡</span>
+                    <p className="text-[11px] text-amber-800/90 font-medium leading-relaxed">
+                      <strong>Famille / Multi-inscriptions :</strong> Si vous avez déjà inscrit un enfant ou si vous avez déjà un compte, vous devez obligatoirement utiliser la <strong>même adresse e-mail</strong>. Vos enfants seront alors automatiquement regroupés sur votre unique tableau de bord.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Telephone */}
@@ -1038,38 +1037,38 @@ function InscriptionForm() {
                   />
                 </div>
 
-                 {/* Submit Button */}
-                 <button
-                   onClick={nextStep}
-                   disabled={
-                     !formData.email || 
-                     !formData.email.includes('@') ||
-                     (registrationType === 'child'
-                       ? (
-                           !formData.parentPrenom ||
-                           !formData.parentNom ||
-                           childrenList.some(c => 
-                             !c.prenom || 
-                             !c.nom || 
-                             (planId === 'presentiel-global'
-                               ? !c.classId
-                               : !c.niveau)
-                           )
-                         )
-                       : (
-                           !formData.prenom ||
-                           !formData.nom ||
-                           (planId === 'presentiel-global'
-                             ? !formData.classId
-                             : !formData.niveau)
-                         )
-                     ) ||
-                     formData.telephone.length < 13 // +33 + espace + 9 chiffres = 13 chars minimum
-                   }
-                   className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
-                 >
-                   Continuer <ChevronRight className="w-5 h-5" />
-                 </button>
+                {/* Submit Button */}
+                <button
+                  onClick={nextStep}
+                  disabled={
+                    !formData.email ||
+                    !formData.email.includes('@') ||
+                    (registrationType === 'child'
+                      ? (
+                        !formData.parentPrenom ||
+                        !formData.parentNom ||
+                        childrenList.some(c =>
+                          !c.prenom ||
+                          !c.nom ||
+                          (planId === 'presentiel-global'
+                            ? !c.classId
+                            : !c.niveau)
+                        )
+                      )
+                      : (
+                        !formData.prenom ||
+                        !formData.nom ||
+                        (planId === 'presentiel-global'
+                          ? !formData.classId
+                          : !formData.niveau)
+                      )
+                    ) ||
+                    formData.telephone.length < 13 // +33 + espace + 9 chiffres = 13 chars minimum
+                  }
+                  className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                >
+                  Continuer <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
             </motion.div>
           )}
@@ -1120,7 +1119,7 @@ function InscriptionForm() {
                   ← Retour
                 </button>
                 <button
-                  onClick={handleNextWithSave}
+                  onClick={nextStep}
                   className="flex-[2] bg-[#008953] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all flex items-center justify-center gap-3 shadow-xl shadow-[#008953]/20"
                 >
                   J'AI COMPRIS, PAYER <ChevronRight className="w-5 h-5" />
@@ -1132,15 +1131,15 @@ function InscriptionForm() {
           {step === 2 && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-6">
               <h2 className="text-2xl font-black text-[#101828] text-center mb-8">Récapitulatif de votre programme</h2>
-              
+
               {/* Recap Card */}
               <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 max-w-xl mx-auto mb-10">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="text-4xl bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
                     {planId === 'tajwid_intensif' ? '🚀' :
-                     planId === 'tajwid_standard' ? '🕌' :
-                     planId === 'sciences_islamiques' ? '📖' :
-                     planId === 'arabe_coran_junior' ? '👶' : '✨'}
+                      planId === 'tajwid_standard' ? '🕌' :
+                        planId === 'sciences_islamiques' ? '📖' :
+                          planId === 'arabe_coran_junior' ? '👶' : '✨'}
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-[#101828]">{planName || "Votre Formation"}</h3>
@@ -1153,13 +1152,13 @@ function InscriptionForm() {
                 <div className="border-t border-gray-200/50 pt-6 mb-6">
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Ce qui est inclus dans votre formation :</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(planId === 'tajwid_intensif' 
-                       ? ["Méthode intensive", "Lecture rapide", "Autonomie totale", "Coaching audio"]
-                       : planId === 'tajwid_standard'
-                       ? ["Cours en présentiel", "Suivi personnalisé", "Pédagogie structurée", "Manuel inclus"]
-                       : planId === 'sciences_islamiques'
-                       ? ["Fiqh Malikite", "Piliers de l'Islam", "Éthique & Spiritualité", "Cours interactifs"]
-                       : ["Pédagogie certifiée CECRL", "Suivi individuel", "Supports modernes", "Excellence ISHES"]
+                    {(planId === 'tajwid_intensif'
+                      ? ["Méthode intensive", "Lecture rapide", "Autonomie totale", "Coaching audio"]
+                      : planId === 'tajwid_standard'
+                        ? ["Cours en présentiel", "Suivi personnalisé", "Pédagogie structurée", "Manuel inclus"]
+                        : planId === 'sciences_islamiques'
+                          ? ["Fiqh Malikite", "Piliers de l'Islam", "Éthique & Spiritualité", "Cours interactifs"]
+                          : ["Pédagogie certifiée CECRL", "Suivi individuel", "Supports modernes", "Excellence ISHES"]
                     ).map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-[#008953] shrink-0" />
@@ -1253,11 +1252,10 @@ function InscriptionForm() {
                       <button
                         type="button"
                         onClick={() => setSelectedInstallments(1)}
-                        className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${
-                          selectedInstallments === 1
+                        className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 1
                             ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
                             : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
-                        }`}
+                          }`}
                       >
                         <div>
                           <span className="font-bold text-sm block">En 1 fois</span>
@@ -1273,11 +1271,10 @@ function InscriptionForm() {
                         <button
                           type="button"
                           onClick={() => setSelectedInstallments(3)}
-                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${
-                            selectedInstallments === 3
+                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 3
                               ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
                               : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
-                        }`}
+                            }`}
                         >
                           <div>
                             <span className="font-bold text-sm block">En 3 fois</span>
@@ -1295,11 +1292,10 @@ function InscriptionForm() {
                         <button
                           type="button"
                           onClick={() => setSelectedInstallments(5)}
-                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${
-                            selectedInstallments === 5
+                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 5
                               ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
                               : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
-                        }`}
+                            }`}
                         >
                           <div>
                             <span className="font-bold text-sm block">En 5 fois</span>

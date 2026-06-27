@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function UnauthorizedPage() {
   return (
     <div className="min-h-screen bg-[#111c29] text-white flex flex-col justify-center items-center p-6 relative overflow-hidden font-sans">
-      
+
       {/* Premium Background Ambient Gradients */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-[#086b51]/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#c8a96e]/10 rounded-full blur-[120px] pointer-events-none" />

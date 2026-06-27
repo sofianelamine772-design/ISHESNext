@@ -7,6 +7,136 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as any,
 });
 
+/** Normalise un email en supprimant le suffixe +xxx avant le @ */
+function getBaseEmail(email: string): string {
+  if (!email) return '';
+  const [local, domain] = email.toLowerCase().split('@');
+  if (!domain) return email.toLowerCase();
+  return `${local.split('+')[0]}@${domain}`;
+}
+
+/**
+ * Crée ou met à jour un étudiant par email + prénom + nom.
+ * Retourne l'ID de l'étudiant.
+ */
+async function upsertStudent(params: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+}): Promise<string | null> {
+  const { email, firstName, lastName, phone } = params;
+  const baseEmail = getBaseEmail(email);
+
+  // Chercher un étudiant existant avec le même email et nom (doublon si même paiement)
+  const { data: existing } = await supabaseAdmin
+    .from('etudiants')
+    .select('id')
+    .eq('email', baseEmail)
+    .ilike('first_name', firstName)
+    .ilike('last_name', lastName)
+    .maybeSingle();
+
+  if (existing) {
+    // Mise à jour du téléphone si disponible
+    if (phone) {
+      await supabaseAdmin.from('etudiants').update({ phone, status: 'actif' }).eq('id', existing.id);
+    }
+    return existing.id;
+  }
+
+  // Créer un nouvel étudiant avec un UUID généré côté app
+  const newId = crypto.randomUUID();
+  const { data: newStudent, error } = await supabaseAdmin
+    .from('etudiants')
+    .insert({
+      id: newId,
+      email: baseEmail,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone || '',
+      role: 'eleve',
+      status: 'actif',
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('[upsertStudent] Insert error:', error.message);
+    return null;
+  }
+
+  return newStudent?.id || null;
+}
+
+/**
+ * Résout l'UUID Supabase d'une formation à partir d'un slug ou UUID.
+ * Retourne l'UUID de la formation ou null.
+ */
+async function resolveFormationUuid(formationId: string): Promise<string | null> {
+  if (!formationId) return null;
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formationId);
+  if (isUuid) return formationId;
+
+  const { data } = await supabaseAdmin.from('formations').select('id').eq('slug', formationId).maybeSingle();
+  if (data) return data.id;
+
+  // Fallback presentiel-global
+  const { data: fallback } = await supabaseAdmin.from('formations').select('id').eq('slug', 'presentiel-global').maybeSingle();
+  return fallback?.id || null;
+}
+
+/**
+ * Crée ou met à jour une inscription pour un étudiant.
+ * Retourne l'ID de l'inscription.
+ */
+async function upsertInscription(params: {
+  studentId: string;
+  formationUuid: string;
+  classId: string | null;
+  academicYear: string;
+}): Promise<string | null> {
+  const { studentId, formationUuid, classId, academicYear } = params;
+  const hasClass = !!classId;
+  const targetStatus = hasClass ? 'valide' : 'en_attente_daffectation';
+
+  const { data: existing } = await supabaseAdmin
+    .from('inscriptions')
+    .select('id')
+    .eq('etudiant_id', studentId)
+    .eq('formation_id', formationUuid)
+    .eq('academic_year', academicYear)
+    .maybeSingle();
+
+  if (existing) {
+    await supabaseAdmin
+      .from('inscriptions')
+      .update({ class_id: classId || undefined, status: targetStatus, paid_status: 'paye' })
+      .eq('id', existing.id);
+    return existing.id;
+  }
+
+  const { data: newIns, error } = await supabaseAdmin
+    .from('inscriptions')
+    .insert({
+      etudiant_id: studentId,
+      formation_id: formationUuid,
+      class_id: classId,
+      status: targetStatus,
+      paid_status: 'paye',
+      academic_year: academicYear,
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('[upsertInscription] Insert error:', error.message);
+    return null;
+  }
+
+  return newIns?.id || null;
+}
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get('session_id');
@@ -19,91 +149,96 @@ export async function GET(req: Request) {
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    if (session.payment_status === 'paid') {
-      const planId = session.metadata?.formationId || session.metadata?.planId;
-      const classIdMetadata = session.metadata?.classId;
-      
-      const { data: membre } = await supabaseAdmin
-        .from('etudiants')
-        .select('id')
-        .eq('email', email || session.customer_details?.email)
-        .maybeSingle();
+    if (session.payment_status !== 'paid') {
+      console.warn('[LOCAL_SUCCESS] Session not paid, skipping.');
+      return NextResponse.redirect(new URL(`/sign-up?email_address=${encodeURIComponent(email || '')}`, req.url));
+    }
 
-      if (membre && planId) {
-        const { data: formation } = await supabaseAdmin
-          .from('formations')
-          .select('id')
-          .eq('slug', planId)
-          .maybeSingle();
+    const payerEmail = getBaseEmail(
+      session.metadata?.email || session.customer_details?.email || email || ''
+    );
+    const telephone = session.metadata?.telephone || '';
+    const formationId = session.metadata?.formationId || '';
+    const isRenewal = session.metadata?.isRenewal === 'true';
+    const renewalYear = session.metadata?.renewalYear || getCurrentAcademicYear();
+    const academicYear = getCurrentAcademicYear();
 
-        const formationUuid = formation?.id;
+    console.log(`[LOCAL_SUCCESS] Processing session ${sessionId} for ${payerEmail}`);
 
-        if (formationUuid) {
-          const { data: existingIns } = await supabaseAdmin
-            .from('inscriptions')
-            .select('id, class_id')
-            .eq('etudiant_id', membre.id)
-            .eq('formation_id', formationUuid)
-            .maybeSingle();
+    const formationUuid = await resolveFormationUuid(formationId);
+    const studentIds: string[] = [];
 
-          let finalClassId = classIdMetadata || existingIns?.class_id;
+    if (isRenewal) {
+      // Réinscription : l'étudiant existe déjà par ID
+      const studentId = session.metadata?.studentId;
+      if (studentId && formationUuid) {
+        const insId = await upsertInscription({ studentId, formationUuid, classId: null, academicYear: renewalYear });
+        if (insId) studentIds.push(studentId);
+      }
+    } else {
+      // Nouvelle inscription — récupérer tous les élèves de la commande
+      const childrenCount = parseInt(session.metadata?.childrenCount || '0', 10);
 
-          if (!finalClassId) {
-            const { data: defaultClass } = await supabaseAdmin
-              .from('classes')
-              .select('id')
-              .eq('formation_id', formationUuid)
-              .order('created_at', { ascending: false })
-              .limit(1)
-              .maybeSingle();
-            if (defaultClass) finalClassId = defaultClass.id;
-          }
+      if (childrenCount > 0) {
+        // Mode famille : plusieurs élèves
+        for (let i = 0; i < childrenCount; i++) {
+          const firstName = session.metadata?.[`child_${i}_first`] || '';
+          const lastName = session.metadata?.[`child_${i}_last`] || '';
+          const classId = session.metadata?.[`child_${i}_classId`] || null;
 
-          if (existingIns) {
-            await supabaseAdmin
-              .from('inscriptions')
-              .update({
-                class_id: finalClassId || undefined,
-                status: 'valide',
-                paid_status: 'paye'
-              })
-              .eq('id', existingIns.id);
-          } else {
-            await supabaseAdmin
-              .from('inscriptions')
-              .insert({
-                etudiant_id: membre.id,
-                formation_id: formationUuid,
-                class_id: finalClassId,
-                status: 'valide',
-                paid_status: 'paye',
-                academic_year: getCurrentAcademicYear()
-              });
-          }
+          if (!firstName || !lastName) continue;
 
-          // Paiement
-          const { data: existingPayment } = await supabaseAdmin
-            .from('paiements')
-            .select('id')
-            .eq('stripe_session_id', session.id)
-            .maybeSingle();
+          const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
+          if (!studentId || !formationUuid) continue;
 
-          if (!existingPayment) {
-            await supabaseAdmin.from('paiements').insert({
-              etudiant_id: membre.id,
-              amount: session.amount_total ? session.amount_total / 100 : 0,
-              status: 'succeeded',
-              currency: session.currency || 'eur',
-              stripe_session_id: session.id
-            });
+          const finalClassId = classId || null;
+          const insId = await upsertInscription({ studentId, formationUuid, classId: finalClassId, academicYear });
+          if (insId) studentIds.push(studentId);
+        }
+      } else {
+        // Mode adulte seul
+        const firstName = session.metadata?.first_name || '';
+        const lastName = session.metadata?.last_name || '';
+        const classId = session.metadata?.classId || null;
+
+        if (firstName && lastName) {
+          const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
+          if (studentId && formationUuid) {
+            const insId = await upsertInscription({ studentId, formationUuid, classId, academicYear });
+            if (insId) studentIds.push(studentId);
           }
         }
       }
     }
 
-    return NextResponse.redirect(new URL(`/sign-up?email_address=${encodeURIComponent(email || '')}`, req.url));
+    // Logger le paiement (un seul paiement par session Stripe, lié au 1er étudiant)
+    if (studentIds.length > 0) {
+      const { data: existingPayment } = await supabaseAdmin
+        .from('paiements')
+        .select('id')
+        .eq('stripe_session_id', session.id)
+        .maybeSingle();
+
+      if (!existingPayment) {
+        await supabaseAdmin.from('paiements').insert({
+          etudiant_id: studentIds[0],
+          stripe_session_id: session.id,
+          amount: (session.amount_total || 0) / 100,
+          currency: (session.currency || 'eur').toUpperCase(),
+          status: 'succeeded',
+        });
+      }
+    }
+
+    console.log(`[LOCAL_SUCCESS] Done. Created/updated ${studentIds.length} student(s) for ${payerEmail}`);
+
+    return NextResponse.redirect(
+      new URL(`/sign-up?email_address=${encodeURIComponent(payerEmail)}`, req.url)
+    );
   } catch (error) {
-    console.error('[LOCAL_SYNC_ERROR]', error);
-    return NextResponse.redirect(new URL(`/sign-up?email_address=${encodeURIComponent(email || '')}`, req.url));
+    console.error('[LOCAL_SUCCESS_ERROR]', error);
+    return NextResponse.redirect(
+      new URL(`/sign-up?email_address=${encodeURIComponent(email || '')}`, req.url)
+    );
   }
 }

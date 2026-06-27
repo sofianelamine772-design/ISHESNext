@@ -11,15 +11,124 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-/**
- * Normalise un email en supprimant le suffixe +xxx avant le @
- * Ex: benilias757+zakaria@gmail.com => benilias757@gmail.com
- */
+/** Normalise un email en supprimant le suffixe +xxx avant le @ */
 function getBaseEmail(email: string): string {
   if (!email) return '';
   const [local, domain] = email.toLowerCase().split('@');
   if (!domain) return email.toLowerCase();
   return `${local.split('+')[0]}@${domain}`;
+}
+
+/**
+ * Crée ou met à jour un étudiant par email + prénom + nom.
+ * Retourne l'ID de l'étudiant.
+ */
+async function upsertStudent(params: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+}): Promise<string | null> {
+  const { email, firstName, lastName, phone } = params;
+  const baseEmail = getBaseEmail(email);
+
+  const { data: existing } = await supabaseAdmin
+    .from('etudiants')
+    .select('id')
+    .eq('email', baseEmail)
+    .ilike('first_name', firstName)
+    .ilike('last_name', lastName)
+    .maybeSingle();
+
+  if (existing) {
+    if (phone) {
+      await supabaseAdmin.from('etudiants').update({ phone, status: 'actif' }).eq('id', existing.id);
+    }
+    return existing.id;
+  }
+
+  const newId = crypto.randomUUID();
+  const { data: newStudent, error } = await supabaseAdmin
+    .from('etudiants')
+    .insert({
+      id: newId,
+      email: baseEmail,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone || '',
+      role: 'eleve',
+      status: 'actif',
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('[WEBHOOK upsertStudent] Insert error:', error.message);
+    return null;
+  }
+
+  return newStudent?.id || null;
+}
+
+/** Résout l'UUID Supabase d'une formation à partir d'un slug ou UUID. */
+async function resolveFormationUuid(formationId: string): Promise<string | null> {
+  if (!formationId) return null;
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formationId);
+  if (isUuid) return formationId;
+
+  const { data } = await supabaseAdmin.from('formations').select('id').eq('slug', formationId).maybeSingle();
+  if (data) return data.id;
+
+  const { data: fallback } = await supabaseAdmin.from('formations').select('id').eq('slug', 'presentiel-global').maybeSingle();
+  return fallback?.id || null;
+}
+
+/** Crée ou met à jour une inscription pour un étudiant. */
+async function upsertInscription(params: {
+  studentId: string;
+  formationUuid: string;
+  classId: string | null;
+  academicYear: string;
+}): Promise<string | null> {
+  const { studentId, formationUuid, classId, academicYear } = params;
+  const hasClass = !!classId;
+  const targetStatus = hasClass ? 'valide' : 'en_attente_daffectation';
+
+  const { data: existing } = await supabaseAdmin
+    .from('inscriptions')
+    .select('id')
+    .eq('etudiant_id', studentId)
+    .eq('formation_id', formationUuid)
+    .eq('academic_year', academicYear)
+    .maybeSingle();
+
+  if (existing) {
+    await supabaseAdmin
+      .from('inscriptions')
+      .update({ class_id: classId || undefined, status: targetStatus, paid_status: 'paye' })
+      .eq('id', existing.id);
+    return existing.id;
+  }
+
+  const { data: newIns, error } = await supabaseAdmin
+    .from('inscriptions')
+    .insert({
+      etudiant_id: studentId,
+      formation_id: formationUuid,
+      class_id: classId,
+      status: targetStatus,
+      paid_status: 'paye',
+      academic_year: academicYear,
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('[WEBHOOK upsertInscription] Insert error:', error.message);
+    return null;
+  }
+
+  return newIns?.id || null;
 }
 
 export async function POST(req: Request) {
@@ -36,381 +145,155 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  // 1. Gestion de la complétion du Checkout (Inscription)
+  // ── 1. Checkout completed (nouvelle inscription ou réinscription) ──────────
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
-    const clerkUserId = session.metadata?.clerkUserId;
-    const formationId = session.metadata?.formationId;
-    const parentEmail = session.metadata?.email || session.customer_details?.email || '';
-    const slot = session.metadata?.slot;
-    const baseEmail = getBaseEmail(parentEmail);
 
-    console.log(`[STRIPE_WEBHOOK] checkout.session.completed. Email: ${parentEmail}, Formation: ${formationId}`);
+    if (session.payment_status !== 'paid') {
+      return new NextResponse(null, { status: 200 });
+    }
 
-    // ─── 1A. Récupérer TOUS les membres de la famille ───────────────────────
-    // Stratégie : trouver le parent (Clerk ID) et tous ses enfants (parent_id = clerkUserId)
-    // OU tous les étudiants qui partagent le même email de base.
-    let familyMembers: { id: string; email: string; parent_id: string | null; created_at?: string; first_name?: string }[] = [];
-    let parentMember: any = null;
+    const payerEmail = getBaseEmail(
+      session.metadata?.email || session.customer_details?.email || ''
+    );
+    const telephone = session.metadata?.telephone || '';
+    const formationId = session.metadata?.formationId || '';
+    const isRenewal = session.metadata?.isRenewal === 'true';
+    const renewalYear = session.metadata?.renewalYear || getCurrentAcademicYear();
+    const academicYear = getCurrentAcademicYear();
+    const clerkUserId = session.metadata?.clerkUserId || null;
 
-    // D'abord chercher via l'ID Clerk si disponible
-    if (clerkUserId) {
-      const { data: parent } = await supabaseAdmin
-        .from('etudiants')
-        .select('id, email, parent_id, created_at, first_name')
-        .eq('id', clerkUserId)
+    console.log(`[WEBHOOK] checkout.session.completed for ${payerEmail}, isRenewal=${isRenewal}`);
+
+    const formationUuid = await resolveFormationUuid(formationId);
+    const studentIds: string[] = [];
+
+    if (isRenewal) {
+      const studentId = session.metadata?.studentId;
+      if (studentId && formationUuid) {
+        const insId = await upsertInscription({ studentId, formationUuid, classId: null, academicYear: renewalYear });
+        if (insId) studentIds.push(studentId);
+      }
+    } else {
+      const childrenCount = parseInt(session.metadata?.childrenCount || '0', 10);
+
+      if (childrenCount > 0) {
+        // Plusieurs élèves (famille)
+        for (let i = 0; i < childrenCount; i++) {
+          const firstName = session.metadata?.[`child_${i}_first`] || '';
+          const lastName = session.metadata?.[`child_${i}_last`] || '';
+          const classId = session.metadata?.[`child_${i}_classId`] || null;
+
+          if (!firstName || !lastName) continue;
+
+          const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
+          if (!studentId || !formationUuid) continue;
+
+          // Envoyer email WhatsApp si classe connue
+          if (classId) {
+            const { data: classData } = await supabaseAdmin.from('classes').select('name, whatsapp_link').eq('id', classId).maybeSingle();
+            if (classData?.whatsapp_link) {
+              try {
+                const { sendClassAssignmentEmail } = await import('@/lib/mail');
+                await sendClassAssignmentEmail(payerEmail, firstName, classData.name || 'Votre classe', classData.whatsapp_link);
+              } catch (err) {
+                console.error('[WEBHOOK] WhatsApp email error:', err);
+              }
+            }
+          }
+
+          const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear });
+          if (insId) studentIds.push(studentId);
+        }
+      } else {
+        // Adulte seul
+        const firstName = session.metadata?.first_name || '';
+        const lastName = session.metadata?.last_name || '';
+        const classId = session.metadata?.classId || null;
+
+        if (firstName && lastName) {
+          const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
+          if (studentId && formationUuid) {
+            if (classId) {
+              const { data: classData } = await supabaseAdmin.from('classes').select('name, whatsapp_link').eq('id', classId).maybeSingle();
+              if (classData?.whatsapp_link) {
+                try {
+                  const { sendClassAssignmentEmail } = await import('@/lib/mail');
+                  await sendClassAssignmentEmail(payerEmail, firstName, classData.name || 'Votre classe', classData.whatsapp_link);
+                } catch (err) {
+                  console.error('[WEBHOOK] WhatsApp email error:', err);
+                }
+              }
+            }
+
+            const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear });
+            if (insId) studentIds.push(studentId);
+          }
+        }
+      }
+    }
+
+    // Logger le paiement (un seul par session Stripe)
+    if (studentIds.length > 0) {
+      const { data: existingPayment } = await supabaseAdmin
+        .from('paiements')
+        .select('id')
+        .eq('stripe_session_id', session.id)
         .maybeSingle();
 
-      if (parent) parentMember = parent;
-    }
-
-    // Chercher TOUS les étudiants liés par l'email de base
-    if (baseEmail) {
-      const { data: byEmail } = await supabaseAdmin
-        .from('etudiants')
-        .select('id, email, parent_id, created_at, first_name')
-        .ilike('email', baseEmail)
-        .order('created_at', { ascending: true }); // Important pour correspondre à l'ordre d'insertion
-
-      if (byEmail && byEmail.length > 0) {
-        const sessionCreatedAt = session.created * 1000; // Convert to ms
-        
-        // Sécurité anti-rejeu (très fréquent avec Stripe CLI en local) :
-        // Un étudiant est toujours inséré en base AVANT la génération de la session Stripe.
-        // Si l'étudiant a été créé *après* la session Stripe (marge de 60s), c'est un rejeu d'un vieux paiement.
-        const validStudents = byEmail.filter(m => {
-          const studentCreatedAt = new Date(m.created_at).getTime();
-          // L'étudiant doit avoir été créé avant (ou très peu de temps après) la session.
-          return studentCreatedAt <= sessionCreatedAt + 60000;
+      if (!existingPayment) {
+        await supabaseAdmin.from('paiements').insert({
+          etudiant_id: studentIds[0],
+          stripe_session_id: session.id,
+          amount: (session.amount_total || 0) / 100,
+          currency: (session.currency || 'eur').toUpperCase(),
+          status: 'succeeded',
         });
-
-        // Lier les enfants "temp_" au parent si le parent existe
-        if (parentMember) {
-          for (const m of validStudents) {
-            if (!m.parent_id && m.id !== parentMember.id && m.id.startsWith('temp_')) {
-              await supabaseAdmin.from('etudiants').update({ parent_id: parentMember.id }).eq('id', m.id);
-              m.parent_id = parentMember.id;
-            }
-          }
-        }
-        validStudents.forEach(m => familyMembers.push(m));
       }
-    }
 
-    // Assurer que le parent est dans la liste s'il n'y est pas déjà
-    if (parentMember && !familyMembers.find(m => m.id === parentMember.id)) {
-      familyMembers.push(parentMember);
-    }
-
-    // Si aucun membre trouvé → créer un étudiant temporaire (inscription sans compte)
-    if (familyMembers.length === 0 && parentEmail) {
-      const tempId = `temp_${Date.now()}`;
-      const { data: newEtudiant, error: insertError } = await supabaseAdmin
-        .from('etudiants')
-        .insert({
-          id: tempId,
-          email: parentEmail,
-          status: 'actif'
-        })
-        .select('id, email, parent_id')
-        .single();
-
-      if (newEtudiant) {
-        familyMembers.push(newEtudiant);
-      } else {
-        console.error('[STRIPE_WEBHOOK_INSERT_ERROR]', insertError);
-      }
-    }
-
-    console.log(`[STRIPE_WEBHOOK] Family members to validate: ${familyMembers.map(m => m.id).join(', ')}`);
-
-    // ─── Envoi de l'invitation Clerk si aucun compte n'est trouvé ───────────
-    if (!parentMember && (baseEmail || parentEmail)) {
-      const emailToInvite = baseEmail || parentEmail;
-      if (emailToInvite) {
-        try {
-          const client = await clerkClient();
-          await client.invitations.createInvitation({
-            emailAddress: emailToInvite,
-            ignoreExisting: true,
-          });
-          console.log(`[STRIPE_WEBHOOK] Invitation Clerk envoyée à ${emailToInvite}`);
-        } catch (inviteErr: any) {
-          // Ignore l'erreur si l'utilisateur ou l'invitation existe déjà
-          if (inviteErr?.errors?.[0]?.code !== 'form_identifier_exists') {
-            console.error('[STRIPE_WEBHOOK_CLERK_INVITE_ERROR]', inviteErr);
-          }
+      // Lier le clerk_user_id si disponible
+      if (clerkUserId) {
+        for (const sid of studentIds) {
+          await supabaseAdmin.from('etudiants').update({ clerk_user_id: clerkUserId }).eq('id', sid).is('clerk_user_id', null);
         }
       }
     }
 
-    // ─── 1B. Résoudre l'UUID de la formation ────────────────────────────────
-    let formationUuid: string | null = null;
-    if (formationId) {
-      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formationId);
-      if (isUuid) {
-        formationUuid = formationId;
-      } else {
-        const { data: formation } = await supabaseAdmin
-          .from('formations')
-          .select('id')
-          .eq('slug', formationId)
-          .maybeSingle();
-        if (formation) {
-          formationUuid = formation.id;
-        } else {
-          console.warn(`[WEBHOOK] Formation not found for slug/id: ${formationId}. Creating a fallback "Inconnue".`);
-          
-          // Au lieu de prendre la première formation au hasard (qui cause le bug d'assignation à Tajwid),
-          // on cherche ou crée une formation "Inconnue" pour ne pas bloquer le paiement sans fausser les données.
-          const { data: fallbackFormation } = await supabaseAdmin
-            .from('formations')
-            .select('id')
-            .eq('slug', 'formation_inconnue')
-            .maybeSingle();
-            
-          if (fallbackFormation) {
-            formationUuid = fallbackFormation.id;
-          } else {
-            const { data: newFallback } = await supabaseAdmin.from('formations').insert({
-              title: 'Formation Inconnue (À vérifier)',
-              slug: 'formation_inconnue',
-              price: 0,
-              type: 'distanciel'
-            }).select('id').single();
-            if (newFallback) formationUuid = newFallback.id;
-          }
+    // Envoyer invitation Clerk si pas encore connecté
+    if (payerEmail && !clerkUserId) {
+      try {
+        const client = await clerkClient();
+        await client.invitations.createInvitation({ emailAddress: payerEmail, ignoreExisting: true });
+        console.log(`[WEBHOOK] Clerk invitation sent to ${payerEmail}`);
+      } catch (inviteErr: any) {
+        if (inviteErr?.errors?.[0]?.code !== 'form_identifier_exists') {
+          console.error('[WEBHOOK Clerk invite error]', inviteErr);
         }
       }
     }
 
-    // ─── 1C. Pour chaque membre de la famille, valider son inscription ───────
-    // Le paiement Stripe est enregistré UNE SEULE FOIS (sur le premier membre)
-    let paymentLogged = false;
-
-    // Si l'inscription est pour des enfants, on exclut le parent de l'assignation de classes
-    let studentsToEnrol = familyMembers;
-    if (session.metadata?.registrationType === 'child' && parentMember) {
-      studentsToEnrol = familyMembers.filter(m => m.id !== parentMember.id);
-    }
-    
-    // Si la liste est vide (anomalie), on rabat sur toute la famille
-    if (studentsToEnrol.length === 0) {
-       studentsToEnrol = familyMembers;
-    }
-
-    for (let i = 0; i < studentsToEnrol.length; i++) {
-      const membre = studentsToEnrol[i];
-      let classId: string | null = null;
-
-      // 1. Essayer de récupérer le classId exact depuis les métadonnées (injecté par la vitrine)
-      const exactClassId = session.metadata?.[`classId_${i}`] || session.metadata?.classId;
-      
-      if (exactClassId) {
-        classId = exactClassId;
-      } else if (slot) {
-        // 2. Fallback (ancien système) : deviner la classe avec le jour
-        const { data: classe } = await supabaseAdmin
-          .from('classes')
-          .select('id')
-          .ilike('day_of_week', slot)
-          .maybeSingle();
-        if (classe) classId = classe.id;
-      }
-
-      if (!classId && formationUuid) {
-        // 3. Fallback automatique : si aucune classe n'est spécifiée (très courant en distanciel), assigner à la première classe active de cette formation
-        const { data: defaultClass } = await supabaseAdmin
-          .from('classes')
-          .select('id')
-          .eq('formation_id', formationUuid)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle();
-        if (defaultClass) classId = defaultClass.id;
-      }
-
-      let inscriptionId: string | null = null;
-      
-      const isRenewal = session.metadata?.isRenewal === 'true';
-      const renewalYear = session.metadata?.renewalYear;
-
-      if (formationUuid) {
-        if (isRenewal) {
-          // POUR UNE RÉINSCRIPTION : On crée toujours une nouvelle ligne pour l'année prochaine
-          // sans écraser l'inscription active de l'année en cours.
-          const { data: newIns, error: insertError } = await supabaseAdmin
-            .from('inscriptions')
-            .insert({
-              etudiant_id: membre.id,
-              formation_id: formationUuid,
-              // On force null pour en_attente_daffectation car les horaires changent d'une année à l'autre
-              class_id: null,
-              status: 'en_attente_daffectation', 
-              paid_status: 'paye',
-              academic_year: renewalYear || getCurrentAcademicYear()
-            })
-            .select('id')
-            .single();
-
-          if (insertError) {
-            console.error('[WEBHOOK_DB_INSERT_ERROR_RENEWAL]', insertError);
-          } else if (newIns) {
-            inscriptionId = newIns.id;
-            console.log(`[STRIPE_WEBHOOK] Created RENEWAL inscription ${inscriptionId} for member ${membre.id} year ${renewalYear}`);
-          }
-        } else {
-          // COMPORTEMENT STANDARD (Nouvelle Inscription)
-          // Chercher une inscription existante pour ce membre et cette formation
-          const { data: existingIns } = await supabaseAdmin
-            .from('inscriptions')
-            .select('id, paid_status')
-            .eq('etudiant_id', membre.id)
-            .eq('formation_id', formationUuid)
-            .maybeSingle();
-
-          if (existingIns) {
-            inscriptionId = existingIns.id;
-            await supabaseAdmin
-              .from('inscriptions')
-              .update({
-                class_id: classId || undefined,
-                status: 'valide',
-                paid_status: 'paye'
-              })
-              .eq('id', inscriptionId);
-            console.log(`[STRIPE_WEBHOOK] Updated inscription ${inscriptionId} for member ${membre.id} (classId: ${classId})`);
-          } else {
-            // Créer une nouvelle inscription pour ce membre
-            const { data: newIns, error: insertError } = await supabaseAdmin
-              .from('inscriptions')
-              .insert({
-                etudiant_id: membre.id,
-                formation_id: formationUuid,
-                class_id: classId,
-                status: 'valide',
-                paid_status: 'paye',
-                academic_year: getCurrentAcademicYear()
-              })
-              .select('id')
-              .single();
-
-            if (insertError) {
-              console.error('[WEBHOOK_DB_INSERT_ERROR]', insertError);
-            } else if (newIns) {
-              inscriptionId = newIns.id;
-              console.log(`[STRIPE_WEBHOOK] Created inscription ${inscriptionId} for member ${membre.id}`);
-            }
-          }
-        }
-      } else {
-        // Pas de formation connue → juste marquer l'inscription en attente existante comme payée
-        const { data: anyIns } = await supabaseAdmin
-          .from('inscriptions')
-          .select('id')
-          .eq('etudiant_id', membre.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle();
-
-        if (anyIns) {
-          inscriptionId = anyIns.id;
-          await supabaseAdmin
-            .from('inscriptions')
-            .update({ status: 'valide', paid_status: 'paye' })
-            .eq('id', inscriptionId);
-        }
-      }
-
-      // Marquer l'étudiant comme actif
-      await supabaseAdmin
-        .from('etudiants')
-        .update({ status: 'actif' })
-        .eq('id', membre.id);
-
-      // --- ENVOI DU LIEN WHATSAPP AUTOMATIQUE ---
-      if (classId && (baseEmail || parentEmail)) {
-        const emailToSendTo = baseEmail || parentEmail;
-        const { data: classData } = await supabaseAdmin
-          .from('classes')
-          .select('name, whatsapp_link')
-          .eq('id', classId)
-          .maybeSingle();
-
-        if (classData?.whatsapp_link && emailToSendTo) {
-          try {
-            const { sendClassAssignmentEmail } = await import('@/lib/mail');
-            await sendClassAssignmentEmail(
-              emailToSendTo,
-              membre.first_name || 'Élève',
-              classData.name || 'Votre classe',
-              classData.whatsapp_link
-            );
-            console.log(`[STRIPE_WEBHOOK] WhatsApp email sent to ${emailToSendTo} for class ${classId}`);
-          } catch (err) {
-            console.error('[STRIPE_WEBHOOK] Failed to send WhatsApp email:', err);
-          }
-        }
-      }
-      // ------------------------------------------
-
-      // ─── Enregistrer le paiement UNE SEULE FOIS ─────────────────────────
-      // On log le paiement sur le premier membre seulement (évite la duplication).
-      // Les autres inscriptions sont marquées "paye" mais sans doublon de paiement.
-      if (!paymentLogged && session.mode === 'payment' && inscriptionId) {
-        // Vérifier qu'il n'existe pas déjà
-        const { data: existingPayment } = await supabaseAdmin
-          .from('paiements')
-          .select('id')
-          .eq('stripe_session_id', session.id)
-          .maybeSingle();
-
-        if (!existingPayment) {
-          const { error: payError } = await supabaseAdmin.from('paiements').insert({
-            inscription_id: inscriptionId,
-            etudiant_id: parentMember ? parentMember.id : membre.id,
-            stripe_session_id: session.id,
-            amount: (session.amount_total || 0) / 100,
-            currency: (session.currency || 'eur').toUpperCase(),
-            status: 'succeeded'
-          });
-
-          if (payError) {
-            console.error('[WEBHOOK_PAYMENT_LOG_ERROR]', payError);
-          } else {
-            paymentLogged = true;
-            console.log(`[STRIPE_WEBHOOK] Payment logged for family (member: ${membre.id}), session: ${session.id}`);
-          }
-        } else {
-          paymentLogged = true; // Déjà enregistré
-        }
-      }
-    }
+    console.log(`[WEBHOOK] Done: ${studentIds.length} student(s) processed for ${payerEmail}`);
   }
 
-  // 2. Gestion des paiements récurrents (Abonnements)
+  // ── 2. Paiements récurrents (abonnements) ──────────────────────────────────
   if (event.type === 'invoice.payment_succeeded' || event.type === 'invoice.payment_failed') {
     const invoice = event.data.object as Stripe.Invoice;
     const customerEmail = invoice.customer_email;
     const status = event.type === 'invoice.payment_succeeded' ? 'succeeded' : 'failed';
     const amountInCents = invoice.amount_paid > 0 ? invoice.amount_paid : invoice.amount_due;
     const amount = amountInCents / 100;
-    
+
     if (customerEmail) {
       const baseEmail = getBaseEmail(customerEmail);
 
-      // Trouver tous les membres de la famille par email
       const { data: familyMembers } = await supabaseAdmin
         .from('etudiants')
         .select('id')
-        .ilike('email', baseEmail);
+        .eq('email', baseEmail);
 
-      // Trouver le parent (Clerk ID = vrai compte)
-      const parent = familyMembers?.find(m => !m.id.startsWith('temp_') && !m.id.startsWith('manual_'));
-      const primaryMember = parent || familyMembers?.[0];
+      const primaryMember = familyMembers?.[0];
 
       if (primaryMember) {
-        // Trouver l'inscription active la plus récente (valide ou en attente)
         const { data: inscription } = await supabaseAdmin
           .from('inscriptions')
           .select('id')
@@ -420,31 +303,24 @@ export async function POST(req: Request) {
           .limit(1)
           .maybeSingle();
 
-        // Enregistrer la transaction (une seule fois sur le membre principal)
         const { data: insertedPayment, error } = await supabaseAdmin.from('paiements').insert({
           inscription_id: inscription?.id || null,
           etudiant_id: primaryMember.id,
           stripe_session_id: invoice.id,
-          amount: amount,
+          amount,
           currency: (invoice.currency || 'eur').toUpperCase(),
-          status: status,
-          error_message: (invoice as any).last_payment_error?.message || null
+          status,
+          error_message: (invoice as any).last_payment_error?.message || null,
         }).select('id').single();
 
         if (error) {
-          console.error('[WEBHOOK_DB_PAIEMENT_ERROR]', error);
+          console.error('[WEBHOOK paiement log error]', error);
         } else {
-          console.log(`[WEBHOOK] Paiement ${status} loggé pour famille ${customerEmail} (Montant: ${amount})`);
-
-          
-          // Envoi automatique de la relance si échoué
           if (status === 'failed' && insertedPayment?.id) {
-            console.log(`[WEBHOOK] Paiement échoué, envoi automatique de la relance pour ${insertedPayment.id}`);
             const { sendPaymentReminderWithLinkAction } = await import('@/app/actions/students');
             await sendPaymentReminderWithLinkAction(insertedPayment.id);
           }
 
-          // Mettre à jour toutes les inscriptions actives de la famille
           if (familyMembers && familyMembers.length > 0) {
             const familyIds = familyMembers.map(m => m.id);
             await supabaseAdmin
@@ -454,34 +330,24 @@ export async function POST(req: Request) {
               .eq('status', 'valide');
           }
         }
-      } else {
-        console.warn(`[WEBHOOK] Étudiant non trouvé pour l'email de facture: ${customerEmail}`);
       }
     }
 
-    // Gestion de la limite d'échéances pour le paiement en plusieurs fois
+    // Gérer la fin d'abonnement en plusieurs fois
     if (event.type === 'invoice.payment_succeeded' && (invoice as any).subscription) {
       try {
         const subscription = await stripe.subscriptions.retrieve((invoice as any).subscription as string);
         const installmentsTotal = subscription.metadata?.installments_total;
         if (installmentsTotal) {
           const total = parseInt(installmentsTotal, 10);
-          const invoices = await stripe.invoices.list({
-            subscription: subscription.id,
-            status: 'paid',
-            limit: 10
-          });
-          const paidCount = invoices.data.length;
-          console.log(`[STRIPE_WEBHOOK] Abonnement ${subscription.id} : ${paidCount}/${total} mensualités payées.`);
-          if (paidCount >= total) {
-            await stripe.subscriptions.update(subscription.id, {
-              cancel_at_period_end: true
-            });
-            console.log(`[STRIPE_WEBHOOK] Abonnement ${subscription.id} configuré pour résiliation (toutes mensualités réglées).`);
+          const invoices = await stripe.invoices.list({ subscription: subscription.id, status: 'paid', limit: 10 });
+          if (invoices.data.length >= total) {
+            await stripe.subscriptions.update(subscription.id, { cancel_at_period_end: true });
+            console.log(`[WEBHOOK] Abonnement ${subscription.id} terminé (${total} mensualités).`);
           }
         }
       } catch (subErr) {
-        console.error('[STRIPE_WEBHOOK_SUB_CANCEL_ERROR]', subErr);
+        console.error('[WEBHOOK sub cancel error]', subErr);
       }
     }
   }

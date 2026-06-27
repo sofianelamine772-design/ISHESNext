@@ -108,13 +108,13 @@ export default function EleveDashboard() {
       // Convert the specific DOM element to an image
       // Using pixelRatio > 1 for high-res PDF rendering
       const dataUrl = await toPng(element, { quality: 1, pixelRatio: 2 });
-      
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
       });
-      
+
       pdf.addImage(dataUrl, 'PNG', 0, 0, 210, 297);
       pdf.save(`Certificat_Scolarite_${certData?.firstName || "Eleve"}_${certData?.lastName || ""}.pdf`);
     } catch (error) {
@@ -132,10 +132,10 @@ export default function EleveDashboard() {
       const { toPng } = await import('html-to-image');
       const element = document.getElementById("print-certificate-wrapper");
       if (!element) return;
-      
+
       // Convert to image for perfect print fidelity (bypasses CSS print quirks)
       const dataUrl = await toPng(element, { quality: 1, pixelRatio: 2 });
-      
+
       const iframe = document.createElement("iframe");
       iframe.style.position = "fixed";
       iframe.style.right = "0";
@@ -144,10 +144,10 @@ export default function EleveDashboard() {
       iframe.style.height = "0";
       iframe.style.border = "0";
       document.body.appendChild(iframe);
-      
+
       const doc = iframe.contentDocument || iframe.contentWindow?.document;
       if (!doc) return;
-      
+
       doc.open();
       doc.write(`
         <!DOCTYPE html>
@@ -165,7 +165,7 @@ export default function EleveDashboard() {
         </html>
       `);
       doc.close();
-      
+
       // Give the image a moment to render in the iframe
       setTimeout(() => {
         iframe.contentWindow?.focus();
@@ -182,7 +182,7 @@ export default function EleveDashboard() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-12">
-      
+
       {/* ─── SIMPLIFIED WELCOME ─── */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
@@ -207,25 +207,23 @@ export default function EleveDashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {childrenData.map((child) => (
-              <div 
-                key={child.id} 
-                className={`border rounded-[2rem] p-6 md:p-8 flex flex-col justify-between gap-6 hover:shadow-lg transition-all relative overflow-hidden ${
-                  activeChildId === child.id 
-                    ? "border-[#086b51] bg-[#086b51]/5" 
+              <div
+                key={child.id}
+                className={`border rounded-[2rem] p-6 md:p-8 flex flex-col justify-between gap-6 hover:shadow-lg transition-all relative overflow-hidden ${activeChildId === child.id
+                    ? "border-[#086b51] bg-[#086b51]/5"
                     : "border-gray-100 bg-white"
-                }`}
+                  }`}
               >
                 {activeChildId === child.id && (
                   <div className="absolute top-0 right-0 bg-[#086b51] text-white text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-bl-2xl">
                     Sélectionné
                   </div>
                 )}
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm ${
-                      activeChildId === child.id ? "bg-[#086b51] text-white" : "bg-gray-100 text-[#086b51]"
-                    }`}>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm ${activeChildId === child.id ? "bg-[#086b51] text-white" : "bg-gray-100 text-[#086b51]"
+                      }`}>
                       {child.firstName?.[0] || ""}
                     </div>
                     <div>
@@ -251,11 +249,10 @@ export default function EleveDashboard() {
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400 font-medium">Mode :</span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                        child.classType === 'presentiel' 
-                          ? 'bg-[#086b51]/10 text-[#086b51]' 
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${child.classType === 'presentiel'
+                          ? 'bg-[#086b51]/10 text-[#086b51]'
                           : 'bg-blue-50 text-blue-600'
-                      }`}>
+                        }`}>
                         {child.classType === 'presentiel' ? 'Présentiel (Salle ISHES)' : 'Distanciel (Zoom)'}
                       </span>
                     </div>
@@ -277,11 +274,10 @@ export default function EleveDashboard() {
                 <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
                   <button
                     onClick={() => setActiveChildId(child.id)}
-                    className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all ${
-                      activeChildId === child.id
+                    className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all ${activeChildId === child.id
                         ? "bg-[#086b51] text-white hover:bg-[#075943]"
                         : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Sélectionner pour documents
                   </button>
@@ -312,15 +308,13 @@ export default function EleveDashboard() {
             <button
               key={child.id}
               onClick={() => setActiveChildId(child.id)}
-              className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 ${
-                activeChildId === child.id 
-                  ? "bg-[#086b51] text-white" 
+              className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 ${activeChildId === child.id
+                  ? "bg-[#086b51] text-white"
                   : "bg-white text-gray-500 hover:bg-gray-50 border border-gray-100"
-              }`}
+                }`}
             >
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${
-                activeChildId === child.id ? "bg-white/20" : "bg-gray-100 text-gray-400"
-              }`}>
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${activeChildId === child.id ? "bg-white/20" : "bg-gray-100 text-gray-400"
+                }`}>
                 {child.firstName?.[0] || ""}
               </div>
               {child.firstName}
@@ -471,7 +465,8 @@ export default function EleveDashboard() {
       {showPreviewModal && certData && (
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 overflow-y-auto">
           {/* Print & Web Typography specific CSS override injected directly */}
-          <style dangerouslySetInnerHTML={{ __html: `
+          <style dangerouslySetInnerHTML={{
+            __html: `
             @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
             
             .font-amiri {
@@ -556,7 +551,7 @@ export default function EleveDashboard() {
             <div className="flex-1 bg-gray-100 p-8 overflow-y-auto max-h-[70vh] flex justify-center">
               {/* Printable Wrapper */}
               <div id="print-certificate-wrapper" className="bg-[#FAF8F5] w-[210mm] h-[297mm] p-[20mm] border border-gray-300 shadow-lg relative flex flex-col justify-between select-none shrink-0 text-[#1c2e28] overflow-hidden" style={{ printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}>
-                
+
                 {/* Translucent Background Watermark Logo & Arabic Text */}
                 <div className="absolute inset-0 flex flex-col items-center justify-between py-28 pointer-events-none select-none z-0">
                   {/* Top Arabic Text Watermark */}
@@ -622,13 +617,13 @@ export default function EleveDashboard() {
                   <div className="text-center space-y-4">
                     {/* Logo ISHES */}
                     <div className="flex justify-center select-none pt-2">
-                      <img 
-                        src="/logo-ishes-institut-arabe.png" 
-                        alt="Logo ISHES" 
+                      <img
+                        src="/logo-ishes-institut-arabe.png"
+                        alt="Logo ISHES"
                         className="h-20 w-auto object-contain"
                       />
                     </div>
-                    
+
                     <div className="space-y-1">
                       <h1 className="text-[16px] font-bold tracking-[0.25em] font-cinzel text-gray-900 uppercase">
                         Institut des Sciences Humaines & Spirituelles

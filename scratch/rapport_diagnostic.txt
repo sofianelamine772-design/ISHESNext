@@ -1,0 +1,3 @@
+--- RAPPORT DE DIAGNOSTIC ISHES ---
+
+✅ Tout est parfait. Aucune anomalie détectée dans la base de données.
