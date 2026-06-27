@@ -135,34 +135,27 @@ async function upsertInscription(params: {
  * Envoie l'email WhatsApp de classe avec un délai d'une minute en arrière-plan.
  * Utilise l'API after de Next.js pour s'assurer que le traitement s'exécute après le retour de la réponse HTTP.
  */
-async function scheduleClassAssignmentEmail(email: string, firstName: string, className: string, whatsappLink: string) {
+/**
+ * Envoie l'email WhatsApp de classe avec un délai d'une minute en arrière-plan.
+ * Fonctionne dans n'importe quel environnement (Node, Edge, Serverless).
+ */
+async function scheduleClassAssignmentEmail(
+  email: string,
+  firstName: string,
+  className: string,
+  whatsappLink: string
+) {
+  // Attente d'une minute avant d'envoyer l'email
+  await new Promise(resolve => setTimeout(resolve, 60_000));
   try {
-    // @ts-ignore
-    const { after } = await import('next/after');
-    after(async () => {
-      await new Promise(resolve => setTimeout(resolve, 60000));
-      try {
-        const { sendClassAssignmentEmail } = await import('@/lib/mail');
-        await sendClassAssignmentEmail(email, firstName, className, whatsappLink);
-        console.log(`[WEBHOOK] Delayed WhatsApp email sent successfully to ${email} (1m delay)`);
-      } catch (err) {
-        console.error('[WEBHOOK] Delayed WhatsApp email error:', err);
-      }
-    });
+    const { sendClassAssignmentEmail } = await import('@/lib/mail');
+    await sendClassAssignmentEmail(email, firstName, className, whatsappLink);
+    console.log(`[WEBHOOK] Delayed WhatsApp email sent successfully to ${email} (1m delay)`);
   } catch (err) {
-    // Fallback de secours (environnement hors Next.js standard ou test local)
-    const task = async () => {
-      await new Promise(resolve => setTimeout(resolve, 60000));
-      try {
-        const { sendClassAssignmentEmail } = await import('@/lib/mail');
-        await sendClassAssignmentEmail(email, firstName, className, whatsappLink);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    task();
+    console.error('[WEBHOOK] Delayed WhatsApp email error:', err);
   }
 }
+
 
 export async function POST(req: Request) {
   const body = await req.text();

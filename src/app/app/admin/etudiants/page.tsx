@@ -443,10 +443,12 @@ function EtudiantsContent() {
     const baseEmail = getBaseEmail(selectedStudent.email);
     return students.filter(s =>
       s.id !== selectedStudent.id &&
-      (
-        getBaseEmail(s.email) === baseEmail ||
-        (selectedStudent.phone && s.phone && s.phone !== "Non renseigné" && selectedStudent.phone === s.phone)
-      )
+      getBaseEmail(s.email) === baseEmail &&
+      selectedStudent.phone &&
+      s.phone &&
+      selectedStudent.phone !== "Non renseigné" &&
+      s.phone !== "Non renseigné" &&
+      selectedStudent.phone === s.phone
     );
   }, [selectedStudent, students]);
 
