@@ -22,7 +22,8 @@ const isPublicRoute = createRouteMatcher([
   '/boutique(.*)',
   '/inscription(.*)',
   '/test-positionnement(.*)',
-  '/unauthorized(.*)'
+  '/unauthorized(.*)',
+  '/__clerk(.*)'
 ]);
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 
