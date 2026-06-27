@@ -126,10 +126,16 @@ export default function Home() {
                     <span className="font-bold text-gray-700">Pédagogie Adaptée</span>
                   </div>
                 </div>
+
+                <div className="relative z-10 text-center mt-8">
+                  <Link href="/programmes" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
+                    Découvrir nos cours
+                  </Link>
+                </div>
               </div>
 
               {/* Carte 2 : Parent (Enfant) - HIGHLIGHTED */}
-              <div className="bg-gradient-to-b from-[#008953] to-[#065b39] rounded-[2.5rem] p-8 lg:p-10 border border-[#008953] shadow-2xl hover:shadow-[#008953]/30 hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4">
+              <div className="bg-gradient-to-b from-[#c8a96e] to-[#a88a53] rounded-[2.5rem] p-8 lg:p-10 border border-[#c8a96e] shadow-2xl hover:shadow-[#c8a96e]/30 hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4"></div>
                 
                 <div className="text-4xl mb-6 relative z-10">🧑🧒</div>
@@ -159,6 +165,12 @@ export default function Home() {
                     </div>
                     <span className="font-bold text-white">Pédagogie Adaptée</span>
                   </div>
+                </div>
+
+                <div className="relative z-10 text-center mt-8">
+                  <Link href="/programmes" className="inline-block w-full py-4 px-6 rounded-2xl bg-white text-[#c8a96e] font-black hover:bg-gray-50 transition-all hover:scale-[1.02] shadow-lg">
+                    Découvrir nos cours
+                  </Link>
                 </div>
               </div>
 
@@ -193,6 +205,12 @@ export default function Home() {
                     </div>
                     <span className="font-bold text-gray-700">Pédagogie Adaptée</span>
                   </div>
+                </div>
+
+                <div className="relative z-10 text-center mt-8">
+                  <Link href="/programmes" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
+                    Découvrir nos cours
+                  </Link>
                 </div>
               </div>
 
@@ -245,7 +263,7 @@ export default function Home() {
             {/* Zoom Card */}
             <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#fafafa] border-2 border-blue-50 rounded-[3rem] shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-[#0b5cff]/30 transition-all w-full">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-sm flex items-center justify-center mb-8 rotate-[-3deg] hover:rotate-0 transition-transform">
-                <img src="/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
+                <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Cours en direct & Replays</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Suivez nos formations à distance de chez vous. Si vous manquez un cours, le <strong className="text-[#0b5cff]">replay vidéo</strong> est disponible dès la fin de chaque séance.</p>
@@ -254,7 +272,7 @@ export default function Home() {
             {/* WhatsApp Card */}
             <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#fafafa] border-2 border-green-50 rounded-[3rem] shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-[#25D366]/30 transition-all w-full">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-sm flex items-center justify-center mb-8 rotate-[3deg] hover:rotate-0 transition-transform">
-                <img src="/whatsapp-logo.avif" alt="WhatsApp" className="h-14 w-14 object-cover rounded-full" />
+                <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-14 w-14 object-cover rounded-full" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi & Entraide par Classe</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Intégrez un <strong className="text-[#25D366]">groupe WhatsApp exclusif</strong> pour votre classe. Posez vos questions, recevez les annonces et échangez avec vos camarades.</p>
