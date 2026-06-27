@@ -1,3 +1,5 @@
+export const dynamic = 'force-static';
+
 import HomePage from "../(vitrine)/page";
 
 // Cette page est un exact miroir de la page d'accueil principale (/)
