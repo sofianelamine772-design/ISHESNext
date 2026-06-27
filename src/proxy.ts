@@ -28,6 +28,10 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 
 export default clerkMiddleware(async (auth, request) => {
+  console.log('[PROXY] Incoming request:', request.nextUrl.href);
+  const publicMatch = isPublicRoute(request);
+  console.log('[PROXY] isPublicRoute:', publicMatch);
+  // Continue with existing logic {
   // Redirection case-sensitive pour /CGV vers /cgv
   if (request.nextUrl.pathname === '/CGV') {
     return NextResponse.redirect(new URL('/cgv', request.url), 308);
@@ -36,11 +40,13 @@ export default clerkMiddleware(async (auth, request) => {
   const { userId } = await auth();
 
   // Protection de base pour les routes privées
-  if (!userId && !isPublicRoute(request)) {
+  if (!userId && !publicMatch) {
     // Si c'est un appel API, on renvoie une 401 au lieu d'une redirection
     if (request.nextUrl.pathname.startsWith('/api')) {
+      console.warn('[PROXY] Unauthorized API request to', request.nextUrl.pathname);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    console.warn('[PROXY] Unauthorized request, redirecting to sign-in:', request.nextUrl.pathname);
     return (await auth()).redirectToSignIn();
   }
 
@@ -55,10 +61,11 @@ export default clerkMiddleware(async (auth, request) => {
 
       // Si pas admin et essaie d'accéder au dashboard admin -> Redirection vers l'espace élève
       if (!isAdmin) {
-        return NextResponse.redirect(new URL("/app/eleve", request.url));
-      }
+          console.warn('[PROXY] Non-admin user attempted admin access, redirecting to /app/eleve');
+          return NextResponse.redirect(new URL("/app/eleve", request.url));
+        }
     } catch (error) {
-      console.error("Clerk API Response Error in proxy.ts:", error);
+      console.error('[PROXY] Clerk API Response Error in proxy.ts:', error);
       // If user fetch fails (e.g., user deleted in Clerk but cookie remains), redirect to sign-in
       return (await auth()).redirectToSignIn();
     }
@@ -68,7 +75,7 @@ export default clerkMiddleware(async (auth, request) => {
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|__clerk|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/((?!_next|__clerk|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)', // Added __clerk exclusion
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
