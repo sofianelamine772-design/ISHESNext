@@ -738,6 +738,29 @@ export async function updateStudentAction(id: string, data: any) {
         });
 
       if (pError) console.error("Failed to add manual payment on update:", pError);
+
+      // Débloquer l'étudiant (et toute la famille)
+      const emailToUse = targetEmail || currentStudent?.email;
+      if (emailToUse) {
+        const baseEmail = emailToUse.split('@').length === 2
+          ? `${emailToUse.split('@')[0].split('+')[0]}@${emailToUse.split('@')[1]}`.toLowerCase()
+          : emailToUse.toLowerCase();
+
+        const { data: familyMembers } = await supabaseAdmin
+          .from('etudiants')
+          .select('id')
+          .eq('email', baseEmail);
+
+        if (familyMembers && familyMembers.length > 0) {
+          const familyIds = familyMembers.map(m => m.id);
+          await supabaseAdmin
+            .from('inscriptions')
+            .update({ paid_status: 'paye' })
+            .in('etudiant_id', familyIds)
+            .eq('status', 'valide');
+          console.log(`[ADMIN_MANUAL_UNLOCK] Restored paid_status to 'paye' for family:`, familyIds);
+        }
+      }
     }
 
     return { success: true };

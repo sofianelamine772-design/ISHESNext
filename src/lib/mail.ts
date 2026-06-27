@@ -106,15 +106,37 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Nous avons tout préparé pour que votre apprentissage soit exceptionnel. Vous allez passer d'excellents moments en notre compagnie, riches en savoir et en partage. Toute notre équipe pédagogique est là pour vous accompagner pas à pas vers la réussite.
         </p>
+
+        <!-- Instagram Group Block -->
+        <div style="background-color: #fdf2f8; border-left: 4px solid #ee2a7b; padding: 20px; margin: 25px 0; border-radius: 8px;">
+          <p style="margin: 0 0 10px 0; color: #ee2a7b; font-weight: bold; font-size: 16px;">📸 Rejoignez notre communauté Instagram !</p>
+          <p style="margin: 0 0 15px 0; color: #86198f; font-size: 14px; line-height: 1.5;">Pour suivre l'actualité de l'institut, nos conseils quotidiens, nos partages et nos événements en direct, rejoignez dès maintenant notre page officielle Instagram :</p>
+          <div style="text-align: center;">
+            <a href="https://www.instagram.com/institutishes/" target="_blank" style="display: inline-block; background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px;">Rejoindre notre Instagram</a>
+          </div>
+        </div>
+
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Pour bien commencer, nous vous invitons à découvrir votre espace personnel. Vous y retrouverez vos cours, votre emploi du temps et tous vos documents.
         </p>
         <div style="text-align: center; margin: 35px 0;">
           <a href="https://ishees.vercel.app/app" style="${buttonStyle}">Accéder à mon espace</a>
         </div>
+
         <p style="color: #777; font-size: 14px; margin-top: 30px; background-color: #f9f9f9; padding: 15px; border-radius: 8px;">
           <em>💡 <strong>Astuce :</strong> Si vous n'avez pas encore défini de mot de passe, cliquez sur "Se connecter", puis inscrivez-vous ou utilisez la connexion sans mot de passe avec cette adresse e-mail.</em>
         </p>
+
+        <!-- WhatsApp Support Block -->
+        <div style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #eee;">
+          <p style="color: #333; font-weight: bold; font-size: 16px; margin: 0 0 10px 0;">💬 Des questions ? Un besoin d'assistance ?</p>
+          <p style="color: #555; line-height: 1.6; font-size: 15px; margin: 0 0 15px 0;">
+            Notre équipe reste entièrement à votre écoute. Vous pouvez nous écrire directement sur WhatsApp au <strong>+33 6 66 03 35 19</strong> (pour les cours à distance) ou au <strong>+33 7 68 65 20 91</strong> (pour le présentiel).
+          </p>
+          <div style="text-align: center;">
+            <a href="https://wa.me/33666033519" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px;">Nous écrire sur WhatsApp</a>
+          </div>
+        </div>
       </div>
       ${emailFooter}
     </div>

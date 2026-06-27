@@ -58,7 +58,7 @@ export default clerkMiddleware(async (auth, request) => {
       }
     } catch (error) {
       console.error("Clerk API Response Error in middleware.ts:", error);
-      // If user fetch fails (e.g., user deleted in Clerk but cookie remains), redirect to sign-in
+      // If user fetch fails (e.g., user ccdeleted in Clerk but cookie remains), redirect to sign-in
       return (await auth()).redirectToSignIn();
     }
   }

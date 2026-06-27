@@ -395,9 +395,9 @@ export default function EleveDashboard() {
       </div>
 
       {/* ─── INSTALL APP SECTION ─── */}
-      <div className="bg-ishes-dark rounded-[3.5rem] overflow-hidden shadow-2xl relative">
+      <div className="bg-white border border-gray-100 rounded-[3.5rem] overflow-hidden shadow-sm relative">
         {/* Background decorative icon */}
-        <div className="absolute top-0 right-0 p-12 opacity-5 text-white pointer-events-none">
+        <div className="absolute top-0 right-0 p-12 opacity-[0.03] text-[#086b51] pointer-events-none">
           <Smartphone className="w-64 h-64" strokeWidth={1} />
         </div>
 
@@ -408,54 +408,92 @@ export default function EleveDashboard() {
               <div className="w-8 h-[1px] bg-ishes-green"></div>
               <span className="text-ishes-green text-[10px] font-black uppercase tracking-[0.3em]">Application Mobile</span>
             </div>
-            <h3 className="text-4xl md:text-5xl font-black text-white leading-tight uppercase tracking-tight">
+            <h3 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight uppercase tracking-tight">
               Installez l'application<br />
-              <span className="text-ishes-green italic">sur votre appareil.</span>
+              <span className="text-ishes-green italic font-amiri capitalize">sur votre appareil.</span>
             </h3>
-            <p className="text-white/60 font-medium text-lg leading-relaxed max-w-xl">
+            <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-xl">
               Accédez à vos cours en un clic, directement depuis votre écran d'accueil — sans passer par le navigateur.
             </p>
           </div>
 
           {/* Install button or status */}
           {isInstalled ? (
-            <div className="inline-flex items-center gap-3 bg-ishes-green/20 border border-ishes-green/30 text-ishes-green px-8 py-4 rounded-[1.5rem] font-black text-sm">
+            <div className="inline-flex items-center gap-3 bg-ishes-green/10 border border-ishes-green/20 text-[#086b51] px-8 py-4 rounded-[1.5rem] font-bold text-sm">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
               Application déjà installée ✓
             </div>
           ) : installPrompt ? (
             // Android / Chrome / Edge: native install prompt available
-            <button
-              onClick={handleInstallApp}
-              className="inline-flex items-center gap-3 bg-ishes-green hover:bg-[#075943] text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-ishes-green/30 cursor-pointer"
-            >
-              <MonitorDown className="w-5 h-5" />
-              Installer le logiciel
-            </button>
+            <div className="space-y-4">
+              <button
+                onClick={handleInstallApp}
+                className="inline-flex items-center gap-3 bg-ishes-green hover:bg-[#075943] text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-ishes-green/20 cursor-pointer"
+              >
+                <MonitorDown className="w-5 h-5" />
+                Installer l'application
+              </button>
+              <p className="text-gray-400 text-xs font-semibold">Compatible Windows, macOS, Android et ChromeOS.</p>
+            </div>
           ) : (
-            // iOS / Safari: no native prompt — show simple manual instructions
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-400/20 text-amber-300 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider">
+            // Guides for each OS when native browser prompt is not active
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider">
                 <Smartphone className="w-4 h-4" />
-                {isIOS ? "Sur iPhone/iPad — ajout manuel requis" : "Ouvrez cette page dans Chrome ou Edge pour installer"}
+                Guide d'installation pour vos appareils
               </div>
 
-              {isIOS && (
-                <div className="space-y-4 max-w-md">
-                  {[
-                    { step: "01", icon: Share, text: "Appuyez sur l'icône de partage ↑ (barre du bas dans Safari)." },
-                    { step: "02", icon: PlusSquare, text: "Faites défiler et choisissez \"Sur l'écran d'accueil\"." },
-                    { step: "03", icon: ArrowRight, text: "Appuyez sur \"Ajouter\" en haut à droite. C'est tout !" },
-                  ].map((item) => (
-                    <div key={item.step} className="flex items-center gap-5 group">
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-ishes-green font-black text-sm shrink-0 transition-all group-hover:bg-ishes-green group-hover:text-white group-hover:scale-110">
-                        {item.step}
-                      </div>
-                      <p className="text-white/80 font-bold text-sm">{item.text}</p>
-                    </div>
-                  ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                {/* iOS */}
+                <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
+                  <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <span className="text-lg">🍎</span> iPhone / iPad (iOS)
+                  </div>
+                  <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
+                    <li>Ouvrez ce site dans le navigateur <strong className="text-ishes-dark">Safari</strong>.</li>
+                    <li>Appuyez sur l'icône de partage <strong className="text-ishes-dark">↑</strong> en bas de l'écran.</li>
+                    <li>Faites défiler et choisissez <strong className="text-ishes-dark">« Sur l'écran d'accueil »</strong>.</li>
+                    <li>Appuyez sur <strong className="text-ishes-dark">« Ajouter »</strong> en haut à droite.</li>
+                  </ol>
                 </div>
-              )}
+
+                {/* macOS (Safari) */}
+                <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
+                  <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <span className="text-lg">💻</span> Mac (Safari)
+                  </div>
+                  <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
+                    <li>Ouvrez ce site dans le navigateur <strong className="text-ishes-dark">Safari</strong>.</li>
+                    <li>Allez dans le menu <strong className="text-ishes-dark">Fichier</strong> en haut de votre écran.</li>
+                    <li>Cliquez sur <strong className="text-ishes-dark">« Ajouter au Dock »</strong>.</li>
+                    <li>Validez en cliquant sur <strong className="text-ishes-dark">« Ajouter »</strong>.</li>
+                  </ol>
+                </div>
+
+                {/* Android (Chrome) */}
+                <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
+                  <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <span className="text-lg">🤖</span> Android (Chrome / Edge)
+                  </div>
+                  <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
+                    <li>Ouvrez dans <strong className="text-ishes-dark">Chrome</strong> ou <strong className="text-ishes-dark">Edge</strong>.</li>
+                    <li>Appuyez sur les <strong className="text-ishes-dark">3 points ⋮</strong> en haut à droite.</li>
+                    <li>Choisissez <strong className="text-ishes-dark">« Installer l'application »</strong> (ou « Ajouter à l'écran d'accueil »).</li>
+                  </ol>
+                </div>
+
+                {/* Windows / Mac / Linux (Chrome / Edge Desktop) */}
+                <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
+                  <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <span className="text-lg">🖥️</span> Windows / Mac (Chrome / Edge)
+                  </div>
+                  <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
+                    <li>Regardez à droite de la <strong className="text-ishes-dark">barre d'adresse (URL)</strong>.</li>
+                    <li>Cliquez sur l'icône de raccourci <strong className="text-ishes-dark">⊕</strong> (Ordinateur avec une flèche).</li>
+                    <li>Cliquez sur le bouton <strong className="text-ishes-dark">« Installer »</strong> dans la fenêtre.</li>
+                  </ol>
+                </div>
+              </div>
             </div>
           )}
         </div>

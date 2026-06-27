@@ -131,6 +131,39 @@ async function upsertInscription(params: {
   return newIns?.id || null;
 }
 
+/**
+ * Envoie l'email WhatsApp de classe avec un délai d'une minute en arrière-plan.
+ * Utilise l'API after de Next.js pour s'assurer que le traitement s'exécute après le retour de la réponse HTTP.
+ */
+async function scheduleClassAssignmentEmail(email: string, firstName: string, className: string, whatsappLink: string) {
+  try {
+    // @ts-ignore
+    const { after } = await import('next/after');
+    after(async () => {
+      await new Promise(resolve => setTimeout(resolve, 60000));
+      try {
+        const { sendClassAssignmentEmail } = await import('@/lib/mail');
+        await sendClassAssignmentEmail(email, firstName, className, whatsappLink);
+        console.log(`[WEBHOOK] Delayed WhatsApp email sent successfully to ${email} (1m delay)`);
+      } catch (err) {
+        console.error('[WEBHOOK] Delayed WhatsApp email error:', err);
+      }
+    });
+  } catch (err) {
+    // Fallback de secours (environnement hors Next.js standard ou test local)
+    const task = async () => {
+      await new Promise(resolve => setTimeout(resolve, 60000));
+      try {
+        const { sendClassAssignmentEmail } = await import('@/lib/mail');
+        await sendClassAssignmentEmail(email, firstName, className, whatsappLink);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    task();
+  }
+}
+
 export async function POST(req: Request) {
   const body = await req.text();
   const headerList = await headers();
@@ -168,6 +201,48 @@ export async function POST(req: Request) {
     const formationUuid = await resolveFormationUuid(formationId);
     const studentIds: string[] = [];
 
+    const isRegularisation = session.metadata?.type === 'regularisation';
+
+    if (isRegularisation) {
+      const studentId = session.metadata?.clerkUserId;
+      console.log(`[WEBHOOK] Processing regularisation payment for student ${studentId}`);
+      if (studentId) {
+        const { data: student } = await supabaseAdmin
+          .from('etudiants')
+          .select('email')
+          .eq('id', studentId)
+          .maybeSingle();
+
+        if (student?.email) {
+          const baseEmail = getBaseEmail(student.email);
+          const { data: familyMembers } = await supabaseAdmin
+            .from('etudiants')
+            .select('id')
+            .eq('email', baseEmail);
+
+          if (familyMembers && familyMembers.length > 0) {
+            const familyIds = familyMembers.map(m => m.id);
+            await supabaseAdmin
+              .from('inscriptions')
+              .update({ paid_status: 'paye' })
+              .in('etudiant_id', familyIds)
+              .eq('status', 'valide');
+            console.log(`[WEBHOOK] Restored paid_status to 'paye' for family:`, familyIds);
+          }
+        }
+
+        const originalPaymentId = session.metadata?.originalPaymentId;
+        if (originalPaymentId) {
+          await supabaseAdmin
+            .from('paiements')
+            .update({ status: 'succeeded', stripe_session_id: session.id })
+            .eq('id', originalPaymentId);
+          console.log(`[WEBHOOK] Updated payment ${originalPaymentId} to succeeded.`);
+        }
+      }
+      return new NextResponse(null, { status: 200 });
+    }
+
     if (isRenewal) {
       const studentId = session.metadata?.studentId;
       if (studentId && formationUuid) {
@@ -189,16 +264,11 @@ export async function POST(req: Request) {
           const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
           if (!studentId || !formationUuid) continue;
 
-          // Envoyer email WhatsApp si classe connue
+          // Envoyer email WhatsApp si classe connue (avec un délai de 1 minute)
           if (classId) {
             const { data: classData } = await supabaseAdmin.from('classes').select('name, whatsapp_link').eq('id', classId).maybeSingle();
             if (classData?.whatsapp_link) {
-              try {
-                const { sendClassAssignmentEmail } = await import('@/lib/mail');
-                await sendClassAssignmentEmail(payerEmail, firstName, classData.name || 'Votre classe', classData.whatsapp_link);
-              } catch (err) {
-                console.error('[WEBHOOK] WhatsApp email error:', err);
-              }
+              scheduleClassAssignmentEmail(payerEmail, firstName, classData.name || 'Votre classe', classData.whatsapp_link);
             }
           }
 
@@ -217,12 +287,7 @@ export async function POST(req: Request) {
             if (classId) {
               const { data: classData } = await supabaseAdmin.from('classes').select('name, whatsapp_link').eq('id', classId).maybeSingle();
               if (classData?.whatsapp_link) {
-                try {
-                  const { sendClassAssignmentEmail } = await import('@/lib/mail');
-                  await sendClassAssignmentEmail(payerEmail, firstName, classData.name || 'Votre classe', classData.whatsapp_link);
-                } catch (err) {
-                  console.error('[WEBHOOK] WhatsApp email error:', err);
-                }
+                scheduleClassAssignmentEmail(payerEmail, firstName, classData.name || 'Votre classe', classData.whatsapp_link);
               }
             }
 

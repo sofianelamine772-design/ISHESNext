@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2 } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2, ExternalLink } from "lucide-react";
 import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
@@ -27,6 +27,7 @@ type StudentDetail = {
   address: string;
   lastPayment: string;
   paymentStatus: "a_jour" | "en_retard";
+  classId?: string | null;
 };
 
 function EtudiantsContent() {
@@ -87,8 +88,12 @@ function EtudiantsContent() {
       const result = await fetchStudentsAction(selectedYear);
       if (result.success && result.data) {
         const formatted = result.data.map((s: any) => {
-          const latestInscription = s.inscriptions?.[0];
-          
+          const latestInscription = 
+            s.inscriptions?.find((ins: any) => ins.academic_year === selectedYear && (ins.status === 'actif' || ins.status === 'valide')) ||
+            s.inscriptions?.find((ins: any) => ins.academic_year === selectedYear) ||
+            s.inscriptions?.find((ins: any) => ins.status === 'actif' || ins.status === 'valide') ||
+            s.inscriptions?.[0];
+
           const getCleanEmail = (e: string) => {
             if (!e) return "";
             const parts = e.split('@');
@@ -117,7 +122,8 @@ function EtudiantsContent() {
             parentName: null,
             address: s.address || "Adresse non renseignée",
             lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
-            paymentStatus: (latestInscription?.paid_status === 'paye' || s.id.startsWith('manual_')) ? "a_jour" as const : "en_retard" as const
+            paymentStatus: (latestInscription?.paid_status === 'paye' || s.id.startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
+            classId: latestInscription?.class_id || null
           };
         });
 
@@ -435,8 +441,8 @@ function EtudiantsContent() {
   const familyMembers = useMemo(() => {
     if (!selectedStudent) return [];
     const baseEmail = getBaseEmail(selectedStudent.email);
-    return students.filter(s => 
-      s.id !== selectedStudent.id && 
+    return students.filter(s =>
+      s.id !== selectedStudent.id &&
       (
         getBaseEmail(s.email) === baseEmail ||
         (selectedStudent.phone && s.phone && s.phone !== "Non renseigné" && selectedStudent.phone === s.phone)
@@ -666,7 +672,17 @@ function EtudiantsContent() {
                         <div className="flex items-center justify-between group">
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Formation Actuelle</span>
-                            <span className="ishes-heading text-base md:text-lg text-ishes-green">{selectedStudent.enrolledClass}</span>
+                            {selectedStudent.classId ? (
+                              <Link
+                                href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
+                                className="ishes-heading text-base md:text-lg text-ishes-green hover:underline flex items-center gap-1.5 font-bold group/link"
+                              >
+                                {selectedStudent.enrolledClass}
+                                <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
+                              </Link>
+                            ) : (
+                              <span className="ishes-heading text-base md:text-lg text-gray-400">{selectedStudent.enrolledClass}</span>
+                            )}
                           </div>
                           <Button variant="ghost" size="sm" className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green" onClick={openScolariteModal}>MODIFIER</Button>
                         </div>
@@ -699,8 +715,8 @@ function EtudiantsContent() {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {familyMembers.map((member) => (
-                          <div 
-                            key={member.id} 
+                          <div
+                            key={member.id}
                             onClick={() => setSelectedStudentId(member.id)}
                             className="bg-purple-50 border border-purple-100 rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-purple-100 transition-colors"
                           >
@@ -746,19 +762,17 @@ function EtudiantsContent() {
                           const membersCount = payment.familyMembersCount || 1;
 
                           return (
-                            <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${
-                              payment.status === 'succeeded'
-                                ? 'bg-ishes-green/[0.03] border-ishes-green/15'
-                                : 'bg-red-50 border-red-100'
-                            }`}>
+                            <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${payment.status === 'succeeded'
+                              ? 'bg-ishes-green/[0.03] border-ishes-green/15'
+                              : 'bg-red-50 border-red-100'
+                              }`}>
                               {/* En-tête */}
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex items-start gap-3">
-                                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${
-                                    payment.status === 'succeeded'
-                                      ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10'
-                                      : 'bg-red-50 text-red-500 border border-red-100'
-                                  }`}>
+                                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${payment.status === 'succeeded'
+                                    ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10'
+                                    : 'bg-red-50 text-red-500 border border-red-100'
+                                    }`}>
                                     <CreditCard className="w-5 h-5" />
                                   </div>
                                   <div>
@@ -780,11 +794,10 @@ function EtudiantsContent() {
                                 </div>
                                 <div className="text-right shrink-0">
                                   <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
-                                  <span className={`inline-block mt-1 px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${
-                                    payment.status === 'succeeded'
-                                      ? 'bg-ishes-green/10 text-ishes-green'
-                                      : 'bg-red-100 text-red-600'
-                                  }`}>
+                                  <span className={`inline-block mt-1 px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${payment.status === 'succeeded'
+                                    ? 'bg-ishes-green/10 text-ishes-green'
+                                    : 'bg-red-100 text-red-600'
+                                    }`}>
                                     {payment.status === 'succeeded' ? 'Réglé' : 'Échoué'}
                                   </span>
                                 </div>
@@ -803,14 +816,12 @@ function EtudiantsContent() {
                                     return (
                                       <div
                                         key={member.id}
-                                        className={`flex items-center justify-between px-3 py-2 rounded-xl ${
-                                          isResilie ? 'bg-red-50 border border-red-100' : 'bg-white border border-gray-100'
-                                        }`}
+                                        className={`flex items-center justify-between px-3 py-2 rounded-xl ${isResilie ? 'bg-red-50 border border-red-100' : 'bg-white border border-gray-100'
+                                          }`}
                                       >
                                         <div className="flex items-center gap-2">
-                                          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[8px] font-black ${
-                                            isResilie ? 'bg-red-100 text-red-600' : 'bg-ishes-green/10 text-ishes-green'
-                                          }`}>
+                                          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[8px] font-black ${isResilie ? 'bg-red-100 text-red-600' : 'bg-ishes-green/10 text-ishes-green'
+                                            }`}>
                                             {member.firstName?.[0]}{member.lastName?.[0]}
                                           </div>
                                           <div>
@@ -822,13 +833,12 @@ function EtudiantsContent() {
                                             )}
                                           </div>
                                         </div>
-                                        <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg ${
-                                          isResilie
-                                            ? 'bg-red-500 text-white'
-                                            : isPaid
-                                              ? 'bg-ishes-green text-white'
-                                              : 'bg-yellow-400 text-white'
-                                        }`}>
+                                        <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg ${isResilie
+                                          ? 'bg-red-500 text-white'
+                                          : isPaid
+                                            ? 'bg-ishes-green text-white'
+                                            : 'bg-yellow-400 text-white'
+                                          }`}>
                                           {isResilie ? 'Résilié' : isPaid ? 'Réglé' : 'En attente'}
                                         </span>
                                       </div>

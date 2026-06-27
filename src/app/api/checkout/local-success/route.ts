@@ -168,6 +168,46 @@ export async function GET(req: Request) {
     const formationUuid = await resolveFormationUuid(formationId);
     const studentIds: string[] = [];
 
+    const isRegularisation = session.metadata?.type === 'regularisation';
+
+    if (isRegularisation) {
+      const studentId = session.metadata?.clerkUserId;
+      console.log(`[LOCAL_SUCCESS] Processing regularisation payment for student ${studentId}`);
+      if (studentId) {
+        const { data: student } = await supabaseAdmin
+          .from('etudiants')
+          .select('email')
+          .eq('id', studentId)
+          .maybeSingle();
+
+        if (student?.email) {
+          const baseEmail = getBaseEmail(student.email);
+          const { data: familyMembers } = await supabaseAdmin
+            .from('etudiants')
+            .select('id')
+            .eq('email', baseEmail);
+
+          if (familyMembers && familyMembers.length > 0) {
+            const familyIds = familyMembers.map(m => m.id);
+            await supabaseAdmin
+              .from('inscriptions')
+              .update({ paid_status: 'paye' })
+              .in('etudiant_id', familyIds)
+              .eq('status', 'valide');
+          }
+        }
+
+        const originalPaymentId = session.metadata?.originalPaymentId;
+        if (originalPaymentId) {
+          await supabaseAdmin
+            .from('paiements')
+            .update({ status: 'succeeded', stripe_session_id: session.id })
+            .eq('id', originalPaymentId);
+        }
+      }
+      return NextResponse.redirect(new URL('/app/eleve?success=true', req.url));
+    }
+
     if (isRenewal) {
       // Réinscription : l'étudiant existe déjà par ID
       const studentId = session.metadata?.studentId;
