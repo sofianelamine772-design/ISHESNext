@@ -529,10 +529,6 @@ export default function AdminDashboard() {
                       >
                         <Mail className="w-4 h-4" /> <span>Contacter la classe</span>
                       </Button>
-                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={openAddStudentModal}>
-                        <Users className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Affecter Élève</span>
-                        <span className="sm:hidden text-[10px]">Affecter</span>
-                      </Button>
                       <Button variant="ishes-green" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
                         <Plus className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Créer Élève</span>
                         <span className="sm:hidden text-[10px]">Créer</span>
