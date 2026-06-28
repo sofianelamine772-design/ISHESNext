@@ -96,7 +96,7 @@ function InscriptionForm() {
 
   const getBasePriceOfPlan = (plan: string | null): number => {
     if (!plan) return 349;
-    const normalized = plan.toLowerCase();
+    const normalized = plan.toLowerCase().replace(/-/g, '_');
 
     // 1. Lire le prix exact depuis la source de vérité (PROGRAMS_DATA)
     const program = PROGRAMS_DATA[normalized];
@@ -106,11 +106,26 @@ function InscriptionForm() {
       if (!isNaN(parsedPrice) && parsedPrice > 0) return parsedPrice;
     }
 
-    // 2. Si le plan n'est pas dans PROGRAMS_DATA (ex: presentiel-global)
-    // On vérifie si c'est pour un enfant (Scolarité Enfant = 480€)
-    if (normalized === 'presentiel-global' || (normalized === 'tajwid_standard' && audienceParam === 'enfant')) {
-      if (registrationType === 'child') return 480; // Tarif Scolarité Enfants
-      return 349; // Tarif Adulte par défaut
+    // 2. Si le plan n'est pas dans PROGRAMS_DATA (ex: presentiel-global ou si le slot correspond à un cours présentiel)
+    const currentSlot = (formData?.slot || slot || "").toLowerCase();
+    const isChildSlot = (childrenList?.[0]?.slot || "").toLowerCase();
+
+    if (
+      normalized === 'presentiel_global' || 
+      normalized.includes('presentiel') || 
+      normalized === 'arabe_coran_junior' ||
+      (normalized === 'tajwid_standard' && audienceParam === 'enfant') ||
+      currentSlot === 'samedi' || 
+      currentSlot === 'dimanche' || 
+      currentSlot === 'mardi-vendredi' || 
+      currentSlot === 'mercredi-dimanche' || 
+      currentSlot === 'mercredi-dimanche-hifdh' || 
+      currentSlot === 'samedi-sirah' ||
+      isChildSlot === 'mercredi' ||
+      isChildSlot === 'samedi' ||
+      isChildSlot === 'dimanche'
+    ) {
+      return 480; // Tarif présentiel
     }
 
     if (normalized === 'tarbiya_islamiya') return 249;

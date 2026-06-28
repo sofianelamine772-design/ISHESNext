@@ -25,7 +25,7 @@ export const PROGRAMS_DATA: Record<string, any> = {
     tag: "Fondamentaux",
     price: "0 €",
     hook: "Maîtrisez la récitation de la Fatiha et des 3 dernières sourates pour une prière valide.",
-    description: "❓ C'EST QUOI ?\nParce qu'il n'y a pas de prière sans la Fatiha, l'Institut ISHES vous offre ce module de correction de sourate.\n\n👤 POUR QUI ?\nTout musulman souhaitant corriger sa récitation pour valider sa prière.\n\n⏳ QUAND ?\nSur rendez-vous lors des sessions dédiées.\n\n💻 COMMENT ?\nFormat interactif en ligne avec correction directe de votre récitation.\n\n🎯 OBJECTIFS\nApprendre à réciter correctement la Fatiha et les 3 dernières sourates indispensables à votre pratique quotidienne avec une méthodologie rigoureuse.",
+    description: "❓ C'EST QUOI ?\nParce qu'il n'y a pas de prière sans la Fatiha (Sourate d'ouverture du Coran), sa récitation exacte et sans faute est une condition fondamentale pour la validité de votre prière (Salat). L'Institut ISHES offre à toute la communauté musulmane ce module complet et 100% gratuit de correction de sourate.\n\n👤 POUR QUI ?\nCe cours de Coran s'adresse à tout musulman (homme, femme, débutant, converti ou initié) souhaitant vérifier et corriger sa prononciation de la Fatiha ainsi que des trois dernières sourates protectrices.\n\n⏳ QUAND ?\nFormation flexible sur rendez-vous lors de nos sessions régulières de correction.\n\n💻 COMMENT ?\nEn ligne, sous format interactif en direct avec un enseignant qualifié pour des retours et corrections de récitation en tête-à-tête.\n\n🎯 OBJECTIFS PÉDAGOGIQUES\n• Réciter la Sourate Al-Fatiha sans faute phonétique majeure (Lahn Jaly) susceptible d'altérer le sens des mots.\n• Maîtriser l'articulation exacte des lettres arabes difficiles (Makharij) comme le Hâ, le 'Ayn ou le Dâd.\n• Apprendre et corriger les trois dernières sourates du Coran (Sourate Al-Ikhlas, Sourate Al-Falaq, Sourate An-Nas) indispensables pour la pratique de vos prières quotidiennes.\n• Assimiler les bases de la méthodologie Nour Al Bayan appliquée à la récitation.\n\n❌ L'IMPORTANCE CRUCIALE DE LA FATIHA DANS LA PRIÈRE\nLe Prophète ﷺ a dit : « Pas de prière pour celui qui ne récite pas la Fatiha du Livre ». Une mauvaise articulation ou une erreur de haraka (voyelle) peut changer radicalement le sens d'un verset sacré et invalider la prière. Ce cours gratuit vous permet de dissiper vos doutes et de prier avec une totale sérénité d'esprit.\n\n✨ COMMENT FONCTIONNE NOTRE MODULE DE CORRECTION GRATUIT ?\n1. Inscription rapide et gratuite sur notre plateforme.\n2. Accès à la vidéo explicative étape par étape (disponible ci-dessous) décortiquant les erreurs les plus fréquentes de la Fatiha.\n3. Planification de votre créneau individuel en tête-à-tête avec un enseignant pour réciter et recevoir vos corrections directes.",
     features: [
       { t: "Fatiha", d: "Correction précise de chaque verset de la sourate d'ouverture." },
       { t: "3 Sourates", d: "Apprentissage des sourates Ikhlass, Falaq et Nas." },
@@ -37,7 +37,8 @@ export const PROGRAMS_DATA: Record<string, any> = {
       "Méthodologie Nour Al Bayan appliquée à la Fatiha",
       "Accès totalement gratuit sans frais cachés",
       "Format interactif en ligne avec correction directe"
-    ]
+    ],
+    videoUrl: "https://www.youtube.com/embed/Kjn_SbSTpYo"
   },
   "spiritualite_islam": {
     title: "Spiritualité Musulmane",

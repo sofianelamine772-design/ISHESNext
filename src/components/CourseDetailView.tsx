@@ -103,7 +103,12 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </Link>
                      )}
                      {course.videoUrl && (
-                        <button className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3">
+                        <button 
+                           onClick={() => {
+                              document.getElementById('course-video')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                           }}
+                           className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3 active:scale-95"
+                        >
                            <Play className="w-5 h-5 fill-current" /> Voir le teaser
                         </button>
                      )}
@@ -158,7 +163,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   </div>
                </div>
 
-               <div className="flex-1 w-full max-w-[600px] h-[400px] bg-white rounded-[3rem] shadow-2xl border border-gray-100 relative overflow-hidden group">
+               <div id="course-video" className="flex-1 w-full max-w-[600px] h-[400px] bg-white rounded-[3rem] shadow-2xl border border-gray-100 relative overflow-hidden group">
                   {course.videoUrl ? (
                      <iframe
                         className="w-full h-full"

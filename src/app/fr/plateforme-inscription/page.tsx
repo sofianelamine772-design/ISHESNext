@@ -8,6 +8,7 @@ import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
+import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -83,7 +84,37 @@ function InscriptionForm() {
 
   const getBasePriceOfPlan = (plan: string | null): number => {
     if (!plan) return 349;
-    const normalized = plan.toLowerCase();
+    const normalized = plan.toLowerCase().replace(/-/g, '_');
+
+    // 1. Lire depuis la source de vérité PROGRAMS_DATA
+    const program = PROGRAMS_DATA[normalized];
+    if (program && program.price) {
+      const parsedPrice = parseInt(program.price.replace(/\D/g, ''));
+      if (!isNaN(parsedPrice) && parsedPrice > 0) return parsedPrice;
+    }
+
+    // 2. Si c'est presentiel-global ou si le slot correspond à un cours présentiel, le prix est de 480 €
+    const currentSlot = (formData?.slot || slot || "").toLowerCase();
+    const isChildSlot = (childrenList?.[0]?.slot || "").toLowerCase();
+    
+    if (
+      normalized === 'presentiel_global' || 
+      normalized.includes('presentiel') || 
+      normalized === 'arabe_coran_junior' ||
+      currentSlot === 'samedi' || 
+      currentSlot === 'dimanche' || 
+      currentSlot === 'mardi-vendredi' || 
+      currentSlot === 'mercredi-dimanche' || 
+      currentSlot === 'mercredi-dimanche-hifdh' || 
+      currentSlot === 'samedi-sirah' ||
+      isChildSlot === 'mercredi' ||
+      isChildSlot === 'samedi' ||
+      isChildSlot === 'dimanche'
+    ) {
+      return 480;
+    }
+
+    // Fallbacks
     if (normalized === 'tarbiya_islamiya') return 249;
     if (normalized === 'tajwid_intensif') return 649;
     if (normalized === 'sciences_du_coran') return 399;
@@ -93,9 +124,7 @@ function InscriptionForm() {
     if (normalized === 'pack_accompagnement') return 49;
     if (normalized === 'correction_fatiha') return 0;
     if (normalized === 'cours_particuliers') return 0;
-    if (normalized === 'presentiel-global') {
-      return 349;
-    }
+
     return 349; // Tarif par défaut
   };
 
