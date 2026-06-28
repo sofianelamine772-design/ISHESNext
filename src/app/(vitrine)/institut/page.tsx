@@ -104,6 +104,30 @@ export default function InstitutPage() {
   const router = useRouter();
   const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>({});
   const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  const faqItems = [
+    {
+      q: "Où se déroulent exactement les cours en présentiel ?",
+      a: "Tous les cours ont lieu dans nos propres locaux situés au 41 Boulevard de Thibaud, 31100 Toulouse. Le campus est facilement accessible en voiture (périphérique sortie 37 ou 38, parking gratuit sur place) et en transports en commun."
+    },
+    {
+      q: "Quels sont les jours et horaires des formations ?",
+      a: "Pour l'année en cours : \n• Scolarité Enfants : Mercredi après-midi (13h30-16h30), Samedi ou Dimanche.\n• Scolarité Femmes Débutante : Samedi matin de 9h00 à 12h00.\n• Scolarité Femmes Intermédiaire : Dimanche matin de 9h00 à 12h00."
+    },
+    {
+      q: "Comment fonctionne le paiement de la scolarité ?",
+      a: "Le tarif annuel est de 480 €. Pour valider votre place, un acompte initial de 150 € est demandé lors de l'inscription en ligne. Le solde restant peut être réglé en une seule fois, ou étalé en 3 ou 5 mensualités automatiques sans aucun frais."
+    },
+    {
+      q: "Les manuels et supports pédagogiques sont-ils compris ?",
+      a: "Oui, l'inscription comprend l'ensemble des manuels physiques distribués en début d'année, y compris notre support exclusif 'Les Clés du Coran' (basé sur Nour Al Bayane) et les manuels de langue arabe (Habib Haffes)."
+    },
+    {
+      q: "Que se passe-t-il si je manque un cours en présentiel ?",
+      a: "Pas d'inquiétude ! L'intégralité des séances est enregistrée. Vous conservez un accès illimité aux replays vidéo des cours via votre espace élève pour réviser et rattraper les cours manqués à votre rythme."
+    }
+  ];
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -413,6 +437,47 @@ export default function InstitutPage() {
                 <div className="absolute inset-0 pointer-events-none border-[12px] border-ishes-dark/20 rounded-[2.5rem]"></div>
              </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* --- FAQ SECTION --- */}
+      <section className="py-24 bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-[#c8a96e] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
+            <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
+              Des réponses à vos <span className="text-[#c8a96e] italic">questions.</span>
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {faqItems.map((item, idx) => {
+              const isOpen = activeFaq === idx;
+              return (
+                <div 
+                  key={idx} 
+                  className="border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 bg-[#fafafa]"
+                >
+                  <button
+                    onClick={() => setActiveFaq(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-[#c8a96e] transition-colors"
+                  >
+                    <span>{item.q}</span>
+                    <ChevronRight 
+                      className={`w-5 h-5 text-[#c8a96e] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                    />
+                  </button>
+                  <div 
+                    className={`transition-all duration-300 ease-in-out ${
+                      isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                    } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
+                  >
+                    {item.a}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
