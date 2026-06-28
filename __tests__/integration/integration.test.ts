@@ -154,7 +154,11 @@ const mockAuth = jest.fn();
 jest.mock('@clerk/nextjs/server', () => ({
   auth: () => mockAuth(),
   currentUser: jest.fn(),
-  clerkClient: jest.fn(),
+  clerkClient: jest.fn().mockResolvedValue({
+    invitations: {
+      createInvitation: jest.fn().mockResolvedValue({})
+    }
+  }),
 }));
 
 const mockSendAdminNewMessageEmail = jest.fn();
