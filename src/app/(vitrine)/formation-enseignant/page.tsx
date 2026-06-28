@@ -1,5 +1,6 @@
 "use client";
  
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, GraduationCap, Monitor, CreditCard, ChevronRight, FileText, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -55,8 +56,33 @@ const formations = [
 ];
  
 export default function FormationEnseignantPage() {
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  const faqItems = [
+    {
+      q: "À qui s'adressent ces formations diplômantes ?",
+      a: "Nos cursus s'adressent à toute personne (enseignant, futur éducateur, parent) souhaitant acquérir des compétences professionnelles et pédagogiques solides pour enseigner la lecture du Coran (Nour Al Bayan) ou l'éducation religieuse bienveillante (Tarbya Islamya)."
+    },
+    {
+      q: "Quels sont les prérequis pour s'inscrire ?",
+      a: "Pour la formation diplômante Tajwid (Nour Al Bayan), il est nécessaire de savoir lire le Coran de manière fluide. Pour la formation Tarbya Islamya, aucun prérequis technique n'est imposé, si ce n'est une forte motivation pour la transmission et la pédagogie positive."
+    },
+    {
+      q: "Comment se déroulent l'évaluation et la remise de diplôme ?",
+      a: "La validation s'appuie sur un examen théorique écrit en fin de parcours ainsi que sur une mise en situation pratique (stage d'observation ou d'animation d'une classe virtuelle sur Zoom). Un diplôme officiel de l'Institut ISHES est remis aux élèves ayant validé l'évaluation."
+    },
+    {
+      q: "Proposez-vous des facilités de paiement ?",
+      a: "Absolument. Nous comprenons que l'investissement dans une formation professionnelle est important. C'est pourquoi nous proposons des options d'étalement de paiement allant jusqu'à 10 mensualités sans aucun frais."
+    },
+    {
+      q: "Quel est le rythme de travail et la durée de la formation ?",
+      a: "La formation théorique s'étale sur environ 20 heures de cours en ligne, complétées par des sessions de stage pratique et de suivi personnalisé. Le rythme est conçu pour être parfaitement compatible avec une activité professionnelle ou des études à plein temps."
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-green selection:text-white">
+    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-green selection:text-white pb-0">
       {/* --- HERO SECTION --- */}
       <section className="relative pt-44 pb-32 md:pt-56 md:pb-48 overflow-hidden">
         <ArabicBackground />
@@ -242,6 +268,49 @@ export default function FormationEnseignantPage() {
           </div>
         </div>
       </section>
+
+      {/* --- FAQ SECTION --- */}
+      <section className="py-24 bg-white border-t border-gray-100 relative z-10">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-[#008953] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
+            <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
+              Tout savoir sur la <span className="text-[#008953] italic">certification.</span>
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {faqItems.map((item, idx) => {
+              const isOpen = activeFaq === idx;
+              return (
+                <div 
+                  key={idx} 
+                  className="border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 bg-[#fafafa]"
+                >
+                  <button
+                    onClick={() => setActiveFaq(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-[#008953] transition-colors"
+                  >
+                    <span>{item.q}</span>
+                    <ChevronRight 
+                      className={`w-5 h-5 text-[#008953] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                    />
+                  </button>
+                  <div 
+                    className={`transition-all duration-300 ease-in-out ${
+                      isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                    } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
+                  >
+                    {item.a}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }
