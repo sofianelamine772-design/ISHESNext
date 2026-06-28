@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X, CalendarDays, Search } from "lucide-react";
+import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X, CalendarDays, Search, Building2, MapPin } from "lucide-react";
 import { PRESENTIEL_CLASSES, PresentielClass } from "@/lib/presentiel-data";
 
 
@@ -129,7 +129,17 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   </div>
 
                   <div className="flex flex-col sm:flex-row items-start sm:items-stretch gap-5 pt-6 w-full">
-                     {id !== "arabe_coran_junior" && (
+                     {id.includes("presentiel") ? (
+                        <div className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-amber-50 rounded-3xl shadow-md">
+                           <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
+                              <Building2 className="w-5 h-5 text-[#c8a96e]" />
+                           </div>
+                           <div>
+                              <p className="text-[13px] font-black text-[#c8a96e] uppercase tracking-widest">Sur Place à l'Institut</p>
+                              <p className="text-xs font-bold text-gray-500 mt-0.5">41 Bld de Thibaud, Toulouse</p>
+                           </div>
+                        </div>
+                     ) : id !== "arabe_coran_junior" && (
                         <a href="https://www.zoom.com/fr" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-blue-50 rounded-3xl shadow-md hover:shadow-lg hover:border-[#0b5cff]/30 transition-all group">
                            <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain group-hover:scale-110 transition-transform" />
                            <div>
