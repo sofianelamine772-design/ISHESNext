@@ -4,6 +4,7 @@ import { UserButton } from "@clerk/nextjs";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { stripe } from "@/lib/stripe";
+import { SalesChart } from "@/components/admin/SalesChart";
 
 export const dynamic = 'force-dynamic';
 
@@ -51,6 +52,15 @@ export default async function AdminOverview() {
     .from('paiements')
     .select('amount, created_at, status')
     .eq('status', 'succeeded');
+
+  // Fetch recent payments with student info (real-time stream)
+  const { data: recentPaymentsRaw } = await supabaseAdmin
+    .from('paiements')
+    .select('id, amount, status, created_at, stripe_session_id, etudiants (first_name, last_name, email)')
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  const recentPayments = recentPaymentsRaw || [];
 
   const monthlyData = [
     { month: 'Jan', value: 0 },
@@ -164,62 +174,69 @@ export default async function AdminOverview() {
               </div>
             </div>
 
-            {/* Sales Overview Chart Section */}
-            <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 p-6 md:p-10 shadow-sm overflow-hidden">
-              <div className="flex flex-col mb-8 md:mb-12">
-                <h3 className="text-xl md:text-2xl ishes-heading text-ishes-dark">Aperçu des Ventes</h3>
-                <p className="text-xs md:text-sm font-medium text-gray-400 mt-1">Visualisation de vos revenus ce mois-ci.</p>
+            {/* Sales Overview & Recent Payments Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+              
+              {/* Left: Sales Overview Chart Section (2 cols) */}
+              <div className="lg:col-span-2 bg-white rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 p-6 md:p-10 shadow-sm overflow-hidden flex flex-col justify-between">
+                <SalesChart monthlyData={monthlyData} />
               </div>
 
-               {/* Chart Container */}
-              <div className="relative h-64 w-full mt-8 overflow-x-auto custom-scrollbar pb-4">
-                <div className="min-w-[600px] h-full relative flex flex-col justify-end">
-                  
-                  {/* Grid Lines behind the bars */}
-                  <div className="absolute inset-x-0 top-4 bottom-10 flex flex-col justify-between pointer-events-none z-0 opacity-40">
-                    <div className="w-full border-t border-dashed border-gray-200"></div>
-                    <div className="w-full border-t border-dashed border-gray-200"></div>
-                    <div className="w-full border-t border-dashed border-gray-200"></div>
-                    <div className="w-full border-t border-dashed border-gray-200"></div>
-                  </div>
+              {/* Right: Recent Payments (1 col) */}
+              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 p-6 md:p-8 shadow-sm flex flex-col overflow-hidden h-[450px]">
+                <div className="flex flex-col mb-6">
+                  <h3 className="text-xl ishes-heading text-ishes-dark">Derniers Paiements</h3>
+                  <p className="text-xs font-medium text-gray-400 mt-1">Les derniers flux financiers en temps réel.</p>
+                </div>
 
-                  {/* Bars Row */}
-                  <div className="h-[210px] w-full flex items-end justify-between gap-2 md:gap-4 relative z-10">
-                    {monthlyData.map((item, index) => {
-                      const percentHeight = maxRevenueValue > 0 ? (item.value / maxRevenueValue) * 100 : 0;
+                <div className="flex-1 overflow-y-auto space-y-3.5 pr-1 custom-scrollbar">
+                  {recentPayments.length > 0 ? (
+                    recentPayments.map((p: any) => {
+                      const studentName = p.etudiants
+                        ? `${p.etudiants.first_name || ''} ${p.etudiants.last_name || ''}`.trim() || p.etudiants.email
+                        : "Élève Inconnu";
+                      const studentEmail = p.etudiants?.email || "Pas d'adresse email";
+                      const paymentDate = new Date(p.created_at).toLocaleDateString('fr-FR', {
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      });
+
+                      const isSucceeded = p.status === 'succeeded';
+                      
                       return (
-                        <div key={index} className="flex-1 flex flex-col items-center justify-end h-full group relative">
-                          
-                          {/* Value text above the bar - ALWAYS VISIBLE */}
-                          <span className="text-[10px] font-black text-ishes-dark mb-1.5 opacity-90 transition-transform duration-300 group-hover:scale-110 group-hover:text-ishes-green shrink-0">
-                            {formatRevenue(item.value)}
-                          </span>
-                          
-                          {/* Bar Track (Transparent Grey Background) & Interactive Bar */}
-                          <div className="w-full h-full max-h-[155px] bg-gray-100/50 rounded-t-xl rounded-b-lg relative overflow-hidden flex items-end shadow-inner border border-gray-200/20">
-                            
-                            {/* Green Gradient Bar */}
-                            <div 
-                              className="w-full bg-gradient-to-t from-[#065440] via-ishes-green to-[#0ea880] rounded-t-xl rounded-b-lg transition-all duration-700 ease-out relative group-hover:brightness-105"
-                              style={{ height: `${percentHeight}%` }}
-                            >
-                              {/* Shimmer overlay on hover */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </div>
-
+                        <div key={p.id} className="flex items-center justify-between p-3.5 bg-gray-50/50 rounded-2xl border border-gray-100 hover:border-ishes-green/20 transition-all">
+                          <div className="min-w-0 flex-1 pr-2">
+                            <div className="text-xs font-black text-ishes-dark truncate">{studentName}</div>
+                            <div className="text-[9px] text-gray-400 font-mono truncate">{studentEmail}</div>
+                            <div className="text-[9px] text-gray-450 mt-1 font-semibold">{paymentDate}</div>
                           </div>
-                          
-                          {/* Month Label */}
-                          <span className="text-[10px] font-black uppercase tracking-tight text-gray-400 mt-2 group-hover:text-ishes-dark transition-colors shrink-0">
-                            {item.month}
-                          </span>
+                          <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
+                            <span className="font-black text-sm text-ishes-dark">{Number(p.amount).toFixed(0)} €</span>
+                            <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${
+                              isSucceeded 
+                                ? 'bg-ishes-green/10 text-ishes-green' 
+                                : 'bg-red-50 text-red-500 border border-red-100'
+                            }`}>
+                              {isSucceeded ? 'Réussi' : 'Échoué'}
+                            </span>
+                          </div>
                         </div>
                       );
-                    })}
-                  </div>
-
+                    })
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center py-12 text-gray-400">
+                      <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-3">
+                        <span className="text-xl">💳</span>
+                      </div>
+                      <p className="font-bold text-xs">Aucune transaction</p>
+                      <p className="text-[10px] italic">Les paiements s'afficheront ici en direct.</p>
+                    </div>
+                  )}
                 </div>
               </div>
+
             </div>
 
           </div>

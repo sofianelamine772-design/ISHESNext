@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type FamilyMember = {
@@ -30,6 +31,7 @@ type FamilyMember = {
 type Payment = {
   id: string;
   rawId: string;
+  etudiantId?: string;
   payerName: string;
   payerAvatar: string;
   email: string;
@@ -67,6 +69,7 @@ export default function FacturationPage() {
           return {
             id: p.id.slice(0, 8),
             rawId: p.id,
+            etudiantId: etudiant?.id || '',
             payerName: `${etudiant?.first_name || ''} ${etudiant?.last_name || ''}`.trim() || 'Inconnu',
             payerAvatar: ((etudiant?.first_name?.[0] || '') + (etudiant?.last_name?.[0] || '')) || '?',
             email: etudiant?.email || '',
@@ -392,11 +395,11 @@ export default function FacturationPage() {
             className="fixed inset-0 bg-ishes-dark/40 backdrop-blur-sm z-[70] transition-opacity animate-in fade-in duration-300"
             onClick={() => setSelectedPayment(null)}
           />
-          <div className="fixed inset-y-0 right-0 w-full sm:w-[520px] bg-white shadow-2xl z-[80] flex flex-col transition-transform duration-500 ease-out border-l border-gray-100 animate-in slide-in-from-right overflow-hidden rounded-l-[3rem]">
+          <div className="fixed inset-y-0 right-0 w-full sm:w-[650px] bg-white shadow-2xl z-[80] flex flex-col transition-transform duration-500 ease-out border-l border-gray-100 animate-in slide-in-from-right overflow-hidden rounded-l-[3rem]">
 
             {/* Panel Header */}
-            <div className="bg-ishes-dark text-white p-10 relative overflow-hidden shrink-0">
-              <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
+            <div className="bg-white border-b border-gray-100 text-ishes-dark p-10 relative overflow-hidden shrink-0">
+              <div className="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none">
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-ishes-green blur-[120px] rounded-full" />
               </div>
               <div className="relative z-10">
@@ -406,32 +409,41 @@ export default function FacturationPage() {
                   </span>
                   <button
                     onClick={() => setSelectedPayment(null)}
-                    className="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+                    className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
                   >
-                    <X className="w-5 h-5 text-white/40" />
+                    <X className="w-5 h-5 text-gray-500" />
                   </button>
                 </div>
-                <div className="flex items-center gap-6">
-                  <div className="w-20 h-20 rounded-3xl bg-white p-1 shadow-2xl rotate-3">
-                    <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 rounded-[1.2rem] flex items-center justify-center font-black text-2xl text-ishes-dark">
-                      {selectedPayment.payerAvatar}
+                <div className="flex items-center justify-between gap-6 flex-wrap sm:flex-nowrap">
+                  <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 rounded-3xl bg-gray-50 p-1 shadow-md border border-gray-100 shrink-0">
+                      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-[1.2rem] flex items-center justify-center font-black text-2xl text-ishes-dark">
+                        {selectedPayment.payerAvatar}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <h2 className="text-3xl ishes-heading text-white mb-1">{selectedPayment.payerName}</h2>
-                    <div className="flex flex-wrap items-center gap-2 mt-1">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-ishes-green bg-ishes-green/10 px-2 py-0.5 rounded">
-                        #{selectedPayment.id}
-                      </span>
-                      <span className="text-[10px] font-bold text-white/40">{selectedPayment.date}</span>
-                      {selectedPayment.isFamilyPayment && (
-                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-300 bg-blue-400/10 px-2 py-0.5 rounded flex items-center gap-1">
-                          <Users className="w-3 h-3" />
-                          {selectedPayment.familyMembers.length} enfant{selectedPayment.familyMembers.length > 1 ? 's' : ''}
+                    <div>
+                      <h2 className="text-3xl ishes-heading text-ishes-dark mb-1">{selectedPayment.payerName}</h2>
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-ishes-green bg-ishes-green/10 px-2 py-0.5 rounded">
+                          #{selectedPayment.id}
                         </span>
-                      )}
+                        <span className="text-[10px] font-bold text-gray-400">{selectedPayment.date}</span>
+                        {selectedPayment.isFamilyPayment && (
+                          <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-0.5 rounded flex items-center gap-1">
+                            <Users className="w-3 h-3" />
+                            {selectedPayment.familyMembers.length} enfant{selectedPayment.familyMembers.length > 1 ? 's' : ''}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
+                  {selectedPayment.etudiantId && (
+                    <Link href={`/app/admin/etudiants?id=${selectedPayment.etudiantId}`} className="shrink-0">
+                      <Button variant="outline" className="h-10 px-5 rounded-2xl text-xs font-black uppercase tracking-widest bg-white text-ishes-dark hover:bg-gray-50 border border-gray-200">
+                        Voir Profil
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -488,32 +500,41 @@ export default function FacturationPage() {
                         <div
                           key={member.id}
                           className={cn(
-                            "flex items-center gap-4 p-4 rounded-2xl border transition-all",
+                            "flex items-center justify-between p-4 rounded-2xl border transition-all",
                             isPaid
                               ? "bg-ishes-green/5 border-ishes-green/20"
                               : "bg-orange-50 border-orange-200"
                           )}
                         >
-                          <div className={cn(
-                            "w-10 h-10 rounded-xl flex items-center justify-center font-black text-[11px] shrink-0",
-                            isPaid ? "bg-ishes-green text-white" : "bg-orange-100 text-orange-600"
-                          )}>
-                            {member.firstName?.[0]}{member.lastName?.[0]}
+                          <div className="flex items-center gap-4 min-w-0 flex-1 pr-2">
+                            <div className={cn(
+                              "w-10 h-10 rounded-xl flex items-center justify-center font-black text-[11px] shrink-0",
+                              isPaid ? "bg-ishes-green text-white" : "bg-orange-100 text-orange-600"
+                            )}>
+                              {member.firstName?.[0]}{member.lastName?.[0]}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-black text-ishes-dark text-sm truncate">
+                                {member.firstName} {member.lastName}
+                              </p>
+                              <p className="text-[10px] text-gray-400 font-medium truncate">
+                                {member.inscription?.formations?.title || 'Formation'} — {member.inscription?.classes?.name || ''}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-black text-ishes-dark text-sm">
-                              {member.firstName} {member.lastName}
-                            </p>
-                            <p className="text-[10px] text-gray-400 font-medium truncate">
-                              {member.inscription?.formations?.title || 'Formation'} — {member.inscription?.classes?.name || ''}
-                            </p>
+                          <div className="flex items-center gap-2.5 shrink-0">
+                            <span className={cn(
+                              "text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg whitespace-nowrap",
+                              isPaid ? "bg-ishes-green text-white" : "bg-orange-500 text-white"
+                            )}>
+                              {isPaid ? 'RÉGLÉ' : 'EN ATTENTE'}
+                            </span>
+                            <Link href={`/app/admin/etudiants?id=${member.id}`}>
+                              <Button variant="outline" size="sm" className="h-8 px-3 rounded-xl border-gray-250 text-[10px] font-black uppercase tracking-wider text-ishes-dark hover:bg-gray-100">
+                                Profil
+                              </Button>
+                            </Link>
                           </div>
-                          <span className={cn(
-                            "text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg whitespace-nowrap",
-                            isPaid ? "bg-ishes-green text-white" : "bg-orange-500 text-white"
-                          )}>
-                            {isPaid ? 'RÉGLÉ' : 'EN ATTENTE'}
-                          </span>
                         </div>
                       );
                     })}
