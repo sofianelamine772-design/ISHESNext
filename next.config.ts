@@ -95,14 +95,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // Clerk assets rewrite – forwards __clerk/* to Clerk CDN
-  async rewrites() {
-    return [
-      {
-        source: '/__clerk/:path*',
-        destination: 'https://cdn.clerk.com/:path*',
-      },
-    ];
   },
 };
 
