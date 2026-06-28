@@ -139,7 +139,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </a>
                      )}
                      <div className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-green-50 rounded-3xl shadow-md">
-                        <img src="/whatsapp-logo.avif" alt="WhatsApp" className="h-10 w-10 object-cover rounded-full shadow-sm" />
+                        <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-10 w-10 object-cover rounded-full shadow-sm" />
                         <div>
                            <p className="text-[13px] font-black text-[#25D366] uppercase tracking-widest">Suivi & Entraide</p>
                            <p className="text-xs font-bold text-gray-500 mt-1">Groupe WhatsApp par classe</p>
