@@ -90,8 +90,54 @@ async function upsertInscription(params: {
   classId: string | null;
   academicYear: string;
 }): Promise<string | null> {
-  const { studentId, formationUuid, classId, academicYear } = params;
-  const hasClass = !!classId;
+  const { studentId, formationUuid, academicYear } = params;
+  let resolvedClassId = params.classId;
+
+  // Si aucun classId n'est fourni, on cherche si c'est un cours distanciel ou s'il y a une classe active pour cette formation
+  if (!resolvedClassId) {
+    const { data: formation } = await supabaseAdmin
+      .from('formations')
+      .select('type')
+      .eq('id', formationUuid)
+      .maybeSingle();
+
+    const isPresentiel = formation?.type === 'presentiel';
+
+    if (!isPresentiel) {
+      // Pour les cours distanciels, on affecte automatiquement une classe active
+      const { data: activeClass } = await supabaseAdmin
+        .from('classes')
+        .select('id')
+        .eq('formation_id', formationUuid)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (activeClass) {
+        resolvedClassId = activeClass.id;
+      } else {
+        // Créer une classe par défaut si aucune n'est active
+        const { data: newClass } = await supabaseAdmin
+          .from('classes')
+          .insert({
+            formation_id: formationUuid,
+            name: `Session ${new Date().getFullYear()}`,
+            type: 'distanciel',
+            academic_year: academicYear,
+            is_active: true
+          })
+          .select('id')
+          .maybeSingle();
+
+        if (newClass) {
+          resolvedClassId = newClass.id;
+        }
+      }
+    }
+  }
+
+  const hasClass = !!resolvedClassId;
   const targetStatus = hasClass ? 'valide' : 'en_attente_daffectation';
 
   const { data: existing } = await supabaseAdmin
@@ -105,7 +151,7 @@ async function upsertInscription(params: {
   if (existing) {
     await supabaseAdmin
       .from('inscriptions')
-      .update({ class_id: classId || undefined, status: targetStatus, paid_status: 'paye' })
+      .update({ class_id: resolvedClassId || undefined, status: targetStatus, paid_status: 'paye' })
       .eq('id', existing.id);
     return existing.id;
   }
@@ -115,7 +161,7 @@ async function upsertInscription(params: {
     .insert({
       etudiant_id: studentId,
       formation_id: formationUuid,
-      class_id: classId,
+      class_id: resolvedClassId,
       status: targetStatus,
       paid_status: 'paye',
       academic_year: academicYear,

@@ -1384,3 +1384,57 @@ export async function sendPaymentReminderWithLinkAction(paymentId: string) {
     return { success: false, error: String(error) };
   }
 }
+
+export async function linkTypoRegistrationAction(typoEmail: string) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return { success: false, error: "Vous devez être connecté pour effectuer cette action." };
+    }
+
+    const cleanTypoEmail = typoEmail.trim().toLowerCase();
+
+    // 1. Récupérer le bon email de l'utilisateur connecté sur Clerk
+    const clerkUser = await currentUser();
+    if (!clerkUser) {
+      return { success: false, error: "Utilisateur Clerk non trouvé." };
+    }
+    const correctEmail = clerkUser.primaryEmailAddress?.emailAddress?.toLowerCase();
+    if (!correctEmail) {
+      return { success: false, error: "Adresse email Clerk introuvable." };
+    }
+
+    // 2. Chercher les candidats correspondants dans la base de données
+    const { data: candidates, error: fetchErr } = await supabaseAdmin
+      .from('etudiants')
+      .select('id, email, clerk_user_id')
+      .eq('email', cleanTypoEmail);
+
+    if (fetchErr || !candidates || candidates.length === 0) {
+      return { 
+        success: false, 
+        error: "Aucune inscription trouvée avec cet e-mail. Veuillez vérifier l'orthographe exacte saisie lors du paiement." 
+      };
+    }
+
+    // 3. Mettre à jour l'étudiant (et sa fratrie éventuelle) avec le bon e-mail et lier son compte Clerk ID
+    const { error: updateErr } = await supabaseAdmin
+      .from('etudiants')
+      .update({
+        email: correctEmail,
+        clerk_user_id: userId
+      })
+      .eq('email', cleanTypoEmail);
+
+    if (updateErr) {
+      console.error("[LINK_ERROR] Failed to update student record:", updateErr);
+      return { success: false, error: "Erreur technique lors de la mise à jour de votre inscription." };
+    }
+
+    console.log(`[LINK_SUCCESS] Linked typo email ${cleanTypoEmail} to ${correctEmail} for Clerk ID ${userId}`);
+    return { success: true, message: "Votre inscription a été associée avec succès !" };
+  } catch (err: any) {
+    console.error("[LINK_ACTION_ERROR]", err);
+    return { success: false, error: "Une erreur interne s'est produite lors de la liaison." };
+  }
+}

@@ -1,10 +1,42 @@
 "use client";
 
+import { useState } from "react";
 import { SignOutButton } from "@clerk/nextjs";
-import { ShieldAlert, ArrowLeft, Mail, Globe } from "lucide-react";
+import { ShieldAlert, ArrowLeft, Mail, Globe, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { linkTypoRegistrationAction } from "@/app/actions/students";
 
 export default function UnauthorizedPage() {
+  const router = useRouter();
+  const [typoEmail, setTypoEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ success: boolean; text: string } | null>(null);
+
+  const handleLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!typoEmail) return;
+
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await linkTypoRegistrationAction(typoEmail);
+      if (res.success) {
+        setMessage({ success: true, text: res.message || "Association réussie !" });
+        setTimeout(() => {
+          router.push("/app/eleve");
+        }, 2000);
+      } else {
+        setMessage({ success: false, text: res.error || "Une erreur s'est produite." });
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage({ success: false, text: "Erreur lors de la communication avec le serveur." });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#111c29] text-white flex flex-col justify-center items-center p-6 relative overflow-hidden font-sans">
 
@@ -45,15 +77,61 @@ export default function UnauthorizedPage() {
             <div className="w-16 h-[1px] bg-[#c8a96e]/30 mx-auto my-4" />
           </div>
 
-          <div className="space-y-6 text-sm sm:text-base leading-relaxed text-white/70 font-medium">
-            <p>
-              Assalamou alaykoum. Nous n'avons trouvé **aucune inscription validée** associée à votre adresse email dans notre registre d'élèves.
+          <div className="space-y-6 text-sm sm:text-base leading-relaxed text-white/70 font-medium text-left">
+            <p className="text-center">
+              Assalamou alaykoum. Nous n'avons trouvé **aucune inscription validée** associée à votre adresse email actuelle dans notre registre d'élèves.
             </p>
             <p className="text-xs sm:text-sm bg-white/5 border border-white/5 p-4 rounded-2xl text-left leading-relaxed">
               💡 **Pour accéder à l'école en ligne, vous devez au choix :**<br />
               1. **Avoir acheté et validé** votre formation (Tajwid, Coran, etc.) via notre boutique.<br />
               2. **Être invité par l'administration** (votre dossier doit avoir été saisi manuellement par un secrétaire de l'Institut).
             </p>
+          </div>
+
+          {/* Recovery Form */}
+          <div className="border-t border-white/10 pt-8 text-left space-y-4">
+            <h3 className="text-sm font-black text-[#c8a96e] uppercase tracking-wider">
+              Une erreur d'adresse e-mail au paiement ?
+            </h3>
+            <p className="text-xs text-white/60 leading-relaxed font-semibold">
+              Si vous avez fait une faute de frappe dans votre adresse e-mail lors de votre paiement, saisissez le mauvais mail utilisé pour lier instantanément votre inscription à ce compte.
+            </p>
+
+            <form onSubmit={handleLink} className="space-y-3">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Adresse e-mail erronée (ex: sofiene@gamil.com)"
+                  value={typoEmail}
+                  onChange={(e) => setTypoEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 text-xs font-semibold focus:outline-none focus:border-[#086b51] transition-all"
+                />
+              </div>
+
+              {message && (
+                <div className={`p-3.5 rounded-xl text-xs font-bold flex items-start gap-2 ${
+                  message.success ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-red-500/10 text-red-400 border border-red-500/20"
+                }`}>
+                  {message.success ? <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" /> : <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />}
+                  <span>{message.text}</span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-white/10 hover:bg-white/15 text-white border border-white/15 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Liaison en cours...
+                  </>
+                ) : (
+                  "Lier mon inscription"
+                )}
+              </button>
+            </form>
           </div>
 
           <div className="pt-6 space-y-4">
