@@ -578,7 +578,8 @@ export function ProgramContent() {
               (program.id === 'tajwid_standard' || program.id === 'tajwid-standard-presentiel') ? '/fr/cours-lecture-tajwid' :
                 program.id === 'tajwid_intensif' ? '/fr/cours-tajwid-intensif' :
                   (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' :
-                    (program.id === 'femme-debutante-presentiel' || program.id === 'femme-intermediaire-presentiel') ? '/fr/cours-en-presentiel' :
+                    program.id === 'femme-debutante-presentiel' ? '/fr/cours-presentiel-femme-debutante' :
+                      program.id === 'femme-intermediaire-presentiel' ? '/fr/cours-presentiel-femme-intermediaire' :
                       (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
                         program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
                           program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :

@@ -26,6 +26,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/cours-arabe-enfant',
     '/fr/cours-as-sirah',
     '/fr/cours-education-islamique',
+    '/fr/cours-presentiel-femme-debutante',
+    '/fr/cours-presentiel-femme-intermediaire',
     '/fr/cours-en-presentiel',
     '/fr/cours-fiqh-malikite',
     '/fr/cours-lecture-tajwid',

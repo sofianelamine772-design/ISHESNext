@@ -147,6 +147,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-[#008953]/20 hover:border-[#008953]",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "samedi",
+      infoUrl: "/fr/cours-presentiel-femme-debutante",
       hook: "Le grand problème des écoles traditionnelles est la séparation de la langue arabe et des règles de Tajwid, obligeant à faire deux fois plus d'efforts. Pour résoudre cela, notre cursus unique combine les deux en présentiel. En apprenant à lire et écrire l'arabe avec la méthode Habib Haffes, vous appliquez immédiatement ces notions pour comprendre et prononcer les règles de récitation du Tajwid s'appuyant sur notre support 'Les Clés du Coran' (Nour Al Bayane).",
       outcomes: [
         "Prononciation exacte de chaque lettre arabe (Makharij al-Hourouf)",
@@ -175,6 +176,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-amber-200 hover:border-[#c8a96e]",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "mardi-vendredi",
+      infoUrl: "/fr/cours-tajwid-intensif",
       hook: "Beaucoup ont commencé à apprendre le Tajwid plusieurs fois... puis ont arrêté par manque de régularité ou de suivi. Conçu pour éviter ce piège, ce programme accéléré permet de maîtriser et appliquer les règles essentielles jusqu'à 3 fois plus vite qu'un cursus classique.",
       outcomes: [
         "Maîtrise complète des règles fondamentales du Tajwid",
@@ -203,6 +205,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-[#008953]/20 hover:border-[#008953]",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "mercredi-dimanche",
+      infoUrl: "/fr/cours-lecture-tajwid",
       hook: "Tu connais les règles de Tajwid en théorie... mais au moment de réciter, tu hésites, tu t'arrêtes souvent et des erreurs subsistent ? Le cours de Tilawa est conçu pour automatiser tes acquis et corriger tes imperfections de manière personnalisée.",
       outcomes: [
         "Application fluide et automatique des règles de Tajwid",
@@ -232,6 +235,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-amber-200 hover:border-[#c8a96e]",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "mercredi-dimanche-hifdh",
+      infoUrl: "/fr/cours-memoriser-coran",
       hook: "Mémoriser seul est un défi où la démotivation et l'oubli prennent souvent le dessus. Le programme de Hifdh offre le cadre idéal pour bâtir une routine d'apprentissage stable, préserver les sourates mémorisées et cheminer spirituellement.",
       outcomes: [
         "Mémorisation solide et structurée de nouveaux versets",
@@ -261,6 +265,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-[#008953]/20 hover:border-[#008953]",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "samedi-sirah",
+      infoUrl: "/fr/cours-as-sirah",
       hook: "La Sîrah est trop souvent étudiée comme une simple suite de dates ou de batailles. Ce cours propose une approche vivante et spirituelle pour rapprocher le Prophète ﷺ de votre cœur et comprendre comment son modèle illumine votre vie moderne.",
       outcomes: [
         "Compréhension approfondie de la sagesse et de la spiritualité prophétique",
@@ -288,6 +293,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-amber-200 hover:border-[#c8a96e]",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "dimanche",
+      infoUrl: "/fr/cours-presentiel-femme-intermediaire",
       tagline: "Perfectionner son arabe littéraire et approfondir sa récitation du Coran.",
       hook: "Beaucoup d'élèves savent lire le Coran mais ne comprennent pas ce qu'ils lisent, ou apprennent la grammaire de façon trop abstraite. Notre cursus résout ce problème en liant le perfectionnement en arabe (grammaire Nahw) à la pratique directe du Tajwid. Vous gagnez en fluidité et en récitation tout en apprenant à traduire et à saisir le sens des versets récités au quotidien.",
       outcomes: [
@@ -543,7 +549,7 @@ export default function CoursPresentielPage() {
                   </div>
 
                   {/* Pricing and Button */}
-                  <div className="flex items-center justify-between pt-2">
+                  <div className="flex items-center justify-between pt-2 gap-4">
                     <div>
                       <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
                         TARIF FORMATION
@@ -553,13 +559,23 @@ export default function CoursPresentielPage() {
                       </span>
                     </div>
                     
-                    <Link 
-                      href={`/inscription?plan=presentiel-global&slot=${course.slot}`}
-                      className="inline-flex items-center gap-2 bg-[#008953] hover:bg-[#007044] text-white px-5 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-[#008953]/10 hover:shadow-lg active:scale-95"
-                    >
-                      <span>S'inscrire</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                    <div className="flex gap-2">
+                      {course.infoUrl && (
+                        <Link 
+                          href={course.infoUrl}
+                          className="inline-flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
+                        >
+                          Info
+                        </Link>
+                      )}
+                      <Link 
+                        href={`/inscription?plan=presentiel-global&slot=${course.slot}`}
+                        className="inline-flex items-center gap-2 bg-[#008953] hover:bg-[#007044] text-white px-5 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-[#008953]/10 hover:shadow-lg active:scale-95"
+                      >
+                        <span>S'inscrire</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>

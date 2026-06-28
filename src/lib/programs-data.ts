@@ -370,5 +370,79 @@ export const PROGRAMS_DATA: Record<string, any> = {
       "Transformez la théorie en automatisme",
       "Replays accessibles pour s'entraîner"
     ]
+  },
+  "femme_debutante_presentiel": {
+    title: "🧕 Arabe & Tajwid — Femme Débutante",
+    duration: "Annuel",
+    tag: "Présentiel | 100% Femme",
+    price: "480 €",
+    hook: "Apprendre à lire le Coran et comprendre la langue arabe en partant de zéro. Un cadre bienveillant et structuré.",
+    description: "🧕 100% FEMME — COURS EN PRÉSENTIEL À TOULOUSE\n\nTu veux avancer dans ta relation avec ALLAH… mais sans cadre, tu stagnes.\nÀ l’Institut ISHES, nous te proposons des cours structurés, encadrés par des enseignants expérimentés, avec un suivi réel pour transformer ta relation avec ALLAH.\n\n❌ LE PROBLÈME DES ÉCOLES TRADITIONNELLES\nLa plupart des instituts séparent l'apprentissage de la langue arabe et les règles de Tajwid. L'élève doit alors choisir l'un ou l'autre, ou fournir un double effort financier et de temps. De plus, il est difficile de trouver des cours de qualité dans un cadre 100% féminin, bienveillant et rigoureux.\n\n✨ NOTRE SOLUTION : LE CURSUS FUSIONNÉ ET ENCADRÉ\nPour résoudre ce problème, notre formation en présentiel combine l'apprentissage de la langue arabe et les règles de Tajwid.\nEn apprenant à lire et écrire l'arabe avec la célèbre méthode Habib Haffes (spécialement conçue pour les francophones), vous appliquez immédiatement ces notions pour comprendre et prononcer les règles de récitation du Tajwid grâce à notre support exclusif 'Les Clés du Coran' (Nour Al Bayane).\n\n• Cursus 100% réservé aux Femmes : Un cadre serein, chaleureux et propice à l'entraide entre sœurs.\n• Double Volet Progressif : Apprenez la lecture, l'écriture et les règles de récitation (Tajwid) en partant complètement de zéro.\n• Prononciation Exacte : Travail méthodique des points de sortie des lettres (Makharij) pour honorer la parole d'ALLAH.\n\n💛 UNE MÉTHODE ÉPROUVÉE\n• Zéro prérequis : Accessible même si vous ne connaissez pas l'alphabet.\n• Session en petit comité : Max 20 élèves pour garantir des corrections individuelles régulières.\n• Flexibilité locale : Cours tous les samedis matin à Toulouse avec replays disponibles en ligne si vous manquez une séance.\n• Diplôme officiel : Remis en fin de parcours par l'Institut ISHES.",
+    features: [
+      { t: "100% Femme", d: "Cours réservé exclusivement aux femmes dans un cadre serein et d'entraide." },
+      { t: "Cursus Fusionné", d: "Arabe & Tajwid combinés pour une efficacité et un gain de temps doublés." },
+      { t: "Méthode Habib Haffes", d: "L'apprentissage linguistique idéal pensé pour les francophones." },
+      { t: "Les Clés du Coran", d: "Support de Tajwid exclusif adapté de Nour Al Bayane." }
+    ],
+    whyMe: [
+      "Cadre d'apprentissage 100% féminin et bienveillant",
+      "Élimination rapide des blocages de prononciation (Makharij)",
+      "Supports d'apprentissage et manuels physiques inclus",
+      "Enseignante expérimentée et pédagogue"
+    ],
+    horaires: [
+      "Tous les samedis de 9h00 à 12h00"
+    ],
+    fullProgram: {
+      objectifs: [
+        "Maîtriser la lecture et l'écriture des lettres arabes dans toutes leurs positions",
+        "Prononcer correctement les points de sortie de chaque lettre (Makharij al-Hourouf)",
+        "Appliquer de manière autonome les règles essentielles du Tajwid (Noun Sakina, Tanween, Radd)",
+        "Comprendre le sens global et mémoriser les sourates courtes indispensables pour la prière"
+      ],
+      deroulement: [
+        "Étape 1 : Acquisition de l'alphabet et de la phonétique avec la méthode Habib Haffes",
+        "Étape 2 : Entraînement intensif à l'écriture et à l'articulation exacte des points de sortie",
+        "Étape 3 : Introduction progressive des règles de Tajwid à l'aide de Nour Al Bayane",
+        "Étape 4 : Récitation pratique et correction individuelle sur le Moushaf"
+      ]
+    }
+  },
+  "femme_intermediaire_presentiel": {
+    title: "🧕 Arabe & Tajwid — Femme Intermédiaire",
+    duration: "Annuel",
+    tag: "Présentiel | 100% Femme",
+    price: "480 €",
+    hook: "Perfectionner son arabe littéraire et approfondir sa récitation du Coran de manière fluide.",
+    description: "🧕 100% FEMME — COURS EN PRÉSENTIEL À TOULOUSE\n\nTu veux avancer dans ta relation avec ALLAH… mais sans cadre, tu stagnes.\nÀ l’Institut ISHES, nous te proposons des cours structurés, encadrés par des enseignants expérimentés, avec un suivi réel pour transformer ta relation avec ALLAH.\n\n❌ LE PROBLÈME DES ÉLÈVES INTERMÉDIAIRES\nBeaucoup d'élèves savent lire le Coran de manière fluide mais ne comprennent pas ce qu'elles lisent. D'autres connaissent les règles de Tajwid en théorie mais manquent d'assurance lors de la récitation. Séparer l'apprentissage linguistique et spirituel ralentit la progression et maintient une barrière entre le cœur et le Moushaf.\n\n✨ NOTRE SOLUTION : LIER LA GRAMMAIRE ET LA PRATIQUE DIRECTE\nCe cursus résout ce problème en liant le perfectionnement en arabe littéraire (règles de grammaire Nahw) à la pratique directe et rigoureuse du Tajwid.\nVous apprenez à traduire et à comprendre les versets que vous récitez tout en corrigeant de manière chirurgicale votre prononciation.\n\n• Cursus 100% réservé aux Femmes : Progressez en confiance aux côtés d'une enseignante expérimentée.\n• Grammaire Coranique (Nahw) : Comprenez la structure des phrases et gagnez en autonomie face au texte sans traduction.\n• Récitation Fluide : Automatisez vos acquis de Tajwid pour passer d'une lecture mécanique à une récitation vivante et consciente.\n\n💛 UNE PROGRESSION ACADÉMIQUE ET SPIRITUELLE\n• Suivi rigoureux : Corrections personnalisées à chaque cours.\n• Supports de cours inclus : Méthodes adaptées aux élèves intermédiaires pour lever les blocages.\n• Flexibilité locale : Cours tous les dimanches matin à Toulouse avec accès aux replays vidéo à vie.\n• Diplôme officiel : Certificat de fin de parcours remis par l'Institut ISHES.",
+    features: [
+      { t: "100% Femme", d: "Cadre d'apprentissage exclusif pour progresser en toute confiance." },
+      { t: "Grammaire Nahw", d: "Compréhension de la structure de la langue pour traduire soi-même." },
+      { t: "Perfectionnement Tajwid", d: "Automatisation et fluidité de la récitation du Coran." },
+      { t: "Enseignement interactif", d: "Mise en pratique directe lors des sessions en groupe restreint." }
+    ],
+    whyMe: [
+      "Lien direct entre grammaire et récitation coranique",
+      "Élimination des hésitations et automatisation du Tajwid",
+      "Manuels et supports de niveau intermédiaire fournis",
+      "Professeure qualifiée avec suivi de progression"
+    ],
+    horaires: [
+      "Tous les dimanches de 9h00 à 12h00"
+    ],
+    fullProgram: {
+      objectifs: [
+        "Automatiser l'application du Tajwid sans aucune hésitation lors de la lecture",
+        "Comprendre la structure grammaticale de base (Nahw) pour traduire les versets courts",
+        "Enrichir le vocabulaire coranique et littéraire pour un lien direct avec le Moushaf",
+        "Passer d'une lecture mécanique à une récitation vivante et méditée (Tadabbour)"
+      ],
+      deroulement: [
+        "Étape 1 : Consolidation de la récitation et correction individuelle du Tajwid",
+        "Étape 2 : Introduction aux bases de la grammaire arabe (Nahw) appliquées au Coran",
+        "Étape 3 : Analyse linguistique et traduction guidée de sourates sélectionnées",
+        "Étape 4 : Récitation fluide avec mise en pratique des règles de grammaire et de sens"
+      ]
+    }
   }
 };
