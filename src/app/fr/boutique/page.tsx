@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { BoutiqueHero } from "@/components/vitrine/BoutiqueHero";
 import { BoutiqueProducts } from "@/components/vitrine/BoutiqueProducts";
+import { BoutiqueFaq } from "@/components/vitrine/BoutiqueFaq";
 
 export const metadata: Metadata = {
   title: "Boutique ISHES - Supports pédagogiques et spirituels",
@@ -45,6 +46,9 @@ export default function BoutiquePage() {
           </div>
         </div>
       </section>
+
+      {/* --- FAQ SECTION --- */}
+      <BoutiqueFaq />
 
     </div>
   );
