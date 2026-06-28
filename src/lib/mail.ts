@@ -272,3 +272,44 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
   });
 }
 
+export async function sendAdminNewMessageEmail({
+  studentName,
+  studentEmail,
+  messageContent,
+}: {
+  studentName: string;
+  studentEmail: string;
+  messageContent: string;
+}) {
+  const processedContent = messageContent.replace(/\n/g, '<br />');
+
+  const html = `
+    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      ${emailHeader}
+      <div style="padding: 40px 30px;">
+        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Nouveau message d'un élève ✉️</h2>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Bonjour Administrateur,
+        </p>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Vous avez reçu un nouveau message de la part de l'élève <strong>${studentName}</strong> (Email : ${studentEmail}).
+        </p>
+        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: italic;">
+          ${processedContent}
+        </div>
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app/admin/etudiants" style="${buttonStyle}">Consulter le panneau admin</a>
+        </div>
+      </div>
+      ${emailFooter}
+    </div>
+  `;
+
+  return sendEmail({
+    to: "sofianelamine772@gmail.com",
+    subject: `✉️ Nouveau message de ${studentName} - ISHES`,
+    html,
+    provider: 'resend' // Utilise Resend par défaut pour garantir la délivrabilité
+  });
+}
+

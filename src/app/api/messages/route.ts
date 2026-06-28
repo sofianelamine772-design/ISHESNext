@@ -241,6 +241,34 @@ export async function POST(req: Request) {
       }
     }
 
+    // Envoi de Notification à l'admin si l'élève écrit
+    if (sender_id !== 'admin_system' && receiver_id === 'admin_system') {
+      try {
+        // 1. Récupérer les informations de l'élève dans Supabase
+        const { data: student } = await supabaseAdmin
+          .from('etudiants')
+          .select('first_name, last_name, email')
+          .eq('clerk_user_id', sender_id || userId)
+          .maybeSingle();
+
+        const studentName = student 
+          ? `${student.first_name || ''} ${student.last_name || ''}`.trim() || 'Élève ISHES'
+          : 'Élève ISHES';
+        const studentEmail = student?.email || 'Non renseigné';
+
+        // 2. Envoyer le mail à l'administrateur
+        const { sendAdminNewMessageEmail } = await import('@/lib/mail');
+        await sendAdminNewMessageEmail({
+          studentName,
+          studentEmail,
+          messageContent: content
+        });
+        console.log(`[MESSAGES_POST] Notification email sent to admin for student: ${studentName}`);
+      } catch (err) {
+        console.error('[ADMIN_NOTIFY_ERROR]', err);
+      }
+    }
+
     return NextResponse.json({ success: true, data });
   } catch (err: any) {
     console.error('[MESSAGES_POST_CRASH]', err?.message);
