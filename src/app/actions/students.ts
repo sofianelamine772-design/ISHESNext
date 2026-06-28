@@ -1438,3 +1438,92 @@ export async function linkTypoRegistrationAction(typoEmail: string) {
     return { success: false, error: "Une erreur interne s'est produite lors de la liaison." };
   }
 }
+
+export async function fetchStudentBillingDataAction(studentId: string) {
+  try {
+    const { data: etudiant } = await supabaseAdmin
+      .from('etudiants')
+      .select('id, email')
+      .eq('id', studentId)
+      .maybeSingle();
+
+    if (!etudiant) {
+      return { success: true, data: { payments: [], inscriptions: [] } };
+    }
+
+    const getBaseEmail = (e: string) => {
+      if (!e) return '';
+      const [local, domain] = e.toLowerCase().split('@');
+      if (!domain) return e.toLowerCase();
+      return `${local.split('+')[0]}@${domain}`;
+    };
+
+    const baseEmail = getBaseEmail(etudiant.email);
+
+    const { data: familyStudents } = await supabaseAdmin
+      .from('etudiants')
+      .select('id, first_name, last_name')
+      .eq('email', baseEmail);
+
+    const familyIds = (familyStudents || []).map(m => m.id);
+
+    const { data: inscriptions } = await supabaseAdmin
+      .from('inscriptions')
+      .select(`
+        id,
+        etudiant_id,
+        status,
+        paid_status,
+        created_at,
+        formations (title),
+        classes (name, type)
+      `)
+      .in('etudiant_id', familyIds)
+      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
+
+    const { data: payments } = await supabaseAdmin
+      .from('paiements')
+      .select(`
+        *,
+        inscriptions (
+          formations (title),
+          classes (name)
+        )
+      `)
+      .in('etudiant_id', familyIds)
+      .order('created_at', { ascending: false });
+
+    const seen = new Set<string>();
+    const deduplicatedPayments = (payments || []).filter((p: any) => {
+      const key = p.stripe_session_id || p.id;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    const enrichedInscriptions = (inscriptions || []).map((ins: any) => ({
+      id: ins.id,
+      studentId: ins.etudiant_id,
+      status: ins.status,
+      paidStatus: ins.paid_status,
+      formationTitle: ins.formations?.title || 'Formation ISHES',
+      className: ins.classes?.name || '',
+      classType: ins.classes?.type || 'distanciel',
+      studentName: (() => {
+        const student = (familyStudents || []).find(f => f.id === ins.etudiant_id);
+        return student ? `${student.first_name || ''} ${student.last_name || ''}`.trim() : 'Élève';
+      })()
+    }));
+
+    return { 
+      success: true, 
+      data: { 
+        payments: deduplicatedPayments, 
+        inscriptions: enrichedInscriptions 
+      } 
+    };
+  } catch (err) {
+    console.error('Fetch Student Billing Data Error:', err);
+    return { success: false, error: 'Failed to fetch student billing data' };
+  }
+}

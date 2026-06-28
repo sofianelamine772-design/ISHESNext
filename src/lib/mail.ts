@@ -30,9 +30,14 @@ interface SendEmailParams {
   text?: string;
   from?: string;
   provider?: 'smtp' | 'resend';
+  attachments?: Array<{
+    filename: string;
+    content: any;
+    contentType?: string;
+  }>;
 }
 
-export async function sendEmail({ to, subject, html, text, from, provider }: SendEmailParams) {
+export async function sendEmail({ to, subject, html, text, from, provider, attachments }: SendEmailParams) {
   try {
     // Si SMTP est configuré et :
     // - soit provider est 'smtp'
@@ -51,6 +56,7 @@ export async function sendEmail({ to, subject, html, text, from, provider }: Sen
         subject,
         html,
         text: text || '',
+        attachments: attachments,
       };
       
       const info = await transporter.sendMail(mailOptions);
@@ -65,6 +71,10 @@ export async function sendEmail({ to, subject, html, text, from, provider }: Sen
       subject,
       html,
       text: text || '',
+      attachments: attachments ? attachments.map(att => ({
+        filename: att.filename,
+        content: typeof att.content === 'string' ? Buffer.from(att.content, 'utf-8') : att.content
+      })) : undefined,
     });
 
     if (data.error) {
@@ -310,6 +320,90 @@ export async function sendAdminNewMessageEmail({
     subject: `✉️ Nouveau message de ${studentName} - ISHES`,
     html,
     provider: 'resend' // Utilise Resend par défaut pour garantir la délivrabilité
+  });
+}
+
+export async function sendBackupReportEmail(params: {
+  date: string;
+  signedUrl: string;
+  stats: {
+    etudiants: number;
+    inscriptions: number;
+    paiements: number;
+    classes: number;
+    messages: number;
+  };
+  backupJsonString?: string;
+}) {
+  const { date, signedUrl, stats, backupJsonString } = params;
+
+  const html = `
+    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      ${emailHeader}
+      <div style="padding: 40px 30px;">
+        <h2 style="color: #086b51; margin-top: 0; font-size: 20px;">📦 Sauvegarde de base de données réussie !</h2>
+        <p style="color: #555; line-height: 1.6; font-size: 15px;">
+          Bonjour Administrateur,
+        </p>
+        <p style="color: #555; line-height: 1.6; font-size: 15px;">
+          La sauvegarde automatique de la base de données ISHES a été effectuée avec succès le <strong>${date}</strong>.
+        </p>
+
+        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">📊 Statistiques des données sauvegardées :</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px;">
+          <tr style="background-color: #f9f9f9;">
+            <th style="text-align: left; padding: 8px; border: 1px solid #eaeaea; color: #555;">Table</th>
+            <th style="text-align: right; padding: 8px; border: 1px solid #eaeaea; color: #555;">Nombre d'enregistrements</th>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Élèves (etudiants)</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.etudiants}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Inscriptions</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.inscriptions}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Paiements</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.paiements}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Classes</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.classes}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Messages (Messagerie)</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.messages}</td>
+          </tr>
+        </table>
+
+        <div style="background-color: #f4faf8; border-left: 4px solid #086b51; padding: 15px; margin: 25px 0; border-radius: 8px; color: #086b51; font-size: 13px; font-weight: 600;">
+          💡 Le fichier de sauvegarde a été téléversé de manière sécurisée dans votre bucket privé Supabase Storage (backups).
+        </div>
+
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${signedUrl}" style="${buttonStyle}">Télécharger le fichier .json de sauvegarde</a>
+          <p style="font-size: 11px; color: #888; margin-top: 10px;">Ce lien est privé et sera valide pendant 7 jours.</p>
+        </div>
+      </div>
+      ${emailFooter}
+    </div>
+  `;
+
+  const attachments = backupJsonString ? [
+    {
+      filename: `ishes_db_backup_${date.replace(/\//g, '_').replace(/ /g, '_').replace(/:/g, '_')}.json`,
+      content: backupJsonString,
+      contentType: 'application/json'
+    }
+  ] : undefined;
+
+  return sendEmail({
+    to: "sofianelamine772@gmail.com",
+    subject: `📦 Sauvegarde automatique BD - ${date} - ISHES`,
+    html,
+    provider: 'resend',
+    attachments
   });
 }
 

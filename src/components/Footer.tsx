@@ -172,12 +172,27 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col items-center justify-center gap-5 text-center pb-8">
+        <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col items-center justify-center gap-6 text-center pb-8">
           <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
             <Link href="/mentions-legales" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Mentions Légales</Link>
             <Link href="/cgv" className="bg-ishes-green text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-green-dark transition-colors">CGV</Link>
             <Link href="/politique-de-confidentialite" className="bg-ishes-green text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-green-dark transition-colors">Politique de confidentialité</Link>
           </div>
+
+          {/* Paiement Sécurisé */}
+          <div className="flex flex-col items-center gap-2.5 bg-gray-50/50 border border-gray-100 rounded-2xl px-6 py-3.5 max-w-sm w-full mx-auto">
+            <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-1.5">
+              <svg className="w-3 h-3 text-[#008953]" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+              Paiement 100% Sécurisé avec Stripe
+            </span>
+            <div className="flex items-center justify-center gap-4">
+              <img src="/visa-logo.png" alt="Visa / Cards" className="h-5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/mastercard-logo.png" alt="MasterCard" className="h-4.5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <div className="w-[1px] h-3.5 bg-gray-200"></div>
+              <img src="/stripe-logo.png" alt="Stripe" className="h-4 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+            </div>
+          </div>
+
           <p className="text-xs text-gray-400 font-medium">
             © {new Date().getFullYear()} ISHES Institut. Tous droits réservés.
           </p>

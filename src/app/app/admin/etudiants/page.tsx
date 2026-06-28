@@ -553,6 +553,11 @@ function EtudiantsContent() {
                             <span className={`ishes-label text-[8px] px-2 py-0.5 rounded-md truncate ${selectedStudentId === student.id ? 'bg-ishes-dark/10 text-ishes-dark' : 'bg-gray-50 text-gray-400'}`}>
                               {student.enrolledClass || "Non assigné"}
                             </span>
+                            {student.paymentStatus === 'en_retard' && (
+                              <span className="ishes-label text-[8px] px-2 py-0.5 rounded-md bg-red-50 text-red-500 font-bold border border-red-100 shrink-0">
+                                IMPAYÉ
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -787,15 +792,16 @@ function EtudiantsContent() {
                           const isFamily = payment.isFamilyPayment && payment.familyMembers?.length > 0;
                           const membersCount = payment.familyMembersCount || 1;
 
+                          const isSucceeded = payment.status === 'succeeded' || payment.status === 'paid';
                           return (
-                            <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${payment.status === 'succeeded'
+                            <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${isSucceeded
                               ? 'bg-ishes-green/[0.03] border-ishes-green/15'
                               : 'bg-red-50 border-red-100'
                               }`}>
                               {/* En-tête */}
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex items-start gap-3">
-                                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${payment.status === 'succeeded'
+                                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${isSucceeded
                                     ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10'
                                     : 'bg-red-50 text-red-500 border border-red-100'
                                     }`}>
@@ -806,8 +812,13 @@ function EtudiantsContent() {
                                       {payment.inscriptions?.formations?.title || 'Règlement Formation'}
                                     </div>
                                     <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
-                                      Reçu le {paymentDate}
+                                      {isSucceeded ? 'Reçu le' : 'Échoué le'} {paymentDate}
                                     </div>
+                                    {payment.status === 'failed' && payment.error_message && (
+                                      <div className="text-[10px] text-red-500 font-bold mt-1 max-w-md">
+                                        Motif du refus : {payment.error_message}
+                                      </div>
+                                    )}
                                     {isFamily && (
                                       <div className="flex items-center gap-1.5 mt-1.5">
                                         <Users className="w-3 h-3 text-blue-500" />
@@ -820,11 +831,11 @@ function EtudiantsContent() {
                                 </div>
                                 <div className="text-right shrink-0">
                                   <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
-                                  <span className={`inline-block mt-1 px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${payment.status === 'succeeded'
+                                  <span className={`inline-block mt-1 px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${isSucceeded
                                     ? 'bg-ishes-green/10 text-ishes-green'
                                     : 'bg-red-100 text-red-600'
                                     }`}>
-                                    {payment.status === 'succeeded' ? 'Réglé' : 'Échoué'}
+                                    {isSucceeded ? 'Réglé' : 'Échoué'}
                                   </span>
                                 </div>
                               </div>
