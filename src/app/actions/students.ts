@@ -1435,6 +1435,10 @@ export async function linkTypoRegistrationAction(typoEmail: string) {
     return { success: true, message: "Votre inscription a été associée avec succès !" };
   } catch (err: any) {
     console.error("[LINK_ACTION_ERROR]", err);
+    try {
+      const { logSystemError } = await import('@/lib/error-logger');
+      await logSystemError('Link Typo Email Action', err);
+    } catch {}
     return { success: false, error: "Une erreur interne s'est produite lors de la liaison." };
   }
 }

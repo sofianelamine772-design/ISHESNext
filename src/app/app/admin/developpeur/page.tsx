@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { 
-  Terminal, ShieldCheck, Activity, Zap, RefreshCw, 
-  CheckCircle2, AlertCircle, ExternalLink, Database, 
+import {
+  Terminal, ShieldCheck, Activity, Zap, RefreshCw,
+  CheckCircle2, AlertCircle, ExternalLink, Database,
   ChevronRight, Settings, Mail, Bell
 } from "lucide-react";
 import { AdminSidebar } from "@/components/AdminSidebar";
@@ -14,6 +14,7 @@ import { UserButton } from "@clerk/nextjs";
 export default function DeveloperPage() {
   const [isTesting, setIsTesting] = useState(false);
   const [logs, setLogs] = useState<string>("");
+  const [systemErrors, setSystemErrors] = useState<any[]>([]);
   const [tests, setTests] = useState([
     { id: 'env', name: 'Variables d\'environnement', status: 'idle', message: 'Attente du test...' },
     { id: 'clerk_alignment', name: 'Alignement Clés Clerk', status: 'idle', message: 'Attente du test...' },
@@ -31,7 +32,7 @@ export default function DeveloperPage() {
   const runAllTests = async () => {
     setIsTesting(true);
     setLogs(`[${new Date().toLocaleTimeString()}] Lancement de la suite de diagnostics...\n`);
-    
+
     // Set all to loading first
     setTests(prev => prev.map(t => ({ ...t, status: 'loading', message: 'Vérification en cours...' })));
 
@@ -42,6 +43,10 @@ export default function DeveloperPage() {
         throw new Error(errorData.error || `Erreur serveur (code ${res.status})`);
       }
       const data = await res.json();
+      
+      if (data.systemErrors) {
+        setSystemErrors(data.systemErrors);
+      }
       
       let logsReport = `[${new Date().toLocaleTimeString()}] Diagnostic terminé avec succès. Analyse des résultats :\n\n`;
       let hasErrors = false;
@@ -119,61 +124,112 @@ export default function DeveloperPage() {
 
         <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-8">
-            
+
             {/* Test Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {tests.map((test) => (
-                    <div key={test.id} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                        <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-4">
-                                <div className={cn(
-                                    "w-12 h-12 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110",
-                                    test.status === 'success' ? 'bg-ishes-green/10 text-ishes-green' :
-                                    test.status === 'error' ? 'bg-red-50 text-red-500' :
-                                    test.status === 'loading' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'
-                                )}>
-                                    {test.id === 'env' && <Settings className="w-5 h-5" />}
-                                    {test.id === 'api' && <Zap className="w-5 h-5" />}
-                                    {test.id === 'webhooks' && <Activity className="w-5 h-5" />}
-                                    {test.id === 'products' && <Database className="w-5 h-5" />}
-                                    {test.id === 'database_schema' && <ShieldCheck className="w-5 h-5" />}
-                                    {test.id === 'clerk' && <ShieldCheck className="w-5 h-5" />}
-                                    {test.id === 'resend' && <Mail className="w-5 h-5" />}
-                                    {test.id === 'webpush' && <Bell className="w-5 h-5" />}
-                                    {test.id === 'clerk_alignment' && <ShieldCheck className="w-5 h-5" />}
-                                    {test.id === 'stripe_alignment' && <Zap className="w-5 h-5" />}
-                                    {test.id === 'supabase_key_role' && <Database className="w-5 h-5" />}
-                                </div>
-                                <div>
-                                  <h4 className="font-black italic text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
-                                  <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">{test.id}</p>
-                                </div>
-                            </div>
-                            {test.status === 'success' && <CheckCircle2 className="w-5 h-5 text-ishes-green" />}
-                            {test.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
-                            {test.status === 'loading' && <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />}
-                        </div>
-                        
-                        <div className="bg-gray-50/50 rounded-xl p-3 mb-4">
-                          <p className="text-[10px] font-bold text-gray-400 italic">"{test.message}"</p>
-                        </div>
-
-                        <div className="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden">
-                            <div className={cn(
-                                "h-full transition-all duration-1000",
-                                test.status === 'success' ? 'w-full bg-ishes-green' :
-                                test.status === 'error' ? 'w-full bg-red-500' :
-                                test.status === 'loading' ? 'w-1/2 bg-blue-500 animate-pulse' : 'w-0'
-                            )}></div>
-                        </div>
+              {tests.map((test) => (
+                <div key={test.id} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className={cn(
+                        "w-12 h-12 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110",
+                        test.status === 'success' ? 'bg-ishes-green/10 text-ishes-green' :
+                          test.status === 'error' ? 'bg-red-50 text-red-500' :
+                            test.status === 'loading' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'
+                      )}>
+                        {test.id === 'env' && <Settings className="w-5 h-5" />}
+                        {test.id === 'api' && <Zap className="w-5 h-5" />}
+                        {test.id === 'webhooks' && <Activity className="w-5 h-5" />}
+                        {test.id === 'products' && <Database className="w-5 h-5" />}
+                        {test.id === 'database_schema' && <ShieldCheck className="w-5 h-5" />}
+                        {test.id === 'clerk' && <ShieldCheck className="w-5 h-5" />}
+                        {test.id === 'resend' && <Mail className="w-5 h-5" />}
+                        {test.id === 'webpush' && <Bell className="w-5 h-5" />}
+                        {test.id === 'clerk_alignment' && <ShieldCheck className="w-5 h-5" />}
+                        {test.id === 'stripe_alignment' && <Zap className="w-5 h-5" />}
+                        {test.id === 'supabase_key_role' && <Database className="w-5 h-5" />}
+                      </div>
+                      <div>
+                        <h4 className="font-black italic text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
+                        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">{test.id}</p>
+                      </div>
                     </div>
-                ))}
+                    {test.status === 'success' && <CheckCircle2 className="w-5 h-5 text-ishes-green" />}
+                    {test.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
+                    {test.status === 'loading' && <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />}
+                  </div>
+
+                  <div className="bg-gray-50/50 rounded-xl p-3 mb-4">
+                    <p className="text-[10px] font-bold text-gray-400 italic">"{test.message}"</p>
+                  </div>
+
+                  <div className="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden">
+                    <div className={cn(
+                      "h-full transition-all duration-1000",
+                      test.status === 'success' ? 'w-full bg-ishes-green' :
+                        test.status === 'error' ? 'w-full bg-red-500' :
+                          test.status === 'loading' ? 'w-1/2 bg-blue-500 animate-pulse' : 'w-0'
+                    )}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Live APM Error Logger */}
+            <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h4 className="text-xl ishes-heading text-ishes-dark">🚨 Erreurs Système Récentes (Live APM)</h4>
+                  <p className="text-xs text-gray-400 mt-1">Les 10 dernières erreurs interceptées par le système en temps réel</p>
+                </div>
+                <span className="text-xs font-mono text-ishes-green bg-ishes-green/5 border border-ishes-green/10 px-3 py-1 rounded-full">
+                  Surveillance Active
+                </span>
+              </div>
+
+              {systemErrors.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                  <CheckCircle2 className="w-10 h-10 text-ishes-green mb-2" />
+                  <p className="text-sm font-bold text-ishes-dark">Aucun bug détecté</p>
+                  <p className="text-xs text-gray-400">Le système fonctionne de manière totalement stable.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {systemErrors.map((err) => (
+                    <div key={err.id} className="bg-red-50/30 border border-red-100/50 rounded-2xl p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-red-600 bg-red-100/50 px-2 py-0.5 rounded-md">
+                            {err.module}
+                          </span>
+                          <span className="text-xs text-gray-400 font-mono">
+                            {new Date(err.createdAt).toLocaleTimeString()}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-sm font-mono text-gray-800 bg-white/80 p-3 rounded-xl border border-red-50/50">
+                        {err.message}
+                      </p>
+                      {err.stack && (
+                        <details className="mt-2 group">
+                          <summary className="text-[10px] font-bold text-red-500/80 uppercase tracking-widest cursor-pointer hover:underline select-none">
+                            Voir la stack trace
+                          </summary>
+                          <pre className="text-[10px] font-mono text-gray-500 bg-gray-900 p-4 rounded-xl mt-2 overflow-x-auto max-h-[150px] whitespace-pre-wrap select-all">
+                            {err.stack}
+                          </pre>
+                        </details>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Console des Logs d'Erreurs */}
             <div className="bg-[#0B0F19] rounded-[2rem] border border-gray-800 p-6 shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-ishes-green"></div>
-              
+
               <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
@@ -207,33 +263,33 @@ export default function DeveloperPage() {
 
             {/* Extra Info */}
             <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm">
-                <h4 className="text-xl ishes-heading text-ishes-dark mb-8">Ressources Externes</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
-                                <ExternalLink className="w-5 h-5" />
-                            </div>
-                            <div>
-                              <span className="text-[11px] font-black uppercase tracking-widest text-ishes-dark block">Logs Stripe</span>
-                              <span className="text-[9px] font-bold text-gray-400">Suivi des requêtes</span>
-                            </div>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                    <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
-                                <Zap className="w-5 h-5" />
-                            </div>
-                            <div>
-                              <span className="text-[11px] font-black uppercase tracking-widest text-ishes-dark block">Webhooks</span>
-                              <span className="text-[9px] font-bold text-gray-400">Config des événements</span>
-                            </div>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                </div>
+              <h4 className="text-xl ishes-heading text-ishes-dark mb-8">Ressources Externes</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
+                      <ExternalLink className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-black uppercase tracking-widest text-ishes-dark block">Logs Stripe</span>
+                      <span className="text-[9px] font-bold text-gray-400">Suivi des requêtes</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
+                </a>
+                <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-black uppercase tracking-widest text-ishes-dark block">Webhooks</span>
+                      <span className="text-[9px] font-bold text-gray-400">Config des événements</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </div>
             </div>
 
           </div>

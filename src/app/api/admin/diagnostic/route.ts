@@ -13,14 +13,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // Helper pour valider si une clé Supabase est bien une service_role key
 function checkSupabaseServiceRoleKey(key: string): { success: boolean; message: string } {
   if (!key) return { success: false, message: "Clé absente." };
-  
+
   if (key.startsWith('sb_secret_')) {
     return { success: true, message: "Format de clé secrète (service_role) correct." };
   }
   if (key.startsWith('sb_publishable_')) {
-    return { 
-      success: false, 
-      message: "ATTENTION : Vous avez configuré une clé publique anonyme (anon) à la place de la clé secrète service_role !" 
+    return {
+      success: false,
+      message: "ATTENTION : Vous avez configuré une clé publique anonyme (anon) à la place de la clé secrète service_role !"
     };
   }
 
@@ -31,13 +31,13 @@ function checkSupabaseServiceRoleKey(key: string): { success: boolean; message: 
       if (payload.role === 'service_role') {
         return { success: true, message: "Format JWT de rôle de service (service_role) correct." };
       } else if (payload.role === 'anon') {
-        return { 
-          success: false, 
-          message: "ATTENTION : Vous avez configuré la clé anonyme (anon) à la place de la clé service_role." 
+        return {
+          success: false,
+          message: "ATTENTION : Vous avez configuré la clé anonyme (anon) à la place de la clé service_role."
         };
       }
     }
-  } catch {}
+  } catch { }
 
   return { success: true, message: "Format de clé inconnu, mais semble être une clé secrète (pas de préfixe public détecté)." };
 }
@@ -84,8 +84,8 @@ export async function GET() {
     const missingEnv = requiredEnv.filter(key => !process.env[key]);
     diagnostics['env'] = {
       success: missingEnv.length === 0,
-      message: missingEnv.length === 0 
-        ? 'Toutes les variables d\'environnement requises sont bien configurées.' 
+      message: missingEnv.length === 0
+        ? 'Toutes les variables d\'environnement requises sont bien configurées.'
         : `Variables manquantes : ${missingEnv.join(', ')}`
     };
 
@@ -178,7 +178,7 @@ export async function GET() {
         const webhooks = await stripe.webhookEndpoints.list();
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
         const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
-        
+
         // Cherche s'il y a un webhook pointant vers notre URL de webhook
         const match = webhooks.data.find(w => w.url.includes('/api/webhooks/stripe'));
 
@@ -242,18 +242,18 @@ export async function GET() {
     try {
       const tables = ['formations', 'etudiants', 'inscriptions', 'messages', 'push_subscriptions'];
       const missingTables: string[] = [];
-      
+
       for (const table of tables) {
         const { error } = await supabaseAdmin
           .from(table)
           .select('id')
           .limit(1);
-        
+
         if (error) {
           missingTables.push(table);
         }
       }
-      
+
       if (missingTables.length === 0) {
         diagnostics['database_schema'] = {
           success: true,
@@ -305,17 +305,24 @@ export async function GET() {
             message: `Erreur Resend : ${domains.error.message}`
           };
         } else {
-          // Récupérer le nombre d'emails envoyés aujourd'hui
+          // Récupérer le nombre d'emails envoyés aujourd'hui (00h00 - 24h00)
           const emails = await resend.emails.list();
           let sentToday = 0;
           if (!emails.error && emails.data && emails.data.data) {
-             const todayStr = new Date().toISOString().split('T')[0];
-             sentToday = emails.data.data.filter((e: any) => e.created_at && e.created_at.startsWith(todayStr)).length;
+            const now = new Date();
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+            sentToday = emails.data.data.filter((e: any) => {
+              if (!e.created_at) return false;
+              const d = new Date(e.created_at);
+              return d >= startOfDay && d <= endOfDay;
+            }).length;
           }
 
           diagnostics['resend'] = {
             success: true,
-            message: `Connexion établie. ${domains.data?.data?.length || 0} domaine(s) configuré(s). ${sentToday} e-mail(s) envoyé(s) aujourd'hui.`
+            message: `Connexion établie. ${domains.data?.data?.length || 0} domaine(s) configuré(s). ${sentToday}/500 e-mail(s) envoyé(s) aujourd'hui.`
           };
         }
       } catch (err: any) {
@@ -362,13 +369,13 @@ export async function GET() {
         .from('formations')
         .select('id, slug, title')
         .eq('is_active', true);
-        
+
       if (formErr) throw formErr;
 
       if (formations && formations.length > 0) {
         const slugs = formations.map(f => f.slug);
         const duplicateSlugs = slugs.filter((item, index) => slugs.indexOf(item) !== index);
-        
+
         if (duplicateSlugs.length > 0) {
           diagnostics['formations_classes'] = {
             success: false,
@@ -448,7 +455,7 @@ export async function GET() {
           .from('classes')
           .select('id, formation_id')
           .in('id', classIds);
-          
+
         const classToFormation: Record<string, string> = {};
         (classesList || []).forEach((c: any) => { classToFormation[c.id] = c.formation_id; });
 
@@ -484,7 +491,46 @@ export async function GET() {
       };
     }
 
-    return NextResponse.json(diagnostics);
+    // 15. Récupération des erreurs système récentes
+    let systemErrors: any[] = [];
+    try {
+      const { data: errorLogs } = await supabaseAdmin
+        .from('messages')
+        .select('id, content, created_at')
+        .eq('sender_id', 'system_logger')
+        .eq('title', 'system_error')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (errorLogs) {
+        systemErrors = errorLogs.map((log: any) => {
+          try {
+            const parsed = JSON.parse(log.content);
+            return {
+              id: log.id,
+              module: parsed.module || 'Inconnu',
+              message: parsed.message || '',
+              stack: parsed.stack || null,
+              createdAt: log.created_at
+            };
+          } catch {
+            return {
+              id: log.id,
+              module: 'Raw Error',
+              message: log.content,
+              createdAt: log.created_at
+            };
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load system errors:', err);
+    }
+
+    return NextResponse.json({
+      ...diagnostics,
+      systemErrors
+    });
   } catch (error: any) {
     console.error('[DIAGNOSTIC_ERROR]', error);
     return NextResponse.json({ error: 'Erreur interne de diagnostic' }, { status: 500 });

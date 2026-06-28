@@ -1,143 +1,160 @@
 -- =====================================================================================
--- FICHIER : SCHEMA.sql
--- UTILITÉ : Fichier UNIQUE et complet décrivant la structure complète de la base de données 
---           ISHEECOLE (Élèves, Formations, Classes, Inscriptions, Paiements, Web Push, 
---           Messagerie). Contient toutes les tables, contraintes ON DELETE CASCADE, 
---           index, politiques de sécurité (RLS), ainsi que les données de départ (les 
---           formations et les 31 classes en présentiel avec leurs liens WhatsApp).
+-- SCHEMA DE LA BASE DE DONNEES ISHES (V3 - CLÉ EN MAIN ET PRÊT À L'EMPLOI)
+-- =====================================================================================
+-- Ce script est 100 % autonome. Il peut être copié-collé directement dans le
+-- SQL Editor d'un nouveau projet Supabase pour recréer l'ensemble de la base
+-- de données nécessaire au fonctionnement du logiciel.
 -- =====================================================================================
 
--- 1. EXTENSIONS
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 1. EXTENSIONS REQUISES
+-- ─────────────────────────────────────────────────────────────────────────────────────
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- 2. TABLE DES ÉTUDIANTS (Synchronisée avec Clerk)
--- Remarque : La contrainte UNIQUE sur l'email a été supprimée pour permettre
--- aux parents d'inscrire plusieurs enfants (fratrie) sous la même adresse e-mail.
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 2. CRÉATION DES TABLES APPLICATIVES (ORDRE RESPECTANT LES CONTRAINTES)
+-- ─────────────────────────────────────────────────────────────────────────────────────
+
+-- Table : etudiants
 CREATE TABLE IF NOT EXISTS public.etudiants (
-    id text PRIMARY KEY, -- Utilise l'ID Clerk
+    id text NOT NULL,
     email text NOT NULL,
     first_name text,
     last_name text,
     phone text,
-    photo_url text,
-    role text DEFAULT 'eleve' CHECK (role IN ('admin', 'eleve', 'prof')),
-    status text DEFAULT 'actif' CHECK (status IN ('actif', 'suspendu', 'en_attente')),
-    parent_first_name text,
-    parent_last_name text,
-    parent_id text REFERENCES public.etudiants(id) ON DELETE CASCADE,
-    created_at timestamp WITH time zone DEFAULT now(),
-    updated_at timestamp WITH time zone DEFAULT now()
+    role text DEFAULT 'eleve'::text CHECK (role = ANY (ARRAY['admin'::text, 'eleve'::text, 'prof'::text])),
+    status text DEFAULT 'actif'::text CHECK (status = ANY (ARRAY['actif'::text, 'suspendu'::text, 'en_attente'::text])),
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    clerk_user_id text UNIQUE,
+    CONSTRAINT etudiants_pkey PRIMARY KEY (id),
+    CONSTRAINT etudiants_email_unique UNIQUE (email)
 );
 
--- Index pour accélérer les recherches sur l'e-mail des étudiants
-CREATE INDEX IF NOT EXISTS idx_etudiants_email ON public.etudiants(email);
-
--- 3. TABLE DES FORMATIONS (Le catalogue des offres)
+-- Table : formations
 CREATE TABLE IF NOT EXISTS public.formations (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     title text NOT NULL,
-    slug text UNIQUE NOT NULL,
+    slug text NOT NULL UNIQUE,
     description text,
-    price numeric(10, 2) NOT NULL,
-    duration text, -- e.g. '3 mois', 'Annuel'
-    type text CHECK (type IN ('presentiel', 'distanciel')),
+    price numeric NOT NULL,
+    duration text,
+    type text CHECK (type = ANY (ARRAY['presentiel'::text, 'distanciel'::text])),
     is_active boolean DEFAULT true,
-    created_at timestamp WITH time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now(),
+    CONSTRAINT formations_pkey PRIMARY KEY (id)
 );
 
--- 4. TABLE DES CLASSES (Les groupes et créneaux horaires)
+-- Table : classes
 CREATE TABLE IF NOT EXISTS public.classes (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    formation_id uuid REFERENCES public.formations(id) ON DELETE CASCADE,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    formation_id uuid,
     name text NOT NULL,
-    type text CHECK (type IN ('presentiel', 'distanciel')),
+    type text CHECK (type = ANY (ARRAY['presentiel'::text, 'distanciel'::text])),
     is_active boolean DEFAULT true,
+    created_at timestamp with time zone DEFAULT now(),
     day_of_week text,
-    start_time time,
-    end_time time,
-    capacity_limit integer DEFAULT 23,
+    start_time time without time zone,
+    end_time time without time zone,
+    capacity_limit integer DEFAULT 20,
     niveau text,
     age_condition text,
-    periode text,      -- matin | après-midi | soir
-    audience text,     -- enfant | adulte
-    classe_type text,  -- mixte | femme
-    niveau_key text,   -- clé unique de niveau (ex: maternel_1, elementaire_1)
-    external_id integer UNIQUE, -- Identifiant numérique unique (ex: 1 à 31)
-    whatsapp_link text,         -- Lien vers le groupe WhatsApp de la classe
-    created_at timestamp WITH time zone DEFAULT now()
+    periode text,
+    audience text,
+    classe_type text,
+    niveau_key text,
+    external_id integer UNIQUE,
+    whatsapp_link text,
+    academic_year text DEFAULT '2023-2024'::text,
+    CONSTRAINT classes_pkey PRIMARY KEY (id),
+    CONSTRAINT classes_formation_id_fkey FOREIGN KEY (formation_id) REFERENCES public.formations(id) ON DELETE CASCADE
 );
 
--- Index pour lier rapidement les classes à leur formation
-CREATE INDEX IF NOT EXISTS idx_classes_formation ON public.classes(formation_id);
-
--- 5. TABLE DES INSCRIPTIONS (Pont d'inscription d'un élève à une formation / classe)
+-- Table : inscriptions
 CREATE TABLE IF NOT EXISTS public.inscriptions (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    etudiant_id text REFERENCES public.etudiants(id) ON DELETE CASCADE,
-    class_id uuid REFERENCES public.classes(id) ON DELETE CASCADE,
-    formation_id uuid REFERENCES public.formations(id) ON DELETE CASCADE,
-    status text DEFAULT 'en_attente' CHECK (status IN ('en_attente', 'valide', 'actif', 'annule', 'termine', 'en_attente_daffectation')),
-    paid_status text DEFAULT 'impaye' CHECK (paid_status IN ('impaye', 'partiel', 'paye', 'refuse')),
-    created_at timestamp WITH time zone DEFAULT now()
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    etudiant_id text,
+    class_id uuid,
+    status text DEFAULT 'en_attente'::text CHECK (status = ANY (ARRAY['en_attente'::text, 'valide'::text, 'actif'::text, 'annule'::text, 'termine'::text, 'en_attente_daffectation'::text])),
+    paid_status text DEFAULT 'impaye'::text CHECK (paid_status = ANY (ARRAY['impaye'::text, 'partiel'::text, 'paye'::text, 'refuse'::text])),
+    created_at timestamp with time zone DEFAULT now(),
+    formation_id uuid,
+    academic_year text DEFAULT '2023-2024'::text,
+    CONSTRAINT inscriptions_pkey PRIMARY KEY (id),
+    CONSTRAINT inscriptions_etudiant_id_fkey FOREIGN KEY (etudiant_id) REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    CONSTRAINT inscriptions_class_id_fkey FOREIGN KEY (class_id) REFERENCES public.classes(id) ON DELETE SET NULL,
+    CONSTRAINT inscriptions_formation_id_fkey FOREIGN KEY (formation_id) REFERENCES public.formations(id) ON DELETE CASCADE
 );
 
--- Indexation et contraintes d'unicité pour éviter les doubles inscriptions
-CREATE INDEX IF NOT EXISTS idx_inscriptions_class ON public.inscriptions(class_id);
-CREATE INDEX IF NOT EXISTS idx_inscriptions_status ON public.inscriptions(status);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_inscription_formation ON public.inscriptions (etudiant_id, formation_id) WHERE class_id IS NULL;
-CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_inscription_class ON public.inscriptions (etudiant_id, class_id) WHERE class_id IS NOT NULL;
-
--- 6. TABLE DES PAIEMENTS (Historique des transactions Stripe)
+-- Table : paiements
 CREATE TABLE IF NOT EXISTS public.paiements (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    inscription_id uuid REFERENCES public.inscriptions(id) ON DELETE CASCADE,
-    etudiant_id text REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    inscription_id uuid,
+    etudiant_id text,
     stripe_session_id text UNIQUE,
     stripe_payout_id text,
     amount numeric(10, 2) NOT NULL,
-    currency text DEFAULT 'EUR',
-    status text NOT NULL, -- e.g. 'succeeded', 'failed', 'refunded'
+    currency text DEFAULT 'EUR'::text,
+    status text NOT NULL,
     error_message text,
-    created_at timestamp WITH time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now(),
+    CONSTRAINT paiements_pkey PRIMARY KEY (id),
+    CONSTRAINT paiements_etudiant_id_fkey FOREIGN KEY (etudiant_id) REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    CONSTRAINT paiements_inscription_id_fkey FOREIGN KEY (inscription_id) REFERENCES public.inscriptions(id) ON DELETE CASCADE
 );
 
--- Indexation des paiements
+-- Table : messages
+CREATE TABLE IF NOT EXISTS public.messages (
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    sender_id text NOT NULL,
+    receiver_id text,
+    content text NOT NULL,
+    is_read boolean DEFAULT false,
+    created_at timestamp with time zone DEFAULT now(),
+    type text DEFAULT 'private'::text CHECK (type = ANY (ARRAY['private'::text, 'class'::text, 'global'::text])),
+    title text,
+    target_class_id uuid,
+    CONSTRAINT messages_pkey PRIMARY KEY (id),
+    CONSTRAINT messages_sender_id_fkey FOREIGN KEY (sender_id) REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    CONSTRAINT messages_receiver_id_fkey FOREIGN KEY (receiver_id) REFERENCES public.etudiants(id) ON DELETE CASCADE,
+    CONSTRAINT messages_target_class_id_fkey FOREIGN KEY (target_class_id) REFERENCES public.classes(id) ON DELETE CASCADE
+);
+
+-- Table : push_subscriptions
+CREATE TABLE IF NOT EXISTS public.push_subscriptions (
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    etudiant_id text NOT NULL,
+    endpoint text NOT NULL UNIQUE,
+    p256dh text NOT NULL,
+    auth text NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    CONSTRAINT push_subscriptions_pkey PRIMARY KEY (id),
+    CONSTRAINT push_subscriptions_etudiant_id_fkey FOREIGN KEY (etudiant_id) REFERENCES public.etudiants(id) ON DELETE CASCADE
+);
+
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 3. INDEXATION (OPTIMISATION DES LECTURES ET REQUÊTES RELATIONNELLES)
+-- ─────────────────────────────────────────────────────────────────────────────────────
+CREATE INDEX IF NOT EXISTS idx_etudiants_email ON public.etudiants(email);
+CREATE INDEX IF NOT EXISTS idx_etudiants_clerk ON public.etudiants(clerk_user_id);
+CREATE INDEX IF NOT EXISTS idx_classes_formation ON public.classes(formation_id);
+CREATE INDEX IF NOT EXISTS idx_inscriptions_etudiant ON public.inscriptions(etudiant_id);
+CREATE INDEX IF NOT EXISTS idx_inscriptions_class ON public.inscriptions(class_id);
+CREATE INDEX IF NOT EXISTS idx_inscriptions_status ON public.inscriptions(status);
 CREATE INDEX IF NOT EXISTS idx_paiements_stripe_id ON public.paiements(stripe_session_id);
 CREATE INDEX IF NOT EXISTS idx_paiements_etudiant ON public.paiements(etudiant_id);
-
--- 7. TABLE DES MESSAGES (Messagerie interne d'administration)
-CREATE TABLE IF NOT EXISTS public.messages (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    sender_id text NOT NULL REFERENCES public.etudiants(id) ON DELETE CASCADE,
-    receiver_id text REFERENCES public.etudiants(id) ON DELETE CASCADE, -- Optionnel pour broadcast global/classe
-    type text DEFAULT 'private' CHECK (type IN ('private', 'class', 'global')),
-    title text, -- Titre ou Sujet de l'annonce générale
-    content text NOT NULL,
-    target_class_id uuid REFERENCES public.classes(id) ON DELETE CASCADE,
-    is_read boolean DEFAULT false,
-    created_at timestamp WITH time zone DEFAULT now()
-);
-
--- Indexation pour la fluidité des messages
 CREATE INDEX IF NOT EXISTS idx_messages_sender ON public.messages(sender_id);
 CREATE INDEX IF NOT EXISTS idx_messages_receiver ON public.messages(receiver_id);
 CREATE INDEX IF NOT EXISTS idx_messages_type ON public.messages(type);
 CREATE INDEX IF NOT EXISTS idx_messages_class ON public.messages(target_class_id);
 
--- 8. TABLE DES ABONNEMENTS PUSH (Web Push Notifications)
-CREATE TABLE IF NOT EXISTS public.push_subscriptions (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    etudiant_id text NOT NULL REFERENCES public.etudiants(id) ON DELETE CASCADE,
-    endpoint text NOT NULL,
-    p256dh text NOT NULL,
-    auth text NOT NULL,
-    created_at timestamp WITH time zone DEFAULT now(),
-    UNIQUE(endpoint)
-);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_inscription_formation ON public.inscriptions (etudiant_id, formation_id) WHERE class_id IS NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_inscription_class ON public.inscriptions (etudiant_id, class_id) WHERE class_id IS NOT NULL;
 
--- =====================================================================================
--- 9. POLITIQUES DE SECURITE (Row Level Security - RLS)
--- =====================================================================================
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 4. POLITIQUES DE SECURITE (Row Level Security - RLS)
+-- ─────────────────────────────────────────────────────────────────────────────────────
 ALTER TABLE public.etudiants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.formations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.classes ENABLE ROW LEVEL SECURITY;
@@ -175,10 +192,9 @@ CREATE POLICY "Envoi de messages" ON public.messages FOR INSERT WITH CHECK (auth
 CREATE POLICY "Les élèves peuvent gérer leurs abonnements" ON public.push_subscriptions 
 FOR ALL USING (auth.uid()::text = etudiant_id) WITH CHECK (auth.uid()::text = etudiant_id);
 
--- =====================================================================================
--- 10. VUES DE MONITORING ET DE STATISTIQUES
--- =====================================================================================
--- Vue pour voir l'état d'occupation en temps réel des 31 classes présentielles
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 5. VUES DE MONITORING ET DE STATISTIQUES
+-- ─────────────────────────────────────────────────────────────────────────────────────
 CREATE OR REPLACE VIEW public.vue_etat_creneaux AS
 SELECT
     c.external_id                                       AS classe_numero,
@@ -208,9 +224,9 @@ GROUP BY
     c.day_of_week, c.periode, c.audience, c.classe_type,
     c.niveau_key, c.capacity_limit;
 
--- =====================================================================================
--- 11. CATALOGUE INITIAL DES FORMATIONS
--- =====================================================================================
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 6. SEEDING / RENSEIGNEMENT DU CATALOGUE INITIAL DES FORMATIONS
+-- ─────────────────────────────────────────────────────────────────────────────────────
 INSERT INTO public.formations (title, slug, description, price, duration, type) VALUES
 ('Cours Particuliers', 'cours_particuliers', 'Accompagnement individuel pour adultes et enfants.', 0, 'À la carte', 'distanciel'),
 ('Correction al Fatiha', 'correction_fatiha', 'Maîtrisez la récitation de la Fatiha et des 3 dernières sourates.', 0, 'Session', 'distanciel'),
@@ -237,9 +253,9 @@ ON CONFLICT (slug) DO UPDATE SET
     duration = EXCLUDED.duration,
     type = EXCLUDED.type;
 
--- =====================================================================================
--- 12. CATALOGUE INITIAL DES 31 CLASSES PRÉSENTIELLES AVEC LIENS WHATSAPP
--- =====================================================================================
+-- ─────────────────────────────────────────────────────────────────────────────────────
+-- 7. SEEDING / RENSEIGNEMENT DES 31 CLASSES PRÉSENTIELLES AVEC LIENS WHATSAPP
+-- ─────────────────────────────────────────────────────────────────────────────────────
 WITH formation AS (
     SELECT id FROM public.formations WHERE slug = 'presentiel-global'
 )

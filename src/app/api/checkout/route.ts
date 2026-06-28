@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
 import { CLASS_ID_TO_UUID } from '@/lib/presentiel-data';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-04-22.dahlia',
@@ -18,24 +19,37 @@ export async function POST(req: Request) {
       // Pas connecté — autorisé pour l'inscription publique
     }
 
-        const body = await req.json();
-    // Support les deux formats envoyés (page inscription vs page réinscription)
-    const formationTitle = body.formationTitle || body.title || 'Formation ISHES';
+    const body = await req.json();
     const formationId = body.formationId || body.planId || '';
-    const rawPrice = body.price;
-    // Robuste : gère "150 €", "150€" ou le nombre 150
-    const priceNumber = typeof rawPrice === 'number' 
-      ? rawPrice 
-      : parseFloat(String(rawPrice).replace(/[€\s]/g, ''));
-    const unitAmount = Math.round(priceNumber * 100);
+    const registrationType = body.registrationType || 'adult';
+
+    // 1. Charger la formation depuis la base de données (Source unique de vérité)
+    const { data: formation } = await supabaseAdmin
+      .from('formations')
+      .select('price, title')
+      .eq('slug', formationId)
+      .maybeSingle();
+
+    if (!formation) {
+      return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
+    }
+
+    const formationTitle = formation.title || 'Formation ISHES';
+    const basePrice = Number(formation.price);
+
+    // 2. Calculer le montant total (multiplié par le nombre d'enfants si inscription famille)
+    let totalAmount = basePrice;
+    if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
+      totalAmount = basePrice * body.childrenList.length;
+    }
+
+    const unitAmount = Math.round(totalAmount * 100);
 
     const installments = body.installments ? parseInt(String(body.installments), 10) : 1;
 
     const isLocal = !process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_APP_URL.includes('localhost');
 
     let sessionParams: Stripe.Checkout.SessionCreateParams;
-
-    const registrationType = body.registrationType || 'adult';
 
     const metadata: Record<string, string> = {
       clerkUserId: userId || '',

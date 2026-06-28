@@ -214,8 +214,14 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
     console.error(`Webhook Error: ${err.message}`);
+    try {
+      const { logSystemError } = await import('@/lib/error-logger');
+      await logSystemError('Stripe Webhook Signature', err);
+    } catch {}
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
+
+  try {
 
   // ── 1. Checkout completed (nouvelle inscription ou réinscription) ──────────
   if (event.type === 'checkout.session.completed') {
@@ -454,6 +460,14 @@ export async function POST(req: Request) {
         console.error('[WEBHOOK sub cancel error]', subErr);
       }
     }
+  }
+} catch (err: any) {
+    console.error('[WEBHOOK ERROR]', err);
+    try {
+      const { logSystemError } = await import('@/lib/error-logger');
+      await logSystemError('Stripe Webhook Processing', err);
+    } catch {}
+    return new NextResponse(`Internal Error: ${err.message}`, { status: 500 });
   }
 
   return new NextResponse(null, { status: 200 });

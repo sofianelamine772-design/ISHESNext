@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
+import { logSystemError } from './error-logger';
 
 const resend = new Resend(process.env.RESEND_API_KEY || "fallback_key_for_build");
 
@@ -45,7 +46,7 @@ export async function sendEmail({ to, subject, html, text, from, provider, attac
     // - soit aucun provider n'est spécifié
     const useSmtp = !!transporter && (
       provider === 'smtp' ||
-      process.env.NODE_ENV === 'development' ||
+      (process.env.NODE_ENV === 'development' && provider !== 'resend') ||
       !provider
     );
 
@@ -58,7 +59,7 @@ export async function sendEmail({ to, subject, html, text, from, provider, attac
         text: text || '',
         attachments: attachments,
       };
-      
+
       const info = await transporter.sendMail(mailOptions);
       console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
       return { success: true, data: info };
@@ -79,12 +80,14 @@ export async function sendEmail({ to, subject, html, text, from, provider, attac
 
     if (data.error) {
       console.error("Resend API Error:", data.error);
+      await logSystemError('Mailing Service (Resend)', data.error);
       return { success: false, error: data.error };
     }
 
     return { success: true, data };
   } catch (error) {
     console.error("Failed to send email:", error);
+    await logSystemError('Mailing Service', error);
     return { success: false, error };
   }
 }
@@ -326,6 +329,7 @@ export async function sendAdminNewMessageEmail({
 export async function sendBackupReportEmail(params: {
   date: string;
   signedUrl: string;
+  signedUrlSql?: string;
   stats: {
     etudiants: number;
     inscriptions: number;
@@ -334,8 +338,9 @@ export async function sendBackupReportEmail(params: {
     messages: number;
   };
   backupJsonString?: string;
+  backupSqlString?: string;
 }) {
-  const { date, signedUrl, stats, backupJsonString } = params;
+  const { date, signedUrl, signedUrlSql, stats, backupJsonString, backupSqlString } = params;
 
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -378,32 +383,50 @@ export async function sendBackupReportEmail(params: {
         </table>
 
         <div style="background-color: #f4faf8; border-left: 4px solid #086b51; padding: 15px; margin: 25px 0; border-radius: 8px; color: #086b51; font-size: 13px; font-weight: 600;">
-          💡 Le fichier de sauvegarde a été téléversé de manière sécurisée dans votre bucket privé Supabase Storage (backups).
+          💡 Les fichiers de sauvegarde ont été téléversés de manière sécurisée dans votre bucket privé Supabase Storage (backups).
         </div>
 
         <div style="text-align: center; margin: 35px 0;">
-          <a href="${signedUrl}" style="${buttonStyle}">Télécharger le fichier .json de sauvegarde</a>
-          <p style="font-size: 11px; color: #888; margin-top: 10px;">Ce lien est privé et sera valide pendant 7 jours.</p>
+          <div style="margin-bottom: 15px;">
+            <a href="${signedUrl}" style="${buttonStyle}">Télécharger le backup JSON</a>
+          </div>
+          ${signedUrlSql ? `
+          <div>
+            <a href="${signedUrlSql}" style="${buttonStyle} background-color: #1d4ed8;">Télécharger le backup SQL</a>
+          </div>
+          ` : ''}
+          <p style="font-size: 11px; color: #888; margin-top: 15px;">Ces liens sont privés et seront valides pendant 7 jours.</p>
         </div>
       </div>
       ${emailFooter}
     </div>
   `;
 
-  const attachments = backupJsonString ? [
-    {
-      filename: `ishes_db_backup_${date.replace(/\//g, '_').replace(/ /g, '_').replace(/:/g, '_')}.json`,
+  const attachments: any[] = [];
+  const safeDateStr = date.replace(/\//g, '_').replace(/ /g, '_').replace(/:/g, '_');
+
+  if (backupJsonString) {
+    attachments.push({
+      filename: `ishes_db_backup_${safeDateStr}.json`,
       content: backupJsonString,
       contentType: 'application/json'
-    }
-  ] : undefined;
+    });
+  }
+
+  if (backupSqlString) {
+    attachments.push({
+      filename: `ishes_db_backup_${safeDateStr}.sql`,
+      content: backupSqlString,
+      contentType: 'application/sql'
+    });
+  }
 
   return sendEmail({
     to: "sofianelamine772@gmail.com",
     subject: `📦 Sauvegarde automatique BD - ${date} - ISHES`,
     html,
     provider: 'resend',
-    attachments
+    attachments: attachments.length > 0 ? attachments : undefined
   });
 }
 

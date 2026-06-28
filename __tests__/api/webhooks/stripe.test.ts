@@ -76,12 +76,15 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
       data: {
         object: {
           id: `cs_test_${formationSlug}`,
+          payment_status: 'paid',
           amount_total: 15000,
           currency: 'eur',
           mode: 'payment',
           metadata: {
             formationId: formationSlug,
             email: 'test@example.com',
+            first_name: 'Jean',
+            last_name: 'Dupont',
           }
         }
       }
@@ -143,6 +146,7 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
       data: {
         object: {
           id: 'cs_test_presentiel',
+          payment_status: 'paid',
           amount_total: 34900,
           currency: 'eur',
           mode: 'payment',
@@ -150,6 +154,8 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
             formationId: 'presentiel-global',
             email: 'test_presentiel@example.com',
             classId: 'uuid-classe-specifique-choisie', // L'élève a choisi sa classe !
+            first_name: 'Jean',
+            last_name: 'Dupont',
           }
         }
       }
