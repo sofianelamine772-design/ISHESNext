@@ -27,6 +27,7 @@ const isPublicRoute = createRouteMatcher([
   '/contact(.*)',
   '/api/webhooks(.*)',
   '/api/checkout(.*)',
+  '/api/classes(.*)',
   '/mentions-legales(.*)',
   '/cgv(.*)',
   '/politique-de-confidentialite(.*)',
@@ -39,7 +40,8 @@ const isPublicRoute = createRouteMatcher([
   '/inscription(.*)',
   '/test-positionnement(.*)',
   '/unauthorized(.*)',
-  '/__clerk(.*)'
+  '/__clerk(.*)',
+  '/manifest.json'
 ]);
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 

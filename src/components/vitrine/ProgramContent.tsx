@@ -31,7 +31,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "femme-debutante-presentiel",
     formationId: "presentiel-global",
-    title: "FEMME DEBUTANTE : Arabe + Tajwid",
+    title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
@@ -46,7 +46,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "femme-intermediaire-presentiel",
     formationId: "presentiel-global",
-    title: "FEMME INTERMEDIAIRE : Arabe + Tajwid",
+    title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",

@@ -431,8 +431,8 @@ function InscriptionForm() {
       case "elementaire_3_plus": return "Élémentaire 3+";
       case "elementaire_4": return "Élémentaire 4";
       case "elementaire_5": return "Élémentaire 5";
-      case "femme_debutante": return "Femme Débutante";
-      case "femme_intermediaire": return "Femme Intermédiaire";
+      case "femme_debutante": return "🧕 Femme Débutante";
+      case "femme_intermediaire": return "🧕 Femme Intermédiaire";
       default: return lvl;
     }
   };
