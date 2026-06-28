@@ -78,7 +78,10 @@ export default clerkMiddleware(async (auth, request) => {
         if (!isAdmin) {
           return NextResponse.redirect(new URL("/app/eleve", request.url));
         }
-      } catch (error) {
+      } catch (error: any) {
+        if (error && (error.message === 'NEXT_REDIRECT' || String(error).includes('NEXT_REDIRECT'))) {
+          throw error;
+        }
         const errInfo = logError(error, { url: request.nextUrl.href, route: '/admin' });
         if (process.env.NODE_ENV !== 'production') {
           return NextResponse.json({ error: errInfo }, { status: 500 });
@@ -87,7 +90,10 @@ export default clerkMiddleware(async (auth, request) => {
       }
     }
     return NextResponse.next();
-  } catch (outerErr) {
+  } catch (outerErr: any) {
+    if (outerErr && (outerErr.message === 'NEXT_REDIRECT' || String(outerErr).includes('NEXT_REDIRECT'))) {
+      throw outerErr;
+    }
     const errInfo = logError(outerErr, { url: request?.nextUrl?.href, route: 'proxy middleware' });
     if (process.env.NODE_ENV !== 'production') {
       return NextResponse.json({ error: errInfo }, { status: 500 });
