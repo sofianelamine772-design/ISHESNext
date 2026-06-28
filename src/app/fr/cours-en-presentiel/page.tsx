@@ -138,32 +138,32 @@ const coursesJsonLd = {
 export default function CoursPresentielPage() {
   const presentielCourses = [
     {
-      id: "tajwid-progressif",
-      title: "Tajwid Progressif",
-      tagline: "Apprendre à lire le Coran correctement, même en partant de zéro.",
-      badge: "Scolarité Annuelle",
+      id: "femme-debutante-presentiel",
+      title: "🧕 Arabe & Tajwid — Femme Débutante",
+      tagline: "Apprendre à lire le Coran et comprendre la langue arabe en partant de zéro.",
+      badge: "Scolarité Annuelle (Femme)",
       duration: "1 an (Annuel)",
       icon: <BookOpenCheck className="w-6 h-6 text-[#008953]" />,
       colorClass: "border-[#008953]/20 hover:border-[#008953]",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
-      slot: "mardi",
-      hook: "Tu aimerais mieux lire le Coran… mais tu n’as peut-être jamais réellement appris les bases de la lecture arabe ou les règles du Tajwid. Certaines lettres te semblent encore difficiles, tu hésites sur la prononciation et certains symboles restent flous. Ce cours progressif t'accompagne étape par étape.",
+      slot: "samedi",
+      hook: "Le grand problème des écoles traditionnelles est la séparation de la langue arabe et des règles de Tajwid, obligeant à faire deux fois plus d'efforts. Pour résoudre cela, notre cursus unique combine les deux en présentiel. En apprenant à lire et écrire l'arabe avec la méthode Habib Haffes, vous appliquez immédiatement ces notions pour comprendre et prononcer les règles de récitation du Tajwid s'appuyant sur notre support 'Les Clés du Coran' (Nour Al Bayane).",
       outcomes: [
-        "Les lettres arabes et leur prononciation exacte (Makharij)",
-        "Les règles essentielles du Tajwid pour une lecture sereine",
-        "Compréhension des symboles présents dans le Moushaf",
-        "Gagner en autonomie et corriger sa récitation du Coran"
+        "Prononciation exacte de chaque lettre arabe (Makharij al-Hourouf)",
+        "Bases solides d'écriture et de lecture de la langue arabe",
+        "Règles fondamentales du Tajwid pour une récitation correcte",
+        "Vocabulaire religieux indispensable pour comprendre les sourates courtes"
       ],
-      methodology: "Basé sur notre support exclusif 'Les Clés du Coran', une adaptation francophone inspirée de la méthode Nour Al Bayan.",
+      methodology: "Pédagogie progressive fusionnant la méthode Habib Haffes (pour l'Arabe) et notre support exclusif 'Les Clés du Coran' adapté de Nour Al Bayan (pour le Tajwid).",
       practical: [
-        "Tous les mardis en présentiel",
+        "Tous les samedis (9h-12h) en présentiel",
         "Replays accessibles à vie",
         "Suivi pédagogique personnalisé",
-        "Support pédagogique physique inclus"
+        "Supports d'apprentissage inclus"
       ],
-      priceText: "480 € / an",
-      cta: "Découvrir Tajwid Progressif",
-      target: "Adultes débutants, personnes ne sachant pas encore lire l'arabe ou souhaitant reprendre les bases correctement."
+      priceText: "480 € / session",
+      cta: "S'inscrire au niveau Débutante",
+      target: "Femmes débutantes ne sachant pas encore lire l'arabe ou souhaitant reprendre les bases de la lecture et de la prononciation à zéro."
     },
     {
       id: "tajwid-accelere",
@@ -280,32 +280,32 @@ export default function CoursPresentielPage() {
       target: "Hommes et femmes, débutants comme initiés, souhaitant découvrir sa vie et s'en inspirer."
     },
     {
-      id: "arabe",
-      title: "Langue Arabe",
-      tagline: "Apprendre la langue du Coran pas à pas pour gagner en autonomie.",
-      badge: "Méthode Francophone",
-      duration: "Progressif",
+      id: "femme-intermediaire-presentiel",
+      title: "🧕 Arabe & Tajwid — Femme Intermédiaire",
+      badge: "Scolarité Annuelle (Femme)",
+      duration: "1 an (Annuel)",
       icon: <BookOpen className="w-6 h-6 text-[#c8a96e]" />,
       colorClass: "border-amber-200 hover:border-[#c8a96e]",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
-      slot: "jeudi-arabe",
-      hook: "La langue arabe vous semble intimidante ou hors de portée ? Ce cursus a été pensé spécifiquement pour les francophones afin de lever tous les blocages de prononciation et de grammaire, en partant complètement de zéro.",
+      slot: "dimanche",
+      tagline: "Perfectionner son arabe littéraire et approfondir sa récitation du Coran.",
+      hook: "Beaucoup d'élèves savent lire le Coran mais ne comprennent pas ce qu'ils lisent, ou apprennent la grammaire de façon trop abstraite. Notre cursus résout ce problème en liant le perfectionnement en arabe (grammaire Nahw) à la pratique directe du Tajwid. Vous gagnez en fluidité et en récitation tout en apprenant à traduire et à saisir le sens des versets récités au quotidien.",
       outcomes: [
-        "Bases solides de lecture et d'écriture de la langue arabe",
-        "Acquisition d'un vocabulaire religieux et usuel indispensable",
-        "Compréhension des règles de grammaire essentielles (Nahw)",
-        "Gagner en autonomie face aux textes sacrés et traductions"
+        "Maîtrise approfondie et application automatique du Tajwid",
+        "Compréhension des règles de grammaire essentielles (Nahw) pour traduire",
+        "Acquisition d'un vocabulaire coranique et littéraire riche",
+        "Passage d'une récitation mécanique à une lecture consciente"
       ],
-      methodology: "S'appuie sur la célèbre méthode de Habib Haffes, réputée pour sa clarté et sa progression fluide pour les francophones.",
+      methodology: "Méthode immersive alliant théorie grammaticale (Nahw), vocabulaire et analyse pratique des versets du Coran en direct.",
       practical: [
-        "Tous les jeudis à 18H30 en présentiel",
-        "Replays interactifs pour réviser à votre rythme",
-        "Support pédagogique complet et inclus",
-        "Suivi pédagogique régulier par l'enseignant"
+        "Tous les dimanches (9h-12h) en présentiel",
+        "Replays interactifs accessibles à vie",
+        "Support pédagogique complet inclus",
+        "Suivi personnalisé par l'enseignante"
       ],
-      priceText: "480 € / niveau",
-      cta: "S'inscrire au cours d'Arabe",
-      target: "Grands débutants ou francophones souhaitant acquérir des bases académiques et religieuses solides."
+      priceText: "480 € / session",
+      cta: "S'inscrire au niveau Intermédiaire",
+      target: "Femmes sachant déjà lire l'arabe et ayant des notions de base, souhaitant acquérir autonomie de traduction et fluidité de lecture."
     }
   ];
 

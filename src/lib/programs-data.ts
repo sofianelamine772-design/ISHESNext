@@ -332,23 +332,23 @@ export const PROGRAMS_DATA: Record<string, any> = {
     ]
   },
   "arabe_coran_junior": {
-    title: "Cours d'arabe enfant",
+    title: "Scolarité Enfants : Arabe, Coran & Tajwid",
     duration: "Annuel",
-    tag: "Présentiel | Junior 4-15 ans",
+    tag: "Présentiel & Distanciel | 4-15 ans",
     price: "480 €",
-    hook: "Un cadre chaleureux qui vous accueille à Toulouse avec des professeurs compétents en présentiel. Une méthode immersive et ludique pour faire aimer la langue arabe à vos enfants.",
-    description: "❓ C'EST QUOI ?\nNos cours pour enfants sont conçus pour être à la fois pédagogiques et divertissants. Nous utilisons des méthodes modernes pour garantir une progression solide.\n\n👤 POUR QUI ?\nEnfants et adolescents (de 4 à 15 ans).\n\n⏳ QUAND ?\nFormation annuelle.\n\n💻 COMMENT ?\nEn présentiel à Toulouse avec une méthode immersive et ludique.\n\n🎯 OBJECTIFS\nFaire aimer la langue arabe à vos enfants et leur donner des bases solides grâce à une pédagogie active (jeux, supports).",
+    hook: "Une méthode fusionnée et ludique pour faire aimer la langue arabe et le Coran à vos enfants en présentiel à Toulouse ou en ligne.",
+    description: "Le cursus complet pour donner des bases solides et durables à vos enfants.\n\n❌ LE PROBLÈME DE L'APPRENTISSAGE TRADITIONNEL\nBeaucoup d'enfants s'ennuient dans les cours d'arabe classiques car les méthodes sont souvent rigides ou trop théoriques.\nDe plus, on sépare généralement l'apprentissage de la langue et celui du Coran.\nL'enfant se retrouve à devoir mémoriser des versets qu'il ne sait pas déchiffrer, ou à apprendre des règles de grammaire sans lien avec le Coran, ce qui crée de la confusion et de la démotivation.\n\n✨ NOTRE SOLUTION : LA MÉTHODE FUSIONNÉE ET ACTIVE\nPour résoudre ce problème, notre programme 'Scolarité Enfants' combine intelligemment l'Arabe et le Coran & Tajwid dans un seul et même cursus pédagogique.\nL'enfant apprend à lire et écrire la langue arabe tout en appliquant immédiatement ces notions pour prononcer correctement et mémoriser le Coran.\n\n• Volet Arabe : Acquisition de la lecture et de l'écriture progressive, développement du vocabulaire de base et expression orale.\n• Volet Coran & Tajwid : Apprentissage de la récitation fluide à l'aide de notre méthode 'Les Clés du Coran' (Nour Al Bayane), correction méthodique de la prononciation (Makharij) et mémorisation adaptée au rythme de l'enfant.\n• Tarbiya & Comportement : Des histoires prophétiques et des leçons d'éthique musulmane (Adab) pour éveiller la spiritualité des plus jeunes.\n\n💛 UNE PÉDAGOGIE BIENVEILLANTE ET LUDIQUE\nPour maintenir l'engagement et l'enthousiasme de votre enfant :\n• Nous utilisons des supports visuels exclusifs, des jeux éducatifs et des coloriages adaptés selon les âges.\n• L'apprentissage se fait par le jeu et le renforcement positif.\n• Les classes sont limitées en nombre pour garantir un suivi individuel précis de chaque élève.\n\n👤 POUR QUI ?\nAccessible aux enfants et adolescents de 4 à 15 ans :\n• Cursus adapté selon les tranches d'âge (Maternelle à Ado).\n• Groupes de niveaux homogènes, du grand débutant à l'élève déjà lecteur.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cursus annuel de septembre à juin\n• En présentiel à Toulouse (Mercredi, Samedi ou Dimanche) ou en ligne\n• Suivi régulier des parents via un groupe WhatsApp dédié\n• Supports pédagogiques (manuels d'activités physiques) inclus dans la formation",
     features: [
-      { t: "Pédagogie active", d: "Coloriages, jeux et supports multimédias pour maintenir l'engagement." },
-      { t: "Immersion totale", d: "Familiarisation dès le plus jeune âge pour une aisance naturelle." },
-      { t: "Supports inclus", d: "Manuels et ressources numériques adaptés à chaque niveau." },
-      { t: "Suivi parents", d: "Communication régulière via WhatsApp pour suivre les progrès." }
+      { t: "Pédagogie active", d: "Coloriages, jeux et supports interactifs pour maintenir l'enthousiasme." },
+      { t: "Méthode Fusionnée", d: "Arabe, Coran et Tajwid réunis pour une progression naturelle." },
+      { t: "Supports inclus", d: "Manuels d'apprentissage physiques complets distribués aux élèves." },
+      { t: "Suivi parents", d: "Retours réguliers via WhatsApp pour suivre l'évolution de l'enfant." }
     ],
     whyMe: [
-      "Enseignants spécialisés dans la pédagogie enfant",
-      "Classes en petits groupes (max 12 élèves)",
-      "Possibilité de régler en 10 fois sans frais",
-      "Niveaux adaptés du débutant (4 ans) au supérieur (15 ans)"
+      "Enseignants qualifiés spécialisés dans la pédagogie des enfants",
+      "Pédagogie positive et bienveillante pour aimer la religion",
+      "Suivi personnalisé grâce à des petits groupes de niveau",
+      "Éveil spirituel à travers des récits de Sîrah adaptés"
     ]
   },
   "tilawa": {
