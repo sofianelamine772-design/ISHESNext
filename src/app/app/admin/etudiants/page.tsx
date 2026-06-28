@@ -649,9 +649,21 @@ function EtudiantsContent() {
                             </div>
                           </div>
                         )}
-                        <div className="flex flex-col">
-                          <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Email Personnel</span>
-                          <span className="ishes-heading text-base md:text-lg text-ishes-dark truncate">{selectedStudent.email}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Email Personnel</span>
+                            <span className="ishes-heading text-base md:text-lg text-ishes-dark truncate block" title={selectedStudent.email}>
+                              {selectedStudent.email}
+                            </span>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green shrink-0 ml-2" 
+                            onClick={openEditModal}
+                          >
+                            MODIFIER
+                          </Button>
                         </div>
                         <div className="flex flex-col">
                           <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Téléphone</span>
