@@ -665,9 +665,21 @@ function EtudiantsContent() {
                             MODIFIER
                           </Button>
                         </div>
-                        <div className="flex flex-col">
-                          <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Téléphone</span>
-                          <span className="ishes-heading text-base md:text-lg text-ishes-dark font-mono">{selectedStudent.phone}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Téléphone</span>
+                            <span className="ishes-heading text-base md:text-lg text-ishes-dark font-mono block">
+                              {selectedStudent.phone}
+                            </span>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green shrink-0 ml-2" 
+                            onClick={openEditModal}
+                          >
+                            MODIFIER
+                          </Button>
                         </div>
                         <div className="flex flex-col">
                           <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Adresse de résidence</span>
