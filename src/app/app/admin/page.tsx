@@ -5,14 +5,14 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { stripe } from "@/lib/stripe";
 import { SalesChart } from "@/components/admin/SalesChart";
+import { fetchStudentsAction } from "@/app/actions/students";
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminOverview() {
-  // Fetch stats directly on the server (much faster)
-  const { count: totalStudents } = await supabaseAdmin
-    .from('etudiants')
-    .select('*', { count: 'exact', head: true });
+  // Fetch stats using the same logic as the student list (filters out parents and abandoned carts)
+  const studentsResult = await fetchStudentsAction();
+  const totalStudents = studentsResult.success ? (studentsResult.data?.length || 0) : 0;
 
   // Stripe Revenue Data
   let monthlyRevenue = 0;
