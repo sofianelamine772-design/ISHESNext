@@ -58,6 +58,17 @@ jest.mock('@/lib/supabaseAdmin', () => {
                 return { ...e, inscriptions: studentInscriptions };
               });
             }
+            if (table === 'inscriptions' && fields.includes('formations')) {
+              currentData = currentData.map(ins => {
+                const formation = mockDb.formations.find(f => f.id === ins.formation_id);
+                const classe = mockDb.classes.find(c => c.id === ins.class_id);
+                return {
+                  ...ins,
+                  formations: formation || null,
+                  classes: classe || null
+                };
+              });
+            }
 
             return {
               eq: jest.fn().mockImplementation((field: string, value: any) => {
@@ -476,7 +487,8 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         id: 'ins_failed_pay',
         etudiant_id: 'student_failed_pay',
         status: 'valide',
-        paid_status: 'paye'
+        paid_status: 'paye',
+        expected_amount: 150
       });
 
       // 2. Simuler le webhook Stripe invoice.payment_failed
@@ -514,10 +526,10 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
       expect(loggedPayment.amount).toBe(150); // Le prix exact du prélèvement (15000 cents / 100)
       expect(loggedPayment.error_message).toBe('La carte a été déclinée');
 
-      // 5. Vérifier que le statut de l'inscription est passé à 'refuse' (badge rouge IMPAYÉ)
+      // 5. Vérifier que le statut de l'inscription est passé à 'impaye' (badge rouge IMPAYÉ)
       const updatedInscription = mockDb.inscriptions.find(i => i.id === 'ins_failed_pay');
       expect(updatedInscription).toBeDefined();
-      expect(updatedInscription.paid_status).toBe('refuse');
+      expect(updatedInscription.paid_status).toBe('impaye');
 
       // 6. Vérifier que l'e-mail de relance automatique a été expédié à l'élève avec le lien de paiement
       const { sendPaymentReminderEmail } = require('@/lib/mail');
@@ -685,7 +697,8 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         id: formationId,
         slug: 'fiqh_malikite',
         title: 'FIQH MALIKITE',
-        type: 'distanciel'
+        type: 'distanciel',
+        price: 480
       });
 
       mockDb.classes.push({
@@ -730,10 +743,10 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
       let uiStudent = uiResult.data.find((s: any) => s.email === 'eleve.multi@example.com');
       expect(uiStudent).toBeDefined();
       
-      // L'inscription doit exister et pointer vers la bonne formation et classe
+      // La formation est TOUJOURS la bonne (ne doit pas avoir disparu)
       expect(uiStudent.inscriptions[0].formations.title).toBe('FIQH MALIKITE');
       expect(uiStudent.inscriptions[0].classes.name).toBe('Session Fiqh Malikite 2026');
-      expect(uiStudent.inscriptions[0].paid_status).toBe('paye');
+      expect(uiStudent.inscriptions[0].paid_status).toBe('partiel');
 
       // 4. LE MOIS SUIVANT: Le prélèvement Stripe ÉCHOUE
       stripe.webhooks.constructEvent.mockReturnValueOnce({
@@ -762,8 +775,8 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
       // La formation est TOUJOURS la bonne (ne doit pas avoir disparu)
       expect(uiStudent.inscriptions[0].formations.title).toBe('FIQH MALIKITE');
       
-      // MAIS le statut financier a impérativement basculé sur REFUSÉ / IMPAYÉ
-      expect(uiStudent.inscriptions[0].paid_status).toBe('refuse');
+      // MAIS le statut financier a impérativement basculé sur PARTIEL (car une mensualité a réussi et l'autre a échoué)
+      expect(uiStudent.inscriptions[0].paid_status).toBe('partiel');
 
       // 6. Vérifier que la relance a été expédiée avec le lien de régularisation
       const { sendPaymentReminderEmail } = require('@/lib/mail');
@@ -772,6 +785,12 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         'Imam',
         expect.any(String)
       );
+
+      // 7. Vérifier que le paiement échoué est bien listé dans l'historique (pour l'onglet Facturation)
+      const failedPayment = mockDb.paiements.find(p => p.etudiant_id === uiStudent.id && p.status === 'failed');
+      expect(failedPayment).toBeDefined();
+      expect(failedPayment.amount).toBe(150);
+      expect(failedPayment.error_message).toBe('Fonds insuffisants');
     });
   });
 });
