@@ -130,18 +130,18 @@ export default function Home() {
                 </div>
 
                 <div className="relative z-10 text-center mt-8">
-                  <Link href="/programmes" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
+                  <Link href="/program" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
                     Découvrir nos cours
                   </Link>
                 </div>
               </div>
 
-              {/* Carte 2 : Parent (Enfant) - HIGHLIGHTED */}
+              {/* Carte 2 : Enfant / Adolescent - HIGHLIGHTED */}
               <div className="bg-gradient-to-b from-[#c8a96e] to-[#a88a53] rounded-[2.5rem] p-8 lg:p-10 border border-[#c8a96e] shadow-2xl hover:shadow-[#c8a96e]/30 hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4"></div>
                 
                 <div className="text-4xl mb-6 relative z-10">🧑🧒</div>
-                <h4 className="text-2xl font-black text-white mb-1 relative z-10">Parent (Enfant)</h4>
+                <h4 className="text-2xl font-black text-white mb-1 relative z-10">Enfant / Adolescent</h4>
                 <div className="text-white/70 text-xs font-black uppercase tracking-widest mb-8 relative z-10">Solution ISHES</div>
                 
                 <p className="text-white/80 font-medium leading-relaxed mb-8 relative z-10 h-14">
@@ -170,7 +170,7 @@ export default function Home() {
                 </div>
 
                 <div className="relative z-10 text-center mt-8">
-                  <Link href="/programmes" className="inline-block w-full py-4 px-6 rounded-2xl bg-white text-[#c8a96e] font-black hover:bg-gray-50 transition-all hover:scale-[1.02] shadow-lg">
+                  <Link href="/program" className="inline-block w-full py-4 px-6 rounded-2xl bg-white text-[#c8a96e] font-black hover:bg-gray-50 transition-all hover:scale-[1.02] shadow-lg">
                     Découvrir nos cours
                   </Link>
                 </div>
@@ -210,7 +210,7 @@ export default function Home() {
                 </div>
 
                 <div className="relative z-10 text-center mt-8">
-                  <Link href="/programmes" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
+                  <Link href="/formation-enseignant" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
                     Découvrir nos cours
                   </Link>
                 </div>

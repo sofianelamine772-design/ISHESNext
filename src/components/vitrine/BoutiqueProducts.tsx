@@ -63,7 +63,7 @@ export function BoutiqueProducts() {
               className="group flex flex-col md:flex-row gap-8 items-center md:items-start bg-white p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
             >
               {/* Product Image */}
-              <div className="w-full md:w-56 aspect-[3/4] rounded-2xl overflow-hidden shadow-lg shadow-black/10 shrink-0 relative">
+              <div className="w-[60%] sm:w-64 md:w-56 aspect-[3/4] mx-auto md:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/10 shrink-0 relative">
                 <Image 
                   src={product.image} 
                   alt={product.title}
@@ -87,12 +87,12 @@ export function BoutiqueProducts() {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between gap-8 mt-auto pt-6 border-t border-gray-50">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-8 mt-auto pt-6 border-t border-gray-50">
                   <span className="ishes-heading text-xl text-ishes-dark whitespace-nowrap">
                     {product.price}
                   </span>
-                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="shrink-0">
-                    <Button variant="ishes-gold" className="h-12 px-6 gap-2">
+                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto shrink-0">
+                    <Button variant="ishes-gold" className="w-full sm:w-auto h-12 px-6 gap-2">
                       Acheter en ligne <ShoppingBag className="w-4 h-4" />
                     </Button>
                   </a>
