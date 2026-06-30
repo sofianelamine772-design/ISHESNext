@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS public.inscriptions (
     created_at timestamp with time zone DEFAULT now(),
     formation_id uuid,
     academic_year text DEFAULT '2023-2024'::text,
+    expected_amount numeric(10, 2),
     CONSTRAINT inscriptions_pkey PRIMARY KEY (id),
     CONSTRAINT inscriptions_etudiant_id_fkey FOREIGN KEY (etudiant_id) REFERENCES public.etudiants(id) ON DELETE CASCADE,
     CONSTRAINT inscriptions_class_id_fkey FOREIGN KEY (class_id) REFERENCES public.classes(id) ON DELETE SET NULL,

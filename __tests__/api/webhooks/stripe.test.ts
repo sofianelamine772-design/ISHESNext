@@ -192,3 +192,100 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
     );
   });
 });
+
+describe('Parcours Fiqh Malikite - Test Solide et Intégral', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('devrait garantir que l\'étudiant est inscrit dans la bonne formation Fiqh Malikite ET la bonne classe', async () => {
+    const mockRequest = new Request('http://localhost/api/webhooks/stripe', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+
+    const Stripe = require('stripe');
+    const stripe = new Stripe();
+
+    // 1. L'élève achète la formation "Fiqh Malikite"
+    stripe.webhooks.constructEvent.mockReturnValue({
+      type: 'checkout.session.completed',
+      data: {
+        object: {
+          id: 'cs_test_fiqh_malikite_solid',
+          payment_status: 'paid',
+          amount_total: 15000,
+          currency: 'eur',
+          mode: 'payment',
+          metadata: {
+            formationId: 'fiqh_malikite',
+            email: 'eleve.fiqh@example.com',
+            first_name: 'Imam',
+            last_name: 'Malik',
+          }
+        }
+      }
+    });
+
+    const { supabaseAdmin } = require('@/lib/supabaseAdmin');
+
+    const FORMATION_UUID = 'uuid-formation-fiqh-malikite-123';
+    const CLASSE_UUID = 'uuid-classe-fiqh-malikite-active-456';
+    const STUDENT_UUID = 'uuid-student-imam-malik';
+
+    // 2. On configure la base de données pour ce scénario précis
+    let eqContext = '';
+    supabaseAdmin.from.mockImplementation((table: string) => {
+      eqContext = table;
+      return supabaseAdmin;
+    });
+
+    supabaseAdmin.ilike.mockReturnThis();
+
+    // Simuler que l'étudiant n'existe pas encore (ilike renvoie null, maybeSingle renvoie null)
+    supabaseAdmin.maybeSingle.mockImplementation(() => {
+      if (eqContext === 'etudiants') return Promise.resolve({ data: null });
+      if (eqContext === 'inscriptions') return Promise.resolve({ data: null });
+      return Promise.resolve({ data: null });
+    });
+
+    supabaseAdmin.eq.mockImplementation((field: string, value: string) => {
+      // Trouver la formation exacte "fiqh_malikite"
+      if (eqContext === 'formations' && field === 'slug' && value === 'fiqh_malikite') {
+        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: FORMATION_UUID, title: 'FIQH MALIKITE' } });
+      }
+      // Trouver la classe active pour cette formation
+      if (eqContext === 'classes' && field === 'formation_id' && value === FORMATION_UUID) {
+        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: CLASSE_UUID, name: 'Session Fiqh Malikite 2026' } });
+      }
+      return supabaseAdmin;
+    });
+
+    // 3. Exécuter le Webhook
+    await POST(mockRequest);
+
+    // 4. VÉRIFICATIONS SOLIDES
+    // Vérifier la création de l'étudiant
+    expect(supabaseAdmin.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email: 'eleve.fiqh@example.com',
+        first_name: 'Imam',
+        last_name: 'Malik',
+        status: 'actif'
+      })
+    );
+
+    // Vérifier L'AFFECTATION EXACTE dans la table des inscriptions
+    expect(supabaseAdmin.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        formation_id: FORMATION_UUID,
+        class_id: CLASSE_UUID,
+        status: 'valide',
+        paid_status: 'paye'
+      })
+    );
+
+    // Si ces vérifications passent, l'élève s'affichera parfaitement dans l'interface Admin !
+  });
+});
+

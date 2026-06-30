@@ -35,15 +35,33 @@ jest.mock('@/lib/supabaseAdmin', () => {
 
         const chain: any = {
           select: jest.fn().mockImplementation((fields: string = '') => {
+            let currentData = [...tableData];
+              
+            // JOIN relations globally for any select
+            if (table === 'paiements' && fields.includes('etudiants')) {
+              currentData = currentData.map(p => {
+                const student = mockDb.etudiants.find(e => e.id === p.etudiant_id);
+                return { ...p, etudiants: student || null };
+              });
+            }
+            if (table === 'etudiants' && fields.includes('inscriptions')) {
+              currentData = currentData.map(e => {
+                const studentInscriptions = mockDb.inscriptions.filter(i => i.etudiant_id === e.id).map(ins => {
+                  const formation = mockDb.formations.find(f => f.id === ins.formation_id);
+                  const classe = mockDb.classes.find(c => c.id === ins.class_id);
+                  return {
+                    ...ins,
+                    formations: formation || null,
+                    classes: classe || null
+                  };
+                });
+                return { ...e, inscriptions: studentInscriptions };
+              });
+            }
+
             return {
               eq: jest.fn().mockImplementation((field: string, value: any) => {
-                let filtered = tableData.filter((r: any) => r[field] === value);
-                if (table === 'paiements' && fields.includes('etudiants')) {
-                  filtered = filtered.map(p => {
-                    const student = mockDb.etudiants.find(e => e.id === p.etudiant_id);
-                    return { ...p, etudiants: student || null };
-                  });
-                }
+                let filtered = currentData.filter((r: any) => r[field] === value);
                 const queryObj: any = {
                   maybeSingle: jest.fn().mockResolvedValue({ data: filtered[0] || null }),
                   single: jest.fn().mockResolvedValue({ data: filtered[0] || null }),
@@ -68,7 +86,7 @@ jest.mock('@/lib/supabaseAdmin', () => {
                 return queryObj;
               }),
               in: jest.fn().mockImplementation((field: string, values: any[]) => {
-                const filtered = tableData.filter((r: any) => values.includes(r[field]));
+                const filtered = currentData.filter((r: any) => values.includes(r[field]));
                 const queryObj: any = {
                   in: jest.fn().mockImplementation(() => queryObj),
                   order: jest.fn().mockImplementation(() => queryObj),
@@ -80,8 +98,14 @@ jest.mock('@/lib/supabaseAdmin', () => {
                 };
                 return queryObj;
               }),
-              order: jest.fn().mockImplementation(() => Promise.resolve({ data: tableData })),
-              then: (cb: any) => cb({ data: tableData })
+              order: jest.fn().mockImplementation(() => {
+                const queryObj: any = {
+                  limit: jest.fn().mockImplementation(() => queryObj),
+                  then: (cb: any) => cb({ data: currentData })
+                };
+                return queryObj;
+              }),
+              then: (cb: any) => cb({ data: currentData })
             };
           }),
           eq: jest.fn().mockImplementation((field: string, value: any) => {
@@ -648,6 +672,106 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
 
       const paymentSum = res.data?.payments.reduce((sum: number, p: any) => sum + p.amount, 0);
       expect(paymentSum).toBe(180); // La somme calculée doit être exactement de 180 €
+    });
+  });
+
+  describe('Scénario 9 : Parcours Extrême (Paiement Multi-mois avec Échec) -> Interface Étudiant', () => {
+    it('devrait garantir que la bonne formation s\'affiche sur le dashboard ET que le statut financier bascule en impayé après un échec', async () => {
+      // 1. Initialiser une formation Fiqh Malikite et sa classe
+      const formationId = 'uuid-formation-fiqh-malikite-123';
+      const classId = 'uuid-classe-fiqh-malikite-active-456';
+      
+      mockDb.formations.push({
+        id: formationId,
+        slug: 'fiqh_malikite',
+        title: 'FIQH MALIKITE',
+        type: 'distanciel'
+      });
+
+      mockDb.classes.push({
+        id: classId,
+        name: 'Session Fiqh Malikite 2026',
+        formation_id: formationId,
+        type: 'distanciel',
+        is_active: true
+      });
+
+      // 2. Simuler l'inscription réussie (1er mois payé)
+      const Stripe = require('stripe');
+      const stripe = new Stripe();
+      stripe.webhooks.constructEvent.mockReturnValueOnce({
+        type: 'checkout.session.completed',
+        data: {
+          object: {
+            id: 'cs_test_fiqh_malikite_multi',
+            payment_status: 'paid',
+            amount_total: 15000, // 1ère mensualité payée
+            currency: 'eur',
+            mode: 'subscription', // Mode abonnement (plusieurs fois)
+            metadata: {
+              formationId: 'fiqh_malikite',
+              email: 'eleve.multi@example.com',
+              first_name: 'Imam',
+              last_name: 'Malik',
+            }
+          }
+        }
+      });
+
+      const mockRequest1 = new Request('http://localhost/api/webhooks/stripe', { method: 'POST', body: JSON.stringify({}) });
+      await stripePost(mockRequest1);
+
+      // 3. Vérifier que l'UI affiche bien l'élève COMME "À JOUR" et dans la BONNE CLASSE !
+      const { fetchStudentsAction } = require('@/app/actions/students');
+      
+      let uiResult = await fetchStudentsAction();
+      expect(uiResult.success).toBe(true);
+      
+      let uiStudent = uiResult.data.find((s: any) => s.email === 'eleve.multi@example.com');
+      expect(uiStudent).toBeDefined();
+      
+      // L'inscription doit exister et pointer vers la bonne formation et classe
+      expect(uiStudent.inscriptions[0].formations.title).toBe('FIQH MALIKITE');
+      expect(uiStudent.inscriptions[0].classes.name).toBe('Session Fiqh Malikite 2026');
+      expect(uiStudent.inscriptions[0].paid_status).toBe('paye');
+
+      // 4. LE MOIS SUIVANT: Le prélèvement Stripe ÉCHOUE
+      stripe.webhooks.constructEvent.mockReturnValueOnce({
+        type: 'invoice.payment_failed',
+        data: {
+          object: {
+            id: 'in_failed_invoice_multi',
+            customer_email: 'eleve.multi@example.com',
+            amount_due: 15000,
+            amount_paid: 0,
+            currency: 'eur',
+            last_payment_error: {
+              message: 'Fonds insuffisants'
+            }
+          }
+        }
+      });
+
+      const mockRequest2 = new Request('http://localhost/api/webhooks/stripe', { method: 'POST', body: JSON.stringify({}) });
+      await stripePost(mockRequest2);
+
+      // 5. Revérifier l'Interface UI (Le logiciel) !
+      uiResult = await fetchStudentsAction();
+      uiStudent = uiResult.data.find((s: any) => s.email === 'eleve.multi@example.com');
+      
+      // La formation est TOUJOURS la bonne (ne doit pas avoir disparu)
+      expect(uiStudent.inscriptions[0].formations.title).toBe('FIQH MALIKITE');
+      
+      // MAIS le statut financier a impérativement basculé sur REFUSÉ / IMPAYÉ
+      expect(uiStudent.inscriptions[0].paid_status).toBe('refuse');
+
+      // 6. Vérifier que la relance a été expédiée avec le lien de régularisation
+      const { sendPaymentReminderEmail } = require('@/lib/mail');
+      expect(sendPaymentReminderEmail).toHaveBeenCalledWith(
+        'eleve.multi@example.com',
+        'Imam',
+        expect.any(String)
+      );
     });
   });
 });

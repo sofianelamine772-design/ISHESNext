@@ -62,22 +62,20 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
             Visualisation interactive de vos revenus annuels. Survolez la courbe pour plus de détails.
           </p>
         </div>
-        {hoveredIndex !== null && (
-          <div className="bg-ishes-green/5 border border-ishes-green/20 rounded-2xl px-5 py-2.5 flex items-center gap-3 animate-fade-in self-start sm:self-center">
-            <span className="text-[10px] font-black uppercase text-ishes-green tracking-widest">
-              {monthlyData[hoveredIndex].month}
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-ishes-green"></span>
-            <span className="text-lg font-black text-ishes-dark">
-              {monthlyData[hoveredIndex].value.toLocaleString()} €
-            </span>
-          </div>
-        )}
+        <div className={`bg-ishes-green/5 border border-ishes-green/20 rounded-2xl px-5 py-2.5 flex items-center gap-3 transition-opacity duration-200 self-start sm:self-center ${hoveredIndex !== null ? 'opacity-100' : 'opacity-0'}`}>
+          <span className="text-[10px] font-black uppercase text-ishes-green tracking-widest">
+            {hoveredIndex !== null ? monthlyData[hoveredIndex].month : "JAN"}
+          </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-ishes-green"></span>
+          <span className="text-lg font-black text-ishes-dark whitespace-nowrap">
+            {hoveredIndex !== null ? monthlyData[hoveredIndex].value.toLocaleString('fr-FR') : "0"} €
+          </span>
+        </div>
       </div>
 
       {/* SVG Graphic wrapper */}
       <div className="relative w-full overflow-x-auto custom-scrollbar pb-2">
-        <div className="min-w-[760px] relative">
+        <div className="min-w-[800px] relative">
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             className="w-full h-auto overflow-visible select-none"

@@ -1452,7 +1452,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       .maybeSingle();
 
     if (!etudiant) {
-      return { success: true, data: { payments: [], inscriptions: [] } };
+      return { success: true, data: { payments: [], inscriptions: [], total_expected: 0, total_paid: 0, reste_a_payer: 0 } };
     }
 
     const getBaseEmail = (e: string) => {
@@ -1479,11 +1479,12 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         status,
         paid_status,
         created_at,
-        formations (title),
+        expected_amount,
+        formations (title, price),
         classes (name, type)
       `)
       .in('etudiant_id', familyIds)
-      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
+      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation', 'termine']);
 
     const { data: payments } = await supabaseAdmin
       .from('paiements')
@@ -1505,29 +1506,173 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       return true;
     });
 
-    const enrichedInscriptions = (inscriptions || []).map((ins: any) => ({
-      id: ins.id,
-      studentId: ins.etudiant_id,
-      status: ins.status,
-      paidStatus: ins.paid_status,
-      formationTitle: ins.formations?.title || 'Formation ISHES',
-      className: ins.classes?.name || '',
-      classType: ins.classes?.type || 'distanciel',
-      studentName: (() => {
-        const student = (familyStudents || []).find(f => f.id === ins.etudiant_id);
-        return student ? `${student.first_name || ''} ${student.last_name || ''}`.trim() : 'Élève';
-      })()
-    }));
+    let total_expected = 0;
+    const enrichedInscriptions = (inscriptions || []).map((ins: any) => {
+      const fallbackPrice = ins.formations?.price ? Number(ins.formations.price) : 0;
+      const expected = ins.expected_amount !== null && ins.expected_amount !== undefined 
+        ? Number(ins.expected_amount) 
+        : fallbackPrice;
+      
+      total_expected += expected;
+
+      return {
+        id: ins.id,
+        studentId: ins.etudiant_id,
+        status: ins.status,
+        paidStatus: ins.paid_status,
+        expectedAmount: expected,
+        formationTitle: ins.formations?.title || 'Formation ISHES',
+        className: ins.classes?.name || '',
+        classType: ins.classes?.type || 'distanciel',
+        studentName: (() => {
+          const student = (familyStudents || []).find(f => f.id === ins.etudiant_id);
+          return student ? `${student.first_name || ''} ${student.last_name || ''}`.trim() : 'Élève';
+        })()
+      };
+    });
+
+    const total_paid = deduplicatedPayments
+      .filter((p: any) => p.status === 'succeeded' || p.status === 'paid' || p.status === 'payé')
+      .reduce((acc: number, p: any) => acc + Number(p.amount || 0), 0);
+      
+    const reste_a_payer = Math.max(0, total_expected - total_paid);
 
     return { 
       success: true, 
       data: { 
         payments: deduplicatedPayments, 
-        inscriptions: enrichedInscriptions 
+        inscriptions: enrichedInscriptions,
+        total_expected,
+        total_paid,
+        reste_a_payer
       } 
     };
   } catch (err) {
     console.error('Fetch Student Billing Data Error:', err);
     return { success: false, error: 'Failed to fetch student billing data' };
+  }
+}
+
+export async function addManualSettlePaymentAction(studentId: string, amount: number, method: string) {
+  try {
+    const authResult = await auth();
+    const adminId = authResult.userId;
+    if (!adminId) {
+      return { success: false, error: "Non autorisé." };
+    }
+
+    const { data: adminUser } = await supabaseAdmin
+      .from('etudiants')
+      .select('role')
+      .eq('clerk_user_id', adminId)
+      .maybeSingle();
+
+    if (!adminUser || adminUser.role !== 'admin') {
+      return { success: false, error: "Non autorisé. Droits administrateur requis." };
+    }
+
+    if (!amount || amount <= 0) {
+      return { success: false, error: "Le montant doit être supérieur à 0." };
+    }
+
+    // Récupérer le bon ID étudiant
+    let realStudentId = studentId;
+    const { data: etudiant } = await supabaseAdmin.from('etudiants').select('id, email').eq('id', studentId).maybeSingle();
+    if (etudiant && etudiant.email) {
+      const baseEmail = etudiant.email.toLowerCase().split('+')[0] + '@' + etudiant.email.split('@')[1];
+      const { data: familyStudents } = await supabaseAdmin.from('etudiants').select('id').eq('email', baseEmail);
+      if (familyStudents && familyStudents.length > 0) {
+        realStudentId = familyStudents[0].id; // Associer le paiement au 1er membre de la famille
+      }
+    }
+
+    // Insérer le paiement
+    const stripe_session_id = `manual_settle_${method}_${Date.now()}`;
+    const { data: newPayment, error: insertError } = await supabaseAdmin
+      .from('paiements')
+      .insert({
+        etudiant_id: realStudentId,
+        amount,
+        currency: 'EUR',
+        status: 'succeeded',
+        stripe_session_id,
+      })
+      .select('id')
+      .single();
+
+    if (insertError) {
+      console.error("[addManualSettlePaymentAction] Insert error:", insertError);
+      return { success: false, error: "Erreur lors de l'insertion du paiement." };
+    }
+
+    // Recalculer le statut global
+    await syncStudentPaidStatus(realStudentId);
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("[addManualSettlePaymentAction] Exception:", error);
+    return { success: false, error: "Erreur interne." };
+  }
+}
+
+/**
+ * Fonction de synchronisation absolue : Calcule le reste à payer et force le statut de toutes
+ * les inscriptions actives à la réalité mathématique (paye, partiel, impaye).
+ */
+export async function syncStudentPaidStatus(studentId: string) {
+  try {
+    const billingRes = await fetchStudentBillingDataAction(studentId);
+    if (!billingRes.success || !billingRes.data) return;
+
+    const { reste_a_payer, total_paid, inscriptions } = billingRes.data;
+    if (!inscriptions || inscriptions.length === 0) return;
+
+    const familyIds = inscriptions.map((ins: any) => ins.studentId);
+    
+    let targetStatus = 'impaye';
+    if (reste_a_payer <= 0) {
+      targetStatus = 'paye';
+    } else if (total_paid > 0) {
+      targetStatus = 'partiel';
+    }
+
+    // Ne mettre à jour que les inscriptions valides, en attente ou actives
+    await supabaseAdmin
+      .from('inscriptions')
+      .update({ paid_status: targetStatus })
+      .in('etudiant_id', familyIds)
+      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
+      
+  } catch (err) {
+    console.error("[syncStudentPaidStatus] Erreur:", err);
+  }
+}
+
+export async function deletePaymentAction(paymentId: string, studentId: string) {
+  try {
+    const authResult = await auth();
+    const adminId = authResult.userId;
+    if (!adminId) return { success: false, error: "Non autorisé." };
+
+    const { data: adminUser } = await supabaseAdmin.from('etudiants').select('role').eq('clerk_user_id', adminId).maybeSingle();
+    if (!adminUser || adminUser.role !== 'admin') return { success: false, error: "Non autorisé." };
+
+    // Seuls les paiements manuels peuvent être supprimés pour des raisons de sécurité
+    const { data: payment } = await supabaseAdmin.from('paiements').select('stripe_session_id').eq('id', paymentId).maybeSingle();
+    if (!payment) return { success: false, error: "Paiement introuvable." };
+    if (!payment.stripe_session_id || !payment.stripe_session_id.startsWith('manual_')) {
+      return { success: false, error: "Seuls les paiements manuels peuvent être supprimés." };
+    }
+
+    const { error } = await supabaseAdmin.from('paiements').delete().eq('id', paymentId);
+    if (error) throw error;
+
+    // Recalculer le statut après suppression
+    await syncStudentPaidStatus(studentId);
+
+    return { success: true };
+  } catch (error) {
+    console.error("[deletePaymentAction] Erreur:", error);
+    return { success: false, error: "Erreur lors de la suppression." };
   }
 }

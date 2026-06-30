@@ -64,6 +64,7 @@ export async function POST(req: Request) {
       renewalYear: body.year || '',
       nextLevelTitle: body.nextLevelTitle || '',
       registrationType,
+      expected_amount: String(basePrice), // Le prix de base par inscription
     };
 
     if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {

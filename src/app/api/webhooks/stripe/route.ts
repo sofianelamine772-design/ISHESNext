@@ -89,8 +89,9 @@ async function upsertInscription(params: {
   formationUuid: string;
   classId: string | null;
   academicYear: string;
+  expectedAmount?: number;
 }): Promise<string | null> {
-  const { studentId, formationUuid, academicYear } = params;
+  const { studentId, formationUuid, academicYear, expectedAmount } = params;
   let resolvedClassId = params.classId;
 
   // Si aucun classId n'est fourni, on cherche si c'est un cours distanciel ou s'il y a une classe active pour cette formation
@@ -149,23 +150,29 @@ async function upsertInscription(params: {
     .maybeSingle();
 
   if (existing) {
+    const updatePayload: any = { class_id: resolvedClassId || undefined, status: targetStatus, paid_status: 'paye' };
+    if (expectedAmount !== undefined) updatePayload.expected_amount = expectedAmount;
+
     await supabaseAdmin
       .from('inscriptions')
-      .update({ class_id: resolvedClassId || undefined, status: targetStatus, paid_status: 'paye' })
+      .update(updatePayload)
       .eq('id', existing.id);
     return existing.id;
   }
 
+  const insertPayload: any = {
+    etudiant_id: studentId,
+    formation_id: formationUuid,
+    class_id: resolvedClassId,
+    status: targetStatus,
+    paid_status: 'paye',
+    academic_year: academicYear,
+  };
+  if (expectedAmount !== undefined) insertPayload.expected_amount = expectedAmount;
+
   const { data: newIns, error } = await supabaseAdmin
     .from('inscriptions')
-    .insert({
-      etudiant_id: studentId,
-      formation_id: formationUuid,
-      class_id: resolvedClassId,
-      status: targetStatus,
-      paid_status: 'paye',
-      academic_year: academicYear,
-    })
+    .insert(insertPayload)
     .select('id')
     .single();
 
@@ -291,7 +298,8 @@ export async function POST(req: Request) {
     if (isRenewal) {
       const studentId = session.metadata?.studentId;
       if (studentId && formationUuid) {
-        const insId = await upsertInscription({ studentId, formationUuid, classId: null, academicYear: renewalYear });
+        const expectedAmount = parseFloat(session.metadata?.expected_amount || '0') || undefined;
+        const insId = await upsertInscription({ studentId, formationUuid, classId: null, academicYear: renewalYear, expectedAmount });
         if (insId) studentIds.push(studentId);
       }
     } else {
@@ -317,7 +325,8 @@ export async function POST(req: Request) {
             }
           }
 
-          const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear });
+          const expectedAmount = parseFloat(session.metadata?.expected_amount || '0') || undefined;
+          const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear, expectedAmount });
           if (insId) studentIds.push(studentId);
         }
       } else {
@@ -336,7 +345,8 @@ export async function POST(req: Request) {
               }
             }
 
-            const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear });
+            const expectedAmount = parseFloat(session.metadata?.expected_amount || '0') || undefined;
+            const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear, expectedAmount });
             if (insId) studentIds.push(studentId);
           }
         }
@@ -380,6 +390,12 @@ export async function POST(req: Request) {
           console.error('[WEBHOOK Clerk invite error]', inviteErr);
         }
       }
+    }
+
+    // Synchroniser le statut financier pour s'assurer que les paiements en plusieurs fois sont 'partiel'
+    if (studentIds.length > 0) {
+      const { syncStudentPaidStatus } = await import('@/app/actions/students');
+      await syncStudentPaidStatus(studentIds[0]); // Puisque c'est par famille, synchroniser un seul ID synchronise tout
     }
 
     console.log(`[WEBHOOK] Done: ${studentIds.length} student(s) processed for ${payerEmail}`);
@@ -432,12 +448,8 @@ export async function POST(req: Request) {
           }
 
           if (familyMembers && familyMembers.length > 0) {
-            const familyIds = familyMembers.map(m => m.id);
-            await supabaseAdmin
-              .from('inscriptions')
-              .update({ paid_status: status === 'succeeded' ? 'paye' : 'refuse' })
-              .in('etudiant_id', familyIds)
-              .eq('status', 'valide');
+            const { syncStudentPaidStatus } = await import('@/app/actions/students');
+            await syncStudentPaidStatus(primaryMember.id);
           }
         }
       }

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2, ExternalLink } from "lucide-react";
-import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction } from "@/app/actions/students";
+import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, deletePaymentAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -38,8 +38,21 @@ function EtudiantsContent() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  
+  const [billingData, setBillingData] = useState<{ totalExpected: number; totalPaid: number; resteAPayer: number; inscriptions: any[] }>({
+    totalExpected: 0,
+    totalPaid: 0,
+    resteAPayer: 0,
+    inscriptions: []
+  });
+  
   const [payments, setPayments] = useState<any[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
+
+  // Etat pour le règlement manuel du Reste à Payer
+  const [settleAmount, setSettleAmount] = useState("");
+  const [settleMethod, setSettleMethod] = useState("liquide");
+  const [isSettling, setIsSettling] = useState(false);
 
   // Only current and next academic year
   const currentAcademicYear = getCurrentAcademicYear();
@@ -150,9 +163,15 @@ function EtudiantsContent() {
   const fetchStudentPayments = async (studentId: string) => {
     setLoadingPayments(true);
     try {
-      const result = await fetchPaymentsByStudentAction(studentId);
+      const result = await fetchStudentBillingDataAction(studentId);
       if (result.success && result.data) {
-        setPayments(result.data);
+        setPayments(result.data.payments || []);
+        setBillingData({
+          totalExpected: result.data.total_expected || 0,
+          totalPaid: result.data.total_paid || 0,
+          resteAPayer: result.data.reste_a_payer || 0,
+          inscriptions: result.data.inscriptions || []
+        });
       } else {
         setPayments([]);
       }
@@ -169,8 +188,46 @@ function EtudiantsContent() {
       fetchStudentPayments(selectedStudentId);
     } else {
       setPayments([]);
+      setBillingData({ totalExpected: 0, totalPaid: 0, resteAPayer: 0, inscriptions: [] });
     }
   }, [selectedStudentId]);
+
+  const handleManualSettle = async () => {
+    if (!selectedStudentId || !settleAmount || isNaN(Number(settleAmount)) || Number(settleAmount) <= 0) return;
+    setIsSettling(true);
+    try {
+      const result = await addManualSettlePaymentAction(selectedStudentId, Number(settleAmount), settleMethod);
+      if (result.success) {
+        setSettleAmount("");
+        // Rafraîchir les paiements
+        fetchStudentPayments(selectedStudentId);
+      } else {
+        alert(result.error || "Erreur lors de l'enregistrement du règlement.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur système.");
+    } finally {
+      setIsSettling(false);
+    }
+  };
+
+  const handleDeletePayment = async (paymentId: string) => {
+    if (!selectedStudentId) return;
+    if (!confirm("Voulez-vous vraiment supprimer ce paiement manuel ? Cette action recalculera le statut financier de l'élève.")) return;
+    
+    try {
+      const result = await deletePaymentAction(paymentId, selectedStudentId);
+      if (result.success) {
+        fetchStudentPayments(selectedStudentId);
+      } else {
+        alert(result.error || "Erreur lors de la suppression.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur système.");
+    }
+  };
 
   const handleCreateStudent = async () => {
     if (!formData.first_name || !formData.last_name || !formData.email) return;
@@ -774,6 +831,63 @@ function EtudiantsContent() {
                       </h3>
                     </div>
 
+                    {!loadingPayments && (
+                      <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Coût Total</span>
+                          <span className="text-xl font-black text-ishes-dark">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalExpected)}</span>
+                        </div>
+                        <div className="bg-ishes-green/[0.05] border border-ishes-green/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                          <span className="text-[10px] font-black text-ishes-green uppercase tracking-widest mb-1">Déjà Payé</span>
+                          <span className="text-xl font-black text-ishes-green">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalPaid)}</span>
+                        </div>
+                        <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.resteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-100'}`}>
+                          <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.resteAPayer > 0 ? 'text-red-500' : 'text-gray-400'}`}>Reste à Payer</span>
+                          <span className={`text-xl font-black ${billingData.resteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.resteAPayer)}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Formulaire Règlement Manuel */}
+                    {!loadingPayments && billingData.resteAPayer > 0 && (
+                      <div className="mb-8 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-ishes-dark mb-4">Saisir un règlement</h4>
+                        <div className="flex flex-col sm:flex-row gap-4 items-end">
+                          <div className="flex-1 w-full space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Méthode</label>
+                            <select
+                              value={settleMethod}
+                              onChange={(e) => setSettleMethod(e.target.value)}
+                              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                            >
+                              <option value="liquide">Espèces / Liquide</option>
+                              <option value="virement">Virement bancaire</option>
+                              <option value="cheque">Chèque</option>
+                            </select>
+                          </div>
+                          <div className="flex-1 w-full space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant (€)</label>
+                            <input
+                              type="number"
+                              placeholder={`Ex: ${billingData.resteAPayer}`}
+                              value={settleAmount}
+                              onChange={(e) => setSettleAmount(e.target.value)}
+                              max={billingData.resteAPayer}
+                              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                            />
+                          </div>
+                          <Button 
+                            variant="ishes" 
+                            disabled={isSettling || !settleAmount || Number(settleAmount) <= 0 || Number(settleAmount) > billingData.resteAPayer}
+                            onClick={handleManualSettle}
+                            className="w-full sm:w-auto h-[46px] rounded-xl font-black uppercase tracking-widest text-[10px] px-8"
+                          >
+                            {isSettling ? <Loader2 className="w-4 h-4 animate-spin" /> : "Valider"}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
                     {loadingPayments ? (
                       <div className="flex items-center justify-center py-8">
                         <Loader2 className="w-6 h-6 text-ishes-green animate-spin mr-2" />
@@ -829,14 +943,23 @@ function EtudiantsContent() {
                                     )}
                                   </div>
                                 </div>
-                                <div className="text-right shrink-0">
+                                <div className="text-right shrink-0 flex flex-col items-end gap-1">
                                   <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
-                                  <span className={`inline-block mt-1 px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${isSucceeded
+                                  <span className={`inline-block px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${isSucceeded
                                     ? 'bg-ishes-green/10 text-ishes-green'
                                     : 'bg-red-100 text-red-600'
                                     }`}>
-                                    {isSucceeded ? 'Réglé' : 'Échoué'}
+                                    {isSucceeded ? 'Payé' : 'Échoué'}
                                   </span>
+                                  {payment.stripe_session_id?.startsWith('manual_') && (
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); handleDeletePayment(payment.id); }}
+                                      className="mt-1 flex items-center gap-1 text-[9px] font-black text-red-400 hover:text-red-600 uppercase tracking-widest transition-colors"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                      Supprimer
+                                    </button>
+                                  )}
                                 </div>
                               </div>
 
