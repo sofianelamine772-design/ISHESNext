@@ -52,7 +52,7 @@ export function BoutiqueProducts() {
   return (
     <section className="pb-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-16">
           {products.map((product, idx) => (
             <motion.div
               key={product.id}
@@ -60,10 +60,10 @@ export function BoutiqueProducts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="group flex flex-col md:flex-row gap-8 items-center md:items-start bg-white p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
+              className="group flex flex-col md:flex-row lg:flex-col xl:flex-row gap-8 items-center md:items-start lg:items-center xl:items-start bg-white p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
             >
               {/* Product Image */}
-              <div className="w-[60%] sm:w-64 md:w-56 aspect-[3/4] mx-auto md:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/10 shrink-0 relative">
+              <div className="w-[60%] sm:w-64 md:w-56 lg:w-[60%] xl:w-56 aspect-[3/4] mx-auto md:mx-0 lg:mx-auto xl:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/10 shrink-0 relative">
                 <Image 
                   src={product.image} 
                   alt={product.title}
