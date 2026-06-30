@@ -47,7 +47,19 @@ const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 
 export default clerkMiddleware(async (auth, request) => {
   try {
-    console.log('[PROXY] Incoming request:', request.nextUrl.href);
+    const pubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || '';
+    const keyType = pubKey.startsWith('pk_live_') ? 'PRODUCTION' : (pubKey.startsWith('pk_test_') ? 'TEST' : 'UNKNOWN');
+    const maskedKey = pubKey ? `${pubKey.substring(0, 10)}...` : 'MISSING';
+    
+    console.log('\n--- [CLERK DEBUG LOG] ---');
+    console.log(`URL: ${request.nextUrl.href}`);
+    console.log(`Host: ${request.headers.get('host')}`);
+    console.log(`Origin: ${request.headers.get('origin')}`);
+    console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`Clerk Key Type: ${keyType}`);
+    console.log(`Clerk Publishable Key: ${maskedKey}`);
+    console.log('-------------------------\n');
+
     const publicMatch = isPublicRoute(request);
     console.log('[PROXY] isPublicRoute:', publicMatch);
     // Redirection case-sensitive pour /CGV vers /cgv
