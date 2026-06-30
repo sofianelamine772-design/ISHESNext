@@ -906,7 +906,7 @@ function EtudiantsContent() {
                           const isFamily = payment.isFamilyPayment && payment.familyMembers?.length > 0;
                           const membersCount = payment.familyMembersCount || 1;
 
-                          const isSucceeded = payment.status === 'succeeded' || payment.status === 'paid';
+                          const isSucceeded = payment.status === 'succeeded' || payment.status === 'paid' || payment.status === 'paye';
                           return (
                             <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${isSucceeded
                               ? 'bg-ishes-green/[0.03] border-ishes-green/15'

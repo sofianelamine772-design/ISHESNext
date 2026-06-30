@@ -13,7 +13,7 @@ export async function logSystemError(moduleName: string, error: any) {
     }, { onConflict: 'id' });
 
     // Extraire le message et la stack trace
-    const message = error instanceof Error ? error.message : String(error);
+    const message = error instanceof Error ? error.message : (typeof error === 'object' ? JSON.stringify(error) : String(error));
     const stack = error instanceof Error ? error.stack : null;
 
     // 2. Insérer le log dans la table messages
