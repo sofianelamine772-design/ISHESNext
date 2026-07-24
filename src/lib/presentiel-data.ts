@@ -371,19 +371,6 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     id: 26,
     niveau: "Femme débutante ARABE + TAJWID",
     ageCondition: "Femme",
-    horaire: "Samedi matin (09h00 - 12h00)",
-    audience: "adulte",
-    type: "femme",
-    jour: "samedi",
-    periode: "matin",
-    planId: "presentiel-global",
-    slotKey: "samedi",
-    niveauKey: "femme_debutante"
-  },
-  {
-    id: 29,
-    niveau: "Femme intermédiaire ARABE + TAJWID",
-    ageCondition: "Femme",
     horaire: "Dimanche matin (09h00 - 12h00)",
     audience: "adulte",
     type: "femme",
@@ -391,6 +378,19 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     periode: "matin",
     planId: "presentiel-global",
     slotKey: "dimanche",
+    niveauKey: "femme_debutante"
+  },
+  {
+    id: 29,
+    niveau: "Femme intermédiaire ARABE + TAJWID",
+    ageCondition: "Femme",
+    horaire: "Samedi matin (09h00 - 12h00)",
+    audience: "adulte",
+    type: "femme",
+    jour: "samedi",
+    periode: "matin",
+    planId: "presentiel-global",
+    slotKey: "samedi",
     niveauKey: "femme_intermediaire"
   }
 ];

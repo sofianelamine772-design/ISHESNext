@@ -426,7 +426,7 @@ function InscriptionForm() {
   // Derived Title
   const getPlanName = (id: string | null) => {
     switch (id) {
-      case "presentiel-global": return "Cours en Présentiel / Direct";
+      case "presentiel-global": return "Cours en Présentiel";
       case "tajwid_intensif": return "Tajwid Intensif (Distanciel)";
       case "sciences_islamiques": return "Sciences Islamiques (Distanciel)";
       case "arabe_coran_junior": return "Arabe & Coran Junior";
@@ -944,9 +944,9 @@ function InscriptionForm() {
                         >
                           <option value="">— Sélectionner votre niveau —</option>
                           <optgroup label="Standard (Distanciel)">
-                            <option value="debutant">Débutant (Autre)</option>
-                            <option value="intermediaire">Intermédiaire (Autre)</option>
-                            <option value="avance">Avancé (Autre)</option>
+                            <option value="debutant">Débutant</option>
+                            <option value="intermediaire">Intermédiaire</option>
+                            <option value="avance">Avancé</option>
                           </optgroup>
                         </select>
                       </div>
@@ -1129,9 +1129,15 @@ function InscriptionForm() {
                           planId === 'arabe_coran_junior' ? '👶' : '✨'}
                   </div>
                   <div>
-                    <h3 className="text-lg font-black text-[#101828]">{planName || "Votre Formation"}</h3>
+                    <h3 className="text-lg font-black text-[#101828]">
+                      {((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'debutante_presentiel') ? 'Arabe & Tajwid débutant' 
+                      : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'intermediaire_presentiel') ? 'Arabe & Tajwid 2eme année'
+                      : (planName || "Votre Formation")}
+                    </h3>
                     <p className="text-xs font-bold text-[#008953] uppercase tracking-widest mt-1">
-                      Durée : {planId === 'tajwid_intensif' ? '3 mois' : '8 à 9 mois'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : '1h30/semaine'}
+                      {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : (
+                        <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : '8 à 9 mois'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : ((planId === 'presentiel-global' && (planName?.toLowerCase().includes('débutant') || planName?.toLowerCase().includes('interm')) && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'femme_intermediaire_presentiel' || planId === 'debutante_presentiel' || planId === 'intermediaire_presentiel') ? '3h/semaine' : '1h30/semaine'}</>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -1145,7 +1151,13 @@ function InscriptionForm() {
                         ? ["Cours en présentiel", "Suivi personnalisé", "Pédagogie structurée", "Manuel inclus"]
                         : planId === 'sciences_islamiques'
                           ? ["Fiqh Malikite", "Piliers de l'Islam", "Éthique & Spiritualité", "Cours interactifs"]
-                          : ["Pédagogie certifiée CECRL", "Suivi individuel", "Supports modernes", "Excellence ISHES"]
+                          : (planId === 'presentiel-global' && registrationType === 'child')
+                            ? ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"]
+                          : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'debutante_presentiel')
+                            ? ["Bases de l'Arabe", "Bases du Tajwid (Coran)", "Théorie & pratique", "Diplôme final"]
+                          : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'intermediaire_presentiel')
+                            ? ["Perfectionnement Arabe", "Maîtrise des règles de Tajwid", "Théorie & pratique", "Diplôme final"]
+                            : ["Pédagogie certifiée CECRL", "Suivi individuel", "Supports modernes", "Excellence ISHES"]
                     ).map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-[#008953] shrink-0" />

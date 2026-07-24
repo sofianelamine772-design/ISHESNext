@@ -38,10 +38,10 @@ const presentielPrograms: PresentielProgram[] = [
     formationId: "presentiel-global",
     title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
-    durationText: "Samedi matin 9h-12h",
-    day: "Samedi",
+    durationText: "Dimanche matin 9h-12h",
+    day: "Dimanche",
     audience: "adulte",
-    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Samedi matin (9h-12h)", "Suivi personnalisé"],
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Dimanche matin (9h-12h)", "Suivi personnalisé"],
     price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-en-presentiel"
@@ -51,10 +51,10 @@ const presentielPrograms: PresentielProgram[] = [
     formationId: "presentiel-global",
     title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
-    durationText: "Dimanche matin 9h-12h",
-    day: "Dimanche",
+    durationText: "Samedi matin 9h-12h",
+    day: "Samedi",
     audience: "adulte",
-    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Dimanche matin (9h-12h)", "Suivi personnalisé"],
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Samedi matin (9h-12h)", "Suivi personnalisé"],
     price: "480 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-en-presentiel"
@@ -113,7 +113,7 @@ export default function InstitutPage() {
     },
     {
       q: "Quels sont les jours et horaires des formations ?",
-      a: "Pour l'année en cours : \n• Scolarité Enfants : Mercredi après-midi (13h30-16h30), Samedi ou Dimanche.\n• Scolarité Femmes Débutante : Samedi matin de 9h00 à 12h00.\n• Scolarité Femmes Intermédiaire : Dimanche matin de 9h00 à 12h00."
+      a: "Pour l'année en cours : \n• Scolarité Enfants : Mercredi après-midi (13h30-16h30), Samedi ou Dimanche.\n• Scolarité Femmes Débutante : Dimanche matin de 9h00 à 12h00.\n• Scolarité Femmes Intermédiaire : Samedi matin de 9h00 à 12h00."
     },
     {
       q: "Comment fonctionne le paiement de la scolarité ?",
@@ -246,12 +246,14 @@ export default function InstitutPage() {
                       </div>
                       <span className="text-[11px] font-black text-[#c8a96e]">{program.durationText}</span>
                     </div>
-                    <div className="flex items-center gap-2 group/icon">
-                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                        <BookOpen className="w-4 h-4 text-[#c8a96e]" />
+                    {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && (
+                      <div className="flex items-center gap-2 group/icon">
+                        <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
+                          <BookOpen className="w-4 h-4 text-[#c8a96e]" />
+                        </div>
+                        <span className="text-[10px] font-bold text-gray-500">Manuel inclus</span>
                       </div>
-                      <span className="text-[10px] font-bold text-gray-500">Manuel inclus</span>
-                    </div>
+                    )}
                     <div className="flex items-center gap-2 group/icon">
                       <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
                         <Users className="w-4 h-4 text-[#c8a96e]" />

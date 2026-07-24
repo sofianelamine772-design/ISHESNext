@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "rm -rf .next/dev/cache/turbopack && next dev --webpack",
+    "dev": "lsof -ti:3005 | xargs kill -9 2>/dev/null || true && rm -rf .next/dev/cache/turbopack && next dev --turbo -p 3005",
     "dev:turbo": "next dev --turbo",
     "clean": "rm -rf .next && npm run dev",
     "build": "next build",
@@ -25,7 +25,7 @@
     "html-to-image": "^1.11.13",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.8.0",
-    "next": "16.2.4",
+    "next": "^16.2.4",
     "nodemailer": "^8.0.11",
     "pg": "^8.22.0",
     "react": "19.2.4",

@@ -35,13 +35,13 @@ export const PROGRAMS: Program[] = [
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Samedi matin 9h-12h",
-    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Niveau Débutante", "Samedi matin (9h-12h)"],
+    durationText: "Dimanche matin 9h-12h",
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Niveau Débutante", "Dimanche matin (9h-12h)"],
     price: "480 €",
     priceSub: "/ SESSION",
     type: "presentiel",
     audience: "adulte",
-    day: "Samedi"
+    day: "Dimanche"
   },
   {
     id: "femme-intermediaire-presentiel",
@@ -50,13 +50,13 @@ export const PROGRAMS: Program[] = [
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
-    durationText: "Dimanche matin 9h-12h",
-    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Niveau Intermédiaire", "Dimanche matin (9h-12h)"],
+    durationText: "Samedi matin 9h-12h",
+    features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Niveau Intermédiaire", "Samedi matin (9h-12h)"],
     price: "480 €",
     priceSub: "/ SESSION",
     type: "presentiel",
     audience: "adulte",
-    day: "Dimanche"
+    day: "Samedi"
   },
   {
     id: "enfant-mercredi-presentiel",
@@ -66,7 +66,7 @@ export const PROGRAMS: Program[] = [
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
     durationText: "Mercredi 13h30-16h30",
-    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
     priceSub: "/ SESSION",
     type: "presentiel",
@@ -81,7 +81,7 @@ export const PROGRAMS: Program[] = [
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
     durationText: "Samedi 9h-12h / 13h30-16h30",
-    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
     priceSub: "/ SESSION",
     type: "presentiel",
@@ -96,7 +96,7 @@ export const PROGRAMS: Program[] = [
     tagText: "PRÉSENTIEL",
     tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
     durationText: "Dimanche 9h-12h / 13h30-16h30",
-    features: ["Enseignement direct", "Activités ludiques", "Vie d'institut", "Ateliers"],
+    features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
     priceSub: "/ SESSION",
     type: "presentiel",
@@ -105,7 +105,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tajwid_standard",
-    title: "Tajwid Progressif",
+    title: "Tajwid Standard",
     subtitle: "Apprendre à lire le Coran correctement, même en partant de zéro. Une méthode étape par étape.",
     tagText: "STANDARD",
     tagColor: "bg-green-100 text-green-700",
@@ -641,13 +641,17 @@ export function ProgramContent() {
                       <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
                       <span className="text-[10px] font-bold text-gray-400">{isPresentiel ? program.durationText : "1h30/sem"}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400">Manuel inclus</span>
-                    </div>
+                    {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && !program.id.includes("enfant") && (
+                      <div className="flex items-center gap-2">
+                        <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
+                        <span className="text-[10px] font-bold text-gray-400">Manuel inclus</span>
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <Users className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400">Max 20</span>
+                      <span className="text-[10px] font-bold text-gray-400">
+                        {program.id.includes("enfant") ? "Max 16" : "Max 20"}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Award className={`w-3.5 h-3.5 ${accentColor}`} />

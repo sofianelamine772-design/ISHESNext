@@ -156,8 +156,8 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      <div className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-green-50 rounded-3xl shadow-md">
                         <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-10 w-10 object-cover rounded-full shadow-sm" />
                         <div>
-                           <p className="text-[13px] font-black text-[#25D366] uppercase tracking-widest">Suivi & Entraide</p>
-                           <p className="text-xs font-bold text-gray-500 mt-1">Groupe WhatsApp par classe</p>
+                           <p className="text-[13px] font-black text-[#25D366] uppercase tracking-widest">Suivi pédagogique</p>
+                           <p className="text-xs font-bold text-gray-500 mt-1">Groupe WhatsApp de la classe</p>
                         </div>
                      </div>
                   </div>
@@ -177,7 +177,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      <>
                         <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/40 to-transparent z-10"></div>
                         <img
-                           src="https://images.unsplash.com/photo-1584281723351-93e18cd944f2?auto=format&fit=crop&q=80&w=800"
+                           src="/images/kaaba.jpg"
                            alt={course.title}
                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
@@ -253,6 +253,17 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                     <div className="w-2 h-2 rounded-full bg-[#008953] mt-2.5 shrink-0"></div>
                                     <span className="text-lg leading-relaxed">{trimmed.substring(1).trim()}</span>
                                  </div>
+                              );
+                           }
+                           if (trimmed.startsWith('👉')) {
+                              return (
+                                 <Link 
+                                    key={i} 
+                                    href={`/inscription?plan=${id}&audience=${audience}`}
+                                    className="inline-block mt-8 text-2xl font-black text-[#101828] hover:text-[#008953] transition-colors duration-300"
+                                 >
+                                    {trimmed}
+                                 </Link>
                               );
                            }
                            

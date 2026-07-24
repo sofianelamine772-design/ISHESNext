@@ -276,8 +276,8 @@ export default function Home() {
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-sm flex items-center justify-center mb-8 rotate-[3deg] hover:rotate-0 transition-transform">
                 <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-14 w-14 object-cover rounded-full" />
               </div>
-              <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi & Entraide par Classe</h4>
-              <p className="text-gray-500 font-medium leading-relaxed text-lg">Intégrez un <strong className="text-[#25D366]">groupe WhatsApp exclusif</strong> pour votre classe. Posez vos questions, recevez les annonces et échangez avec vos camarades.</p>
+              <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi pédagogique</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-lg">Intégrez le <strong className="text-[#25D366]">groupe WhatsApp de la classe</strong>. Posez vos questions, recevez les annonces et échangez avec vos camarades.</p>
             </div>
           </div>
         </div>
