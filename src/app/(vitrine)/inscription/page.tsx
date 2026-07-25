@@ -326,7 +326,11 @@ function InscriptionForm() {
       let initHoraire = "";
       let initClassId = "";
 
-      if (planId === 'presentiel-global' && initSlot && initNiveau) {
+      if (planId === 'femme_intermediaire_presentiel') {
+        initClassId = "31";
+      } else if (planId === 'femme_debutante_presentiel') {
+        initClassId = "26";
+      } else if (planId === 'presentiel-global' && initSlot && initNiveau) {
         const aud = registrationType === 'child' ? 'enfant' : 'adulte';
         const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
           c.planId === 'presentiel-global' &&
@@ -1088,60 +1092,6 @@ function InscriptionForm() {
             </motion.div>
           )}
 
-          {step === 3 && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center">
-              <div className="flex flex-col lg:flex-row items-center gap-12 mb-12">
-                {/* Mascot Image */}
-                <div className="w-full max-w-[320px] relative">
-                  <img
-                    src="/images/mascotte-ishes-toulouse.png"
-                    alt="Mascotte ISHES"
-                    className="w-full h-auto drop-shadow-2xl"
-                  />
-                </div>
-
-                {/* Message Bubble Container */}
-                <div className="flex-1">
-                  <div className="bg-[#007044] text-white p-8 md:p-10 rounded-[3rem] shadow-2xl relative">
-                    {/* Speech Bubble Tail (CSS triangle) */}
-                    <div className="absolute top-1/2 -left-3 w-6 h-6 bg-[#007044] rotate-45 -translate-y-1/2 hidden lg:block" />
-
-                    <div className="flex items-center gap-3 mb-6">
-                      <MessageSquareText className="w-6 h-6 text-white/80" />
-                      <h3 className="text-xl font-black tracking-tight underline decoration-ishes-green decoration-4 underline-offset-4">Message de la ville</h3>
-                    </div>
-
-                    <div className="space-y-4">
-                      <p className="text-xl md:text-2xl font-bold leading-relaxed">
-                        "Une fois payé, utilisez votre mail <span className="text-white underline decoration-2">{formData.email || 'votre email'}</span> pour vous inscrire sur <span className="underline decoration-2">ISHEECOLE</span> !"
-                      </p>
-                      <div className="pt-4">
-                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-white/20">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Activation Automatique
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="w-full flex flex-col md:flex-row gap-4">
-                <button
-                  onClick={prevStep}
-                  className="flex-1 bg-white border-2 border-gray-100 text-gray-500 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:border-gray-300 transition-all"
-                >
-                  ← Retour
-                </button>
-                <button
-                  onClick={nextStep}
-                  className="flex-[2] bg-[#008953] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all flex items-center justify-center gap-3 shadow-xl shadow-[#008953]/20"
-                >
-                  J'AI COMPRIS, PAYER <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </motion.div>
-          )}
 
           {step === 2 && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-6">
@@ -1164,34 +1114,9 @@ function InscriptionForm() {
                     </h3>
                     <p className="text-xs font-bold text-[#008953] uppercase tracking-widest mt-1">
                       {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : (
-                      <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : '8 à 9 mois'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : '1h30/semaine'}</>
+                      <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : 'du 1er octobre au 30 juin'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : '1h30/semaine'}</>
                       )}
                     </p>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200/50 pt-6 mb-6">
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Ce qui est inclus dans votre formation :</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(planId === 'tajwid_intensif'
-                      ? ["Méthode intensive", "Lecture rapide", "Autonomie totale", "Coaching audio"]
-                      : planId === 'tajwid_standard'
-                        ? ["Cours en présentiel", "Suivi personnalisé", "Pédagogie structurée", "Manuel inclus"]
-                        : planId === 'sciences_islamiques'
-                          ? ["Fiqh Malikite", "Piliers de l'Islam", "Éthique & Spiritualité", "Cours interactifs"]
-                          : (planId === 'presentiel-global' && registrationType === 'child')
-                            ? ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"]
-                          : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'debutante_presentiel')
-                            ? ["Bases de l'Arabe", "Bases du Tajwid (Coran)", "Théorie & pratique", "Diplôme final"]
-                          : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'intermediaire_presentiel')
-                            ? ["Perfectionnement Arabe", "Maîtrise des règles de Tajwid", "Théorie & pratique", "Diplôme final"]
-                            : ["Pédagogie certifiée CECRL", "Suivi individuel", "Supports modernes", "Excellence ISHES"]
-                    ).map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#008953] shrink-0" />
-                        <span className="text-xs text-gray-700 font-bold">{feature}</span>
-                      </div>
-                    ))}
                   </div>
                 </div>
 
@@ -1246,7 +1171,7 @@ function InscriptionForm() {
             </motion.div>
           )}
 
-          {step === 4 && (
+          {step === 3 && (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
               <div className="mb-10">
                 <div className="w-24 h-24 bg-green-50 text-ishes-green rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
@@ -1377,7 +1302,7 @@ function InscriptionForm() {
               </div>
 
               <button
-                onClick={() => setStep(3)}
+                onClick={() => setStep(1)}
                 className="text-gray-400 font-bold text-xs hover:text-gray-600 underline uppercase tracking-widest"
               >
                 Modifier mes informations

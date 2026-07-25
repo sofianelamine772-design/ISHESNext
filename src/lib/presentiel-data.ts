@@ -106,19 +106,6 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     niveauKey: "maternel_2"
   },
   {
-    id: 8,
-    niveau: "Élémentaire Débutant 1",
-    ageCondition: "7-14 ans",
-    horaire: "MERCREDI",
-    audience: "enfant",
-    type: "mixte",
-    jour: "mercredi",
-    periode: "après-midi",
-    planId: "presentiel-global",
-    slotKey: "mercredi",
-    niveauKey: "elementaire_1"
-  },
-  {
     id: 9,
     niveau: "Élémentaire Débutant 1",
     ageCondition: "7-14 ans",
@@ -252,13 +239,13 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     id: 19,
     niveau: "Élémentaire 2",
     ageCondition: "7-14 ans",
-    horaire: "DIMANCHE MATIN",
+    horaire: "SAMEDI MATIN",
     audience: "enfant",
     type: "mixte",
-    jour: "dimanche",
+    jour: "samedi",
     periode: "matin",
     planId: "presentiel-global",
-    slotKey: "dimanche",
+    slotKey: "samedi",
     niveauKey: "elementaire_2"
   },
   {
@@ -304,19 +291,6 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     id: 23,
     niveau: "Élémentaire 3 et 3+",
     ageCondition: "7-12 ans",
-    horaire: "MERCREDI",
-    audience: "enfant",
-    type: "mixte",
-    jour: "mercredi",
-    periode: "après-midi",
-    planId: "presentiel-global",
-    slotKey: "mercredi",
-    niveauKey: "elementaire_3"
-  },
-  {
-    id: 24,
-    niveau: "Élémentaire 4",
-    ageCondition: "7-14 ans",
     horaire: "DIMANCHE A-M",
     audience: "enfant",
     type: "mixte",
@@ -324,6 +298,19 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     periode: "après-midi",
     planId: "presentiel-global",
     slotKey: "dimanche",
+    niveauKey: "elementaire_3"
+  },
+  {
+    id: 24,
+    niveau: "Élémentaire 4",
+    ageCondition: "7-14 ans",
+    horaire: "MERCREDI",
+    audience: "enfant",
+    type: "mixte",
+    jour: "mercredi",
+    periode: "après-midi",
+    planId: "presentiel-global",
+    slotKey: "mercredi",
     niveauKey: "elementaire_4"
   },
   {

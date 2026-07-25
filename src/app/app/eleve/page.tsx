@@ -405,7 +405,7 @@ export default function EleveDashboard() {
                       >
                         Sélectionner pour documents
                       </button>
-                      {child.whatsappLink && (
+                      {child.whatsappLink ? (
                         <a
                           href={child.whatsappLink}
                           target="_blank"
@@ -417,6 +417,17 @@ export default function EleveDashboard() {
                           </svg>
                           Rejoindre WhatsApp
                         </a>
+                      ) : (
+                        <button
+                          disabled
+                          className="w-full py-2.5 rounded-xl font-bold text-xs bg-gray-100 text-gray-400 text-center flex items-center justify-center gap-1.5 cursor-not-allowed"
+                          title="Le lien WhatsApp sera disponible une fois votre classe assignée"
+                        >
+                          <svg className="w-4 h-4 fill-current opacity-50" viewBox="0 0 24 24">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+                          </svg>
+                          WhatsApp (En attente de classe)
+                        </button>
                       )}
                     </div>
                   </div>
@@ -448,7 +459,7 @@ export default function EleveDashboard() {
           )}
 
           {/* ─── WHATSAPP GROUP LINK ─── */}
-          {certData?.whatsappLink && (
+          {certData?.whatsappLink ? (
             <div className="bg-[#086b51]/5 border border-[#086b51]/10 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
               <div className="flex items-center gap-6">
                 <div className="w-16 h-16 bg-[#25D366]/10 text-[#25D366] rounded-[2rem] flex items-center justify-center shrink-0">
@@ -469,6 +480,26 @@ export default function EleveDashboard() {
               >
                 Rejoindre le Groupe
               </a>
+            </div>
+          ) : (
+            <div className="bg-gray-50 border border-gray-100 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm opacity-70">
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-16 bg-gray-200 text-gray-400 rounded-[2rem] flex items-center justify-center shrink-0">
+                  <svg className="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-gray-900 tracking-tight">Rejoindre le WhatsApp de la classe</h3>
+                  <p className="text-gray-500 text-xs font-medium mt-1">Le lien d'accès au groupe WhatsApp sera disponible ici dès que vous serez affecté(e) à une classe.</p>
+                </div>
+              </div>
+              <button
+                disabled
+                className="bg-gray-200 text-gray-500 px-8 py-4 rounded-[1.8rem] font-black uppercase tracking-widest text-[10px] flex items-center gap-2.5 cursor-not-allowed text-center md:self-center shrink-0"
+              >
+                En attente d'affectation
+              </button>
             </div>
           )}
 
