@@ -89,6 +89,20 @@ export default function PackAccompagnementPage() {
                  <p className="text-[10px] font-black text-ishes-dark uppercase tracking-widest">Valeur réelle : 399 €</p>
               </div>
            </div>
+
+           <div className="mt-16 max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white/60 backdrop-blur-sm">
+             <video 
+               src="/videos/pack-accomp-final.mp4" 
+               controls 
+               autoPlay
+               muted
+               loop
+               playsInline
+               className="w-full h-auto aspect-video bg-[#101828]"
+             >
+                Votre navigateur ne supporte pas la lecture de vidéos.
+             </video>
+           </div>
         </div>
       </section>
 

@@ -11,20 +11,48 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 const formations = [
   {
     id: "nour-al-bayan",
-    title: "Diplôme TAJWID",
-    subtitle: "Formation Nour Al Bayan",
+    title: "Formation Enseignant de Tajwid",
+    subtitle: "Méthode Les Clés du Coran",
     availableRemote: true,
     paymentTerms: "Jusqu'à 10x sans frais",
-    tags: ["Arrangement du Coran", "La science du Mecquois"],
-    description: "L'enseignement à la méthodologie Nour Al Bayan est destiné aux enseignants et aux adultes qui souhaitent enseigner la lecture et la récitation du Saint Coran suivant cette méthode reconnue. L'Institut dispose de formateurs spécialisés depuis plusieurs années dans l'enseignement de cette méthode.",
+    tags: ["Pédagogie", "Certification", "Accompagnement"],
+    description: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.\n\nTu connais peut-être déjà les règles du Tajwid. Tu récites correctement. Mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science… et savoir l'enseigner.\n\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.",
     objectifs: [
-      "Redéfinir l'intention de devenir enseignant de la méthode Nour Al Bayan",
-      "Formation à la méthode d'enseignement Nour Al Bayan Kids à destination des enfants",
-      "Formation à la méthode d'enseignement Nour Al Bayan à destination des adultes",
-      "Tarbya Bil Houb, éducation à la bienveillance dans la transmission du savoir",
-      "Enseignement de la pédagogie niveau 1, 2 et 3 : Fath Rahman, Fath Rabbani / Sifat El Hourous",
-      "Maîtrise du Tajwid"
+      "Construire une progression pédagogique logique",
+      "Présenter chaque règle avec simplicité",
+      "Gérer une classe et maintenir l'attention",
+      "Corriger efficacement sans décourager",
+      "S'adapter selon le niveau de chaque élève"
     ],
+    deroulement: [
+      "Deux cours par semaine : le lundi et le jeudi, en direct sur Zoom",
+      "Replays accessibles pendant toute la durée",
+      "Formation organisée en trois modules",
+      "Vérification de la récitation (Module 3)",
+      "Évaluations et examens de validation"
+    ],
+    modules: [
+      {
+        title: "Module 1 — Enseigner le Tajwid",
+        desc: "Méthode pédagogique exclusive Les Clés du Coran (adaptation francophone inspirée de Nour Al Bayan)."
+      },
+      {
+        title: "Module 2 — « Apprendre à apprendre »",
+        desc: "Piliers de l'apprentissage, mémorisation, gestion de classe, psychologie et posture de l'enseignant."
+      },
+      {
+        title: "Module 3 — Perfectionnement de la récitation",
+        desc: "Vérification et correction de ta lecture pour t'assurer une parfaite maîtrise des règles à enseigner."
+      }
+    ],
+    pourQui: [
+      "Futurs enseignants ou enseignants en poste",
+      "Étudiants en sciences islamiques",
+      "Responsables d'écoles, mosquées, associations",
+      "Parents souhaitant transmettre le Coran"
+    ],
+    supports: "Tous les supports sont inclus (Méthode Les Clés du Coran, ressources pédagogiques, évaluations).",
+    accompagnement: "Accompagnement et supervision possibles même après la certification pour tes premiers pas d'enseignant.",
     pricing: "Devis personnalisé",
     format: "Enseignement à distance",
     badgeColor: "bg-ishes-green/10 text-ishes-green"
@@ -108,9 +136,47 @@ export default function FormationEnseignantPage() {
             >
               Transmettez le savoir avec excellence. Nos formations diplômantes vous ouvrent les portes d'une pédagogie moderne et reconnue.
             </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-16 max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white/60 backdrop-blur-sm relative z-20"
+            >
+              <iframe 
+                className="w-full aspect-video bg-[#101828]"
+                src="https://www.youtube.com/embed/8QiflPosqYU?si=TnSm478CtqEXACvl" 
+                title="Présentation de la Formation Enseignant" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+              ></iframe>
+            </motion.div>
           </div>
         </div>
       </section>
+      
+      {/* --- CHIFFRES CLES --- */}
+      <section className="relative z-20 -mt-16 mb-16 px-6">
+        <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
+          <div className="flex-1 text-center">
+            <h3 className="text-4xl font-black text-ishes-dark mb-2">15+</h3>
+            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">années d'expérience dans la formation d'enseignants</p>
+          </div>
+          <div className="hidden md:block w-px h-16 bg-gray-100"></div>
+          <div className="flex-1 text-center">
+            <h3 className="text-4xl font-black text-ishes-green mb-2">Méthode</h3>
+            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">exclusive "Les Clés du Coran"</p>
+          </div>
+          <div className="hidden md:block w-px h-16 bg-gray-100"></div>
+          <div className="flex-1 text-center">
+            <h3 className="text-4xl font-black text-ishes-dark mb-2">100%</h3>
+            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">Accompagnement avant, pendant et après</p>
+          </div>
+        </div>
+      </section>
+
       {/* --- STORYTELLING : VOCATION, PROBLÈME, SOLUTION --- */}
       <section className="pt-20 pb-10 relative z-10">
         <div className="max-w-4xl mx-auto px-6">
@@ -217,6 +283,48 @@ export default function FormationEnseignantPage() {
                       <GraduationCap className="w-32 h-32" strokeWidth={1} />
                     </div>
  
+                    {f.modules && (
+                      <div className="mb-12 relative z-10">
+                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Les 3 Modules de la Formation</h3>
+                        <div className="space-y-6">
+                          {f.modules.map((m: any, i: number) => (
+                             <div key={i} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                               <h4 className="text-[15px] font-black text-ishes-dark mb-2">{m.title}</h4>
+                               <p className="text-sm font-medium text-gray-500 leading-relaxed">{m.desc}</p>
+                             </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {f.pourQui && (
+                      <div className="mb-12 relative z-10">
+                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-6">Pour Qui ?</h3>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          {f.pourQui.map((item: string, i: number) => (
+                            <div key={i} className="flex gap-3 items-center bg-white px-4 py-3 rounded-xl border border-gray-100 shadow-sm">
+                              <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                              <p className="text-xs font-bold text-gray-600 leading-snug">{item}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {f.supports && (
+                      <div className="mb-12 relative z-10 bg-green-50 p-6 rounded-2xl border border-green-100">
+                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-2">Supports Inclus</h3>
+                        <p className="text-sm font-bold text-ishes-dark">{f.supports}</p>
+                      </div>
+                    )}
+
+                    {f.accompagnement && (
+                      <div className="mb-12 relative z-10 bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                        <h3 className="text-blue-600 font-black uppercase tracking-[0.2em] text-xs mb-2">Suivi Post-Formation</h3>
+                        <p className="text-sm font-bold text-blue-900">{f.accompagnement}</p>
+                      </div>
+                    )}
+
                     {f.deroulement && (
                       <div className="mb-12 relative z-10">
                         <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>

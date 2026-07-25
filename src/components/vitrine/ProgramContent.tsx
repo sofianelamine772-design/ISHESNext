@@ -341,6 +341,24 @@ export const PROGRAMS: Program[] = [
     audience: "enfant"
   },
   {
+    id: "formation_enseignant",
+    title: "Devenir Enseignant Tajwid",
+    subtitle: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
+    tagText: "PRO",
+    tagColor: "bg-blue-100 text-blue-700",
+    durationText: "Sur demande",
+    features: [
+      "Méthode Les Clés du Coran",
+      "Pédagogie & didactique",
+      "Gestion de classe",
+      "Certification ISHES"
+    ],
+    price: "Devis",
+    priceSub: "/ PERSONNALISÉ",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
     id: "tarbiya_islamiya",
     title: "Tarbiya Islamiya",
     subtitle: "Éveil du cœur et amour d'Allah. Un cours pour préserver la Fitra de vos enfants.",
@@ -593,7 +611,8 @@ export function ProgramContent() {
                                           program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
                                             program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
                                               program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                                                `/program/${program.id}`;
+                                                program.id === 'formation_enseignant' ? '/formation-enseignant' :
+                                                  `/program/${program.id}`;
 
             return (
               <motion.div
@@ -720,7 +739,15 @@ export function ProgramContent() {
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: index * 0.5 }}
                         className="flex"
                       >
-                        {isPresentiel ? (
+                        {program.id === 'formation_enseignant' ? (
+                          <Link
+                            href="/fr/contact"
+                            onClick={(e) => e.stopPropagation()}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                          >
+                            S'inscrire
+                          </Link>
+                        ) : isPresentiel ? (
                           <Link
                             href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
                             onClick={(e) => e.stopPropagation()}
