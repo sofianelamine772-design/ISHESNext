@@ -59,24 +59,45 @@ const formations = [
   },
   {
     id: "tarbya-islamya",
-    title: "Diplôme Tarbya Islamya",
-    subtitle: "Formation Tarbya Islamya",
+    title: "Formation Enseignant Tarbya Islamiya",
+    subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
     availableRemote: true,
-    paymentTerms: "Jusqu'à 10x sans frais",
-    tags: ["Formation Nour Al Bayan", "La science du Mecquois"],
-    description: "L'enseignement Tarbya Islamya est destiné aux adultes souhaitant enseigner aux enfants une pédagogie adaptée dont l'objectif est de préserver la \"Fitra\" (la nature saine). La formation se déroulera sur plusieurs semaines (environ 5 mois).",
-    deroulement: [
-      "20h de formation",
-      "Stage pratique dans notre Institut à distance (avec une classe en Tarbya Islamya sur ZOOM)",
-      "10h de suivi pratique post-formation (pendant votre mise en pratique) par votre enseignant formateur"
-    ],
+    paymentTerms: "Paiement en plusieurs fois possible",
+    tags: ["Enfants & Ados", "Pédagogie", "Tarbya"],
+    description: "Tu aimes transmettre l'Islam aux enfants. Tu possèdes peut-être déjà des connaissances religieuses. Mais très vite, une réalité apparaît : comment parler d'ALLAH à un enfant ? Comment lui faire aimer son Seigneur plutôt que de lui transmettre uniquement des connaissances ? Comment expliquer des notions abstraites avec des mots adaptés à son âge ?\n\nLa plupart des enseignants n'ont jamais reçu de véritable formation pédagogique. C'est précisément pour répondre à ce besoin qu'a été créée cette formation, fruit de plus de 15 ans d'expérience de l'Institut ISHES.\n\nL'objectif est de former des éducateurs capables d'éveiller les cœurs, de développer l'amour d'ALLAH et d'accompagner les enfants dans leur cheminement spirituel.",
     objectifs: [
-      "Formation théorique (les fondamentaux de la religion)",
-      "Formation pratique (méthodologie d'enseignement à destination de jeunes enfants et adolescents)",
-      "Accès aux supports pédagogiques des cours (affichages, vidéos, livre de Dou'a, etc.)",
-      "Contenus vidéos des cours que nous proposons",
-      "Examen final"
+      "Maîtriser et transmettre les grands thèmes de l'éducation islamique de manière vivante",
+      "Savoir utiliser les histoires et récits pour rendre les enseignements concrets",
+      "Capter et maintenir l'attention des élèves",
+      "Gérer sereinement une classe, en présentiel comme à distance",
+      "Adopter une posture d'enseignant bienveillant et respecté"
     ],
+    deroulement: [
+      "Deux cours par semaine : le lundi et le jeudi à 19h30, en direct sur Zoom",
+      "Formation d'une durée de 4 à 5 mois avec replays accessibles",
+      "Alternance de théorie, exercices pratiques et mises en situation",
+      "Évaluations et examens réguliers de validation des compétences",
+      "Possibilité de stage pratique au sein de l'Institut ISHES"
+    ],
+    modules: [
+      {
+        title: "Module 1 — Maîtriser et transmettre la Tarbya Islamiya",
+        desc: "Rôle de l'enseignant, fondements de la spiritualité, 5 piliers de l'Islam, 6 piliers de la foi, invocations et calendrier musulman, utilisation des histoires."
+      },
+      {
+        title: "Module 2 — « Apprendre à apprendre »",
+        desc: "Piliers de l'apprentissage, mémorisation, gestion de classe, prévention des conflits, création de cours interactifs et accompagnement personnalisé."
+      }
+    ],
+    pourQui: [
+      "Aux futurs enseignants en Tarbya Islamiya",
+      "Aux enseignants souhaitant professionnaliser leur pédagogie",
+      "Aux étudiants en sciences islamiques",
+      "Aux responsables d'écoles, de mosquées ou d'associations",
+      "Aux parents souhaitant transmettre les valeurs de l'Islam à leurs enfants"
+    ],
+    supports: "Manuel pédagogique sur le Tawhid, manuel sur la Sîrah pour enfants, livret d'invocations, fiches d'évaluation et supports complets pour animer les cours.",
+    accompagnement: "Suivi pédagogique continu, mentorat et supervision post-formation pour vous conseiller si vous rencontrez des difficultés dans vos cours.",
     pricing: "Devis personnalisé",
     format: "Enseignement à distance",
     badgeColor: "bg-[#008953]/10 text-[#008953]"
