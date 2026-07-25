@@ -106,15 +106,15 @@ export const PROGRAMS: Program[] = [
   {
     id: "tajwid_standard",
     title: "Tajwid Standard",
-    subtitle: "Apprendre à lire le Coran correctement, même en partant de zéro. Une méthode étape par étape.",
+    subtitle: "Apprendre à lire le Coran avec les règles de Tajwid. Cursus sur 2 années",
     tagText: "STANDARD",
     tagColor: "bg-green-100 text-green-700",
     durationText: "8 mois",
     features: [
-      "Tous les mardis en direct",
-      "Apprentissage Progressif",
-      "Support exclusif inclus",
-      "Adultes débutants"
+      "Prononciation",
+      "Base de la lecture",
+      "Théorie",
+      "Pratique"
     ],
     price: "649 €",
     priceSub: "/ SESSION",
@@ -124,14 +124,12 @@ export const PROGRAMS: Program[] = [
   {
     id: "tajwid_intensif",
     title: "Tajwid Intensif",
-    subtitle: "3 mois pour transformer ta lecture du Coran. Ce que d'autres mettent 2 ans à maîtriser.",
+    subtitle: "Apprendre à lire le Coran avec les règles de Tajwid en 3 Mois",
     tagText: "INTENSIF",
     tagColor: "bg-orange-100 text-orange-700",
     durationText: "3 mois",
     features: [
       "Méthode intensive",
-      "Lecture rapide",
-      "Autonomie totale",
       "Coaching audio"
     ],
     price: "799 €",
@@ -143,7 +141,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "fiqh_malikite",
     title: "Fiqh Mâlikite",
-    subtitle: "Maîtrisez les actes d'adoration selon l'école de l'Imam Mâlik. Étude du Matn Ibn Achir.",
+    subtitle: "Apprendre à pratiquer les actes d'adoration correctement selon l'école Malikite",
     tagText: "DROIT",
     tagColor: "bg-indigo-100 text-indigo-700",
     durationText: "4 mois",
@@ -638,28 +636,36 @@ export function ProgramContent() {
                   </p>
 
                   {/* ICONS GRID */}
+                  {!(program.id === 'tajwid_intensif' || program.id === 'fiqh_malikite' || program.id === 'memoriser_coran') && (
                   <div className="grid grid-cols-2 gap-3 mb-5">
                     <div className="flex items-center gap-2">
                       <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400">{isPresentiel ? program.durationText : "1h30/sem"}</span>
+                      <span className="text-[10px] font-bold text-gray-400">
+                        {isPresentiel ? program.durationText : (program.id === 'tajwid_standard' ? '1h' : '1h30/sem')}
+                      </span>
                     </div>
                     {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && !program.id.includes("enfant") && (
                       <div className="flex items-center gap-2">
                         <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
-                        <span className="text-[10px] font-bold text-gray-400">Manuel inclus</span>
+                        <span className="text-[10px] font-bold text-gray-400">
+                          {program.id === 'tajwid_standard' ? 'Support inclus' : 'Manuel inclus'}
+                        </span>
                       </div>
                     )}
                     <div className="flex items-center gap-2">
                       <Users className={`w-3.5 h-3.5 ${accentColor}`} />
                       <span className="text-[10px] font-bold text-gray-400">
-                        {program.id.includes("enfant") ? "Max 16" : "Max 20"}
+                        {program.id === 'tajwid_standard' ? '10' : (program.id.includes("enfant") ? "Max 16" : "Max 20")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Award className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400 uppercase">Certifié</span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">
+                        {program.id === 'tajwid_standard' ? 'Diplôme' : 'Certifié'}
+                      </span>
                     </div>
                   </div>
+                  )}
 
                   {/* FEATURES LIST */}
                   <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
