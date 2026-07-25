@@ -627,7 +627,7 @@ function InscriptionForm() {
                         </div>
 
                         {/* Niveau / Créneau */}
-                        {planId === 'presentiel-global' ? (() => {
+                        {planId === 'presentiel-global' && (() => {
                           const slotVal = child.slot || (slot ? slot.toLowerCase() : "");
                           return (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
@@ -736,38 +736,7 @@ function InscriptionForm() {
                               </div>
                             </div>
                           );
-                        })() : (
-                          /* Distanciel levels selection as originally */
-                          <div className="space-y-2 md:col-span-2">
-                            <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                              <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
-                              Niveau Actuel de l'élève *
-                            </label>
-                            <select
-                              value={child.niveau}
-                              onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
-                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                            >
-                              <option value="">— Sélectionner son niveau —</option>
-                              <optgroup label="Enfants - Maternel">
-                                <option value="maternel_1">Maternel 1</option>
-                                <option value="maternel_2">Maternel 2</option>
-                              </optgroup>
-                              <optgroup label="Enfants - Elémentaire">
-                                <option value="elementaire_1">Elémentaire 1</option>
-                                <option value="elementaire_1_plus">Elémentaire 1+</option>
-                                <option value="elementaire_2">Elémentaire 2</option>
-                                <option value="elementaire_2_plus">Elémentaire 2+</option>
-                                <option value="elementaire_3">Elémentaire 3</option>
-                                <option value="elementaire_3_plus">Elémentaire 3+</option>
-                                <option value="elementaire_4">Elémentaire 4</option>
-                                <option value="elementaire_5">Elémentaire 5</option>
-                                <option value="elementaire_6">Elémentaire 6</option>
-                                <option value="elementaire_7">Elémentaire 7</option>
-                              </optgroup>
-                            </select>
-                          </div>
-                        )}
+                        })()}
                       </div>
                     ))}
 
@@ -816,7 +785,7 @@ function InscriptionForm() {
                     </div>
 
                     {/* Niveau / Créneau */}
-                    {planId === 'presentiel-global' ? (() => {
+                    {planId === 'presentiel-global' && (() => {
                       const slotVal = formData.slot || (slot ? slot.toLowerCase() : "");
                       return (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
@@ -929,28 +898,7 @@ function InscriptionForm() {
                           </div>
                         </div>
                       );
-                    })() : (
-                      /* Distanciel levels selection as originally */
-                      <div className="space-y-2 md:col-span-2">
-                        <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
-                          <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
-                          Niveau Actuel
-                        </label>
-                        <select
-                          name="niveau"
-                          value={formData.niveau}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                        >
-                          <option value="">— Sélectionner votre niveau —</option>
-                          <optgroup label="Standard (Distanciel)">
-                            <option value="debutant">Débutant</option>
-                            <option value="intermediaire">Intermédiaire</option>
-                            <option value="avance">Avancé</option>
-                          </optgroup>
-                        </select>
-                      </div>
-                    )}
+                    })()}
                   </div>
                 )}
                 {/* Informations du parent / représentant (SI ENFANT) */}
