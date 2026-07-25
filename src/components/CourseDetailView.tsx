@@ -21,6 +21,21 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
 
    const isEnfant = pathname?.includes("enfant") || id === "arabe_coran_junior" || id === "tarbiya_islamiya";
    const audience = isEnfant ? "enfant" : "adulte";
+   
+   const isPresentielCourse = id.includes("presentiel") || id === "arabe_coran_junior";
+   const themeText = isPresentielCourse ? "text-[#c8a96e]" : "text-[#008953]";
+   const themeBgSolid = isPresentielCourse ? "bg-[#c8a96e]" : "bg-[#008953]";
+   const themeBgHover = isPresentielCourse ? "hover:bg-[#b0935b]" : "hover:bg-[#007044]";
+   const themeShadow = isPresentielCourse ? "shadow-[#c8a96e]/20" : "shadow-[#008953]/20";
+   const themeBorderLight = isPresentielCourse ? "border-[#c8a96e]/20" : "border-green-100";
+   const themeGradientFrom = isPresentielCourse ? "from-amber-50/50" : "from-green-50/50";
+   const themeBlob = isPresentielCourse ? "bg-amber-100/50" : "bg-green-100/50";
+   const themeTextHover = isPresentielCourse ? "hover:text-[#c8a96e]" : "hover:text-[#008953]";
+   const themeBgLight5 = isPresentielCourse ? "bg-[#c8a96e]/5" : "bg-ishes-green/5";
+   const themeTextIshes = isPresentielCourse ? "text-[#c8a96e]" : "text-ishes-green";
+   const themeBorderIshes = isPresentielCourse ? "border-[#c8a96e]/10" : "border-ishes-green/10";
+   const themeBgIshes = isPresentielCourse ? "bg-[#c8a96e]" : "bg-ishes-green";
+
 
    useEffect(() => {
       const fetchStatus = async () => {
@@ -72,14 +87,14 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
    return (
       <div className="min-h-screen bg-white font-sans text-[#101828]">
          {/* Hero Section */}
-         <section className="pt-40 pb-20 px-6 bg-gradient-to-b from-green-50/50 to-white overflow-hidden relative">
-            <div className="absolute top-20 right-[-10%] w-[500px] h-[500px] bg-green-100/50 rounded-full blur-[100px] -z-10"></div>
+         <section className={`pt-40 pb-20 px-6 bg-gradient-to-b ${themeGradientFrom} to-white overflow-hidden relative`}>
+            <div className={`absolute top-20 right-[-10%] w-[500px] h-[500px] ${themeBlob} rounded-full blur-[100px] -z-10`}></div>
 
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
                <div className="flex-1 space-y-8">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-green-100 rounded-full shadow-sm">
-                     <span className="w-2 h-2 bg-[#008953] rounded-full animate-pulse"></span>
-                     <span className="text-xs font-black uppercase tracking-widest text-[#008953]">{course.tag}</span>
+                  <div className={`inline-flex items-center gap-2 px-4 py-2 bg-white border ${themeBorderLight} rounded-full shadow-sm`}>
+                     <span className={`w-2 h-2 ${themeBgSolid} rounded-full animate-pulse`}></span>
+                     <span className={`text-xs font-black uppercase tracking-widest ${themeText}`}>{course.tag}</span>
                   </div>
                   <h1 className="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
                      {course.title}
@@ -90,7 +105,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   <div className="flex flex-wrap gap-4 pt-4 text-center items-center">
                      <Link
                         href={`/inscription?plan=${id}&audience=${audience}`}
-                        className="px-10 py-5 bg-[#008953] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#008953]/20 hover:bg-[#007044] transition-all flex items-center gap-3 active:scale-95"
+                        className={`px-10 py-5 ${themeBgSolid} text-white font-black text-lg rounded-2xl shadow-xl ${themeShadow} ${themeBgHover} transition-all flex items-center gap-3 active:scale-95`}
                      >
                         {audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant"} <ArrowRight className="w-6 h-6" />
                      </Link>
@@ -183,7 +198,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         />
                         <div className="absolute inset-0 flex items-center justify-center z-20">
                            <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl cursor-pointer hover:scale-110 transition-transform">
-                              <Play className="w-8 h-8 text-[#008953] ml-1 fill-current" />
+                              <Play className={`w-8 h-8 ${themeText} ml-1 fill-current`} />
                            </div>
                         </div>
                      </>
@@ -234,7 +249,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   {/* Left Column: Description */}
                   <div className="lg:col-span-8 space-y-10">
                      <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight mb-12">
-                        Pourquoi ce programme <br /> va tout <span className="text-[#008953]">changer.</span>
+                        Pourquoi ce programme <br /> va tout <span className={themeText}>changer.</span>
                      </h2>
                      
                      <div className="prose prose-lg max-w-none text-gray-600">
@@ -250,17 +265,19 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                            if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
                               return (
                                  <div key={i} className="flex items-start gap-4 mb-3 ml-2">
-                                    <div className="w-2 h-2 rounded-full bg-[#008953] mt-2.5 shrink-0"></div>
+                                    <div className={`w-2 h-2 rounded-full ${themeBgSolid} mt-2.5 shrink-0`}></div>
                                     <span className="text-lg leading-relaxed">{trimmed.substring(1).trim()}</span>
                                  </div>
                               );
                            }
-                           if (trimmed.startsWith('👉')) {
+                           const isInscriptionLink = trimmed.startsWith('👉') || /inscris/i.test(trimmed);
+                           
+                           if (isInscriptionLink && trimmed.length < 150) {
                               return (
                                  <Link 
                                     key={i} 
                                     href={`/inscription?plan=${id}&audience=${audience}`}
-                                    className="inline-block mt-8 text-2xl font-black text-[#101828] hover:text-[#008953] transition-colors duration-300"
+                                    className={`inline-flex mt-8 text-2xl font-black text-[#101828] ${themeTextHover} transition-colors duration-300 relative z-10 cursor-pointer`}
                                  >
                                     {trimmed}
                                  </Link>
@@ -279,8 +296,8 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         <div className="space-y-5">
                            {course.whyMe.map((item: string, i: number) => (
                               <div key={i} className="flex items-start gap-4">
-                                 <div className="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center mt-0.5 shrink-0">
-                                    <CheckCircle2 className="w-4 h-4 text-[#008953]" />
+                                 <div className={`w-6 h-6 rounded-full ${isPresentielCourse ? 'bg-amber-50' : 'bg-green-50'} flex items-center justify-center mt-0.5 shrink-0`}>
+                                    <CheckCircle2 className={`w-4 h-4 ${themeText}`} />
                                  </div>
                                  <span className="text-base font-medium text-gray-700 leading-snug">{item}</span>
                               </div>
@@ -291,7 +308,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      <div className="grid grid-cols-1 gap-4">
                         {course.features.map((f: any, i: number) => (
                            <div key={i} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                              <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 text-[#008953]">
+                              <div className={`w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 ${themeText}`}>
                                  {i === 0 && <Zap className="w-6 h-6" />}
                                  {i === 1 && <Heart className="w-6 h-6" />}
                                  {i === 2 && <ShieldCheck className="w-6 h-6" />}
@@ -317,7 +334,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                      {/* Left: Program */}
                      <div className="lg:col-span-8 space-y-12">
-                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-ishes-green/5 text-ishes-green rounded-xl border border-ishes-green/10">
+                        <div className={`inline-flex items-center gap-3 px-4 py-2 ${themeBgLight5} ${themeTextIshes} rounded-xl border ${themeBorderIshes}`}>
                            <BookOpen className="w-4 h-4" />
                            <span className="text-[10px] font-black uppercase tracking-widest">Programme Détaillé</span>
                         </div>
@@ -332,7 +349,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <div className="grid sm:grid-cols-2 gap-4">
                                     {course.fullProgram.preIslamique.map((item: string, i: number) => (
                                        <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
-                                          <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                          <CheckCircle2 className={`w-4 h-4 ${themeTextIshes} shrink-0`} />
                                           <span className="text-sm font-bold text-gray-600">{item}</span>
                                        </div>
                                     ))}
@@ -349,7 +366,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <div className="grid sm:grid-cols-2 gap-4">
                                     {course.fullProgram.mecquoise.map((item: string, i: number) => (
                                        <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
-                                          <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                          <CheckCircle2 className={`w-4 h-4 ${themeTextIshes} shrink-0`} />
                                           <span className="text-sm font-bold text-gray-600">{item}</span>
                                        </div>
                                     ))}
@@ -366,7 +383,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <div className="grid sm:grid-cols-2 gap-4">
                                     {course.fullProgram.medinoise.map((item: string, i: number) => (
                                        <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
-                                          <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                          <CheckCircle2 className={`w-4 h-4 ${themeTextIshes} shrink-0`} />
                                           <span className="text-sm font-bold text-gray-600">{item}</span>
                                        </div>
                                     ))}
@@ -382,7 +399,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <div className="grid sm:grid-cols-2 gap-4">
                                     {course.fullProgram.fondamentaux.map((item: string, i: number) => (
                                        <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
-                                          <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                                          <CheckCircle2 className={`w-4 h-4 ${themeTextIshes} shrink-0`} />
                                           <span className="text-sm font-bold text-gray-600">{item}</span>
                                        </div>
                                     ))}
@@ -398,7 +415,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <div className="space-y-4">
                                     {course.fullProgram.deroulement.map((item: string, i: number) => (
                                        <div key={i} className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-gray-50 shadow-sm">
-                                          <div className="w-6 h-6 rounded-full bg-ishes-green/10 flex items-center justify-center text-[10px] font-black text-ishes-green">{i + 1}</div>
+                                          <div className={`w-6 h-6 rounded-full ${themeBgLight5} flex items-center justify-center text-[10px] font-black ${themeTextIshes}`}>{i + 1}</div>
                                           <span className="text-base font-bold text-gray-600">{item}</span>
                                        </div>
                                     ))}
@@ -415,7 +432,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <div className="grid sm:grid-cols-1 gap-4">
                                     {course.fullProgram.objectifs.map((item: string, i: number) => (
                                        <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-50 shadow-sm">
-                                          <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0" />
+                                          <CheckCircle2 className={`w-5 h-5 ${themeTextIshes} shrink-0`} />
                                           <span className="text-base font-black text-ishes-dark">{item}</span>
                                        </div>
                                     ))}
@@ -438,7 +455,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  {course.horaires.map((h: string, i: number) => (
                                     <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
                                        <span className="text-sm font-black text-gray-700">{h}</span>
-                                       <div className="w-2 h-2 rounded-full bg-ishes-green animate-pulse"></div>
+                                       <div className={`w-2 h-2 rounded-full ${themeBgIshes} animate-pulse`}></div>
                                     </div>
                                  ))}
                               </div>

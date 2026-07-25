@@ -176,6 +176,7 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "adulte"
   },
+  /*
   {
     id: "sciences_hadith",
     title: "Sciences du Hadith",
@@ -194,6 +195,7 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "adulte"
   },
+  */
   {
     id: "memoriser_coran",
     title: "Mémorisation du Coran",

@@ -48,7 +48,15 @@ npm run test
 
 ---
 
-## 4. Diagnostics & Suivi des Erreurs
+## 4. Architecture de Paiement et Webhooks (Stripe)
+
+*   **Métadonnées (Metadata)** : Lors de la création d'une session Stripe dans `/api/checkout`, toutes les informations de l'élève (id, classId, nom, prenom, type d'inscription) sont stockées dans les `metadata`.
+*   **Webhooks (`api/webhooks/stripe/route.ts`)** : C'est le webhook qui est responsable de l'ajout effectif de l'élève en base de données et de l'envoi des emails d'invitation (Clerk, WhatsApp). Le webhook est conçu pour être résilient et utiliser des fallbacks (ex: `presentiel-global` si un slug spécifique n'est pas trouvé).
+*   **Redirections (Local vs Prod)** : Le code gère dynamiquement le port de retour en local (ex: localhost:3005) via l'entête `origin`, mais applique strictement `NEXT_PUBLIC_APP_URL` en production.
+
+---
+
+## 5. Diagnostics & Suivi des Erreurs
 
 Les erreurs critiques système sont centralisées et journalisées automatiquement pour faciliter le debug de l'application :
 *   **Enregistreur d'erreurs** : Utiliser [error-logger.ts](file:///Users/elamine/Desktop/ISHES/src/lib/error-logger.ts) pour remonter les anomalies et avertir l'équipe.
