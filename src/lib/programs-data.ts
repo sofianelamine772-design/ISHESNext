@@ -316,20 +316,20 @@ export const PROGRAMS_DATA: Record<string, any> = {
     tag: "Histoire & Révélation",
     price: "399 €",
     hook: "Découvre l’histoire vivante du Livre d’ALLAH.",
-    description: "❓ C'EST QUOI ?\nLe Coran n’est pas simplement un livre récité. C’est une révélation descendue du ciel, préservée génération après génération. Ce cours retrace son histoire.\n\n👤 POUR QUI ?\nTout musulman curieux de connaître l'histoire de la révélation, sans prérequis en arabe.\n\n⏳ QUAND ?\nSession de 4 mois.\n\n💻 COMMENT ?\nCours vivants et accessibles, avec supports pédagogiques inclus.\n\n🎯 OBJECTIFS\nComprendre comment le Livre nous est parvenu, sa compilation, et en quoi cette préservation constitue un miracle unique dans l’histoire de l’humanité.",
+    description: "📖 SCIENCES DU CORAN\nDécouvre l’histoire vivante du Livre d’ALLAH.\nLe Coran n’est pas simplement un livre récité depuis plus de 1400 ans.\nC’est une révélation descendue du ciel, préservée génération après génération, transmise par les cœurs avant les pages.\nMais comment ce Livre nous est-il réellement parvenu ?\nComment a-t-il été révélé au Prophète ﷺ ?\nComment les Compagnons l’ont-ils appris, mémorisé, écrit et transmis ?\nPourquoi le Coran que nous lisons aujourd’hui est-il identique à celui récité par le Messager d’ALLAH ﷺ ?\nEt en quoi cette préservation constitue-t-elle un miracle unique dans l’histoire de l’humanité ?\n\n🎓 POUR QUI ?\nCe cours est destiné aux débutants souhaitant découvrir les Sciences du Coran, aux étudiants en sciences islamiques, aux enseignants, aux parents, et à toute personne désirant comprendre l’histoire et la transmission du Coran avec méthode et profondeur. Aucun niveau avancé en arabe n’est requis.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cours hebdomadaire en direct sur Zoom\n• Replays accessibles à vie\n• Groupe WhatsApp dédié aux étudiants\n• Enseignement structuré et progressif\n• Certificat de fin de parcours délivré par l’Institut ISHES",
     videoUrl: "https://www.youtube.com/embed/NGiWynfi1ac",
-    flyerUrl: "/pdf/sciences-du-coran-descriptif.pdf",
+    flyerUrl: "/images/flyer-sciences-du-coran.jpeg",
     features: [
-      { t: "Voyage unique", d: "Découvrez les circonstances de la révélation et le rôle des Compagnons dans sa mémorisation." },
-      { t: "Préservation Divine", d: "Explorez les étapes de la compilation du Moushaf, de la transmission orale et écrite." },
-      { t: "Miracle Historique", d: "Comprenez en quoi cette préservation constitue un miracle unique et renforcez votre certitude." },
-      { t: "Zéro prérequis", d: "Aucun niveau avancé en arabe n'est requis. Conçu pour être clair, vivant et accessible." }
+      { t: "La Descente", d: "Les circonstances de la révélation et la manière dont le Coran descendait sur le Prophète ﷺ." },
+      { t: "Les Compagnons", d: "Le rôle héroïque des Compagnons dans sa mémorisation et sa transmission." },
+      { t: "La Compilation", d: "La compilation du Moushaf et les différentes étapes de sa préservation." },
+      { t: "La Transmission", d: "La transmission orale et écrite, ainsi que les sagesses et miracles liés au Coran." }
     ],
     whyMe: [
-      "Une preuve vivante de la parole d’ALLAH",
-      "Un héritage transmis avec précision par une chaîne humaine",
+      "Le Coran devient une preuve vivante, pas seulement un texte récité",
+      "Un héritage transmis avec une précision absolue",
       "Un miracle historique, linguistique et spirituel",
-      "Une lumière dont la préservation témoigne de son origine divine"
+      "Une lumière témoignant de son origine divine"
     ]
   },
   "arabe_coran_junior": {

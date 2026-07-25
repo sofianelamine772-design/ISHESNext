@@ -452,7 +452,7 @@ function InscriptionForm() {
       case "sciences_islamiques": return "Sciences Islamiques (Distanciel)";
       case "arabe_coran_junior": return "Arabe & Coran Junior";
       case "pack_accompagnement": return "Pack Accompagnement";
-      case "tajwid_standard": return "Tajwid Standard (Présentiel)";
+      case "tajwid_standard": return "Tajwid Standard (Distanciel)";
       case "sciences_du_coran": return "Sciences du Coran (Distanciel)";
       case "sciences_hadith": return "Sciences du Hadith (Distanciel)";
       case "memoriser_coran": return "Mémorisation du Coran (Distanciel)";
@@ -1113,8 +1113,11 @@ function InscriptionForm() {
                       : (planName || "Votre Formation")}
                     </h3>
                     <p className="text-xs font-bold text-[#008953] uppercase tracking-widest mt-1">
-                      {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : (
-                      <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : 'du 1er octobre au 30 juin'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : '1h30/semaine'}</>
+                      {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : 
+                      planId === 'tajwid_intensif' ? (
+                        <>Durée 3 mois / Cours en direct: 2h/ semaine + audio 24h/24</>
+                      ) : (
+                        <>Durée : du 1er octobre au 30 juin | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : planId === 'tajwid_standard' ? '1h/semaine' : '1h30/semaine'}</>
                       )}
                     </p>
                   </div>

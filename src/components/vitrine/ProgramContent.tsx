@@ -130,7 +130,9 @@ export const PROGRAMS: Program[] = [
     durationText: "3 mois",
     features: [
       "Méthode intensive",
-      "Coaching audio"
+      "Suivi personnalisé",
+      "Coach en direct + audio 24/24h",
+      "Diplôme final"
     ],
     price: "799 €",
     priceSub: "/ SESSION",
