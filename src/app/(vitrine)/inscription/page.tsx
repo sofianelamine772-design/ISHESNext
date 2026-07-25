@@ -1164,7 +1164,7 @@ function InscriptionForm() {
                     </h3>
                     <p className="text-xs font-bold text-[#008953] uppercase tracking-widest mt-1">
                       {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : (
-                        <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : '8 à 9 mois'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : ((planId === 'presentiel-global' && (planName?.toLowerCase().includes('débutant') || planName?.toLowerCase().includes('interm')) && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'femme_intermediaire_presentiel' || planId === 'debutante_presentiel' || planId === 'intermediaire_presentiel') ? '3h/semaine' : '1h30/semaine'}</>
+                      <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : '8 à 9 mois'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : '1h30/semaine'}</>
                       )}
                     </p>
                   </div>

@@ -30,12 +30,22 @@ export async function POST(req: Request) {
       .eq('slug', formationId)
       .maybeSingle();
 
-    if (!formation) {
-      return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
+    let formationData = formation;
+
+    // Fallback sécurisé pour les cours en présentiel non trouvés dans Supabase
+    if (!formationData) {
+      if (formationId.includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire') {
+        formationData = {
+          title: "Cours en Présentiel",
+          price: 480
+        };
+      } else {
+        return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
+      }
     }
 
-    const formationTitle = formation.title || 'Formation ISHES';
-    const basePrice = Number(formation.price);
+    const formationTitle = formationData.title || 'Formation ISHES';
+    const basePrice = Number(formationData.price);
 
     // 2. Calculer le montant total (multiplié par le nombre d'enfants si inscription famille)
     let totalAmount = basePrice;
@@ -47,7 +57,15 @@ export async function POST(req: Request) {
 
     const installments = body.installments ? parseInt(String(body.installments), 10) : 1;
 
-    const isLocal = !process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_APP_URL.includes('localhost');
+    let baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    
+    // En local, on s'adapte dynamiquement au port (ex: 3005) pour éviter les erreurs de redirection
+    const origin = req.headers.get('origin');
+    if (origin && origin.includes('localhost')) {
+      baseUrl = origin;
+    }
+    
+    const isLocal = baseUrl.includes('localhost');
 
     let sessionParams: Stripe.Checkout.SessionCreateParams;
 
@@ -113,9 +131,9 @@ export async function POST(req: Request) {
         ],
         mode: 'subscription',
         success_url: isLocal 
-          ? `http://localhost:3000/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
-          : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/inscription?canceled=true`,
+          ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
+          : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
+        cancel_url: `${baseUrl}/inscription?canceled=true`,
         metadata: {
           ...metadata,
           installments_total: String(installments),
@@ -145,9 +163,9 @@ export async function POST(req: Request) {
         ],
         mode: 'payment',
         success_url: isLocal 
-          ? `http://localhost:3000/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
-          : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/inscription?canceled=true`,
+          ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
+          : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
+        cancel_url: `${baseUrl}/inscription?canceled=true`,
         metadata,
       };
     }
