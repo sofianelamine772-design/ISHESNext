@@ -90,18 +90,16 @@ export default function PackAccompagnementPage() {
               </div>
            </div>
 
-           <div className="mt-16 max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white/60 backdrop-blur-sm">
-             <video 
-               src="/videos/pack-accomp-final.mp4" 
-               controls 
-               autoPlay
-               muted
-               loop
-               playsInline
-               className="w-full h-auto aspect-video bg-[#101828]"
-             >
-                Votre navigateur ne supporte pas la lecture de vidéos.
-             </video>
+           <div className="mt-16 max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white/60 backdrop-blur-sm relative z-20">
+             <iframe 
+               className="w-full aspect-video bg-[#101828]"
+               src="https://www.youtube.com/embed/GuP0DX_0mHg" 
+               title="Présentation du Pack Accompagnement" 
+               frameBorder="0" 
+               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+               referrerPolicy="strict-origin-when-cross-origin" 
+               allowFullScreen
+             ></iframe>
            </div>
         </div>
       </section>
