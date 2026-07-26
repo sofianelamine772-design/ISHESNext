@@ -166,10 +166,11 @@ export const PROGRAMS: Program[] = [
     tagColor: "bg-amber-100 text-amber-700",
     durationText: "4 mois",
     features: [
-      "Processus de Révélation",
-      "Compilation (Mushaf)",
-      "Lectures & Lecteurs",
-      "Inimitabilité (I'jaz)"
+      "1h direct + replay dispo",
+      "Révélation du Coran",
+      "Préservation du Coran",
+      "Rôle des Compagnons",
+      "Sagesse et Miracles liés au Coran"
     ],
     price: "399 €",
     priceSub: "/ SESSION",
@@ -676,7 +677,7 @@ export function ProgramContent() {
                   </p>
 
                   {/* ICONS GRID */}
-                  {!(program.id === 'tajwid_intensif' || program.id === 'fiqh_malikite' || program.id === 'memoriser_coran') && (
+                  {!(program.id === 'tajwid_intensif' || program.id === 'fiqh_malikite' || program.id === 'memoriser_coran' || program.id === 'sciences_du_coran') && (
                   <div className="grid grid-cols-2 gap-3 mb-5">
                     <div className="flex items-center gap-2">
                       <Clock className={`w-3.5 h-3.5 ${accentColor}`} />

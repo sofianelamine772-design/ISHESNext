@@ -250,7 +250,7 @@ export default function FormationEnseignantPage() {
                 className="bg-white/70 backdrop-blur-md rounded-[3rem] p-8 md:p-16 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] grid lg:grid-cols-12 gap-16 items-start"
               >
                   {/* Left Column (span 5) */}
-                  <div className="lg:col-span-5 space-y-8">
+                  <div className="lg:col-span-5 space-y-8 lg:sticky lg:top-32 self-start">
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <span className={`text-[10px] font-black uppercase tracking-[.25em] px-3 py-1 rounded-md ${f.badgeColor}`}>
@@ -438,8 +438,6 @@ export default function FormationEnseignantPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }
