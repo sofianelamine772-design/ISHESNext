@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X, CalendarDays, Search, Building2, MapPin } from "lucide-react";
 import { PRESENTIEL_CLASSES, PresentielClass } from "@/lib/presentiel-data";
+import { ArabicBackground } from "@/components/ArabicBackground";
 
 
 interface CourseDetailViewProps {
@@ -88,6 +89,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
       <div className="min-h-screen bg-white font-sans text-[#101828]">
          {/* Hero Section */}
          <section className={`pt-40 pb-20 px-6 bg-gradient-to-b ${themeGradientFrom} to-white overflow-hidden relative`}>
+            <ArabicBackground />
             <div className={`absolute top-20 right-[-10%] w-[500px] h-[500px] ${themeBlob} rounded-full blur-[100px] -z-10`}></div>
 
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">

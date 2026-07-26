@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, BookOpen, Heart, Mail, ShieldCheck, ChevronRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { ArabicBackground } from "@/components/ArabicBackground";
 
 export default function ConseilSpiritualitePage() {
   return (
@@ -10,6 +11,7 @@ export default function ConseilSpiritualitePage() {
       
       {/* --- HERO SECTION --- */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white">
+        <ArabicBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-ishes-green/[0.03] to-transparent -z-10" />
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">

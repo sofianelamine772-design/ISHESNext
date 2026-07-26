@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays } from "lucide-react";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
-
+import { ArabicBackground } from "@/components/ArabicBackground";
 
 type Program = {
   id: string;
@@ -488,8 +488,9 @@ export function ProgramContent() {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 overflow-hidden">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 overflow-hidden">
+        <ArabicBackground />
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 relative z-10">
           <div className="max-w-2xl relative">
             {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
             <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
