@@ -106,10 +106,12 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   </p>
                   <div className="flex flex-wrap gap-4 pt-4 text-center items-center">
                      <Link
-                        href={`/inscription?plan=${id}&audience=${audience}`}
+                        href={id.startsWith('formation_enseignante_') ? "/fr/contact" : `/inscription?plan=${id}&audience=${audience}`}
                         className={`px-10 py-5 ${themeBgSolid} text-white font-black text-lg rounded-2xl shadow-xl ${themeShadow} ${themeBgHover} transition-all flex items-center gap-3 active:scale-95`}
                      >
-                        {audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant"} <ArrowRight className="w-6 h-6" />
+                        {id.startsWith('formation_enseignante_') 
+                           ? "Contacter nous pour un devis" 
+                           : (audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant")} <ArrowRight className="w-6 h-6" />
                      </Link>
                      {id === "arabe_coran_junior" && (
                         <Link
@@ -278,8 +280,8 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                               return (
                                  <Link 
                                     key={i} 
-                                    href={`/inscription?plan=${id}&audience=${audience}`}
-                                    className={`inline-flex mt-8 text-2xl font-black text-[#101828] ${themeTextHover} transition-colors duration-300 relative z-10 cursor-pointer`}
+                                    href={id.startsWith('formation_enseignante_') ? "/fr/contact" : `/inscription?plan=${id}&audience=${audience}`}
+                                    className={`inline-flex items-center gap-2 mt-8 text-xl md:text-2xl font-black ${themeTextHover} transition-colors duration-300 relative z-10 cursor-pointer underline decoration-2 underline-offset-8`}
                                  >
                                     {trimmed}
                                  </Link>
@@ -473,7 +475,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
          </section>
 
          {/* DETAILED PRESENTIEL SCHEDULER SECTION */}
-         {presentielClasses.length > 0 && (
+         {!id.startsWith('formation_enseignante_') && presentielClasses.length > 0 && (
             <section className="max-w-7xl mx-auto px-6 py-12">
                <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50/50 rounded-[3rem] p-8 md:p-12 border border-gray-100 shadow-xl overflow-hidden">
                   {/* Background ornaments */}

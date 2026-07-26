@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function CoursTajwidEnfantPage() {
-  const id = "tajwid_standard";
+  const id = "tajwid_enfant_distance";
   const course = PROGRAMS_DATA[id];
   
   return <CourseDetailView course={course} id={id} />;

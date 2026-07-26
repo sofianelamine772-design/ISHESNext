@@ -445,5 +445,86 @@ export const PROGRAMS_DATA: Record<string, any> = {
         "Étape 4 : Récitation fluide avec mise en pratique des règles de grammaire et de sens"
       ]
     }
+  },
+  "formation_enseignante_tajwid": {
+    title: "Formation Enseignant de Tajwid",
+    duration: "À la carte",
+    tag: "PRO",
+    price: "Sur Devis",
+    hook: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
+    videoUrl: "https://www.youtube.com/embed/8QiflPosqYU?si=TnSm478CtqEXACvl",
+    description: "Tu connais peut-être déjà les règles du Tajwid. Tu récites correctement. Mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science… et savoir l'enseigner.\n\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.\n\n🎯 OBJECTIFS\n• Construire une progression pédagogique logique\n• Présenter chaque règle avec simplicité\n• Gérer une classe et maintenir l'attention\n• Corriger efficacement sans décourager",
+    features: [
+      { t: "Module 1", d: "Enseigner le Tajwid (Méthode Les Clés du Coran)" },
+      { t: "Module 2", d: "« Apprendre à apprendre » (Pédagogie & Psychologie)" },
+      { t: "Module 3", d: "Perfectionnement de la récitation (Correction)" },
+      { t: "Certification", d: "Évaluations et examens de validation" }
+    ],
+    whyMe: [
+      "Méthode pédagogique exclusive Les Clés du Coran",
+      "Accompagnement et supervision possibles après certification",
+      "Paiement jusqu'à 10x sans frais",
+      "Support et manuels pédagogiques inclus"
+    ]
+  },
+  "formation_enseignante_tarbya": {
+    title: "Formation Enseignant Tarbya Islamiya",
+    duration: "4 à 5 mois",
+    tag: "PRO",
+    price: "Sur Devis",
+    hook: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
+    description: "Tu aimes transmettre l'Islam aux enfants. Tu possèdes peut-être déjà des connaissances religieuses. Mais très vite, une réalité apparaît : comment parler d'ALLAH à un enfant ? Comment lui faire aimer son Seigneur plutôt que de lui transmettre uniquement des connaissances ?\n\nLa plupart des enseignants n'ont jamais reçu de véritable formation pédagogique. C'est précisément pour répondre à ce besoin qu'a été créée cette formation, fruit de plus de 15 ans d'expérience de l'Institut ISHES.\n\n🎯 OBJECTIFS\n• Maîtriser et transmettre les grands thèmes de l'éducation islamique\n• Savoir utiliser les histoires et récits pour rendre les enseignements concrets\n• Capter et maintenir l'attention des élèves\n• Gérer sereinement une classe",
+    features: [
+      { t: "Module 1", d: "Maîtriser et transmettre la Tarbya Islamiya" },
+      { t: "Module 2", d: "« Apprendre à apprendre » (Pédagogie & Gestion de classe)" },
+      { t: "Stage", d: "Possibilité de stage pratique au sein de l'Institut ISHES" },
+      { t: "Certification", d: "Évaluations et examens réguliers de validation" }
+    ],
+    whyMe: [
+      "Fruit de plus de 15 ans d'expérience de l'Institut ISHES",
+      "Manuel pédagogique sur le Tawhid et la Sîrah pour enfants inclus",
+      "Paiement en plusieurs fois possible",
+      "Mentorat et supervision post-formation"
+    ]
+  },
+  "tajwid_enfant_distance": {
+    title: "TAJWID (Enfant)",
+    duration: "3 ans",
+    tag: "ENFANT",
+    price: "399 €",
+    hook: "Offrir à votre enfant le plus beau des héritages : une relation durable avec le Livre d’Allah.",
+    description: "Le Coran est la parole d’Allah.\n\nL’apprendre à le réciter correctement est une responsabilité, mais aussi un immense privilège.\n\nLe Tajwid permet à l’enfant de réciter le Coran comme il a été transmis par le Prophète Muhammad ﷺ, en respectant les règles de prononciation et la beauté de sa récitation.\n\nNotre ambition n’est pas seulement de lui enseigner des règles.\n\nNous souhaitons lui transmettre l’amour du Coran, le plaisir de le réciter et les bases qui lui permettront de conserver ce lien avec le Livre d’Allah toute sa vie.\n\n🎯 UNE MÉTHODE UNIQUE POUR LES ENFANTS FRANCOPHONES\nNotre parcours de Tajwid s’étend sur trois années afin de permettre à chaque enfant de progresser à son rythme et d’acquérir des bases solides.\nL’apprentissage repose sur Les Clés du Coran, une méthode développée par les responsables de l’Institut ISHES à partir de la méthode Nour al-Bayân, spécialement adaptée aux enfants francophones.\nCette approche facilite l’apprentissage de la lecture du Coran et permet une progression naturelle vers une récitation fluide et conforme aux règles du Tajwid.\n\n🎓 UN APPRENTISSAGE ENCADRÉ\nNos enseignants, formés à la pédagogie de l’enfant, accompagnent chaque élève avec exigence, bienveillance et écoute.\nLes cours alternent théorie, mise en pratique et corrections personnalisées afin que chaque enfant progresse avec confiance.\nDes évaluations régulières permettent de mesurer les acquis et d’accompagner chaque élève vers la maîtrise des différentes étapes du programme.\n\n🎁 VOTRE INSCRIPTION VOUS OFFRE BIEN PLUS QU’UN COURS\nEn inscrivant votre enfant, vous bénéficiez gratuitement du Pack Accompagnement, d’une valeur de 399 €, habituellement réservé à nos étudiants adultes.\nVous aurez accès à :\n• des lives mensuels autour de la spiritualité musulmane ;\n• une formation sur les fondamentaux de la spiritualité ;\n• la communauté ISH Ensemble via un groupe WhatsApp réservé à nos étudiants ;\n• des ressources exclusives accessibles tout au long de l’année.\nParce que nous croyons que l’éducation d’un enfant passe aussi par la formation des adultes qui l’accompagnent.\n\n🏆 CERTIFICAT DE FIN D’ANNÉE\nLes élèves ayant validé leur niveau reçoivent un certificat délivré par l’Institut ISHES attestant de leur progression.\n\n👤 POUR QUI ?\nCette formation s’adresse :\n• aux enfants francophones souhaitant apprendre à lire et réciter correctement le Coran ;\n• aux débutants comme aux enfants possédant déjà quelques bases ;\n• aux parents souhaitant offrir à leur enfant une méthode sérieuse et progressive pour apprendre le Tajwid.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• 1 heure de cours en direct chaque semaine (mardi ou jeudi selon le niveau 18h30 à 19h30)\n• Parcours progressif sur 3 années\n• Méthode Les Clés du Coran adaptée aux enfants francophones\n• Cours en direct avec replay disponible\n• Suivi pédagogique via WhatsApp\n• Évaluations régulières\n• Certificat de fin d’année.\n\n👉 Je m’inscris au cours de TAJWID (Enfant)",
+    features: [
+      { t: "1h/semaine", d: "En direct chaque mardi ou jeudi de 18h30 à 19h30." },
+      { t: "3 années", d: "Parcours progressif sur 3 ans pour des bases solides." },
+      { t: "Méthode", d: "Les Clés du Coran, adaptée aux enfants francophones." },
+      { t: "Replay", d: "Cours en direct avec replay disponible." }
+    ],
+    whyMe: [
+      "Suivi pédagogique personnalisé via WhatsApp",
+      "Évaluations régulières pour mesurer la progression",
+      "Pack accompagnement offert (valeur 399€)",
+      "Certificat délivré en fin d'année"
+    ]
+  },
+  "arabe_enfant_distance": {
+    title: "ARABE",
+    duration: "1 an",
+    tag: "ENFANT",
+    price: "399 €",
+    hook: "Donner à votre enfant une langue, c’est lui transmettre une identité.",
+    description: "Une langue est bien plus qu’un moyen de communiquer.\n\nElle façonne notre manière de penser, de nous exprimer, de comprendre le monde et de construire notre identité.\n\nEn apprenant l’arabe dès son plus jeune âge, votre enfant développe des repères solides, s’ouvre à un patrimoine linguistique et culturel exceptionnel et grandit avec une meilleure compréhension de ses racines.\n\nNotre ambition n’est pas seulement de lui apprendre à lire, écrire et parler arabe.\n\nNous voulons lui donner les moyens de s’exprimer avec confiance, de développer sa curiosité et de construire une identité forte dans un monde où il est essentiel de savoir qui l’on est.\n\n🎯 UNE MÉTHODE INTERACTIVE ET PROGRESSIVE\nNotre méthode a été spécialement conçue pour les enfants francophones.\nGrâce à une pédagogie interactive, les élèves développent progressivement l’arabe écrit et parlé dans un environnement motivant, adapté à leur âge et à leur rythme.\nLes supports pédagogiques suivent une progression claire et sont conçus selon les standards pédagogiques européens afin de favoriser un apprentissage durable.\n\n🎓 UN APPRENTISSAGE ENCADRÉ\nNos enseignants, formés à la pédagogie de l’enfant, accompagnent chaque élève avec exigence et bienveillance.\nDes évaluations régulières permettent de mesurer les progrès, d’adapter le suivi pédagogique et d’encourager chaque enfant à progresser sereinement tout au long de l’année.\n\n🎁 VOTRE INSCRIPTION VOUS OFFRE BIEN PLUS QU’UN COURS\nEn inscrivant votre enfant, vous bénéficiez gratuitement du Pack Accompagnement, d’une valeur de 399 €, habituellement réservé à nos étudiants adultes.\nVous aurez accès à :\n• des lives mensuels avec les fondateurs de l'institut ;\n• une formation sur les fondamentaux de la spiritualité ;\n• la communauté ISHES Ensemble via un groupe WhatsApp réservé à nos étudiants ;\nParce que nous croyons que l’éducation d’un enfant passe aussi par la formation des adultes qui l’accompagnent.\n\n🏆 CERTIFICAT DE FIN D’ANNÉE\nLes élèves ayant validé leur niveau reçoivent un certificat délivré par l’Institut ISHES attestant de leur progression.\n\n👤 POUR QUI ?\nCette formation s’adresse :\n• aux enfants francophones, débutants ou ayant déjà quelques bases ;\n• aux parents souhaitant transmettre une langue porteuse de culture, de repères et d’identité.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• 1 heure de cours en direct chaque semaine (mardi ou jeudi selon le niveau 18h30 / 19h30) ;\n• Classes limitées à 10 élèves ;\n• Arabe écrit et parlé ;\n• Manuel pédagogique progressif inclus ;\n• Cours en direct avec replay disponible ;\n• Suivi pédagogique via WhatsApp ;\n• Évaluations régulières ;\n• Certificat de fin d’année.\n\n👉 Je m’inscris au cours d'ARABE (Enfant)",
+    features: [
+      { t: "1h/semaine", d: "En direct chaque mardi ou jeudi de 18h30 à 19h30." },
+      { t: "Max 10", d: "Classes limitées à 10 élèves." },
+      { t: "Manuel", d: "Manuel pédagogique progressif inclus." },
+      { t: "Replay", d: "Cours en direct avec replay disponible." }
+    ],
+    whyMe: [
+      "Pédagogie interactive (Arabe écrit / parlé)",
+      "Accompagnement et suivi WhatsApp",
+      "Pack accompagnement offert (valeur 399€)",
+      "Certificat délivré en fin d'année"
+    ]
   }
 };

@@ -305,17 +305,17 @@ export const PROGRAMS: Program[] = [
     audience: "adulte"
   },
   {
-    id: "arabe_coran_junior",
-    title: "Arabe & Coran Junior",
-    subtitle: "Méthode ludique pour les 6-15 ans. Arabe, Coran, Tajwid et Éducation Islamique.",
-    tagText: "JUNIOR",
-    tagColor: "bg-pink-100 text-pink-700",
-    durationText: "8 mois",
+    id: "arabe_enfant_distance",
+    title: "ARABE (Enfant)",
+    subtitle: "Méthode d’apprentissage de la langue arabe avec interactivité et suivi progressif.",
+    tagText: "ENFANT",
+    tagColor: "bg-blue-100 text-blue-700",
+    durationText: "1 an",
     features: [
-      "Pédagogie adaptée",
-      "Section Ados spécifique",
-      "Éducation islamique",
-      "WhatsApp parent"
+      "1h en direct",
+      "Max 10",
+      "Manuel progressif",
+      "Certifié"
     ],
     price: "399 €",
     priceSub: "/ SESSION",
@@ -325,17 +325,17 @@ export const PROGRAMS: Program[] = [
 
 
   {
-    id: "tajwid_standard",
+    id: "tajwid_enfant_distance",
     title: "Tajwid (Enfant)",
-    subtitle: "Cours de Tajwid en ligne pour enfants. Apprendre et réciter de chez soi.",
+    subtitle: "Cours de Tajwid en ligne pour enfants. Apprendre et réciter le Coran correctement.",
     tagText: "ENFANT",
     tagColor: "bg-green-100 text-green-700",
     durationText: "8 mois",
     features: [
-      "Cours en direct",
-      "Interactivité",
-      "Progression douce",
-      "Suivi WhatsApp"
+      "Cours en direct + replay dispo",
+      "Apprentissage de la lecture",
+      "Règles de Tajwid",
+      "Correction Sourates"
     ],
     price: "399 €",
     priceSub: "/ SESSION",
@@ -343,8 +343,8 @@ export const PROGRAMS: Program[] = [
     audience: "enfant"
   },
   {
-    id: "formation_enseignant",
-    title: "Devenir Enseignant Tajwid",
+    id: "formation_enseignante_tajwid",
+    title: "Formation Enseignant Tajwid",
     subtitle: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     tagText: "PRO",
     tagColor: "bg-blue-100 text-blue-700",
@@ -352,6 +352,24 @@ export const PROGRAMS: Program[] = [
     features: [
       "Méthode Les Clés du Coran",
       "Pédagogie & didactique",
+      "Gestion de classe",
+      "Certification ISHES"
+    ],
+    price: "Devis",
+    priceSub: "/ PERSONNALISÉ",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "formation_enseignante_tarbya",
+    title: "Formation Enseignant Tarbya",
+    subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
+    tagText: "PRO",
+    tagColor: "bg-[#008953]/10 text-[#008953]",
+    durationText: "Sur demande",
+    features: [
+      "Pédagogie bienveillante",
+      "Éducation de l'âme (Enfants)",
       "Gestion de classe",
       "Certification ISHES"
     ],
@@ -601,6 +619,7 @@ export function ProgramContent() {
                   (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' :
                     program.id === 'femme-debutante-presentiel' ? '/fr/cours-presentiel-femme-debutante' :
                       program.id === 'femme-intermediaire-presentiel' ? '/fr/cours-presentiel-femme-intermediaire' :
+                      program.id === 'tajwid_enfant_distance' ? '/fr/cours-tajwid-enfant' :
                       (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
                         program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
                           program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
@@ -614,7 +633,6 @@ export function ProgramContent() {
                                           program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
                                             program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
                                               program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                                                program.id === 'formation_enseignant' ? '/formation-enseignant' :
                                                   `/program/${program.id}`;
 
             return (
@@ -742,13 +760,13 @@ export function ProgramContent() {
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: index * 0.5 }}
                         className="flex"
                       >
-                        {program.id === 'formation_enseignant' ? (
+                        {program.id.startsWith('formation_enseignante_') ? (
                           <Link
                             href="/fr/contact"
                             onClick={(e) => e.stopPropagation()}
                             className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
                           >
-                            S'inscrire
+                            S'inscrire sur devis
                           </Link>
                         ) : isPresentiel ? (
                           <Link

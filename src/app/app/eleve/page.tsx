@@ -458,7 +458,57 @@ export default function EleveDashboard() {
             </div>
           )}
 
-          {/* ─── WHATSAPP GROUP LINK ─── */}
+          {/* ─── PACK ACCOMPAGNEMENT (CADEAU) ─── */}
+          <div className="bg-gradient-to-br from-[#c8a96e] to-[#b0935b] border border-[#c8a96e]/30 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden mb-8 transform transition-all hover:scale-[1.01]">
+            {/* Background ornaments */}
+            <div className="absolute -top-12 -right-12 p-8 opacity-10">
+              <svg className="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+              </svg>
+            </div>
+            <div className="absolute -bottom-6 -left-6 p-8 opacity-10">
+              <svg className="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+              </svg>
+            </div>
+            
+            <div className="flex flex-col md:flex-row items-center gap-6 relative z-10 w-full md:w-auto">
+              <div className="w-20 h-20 bg-white/20 backdrop-blur-md text-white rounded-[2rem] flex items-center justify-center shrink-0 border border-white/40 shadow-inner relative">
+                {/* Gift Icon */}
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                  <rect x="2" y="7" width="20" height="5"></rect>
+                  <line x1="12" y1="22" x2="12" y2="7"></line>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full shadow-md">
+                  Offert
+                </div>
+              </div>
+              <div className="text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                  <h3 className="text-2xl font-black text-white tracking-tight">Votre Pack Accompagnement</h3>
+                </div>
+                <p className="text-white/90 text-sm font-medium mt-1 leading-relaxed max-w-lg">
+                  En cadeau avec votre formation ! Rejoignez la communauté <span className="text-[#086b51] font-black bg-white px-2 py-0.5 rounded shadow-sm ml-1">ISHES ENSEMBLE</span> sur WhatsApp pour échanger et être soutenu(e).
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://chat.whatsapp.com/D6RJbgk405AE0PoMnzrrW1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-[#c8a96e] hover:text-[#b0935b] hover:bg-gray-50 px-8 py-4 rounded-[1.8rem] font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2.5 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10 cursor-pointer w-full md:w-auto shrink-0 relative z-10 border border-white/50"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+              </svg>
+              Ouvrir mon Cadeau
+            </a>
+          </div>
+
+          {/* ─── WHATSAPP GROUP LINK (CLASS) ─── */}
           {certData?.whatsappLink ? (
             <div className="bg-[#086b51]/5 border border-[#086b51]/10 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
               <div className="flex items-center gap-6">

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function CoursArabeEnfantPage() {
-  const id = "arabe_coran_junior";
+  const id = "arabe_enfant_distance";
   const course = PROGRAMS_DATA[id];
   
   return <CourseDetailView course={course} id={id} />;
