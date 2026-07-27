@@ -9,6 +9,7 @@ import { StatsSection } from "@/components/vitrine/StatsSection";
 import { SocialSection } from "@/components/vitrine/SocialSection";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { DynamicTestimonials } from "@/components/vitrine/DynamicTestimonials";
+import { InstitutVideo } from "@/components/vitrine/InstitutVideo";
 
 export const metadata: Metadata = {
   title: "ISHES - L'excellence de la langue arabe à Toulouse",
@@ -328,17 +329,7 @@ export default function Home() {
             </div>
 
             {/* Visual Column */}
-            <div className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
-              <Image
-                src="/images/institut-ishes-accueil-hero.png"
-                alt="Institut ISHES"
-                fill
-                priority
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-ishes-green/10 mix-blend-overlay" />
-            </div>
+            <InstitutVideo />
 
           </div>
         </div>

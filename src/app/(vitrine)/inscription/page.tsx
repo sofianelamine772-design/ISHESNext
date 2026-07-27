@@ -1017,20 +1017,16 @@ function InscriptionForm() {
                         childrenList.some(c =>
                           !c.prenom ||
                           !c.nom ||
-                          (planId === 'presentiel-global'
-                            ? !c.classId
-                            : !c.niveau)
+                          (planId === 'presentiel-global' ? !c.classId : false)
                         )
                       )
                       : (
                         !formData.prenom ||
                         !formData.nom ||
-                        (planId === 'presentiel-global'
-                          ? !formData.classId
-                          : !formData.niveau)
+                        (planId === 'presentiel-global' ? !formData.classId : false)
                       )
                     ) ||
-                    formData.telephone.length < 13 // +33 + espace + 9 chiffres = 13 chars minimum
+                    formData.telephone.length < 10 // 0612345678 (10 chars minimum)
                   }
                   className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
