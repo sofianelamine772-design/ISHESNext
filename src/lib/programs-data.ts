@@ -453,7 +453,21 @@ export const PROGRAMS_DATA: Record<string, any> = {
     price: "Sur Devis",
     hook: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     videoUrl: "https://www.youtube.com/embed/8QiflPosqYU?si=TnSm478CtqEXACvl",
-    description: "Tu connais peut-être déjà les règles du Tajwid. Tu récites correctement. Mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science… et savoir l'enseigner.\n\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.\n\n🎯 OBJECTIFS\n• Construire une progression pédagogique logique\n• Présenter chaque règle avec simplicité\n• Gérer une classe et maintenir l'attention\n• Corriger efficacement sans décourager",
+    description: "Tu connais peut-être déjà les règles du Tajwid. Tu récites correctement. Mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science… et savoir l'enseigner.\n\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.",
+    objectifs: [
+      "Construire une progression pédagogique logique",
+      "Présenter chaque règle avec simplicité",
+      "Gérer une classe et maintenir l'attention",
+      "Corriger efficacement sans décourager",
+      "S'adapter selon le niveau de chaque élève"
+    ],
+    deroulement: [
+      "Deux cours par semaine : le lundi et le jeudi, en direct sur Zoom",
+      "Replays accessibles pendant toute la durée",
+      "Formation organisée en trois modules",
+      "Vérification de la récitation (Module 3)",
+      "Évaluations et examens de validation"
+    ],
     features: [
       { t: "Module 1", d: "Enseigner le Tajwid (Méthode Les Clés du Coran)" },
       { t: "Module 2", d: "« Apprendre à apprendre » (Pédagogie & Psychologie)" },
