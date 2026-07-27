@@ -377,7 +377,7 @@ export default function CoursPresentielPage() {
                      <Building2 className="w-10 h-10 text-[#c8a96e] group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div className="text-center space-y-4 px-4">
-                     <h3 className="text-2xl font-black text-[#101828] italic">"La proximité est la clé de la transmission du cœur."</h3>
+                     <h3 className="text-2xl font-black text-[#101828] italic">"La proximité est la clé de la transmission du cœur"</h3>
                      <p className="text-gray-400 font-medium text-sm">
                        Un environnement d'étude structuré, fraternel et propice à l'élévation spirituelle.
                      </p>

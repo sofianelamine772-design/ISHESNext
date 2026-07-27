@@ -150,7 +150,7 @@ export default function CoursParticuliersPage() {
                  <div className="w-16 h-16 bg-ishes-green/10 text-ishes-green rounded-2xl flex items-center justify-center">
                     <Quote className="w-8 h-8 rotate-180" />
                  </div>
-                 <h2 className="text-4xl font-black text-ishes-dark leading-tight">Apprenez le Coran avec les meilleurs.</h2>
+                 <h2 className="text-4xl font-black text-ishes-dark leading-tight">Apprenez le Coran avec les meilleurs</h2>
                  <p className="text-xl text-gray-500 font-medium leading-relaxed">
                    Vous cherchez à apprendre les règles du Tajwid pour vous permettre de lire le Noble Coran ? Nos cours sont destinés aux adultes et enfants de tous niveaux.
                  </p>

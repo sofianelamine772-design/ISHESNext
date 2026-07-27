@@ -138,7 +138,7 @@ export default function PackAccompagnementPage() {
               <div className="absolute top-0 right-0 w-96 h-96 bg-ishes-green/10 rounded-full blur-[120px] -mr-48 -mt-48" />
               <div className="relative z-10 grid lg:grid-cols-2 gap-20 items-center">
                  <div className="space-y-10">
-                    <h2 className="text-4xl md:text-5xl font-black leading-tight tracking-tight">Une expérience qui dépasse le simple <span className="text-ishes-green">apprentissage</span>.</h2>
+                    <h2 className="text-4xl md:text-5xl font-black leading-tight tracking-tight">Une expérience qui dépasse le simple <span className="text-ishes-green">apprentissage</span></h2>
                     <p className="text-xl text-white/60 font-medium leading-relaxed">
                        À l'Institut ISHES, nous ne souhaitons pas uniquement transmettre des connaissances. Notre ambition est d'accompagner des femmes et des hommes dans leur cheminement vers ALLAH, afin que la science acquise devienne une lumière qui éclaire leur vie, leur famille et leur pratique religieuse.
                     </p>

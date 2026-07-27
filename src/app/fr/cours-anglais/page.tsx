@@ -76,7 +76,7 @@ export default function CoursAnglaisPage() {
                   <div className="absolute top-0 left-0 w-full h-2 bg-blue-600" />
                   <Award className="w-32 h-32 text-blue-600/20 group-hover:scale-110 transition-transform duration-500" />
                   <div className="text-center space-y-4 px-6">
-                    <h3 className="text-2xl font-black text-ishes-dark italic">"English is the bridge to global knowledge and opportunities."</h3>
+                    <h3 className="text-2xl font-black text-ishes-dark italic">"English is the bridge to global knowledge and opportunities"</h3>
                     <p className="text-gray-500 font-medium text-sm">Une pédagogie interactive et stimulante.</p>
                   </div>
                </div>
