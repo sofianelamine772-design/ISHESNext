@@ -162,17 +162,58 @@ export default function FormationEnseignantPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-16 max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white/60 backdrop-blur-sm relative z-20"
+              className="mt-20 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left relative z-20"
             >
-              <iframe 
-                className="w-full aspect-video bg-[#101828]"
-                src="https://www.youtube.com/embed/8QiflPosqYU?si=TnSm478CtqEXACvl" 
-                title="Présentation de la Formation Enseignant" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerPolicy="strict-origin-when-cross-origin" 
-                allowFullScreen
-              ></iframe>
+              {formations.map((f, idx) => (
+                <div key={f.id} className="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-blue/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-6">
+                      <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full ${f.badgeColor}`}>
+                        Certification
+                      </span>
+                      {f.availableRemote && (
+                        <span className="flex items-center gap-1.5 text-[10px] font-black text-gray-500 uppercase tracking-widest bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
+                          <Monitor className="w-3.5 h-3.5" /> Distanciel
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="text-2xl font-black text-ishes-dark leading-tight mb-3 pr-4 group-hover:text-ishes-blue transition-colors">
+                      {f.title}
+                    </h3>
+                    
+                    <p className="text-gray-500 text-[15px] font-medium leading-relaxed mb-6">
+                      {f.subtitle}
+                    </p>
+
+                    <div className="space-y-3 mb-8">
+                      {f.tags.map((tag, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <CheckCircle2 className="w-5 h-5 text-ishes-gold shrink-0" />
+                          <span className="text-gray-600 font-bold text-sm">{tag}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-auto relative z-10 pt-6 border-t border-gray-100 flex flex-col gap-4">
+                    <div className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Investissement</span>
+                        <span className="text-lg font-black text-ishes-dark">{f.pricing}</span>
+                      </div>
+                    </div>
+                    <Link 
+                      href={`/program/${f.id}`}
+                      className="w-full text-center py-4 rounded-2xl bg-gray-50 text-ishes-dark font-black hover:bg-ishes-blue hover:text-white transition-all duration-300 border border-gray-100 text-sm uppercase tracking-widest"
+                    >
+                      Voir le programme
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </motion.div>
           </div>
         </div>
@@ -235,149 +276,7 @@ export default function FormationEnseignantPage() {
         </div>
       </section>
 
-      {/* --- FORMATIONS SECTION --- */}
-      <section className="pt-20 md:pt-32 pb-32 relative z-10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col gap-24">
-            
-            {formations.map((f, idx) => (
-              <motion.div
-                key={f.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: idx * 0.1 }}
-                className="bg-white/70 backdrop-blur-md rounded-[3rem] p-8 md:p-16 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] grid lg:grid-cols-12 gap-16 items-start"
-              >
-                  {/* Left Column (span 5) */}
-                  <div className="lg:col-span-5 space-y-8 lg:sticky lg:top-32 self-start">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <span className={`text-[10px] font-black uppercase tracking-[.25em] px-3 py-1 rounded-md ${f.badgeColor}`}>
-                          {f.subtitle}
-                        </span>
-                        {f.availableRemote && (
-                          <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-3 py-1 rounded-md border border-gray-100">
-                            <Monitor className="w-3.5 h-3.5" /> En distanciel
-                          </div>
-                        )}
-                      </div>
-                      <h2 className="text-3xl md:text-5xl font-black text-ishes-dark tracking-tight leading-tight uppercase">
-                        {f.title}
-                      </h2>
-                      <div className="flex flex-wrap gap-2 pt-2">
-                         {f.tags.map(tag => (
-                           <span key={tag} className="text-[10px] font-bold text-gray-400 border border-gray-100 px-3 py-1 rounded-full uppercase tracking-widest">{tag}</span>
-                         ))}
-                      </div>
-                    </div>
- 
-                    <p className="text-gray-500 text-lg leading-relaxed font-medium bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
-                      {f.description}
-                    </p>
- 
-                    <div className="grid sm:grid-cols-2 gap-6">
-                      <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
-                        <CreditCard className="w-6 h-6 text-ishes-blue mb-3" strokeWidth={1.5} />
-                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Flexibilité</div>
-                        <div className="text-sm font-black text-ishes-dark">{f.paymentTerms}</div>
-                      </div>
-                      <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
-                        <FileText className="w-6 h-6 text-ishes-blue mb-3" strokeWidth={1.5} />
-                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Investissement</div>
-                        <div className="text-sm font-black text-ishes-dark uppercase tracking-wide">{f.pricing}</div>
-                      </div>
-                    </div>
- 
-                    <Link 
-                      href="/contact" 
-                      className="flex items-center justify-center gap-3 bg-ishes-blue hover:bg-[#007044] text-white px-10 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all hover:-translate-y-1 shadow-xl shadow-ishes-blue/20 group w-full"
-                    >
-                      Demander un devis personnalisé
-                      <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </div>
- 
-                  {/* Right Column (span 7) */}
-                  <div className="lg:col-span-7 space-y-12 bg-gray-50/30 p-8 md:p-12 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 text-ishes-blue">
-                      <GraduationCap className="w-32 h-32" strokeWidth={1} />
-                    </div>
- 
-                    {f.modules && (
-                      <div className="mb-12 relative z-10">
-                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-8">Les 3 Modules de la Formation</h3>
-                        <div className="space-y-6">
-                          {f.modules.map((m: any, i: number) => (
-                             <div key={i} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                               <h4 className="text-[15px] font-black text-ishes-dark mb-2">{m.title}</h4>
-                               <p className="text-sm font-medium text-gray-500 leading-relaxed">{m.desc}</p>
-                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    
-                    {f.pourQui && (
-                      <div className="mb-12 relative z-10">
-                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-6">Pour Qui ?</h3>
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          {f.pourQui.map((item: string, i: number) => (
-                            <div key={i} className="flex gap-3 items-center bg-white px-4 py-3 rounded-xl border border-gray-100 shadow-sm">
-                              <CheckCircle2 className="w-4 h-4 text-ishes-blue shrink-0" />
-                              <p className="text-xs font-bold text-gray-600 leading-snug">{item}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
 
-                    {f.supports && (
-                      <div className="mb-12 relative z-10 bg-green-50 p-6 rounded-2xl border border-green-100">
-                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-2">Supports Inclus</h3>
-                        <p className="text-sm font-bold text-ishes-dark">{f.supports}</p>
-                      </div>
-                    )}
-
-                    {f.accompagnement && (
-                      <div className="mb-12 relative z-10 bg-blue-50 p-6 rounded-2xl border border-blue-100">
-                        <h3 className="text-blue-600 font-black uppercase tracking-[0.2em] text-xs mb-2">Suivi Post-Formation</h3>
-                        <p className="text-sm font-bold text-blue-900">{f.accompagnement}</p>
-                      </div>
-                    )}
-
-                    {f.deroulement && (
-                      <div className="mb-12 relative z-10">
-                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>
-                        <div className="space-y-6">
-                          {f.deroulement.map((item, i) => (
-                             <div key={i} className="flex gap-4 items-start">
-                               <div className="w-8 h-8 rounded-xl bg-ishes-blue/10 flex items-center justify-center shrink-0 text-xs font-black text-ishes-blue">{i + 1}</div>
-                               <p className="text-[15px] font-bold text-gray-600 leading-snug">{item}</p>
-                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
- 
-                    <div className="relative z-10">
-                      <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-8">Objectifs de la formation</h3>
-                      <div className="space-y-4">
-                        {f.objectifs.map((obj, i) => (
-                          <div key={i} className="flex gap-4 items-start py-4 border-b border-gray-100/50 last:border-0">
-                            <CheckCircle2 className="w-5 h-5 text-ishes-blue shrink-0 mt-0.5" />
-                            <p className="text-base font-black text-ishes-dark leading-snug">{obj}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-               </motion.div>
-            ))}
- 
-          </div>
-        </div>
-      </section>
  
       {/* --- REASSURANCE --- */}
       <section className="bg-ishes-blue/5 py-24 border-y border-ishes-blue/10 relative overflow-hidden">

@@ -645,13 +645,13 @@ export function ProgramContent() {
                 transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
                 onClick={() => router.push(infoUrl)}
                 className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${program.isRecommended
-                    ? "border-[3px] border-[#00603A] shadow-md"
+                    ? "border-[3px] border-ishes-blue shadow-md"
                     : "border border-gray-100 shadow-sm"
                   }`}
               >
                 {/* RECOMMENDED BADGE */}
                 {program.isRecommended && (
-                  <div className="bg-[#00603A] text-white text-xs font-bold uppercase tracking-widest text-center py-2.5 rounded-t-[1.8rem] flex items-center justify-center gap-2">
+                  <div className="bg-ishes-blue text-white text-xs font-bold uppercase tracking-widest text-center py-2.5 rounded-t-[1.8rem] flex items-center justify-center gap-2">
                     <Star className="w-3.5 h-3.5 fill-white" /> Recommandé
                   </div>
                 )}
@@ -663,7 +663,7 @@ export function ProgramContent() {
                       {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
                     </span>
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${isPresentiel
-                        ? "bg-[#00603A]/10 text-[#00603A] border-[#00603A]/20"
+                        ? "bg-ishes-blue/10 text-ishes-blue border-ishes-blue/20"
                         : "bg-blue-50 text-blue-700 border-blue-100"
                       }`}>
                       <span>📅</span> {program.durationText}

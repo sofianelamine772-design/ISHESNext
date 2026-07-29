@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Heart, ShieldCheck, Users, Sparkles } from "lucide-react";
+import { ArrowRight, Heart, ShieldCheck, Users, Sparkles, BookHeart } from "lucide-react";
 import { HeroSection } from "@/components/vitrine/HeroSection";
 import { StatsSection } from "@/components/vitrine/StatsSection";
 import { SocialSection } from "@/components/vitrine/SocialSection";
@@ -81,10 +81,66 @@ export default function Home() {
                  </div>
                </div>
                
-               <p className="text-[#2d3748] font-black text-lg md:text-xl flex items-start sm:items-center gap-4 bg-[#f2f7f4] p-6 rounded-2xl border border-[#e0ece5]">
+               <p className="text-[#2d3748] font-black text-lg md:text-xl flex items-start sm:items-center gap-4 bg-ishes-blue/5 p-6 rounded-2xl border border-ishes-blue/10">
                  <span className="text-2xl shrink-0 mt-1 sm:mt-0">👉</span> 
-                 <span><strong className="text-[#4a7c59]">Sans accompagnement</strong>, il n’y a pas de progression durable.</span>
+                 <span><strong className="text-ishes-blue">Sans accompagnement</strong>, il n’y a pas de progression durable.</span>
                </p>
+            </div>
+          </div>
+
+          {/* === LES 3 PILIERS ISHES === */}
+          <div className="max-w-7xl mx-auto mt-20 mb-12 px-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Carte 1 */}
+              <div className="bg-[#fcfaf7] border border-[#f5f0e6] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
+                <div className="w-14 h-14 shrink-0 rounded-full bg-ishes-blue flex items-center justify-center text-white shadow-sm">
+                  <ShieldCheck className="w-7 h-7" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-ishes-dark mb-2">1. Légitimité & Expertise</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Plus de 16 ans d'expérience, une méthode pédagogique éprouvée et reconnue en France pour la formation des enseignants.
+                  </p>
+                  <Link href="/institut" className="inline-flex items-center gap-1.5 text-xs font-bold text-ishes-dark hover:text-ishes-blue transition-colors group">
+                    Découvrir notre histoire 
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Carte 2 */}
+              <div className="bg-[#fcfaf7] border border-[#f5f0e6] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
+                <div className="w-14 h-14 shrink-0 rounded-full bg-ishes-gold flex items-center justify-center text-white shadow-sm">
+                  <BookHeart className="w-7 h-7" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-ishes-dark mb-2">2. Spiritualité & Transformation</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Nous formons le cœur et l'esprit pour comprendre le sens profond des enseignements et purifier son âme (Tazkiyat an-nafs).
+                  </p>
+                  <Link href="/conseil-spiritualite" className="inline-flex items-center gap-1.5 text-xs font-bold text-ishes-dark hover:text-ishes-blue transition-colors group">
+                    En savoir plus 
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Carte 3 */}
+              <div className="bg-[#fcfaf7] border border-[#f5f0e6] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
+                <div className="w-14 h-14 shrink-0 rounded-full bg-ishes-blue flex items-center justify-center text-white shadow-sm">
+                  <Users className="w-7 h-7" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-ishes-dark mb-2">3. Accompagnement Permanent</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Groupes WhatsApp, lives, replays, suivi personnalisé, réponses aux questions et conseils tout au long de votre parcours.
+                  </p>
+                  <Link href="/fr/pack-accompagnement" className="inline-flex items-center gap-1.5 text-xs font-bold text-ishes-dark hover:text-ishes-blue transition-colors group">
+                    Découvrir l'accompagnement 
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
 
