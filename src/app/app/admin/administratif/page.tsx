@@ -22,7 +22,7 @@ export default function AdministratifPage() {
             <UserButton
               appearance={{
                 elements: {
-                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]"
                 }
               }}
             />
@@ -48,7 +48,7 @@ export default function AdministratifPage() {
                        <input
                           type="text"
                           placeholder="Rechercher..."
-                          className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-ishes-green transition-all"
+                          className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-ishes-blue transition-all"
                        />
                     </div>
                     <Button variant="ishes-outline" className="w-12 h-12 p-0 rounded-2xl shrink-0">
@@ -59,7 +59,7 @@ export default function AdministratifPage() {
 
               <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
                 <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner animate-pulse">
-                  <FileText className="w-10 h-10 text-ishes-green/20" />
+                  <FileText className="w-10 h-10 text-ishes-blue/20" />
                 </div>
                 <h3 className="text-xl ishes-heading text-ishes-dark mb-2">Bientôt disponible</h3>
               </div>

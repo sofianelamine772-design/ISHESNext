@@ -28,7 +28,7 @@ export function WhatsappButton() {
       <a href="https://wa.me/33612345678" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
         {/* Tooltip animé toutes les 8s */}
         <div
-          className="flex items-center justify-center bg-[#152233] text-white px-5 py-3 rounded-xl shadow-2xl text-[10px] font-bold tracking-[0.15em] relative transition-all duration-500 ease-in-out"
+          className="flex items-center justify-center bg-ishes-dark text-white px-5 py-3 rounded-xl shadow-2xl text-[10px] font-bold tracking-[0.15em] relative transition-all duration-500 ease-in-out"
           style={{
             opacity: showWaTooltip ? 1 : 0,
             transform: showWaTooltip ? "translateX(0) scale(1)" : "translateX(12px) scale(0.95)",

@@ -485,41 +485,41 @@ function InscriptionForm() {
 
           {/* Step 1 */}
           <div className="flex flex-col items-center gap-2 bg-white px-2 cursor-pointer" onClick={() => setStep(1)}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md transition-all ${step >= 1 ? "bg-[#008953] text-white" : "bg-gray-100 text-gray-400"
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md transition-all ${step >= 1 ? "bg-ishes-blue text-white" : "bg-gray-100 text-gray-400"
               }`}>
               1
             </div>
-            <span className={`text-[10px] font-black tracking-widest uppercase transition-all ${step >= 1 ? "text-[#008953]" : "text-gray-400"
+            <span className={`text-[10px] font-black tracking-widest uppercase transition-all ${step >= 1 ? "text-ishes-blue" : "text-gray-400"
               }`}>Infos</span>
           </div>
 
           {/* Step 2 */}
           <div className="flex flex-col items-center gap-2 bg-white px-2 cursor-pointer" onClick={() => { if (step > 2) setStep(2) }}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${step >= 2 ? "bg-[#008953] text-white shadow-md" : "bg-gray-100 text-gray-400"
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${step >= 2 ? "bg-ishes-blue text-white shadow-md" : "bg-gray-100 text-gray-400"
               }`}>
               2
             </div>
-            <span className={`text-[10px] font-bold tracking-widest uppercase transition-all ${step >= 2 ? "text-[#008953]" : "text-gray-400"
+            <span className={`text-[10px] font-bold tracking-widest uppercase transition-all ${step >= 2 ? "text-ishes-blue" : "text-gray-400"
               }`}>Cours</span>
           </div>
 
           {/* Step 3 */}
           <div className="flex flex-col items-center gap-2 bg-white px-2 cursor-pointer" onClick={() => { if (step > 3) setStep(3) }}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${step >= 3 ? "bg-[#008953] text-white shadow-md" : "bg-gray-100 text-gray-400"
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${step >= 3 ? "bg-ishes-blue text-white shadow-md" : "bg-gray-100 text-gray-400"
               }`}>
               3
             </div>
-            <span className={`text-[10px] font-bold tracking-widest uppercase transition-all ${step >= 3 ? "text-[#008953]" : "text-gray-400"
+            <span className={`text-[10px] font-bold tracking-widest uppercase transition-all ${step >= 3 ? "text-ishes-blue" : "text-gray-400"
               }`}>Important</span>
           </div>
 
           {/* Step 4 */}
           <div className="flex flex-col items-center gap-2 bg-white px-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${step >= 4 ? "bg-[#008953] text-white shadow-md" : "bg-gray-100 text-gray-400"
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${step >= 4 ? "bg-ishes-blue text-white shadow-md" : "bg-gray-100 text-gray-400"
               }`}>
               4
             </div>
-            <span className={`text-[10px] font-bold tracking-widest uppercase transition-all ${step >= 4 ? "text-[#008953]" : "text-gray-400"
+            <span className={`text-[10px] font-bold tracking-widest uppercase transition-all ${step >= 4 ? "text-ishes-blue" : "text-gray-400"
               }`}>Paiement</span>
           </div>
         </div>
@@ -547,7 +547,7 @@ function InscriptionForm() {
                   <button
                     onClick={() => setRegistrationType("self")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "self"
-                      ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
+                      ? "border-ishes-blue bg-ishes-blue/5 text-ishes-blue"
                       : "border-gray-100 bg-white text-gray-400 hover:border-gray-200"
                       }`}
                   >
@@ -556,7 +556,7 @@ function InscriptionForm() {
                   <button
                     onClick={() => setRegistrationType("child")}
                     className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all font-bold text-sm flex items-center justify-center gap-3 ${registrationType === "child"
-                      ? "border-[#008953] bg-[#008953]/5 text-[#008953]"
+                      ? "border-ishes-blue bg-ishes-blue/5 text-ishes-blue"
                       : "border-gray-100 bg-white text-gray-400 hover:border-gray-200"
                       }`}
                   >
@@ -588,7 +588,7 @@ function InscriptionForm() {
                             Supprimer
                           </button>
                         )}
-                        <h3 className="text-xs font-black text-[#008953] uppercase tracking-widest flex items-center gap-2">
+                        <h3 className="text-xs font-black text-ishes-blue uppercase tracking-widest flex items-center gap-2">
                           <span>👶</span> ENFANT N°{index + 1}
                         </h3>
 
@@ -604,7 +604,7 @@ function InscriptionForm() {
                               value={child.prenom}
                               onChange={(e) => handleChildInputChange(index, 'prenom', e.target.value)}
                               placeholder="Prénom"
-                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                               required
                             />
                           </div>
@@ -620,7 +620,7 @@ function InscriptionForm() {
                               value={child.nom}
                               onChange={(e) => handleChildInputChange(index, 'nom', e.target.value)}
                               placeholder="Nom"
-                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                               required
                             />
                           </div>
@@ -640,7 +640,7 @@ function InscriptionForm() {
                                   value={slotVal}
                                   disabled={!!slot}
                                   onChange={(e) => handleChildInputChange(index, 'slot', e.target.value)}
-                                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                                 >
                                   <option value="">— Choisir un jour —</option>
                                   <option value="mercredi">Mercredi</option>
@@ -660,7 +660,7 @@ function InscriptionForm() {
                                     value={child.niveau}
                                     disabled={!slotVal}
                                     onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
-                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
                                   >
                                     <option value="">
                                       {!slotVal ? "— Choisir d'abord le jour —" : "— Choisir un niveau —"}
@@ -707,7 +707,7 @@ function InscriptionForm() {
                                     value={child.classId}
                                     disabled={!child.niveau}
                                     onChange={(e) => handleChildInputChange(index, 'classId', e.target.value)}
-                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
                                   >
                                     <option value="">
                                       {!child.niveau ? "— Choisir d'abord le niveau —" : "— Choisir un horaire —"}
@@ -743,7 +743,7 @@ function InscriptionForm() {
                     <button
                       type="button"
                       onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }])}
-                      className="w-full py-4 px-6 border-2 border-dashed border-gray-200 rounded-2xl text-xs font-black text-[#008953] hover:border-[#008953] hover:bg-[#008953]/5 transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-sm"
+                      className="w-full py-4 px-6 border-2 border-dashed border-gray-200 rounded-2xl text-xs font-black text-ishes-blue hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-sm"
                     >
                       <span>➕</span> Inscrire un autre enfant
                     </button>
@@ -762,7 +762,7 @@ function InscriptionForm() {
                         value={formData.prenom}
                         onChange={handleInputChange}
                         placeholder="Mohamed"
-                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                         required
                       />
                     </div>
@@ -779,7 +779,7 @@ function InscriptionForm() {
                         value={formData.nom}
                         onChange={handleInputChange}
                         placeholder="Dubair"
-                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                         required
                       />
                     </div>
@@ -799,7 +799,7 @@ function InscriptionForm() {
                               value={slotVal}
                               disabled={!!slot}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                             >
                               <option value="">— Choisir un jour —</option>
                               <option value="samedi">Samedi</option>
@@ -819,7 +819,7 @@ function InscriptionForm() {
                                 value={formData.niveau}
                                 disabled={!slotVal}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
                               >
                                 <option value="">
                                   {!slotVal ? "— Choisir d'abord le jour —" : "— Choisir un niveau —"}
@@ -868,7 +868,7 @@ function InscriptionForm() {
                                 value={formData.classId}
                                 disabled={!formData.niveau}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
                               >
                                 <option value="">
                                   {!formData.niveau ? "— Choisir d'abord le niveau —" : "— Choisir un horaire —"}
@@ -918,7 +918,7 @@ function InscriptionForm() {
                         value={formData.parentPrenom}
                         onChange={handleInputChange}
                         placeholder="Prénom"
-                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                         required
                       />
                     </div>
@@ -933,7 +933,7 @@ function InscriptionForm() {
                         value={formData.parentNom}
                         onChange={handleInputChange}
                         placeholder="Nom"
-                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                         required
                       />
                     </div>
@@ -952,7 +952,7 @@ function InscriptionForm() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="vous@exemple.fr"
-                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                     required
                   />
                 </div>
@@ -969,7 +969,7 @@ function InscriptionForm() {
                     value={formData.telephone}
                     onChange={handleInputChange}
                     placeholder="+33 6 XX XX XX XX"
-                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all text-sm font-medium"
+                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                     required
                   />
                 </div>
@@ -1000,7 +1000,7 @@ function InscriptionForm() {
                       )
                     )
                   }
-                  className="w-full bg-[#008953] hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-ishes-blue hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   Continuer <ChevronRight className="w-5 h-5" />
                 </button>
@@ -1028,7 +1028,7 @@ function InscriptionForm() {
 
                     <div className="flex items-center gap-3 mb-6">
                       <MessageSquareText className="w-6 h-6 text-white/80" />
-                      <h3 className="text-xl font-black tracking-tight underline decoration-ishes-green decoration-4 underline-offset-4">Message de la ville</h3>
+                      <h3 className="text-xl font-black tracking-tight underline decoration-ishes-blue decoration-4 underline-offset-4">Message de la ville</h3>
                     </div>
 
                     <div className="space-y-4">
@@ -1055,7 +1055,7 @@ function InscriptionForm() {
                 </button>
                 <button
                   onClick={handleNextWithSave}
-                  className="flex-[2] bg-[#008953] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all flex items-center justify-center gap-3 shadow-xl shadow-[#008953]/20"
+                  className="flex-[2] bg-ishes-blue text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all flex items-center justify-center gap-3 shadow-xl shadow-ishes-blue/20"
                 >
                   J'AI COMPRIS, PAYER <ChevronRight className="w-5 h-5" />
                 </button>
@@ -1082,7 +1082,7 @@ function InscriptionForm() {
                       : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'intermediaire_presentiel') ? 'Arabe & Tajwid 2eme année'
                       : (planName || "Votre Formation")}
                     </h3>
-                    <p className="text-xs font-bold text-[#008953] uppercase tracking-widest mt-1">
+                    <p className="text-xs font-bold text-ishes-blue uppercase tracking-widest mt-1">
                       {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : (
                         <>Durée : {planId === 'tajwid_intensif' ? '3 mois' : '8 à 9 mois'} | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : ((planId === 'presentiel-global' && (planName?.toLowerCase().includes('débutant') || planName?.toLowerCase().includes('interm')) && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'femme_intermediaire_presentiel' || planId === 'debutante_presentiel' || planId === 'intermediaire_presentiel') ? '3h/semaine' : '1h30/semaine'}</>
                       )}
@@ -1108,7 +1108,7 @@ function InscriptionForm() {
                             : ["Pédagogie certifiée CECRL", "Suivi individuel", "Supports modernes", "Excellence ISHES"]
                     ).map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#008953] shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-ishes-blue shrink-0" />
                         <span className="text-xs text-gray-700 font-bold">{feature}</span>
                       </div>
                     ))}
@@ -1134,7 +1134,7 @@ function InscriptionForm() {
                 </button>
                 <button
                   onClick={nextStep}
-                  className="flex-[2] bg-[#008953] text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all flex items-center justify-center gap-3 shadow-xl shadow-[#008953]/20"
+                  className="flex-[2] bg-ishes-blue text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#007044] transition-all flex items-center justify-center gap-3 shadow-xl shadow-ishes-blue/20"
                 >
                   Continuer <ArrowRight className="w-4 h-4" />
                 </button>
@@ -1145,13 +1145,13 @@ function InscriptionForm() {
           {step === 4 && (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
               <div className="mb-10">
-                <div className="w-24 h-24 bg-green-50 text-ishes-green rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
+                <div className="w-24 h-24 bg-green-50 text-ishes-blue rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
                   <CheckCircle2 className="w-12 h-12" />
                 </div>
                 <h2 className="text-3xl font-black text-ishes-dark mb-4 tracking-tight">Dernière étape !</h2>
                 <p className="text-gray-500 font-medium max-w-lg mx-auto leading-relaxed">
                   Votre inscription pour <span className="text-ishes-dark font-bold">{planName}</span> est presque terminée.
-                  Utilisez votre email <span className="text-ishes-green font-bold">{formData.email}</span> pour finaliser la création de votre compte.
+                  Utilisez votre email <span className="text-ishes-blue font-bold">{formData.email}</span> pour finaliser la création de votre compte.
                 </p>
               </div>
 
@@ -1176,7 +1176,7 @@ function InscriptionForm() {
                         type="button"
                         onClick={() => setSelectedInstallments(1)}
                         className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 1
-                            ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
+                            ? "border-ishes-blue bg-ishes-blue/5 text-[#101828]"
                             : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
                           }`}
                       >
@@ -1185,7 +1185,7 @@ function InscriptionForm() {
                           <span className="text-[10px] text-gray-400 font-medium">Règlement unique sans frais</span>
                         </div>
                         <div className="text-right">
-                          <span className="font-bold text-sm text-[#008953]">{getPrice()},00 €</span>
+                          <span className="font-bold text-sm text-ishes-blue">{getPrice()},00 €</span>
                         </div>
                       </button>
 
@@ -1195,7 +1195,7 @@ function InscriptionForm() {
                           type="button"
                           onClick={() => setSelectedInstallments(3)}
                           className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 3
-                              ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
+                              ? "border-ishes-blue bg-ishes-blue/5 text-[#101828]"
                               : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
                             }`}
                         >
@@ -1204,7 +1204,7 @@ function InscriptionForm() {
                             <span className="text-[10px] text-gray-400 font-medium">3 mensualités</span>
                           </div>
                           <div className="text-right flex flex-col">
-                            <span className="font-bold text-sm text-[#008953]">{(getPrice() / 3).toFixed(2)} €</span>
+                            <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 3).toFixed(2)} €</span>
                             <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
                           </div>
                         </button>
@@ -1216,7 +1216,7 @@ function InscriptionForm() {
                           type="button"
                           onClick={() => setSelectedInstallments(5)}
                           className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 5
-                              ? "border-[#008953] bg-[#008953]/5 text-[#101828]"
+                              ? "border-ishes-blue bg-ishes-blue/5 text-[#101828]"
                               : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
                             }`}
                         >
@@ -1225,7 +1225,7 @@ function InscriptionForm() {
                             <span className="text-[10px] text-gray-400 font-medium">5 mensualités</span>
                           </div>
                           <div className="text-right flex flex-col">
-                            <span className="font-bold text-sm text-[#008953]">{(getPrice() / 5).toFixed(2)} €</span>
+                            <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 5).toFixed(2)} €</span>
                             <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
                           </div>
                         </button>
@@ -1237,7 +1237,7 @@ function InscriptionForm() {
 
                 {registrationType === 'child' && childrenList.length > 1 && (
                   <div className="text-left text-xs font-bold text-gray-500 mb-6 bg-green-50/50 border border-green-100/50 p-4 rounded-xl">
-                    <span className="text-[#008953]">Multi-inscription ({childrenList.length} enfants) :</span>
+                    <span className="text-ishes-blue">Multi-inscription ({childrenList.length} enfants) :</span>
                     <ul className="mt-2 space-y-1 text-gray-600 font-medium list-disc list-inside">
                       {childrenList.map((c, i) => (
                         <li key={i}>{c.prenom} {c.nom}</li>
@@ -1255,11 +1255,11 @@ function InscriptionForm() {
                 </div>
 
                 <div className="flex items-start gap-3 mb-8 text-left group cursor-pointer" onClick={() => setAcceptedTerms(!acceptedTerms)}>
-                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-ishes-green border-ishes-green' : 'border-gray-300 bg-white group-hover:border-ishes-green'}`}>
+                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-ishes-blue border-ishes-blue' : 'border-gray-300 bg-white group-hover:border-ishes-blue'}`}>
                     {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
-                    J'accepte les <Link href="/cgv" className="text-ishes-green underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
+                    J'accepte les <Link href="/cgv" className="text-ishes-blue underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
                   </p>
                 </div>
 

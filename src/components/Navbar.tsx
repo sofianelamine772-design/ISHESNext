@@ -46,14 +46,14 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 onMouseEnter={() => setHoveredIndex(idx)}
-                className={`relative px-3 py-2 text-[16px] font-bold tracking-tight transition-colors z-10 whitespace-nowrap ${hoveredIndex === idx ? "text-[#008953]" : "text-gray-500"
+                className={`relative px-3 py-2 text-[16px] font-bold tracking-tight transition-colors z-10 whitespace-nowrap ${hoveredIndex === idx ? "text-ishes-blue" : "text-gray-500"
                   }`}
               >
                 {link.name}
                 {hoveredIndex === idx && (
                   <motion.div
                     layoutId="navHoverPill"
-                    className="absolute inset-0 bg-[#008953]/[0.08] border border-[#008953]/10 rounded-full -z-10"
+                    className="absolute inset-0 bg-ishes-blue/[0.08] border border-ishes-blue/10 rounded-full -z-10"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -62,10 +62,10 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link href="/app" className="hidden lg:flex items-center justify-center px-6 py-2.5 rounded-full text-[15px] uppercase tracking-[0.15em] font-black text-gray-600 hover:text-[#008953] hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all active:scale-95">
+            <Link href="/app" className="hidden lg:flex items-center justify-center px-6 py-2.5 rounded-full text-[15px] uppercase tracking-[0.15em] font-black text-gray-600 hover:text-ishes-blue hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all active:scale-95">
               Connexion
             </Link>
-            <Link href="/program" className="hidden sm:block bg-[#008953] hover:bg-[#007044] text-white px-7 py-2.5 rounded-full text-[16px] uppercase tracking-wider font-black transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-[#008953]/20 border border-transparent">
+            <Link href="/program" className="hidden sm:block bg-ishes-blue hover:bg-ishes-blue-hover text-white px-7 py-2.5 rounded-full text-[16px] uppercase tracking-wider font-black transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-ishes-blue/20 border border-transparent">
               S'inscrire
             </Link>
             <button
@@ -108,7 +108,7 @@ export function Navbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
-                      className="px-6 py-4 text-[15px] font-bold text-gray-700 hover:text-[#008953] hover:bg-[#008953]/5 transition-colors border-b border-gray-50 last:border-0"
+                      className="px-6 py-4 text-[15px] font-bold text-gray-700 hover:text-ishes-blue hover:bg-ishes-blue/5 transition-colors border-b border-gray-50 last:border-0"
                     >
                       {link.name}
                     </Link>
@@ -125,7 +125,7 @@ export function Navbar() {
                   <Link
                     href="/program"
                     onClick={() => setMobileOpen(false)}
-                    className="w-full flex items-center justify-center bg-[#008953] hover:bg-[#007044] text-white py-3.5 rounded-xl text-[14px] font-black uppercase tracking-widest transition-all shadow-lg shadow-[#008953]/20"
+                    className="w-full flex items-center justify-center bg-ishes-blue hover:bg-[#007044] text-white py-3.5 rounded-xl text-[14px] font-black uppercase tracking-widest transition-all shadow-lg shadow-ishes-blue/20"
                   >
                     S'inscrire maintenant
                   </Link>

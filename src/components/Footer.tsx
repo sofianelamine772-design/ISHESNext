@@ -40,24 +40,24 @@ export function Footer() {
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Coran & Langues</h4>
             <ul className="space-y-4">
               <li>
-                <Link href="/fr/cours-lecture-tajwid" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Cours de Tajwid</Link>
+                <Link href="/fr/cours-lecture-tajwid" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Cours de Tajwid</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Distance & Présentiel</span>
               </li>
               <li>
-                <Link href="/fr/cours-tajwid-intensif" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Tajwid Intensif</Link>
-                <span className="text-[9px] text-[#008953] font-black uppercase tracking-tighter">Accéléré (3 mois)</span>
+                <Link href="/fr/cours-tajwid-intensif" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Tajwid Intensif</Link>
+                <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Accéléré (3 mois)</span>
               </li>
               <li>
-                <Link href="/fr/cours-memoriser-coran" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Mémorisation (Hifz)</Link>
+                <Link href="/fr/cours-memoriser-coran" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Mémorisation (Hifz)</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Suivi à distance</span>
               </li>
               <li>
-                <Link href="/fr/cours-arabe-adulte" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Arabe Adulte</Link>
+                <Link href="/fr/cours-arabe-adulte" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Arabe Adulte</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Distance & Présentiel</span>
               </li>
               <li>
-                <Link href="/fr/correction-fatiha" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Correction al Fatiha</Link>
-                <span className="text-[9px] text-ishes-green font-black uppercase tracking-tighter">Gratuit</span>
+                <Link href="/fr/correction-fatiha" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Correction al Fatiha</Link>
+                <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Gratuit</span>
               </li>
             </ul>
           </div>
@@ -67,23 +67,23 @@ export function Footer() {
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Sciences</h4>
             <ul className="space-y-4">
               <li>
-                <Link href="/fr/cours-al-aqida" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Al-'Aqîda (Tahawiya)</Link>
+                <Link href="/fr/cours-al-aqida" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Al-'Aqîda (Tahawiya)</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Disponible à distance</span>
               </li>
               <li>
-                <Link href="/fr/cours-as-sirah" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Sîrah An-Nabawiyya</Link>
+                <Link href="/fr/cours-as-sirah" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Sîrah An-Nabawiyya</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Disponible à distance</span>
               </li>
               <li>
-                <Link href="/fr/cours-fiqh-malikite" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Fiqh Mâlikite</Link>
+                <Link href="/fr/cours-fiqh-malikite" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Fiqh Mâlikite</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Distance (Matn Ibn Achir)</span>
               </li>
               <li>
-                <Link href="/fr/cours-sciences-coran" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Sciences du Coran</Link>
+                <Link href="/fr/cours-sciences-coran" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Sciences du Coran</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Disponible à distance</span>
               </li>
               <li>
-                <Link href="/fr/cours-sciences-hadith" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Sciences du Hadith</Link>
+                <Link href="/fr/cours-sciences-hadith" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Sciences du Hadith</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Disponible à distance</span>
               </li>
             </ul>
@@ -94,24 +94,24 @@ export function Footer() {
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Cursus Spéciaux</h4>
             <ul className="space-y-4">
               <li>
-                <Link href="/fr/cours-arabe-enfant" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Junior (4-15 ans)</Link>
-                <span className="text-[9px] text-ishes-green font-black uppercase tracking-tighter">Distance & Présentiel</span>
+                <Link href="/fr/cours-arabe-enfant" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Junior (4-15 ans)</Link>
+                <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Distance & Présentiel</span>
               </li>
               <li>
-                <Link href="/fr/formation-tarbya-islamya" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Tarbiya Islamiya</Link>
+                <Link href="/fr/formation-tarbya-islamya" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Tarbiya Islamiya</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Éveil spirituel enfant</span>
               </li>
               <li>
-                <Link href="/fr/spiritualite-islam" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Spiritualité Musulmane</Link>
-                <span className="text-[9px] text-ishes-green font-black uppercase tracking-tighter">Gratuit</span>
+                <Link href="/fr/spiritualite-islam" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Spiritualité Musulmane</Link>
+                <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Gratuit</span>
               </li>
               <li>
-                <Link href="/fr/cours-particuliers" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Cours Particuliers</Link>
+                <Link href="/fr/cours-particuliers" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Cours Particuliers</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Sur devis (Coran/Arabe)</span>
               </li>
               <li>
-                <Link href="/formation-enseignant" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors block">Formation Enseignant</Link>
-                <span className="text-[9px] text-ishes-green font-black uppercase tracking-tighter">Nouveau</span>
+                <Link href="/formation-enseignant" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Formation Enseignant</Link>
+                <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Nouveau</span>
               </li>
             </ul>
           </div>
@@ -120,29 +120,29 @@ export function Footer() {
           <div>
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">L'Institut</h4>
             <ul className="space-y-4 mb-8">
-              <li><Link href="/institut" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors">À propos</Link></li>
-              <li><Link href="/boutique" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors">Boutique</Link></li>
-              <li><Link href="/app/admin" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors">Espace Membre</Link></li>
-              <li><Link href="/contact" className="text-sm text-gray-500 font-bold hover:text-[#008953] transition-colors">Contact</Link></li>
+              <li><Link href="/institut" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">À propos</Link></li>
+              <li><Link href="/boutique" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Boutique</Link></li>
+              <li><Link href="/app/admin" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Espace Membre</Link></li>
+              <li><Link href="/contact" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Contact</Link></li>
             </ul>
             <h4 className="font-bold text-gray-900 mb-4 text-[11px] uppercase tracking-widest">Nous Trouver</h4>
             <ul className="space-y-3">
               <li className="flex gap-2 items-start">
-                <MapPin className="w-4 h-4 text-[#008953] shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-ishes-blue shrink-0 mt-0.5" />
                 <a
                   href="https://www.google.com/maps/search/?api=1&query=41+Bd+de+Thibaud+31100+Toulouse"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[12px] text-gray-500 font-medium hover:text-[#008953] transition-colors"
+                  className="text-[12px] text-gray-500 font-medium hover:text-ishes-blue transition-colors"
                 >
                   41 Bd de Thibaud<br />31100 Toulouse
                 </a>
               </li>
               <li className="flex gap-2 items-center">
-                <Phone className="w-4 h-4 text-[#008953] shrink-0" />
+                <Phone className="w-4 h-4 text-ishes-blue shrink-0" />
                 <a
                   href="tel:+33612345678"
-                  className="text-[12px] text-gray-500 font-medium hover:text-[#008953] transition-colors"
+                  className="text-[12px] text-gray-500 font-medium hover:text-ishes-blue transition-colors"
                 >
                   06 12 34 56 78
                 </a>
@@ -153,7 +153,7 @@ export function Footer() {
 
         {/* SEO links */}
         <div className="mt-10 pt-10 border-t border-gray-100">
-          <h4 className="text-ishes-green font-black text-xs uppercase tracking-[0.3em] mb-6">Enseignements &amp; Formations</h4>
+          <h4 className="text-ishes-blue font-black text-xs uppercase tracking-[0.3em] mb-6">Enseignements &amp; Formations</h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-3">
             {[
               ["Accueil ISHES", "/fr/"],["Boutique", "/fr/boutique"],["Civilisation Arabo-Musulmane", "/fr/civilisation-arabo-musulmane"],
@@ -166,7 +166,7 @@ export function Footer() {
                ["Formation Tarbya Islamya", "/fr/formation-tarbya-islamya"],
                ["Questions Spiritualité", "/conseil-spiritualite"],["Spiritualité Islam", "/fr/spiritualite-islam"],
             ].map(([label, href]) => (
-              <Link key={href} href={href} className="text-xs text-gray-500 hover:text-[#008953] transition-colors leading-tight">{label}</Link>
+              <Link key={href} href={href} className="text-xs text-gray-500 hover:text-ishes-blue transition-colors leading-tight">{label}</Link>
             ))}
           </div>
         </div>
@@ -175,14 +175,14 @@ export function Footer() {
         <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col items-center justify-center gap-6 text-center pb-8">
           <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
             <Link href="/mentions-legales" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Mentions Légales</Link>
-            <Link href="/cgv" className="bg-ishes-green text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-green-dark transition-colors">CGV</Link>
-            <Link href="/politique-de-confidentialite" className="bg-ishes-green text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-green-dark transition-colors">Politique de confidentialité</Link>
+            <Link href="/cgv" className="bg-ishes-blue text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-blue-dark transition-colors">CGV</Link>
+            <Link href="/politique-de-confidentialite" className="bg-ishes-blue text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-blue-dark transition-colors">Politique de confidentialité</Link>
           </div>
 
           {/* Paiement Sécurisé */}
           <div className="flex flex-col items-center gap-2.5 bg-gray-50/50 border border-gray-100 rounded-2xl px-6 py-3.5 max-w-sm w-full mx-auto">
             <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-1.5">
-              <svg className="w-3 h-3 text-[#008953]" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+              <svg className="w-3 h-3 text-ishes-blue" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
               Paiement 100% Sécurisé avec Stripe
             </span>
             <div className="flex items-center justify-center gap-4">

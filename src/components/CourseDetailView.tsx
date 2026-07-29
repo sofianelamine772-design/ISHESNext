@@ -24,18 +24,18 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
    const audience = isEnfant ? "enfant" : "adulte";
    
    const isPresentielCourse = id.includes("presentiel") || id === "arabe_coran_junior";
-   const themeText = isPresentielCourse ? "text-[#c8a96e]" : "text-[#008953]";
-   const themeBgSolid = isPresentielCourse ? "bg-[#c8a96e]" : "bg-[#008953]";
+   const themeText = isPresentielCourse ? "text-ishes-gold" : "text-ishes-blue";
+   const themeBgSolid = isPresentielCourse ? "bg-ishes-gold" : "bg-ishes-blue";
    const themeBgHover = isPresentielCourse ? "hover:bg-[#b0935b]" : "hover:bg-[#007044]";
-   const themeShadow = isPresentielCourse ? "shadow-[#c8a96e]/20" : "shadow-[#008953]/20";
-   const themeBorderLight = isPresentielCourse ? "border-[#c8a96e]/20" : "border-green-100";
+   const themeShadow = isPresentielCourse ? "shadow-ishes-gold/20" : "shadow-ishes-blue/20";
+   const themeBorderLight = isPresentielCourse ? "border-ishes-gold/20" : "border-green-100";
    const themeGradientFrom = isPresentielCourse ? "from-amber-50/50" : "from-green-50/50";
    const themeBlob = isPresentielCourse ? "bg-amber-100/50" : "bg-green-100/50";
-   const themeTextHover = isPresentielCourse ? "hover:text-[#c8a96e]" : "hover:text-[#008953]";
-   const themeBgLight5 = isPresentielCourse ? "bg-[#c8a96e]/5" : "bg-ishes-green/5";
-   const themeTextIshes = isPresentielCourse ? "text-[#c8a96e]" : "text-ishes-green";
-   const themeBorderIshes = isPresentielCourse ? "border-[#c8a96e]/10" : "border-ishes-green/10";
-   const themeBgIshes = isPresentielCourse ? "bg-[#c8a96e]" : "bg-ishes-green";
+   const themeTextHover = isPresentielCourse ? "hover:text-ishes-gold" : "hover:text-ishes-blue";
+   const themeBgLight5 = isPresentielCourse ? "bg-ishes-gold/5" : "bg-ishes-blue/5";
+   const themeTextIshes = isPresentielCourse ? "text-ishes-gold" : "text-ishes-blue";
+   const themeBorderIshes = isPresentielCourse ? "border-ishes-gold/10" : "border-ishes-blue/10";
+   const themeBgIshes = isPresentielCourse ? "bg-ishes-gold" : "bg-ishes-blue";
 
 
    useEffect(() => {
@@ -116,7 +116,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      {id === "arabe_coran_junior" && (
                         <Link
                            href="/test-positionnement"
-                           className="px-10 py-5 bg-[#c8a96e] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#c8a96e]/20 hover:bg-[#b0935b] transition-all flex items-center gap-3 active:scale-95"
+                           className="px-10 py-5 bg-ishes-gold text-white font-black text-lg rounded-2xl shadow-xl shadow-ishes-gold/20 hover:bg-[#b0935b] transition-all flex items-center gap-3 active:scale-95"
                         >
                            Test de niveau <ArrowRight className="w-6 h-6" />
                         </Link>
@@ -134,7 +134,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      {course.flyerUrl && (
                         <button
                            onClick={() => setIsFlyerOpen(true)}
-                           className="px-10 py-5 bg-gradient-to-r from-[#c8a96e] to-[#b8985d] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#c8a96e]/20 hover:from-[#b8985d] hover:to-[#a8884d] transition-all flex items-center gap-3 active:scale-95"
+                           className="px-10 py-5 bg-gradient-to-r from-ishes-gold to-[#b8985d] text-white font-black text-lg rounded-2xl shadow-xl shadow-ishes-gold/20 hover:from-[#b8985d] hover:to-[#a8884d] transition-all flex items-center gap-3 active:scale-95"
                         >
                            <Eye className="w-5 h-5" />
                            {course.flyerUrl.toLowerCase().endsWith('.pdf') ? "Voir le Programme PDF" : "Voir le Flyer"}
@@ -156,10 +156,10 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      {id.includes("presentiel") ? (
                         <div className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-amber-50 rounded-3xl shadow-md">
                            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
-                              <Building2 className="w-5 h-5 text-[#c8a96e]" />
+                              <Building2 className="w-5 h-5 text-ishes-gold" />
                            </div>
                            <div>
-                              <p className="text-[13px] font-black text-[#c8a96e] uppercase tracking-widest">Sur Place à l'Institut</p>
+                              <p className="text-[13px] font-black text-ishes-gold uppercase tracking-widest">Sur Place à l'Institut</p>
                               <p className="text-xs font-bold text-gray-500 mt-0.5">41 Bld de Thibaud, Toulouse</p>
                            </div>
                         </div>
@@ -450,7 +450,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                      <div className="lg:col-span-4">
                         {course.horaires && (
                            <div className="sticky top-32 p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-xl space-y-8">
-                              <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#c8a96e]/10 text-[#c8a96e] rounded-xl border border-[#c8a96e]/10">
+                              <div className="inline-flex items-center gap-3 px-4 py-2 bg-ishes-gold/10 text-ishes-gold rounded-xl border border-ishes-gold/10">
                                  <Calendar className="w-4 h-4" />
                                  <span className="text-[10px] font-black uppercase tracking-widest">Horaires</span>
                               </div>
@@ -479,13 +479,13 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
             <section className="max-w-7xl mx-auto px-6 py-12">
                <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50/50 rounded-[3rem] p-8 md:p-12 border border-gray-100 shadow-xl overflow-hidden">
                   {/* Background ornaments */}
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-[#c8a96e]/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-ishes-gold/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
                   <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-500/5 rounded-full blur-3xl -ml-24 -mb-24 pointer-events-none" />
 
                   {/* Header info */}
                   <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
                      <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#c8a96e]/10 text-[#c8a96e] rounded-xl border border-[#c8a96e]/10 mb-4">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-ishes-gold/10 text-ishes-gold rounded-xl border border-ishes-gold/10 mb-4">
                            <CalendarDays className="w-4 h-4" />
                            <span className="text-[10px] font-black uppercase tracking-widest">
                               Planning & Créneaux
@@ -493,7 +493,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight tracking-tight uppercase">
                            Organisation de la <br />
-                           <span className="text-[#c8a96e] italic">formation en présentiel.</span>
+                           <span className="text-ishes-gold italic">formation en présentiel.</span>
                         </h2>
                         <p className="text-sm text-gray-400 font-medium mt-2 max-w-xl">
                            {id === "arabe_coran_junior"
@@ -513,7 +513,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                               key={day}
                               onClick={() => setSelectedDayFilter(day)}
                               className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${selectedDayFilter === day
-                                    ? "bg-white text-[#c8a96e] shadow-sm font-bold"
+                                    ? "bg-white text-ishes-gold shadow-sm font-bold"
                                     : "text-gray-500 hover:text-gray-700"
                                  }`}
                            >
@@ -532,7 +532,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                            placeholder="Rechercher une classe, un niveau, un âge..."
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
-                           className="w-full pl-12 pr-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c8a96e]/20 focus:border-[#c8a96e] text-sm font-medium transition-all shadow-sm"
+                           className="w-full pl-12 pr-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c8a96e]/20 focus:border-ishes-gold text-sm font-medium transition-all shadow-sm"
                         />
                      </div>
                   </div>
@@ -549,7 +549,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                               key={c.id}
                               className={`group relative flex flex-col justify-between p-6 bg-white border rounded-[2rem] transition-all hover:shadow-xl hover:-translate-y-1 duration-300 ${isFull
                                     ? "border-gray-100 opacity-80"
-                                    : "border-gray-100/80 hover:border-[#c8a96e]/40 shadow-sm"
+                                    : "border-gray-100/80 hover:border-ishes-gold/40 shadow-sm"
                                  }`}
                            >
                               {/* Badge index */}
@@ -572,14 +572,14 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
 
                               {/* Level and details */}
                               <div className="mb-6">
-                                 <h4 className="text-lg font-black text-ishes-dark leading-snug tracking-tight mb-2 group-hover:text-[#c8a96e] transition-colors">
+                                 <h4 className="text-lg font-black text-ishes-dark leading-snug tracking-tight mb-2 group-hover:text-ishes-gold transition-colors">
                                     {c.niveau}
                                  </h4>
                                  <div className="flex flex-wrap gap-2 text-[10px] font-bold text-gray-400">
                                     <span className="bg-gray-50 border border-gray-100 px-2 py-1 rounded-md">
                                        👶 {c.ageCondition}
                                     </span>
-                                    <span className="bg-[#c8a96e]/5 border border-[#c8a96e]/10 text-[#c8a96e] px-2 py-1 rounded-md uppercase tracking-wider font-extrabold">
+                                    <span className="bg-ishes-gold/5 border border-ishes-gold/10 text-ishes-gold px-2 py-1 rounded-md uppercase tracking-wider font-extrabold">
                                        ⏰ {c.horaire}
                                     </span>
                                  </div>
@@ -590,7 +590,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  href={regUrl}
                                  className={`w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-center shadow-md transition-all ${isFull
                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
-                                       : "bg-[#c8a96e] text-white hover:bg-[#b0935b] shadow-[#c8a96e]/10"
+                                       : "bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/10"
                                     }`}
                               >
                                  {isFull ? "Session Complète" : (c.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")}

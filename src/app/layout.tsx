@@ -36,7 +36,7 @@ export default function RootLayout({
         lang="fr"
         className={cn("antialiased", "h-full", outfit.variable, "font-sans", geist.variable)}
       >
-        <body className="font-sans min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-green selection:text-white">
+        <body className="font-sans min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-blue selection:text-white">
           {children}
           <SpeedInsights />
         </body>

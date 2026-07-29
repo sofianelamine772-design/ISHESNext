@@ -148,7 +148,7 @@ export default function InstitutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-[#c8a96e] selection:text-white">
+    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white">
       <Navbar />
 
       {/* --- HERO CINEMATIC --- */}
@@ -174,12 +174,12 @@ export default function InstitutPage() {
           >
             <h1 className="text-5xl sm:text-7xl md:text-[100px] font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
               L'INSTITUT <br />
-              <span className="text-[#c8a96e] italic">présentiel.</span>
+              <span className="text-ishes-gold italic">présentiel.</span>
             </h1>
             <p className="text-xl text-white/80 font-medium leading-relaxed max-w-2xl mx-auto mb-10">
               Un lieu d'apprentissage privilégié à Toulouse pour approfondir vos connaissances et cheminer ensemble.
             </p>
-            <a href="#formations" className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black tracking-widest uppercase text-xs hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-2xl shadow-[#c8a96e]/20">
+            <a href="#formations" className="inline-flex items-center gap-3 bg-ishes-gold text-white px-10 py-5 rounded-2xl font-black tracking-widest uppercase text-xs hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-2xl shadow-ishes-gold/20">
               Explorer nos cours
             </a>
           </motion.div>
@@ -193,10 +193,10 @@ export default function InstitutPage() {
           
           {/* Section Header */}
           <div className="max-w-3xl mb-16">
-            <span className="text-[#c8a96e] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
+            <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
             <h2 className="text-4xl md:text-6xl font-black text-ishes-dark leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
-              <span className="text-[#c8a96e] italic">en présentiel.</span>
+              <span className="text-ishes-gold italic">en présentiel.</span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
               Pour ceux qui privilégient le contact direct avec l'enseignant, l'émulation collective et la rigueur d'un cadre académique moderne.
@@ -220,17 +220,17 @@ export default function InstitutPage() {
                 <div className="p-5 sm:p-6 flex-1 flex flex-col relative z-20">
                   {/* TAGS ROW */}
                   <div className="flex items-center justify-between mb-4">
-                     <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase bg-[#c8a96e]/10 text-[#c8a96e]">
+                     <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase bg-ishes-gold/10 text-ishes-gold">
                         PRÉSENTIEL
                      </span>
-                     <span className="px-3 py-1 bg-[#c8a96e]/10 text-[#c8a96e] rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border border-[#c8a96e]/20">
+                     <span className="px-3 py-1 bg-ishes-gold/10 text-ishes-gold rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border border-ishes-gold/20">
                         <span>📅</span> {program.durationText}
                      </span>
                   </div>
 
                   {/* TITLE & DESC */}
                   <div>
-                    <h2 className="text-xl font-black text-[#152233] mb-2 tracking-tight leading-[1.1]">
+                    <h2 className="text-xl font-black text-ishes-dark mb-2 tracking-tight leading-[1.1]">
                       {program.title}
                     </h2>
                     <p className="text-xs sm:text-sm text-gray-500 leading-relaxed mb-4 font-medium">
@@ -241,28 +241,28 @@ export default function InstitutPage() {
                   {/* ICONS GRID */}
                   <div className="grid grid-cols-2 gap-3 mb-5">
                     <div className="flex items-center gap-2 group/icon">
-                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                        <Clock className="w-4 h-4 text-[#c8a96e]" />
+                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-ishes-gold/10 transition-colors">
+                        <Clock className="w-4 h-4 text-ishes-gold" />
                       </div>
-                      <span className="text-[11px] font-black text-[#c8a96e]">{program.durationText}</span>
+                      <span className="text-[11px] font-black text-ishes-gold">{program.durationText}</span>
                     </div>
                     {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && (
                       <div className="flex items-center gap-2 group/icon">
-                        <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                          <BookOpen className="w-4 h-4 text-[#c8a96e]" />
+                        <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-ishes-gold/10 transition-colors">
+                          <BookOpen className="w-4 h-4 text-ishes-gold" />
                         </div>
                         <span className="text-[10px] font-bold text-gray-500">Manuel inclus</span>
                       </div>
                     )}
                     <div className="flex items-center gap-2 group/icon">
-                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-[#c8a96e]/10 transition-colors">
-                        <Users className="w-4 h-4 text-[#c8a96e]" />
+                      <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-ishes-gold/10 transition-colors">
+                        <Users className="w-4 h-4 text-ishes-gold" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500">Max 20</span>
                     </div>
                     <div className="flex items-center gap-2 group/icon">
                       <div className="w-9 h-9 rounded-xl bg-ishes-dark flex items-center justify-center">
-                        <Award className="w-4 h-4 text-[#c8a96e]" />
+                        <Award className="w-4 h-4 text-ishes-gold" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500 uppercase">Certifié</span>
                     </div>
@@ -272,8 +272,8 @@ export default function InstitutPage() {
                   <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
                     {program.features.map((feature, idx) => (
                       <div key={idx} className="flex items-start gap-2 py-1">
-                        <div className="mt-1 w-3.5 h-3.5 rounded-full bg-[#c8a96e]/10 flex items-center justify-center shrink-0">
-                           <CheckCircle2 className="w-2.5 h-2.5 text-[#c8a96e]" />
+                        <div className="mt-1 w-3.5 h-3.5 rounded-full bg-ishes-gold/10 flex items-center justify-center shrink-0">
+                           <CheckCircle2 className="w-2.5 h-2.5 text-ishes-gold" />
                         </div>
                         <span className="text-[10px] sm:text-xs text-gray-600 font-bold leading-tight">{feature}</span>
                       </div>
@@ -284,13 +284,13 @@ export default function InstitutPage() {
                   <div className="flex flex-col gap-4 mt-auto pt-6 border-t border-gray-100 relative z-30">
                     <div className="flex flex-col">
                       <div className="flex items-baseline gap-2">
-                        <div className="text-3xl font-black text-[#152233] tracking-tighter">{program.price}</div>
+                        <div className="text-3xl font-black text-ishes-dark tracking-tighter">{program.price}</div>
                         <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                           {program.priceSub}
                         </div>
                       </div>
                       {program.price !== "0 €" && program.price !== "Sur Devis" && (
-                         <div className="text-[10px] font-bold text-[#c8a96e] uppercase tracking-wide mt-1.5 flex items-center gap-1">
+                         <div className="text-[10px] font-bold text-ishes-gold uppercase tracking-wide mt-1.5 flex items-center gap-1">
                             <span>💳</span> Paiement en 1x, 3x ou 5x
                          </div>
                       )}
@@ -326,7 +326,7 @@ export default function InstitutPage() {
                         className={`flex items-center justify-center py-3.5 rounded-2xl shadow-lg transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
                           getSlotStatus(program.day)?.est_plein
                             ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 
-                            : "bg-[#c8a96e] text-white hover:bg-[#b0935b] shadow-[#c8a96e]/20"
+                            : "bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/20"
                         }`}
                       >
                         {getSlotStatus(program.day)?.est_plein ? "COMPLET" : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")}
@@ -345,22 +345,22 @@ export default function InstitutPage() {
             viewport={{ once: true }}
             className="max-w-4xl mx-auto bg-white rounded-[3rem] p-8 md:p-12 border border-ishes-dark/5 shadow-2xl shadow-ishes-dark/5 relative overflow-hidden group"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#c8a96e]/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-[#c8a96e]/10 transition-colors duration-700" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-ishes-gold/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-ishes-gold/10 transition-colors duration-700" />
             
             <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
-              <div className="w-24 h-24 md:w-32 md:h-32 bg-[#c8a96e]/10 rounded-[2.5rem] flex items-center justify-center shrink-0">
-                <Sparkles className="w-10 h-10 md:w-14 md:h-14 text-[#c8a96e]" />
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-ishes-gold/10 rounded-[2.5rem] flex items-center justify-center shrink-0">
+                <Sparkles className="w-10 h-10 md:w-14 md:h-14 text-ishes-gold" />
               </div>
               
               <div className="flex-1 text-center md:text-left">
-                <span className="text-[#c8a96e] font-black uppercase tracking-[0.2em] text-[10px] mb-3 block">Orientation pédagogique</span>
-                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de niveau <span className="text-[#c8a96e] italic">Enfants</span></h3>
+                <span className="text-ishes-gold font-black uppercase tracking-[0.2em] text-[10px] mb-3 block">Orientation pédagogique</span>
+                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de niveau <span className="text-ishes-gold italic">Enfants</span></h3>
                 <p className="text-gray-500 font-medium leading-relaxed mb-8">
                   Un doute sur le niveau de votre enfant ? Notre test interactif vous aide à choisir entre le niveau <strong className="text-ishes-dark">Débutant</strong> ou <strong className="text-ishes-dark">1+</strong> en moins de 2 minutes.
                 </p>
                 <Link 
                   href="/test-positionnement" 
-                  className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-xl shadow-[#c8a96e]/20"
+                  className="inline-flex items-center gap-3 bg-ishes-gold text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-xl shadow-ishes-gold/20"
                 >
                   Démarrer le test gratuit <ChevronRight className="w-4 h-4" />
                 </Link>
@@ -386,12 +386,12 @@ export default function InstitutPage() {
              
              <div className="relative z-10 flex-1 p-8 md:p-12 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-[1px] bg-[#c8a96e]"></div>
-                  <span className="text-[#c8a96e] font-black uppercase tracking-[0.3em] text-[10px]">Prendre rendez-vous</span>
+                  <div className="w-10 h-[1px] bg-ishes-gold"></div>
+                  <span className="text-ishes-gold font-black uppercase tracking-[0.3em] text-[10px]">Prendre rendez-vous</span>
                 </div>
 
                 <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
-                   NOTRE <br /> <span className="text-[#c8a96e] italic">institut.</span>
+                   NOTRE <br /> <span className="text-ishes-gold italic">institut.</span>
                 </h2>
 
                 <div className="space-y-6 mb-12">
@@ -401,11 +401,11 @@ export default function InstitutPage() {
                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm max-w-md">
                       <div className="grid grid-cols-2 gap-4 text-[11px] font-bold tracking-wider uppercase">
                          <div className="text-white/40">Mercredi</div>
-                         <div className="text-[#c8a96e] text-right">13h30 — 16h30</div>
+                         <div className="text-ishes-gold text-right">13h30 — 16h30</div>
                          <div className="text-white/40">Samedi</div>
-                         <div className="text-[#c8a96e] text-right">9h — 12h / 13h30 — 16h30</div>
+                         <div className="text-ishes-gold text-right">9h — 12h / 13h30 — 16h30</div>
                          <div className="text-white/40">Dimanche</div>
-                         <div className="text-[#c8a96e] text-right">9h — 12h / 13h30 — 16h30</div>
+                         <div className="text-ishes-gold text-right">9h — 12h / 13h30 — 16h30</div>
                       </div>
                    </div>
                 </div>
@@ -415,7 +415,7 @@ export default function InstitutPage() {
                      href="https://maps.google.com/?q=41+Boulevard+de+Thibaud+31100+Toulouse" 
                      target="_blank" 
                      rel="noopener noreferrer" 
-                     className="bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-xl shadow-[#c8a96e]/20 flex items-center justify-center gap-3"
+                     className="bg-ishes-gold text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all hover:-translate-y-1 shadow-xl shadow-ishes-gold/20 flex items-center justify-center gap-3"
                    >
                       Lancer l'itinéraire <MapPin className="w-4 h-4 text-white" />
                    </a>
@@ -446,9 +446,9 @@ export default function InstitutPage() {
       <section className="py-24 bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-[#c8a96e] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
+            <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
-              Des réponses à vos <span className="text-[#c8a96e] italic">questions.</span>
+              Des réponses à vos <span className="text-ishes-gold italic">questions.</span>
             </h2>
           </div>
 
@@ -462,11 +462,11 @@ export default function InstitutPage() {
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-[#c8a96e] transition-colors"
+                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-gold transition-colors"
                   >
                     <span>{item.q}</span>
                     <ChevronRight 
-                      className={`w-5 h-5 text-[#c8a96e] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                      className={`w-5 h-5 text-ishes-gold transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
                     />
                   </button>
                   <div 

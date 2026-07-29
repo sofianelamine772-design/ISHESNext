@@ -137,7 +137,7 @@ export default function FacturationPage() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Facturation & Paiements</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]" } }} />
+            <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]" } }} />
           </div>
         </header>
 
@@ -159,7 +159,7 @@ export default function FacturationPage() {
 
               {/* Toutes transactions */}
               <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-ishes-green/10 flex items-center justify-center text-ishes-green shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-ishes-blue/10 flex items-center justify-center text-ishes-blue shrink-0">
                   <CreditCard className="w-6 h-6" />
                 </div>
                 <div>
@@ -200,7 +200,7 @@ export default function FacturationPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher par nom, email, ID..."
-                  className="w-full sm:w-96 bg-white border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium shadow-sm"
+                  className="w-full sm:w-96 bg-white border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium shadow-sm"
                 />
               </div>
               <div className="flex gap-2">
@@ -211,8 +211,8 @@ export default function FacturationPage() {
                     className={cn(
                       "px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-widest transition-all",
                       activeTab === tab
-                        ? "bg-ishes-green text-white shadow-xl shadow-ishes-green/20 scale-105"
-                        : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-green/20 hover:text-ishes-dark"
+                        ? "bg-ishes-blue text-white shadow-xl shadow-ishes-blue/20 scale-105"
+                        : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-blue/20 hover:text-ishes-dark"
                     )}
                   >
                     {tab === "refuse" ? "REFUSÉS" : "TOUS"}
@@ -249,8 +249,8 @@ export default function FacturationPage() {
                       <tr>
                         <td colSpan={7} className="px-8 py-20 text-center">
                           <div className="flex flex-col items-center gap-4">
-                            <div className="w-10 h-10 border-4 border-ishes-green border-t-transparent rounded-full animate-spin" />
-                            <p className="ishes-label text-ishes-green">Chargement des transactions...</p>
+                            <div className="w-10 h-10 border-4 border-ishes-blue border-t-transparent rounded-full animate-spin" />
+                            <p className="ishes-label text-ishes-blue">Chargement des transactions...</p>
                           </div>
                         </td>
                       </tr>
@@ -271,7 +271,7 @@ export default function FacturationPage() {
                             <div className="flex items-center gap-3">
                               <div className={cn(
                                 "w-9 h-9 rounded-xl flex items-center justify-center font-black text-[10px] shadow-sm shrink-0 transition-transform group-hover:scale-110",
-                                payment.status === 'refuse' ? 'bg-red-50 text-red-500' : 'bg-ishes-green/10 text-ishes-green'
+                                payment.status === 'refuse' ? 'bg-red-50 text-red-500' : 'bg-ishes-blue/10 text-ishes-blue'
                               )}>
                                 {payment.payerAvatar}
                               </div>
@@ -329,7 +329,7 @@ export default function FacturationPage() {
                             {payment.status === 'refuse' ? (
                               <span className="px-3 py-1 bg-red-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">REFUSÉ</span>
                             ) : payment.status === 'paye' ? (
-                              <span className="px-3 py-1 bg-ishes-green text-white rounded-lg text-[9px] font-black uppercase tracking-widest">RÉGLÉ</span>
+                              <span className="px-3 py-1 bg-ishes-blue text-white rounded-lg text-[9px] font-black uppercase tracking-widest">RÉGLÉ</span>
                             ) : (
                               <span className="px-3 py-1 bg-yellow-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">ATTENTE</span>
                             )}
@@ -337,7 +337,7 @@ export default function FacturationPage() {
 
                           {/* Action */}
                           <td className="px-6 py-5 text-right">
-                            <div className="w-8 h-8 rounded-full inline-flex items-center justify-center text-ishes-dark/20 group-hover:text-ishes-green group-hover:bg-ishes-green/5 transition-all">
+                            <div className="w-8 h-8 rounded-full inline-flex items-center justify-center text-ishes-dark/20 group-hover:text-ishes-blue group-hover:bg-ishes-blue/5 transition-all">
                               <ChevronRight className="w-5 h-5" />
                             </div>
                           </td>
@@ -348,7 +348,7 @@ export default function FacturationPage() {
                         <td colSpan={7} className="px-8 py-24 text-center">
                           <div className="flex flex-col items-center max-w-sm mx-auto">
                             <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner">
-                              <CheckCircle2 className="w-10 h-10 text-ishes-green/30" />
+                              <CheckCircle2 className="w-10 h-10 text-ishes-blue/30" />
                             </div>
                             <h3 className="text-xl ishes-heading text-ishes-dark mb-2">Aucun incident détecté</h3>
                             <p className="ishes-label text-[10px] md:text-xs opacity-40">
@@ -373,7 +373,7 @@ export default function FacturationPage() {
       {popupMsg && (
         <div className="fixed bottom-6 right-6 z-[100] max-w-sm w-full bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 animate-in slide-in-from-bottom-5">
           <div className="flex items-start gap-4">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${popupMsg.type === 'success' ? 'bg-ishes-green/10 text-ishes-green' : 'bg-red-50 text-red-500'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${popupMsg.type === 'success' ? 'bg-ishes-blue/10 text-ishes-blue' : 'bg-red-50 text-red-500'}`}>
               {popupMsg.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
             </div>
             <div>
@@ -400,11 +400,11 @@ export default function FacturationPage() {
             {/* Panel Header */}
             <div className="bg-white border-b border-gray-100 text-ishes-dark p-10 relative overflow-hidden shrink-0">
               <div className="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none">
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-ishes-green blur-[120px] rounded-full" />
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-ishes-blue blur-[120px] rounded-full" />
               </div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-8">
-                  <span className="text-[11px] font-black uppercase tracking-[0.4em] text-ishes-green">
+                  <span className="text-[11px] font-black uppercase tracking-[0.4em] text-ishes-blue">
                     {selectedPayment.isFamilyPayment ? 'Règlement Familial' : 'Détails de transaction'}
                   </span>
                   <button
@@ -424,7 +424,7 @@ export default function FacturationPage() {
                     <div>
                       <h2 className="text-3xl ishes-heading text-ishes-dark mb-1">{selectedPayment.payerName}</h2>
                       <div className="flex flex-wrap items-center gap-2 mt-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-ishes-green bg-ishes-green/10 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-ishes-blue bg-ishes-blue/10 px-2 py-0.5 rounded">
                           #{selectedPayment.id}
                         </span>
                         <span className="text-[10px] font-bold text-gray-400">{selectedPayment.date}</span>
@@ -457,7 +457,7 @@ export default function FacturationPage() {
                   <p className="ishes-label text-[9px] opacity-40 mb-2">Statut</p>
                   <div className={cn(
                     "inline-flex px-3 py-1 rounded-lg text-[9px] font-black tracking-widest uppercase",
-                    selectedPayment.status === 'refuse' ? 'bg-red-500 text-white' : 'bg-ishes-green text-white'
+                    selectedPayment.status === 'refuse' ? 'bg-red-500 text-white' : 'bg-ishes-blue text-white'
                   )}>
                     {selectedPayment.status === 'refuse' ? 'ÉCHOUÉ' : 'RÉGLÉ'}
                   </div>
@@ -473,13 +473,13 @@ export default function FacturationPage() {
                 <h3 className="text-[11px] font-black uppercase tracking-widest text-gray-300">Payeur</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-4 group">
-                    <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-ishes-green/10 group-hover:text-ishes-green transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-ishes-blue/10 group-hover:text-ishes-blue transition-colors shrink-0">
                       <Phone className="w-4 h-4" />
                     </div>
                     <span className="text-sm font-bold text-ishes-dark">{selectedPayment.phone || '—'}</span>
                   </div>
                   <div className="flex items-center gap-4 group">
-                    <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-ishes-green/10 group-hover:text-ishes-green transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-ishes-blue/10 group-hover:text-ishes-blue transition-colors shrink-0">
                       <Mail className="w-4 h-4" />
                     </div>
                     <span className="text-sm font-bold text-ishes-dark">{selectedPayment.email || '—'}</span>
@@ -502,14 +502,14 @@ export default function FacturationPage() {
                           className={cn(
                             "flex items-center justify-between p-4 rounded-2xl border transition-all",
                             isPaid
-                              ? "bg-ishes-green/5 border-ishes-green/20"
+                              ? "bg-ishes-blue/5 border-ishes-blue/20"
                               : "bg-orange-50 border-orange-200"
                           )}
                         >
                           <div className="flex items-center gap-4 min-w-0 flex-1 pr-2">
                             <div className={cn(
                               "w-10 h-10 rounded-xl flex items-center justify-center font-black text-[11px] shrink-0",
-                              isPaid ? "bg-ishes-green text-white" : "bg-orange-100 text-orange-600"
+                              isPaid ? "bg-ishes-blue text-white" : "bg-orange-100 text-orange-600"
                             )}>
                               {member.firstName?.[0]}{member.lastName?.[0]}
                             </div>
@@ -525,7 +525,7 @@ export default function FacturationPage() {
                           <div className="flex items-center gap-2.5 shrink-0">
                             <span className={cn(
                               "text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg whitespace-nowrap",
-                              isPaid ? "bg-ishes-green text-white" : "bg-orange-500 text-white"
+                              isPaid ? "bg-ishes-blue text-white" : "bg-orange-500 text-white"
                             )}>
                               {isPaid ? 'RÉGLÉ' : 'EN ATTENTE'}
                             </span>
@@ -552,7 +552,7 @@ export default function FacturationPage() {
                   <div className="absolute top-0 right-0 p-4 opacity-10">
                     <AlertCircle className="w-12 h-12" />
                   </div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-ishes-green mb-4">Rapport d'erreur</h4>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-ishes-blue mb-4">Rapport d'erreur</h4>
                   <p className="text-sm font-medium text-white/80 leading-relaxed italic">
                     "{selectedPayment.reason || "Aucun motif spécifié par l'émetteur."}"
                   </p>
@@ -568,7 +568,7 @@ export default function FacturationPage() {
                   <div className="relative">
                     <div className={cn(
                       "absolute -left-[27px] top-1 w-[11px] h-[11px] rounded-full ring-4 ring-white shadow-sm",
-                      selectedPayment.status === 'refuse' ? "bg-red-500" : "bg-ishes-green"
+                      selectedPayment.status === 'refuse' ? "bg-red-500" : "bg-ishes-blue"
                     )} />
                     <div>
                       <p className="text-xs font-black text-ishes-dark mb-1">
@@ -590,7 +590,7 @@ export default function FacturationPage() {
             <div className="p-8 border-t border-gray-50 bg-gray-50/50 flex gap-4">
               {selectedPayment.status === 'refuse' ? (
                 <>
-                  <Button disabled={isSendingReminder} onClick={() => handleRelance(selectedPayment.rawId)} className="flex-1 bg-ishes-green hover:bg-ishes-green-hover shadow-xl shadow-ishes-green/20 h-14 rounded-2xl font-black text-xs uppercase tracking-widest border-none">
+                  <Button disabled={isSendingReminder} onClick={() => handleRelance(selectedPayment.rawId)} className="flex-1 bg-ishes-blue hover:bg-ishes-blue-hover shadow-xl shadow-ishes-blue/20 h-14 rounded-2xl font-black text-xs uppercase tracking-widest border-none">
 {isSendingReminder ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
                     Relancer la famille
                   </Button>

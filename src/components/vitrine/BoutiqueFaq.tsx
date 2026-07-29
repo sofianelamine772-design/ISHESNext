@@ -33,9 +33,9 @@ export function BoutiqueFaq() {
     <section className="py-24 bg-white border-t border-gray-100">
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="text-[#008953] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Aide & Support</span>
+          <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">Aide & Support</span>
           <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
-            Questions sur la <span className="text-[#008953] italic">boutique.</span>
+            Questions sur la <span className="text-ishes-blue italic">boutique.</span>
           </h2>
         </div>
 
@@ -49,11 +49,11 @@ export function BoutiqueFaq() {
               >
                 <button
                   onClick={() => setActiveFaq(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-[#008953] transition-colors"
+                  className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-blue transition-colors"
                 >
                   <span>{item.q}</span>
                   <ChevronRight 
-                    className={`w-5 h-5 text-[#008953] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                    className={`w-5 h-5 text-ishes-blue transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
                   />
                 </button>
                 <div 

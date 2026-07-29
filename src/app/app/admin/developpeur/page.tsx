@@ -107,7 +107,7 @@ export default function DeveloperPage() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Centre de Diagnostic</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes-green" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4 rounded-xl border-none shadow-lg shadow-ishes-green/20">
+            <Button variant="ishes-blue" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4 rounded-xl border-none shadow-lg shadow-ishes-blue/20">
               <RefreshCw className={`w-4 h-4 md:mr-2 ${isTesting ? 'animate-spin' : ''}`} />
               <span className="hidden md:inline">Lancer les tests</span>
               <span className="md:hidden">Tester</span>
@@ -115,7 +115,7 @@ export default function DeveloperPage() {
             <UserButton
               appearance={{
                 elements: {
-                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]"
                 }
               }}
             />
@@ -133,7 +133,7 @@ export default function DeveloperPage() {
                     <div className="flex items-center gap-4">
                       <div className={cn(
                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110",
-                        test.status === 'success' ? 'bg-ishes-green/10 text-ishes-green' :
+                        test.status === 'success' ? 'bg-ishes-blue/10 text-ishes-blue' :
                           test.status === 'error' ? 'bg-red-50 text-red-500' :
                             test.status === 'loading' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'
                       )}>
@@ -154,7 +154,7 @@ export default function DeveloperPage() {
                         <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">{test.id}</p>
                       </div>
                     </div>
-                    {test.status === 'success' && <CheckCircle2 className="w-5 h-5 text-ishes-green" />}
+                    {test.status === 'success' && <CheckCircle2 className="w-5 h-5 text-ishes-blue" />}
                     {test.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
                     {test.status === 'loading' && <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />}
                   </div>
@@ -166,7 +166,7 @@ export default function DeveloperPage() {
                   <div className="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden">
                     <div className={cn(
                       "h-full transition-all duration-1000",
-                      test.status === 'success' ? 'w-full bg-ishes-green' :
+                      test.status === 'success' ? 'w-full bg-ishes-blue' :
                         test.status === 'error' ? 'w-full bg-red-500' :
                           test.status === 'loading' ? 'w-1/2 bg-blue-500 animate-pulse' : 'w-0'
                     )}></div>
@@ -182,14 +182,14 @@ export default function DeveloperPage() {
                   <h4 className="text-xl ishes-heading text-ishes-dark">🚨 Erreurs Système Récentes (Live APM)</h4>
                   <p className="text-xs text-gray-400 mt-1">Les 10 dernières erreurs interceptées par le système en temps réel</p>
                 </div>
-                <span className="text-xs font-mono text-ishes-green bg-ishes-green/5 border border-ishes-green/10 px-3 py-1 rounded-full">
+                <span className="text-xs font-mono text-ishes-blue bg-ishes-blue/5 border border-ishes-blue/10 px-3 py-1 rounded-full">
                   Surveillance Active
                 </span>
               </div>
 
               {systemErrors.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
-                  <CheckCircle2 className="w-10 h-10 text-ishes-green mb-2" />
+                  <CheckCircle2 className="w-10 h-10 text-ishes-blue mb-2" />
                   <p className="text-sm font-bold text-ishes-dark">Aucun bug détecté</p>
                   <p className="text-xs text-gray-400">Le système fonctionne de manière totalement stable.</p>
                 </div>
@@ -228,7 +228,7 @@ export default function DeveloperPage() {
 
             {/* Console des Logs d'Erreurs */}
             <div className="bg-[#0B0F19] rounded-[2rem] border border-gray-800 p-6 shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-ishes-green"></div>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-ishes-blue"></div>
 
               <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
                 <div className="flex items-center gap-2">
@@ -265,9 +265,9 @@ export default function DeveloperPage() {
             <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm">
               <h4 className="text-xl ishes-heading text-ishes-dark mb-8">Ressources Externes</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
+                <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-blue/5 transition-all group border border-transparent hover:border-ishes-blue/20">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-blue shadow-sm transition-colors">
                       <ExternalLink className="w-5 h-5" />
                     </div>
                     <div>
@@ -277,9 +277,9 @@ export default function DeveloperPage() {
                   </div>
                   <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" />
                 </a>
-                <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-green/5 transition-all group border border-transparent hover:border-ishes-green/20">
+                <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-blue/5 transition-all group border border-transparent hover:border-ishes-blue/20">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-green shadow-sm transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ishes-blue shadow-sm transition-colors">
                       <Zap className="w-5 h-5" />
                     </div>
                     <div>

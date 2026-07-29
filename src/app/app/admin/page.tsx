@@ -113,7 +113,7 @@ export default async function AdminOverview() {
             <UserButton
               appearance={{
                 elements: {
-                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]"
                 }
               }}
             />
@@ -129,22 +129,22 @@ export default async function AdminOverview() {
               {/* Card 1 */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-green mb-1 text-[10px] md:text-xs">Élèves inscrits</p>
+                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Élèves inscrits</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{totalStudents || 0}</h3>
-                    <span className="text-[10px] font-black italic text-ishes-green bg-ishes-green/5 px-2 py-0.5 rounded mb-1">+12%</span>
+                    <span className="text-[10px] font-black italic text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+12%</span>
                   </div>
-                  <div className="mt-4 h-1 w-12 bg-ishes-green rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
               </div>
 
               {/* Card 2 */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-green mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
+                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(monthlyRevenue)}</h3>
-                    <span className="text-[10px] font-black italic text-ishes-green bg-ishes-green/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
+                    <span className="text-[10px] font-black italic text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
@@ -153,18 +153,18 @@ export default async function AdminOverview() {
               {/* Card 3 */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-green mb-1 text-[10px] md:text-xs">Revenus (Année)</p>
+                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Année)</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(yearlyRevenue)}</h3>
                   </div>
-                  <div className="mt-4 h-1 w-12 bg-ishes-green rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
               </div>
 
               {/* Card 4 */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-green mb-1 text-[10px] md:text-xs">Dossiers finalisés</p>
+                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Dossiers finalisés</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">89%</h3>
                     <span className="text-[10px] font-black italic text-gray-400 bg-gray-50 px-2 py-0.5 rounded mb-1">-2%</span>
@@ -206,7 +206,7 @@ export default async function AdminOverview() {
                       const isSucceeded = p.status === 'succeeded';
                       
                       return (
-                        <div key={p.id} className="flex items-center justify-between p-3.5 bg-gray-50/50 rounded-2xl border border-gray-100 hover:border-ishes-green/20 transition-all">
+                        <div key={p.id} className="flex items-center justify-between p-3.5 bg-gray-50/50 rounded-2xl border border-gray-100 hover:border-ishes-blue/20 transition-all">
                           <div className="min-w-0 flex-1 pr-2">
                             <div className="text-xs font-black text-ishes-dark truncate">{studentName}</div>
                             <div className="text-[9px] text-gray-400 font-mono truncate">{studentEmail}</div>
@@ -216,7 +216,7 @@ export default async function AdminOverview() {
                             <span className="font-black text-sm text-ishes-dark">{Number(p.amount).toFixed(0)} €</span>
                             <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${
                               isSucceeded 
-                                ? 'bg-ishes-green/10 text-ishes-green' 
+                                ? 'bg-ishes-blue/10 text-ishes-blue' 
                                 : 'bg-red-50 text-red-500 border border-red-100'
                             }`}>
                               {isSucceeded ? 'Réussi' : 'Échoué'}

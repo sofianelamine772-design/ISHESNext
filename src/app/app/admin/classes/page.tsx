@@ -342,14 +342,14 @@ export default function AdminDashboard() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Formations & Classes</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button variant="ishes-green" size="sm" className="h-10 px-4 md:px-6" onClick={openNewClassModal}>
+            <Button variant="ishes-blue" size="sm" className="h-10 px-4 md:px-6" onClick={openNewClassModal}>
               <Plus className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Nouvelle Classe</span>
               <span className="md:hidden">Nouv.</span>
             </Button>
             <UserButton
               appearance={{
                 elements: {
-                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]"
                 }
               }}
             />
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
         <div className="flex-1 overflow-hidden flex relative">
           {loading && (
             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
-              <Loader2 className="w-10 h-10 text-ishes-green animate-spin mb-4" />
+              <Loader2 className="w-10 h-10 text-ishes-blue animate-spin mb-4" />
               <p className="ishes-label animate-pulse">Chargement des classes...</p>
             </div>
           )}
@@ -378,14 +378,14 @@ export default function AdminDashboard() {
                   value={classSearchQuery || ""}
                   onChange={(e) => setClassSearchQuery(e.target.value)}
                   placeholder="Rechercher une classe..."
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green transition-all"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-blue/50 focus:border-ishes-blue transition-all"
                 />
               </div>
               <div className="mt-3 flex gap-2">
                 <select
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-1/2 bg-white border border-gray-200 rounded-lg px-2 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                  className="w-1/2 bg-white border border-gray-200 rounded-lg px-2 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-ishes-blue/50 focus:border-ishes-blue font-semibold text-gray-700"
                 >
                   <option value={getCurrentAcademicYear()}>Année Scolaire {getCurrentAcademicYear()}</option>
                   <option value={getNextAcademicYear()}>Année Scolaire {getNextAcademicYear()}</option>
@@ -393,7 +393,7 @@ export default function AdminDashboard() {
                 <select
                   value={selectedClassType}
                   onChange={(e) => setSelectedClassType(e.target.value)}
-                  className="w-1/2 bg-white border border-gray-200 rounded-lg px-2 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                  className="w-1/2 bg-white border border-gray-200 rounded-lg px-2 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-ishes-blue/50 focus:border-ishes-blue font-semibold text-gray-700"
                 >
                   <option value="tout">Tous types</option>
                   <option value="presentiel">Présentiel</option>
@@ -425,8 +425,8 @@ export default function AdminDashboard() {
                           key={c.id}
                           onClick={() => setSelectedClassId(c.id)}
                           className={`w-full text-left p-3 rounded-xl transition-all border ${selectedClassId === c.id
-                            ? (isAdult ? "bg-ishes-green/10 border-ishes-green/20 shadow-sm" : "bg-gray-100 border-gray-300 shadow-sm")
-                            : (isAdult ? "bg-ishes-green/5 border-ishes-green/10 hover:bg-ishes-green/10 hover:border-ishes-green/20" : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50")
+                            ? (isAdult ? "bg-ishes-blue/10 border-ishes-blue/20 shadow-sm" : "bg-gray-100 border-gray-300 shadow-sm")
+                            : (isAdult ? "bg-ishes-blue/5 border-ishes-blue/10 hover:bg-ishes-blue/10 hover:border-ishes-blue/20" : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50")
                             }`}
                         >
                           <div className="font-semibold text-gray-800 mb-1 text-sm">{c.formationTitle || c.name}</div>
@@ -444,11 +444,11 @@ export default function AdminDashboard() {
               {(selectedClassType === "tout" || selectedClassType === "presentiel") && (
                 <div>
                   <div className="flex items-center gap-2 mb-4 px-2">
-                    <div className="w-8 h-8 rounded-lg bg-ishes-green/10 flex items-center justify-center">
-                      <School className="w-4 h-4 text-ishes-green" />
+                    <div className="w-8 h-8 rounded-lg bg-ishes-blue/10 flex items-center justify-center">
+                      <School className="w-4 h-4 text-ishes-blue" />
                     </div>
                     <h3 className="ishes-label text-[10px] md:text-xs">Classes (Présentiel)</h3>
-                    <span className="ml-auto bg-ishes-green text-white text-[10px] font-black italic px-2 py-0.5 rounded-full">
+                    <span className="ml-auto bg-ishes-blue text-white text-[10px] font-black italic px-2 py-0.5 rounded-full">
                       {filteredPresentielClasses.length}
                     </span>
                   </div>
@@ -458,7 +458,7 @@ export default function AdminDashboard() {
                         key={c.id}
                         onClick={() => setSelectedClassId(c.id)}
                         className={`w-full text-left p-3 rounded-xl transition-all border ${selectedClassId === c.id
-                          ? "bg-ishes-green/10 border-ishes-green/20 shadow-sm"
+                          ? "bg-ishes-blue/10 border-ishes-blue/20 shadow-sm"
                           : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50"
                           }`}
                       >
@@ -467,7 +467,7 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-1">
                             <Users className="w-3.5 h-3.5" /> {c.students.length} inscrits
                           </div>
-                          <div className="font-black italic text-ishes-green">
+                          <div className="font-black italic text-ishes-blue">
                             {c.students.length}/{c.capacity_limit}
                           </div>
                         </div>
@@ -476,7 +476,7 @@ export default function AdminDashboard() {
                           <div
                             className={cn(
                               "h-full transition-all duration-500",
-                              (c.students.length / c.capacity_limit) > 0.9 ? "bg-red-500" : "bg-ishes-green"
+                              (c.students.length / c.capacity_limit) > 0.9 ? "bg-red-500" : "bg-ishes-blue"
                             )}
                             style={{ width: `${Math.min(100, (c.students.length / c.capacity_limit) * 100)}%` }}
                           />
@@ -500,14 +500,14 @@ export default function AdminDashboard() {
                 <div className="pb-6 md:pb-8 mb-4 border-b border-gray-100">
                   <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-6 md:mb-8 gap-6">
                     <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform shrink-0 ${selectedClass.type === 'distanciel' ? 'bg-ishes-dark text-white shadow-ishes-dark/20' : 'bg-ishes-green text-white shadow-ishes-green/20'}`}>
+                      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform shrink-0 ${selectedClass.type === 'distanciel' ? 'bg-ishes-dark text-white shadow-ishes-dark/20' : 'bg-ishes-blue text-white shadow-ishes-blue/20'}`}>
                         {selectedClass.type === 'distanciel' ? <Monitor className="w-6 h-6 md:w-7 md:h-7" /> : <School className="w-6 h-6 md:w-7 md:h-7" />}
                       </div>
                       <div className="min-w-0 flex-1">
                         <span className="ishes-label mb-1 block text-[10px]">Gestion de classe</span>
                         <h2 className="text-xl md:text-2xl xl:text-3xl ishes-heading text-ishes-dark leading-snug break-words">{selectedClass.name}</h2>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
-                          <span className={`text-[8px] md:text-[10px] font-black uppercase italic px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-green-hover text-white'}`}>
+                          <span className={`text-[8px] md:text-[10px] font-black uppercase italic px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
                             Mode {selectedClass.type}
                           </span>
@@ -529,7 +529,7 @@ export default function AdminDashboard() {
                       >
                         <Mail className="w-4 h-4" /> <span>Contacter la classe</span>
                       </Button>
-                      <Button variant="ishes-green" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
+                      <Button variant="ishes-blue" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
                         <Plus className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Créer Élève</span>
                         <span className="sm:hidden text-[10px]">Créer</span>
                       </Button>
@@ -582,7 +582,7 @@ export default function AdminDashboard() {
                         value={searchQuery || ""}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Rechercher un élève..."
-                        className="w-full bg-white border border-gray-100 rounded-full pl-12 pr-6 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-green/5 shadow-sm transition-all font-medium"
+                        className="w-full bg-white border border-gray-100 rounded-full pl-12 pr-6 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 shadow-sm transition-all font-medium"
                       />
                     </div>
                     <div className="ishes-label flex flex-col items-end shrink-0">
@@ -603,7 +603,7 @@ export default function AdminDashboard() {
                           className={cn(
                             "group bg-white p-4 md:p-5 rounded-2xl md:rounded-3xl border shadow-sm hover:shadow-xl hover:shadow-black/5 hover:-translate-y-0.5 transition-all flex items-center justify-between cursor-pointer",
                             highlightStudentId === student.id
-                              ? "border-ishes-green bg-ishes-green/[0.02] ring-2 ring-ishes-green/20"
+                              ? "border-ishes-blue bg-ishes-blue/[0.02] ring-2 ring-ishes-blue/20"
                               : "border-gray-50"
                           )}
                         >
@@ -625,7 +625,7 @@ export default function AdminDashboard() {
                             </div>
                             <div className="flex items-center gap-2">
 
-                              <div className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-gray-50 text-gray-300 group-hover:bg-ishes-green group-hover:text-white rounded-full transition-all">
+                              <div className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-gray-50 text-gray-300 group-hover:bg-ishes-blue group-hover:text-white rounded-full transition-all">
                                 <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
                               </div>
                             </div>
@@ -678,7 +678,7 @@ export default function AdminDashboard() {
           <div className="fixed inset-y-0 right-0 w-[500px] bg-white shadow-2xl z-50 transform flex flex-col transition-transform duration-300 ease-in-out border-l border-gray-200">
             {loadingDetail ? (
               <div className="flex-1 flex flex-col items-center justify-center">
-                <Loader2 className="w-10 h-10 text-ishes-green animate-spin mb-4" />
+                <Loader2 className="w-10 h-10 text-ishes-blue animate-spin mb-4" />
                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Récupération du dossier...</p>
               </div>
             ) : studentDetail && (
@@ -751,7 +751,7 @@ export default function AdminDashboard() {
                             <div className="text-xs font-black text-ishes-dark mb-1">{ins.formations?.title}</div>
                             <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{ins.classes?.name || 'Session en cours'}</div>
                           </div>
-                          <span className="px-2 py-1 bg-ishes-green/10 text-ishes-green text-[9px] font-black uppercase rounded-lg">
+                          <span className="px-2 py-1 bg-ishes-blue/10 text-ishes-blue text-[9px] font-black uppercase rounded-lg">
                             {ins.status === 'actif' ? 'Validé' : 'En attente'}
                           </span>
                         </div>
@@ -773,7 +773,7 @@ export default function AdminDashboard() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-ishes-green/10 rounded-xl flex items-center justify-center text-ishes-green">
+                  <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <BookOpen className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-black text-ishes-dark tracking-tight">Nouvelle Classe</h3>
@@ -791,7 +791,7 @@ export default function AdminDashboard() {
                     placeholder="Ex: Session 2026-A"
                     value={newClassData.name}
                     onChange={(e) => setNewClassData({ ...newClassData, name: e.target.value })}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium text-sm"
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm"
                   />
                 </div>
 
@@ -800,7 +800,7 @@ export default function AdminDashboard() {
                   <select
                     value={newClassData.formation_id}
                     onChange={(e) => setNewClassData({ ...newClassData, formation_id: e.target.value })}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium text-sm appearance-none"
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm appearance-none"
                   >
                     <option value="">Sélectionner une formation</option>
                     {formations.map(f => (
@@ -814,13 +814,13 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setNewClassData({ ...newClassData, type: 'distanciel' })}
-                      className={`py-3 rounded-2xl border-2 font-bold text-xs transition-all ${newClassData.type === 'distanciel' ? 'border-ishes-green bg-ishes-green/5 text-ishes-green shadow-lg shadow-ishes-green/10' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}
+                      className={`py-3 rounded-2xl border-2 font-bold text-xs transition-all ${newClassData.type === 'distanciel' ? 'border-ishes-blue bg-ishes-blue/5 text-ishes-blue shadow-lg shadow-ishes-blue/10' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}
                     >
                       🖥️ Distanciel
                     </button>
                     <button
                       onClick={() => setNewClassData({ ...newClassData, type: 'presentiel' })}
-                      className={`py-3 rounded-2xl border-2 font-bold text-xs transition-all ${newClassData.type === 'presentiel' ? 'border-ishes-green bg-ishes-green/5 text-ishes-green shadow-lg shadow-ishes-green/10' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}
+                      className={`py-3 rounded-2xl border-2 font-bold text-xs transition-all ${newClassData.type === 'presentiel' ? 'border-ishes-blue bg-ishes-blue/5 text-ishes-blue shadow-lg shadow-ishes-blue/10' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}
                     >
                       🕌 Présentiel
                     </button>
@@ -856,7 +856,7 @@ export default function AdminDashboard() {
             <div className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar">
               {waitingStudents.length > 0 ? (
                 waitingStudents.map(student => (
-                  <div key={student.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-ishes-green/30 transition-colors group">
+                  <div key={student.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-ishes-blue/30 transition-colors group">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 bg-ishes-dark rounded-xl flex items-center justify-center text-white font-black italic text-xs">
                         {(student.first_name?.[0] || '') + (student.last_name?.[0] || '')}
@@ -869,7 +869,7 @@ export default function AdminDashboard() {
                     <button
                       onClick={() => handleAddStudentToClass(student.id)}
                       disabled={isSubmitting}
-                      className="w-10 h-10 bg-white text-ishes-green border border-ishes-green/20 rounded-xl flex items-center justify-center hover:bg-ishes-green hover:text-white transition-all shadow-sm"
+                      className="w-10 h-10 bg-white text-ishes-blue border border-ishes-blue/20 rounded-xl flex items-center justify-center hover:bg-ishes-blue hover:text-white transition-all shadow-sm"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -898,7 +898,7 @@ export default function AdminDashboard() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-ishes-green/10 rounded-xl flex items-center justify-center text-ishes-green">
+                  <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <History className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-black text-ishes-dark tracking-tight">Transférer l'élève</h3>
@@ -920,13 +920,13 @@ export default function AdminDashboard() {
                     <button
                       key={c.id}
                       onClick={() => setTargetClassId(c.id)}
-                      className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${targetClassId === c.id ? 'border-ishes-green bg-ishes-green/5 shadow-lg shadow-ishes-green/10' : 'border-gray-100 hover:border-gray-200'}`}
+                      className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${targetClassId === c.id ? 'border-ishes-blue bg-ishes-blue/5 shadow-lg shadow-ishes-blue/10' : 'border-gray-100 hover:border-gray-200'}`}
                     >
                       <div>
-                        <div className={`text-xs font-black uppercase tracking-tight ${targetClassId === c.id ? 'text-ishes-green' : 'text-ishes-dark'}`}>{c.name}</div>
+                        <div className={`text-xs font-black uppercase tracking-tight ${targetClassId === c.id ? 'text-ishes-blue' : 'text-ishes-dark'}`}>{c.name}</div>
                         <div className="text-[10px] text-gray-400 font-medium">{c.formationTitle}</div>
                       </div>
-                      {targetClassId === c.id && <CheckCircle2 className="w-4 h-4 text-ishes-green" />}
+                      {targetClassId === c.id && <CheckCircle2 className="w-4 h-4 text-ishes-blue" />}
                     </button>
                   ))}
                 </div>
@@ -961,8 +961,8 @@ export default function AdminDashboard() {
               {/* Personal Info */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Informations Personnelles</h4>
+                  <div className="w-1 h-4 bg-ishes-blue rounded-full"></div>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue">Informations Personnelles</h4>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -972,7 +972,7 @@ export default function AdminDashboard() {
                       placeholder="Ex: Omar"
                       value={formData.first_name}
                       onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                   <div className="space-y-2">
@@ -982,7 +982,7 @@ export default function AdminDashboard() {
                       placeholder="Ex: Diallo"
                       value={formData.last_name}
                       onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 </div>
@@ -994,7 +994,7 @@ export default function AdminDashboard() {
                       placeholder="omar@exemple.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                   <div className="space-y-2">
@@ -1004,7 +1004,7 @@ export default function AdminDashboard() {
                       placeholder="06 XX XX XX XX"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 </div>
@@ -1020,15 +1020,15 @@ export default function AdminDashboard() {
                   placeholder="123 Rue de la Paix, Paris"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                 />
               </div>
 
               {/* Règlement Manuel Section */}
               <div className="space-y-6 pt-4 border-t border-gray-50">
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Statut du Règlement & Paiement</h4>
+                  <div className="w-1 h-4 bg-ishes-blue rounded-full"></div>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue">Statut du Règlement & Paiement</h4>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -1037,7 +1037,7 @@ export default function AdminDashboard() {
                     <select
                       value={formData.payment_status}
                       onChange={(e) => setFormData({ ...formData, payment_status: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold appearance-none"
                     >
                       <option value="en_attente">En attente de paiement</option>
                       <option value="a_jour">Règlement Effectué (Payé)</option>
@@ -1050,7 +1050,7 @@ export default function AdminDashboard() {
                       <select
                         value={formData.payment_method}
                         onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold appearance-none"
                       >
                         <option value="virement">🏦 Virement bancaire</option>
                         <option value="liquide">💵 Espèces / Liquide</option>
@@ -1067,7 +1067,7 @@ export default function AdminDashboard() {
                       placeholder="Ex: 150"
                       value={formData.amount_paid}
                       onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 )}
@@ -1124,7 +1124,7 @@ export default function AdminDashboard() {
                     placeholder="Ex: Rappel de cours / Changement de salle"
                     value={contactSubject}
                     onChange={(e) => setContactSubject(e.target.value)}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium text-sm"
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm"
                   />
                 </div>
 
@@ -1135,7 +1135,7 @@ export default function AdminDashboard() {
                     placeholder="Saisissez votre message ici..."
                     value={contactMessage}
                     onChange={(e) => setContactMessage(e.target.value)}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-green/5 focus:border-ishes-green transition-all font-medium text-sm resize-none"
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm resize-none"
                   />
                 </div>
               </div>

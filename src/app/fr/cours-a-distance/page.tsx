@@ -25,12 +25,12 @@ import { Button } from '@/components/ui/button';
 
 export default function CoursDistancePage() {
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-[#008953] selection:text-white pb-20">
+    <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-ishes-blue selection:text-white pb-20">
       
       {/* ─── HERO SECTION ─── */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-white border-b border-gray-100">
         <ArabicBackground />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-ishes-green/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-ishes-blue/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative z-10 pt-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
@@ -41,21 +41,21 @@ export default function CoursDistancePage() {
               className="flex-1 space-y-8 text-center lg:text-left"
             >
               <nav className="flex items-center justify-center lg:justify-start gap-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">
-                <Link href="/" className="hover:text-ishes-green transition-colors">Accueil</Link>
+                <Link href="/" className="hover:text-ishes-blue transition-colors">Accueil</Link>
                 <ChevronRight className="w-3 h-3" />
-                <span className="text-ishes-green">Cours à Distance</span>
+                <span className="text-ishes-blue">Cours à Distance</span>
               </nav>
               
-              <div className="inline-flex items-center gap-2 px-5 py-2 bg-ishes-green/5 border border-ishes-green/20 rounded-full shadow-sm mb-2">
-                <Globe className="w-4 h-4 text-ishes-green" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-ishes-green">
+              <div className="inline-flex items-center gap-2 px-5 py-2 bg-ishes-blue/5 border border-ishes-blue/20 rounded-full shadow-sm mb-2">
+                <Globe className="w-4 h-4 text-ishes-blue" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">
                   L'excellence ISHES partout dans le monde
                 </span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
                 Apprenez la science <br />
-                <span className="text-ishes-green italic">d'où vous voulez.</span>
+                <span className="text-ishes-blue italic">d'où vous voulez.</span>
               </h1>
 
               <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
@@ -67,7 +67,7 @@ export default function CoursDistancePage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
                   href="#formations" 
-                  className="w-full sm:w-auto bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1 active:scale-95 text-center"
+                  className="w-full sm:w-auto bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1 active:scale-95 text-center"
                 >
                   VOIR NOS COURS
                 </Link>
@@ -76,7 +76,7 @@ export default function CoursDistancePage() {
                     {[1, 2, 3, 4].map((i) => (
                       <div key={i} className={`w-10 h-10 rounded-full border-2 border-white bg-gray-200 shadow-sm flex items-center justify-center overflow-hidden`}>
                          {/* Fallback color if image not found handled by css */}
-                         <div className="w-full h-full bg-[#c8a96e] text-white flex items-center justify-center text-xs">{i}</div>
+                         <div className="w-full h-full bg-ishes-gold text-white flex items-center justify-center text-xs">{i}</div>
                       </div>
                     ))}
                   </div>
@@ -91,7 +91,7 @@ export default function CoursDistancePage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="flex-1 w-full max-w-[500px] relative"
             >
-               <div className="absolute inset-0 bg-gradient-to-tr from-ishes-green to-[#c8a96e] rounded-[3rem] rotate-3 blur-xl opacity-20" />
+               <div className="absolute inset-0 bg-gradient-to-tr from-ishes-blue to-ishes-gold rounded-[3rem] rotate-3 blur-xl opacity-20" />
                <div className="w-full aspect-[4/3] bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden relative group">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20 z-10" />
                   <Image src="/images/institut-ishes-accueil-hero.png" alt="Cours" fill className="object-cover" />
@@ -121,9 +121,9 @@ export default function CoursDistancePage() {
       <section className="py-24 px-6 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <span className="text-ishes-green font-black uppercase tracking-[0.25em] text-xs mb-4 block">La Technologie au Service du Savoir</span>
+            <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">La Technologie au Service du Savoir</span>
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight">
-              Une expérience <span className="text-[#008953] italic">immersive.</span>
+              Une expérience <span className="text-ishes-blue italic">immersive.</span>
             </h2>
           </div>
 
@@ -144,8 +144,8 @@ export default function CoursDistancePage() {
                </div>
 
                <div className="flex gap-6">
-                 <div className="w-16 h-16 shrink-0 bg-ishes-green/10 rounded-2xl flex items-center justify-center">
-                    <Monitor className="w-8 h-8 text-ishes-green" />
+                 <div className="w-16 h-16 shrink-0 bg-ishes-blue/10 rounded-2xl flex items-center justify-center">
+                    <Monitor className="w-8 h-8 text-ishes-blue" />
                  </div>
                  <div>
                    <h3 className="text-2xl font-black text-ishes-dark mb-2">Cours disponibles en replay</h3>
@@ -171,7 +171,7 @@ export default function CoursDistancePage() {
 
              {/* Right: Visual Mockup */}
              <div className="relative">
-                <div className="absolute inset-0 bg-ishes-green/5 rounded-[3rem] -rotate-3 scale-105" />
+                <div className="absolute inset-0 bg-ishes-blue/5 rounded-[3rem] -rotate-3 scale-105" />
                 <div className="bg-ishes-dark p-8 rounded-[3rem] shadow-2xl relative overflow-hidden border border-gray-800">
                    <div className="flex items-center gap-2 mb-6">
                       <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -181,7 +181,7 @@ export default function CoursDistancePage() {
                    
                    <div className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-6">
                       <div className="flex items-center gap-4 mb-6">
-                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-ishes-green to-[#c8a96e]" />
+                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-ishes-blue to-ishes-gold" />
                          <div>
                             <div className="h-4 w-32 bg-white/20 rounded-full mb-2" />
                             <div className="h-3 w-20 bg-white/10 rounded-full" />
@@ -194,12 +194,12 @@ export default function CoursDistancePage() {
                       </div>
                    </div>
 
-                   <div className="bg-ishes-green/20 rounded-2xl p-6 border border-ishes-green/30 text-white flex items-center justify-between">
+                   <div className="bg-ishes-blue/20 rounded-2xl p-6 border border-ishes-blue/30 text-white flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                         <Video className="w-6 h-6 text-ishes-green" />
+                         <Video className="w-6 h-6 text-ishes-blue" />
                          <span className="font-bold">Rejoindre le cours</span>
                       </div>
-                      <span className="px-3 py-1 bg-ishes-green text-[10px] font-black uppercase tracking-widest rounded-full">En cours</span>
+                      <span className="px-3 py-1 bg-ishes-blue text-[10px] font-black uppercase tracking-widest rounded-full">En cours</span>
                    </div>
                 </div>
              </div>
@@ -212,7 +212,7 @@ export default function CoursDistancePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight">
-              Nos programmes <span className="text-[#c8a96e] italic">phares</span>
+              Nos programmes <span className="text-ishes-gold italic">phares</span>
             </h2>
             <p className="text-gray-500 mt-6 max-w-2xl mx-auto font-medium text-lg">
               Des cursus complets et structurés pour vous accompagner dans votre cheminement, quel que soit votre niveau.
@@ -223,7 +223,7 @@ export default function CoursDistancePage() {
             
             {/* Carte Arabe */}
             <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col h-full">
-              <div className="w-14 h-14 bg-[#c8a96e]/10 text-[#c8a96e] rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-ishes-gold/10 text-ishes-gold rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform">
                  <BookOpen className="w-7 h-7" />
               </div>
               <h3 className="text-2xl font-black text-ishes-dark mb-3">Langue Arabe</h3>
@@ -231,8 +231,8 @@ export default function CoursDistancePage() {
                  Apprenez à lire, écrire et comprendre l'arabe avec des méthodes reconnues (Méthode de Médine, Al-Arabiya Bayna Yadayk). De l'alphabétisation à la maîtrise, nous avons le niveau qu'il vous faut.
               </p>
               <div className="space-y-2 mb-8 text-sm font-bold text-gray-700">
-                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-green" /> Session annuelle ou intensive</div>
-                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-green" /> Professeurs natifs ou bilingues</div>
+                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Session annuelle ou intensive</div>
+                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Professeurs natifs ou bilingues</div>
               </div>
               <Link href="/program" className="block w-full text-center py-4 rounded-xl bg-ishes-dark text-white font-black hover:bg-black transition-colors">
                  Détails du programme
@@ -241,8 +241,8 @@ export default function CoursDistancePage() {
 
             {/* Carte Sciences Islamiques */}
             <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col h-full relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-green/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
-              <div className="w-14 h-14 bg-ishes-green/10 text-ishes-green rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform relative z-10">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-blue/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
+              <div className="w-14 h-14 bg-ishes-blue/10 text-ishes-blue rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform relative z-10">
                  <Globe className="w-7 h-7" />
               </div>
               <h3 className="text-2xl font-black text-ishes-dark mb-3 relative z-10">Sciences Islamiques</h3>
@@ -250,10 +250,10 @@ export default function CoursDistancePage() {
                  Étudiez la croyance (Aqida), la jurisprudence (Fiqh) et l'éducation spirituelle (Tarbiyya) avec des enseignants certifiés. Un apprentissage structuré basé sur les sources authentiques.
               </p>
               <div className="space-y-2 mb-8 text-sm font-bold text-gray-700 relative z-10">
-                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-green" /> Cursus modulaire ou complet</div>
-                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-green" /> Évaluations continues</div>
+                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Cursus modulaire ou complet</div>
+                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Évaluations continues</div>
               </div>
-              <Link href="/program" className="block w-full text-center py-4 rounded-xl bg-ishes-green text-white font-black hover:bg-ishes-green-hover transition-colors relative z-10">
+              <Link href="/program" className="block w-full text-center py-4 rounded-xl bg-ishes-blue text-white font-black hover:bg-ishes-blue-hover transition-colors relative z-10">
                  Détails du programme
               </Link>
             </div>
@@ -268,8 +268,8 @@ export default function CoursDistancePage() {
                  Améliorez votre récitation, apprenez les règles de Tajwid ou entamez un programme de mémorisation (Hifz) avec un suivi personnalisé et une correction précise.
               </p>
               <div className="space-y-2 mb-8 text-sm font-bold text-gray-700">
-                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-green" /> Correction Al-Fatiha</div>
-                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-green" /> Groupes restreints (suivi optimal)</div>
+                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Correction Al-Fatiha</div>
+                 <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Groupes restreints (suivi optimal)</div>
               </div>
               <Link href="/program" className="block w-full text-center py-4 rounded-xl bg-ishes-dark text-white font-black hover:bg-black transition-colors">
                  Détails du programme
@@ -279,7 +279,7 @@ export default function CoursDistancePage() {
           </div>
           
           <div className="mt-16 text-center">
-             <Link href="/program" className="inline-flex items-center gap-2 text-ishes-green font-black hover:underline underline-offset-4 decoration-2">
+             <Link href="/program" className="inline-flex items-center gap-2 text-ishes-blue font-black hover:underline underline-offset-4 decoration-2">
                 Voir toutes nos formations à distance <ChevronRight className="w-4 h-4" />
              </Link>
           </div>
@@ -294,7 +294,7 @@ export default function CoursDistancePage() {
                 <Image src="/images/institut-ishes-accueil-hero.png" alt="Etudiante" width={600} height={600} className="rounded-[3rem] object-cover aspect-square shadow-2xl" />
                 <div className="absolute -bottom-8 -right-8 bg-white p-6 rounded-3xl shadow-xl max-w-xs border border-gray-100 hidden md:block">
                    <div className="flex items-center gap-2 mb-2">
-                      {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 text-[#c8a96e] fill-current" />)}
+                      {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 text-ishes-gold fill-current" />)}
                    </div>
                    <p className="text-gray-600 text-sm font-medium italic">"L'organisation est parfaite, les professeurs sont passionnés, on se sent vraiment accompagnés même à travers l'écran."</p>
                    <p className="mt-3 font-bold text-ishes-dark text-xs uppercase">— Sarah M.</p>
@@ -303,7 +303,7 @@ export default function CoursDistancePage() {
 
              <div className="space-y-8">
                <h2 className="text-4xl font-black text-ishes-dark leading-tight">
-                 Le distanciel sans <span className="text-ishes-green italic">les inconvénients.</span>
+                 Le distanciel sans <span className="text-ishes-blue italic">les inconvénients.</span>
                </h2>
                <p className="text-gray-500 font-medium text-lg leading-relaxed">
                  Chez ISHES, nous avons conçu notre plateforme pour pallier les défauts habituels de l'apprentissage en ligne. 
@@ -311,8 +311,8 @@ export default function CoursDistancePage() {
 
                <div className="space-y-6">
                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-ishes-green/10 flex items-center justify-center shrink-0 mt-1">
-                       <Users className="w-5 h-5 text-ishes-green" />
+                    <div className="w-10 h-10 rounded-full bg-ishes-blue/10 flex items-center justify-center shrink-0 mt-1">
+                       <Users className="w-5 h-5 text-ishes-blue" />
                     </div>
                     <div>
                        <h4 className="font-bold text-ishes-dark text-lg">Groupes à taille humaine</h4>
@@ -320,8 +320,8 @@ export default function CoursDistancePage() {
                     </div>
                  </div>
                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-ishes-green/10 flex items-center justify-center shrink-0 mt-1">
-                       <Calendar className="w-5 h-5 text-ishes-green" />
+                    <div className="w-10 h-10 rounded-full bg-ishes-blue/10 flex items-center justify-center shrink-0 mt-1">
+                       <Calendar className="w-5 h-5 text-ishes-blue" />
                     </div>
                     <div>
                        <h4 className="font-bold text-ishes-dark text-lg">Assiduité et suivi</h4>
@@ -329,8 +329,8 @@ export default function CoursDistancePage() {
                     </div>
                  </div>
                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-ishes-green/10 flex items-center justify-center shrink-0 mt-1">
-                       <MessageCircle className="w-5 h-5 text-ishes-green" />
+                    <div className="w-10 h-10 rounded-full bg-ishes-blue/10 flex items-center justify-center shrink-0 mt-1">
+                       <MessageCircle className="w-5 h-5 text-ishes-blue" />
                     </div>
                     <div>
                        <h4 className="font-bold text-ishes-dark text-lg">Disponibilité du professeur</h4>
@@ -347,18 +347,18 @@ export default function CoursDistancePage() {
       <section className="py-24 px-6 relative">
         <div className="max-w-5xl mx-auto bg-ishes-dark rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden shadow-2xl">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
-          <div className="absolute top-0 right-0 w-96 h-96 bg-ishes-green/20 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-ishes-blue/20 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
           
           <div className="relative z-10 space-y-8">
             <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
               Prêt à commencer <br />
-              <span className="text-ishes-green italic">votre apprentissage ?</span>
+              <span className="text-ishes-blue italic">votre apprentissage ?</span>
             </h2>
             <p className="text-white/60 text-lg font-medium max-w-2xl mx-auto">
               Rejoignez l'Institut ISHES aujourd'hui et donnez à votre foi les bases solides qu'elle mérite.
             </p>
             <div className="pt-8 flex flex-col sm:flex-row justify-center gap-6">
-              <Link href="/program" className="bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1">
+              <Link href="/program" className="bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1">
                  PARCOURIR LES FORMATIONS
               </Link>
               <Link href="/contact" className="bg-white/10 hover:bg-white/20 text-white px-10 py-5 rounded-2xl font-black transition-all border border-white/10 backdrop-blur-sm">

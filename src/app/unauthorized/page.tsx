@@ -42,7 +42,7 @@ export default function UnauthorizedPage() {
 
       {/* Premium Background Ambient Gradients */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-[#086b51]/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#c8a96e]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-ishes-gold/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Decorative Watermark */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.01] pointer-events-none">
@@ -57,7 +57,7 @@ export default function UnauthorizedPage() {
         <div className="flex justify-center mb-8">
           <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-[#086b51] to-[#064e3b] p-[2px] shadow-xl shadow-[#086b51]/10 flex items-center justify-center border border-white/10">
             <div className="w-full h-full bg-[#111c29]/90 rounded-[1.4rem] flex items-center justify-center">
-              <ShieldAlert className="w-8 h-8 text-[#c8a96e]" />
+              <ShieldAlert className="w-8 h-8 text-ishes-gold" />
             </div>
           </div>
         </div>
@@ -68,13 +68,13 @@ export default function UnauthorizedPage() {
           <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
           <div className="space-y-3">
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#c8a96e]">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ishes-gold">
               Contrôle de Sécurité
             </span>
             <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">
               Accès Non Autorisé
             </h1>
-            <div className="w-16 h-[1px] bg-[#c8a96e]/30 mx-auto my-4" />
+            <div className="w-16 h-[1px] bg-ishes-gold/30 mx-auto my-4" />
           </div>
 
           <div className="space-y-6 text-sm sm:text-base leading-relaxed text-white/70 font-medium text-left">
@@ -90,7 +90,7 @@ export default function UnauthorizedPage() {
 
           {/* Recovery Form */}
           <div className="border-t border-white/10 pt-8 text-left space-y-4">
-            <h3 className="text-sm font-black text-[#c8a96e] uppercase tracking-wider">
+            <h3 className="text-sm font-black text-ishes-gold uppercase tracking-wider">
               Une erreur d'adresse e-mail au paiement ?
             </h3>
             <p className="text-xs text-white/60 leading-relaxed font-semibold">

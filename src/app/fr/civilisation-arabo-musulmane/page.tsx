@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function CivilisationPage() {
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-[#008953] selection:text-white pb-20">
+    <div className="min-h-screen bg-white font-sans selection:bg-ishes-blue selection:text-white pb-20">
       
       {/* ─── HERO SECTION ─── */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-[#fafafa]">
@@ -28,9 +28,9 @@ export default function CivilisationPage() {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="flex-1 space-y-8 text-center lg:text-left">
               <nav className="flex items-center justify-center lg:justify-start gap-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">
-                <Link href="/" className="hover:text-ishes-green transition-colors">Accueil</Link>
+                <Link href="/" className="hover:text-ishes-blue transition-colors">Accueil</Link>
                 <ChevronRight className="w-3 h-3" />
-                <span className="text-ishes-green">Civilisation Arabo-Musulmane</span>
+                <span className="text-ishes-blue">Civilisation Arabo-Musulmane</span>
               </nav>
               
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-600/10 rounded-full shadow-sm mb-2">
@@ -42,7 +42,7 @@ export default function CivilisationPage() {
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
                 Un Héritage <br />
-                <span className="text-ishes-green italic">Universel.</span>
+                <span className="text-ishes-blue italic">Universel.</span>
               </h1>
 
               <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0">
@@ -52,19 +52,19 @@ export default function CivilisationPage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
                   href="/contact" 
-                  className="w-full sm:w-auto bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-green/20 hover:-translate-y-1 active:scale-95"
+                  className="w-full sm:w-auto bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1 active:scale-95"
                 >
                   NOUS CONTACTER
                 </Link>
                 <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-gray-100">
                    <p className="text-sm font-black text-ishes-dark uppercase tracking-widest">Niveau</p>
-                   <p className="text-ishes-green text-lg font-black italic">Culturel & Historique</p>
+                   <p className="text-ishes-blue text-lg font-black italic">Culturel & Historique</p>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4">
                 <div className="flex items-center gap-2">
-                  <Monitor className="w-5 h-5 text-ishes-green" />
+                  <Monitor className="w-5 h-5 text-ishes-blue" />
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Conférences & Cours</span>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function CivilisationPage() {
                   "Héritage contemporain"
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4 bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-ishes-blue shrink-0" />
                     <span className="text-gray-700 font-bold">{item}</span>
                   </div>
                 ))}
@@ -117,11 +117,11 @@ export default function CivilisationPage() {
             <div className="lg:col-span-5 space-y-8">
               <div className="bg-[#101828] text-white rounded-[3rem] p-10 shadow-2xl space-y-8">
                 <div className="flex items-center gap-3">
-                  <GraduationCap className="w-6 h-6 text-ishes-green" />
+                  <GraduationCap className="w-6 h-6 text-ishes-blue" />
                   <h3 className="text-lg font-black uppercase tracking-widest">Format</h3>
                 </div>
                 <div className="flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/5">
-                  <Award className="w-8 h-8 text-ishes-green shrink-0" />
+                  <Award className="w-8 h-8 text-ishes-blue shrink-0" />
                   <div>
                     <h4 className="font-bold text-white mb-2">Séminaires</h4>
                     <p className="text-gray-400 text-sm">Des sessions thématiques pour approfondir vos connaissances.</p>

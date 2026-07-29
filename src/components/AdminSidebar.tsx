@@ -60,7 +60,7 @@ export function AdminSidebar() {
         <div className="h-20 flex items-center px-6 border-b border-ishes-dark/10 shrink-0 relative z-10">
           <Link href="/app" className="flex items-center gap-2">
             <span className="text-xl font-black italic tracking-tight text-ishes-dark">
-              ISHEECOLE <span className="text-ishes-green text-sm not-italic align-top">PRO</span>
+              ISHEECOLE <span className="text-ishes-blue text-sm not-italic align-top">PRO</span>
             </span>
           </Link>
         </div>
@@ -80,7 +80,7 @@ export function AdminSidebar() {
                     : "text-ishes-dark/70 hover:bg-ishes-dark/5 hover:text-ishes-dark"
                 )}
               >
-                <item.icon className={cn("w-4 h-4", isActive ? "text-ishes-green" : "")} />
+                <item.icon className={cn("w-4 h-4", isActive ? "text-ishes-blue" : "")} />
                 {item.label}
               </Link>
             );

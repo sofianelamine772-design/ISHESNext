@@ -62,13 +62,13 @@ export default function MentionsLegales() {
         >
           {/* Header */}
           <div className="mb-16">
-            <span className="ishes-label text-ishes-green mb-4 block">Transparence & Conformité</span>
+            <span className="ishes-label text-ishes-blue mb-4 block">Transparence & Conformité</span>
             <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
               Mentions<br />
-              <span className="text-ishes-green italic">légales.</span>
+              <span className="text-ishes-blue italic">légales.</span>
             </h1>
             <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
-              <Shield className="w-4 h-4 text-ishes-green" />
+              <Shield className="w-4 h-4 text-ishes-blue" />
               <span>Dernière mise à jour : Mars 2025 — Institut ISHES, 41 Boulevard de Thibaud, 31100 Toulouse</span>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function MentionsLegales() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
-                className="bg-white rounded-3xl p-8 border border-gray-100 hover:border-ishes-green/10 transition-colors"
+                className="bg-white rounded-3xl p-8 border border-gray-100 hover:border-ishes-blue/10 transition-colors"
               >
                 <h2 className="ishes-label text-ishes-dark mb-6 pb-4 border-b border-gray-100">
                   {section.title}
@@ -93,7 +93,7 @@ export default function MentionsLegales() {
                       {paragraph.includes("contact@ishes.fr") ? (
                         <>
                           Pour toute demande relative à vos données personnelles, contactez-nous à :{" "}
-                          <a href="mailto:contact@ishes.fr" className="text-ishes-green font-black hover:underline">
+                          <a href="mailto:contact@ishes.fr" className="text-ishes-blue font-black hover:underline">
                             contact@ishes.fr
                           </a>
                         </>

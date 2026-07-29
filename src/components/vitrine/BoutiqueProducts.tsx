@@ -79,7 +79,7 @@ export function BoutiqueProducts() {
                   <h2 className="ishes-heading text-2xl text-ishes-gold mb-2 transition-colors leading-tight">
                     {product.title}
                   </h2>
-                  <p className="ishes-label text-[10px] text-ishes-green mb-4 leading-tight opacity-80">
+                  <p className="ishes-label text-[10px] text-ishes-blue mb-4 leading-tight opacity-80">
                     {product.subtitle}
                   </p>
                   <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">

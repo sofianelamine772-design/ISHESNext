@@ -34,7 +34,7 @@ export const PROGRAMS: Program[] = [
     title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    tagColor: "bg-ishes-gold/10 text-ishes-gold",
     durationText: "Dimanche matin 9h-12h",
     features: ["Bases de l'Arabe", "Théorie & pratique", "Bases du Tajwid (Coran)", "Diplôme final"],
     price: "480 €",
@@ -49,7 +49,7 @@ export const PROGRAMS: Program[] = [
     title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    tagColor: "bg-ishes-gold/10 text-ishes-gold",
     durationText: "Samedi matin 9h-12h",
     features: ["Approfondissement Arabe", "Théorie & pratique", "Maîtrise complète du Tajwid Coran", "Diplôme final"],
     price: "480 €",
@@ -64,7 +64,7 @@ export const PROGRAMS: Program[] = [
     title: "Scolarité Enfants",
     subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    tagColor: "bg-ishes-gold/10 text-ishes-gold",
     durationText: "Mercredi 13h30-16h30",
     features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
@@ -79,7 +79,7 @@ export const PROGRAMS: Program[] = [
     title: "Scolarité Enfants",
     subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    tagColor: "bg-ishes-gold/10 text-ishes-gold",
     durationText: "Samedi 9h-12h ou 13h30-16h30",
     features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
@@ -94,7 +94,7 @@ export const PROGRAMS: Program[] = [
     title: "Scolarité Enfants",
     subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
-    tagColor: "bg-[#c8a96e]/10 text-[#c8a96e]",
+    tagColor: "bg-ishes-gold/10 text-ishes-gold",
     durationText: "Dimanche 9h-12h ou 13h30-16h30",
     features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
@@ -366,7 +366,7 @@ export const PROGRAMS: Program[] = [
     title: "Formation Enseignant Tarbya",
     subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
     tagText: "PRO",
-    tagColor: "bg-[#008953]/10 text-[#008953]",
+    tagColor: "bg-ishes-blue/10 text-ishes-blue",
     durationText: "Sur demande",
     features: [
       "Pédagogie bienveillante",
@@ -527,12 +527,12 @@ export function ProgramContent() {
               </div>
             </div>
 
-            <div className={`font-black tracking-widest text-xs uppercase mb-6 ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>
+            <div className={`font-black tracking-widest text-xs uppercase mb-6 ${activeMode === "presentiel" ? "text-ishes-gold" : "text-ishes-blue"}`}>
               Nos Formations
             </div>
             <h1 className="text-[32px] sm:text-5xl md:text-6xl font-black text-[#101828] leading-[1.1] tracking-tight mb-6">
               Choisissez votre <br />
-              <span className={`italic ${activeMode === "presentiel" ? "text-[#c8a96e]" : "text-[#008953]"}`}>mode d'apprentissage.</span>
+              <span className={`italic ${activeMode === "presentiel" ? "text-ishes-gold" : "text-ishes-blue"}`}>mode d'apprentissage.</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-500 font-medium">
               Que vous soyez à Toulouse ou ailleurs, nous avons le programme idéal pour votre progression.
@@ -545,7 +545,7 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveMode("presentiel")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "presentiel"
-                    ? "bg-white text-[#c8a96e] shadow-lg shadow-black/5 transform scale-100"
+                    ? "bg-white text-ishes-gold shadow-lg shadow-black/5 transform scale-100"
                     : "text-gray-500 hover:text-gray-700"
                   }`}
               >
@@ -554,7 +554,7 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveMode("distanciel")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "distanciel"
-                    ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                    ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
                     : "text-gray-500 hover:text-gray-700"
                   }`}
               >
@@ -567,7 +567,7 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveAudience("adulte")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "adulte"
-                    ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                    ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
                     : "text-gray-500 hover:text-gray-700"
                   }`}
               >
@@ -576,7 +576,7 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveAudience("enfant")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "enfant"
-                    ? "bg-white text-[#008953] shadow-lg shadow-black/5 transform scale-100"
+                    ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
                     : "text-gray-500 hover:text-gray-700"
                   }`}
               >
@@ -601,7 +601,7 @@ export function ProgramContent() {
             placeholder="Rechercher une formation..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="block w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-[#008953] transition-all shadow-sm"
+            className="block w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all shadow-sm"
           />
         </div>
       </div>
@@ -611,8 +611,8 @@ export function ProgramContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPrograms.map((program, index) => {
             const isPresentiel = program.type === "presentiel";
-            const accentColor = isPresentiel ? "text-[#c8a96e]" : "text-[#008953]";
-            const btnColor = isPresentiel ? "bg-[#c8a96e] hover:bg-[#b0935b]" : "bg-[#008953] hover:bg-[#007044]";
+            const accentColor = isPresentiel ? "text-ishes-gold" : "text-ishes-blue";
+            const btnColor = isPresentiel ? "bg-ishes-gold hover:bg-[#b0935b]" : "bg-ishes-blue hover:bg-[#007044]";
 
             const infoUrl =
               (program.id === 'tajwid_standard' || program.id === 'tajwid-standard-presentiel') ? '/fr/cours-lecture-tajwid' :
@@ -659,7 +659,7 @@ export function ProgramContent() {
                 <div className="p-5 sm:p-6 flex-1 flex flex-col">
                   {/* TAGS ROW */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase ${program.tagColor || "bg-[#008953]/10 text-[#008953]"}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase ${program.tagColor || "bg-ishes-blue/10 text-ishes-blue"}`}>
                       {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
                     </span>
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${isPresentiel
@@ -727,7 +727,7 @@ export function ProgramContent() {
                           {program.priceSub}
                         </div>
                         {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "GRATUIT" && (
-                          <div className="text-[10px] font-bold text-[#008953] uppercase tracking-wide mt-1.5 flex items-center gap-1">
+                          <div className="text-[10px] font-bold text-ishes-blue uppercase tracking-wide mt-1.5 flex items-center gap-1">
                             <span>💳</span> Paiement en 1x, 3x ou 5x
                           </div>
                         )}

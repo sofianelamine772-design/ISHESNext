@@ -20,7 +20,7 @@ export function InstitutManifesto() {
              >
                 <h2 className="text-ishes-dark font-black text-4xl md:text-6xl leading-[1.1] tracking-tight">
                   L’architecture au <br />
-                  <span className="text-ishes-green">service du sens.</span>
+                  <span className="text-ishes-blue">service du sens.</span>
                 </h2>
              </motion.div>
              <motion.div 

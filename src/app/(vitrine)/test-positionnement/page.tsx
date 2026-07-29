@@ -129,11 +129,11 @@ export default function TestPositionnement() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <span className="inline-block bg-[#c8a96e]/10 text-[#c8a96e] px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+              <span className="inline-block bg-ishes-gold/10 text-ishes-gold px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
                 Orientation Enfants
               </span>
               <h1 className="text-4xl md:text-6xl font-black text-ishes-dark mb-6 uppercase leading-tight">
-                Test de <br /><span className="text-[#c8a96e] italic">Niveau.</span>
+                Test de <br /><span className="text-ishes-gold italic">Niveau.</span>
               </h1>
               <p className="text-gray-500 font-medium mb-12 max-w-xl mx-auto">
                 Ce test rapide nous permet d'orienter au mieux votre enfant pour qu'il progresse sereinement bi idhniLLAH.
@@ -145,11 +145,11 @@ export default function TestPositionnement() {
                   className="group p-8 rounded-[2.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all text-left flex flex-col"
                 >
                   <div className="w-14 h-14 rounded-2xl bg-ishes-dark flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <BookOpen className="w-6 h-6 text-[#c8a96e]" />
+                    <BookOpen className="w-6 h-6 text-ishes-gold" />
                   </div>
                   <h3 className="text-xl font-black text-ishes-dark mb-2 uppercase">Langue Arabe</h3>
                   <p className="text-xs text-gray-400 font-bold mb-6">Évaluez le niveau de lecture et d'écriture.</p>
-                  <div className="mt-auto flex items-center gap-2 text-[#c8a96e] font-black text-[10px] uppercase tracking-widest">
+                  <div className="mt-auto flex items-center gap-2 text-ishes-gold font-black text-[10px] uppercase tracking-widest">
                     Commencer <ChevronRight className="w-3 h-3" />
                   </div>
                 </button>
@@ -158,12 +158,12 @@ export default function TestPositionnement() {
                   onClick={() => setTestType("tajwid")}
                   className="group p-8 rounded-[2.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all text-left flex flex-col"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[#c8a96e] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-ishes-gold flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <GraduationCap className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-black text-ishes-dark mb-2 uppercase">Tajwid</h3>
                   <p className="text-xs text-gray-400 font-bold mb-6">Évaluez la maîtrise des règles de récitation.</p>
-                  <div className="mt-auto flex items-center gap-2 text-[#c8a96e] font-black text-[10px] uppercase tracking-widest">
+                  <div className="mt-auto flex items-center gap-2 text-ishes-gold font-black text-[10px] uppercase tracking-widest">
                     Commencer <ChevronRight className="w-3 h-3" />
                   </div>
                 </button>
@@ -180,7 +180,7 @@ export default function TestPositionnement() {
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
-                  className="h-full bg-[#c8a96e]"
+                  className="h-full bg-ishes-gold"
                 />
               </div>
 
@@ -200,10 +200,10 @@ export default function TestPositionnement() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-lg bg-[#c8a96e]/10 flex items-center justify-center text-[#c8a96e]">
+                    <div className="w-8 h-8 rounded-lg bg-ishes-gold/10 flex items-center justify-center text-ishes-gold">
                       {categories.find(c => c.questions.includes(currentQuestion))?.icon}
                     </div>
-                    <span className="text-[10px] font-black text-[#c8a96e] uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-ishes-gold uppercase tracking-widest">
                       {categories.find(c => c.questions.includes(currentQuestion))?.title}
                     </span>
                   </div>
@@ -223,14 +223,14 @@ export default function TestPositionnement() {
                       <button
                         key={option}
                         onClick={() => handleAnswer(option)}
-                        className="w-full p-6 rounded-2xl border-2 border-gray-50 bg-gray-50 hover:border-[#c8a96e] hover:bg-white transition-all text-left group"
+                        className="w-full p-6 rounded-2xl border-2 border-gray-50 bg-gray-50 hover:border-ishes-gold hover:bg-white transition-all text-left group"
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-black text-ishes-dark uppercase tracking-widest text-sm">
                             {option === "oui" ? "Oui" : option === "un-peu" ? "Un peu" : "Non"}
                           </span>
-                          <div className="w-6 h-6 rounded-full border-2 border-gray-200 group-hover:border-[#c8a96e] flex items-center justify-center">
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#c8a96e] scale-0 group-hover:scale-100 transition-transform" />
+                          <div className="w-6 h-6 rounded-full border-2 border-gray-200 group-hover:border-ishes-gold flex items-center justify-center">
+                            <div className="w-2.5 h-2.5 rounded-full bg-ishes-gold scale-0 group-hover:scale-100 transition-transform" />
                           </div>
                         </div>
                       </button>
@@ -250,8 +250,8 @@ export default function TestPositionnement() {
               animate={{ opacity: 1, scale: 1 }}
               className="bg-white rounded-[3rem] p-8 md:p-12 shadow-2xl border border-gray-50 text-center"
             >
-              <div className="w-20 h-20 bg-ishes-green/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                <Sparkles className="w-10 h-10 text-ishes-green" />
+              <div className="w-20 h-20 bg-ishes-blue/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                <Sparkles className="w-10 h-10 text-ishes-blue" />
               </div>
 
               <h2 className="text-3xl font-black text-ishes-dark mb-4 uppercase">Test Terminé !</h2>
@@ -267,14 +267,14 @@ export default function TestPositionnement() {
                   </p>
                   <Link 
                     href="/inscription?plan=presentiel-global"
-                    className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all shadow-lg shadow-[#c8a96e]/20"
+                    className="inline-flex items-center gap-3 bg-ishes-gold text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all shadow-lg shadow-ishes-gold/20"
                   >
                     Inscrire mon enfant <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               ) : result === "niveau1plus" ? (
                 <div className="bg-green-50 border border-green-100 rounded-[2.5rem] p-10 mb-10">
-                  <span className="inline-block bg-green-100 text-ishes-green px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
+                  <span className="inline-block bg-green-100 text-ishes-blue px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
                     Niveau 1+
                   </span>
                   <p className="text-green-900 font-bold text-lg mb-8 leading-relaxed">
@@ -282,23 +282,23 @@ export default function TestPositionnement() {
                   </p>
                   <Link 
                     href="/inscription?plan=presentiel-global"
-                    className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all shadow-lg shadow-[#c8a96e]/20"
+                    className="inline-flex items-center gap-3 bg-ishes-gold text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all shadow-lg shadow-ishes-gold/20"
                   >
                     Inscrire mon enfant <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               ) : (
-                <div className="bg-[#c8a96e]/5 border border-[#c8a96e]/10 rounded-[2.5rem] p-10 mb-10">
-                  <span className="inline-block bg-[#c8a96e]/10 text-[#c8a96e] px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
+                <div className="bg-ishes-gold/5 border border-ishes-gold/10 rounded-[2.5rem] p-10 mb-10">
+                  <span className="inline-block bg-ishes-gold/10 text-ishes-gold px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
                     Niveau Avancé
                   </span>
-                  <p className="text-[#c8a96e] font-bold text-lg mb-8 leading-relaxed">
+                  <p className="text-ishes-gold font-bold text-lg mb-8 leading-relaxed">
                     Votre enfant semble maîtriser ces compétences. Un test oral est nécessaire pour un niveau plus avancé.
                   </p>
                   <a
                     href="https://wa.me/33600000000"
                     target="_blank"
-                    className="inline-flex items-center gap-3 bg-[#c8a96e] text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all"
+                    className="inline-flex items-center gap-3 bg-ishes-gold text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#b0935b] transition-all"
                   >
                     Contacter via WhatsApp <MessageCircle className="w-4 h-4" />
                   </a>
@@ -315,8 +315,8 @@ export default function TestPositionnement() {
           )}
 
           {/* Disclaimer Footer */}
-          <div className="mt-12 flex items-start gap-4 p-6 bg-[#c8a96e]/10 border border-[#c8a96e]/20 text-gray-700 rounded-3xl text-xs font-semibold leading-relaxed">
-            <AlertCircle className="w-5 h-5 text-[#c8a96e] shrink-0 mt-0.5" />
+          <div className="mt-12 flex items-start gap-4 p-6 bg-ishes-gold/10 border border-ishes-gold/20 text-gray-700 rounded-3xl text-xs font-semibold leading-relaxed">
+            <AlertCircle className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
             <p>
               Ce test vous permet de choisir le niveau le plus adapté à votre enfant en cas d’hésitation.
             </p>

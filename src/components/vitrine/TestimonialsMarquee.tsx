@@ -43,7 +43,7 @@ const getGoogleColor = (char: string) => {
 export function TestimonialsMarquee() {
   return (
     <section className="bg-gradient-to-b from-[#fafafa] to-white border-t border-gray-100 py-20 md:py-24 overflow-hidden relative">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-ishes-green/[0.02] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-ishes-blue/[0.02] rounded-full blur-3xl pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-6 text-center mb-14 relative z-10">
         <motion.div
@@ -52,11 +52,11 @@ export function TestimonialsMarquee() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block bg-ishes-green/10 text-ishes-green text-[10px] font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6">
+          <span className="inline-block bg-ishes-blue/10 text-ishes-blue text-[10px] font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6">
             Approuvé par la communauté
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight flex items-center justify-center gap-3 flex-wrap">
-            Ce que nos <span className="text-ishes-green italic">étudiants</span> pensent.
+            Ce que nos <span className="text-ishes-blue italic">étudiants</span> pensent.
           </h2>
         </motion.div>
       </div>

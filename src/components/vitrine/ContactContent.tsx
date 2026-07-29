@@ -15,9 +15,9 @@ export function ContactContent() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-24"
       >
-        <span className="ishes-label text-ishes-green mb-5 block">Nous contacter</span>
+        <span className="ishes-label text-ishes-blue mb-5 block">Nous contacter</span>
         <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-dark leading-none mb-8 uppercase tracking-tighter">
-          Parlons-<span className="text-ishes-green italic">nous.</span>
+          Parlons-<span className="text-ishes-blue italic">nous.</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.
@@ -34,7 +34,7 @@ export function ContactContent() {
         {/* PRÉSENTIEL */}
         <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
           <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">Institut ISHES</h2>
-          <p className="ishes-heading text-xl text-ishes-green mb-6">PRÉSENTIEL</p>
+          <p className="ishes-heading text-xl text-ishes-blue mb-6">PRÉSENTIEL</p>
           
           <a href="tel:+33768652091" className="flex items-center gap-4 mb-8 group/phone">
             <div className="w-16 h-16 rounded-2xl bg-ishes-dark flex items-center justify-center shrink-0 shadow-lg shadow-ishes-dark/20 group-hover/phone:scale-110 transition-transform">
@@ -44,7 +44,7 @@ export function ContactContent() {
             </div>
             <div>
               <span className="ishes-label text-[9px] opacity-40 block mb-0.5">Appelez-nous</span>
-              <span className="ishes-heading text-2xl text-ishes-dark group-hover/phone:text-ishes-green transition-colors">+33 7 68 65 20 91</span>
+              <span className="ishes-heading text-2xl text-ishes-dark group-hover/phone:text-ishes-blue transition-colors">+33 7 68 65 20 91</span>
             </div>
           </a>
 
@@ -53,17 +53,17 @@ export function ContactContent() {
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="ishes-heading text-sm text-ishes-dark">MERCREDI</span>
-                <span className="font-black italic text-ishes-green text-sm">14h — 17h</span>
+                <span className="font-black italic text-ishes-blue text-sm">14h — 17h</span>
               </div>
               <div className="h-px bg-gray-100"></div>
               <div className="flex justify-between items-center">
                 <span className="ishes-heading text-sm text-ishes-dark">SAMEDI</span>
-                <span className="font-black italic text-ishes-green text-sm">9h — 12h / 13h30 — 16h30</span>
+                <span className="font-black italic text-ishes-blue text-sm">9h — 12h / 13h30 — 16h30</span>
               </div>
               <div className="h-px bg-gray-100"></div>
               <div className="flex justify-between items-center">
                 <span className="ishes-heading text-sm text-ishes-dark">DIMANCHE</span>
-                <span className="font-black italic text-ishes-green text-sm">11h30 — 15h</span>
+                <span className="font-black italic text-ishes-blue text-sm">11h30 — 15h</span>
               </div>
             </div>
           </div>
@@ -72,7 +72,7 @@ export function ContactContent() {
         {/* DISTANCE (WhatsApp) */}
         <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
           <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">ISHES DISTANCIEL</h2>
-          <p className="ishes-heading text-xl text-[#c8a96e] mb-6">DISTANCE</p>
+          <p className="ishes-heading text-xl text-ishes-gold mb-6">DISTANCE</p>
           
           <a href="tel:+33666033519" className="flex items-center gap-4 mb-8 group/phone">
             <div className="w-16 h-16 rounded-2xl bg-ishes-dark flex items-center justify-center shrink-0 shadow-lg shadow-ishes-dark/20 group-hover/phone:scale-110 transition-transform">
@@ -82,7 +82,7 @@ export function ContactContent() {
             </div>
             <div>
               <span className="ishes-label text-[9px] opacity-40 block mb-0.5">Appelez-nous</span>
-              <span className="ishes-heading text-2xl text-ishes-dark group-hover/phone:text-ishes-green transition-colors">+33 6 66 03 35 19</span>
+              <span className="ishes-heading text-2xl text-ishes-dark group-hover/phone:text-ishes-blue transition-colors">+33 6 66 03 35 19</span>
             </div>
           </a>
 
@@ -177,18 +177,18 @@ export function ContactContent() {
         {/* Info Column */}
         <div className="relative z-10 lg:flex-1 p-8 md:p-12 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-[1px] bg-ishes-green"></div>
-            <span className="ishes-label text-ishes-green uppercase tracking-[0.3em] text-[10px]">Nous trouver</span>
+            <div className="w-10 h-[1px] bg-ishes-blue"></div>
+            <span className="ishes-label text-ishes-blue uppercase tracking-[0.3em] text-[10px]">Nous trouver</span>
           </div>
           
           <h2 className="ishes-heading text-5xl md:text-7xl text-white leading-none mb-6">
             TOULOUSE<br />
-            <span className="text-ishes-green italic">Institut.</span>
+            <span className="text-ishes-blue italic">Institut.</span>
           </h2>
           
           <div className="space-y-4 mb-10">
             <p className="text-white/60 font-medium text-lg md:text-xl flex items-start gap-3">
-              <svg className="w-6 h-6 text-ishes-green shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-ishes-blue shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -200,7 +200,7 @@ export function ContactContent() {
             href="https://maps.google.com/?q=41+Boulevard+de+Thibaud+Toulouse"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-center lg:justify-start gap-4 bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:shadow-2xl hover:shadow-ishes-green/40 hover:-translate-y-1 w-full sm:w-fit"
+            className="group flex items-center justify-center lg:justify-start gap-4 bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:shadow-2xl hover:shadow-ishes-blue/40 hover:-translate-y-1 w-full sm:w-fit"
           >
             Ouvrir dans Google Maps
             <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">

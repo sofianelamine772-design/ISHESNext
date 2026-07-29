@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function BoutiquePage() {
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-ishes-green selection:text-white">
+    <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-ishes-blue selection:text-white">
       
       {/* --- HERO SECTION --- */}
       <BoutiqueHero />

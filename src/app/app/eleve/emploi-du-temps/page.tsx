@@ -84,7 +84,7 @@ export default function EmploiDuTempsPage() {
         <div className="bg-white rounded-[3rem] border border-gray-100 p-12 md:p-20 text-center shadow-xl max-w-3xl mx-auto relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#086b51]/5 rounded-full blur-3xl pointer-events-none -mr-32 -mt-32" />
           <div className="relative z-10 space-y-6 max-w-xl mx-auto">
-            <div className="w-20 h-20 bg-amber-50 text-[#c8a96e] border border-amber-100 rounded-3xl flex items-center justify-center mx-auto shadow-md">
+            <div className="w-20 h-20 bg-amber-50 text-ishes-gold border border-amber-100 rounded-3xl flex items-center justify-center mx-auto shadow-md">
               <AlertCircle className="w-10 h-10" />
             </div>
             <h3 className="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight">Affectation en cours</h3>

@@ -55,7 +55,7 @@ const formations = [
     accompagnement: "Accompagnement et supervision possibles même après la certification pour tes premiers pas d'enseignant.",
     pricing: "Devis personnalisé",
     format: "Enseignement à distance",
-    badgeColor: "bg-ishes-green/10 text-ishes-green"
+    badgeColor: "bg-ishes-blue/10 text-ishes-blue"
   },
   {
     id: "tarbya-islamya",
@@ -100,7 +100,7 @@ const formations = [
     accompagnement: "Suivi pédagogique continu, mentorat et supervision post-formation pour vous conseiller si vous rencontrez des difficultés dans vos cours.",
     pricing: "Devis personnalisé",
     format: "Enseignement à distance",
-    badgeColor: "bg-[#008953]/10 text-[#008953]"
+    badgeColor: "bg-ishes-blue/10 text-ishes-blue"
   }
 ];
  
@@ -131,11 +131,11 @@ export default function FormationEnseignantPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-green selection:text-white pb-0">
+    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-blue selection:text-white pb-0">
       {/* --- HERO SECTION --- */}
       <section className="relative pt-44 pb-32 md:pt-56 md:pb-48 overflow-hidden">
         <ArabicBackground />
-        <div className="absolute top-0 right-1/2 translate-x-1/2 w-[800px] h-[600px] bg-ishes-green/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-0 right-1/2 translate-x-1/2 w-[800px] h-[600px] bg-ishes-blue/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
         <div className="max-w-7xl mx-auto px-6 text-center">
           <div className="max-w-5xl mx-auto">
@@ -146,7 +146,7 @@ export default function FormationEnseignantPage() {
               className="text-5xl md:text-7xl lg:text-[95px] font-black text-ishes-dark leading-[0.9] tracking-tighter mb-10 uppercase"
             >
               <span className="block">Devenez</span>
-              <span className="text-ishes-green italic whitespace-nowrap">Enseignant certifié.</span>
+              <span className="text-ishes-blue italic whitespace-nowrap">Enseignant certifié.</span>
             </motion.h1>
             
             <motion.p 
@@ -187,7 +187,7 @@ export default function FormationEnseignantPage() {
           </div>
           <div className="hidden md:block w-px h-16 bg-gray-100"></div>
           <div className="flex-1 text-center">
-            <h3 className="text-4xl font-black text-ishes-green mb-2">Méthode</h3>
+            <h3 className="text-4xl font-black text-ishes-blue mb-2">Méthode</h3>
             <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">exclusive "Les Clés du Coran"</p>
           </div>
           <div className="hidden md:block w-px h-16 bg-gray-100"></div>
@@ -206,7 +206,7 @@ export default function FormationEnseignantPage() {
             {/* Hook Vocation */}
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-black text-ishes-dark mb-6 tracking-tight leading-tight">
-                Transmettre est <span className="text-ishes-green italic">plus qu'un métier</span>,<br/>c'est une vocation.
+                Transmettre est <span className="text-ishes-blue italic">plus qu'un métier</span>,<br/>c'est une vocation.
               </h2>
               <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
                 Apprendre à lire le Coran, éduquer selon les principes islamiques ou transmettre la langue arabe est l'une des missions les plus nobles qui soient.
@@ -216,7 +216,7 @@ export default function FormationEnseignantPage() {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Problème */}
               <div className="bg-[#fcfaf7] p-8 md:p-10 rounded-[2rem] border border-[#f5f0e6] shadow-sm">
-                <h3 className="text-2xl font-black text-[#8b7355] mb-4">Savoir ≠ Enseigner</h3>
+                <h3 className="text-2xl font-black text-ishes-gold mb-4">Savoir ≠ Enseigner</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-lg">
                   Avoir des connaissances est une chose. Savoir les transmettre avec pédagogie, capter l'attention de ses élèves et structurer un cours en est une autre. <strong className="text-ishes-dark">Sans une méthode claire, on risque l'échec et le découragement.</strong>
                 </p>
@@ -278,12 +278,12 @@ export default function FormationEnseignantPage() {
  
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
-                        <CreditCard className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
+                        <CreditCard className="w-6 h-6 text-ishes-blue mb-3" strokeWidth={1.5} />
                         <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Flexibilité</div>
                         <div className="text-sm font-black text-ishes-dark">{f.paymentTerms}</div>
                       </div>
                       <div className="bg-white p-5 rounded-2xl border border-gray-100/50 shadow-sm">
-                        <FileText className="w-6 h-6 text-ishes-green mb-3" strokeWidth={1.5} />
+                        <FileText className="w-6 h-6 text-ishes-blue mb-3" strokeWidth={1.5} />
                         <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Investissement</div>
                         <div className="text-sm font-black text-ishes-dark uppercase tracking-wide">{f.pricing}</div>
                       </div>
@@ -291,7 +291,7 @@ export default function FormationEnseignantPage() {
  
                     <Link 
                       href="/contact" 
-                      className="flex items-center justify-center gap-3 bg-[#008953] hover:bg-[#007044] text-white px-10 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all hover:-translate-y-1 shadow-xl shadow-[#008953]/20 group w-full"
+                      className="flex items-center justify-center gap-3 bg-ishes-blue hover:bg-[#007044] text-white px-10 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all hover:-translate-y-1 shadow-xl shadow-ishes-blue/20 group w-full"
                     >
                       Demander un devis personnalisé
                       <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -300,13 +300,13 @@ export default function FormationEnseignantPage() {
  
                   {/* Right Column (span 7) */}
                   <div className="lg:col-span-7 space-y-12 bg-gray-50/30 p-8 md:p-12 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 text-ishes-green">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 text-ishes-blue">
                       <GraduationCap className="w-32 h-32" strokeWidth={1} />
                     </div>
  
                     {f.modules && (
                       <div className="mb-12 relative z-10">
-                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Les 3 Modules de la Formation</h3>
+                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-8">Les 3 Modules de la Formation</h3>
                         <div className="space-y-6">
                           {f.modules.map((m: any, i: number) => (
                              <div key={i} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
@@ -320,11 +320,11 @@ export default function FormationEnseignantPage() {
                     
                     {f.pourQui && (
                       <div className="mb-12 relative z-10">
-                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-6">Pour Qui ?</h3>
+                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-6">Pour Qui ?</h3>
                         <div className="grid sm:grid-cols-2 gap-3">
                           {f.pourQui.map((item: string, i: number) => (
                             <div key={i} className="flex gap-3 items-center bg-white px-4 py-3 rounded-xl border border-gray-100 shadow-sm">
-                              <CheckCircle2 className="w-4 h-4 text-ishes-green shrink-0" />
+                              <CheckCircle2 className="w-4 h-4 text-ishes-blue shrink-0" />
                               <p className="text-xs font-bold text-gray-600 leading-snug">{item}</p>
                             </div>
                           ))}
@@ -334,7 +334,7 @@ export default function FormationEnseignantPage() {
 
                     {f.supports && (
                       <div className="mb-12 relative z-10 bg-green-50 p-6 rounded-2xl border border-green-100">
-                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-2">Supports Inclus</h3>
+                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-2">Supports Inclus</h3>
                         <p className="text-sm font-bold text-ishes-dark">{f.supports}</p>
                       </div>
                     )}
@@ -348,11 +348,11 @@ export default function FormationEnseignantPage() {
 
                     {f.deroulement && (
                       <div className="mb-12 relative z-10">
-                        <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>
+                        <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-8">Déroulement</h3>
                         <div className="space-y-6">
                           {f.deroulement.map((item, i) => (
                              <div key={i} className="flex gap-4 items-start">
-                               <div className="w-8 h-8 rounded-xl bg-ishes-green/10 flex items-center justify-center shrink-0 text-xs font-black text-ishes-green">{i + 1}</div>
+                               <div className="w-8 h-8 rounded-xl bg-ishes-blue/10 flex items-center justify-center shrink-0 text-xs font-black text-ishes-blue">{i + 1}</div>
                                <p className="text-[15px] font-bold text-gray-600 leading-snug">{item}</p>
                              </div>
                           ))}
@@ -361,11 +361,11 @@ export default function FormationEnseignantPage() {
                     )}
  
                     <div className="relative z-10">
-                      <h3 className="text-ishes-green font-black uppercase tracking-[0.2em] text-xs mb-8">Objectifs de la formation</h3>
+                      <h3 className="text-ishes-blue font-black uppercase tracking-[0.2em] text-xs mb-8">Objectifs de la formation</h3>
                       <div className="space-y-4">
                         {f.objectifs.map((obj, i) => (
                           <div key={i} className="flex gap-4 items-start py-4 border-b border-gray-100/50 last:border-0">
-                            <CheckCircle2 className="w-5 h-5 text-ishes-green shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-5 h-5 text-ishes-blue shrink-0 mt-0.5" />
                             <p className="text-base font-black text-ishes-dark leading-snug">{obj}</p>
                           </div>
                         ))}
@@ -380,10 +380,10 @@ export default function FormationEnseignantPage() {
       </section>
  
       {/* --- REASSURANCE --- */}
-      <section className="bg-ishes-green/5 py-24 border-y border-ishes-green/10 relative overflow-hidden">
+      <section className="bg-ishes-blue/5 py-24 border-y border-ishes-blue/10 relative overflow-hidden">
         <ArabicBackground />
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <div className="w-20 h-20 bg-ishes-green/10 text-ishes-green rounded-3xl flex items-center justify-center mx-auto mb-8">
+          <div className="w-20 h-20 bg-ishes-blue/10 text-ishes-blue rounded-3xl flex items-center justify-center mx-auto mb-8">
             <Sparkles className="w-10 h-10" />
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-ishes-dark mb-6 tracking-tight uppercase">Besoin de plus d'informations ?</h2>
@@ -391,7 +391,7 @@ export default function FormationEnseignantPage() {
             Nos conseillers pédagogiques sont à votre disposition pour vous guider dans votre projet professionnel.
           </p>
           <div className="flex justify-center">
-            <Link href="/contact" className="bg-[#008953] text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#007044] transition-all hover:shadow-xl shadow-[#008953]/20 hover:-translate-y-1">
+            <Link href="/contact" className="bg-ishes-blue text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#007044] transition-all hover:shadow-xl shadow-ishes-blue/20 hover:-translate-y-1">
               Nous contacter
             </Link>
           </div>
@@ -402,9 +402,9 @@ export default function FormationEnseignantPage() {
       <section className="py-24 bg-white border-t border-gray-100 relative z-10">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-[#008953] font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
+            <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
-              Tout savoir sur la <span className="text-[#008953] italic">certification.</span>
+              Tout savoir sur la <span className="text-ishes-blue italic">certification.</span>
             </h2>
           </div>
 
@@ -418,11 +418,11 @@ export default function FormationEnseignantPage() {
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-[#008953] transition-colors"
+                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-blue transition-colors"
                   >
                     <span>{item.q}</span>
                     <ChevronRight 
-                      className={`w-5 h-5 text-[#008953] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                      className={`w-5 h-5 text-ishes-blue transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
                     />
                   </button>
                   <div 

@@ -143,8 +143,8 @@ export default function CoursPresentielPage() {
       tagline: "Apprendre à lire le Coran et comprendre la langue arabe en partant de zéro.",
       badge: "Scolarité Annuelle (Femme)",
       duration: "1 an (Annuel)",
-      icon: <BookOpenCheck className="w-6 h-6 text-[#008953]" />,
-      colorClass: "border-[#008953]/20 hover:border-[#008953]",
+      icon: <BookOpenCheck className="w-6 h-6 text-ishes-blue" />,
+      colorClass: "border-ishes-blue/20 hover:border-ishes-blue",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "samedi",
       infoUrl: "/fr/cours-presentiel-femme-debutante",
@@ -172,8 +172,8 @@ export default function CoursPresentielPage() {
       tagline: "Vaincre la démotivation et progresser 3 fois plus rapidement.",
       badge: "Intensif Trimestriel",
       duration: "3 Mois (Accéléré)",
-      icon: <Zap className="w-6 h-6 text-[#c8a96e]" />,
-      colorClass: "border-amber-200 hover:border-[#c8a96e]",
+      icon: <Zap className="w-6 h-6 text-ishes-gold" />,
+      colorClass: "border-amber-200 hover:border-ishes-gold",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "mardi-vendredi",
       infoUrl: "/fr/cours-tajwid-intensif",
@@ -201,8 +201,8 @@ export default function CoursPresentielPage() {
       tagline: "Transformer la théorie en une récitation naturelle, fluide et maîtrisée.",
       badge: "Suivi Individuel Tête-à-Tête",
       duration: "À la carte",
-      icon: <Sparkles className="w-6 h-6 text-[#008953]" />,
-      colorClass: "border-[#008953]/20 hover:border-[#008953]",
+      icon: <Sparkles className="w-6 h-6 text-ishes-blue" />,
+      colorClass: "border-ishes-blue/20 hover:border-ishes-blue",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "mercredi-dimanche",
       infoUrl: "/fr/cours-lecture-tajwid",
@@ -231,8 +231,8 @@ export default function CoursPresentielPage() {
       tagline: "Construire une relation quotidienne et stable avec le Coran.",
       badge: "Suivi Individuel Tête-à-Tête",
       duration: "Annuel / À la carte",
-      icon: <Award className="w-6 h-6 text-[#c8a96e]" />,
-      colorClass: "border-amber-200 hover:border-[#c8a96e]",
+      icon: <Award className="w-6 h-6 text-ishes-gold" />,
+      colorClass: "border-amber-200 hover:border-ishes-gold",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "mercredi-dimanche-hifdh",
       infoUrl: "/fr/cours-memoriser-coran",
@@ -261,8 +261,8 @@ export default function CoursPresentielPage() {
       tagline: "Découvrir sa vie pour l'aimer, le comprendre et le prendre comme modèle.",
       badge: "Storytelling Spirituel",
       duration: "Cursus Vivant",
-      icon: <Compass className="w-6 h-6 text-[#008953]" />,
-      colorClass: "border-[#008953]/20 hover:border-[#008953]",
+      icon: <Compass className="w-6 h-6 text-ishes-blue" />,
+      colorClass: "border-ishes-blue/20 hover:border-ishes-blue",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "samedi-sirah",
       infoUrl: "/fr/cours-as-sirah",
@@ -289,8 +289,8 @@ export default function CoursPresentielPage() {
       title: "🧕 Arabe & Tajwid — Femme Intermédiaire",
       badge: "Scolarité Annuelle (Femme)",
       duration: "1 an (Annuel)",
-      icon: <BookOpen className="w-6 h-6 text-[#c8a96e]" />,
-      colorClass: "border-amber-200 hover:border-[#c8a96e]",
+      icon: <BookOpen className="w-6 h-6 text-ishes-gold" />,
+      colorClass: "border-amber-200 hover:border-ishes-gold",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "dimanche",
       infoUrl: "/fr/cours-presentiel-femme-intermediaire",
@@ -316,7 +316,7 @@ export default function CoursPresentielPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white font-sans text-[#101828] selection:bg-[#008953] selection:text-white pb-24">
+    <div className="min-h-screen bg-white font-sans text-[#101828] selection:bg-ishes-blue selection:text-white pb-24">
       {/* Google SEO JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -332,21 +332,21 @@ export default function CoursPresentielPage() {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
             <div className="flex-1 space-y-8">
               <nav className="flex items-center justify-center lg:justify-start gap-2 text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
-                <Link href="/" className="hover:text-[#008953] transition-colors">Accueil</Link>
+                <Link href="/" className="hover:text-ishes-blue transition-colors">Accueil</Link>
                 <ChevronRight className="w-3 h-3 text-gray-300" />
-                <span className="text-[#008953]">Cours en Présentiel</span>
+                <span className="text-ishes-blue">Cours en Présentiel</span>
               </nav>
               
               <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-amber-200 rounded-full shadow-sm mb-2">
-                <MapPin className="w-4 h-4 text-[#c8a96e]" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#c8a96e]">
+                <MapPin className="w-4 h-4 text-ishes-gold" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-ishes-gold">
                   Toulouse & Classes en présentiel
                 </span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-[#101828] leading-[1.05] tracking-tight">
                 Vivez l'excellence <br />
-                <span className="text-[#008953] italic">de l'apprentissage.</span>
+                <span className="text-ishes-blue italic">de l'apprentissage.</span>
               </h1>
 
               <p className="text-lg md:text-xl text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
@@ -356,7 +356,7 @@ export default function CoursPresentielPage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <a 
                   href="#catalog" 
-                  className="w-full sm:w-auto text-center bg-[#008953] hover:bg-[#007044] text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-[#008953]/20 hover:-translate-y-0.5 active:scale-95"
+                  className="w-full sm:w-auto text-center bg-ishes-blue hover:bg-[#007044] text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-0.5 active:scale-95"
                 >
                   EXPLORER NOS 6 FORMATIONS
                 </a>
@@ -370,11 +370,11 @@ export default function CoursPresentielPage() {
             </div>
 
             <div className="flex-1 w-full max-w-[500px] aspect-square relative lg:block">
-               <div className="absolute inset-0 bg-[#c8a96e]/5 rounded-[3rem] rotate-3 -z-10" />
+               <div className="absolute inset-0 bg-ishes-gold/5 rounded-[3rem] rotate-3 -z-10" />
                <div className="w-full h-full bg-white rounded-[3rem] shadow-2xl border border-gray-100 p-10 flex flex-col justify-center items-center gap-8 relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-full h-2 bg-[#c8a96e]" />
-                  <div className="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center text-[#c8a96e]">
-                     <Building2 className="w-10 h-10 text-[#c8a96e] group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute top-0 left-0 w-full h-2 bg-ishes-gold" />
+                  <div className="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center text-ishes-gold">
+                     <Building2 className="w-10 h-10 text-ishes-gold group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div className="text-center space-y-4 px-4">
                      <h3 className="text-2xl font-black text-[#101828] italic">"La proximité est la clé de la transmission du cœur"</h3>
@@ -392,11 +392,11 @@ export default function CoursPresentielPage() {
       <section className="py-20 bg-[#FAFAFA] border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#008953] bg-green-50 px-4 py-2 rounded-full border border-green-100">
+            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-ishes-blue bg-green-50 px-4 py-2 rounded-full border border-green-100">
               💡 NOTRE ENGAGEMENT QUALITÉ
             </span>
             <h2 className="text-3xl md:text-5xl font-black text-[#101828] mt-6 tracking-tight">
-              Pourquoi étudier à <span className="text-[#008953]">l'Institut ISHES</span> ?
+              Pourquoi étudier à <span className="text-ishes-blue">l'Institut ISHES</span> ?
             </h2>
             <p className="text-gray-500 font-medium mt-4 text-base">
               Nous combinons rigueur académique, outils modernes et attention individuelle pour vous mener à la réussite.
@@ -427,7 +427,7 @@ export default function CoursPresentielPage() {
               }
             ].map((benefit, i) => (
               <div key={i} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-green-50 text-[#008953] rounded-xl flex items-center justify-center mb-6 border border-green-100">
+                <div className="w-12 h-12 bg-green-50 text-ishes-blue rounded-xl flex items-center justify-center mb-6 border border-green-100">
                   {benefit.icon}
                 </div>
                 <h3 className="text-lg font-black text-[#101828] mb-3">{benefit.title}</h3>
@@ -442,11 +442,11 @@ export default function CoursPresentielPage() {
       <section id="catalog" className="py-24 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#c8a96e] bg-amber-50 px-4 py-2 rounded-full border border-amber-100">
+            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-ishes-gold bg-amber-50 px-4 py-2 rounded-full border border-amber-100">
               📚 CATALOGUE DES PROGRAMMES
             </span>
             <h2 className="text-4xl md:text-6xl font-black text-[#101828] mt-6 tracking-tight">
-              Choisissez votre <span className="text-[#008953]">cheminement</span>
+              Choisissez votre <span className="text-ishes-blue">cheminement</span>
             </h2>
             <p className="text-gray-500 font-medium mt-4 text-lg">
               Six programmes conçus pour répondre précisément à vos besoins de lecture, de compréhension et de spiritualité.
@@ -490,7 +490,7 @@ export default function CoursPresentielPage() {
 
                   {/* Tagline & Hook */}
                   <div className="space-y-3">
-                    <h4 className="text-sm font-black text-[#c8a96e] leading-snug">
+                    <h4 className="text-sm font-black text-ishes-gold leading-snug">
                       {course.tagline}
                     </h4>
                     <p className="text-gray-500 font-medium text-xs leading-relaxed line-clamp-4">
@@ -506,7 +506,7 @@ export default function CoursPresentielPage() {
                     <ul className="space-y-2.5">
                       {course.outcomes.map((outcome, idx) => (
                         <li key={idx} className="flex items-start gap-2.5">
-                          <Check className="w-3.5 h-3.5 text-[#008953] mt-0.5 flex-shrink-0" />
+                          <Check className="w-3.5 h-3.5 text-ishes-blue mt-0.5 flex-shrink-0" />
                           <span className="text-xs font-bold text-gray-700 leading-snug">{outcome}</span>
                         </li>
                       ))}
@@ -542,7 +542,7 @@ export default function CoursPresentielPage() {
                   <div className="grid grid-cols-2 gap-3">
                     {course.practical.map((prac, idx) => (
                       <div key={idx} className="flex items-center gap-1.5 text-[11px] font-bold text-gray-500">
-                        <span className="w-1.5 h-1.5 bg-[#c8a96e] rounded-full flex-shrink-0"></span>
+                        <span className="w-1.5 h-1.5 bg-ishes-gold rounded-full flex-shrink-0"></span>
                         <span className="truncate" title={prac}>{prac}</span>
                       </div>
                     ))}
@@ -570,7 +570,7 @@ export default function CoursPresentielPage() {
                       )}
                       <Link 
                         href={`/inscription?plan=presentiel-global&slot=${course.slot}`}
-                        className="inline-flex items-center gap-2 bg-[#008953] hover:bg-[#007044] text-white px-5 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-[#008953]/10 hover:shadow-lg active:scale-95"
+                        className="inline-flex items-center gap-2 bg-ishes-blue hover:bg-[#007044] text-white px-5 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-ishes-blue/10 hover:shadow-lg active:scale-95"
                       >
                         <span>S'inscrire</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -586,7 +586,7 @@ export default function CoursPresentielPage() {
 
       {/* ─── INFORMATION NOTE & GENERAL REGISTRATION ─── */}
       <section className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="bg-gradient-to-r from-[#008953] to-[#005e38] text-white rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div className="bg-gradient-to-r from-ishes-blue to-[#005e38] text-white rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12">
           {/* Decorative background vectors */}
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-3xl -mr-48 -mt-48 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-black/10 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
@@ -610,7 +610,7 @@ export default function CoursPresentielPage() {
           <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10 shrink-0">
             <Link 
               href="/inscription?plan=presentiel-global" 
-              className="w-full sm:w-auto text-center bg-white hover:bg-gray-50 text-[#008953] px-10 py-5 rounded-2xl text-[14px] font-black tracking-wider transition-all shadow-xl hover:-translate-y-0.5 active:scale-95"
+              className="w-full sm:w-auto text-center bg-white hover:bg-gray-50 text-ishes-blue px-10 py-5 rounded-2xl text-[14px] font-black tracking-wider transition-all shadow-xl hover:-translate-y-0.5 active:scale-95"
             >
               RÉSERVER MA PLACE (150 €)
             </Link>

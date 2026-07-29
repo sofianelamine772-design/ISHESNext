@@ -520,7 +520,7 @@ function EtudiantsContent() {
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Base Étudiants</h1>
-            <span className="hidden sm:inline-block px-3 py-1 bg-ishes-green/5 text-ishes-green text-[10px] font-black italic rounded-full border border-ishes-green/10">
+            <span className="hidden sm:inline-block px-3 py-1 bg-ishes-blue/5 text-ishes-blue text-[10px] font-black italic rounded-full border border-ishes-blue/10">
               {students.length} INSCRITS
             </span>
           </div>
@@ -537,7 +537,7 @@ function EtudiantsContent() {
             <UserButton
               appearance={{
                 elements: {
-                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-green p-[2px]"
+                  userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]"
                 }
               }}
             />
@@ -548,7 +548,7 @@ function EtudiantsContent() {
         <div className="flex-1 overflow-hidden flex relative">
           {loading && (
             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
-              <Loader2 className="w-10 h-10 text-ishes-green animate-spin mb-4" />
+              <Loader2 className="w-10 h-10 text-ishes-blue animate-spin mb-4" />
               <p className="ishes-label animate-pulse">Chargement...</p>
             </div>
           )}
@@ -566,14 +566,14 @@ function EtudiantsContent() {
                   value={searchQuery || ""}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher..."
-                  className="w-full bg-gray-50 border border-gray-50 rounded-full pl-12 pr-6 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-green/5 shadow-sm transition-all font-medium"
+                  className="w-full bg-gray-50 border border-gray-50 rounded-full pl-12 pr-6 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 shadow-sm transition-all font-medium"
                 />
               </div>
               <div className="mt-3">
                 <select
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-green/50 focus:border-ishes-green font-semibold text-gray-700"
+                  className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ishes-blue/50 focus:border-ishes-blue font-semibold text-gray-700"
                 >
                   <option value={currentAcademicYear}>Année Scolaire {currentAcademicYear}</option>
                   <option value={nextAcademicYear}>Année Scolaire {nextAcademicYear}</option>
@@ -603,7 +603,7 @@ function EtudiantsContent() {
                           <div className="flex items-center justify-between mb-0.5">
                             <h3 className="ishes-heading text-sm truncate text-ishes-dark">{student.name}</h3>
                             {(student.status === "en_attente") && <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/20" />}
-                            {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-green shadow-lg shadow-ishes-green/20" />}
+                            {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-blue shadow-lg shadow-ishes-blue/20" />}
                           </div>
                           <p className="text-[10px] font-medium tracking-wider truncate mb-1 opacity-65 uppercase text-ishes-dark">{student.email}</p>
                           <div className="flex items-center gap-2">
@@ -654,7 +654,7 @@ function EtudiantsContent() {
 
                 {/* Profile Cover & Header */}
                 <div className="h-24 bg-white border-b border-gray-50 relative rounded-t-[2.5rem] overflow-hidden shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-r from-ishes-green/10 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-ishes-blue/10 to-transparent"></div>
                 </div>
 
                 <div className="px-6 md:px-8 pb-8 flex-1">
@@ -669,7 +669,7 @@ function EtudiantsContent() {
                       <div className="pb-1 md:pb-2 min-w-0 flex-1">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
                         <h2 className="text-2xl md:text-4xl font-black text-ishes-dark tracking-tight leading-snug">{selectedStudent.name}</h2>
-                        <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-green mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
+                        <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-blue mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>
                     <div className="flex gap-2 md:gap-3 pb-1 md:pb-2 shrink-0 flex-wrap justify-end">
@@ -694,8 +694,8 @@ function EtudiantsContent() {
                     {/* Contact Info Card */}
                     <div className="flex flex-col">
                       <div className="flex items-center gap-3 mb-6 md:mb-8">
-                        <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                        <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-green">Coordonnées</h3>
+                        <div className="w-1 h-4 bg-ishes-blue rounded-full"></div>
+                        <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-blue">Coordonnées</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">
                         {familyMembers.length > 0 && (
@@ -721,7 +721,7 @@ function EtudiantsContent() {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green shrink-0 ml-2" 
+                            className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue shrink-0 ml-2" 
                             onClick={openEditModal}
                           >
                             MODIFIER
@@ -737,7 +737,7 @@ function EtudiantsContent() {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green shrink-0 ml-2" 
+                            className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue shrink-0 ml-2" 
                             onClick={openEditModal}
                           >
                             MODIFIER
@@ -763,7 +763,7 @@ function EtudiantsContent() {
                             {selectedStudent.classId ? (
                               <Link
                                 href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
-                                className="ishes-heading text-base md:text-lg text-ishes-green hover:underline flex items-center gap-1.5 font-bold group/link"
+                                className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
                               >
                                 {selectedStudent.enrolledClass}
                                 <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
@@ -772,7 +772,7 @@ function EtudiantsContent() {
                               <span className="ishes-heading text-base md:text-lg text-gray-400">{selectedStudent.enrolledClass}</span>
                             )}
                           </div>
-                          <Button variant="ghost" size="sm" className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-green/5 text-ishes-green" onClick={openScolariteModal}>MODIFIER</Button>
+                          <Button variant="ghost" size="sm" className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue" onClick={openScolariteModal}>MODIFIER</Button>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -782,7 +782,7 @@ function EtudiantsContent() {
                           </div>
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Statut Financier</span>
-                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-green' : 'text-red-500'}`}>
+                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-blue' : 'text-red-500'}`}>
                               {selectedStudent.paymentStatus === 'a_jour' ? 'À JOUR' : 'IMPAYÉ'}
                             </span>
                           </div>
@@ -825,8 +825,8 @@ function EtudiantsContent() {
                   {/* Facturation & Règlements */}
                   <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-100">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-green flex items-center gap-2">
+                      <div className="w-1 h-4 bg-ishes-blue rounded-full"></div>
+                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-blue flex items-center gap-2">
                         <CreditCard className="w-4 h-4" /> Facturation & Historique des règlements
                       </h3>
                     </div>
@@ -837,9 +837,9 @@ function EtudiantsContent() {
                           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Coût Total</span>
                           <span className="text-xl font-black text-ishes-dark">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalExpected)}</span>
                         </div>
-                        <div className="bg-ishes-green/[0.05] border border-ishes-green/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
-                          <span className="text-[10px] font-black text-ishes-green uppercase tracking-widest mb-1">Déjà Payé</span>
-                          <span className="text-xl font-black text-ishes-green">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalPaid)}</span>
+                        <div className="bg-ishes-blue/[0.05] border border-ishes-blue/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                          <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest mb-1">Déjà Payé</span>
+                          <span className="text-xl font-black text-ishes-blue">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalPaid)}</span>
                         </div>
                         <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.resteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-100'}`}>
                           <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.resteAPayer > 0 ? 'text-red-500' : 'text-gray-400'}`}>Reste à Payer</span>
@@ -858,7 +858,7 @@ function EtudiantsContent() {
                             <select
                               value={settleMethod}
                               onChange={(e) => setSettleMethod(e.target.value)}
-                              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                             >
                               <option value="liquide">Espèces / Liquide</option>
                               <option value="virement">Virement bancaire</option>
@@ -873,7 +873,7 @@ function EtudiantsContent() {
                               value={settleAmount}
                               onChange={(e) => setSettleAmount(e.target.value)}
                               max={billingData.resteAPayer}
-                              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                             />
                           </div>
                           <Button 
@@ -890,7 +890,7 @@ function EtudiantsContent() {
 
                     {loadingPayments ? (
                       <div className="flex items-center justify-center py-8">
-                        <Loader2 className="w-6 h-6 text-ishes-green animate-spin mr-2" />
+                        <Loader2 className="w-6 h-6 text-ishes-blue animate-spin mr-2" />
                         <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Chargement des paiements...</span>
                       </div>
                     ) : payments.length > 0 ? (
@@ -909,14 +909,14 @@ function EtudiantsContent() {
                           const isSucceeded = payment.status === 'succeeded' || payment.status === 'paid' || payment.status === 'paye';
                           return (
                             <div key={payment.id} className={`border rounded-2xl p-5 flex flex-col gap-3 ${isSucceeded
-                              ? 'bg-ishes-green/[0.03] border-ishes-green/15'
+                              ? 'bg-ishes-blue/[0.03] border-ishes-blue/15'
                               : 'bg-red-50 border-red-100'
                               }`}>
                               {/* En-tête */}
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex items-start gap-3">
                                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${isSucceeded
-                                    ? 'bg-ishes-green/10 text-ishes-green border border-ishes-green/10'
+                                    ? 'bg-ishes-blue/10 text-ishes-blue border border-ishes-blue/10'
                                     : 'bg-red-50 text-red-500 border border-red-100'
                                     }`}>
                                     <CreditCard className="w-5 h-5" />
@@ -946,7 +946,7 @@ function EtudiantsContent() {
                                 <div className="text-right shrink-0 flex flex-col items-end gap-1">
                                   <div className="text-sm font-black text-ishes-dark">{amountFormatted}</div>
                                   <span className={`inline-block px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider ${isSucceeded
-                                    ? 'bg-ishes-green/10 text-ishes-green'
+                                    ? 'bg-ishes-blue/10 text-ishes-blue'
                                     : 'bg-red-100 text-red-600'
                                     }`}>
                                     {isSucceeded ? 'Payé' : 'Échoué'}
@@ -980,7 +980,7 @@ function EtudiantsContent() {
                                           }`}
                                       >
                                         <div className="flex items-center gap-2">
-                                          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[8px] font-black ${isResilie ? 'bg-red-100 text-red-600' : 'bg-ishes-green/10 text-ishes-green'
+                                          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[8px] font-black ${isResilie ? 'bg-red-100 text-red-600' : 'bg-ishes-blue/10 text-ishes-blue'
                                             }`}>
                                             {member.firstName?.[0]}{member.lastName?.[0]}
                                           </div>
@@ -996,7 +996,7 @@ function EtudiantsContent() {
                                         <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg ${isResilie
                                           ? 'bg-red-500 text-white'
                                           : isPaid
-                                            ? 'bg-ishes-green text-white'
+                                            ? 'bg-ishes-blue text-white'
                                             : 'bg-yellow-400 text-white'
                                           }`}>
                                           {isResilie ? 'Résilié' : isPaid ? 'Réglé' : 'En attente'}
@@ -1074,8 +1074,8 @@ function EtudiantsContent() {
               {/* Personal Info */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Informations Personnelles</h4>
+                  <div className="w-1 h-4 bg-ishes-blue rounded-full"></div>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue">Informations Personnelles</h4>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -1085,7 +1085,7 @@ function EtudiantsContent() {
                       placeholder="Ex: Omar"
                       value={formData.first_name}
                       onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                   <div className="space-y-2">
@@ -1095,7 +1095,7 @@ function EtudiantsContent() {
                       placeholder="Ex: Diallo"
                       value={formData.last_name}
                       onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 </div>
@@ -1107,7 +1107,7 @@ function EtudiantsContent() {
                       placeholder="omar@exemple.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                   <div className="space-y-2">
@@ -1117,7 +1117,7 @@ function EtudiantsContent() {
                       placeholder="06 XX XX XX XX"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 </div>
@@ -1133,15 +1133,15 @@ function EtudiantsContent() {
                   placeholder="123 Rue de la Paix, Paris"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                 />
               </div>
 
               {/* Règlement Manuel Section */}
               <div className="space-y-6 pt-4 border-t border-gray-50">
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-4 bg-ishes-green rounded-full"></div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-green">Statut du Règlement & Paiement</h4>
+                  <div className="w-1 h-4 bg-ishes-blue rounded-full"></div>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue">Statut du Règlement & Paiement</h4>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -1150,7 +1150,7 @@ function EtudiantsContent() {
                     <select
                       value={formData.payment_status}
                       onChange={(e) => setFormData({ ...formData, payment_status: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold appearance-none"
                     >
                       <option value="en_attente">En attente de paiement</option>
                       <option value="a_jour">Règlement Effectué (Payé)</option>
@@ -1163,7 +1163,7 @@ function EtudiantsContent() {
                       <select
                         value={formData.payment_method}
                         onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold appearance-none"
                       >
                         <option value="virement">🏦 Virement bancaire</option>
                         <option value="liquide">💵 Espèces / Liquide</option>
@@ -1180,7 +1180,7 @@ function EtudiantsContent() {
                       placeholder="Ex: 150"
                       value={formData.amount_paid}
                       onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 )}
@@ -1220,7 +1220,7 @@ function EtudiantsContent() {
                       type="text"
                       value={formData.first_name}
                       onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                   <div className="space-y-2">
@@ -1229,7 +1229,7 @@ function EtudiantsContent() {
                       type="text"
                       value={formData.last_name}
                       onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 </div>
@@ -1240,7 +1240,7 @@ function EtudiantsContent() {
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                   <div className="space-y-2">
@@ -1249,7 +1249,7 @@ function EtudiantsContent() {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 </div>
@@ -1259,7 +1259,7 @@ function EtudiantsContent() {
 
               {/* FACTURATION / PAIEMENT */}
               <div className="space-y-6 pt-4 border-t border-gray-50">
-                <h4 className="text-[10px] font-black tracking-widest uppercase text-ishes-green">Facturation & Paiement</h4>
+                <h4 className="text-[10px] font-black tracking-widest uppercase text-ishes-blue">Facturation & Paiement</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Statut du paiement</label>
@@ -1267,7 +1267,7 @@ function EtudiantsContent() {
                       value={formData.payment_status}
                       onChange={(e) => setFormData({ ...formData, payment_status: e.target.value })}
                       disabled={(formData as any)._original_payment_status === 'a_jour'}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none disabled:opacity-50"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold appearance-none disabled:opacity-50"
                     >
                       <option value="en_attente">En attente de paiement</option>
                       <option value="a_jour">Règlement Effectué (Payé)</option>
@@ -1280,7 +1280,7 @@ function EtudiantsContent() {
                       <select
                         value={formData.payment_method}
                         onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold appearance-none"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold appearance-none"
                       >
                         <option value="virement">🏦 Virement bancaire</option>
                         <option value="liquide">💵 Espèces / Liquide</option>
@@ -1297,7 +1297,7 @@ function EtudiantsContent() {
                       placeholder="Ex: 150"
                       value={formData.amount_paid}
                       onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-sm font-bold"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
                     />
                   </div>
                 )}
@@ -1321,7 +1321,7 @@ function EtudiantsContent() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-ishes-green/10 rounded-xl flex items-center justify-center text-ishes-green">
+                  <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <GraduationCap className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-black text-ishes-dark tracking-tight">Modifier Scolarité</h3>
@@ -1342,7 +1342,7 @@ function EtudiantsContent() {
                     placeholder="Rechercher une classe ou formation..."
                     value={classSearchQuery}
                     onChange={(e) => setClassSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-green transition-all text-xs font-bold"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-xs font-bold"
                   />
                 </div>
 
@@ -1356,13 +1356,13 @@ function EtudiantsContent() {
                       <button
                         key={c.id}
                         onClick={() => setTargetClassId(c.id)}
-                        className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${targetClassId === c.id ? 'border-ishes-green bg-ishes-green/5 shadow-lg shadow-ishes-green/10' : 'border-gray-100 hover:border-gray-200'}`}
+                        className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${targetClassId === c.id ? 'border-ishes-blue bg-ishes-blue/5 shadow-lg shadow-ishes-blue/10' : 'border-gray-100 hover:border-gray-200'}`}
                       >
                         <div>
-                          <div className={`text-xs font-black uppercase tracking-tight ${targetClassId === c.id ? 'text-ishes-green' : 'text-ishes-dark'}`}>{c.name}</div>
+                          <div className={`text-xs font-black uppercase tracking-tight ${targetClassId === c.id ? 'text-ishes-blue' : 'text-ishes-dark'}`}>{c.name}</div>
                           <div className="text-[10px] text-gray-400 font-medium">{c.formationTitle}</div>
                         </div>
-                        {targetClassId === c.id && <CheckCircle2 className="w-4 h-4 text-ishes-green" />}
+                        {targetClassId === c.id && <CheckCircle2 className="w-4 h-4 text-ishes-blue" />}
                       </button>
                     ))}
                 </div>
@@ -1580,7 +1580,7 @@ export default function EtudiantsPage() {
   return (
     <Suspense fallback={
       <div className="h-screen w-full bg-white flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-ishes-green animate-spin" />
+        <Loader2 className="w-10 h-10 text-ishes-blue animate-spin" />
       </div>
     }>
       <EtudiantsContent />

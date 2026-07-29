@@ -78,11 +78,11 @@ export default function FormationTarbyaPage() {
       <section className="py-24 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#008953] bg-green-50 px-4 py-2 rounded-full border border-green-100">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue bg-green-50 px-4 py-2 rounded-full border border-green-100">
               ✨ Un Enseignement Vivant et Profond
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-[#101828] mt-6 tracking-tight">
-              Ce que les enfants <span className="text-[#008953]">découvrent</span>
+              Ce que les enfants <span className="text-ishes-blue">découvrent</span>
             </h2>
             <p className="text-gray-500 font-medium mt-4 text-lg">
               À travers des histoires, des échanges, des mises en scène pédagogiques et un enseignement adapté à leur âge.
@@ -92,7 +92,7 @@ export default function FormationTarbyaPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Piliers */}
             <div className="bg-[#FAFAFA] p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-[#008953] group-hover:bg-[#008953] group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-ishes-blue group-hover:bg-ishes-blue group-hover:text-white transition-colors duration-300">
                 <Compass className="w-6 h-6" />
               </div>
               <h4 className="font-black text-xl mb-3 text-[#101828]">Islam & Foi</h4>
@@ -103,7 +103,7 @@ export default function FormationTarbyaPage() {
 
             {/* Calendrier */}
             <div className="bg-[#FAFAFA] p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-[#008953] group-hover:bg-[#008953] group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-ishes-blue group-hover:bg-ishes-blue group-hover:text-white transition-colors duration-300">
                 <Clock className="w-6 h-6" />
               </div>
               <h4 className="font-black text-xl mb-3 text-[#101828]">Le Calendrier Musulman</h4>
@@ -114,7 +114,7 @@ export default function FormationTarbyaPage() {
 
             {/* Nobles caractères */}
             <div className="bg-[#FAFAFA] p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-[#008953] group-hover:bg-[#008953] group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-ishes-blue group-hover:bg-ishes-blue group-hover:text-white transition-colors duration-300">
                 <Smile className="w-6 h-6" />
               </div>
               <h4 className="font-black text-xl mb-3 text-[#101828]">Les Nobles Caractères</h4>
@@ -125,7 +125,7 @@ export default function FormationTarbyaPage() {
 
             {/* Hadiths */}
             <div className="bg-[#FAFAFA] p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-[#008953] group-hover:bg-[#008953] group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-ishes-blue group-hover:bg-ishes-blue group-hover:text-white transition-colors duration-300">
                 <MessageSquare className="w-6 h-6" />
               </div>
               <h4 className="font-black text-xl mb-3 text-[#101828]">Hadiths & Comportement</h4>
@@ -136,7 +136,7 @@ export default function FormationTarbyaPage() {
 
             {/* Recits des Prophetes */}
             <div className="bg-[#FAFAFA] p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-[#008953] group-hover:bg-[#008953] group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-ishes-blue group-hover:bg-ishes-blue group-hover:text-white transition-colors duration-300">
                 <BookOpen className="w-6 h-6" />
               </div>
               <h4 className="font-black text-xl mb-3 text-[#101828]">Récits des Prophètes</h4>
@@ -147,7 +147,7 @@ export default function FormationTarbyaPage() {
 
             {/* Lumiere de la foi */}
             <div className="bg-[#FAFAFA] p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-[#008953] group-hover:bg-[#008953] group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm text-ishes-blue group-hover:bg-ishes-blue group-hover:text-white transition-colors duration-300">
                 <Sparkles className="w-6 h-6" />
               </div>
               <h4 className="font-black text-xl mb-3 text-[#101828]">Une Lumière de Sens</h4>
@@ -170,11 +170,11 @@ export default function FormationTarbyaPage() {
       <section className="py-24 bg-[#FAFAFA] border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#008953] bg-green-50 px-4 py-2 rounded-full border border-green-100">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue bg-green-50 px-4 py-2 rounded-full border border-green-100">
               💛 Objectifs du Cœur
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-[#101828] mt-6 tracking-tight">
-              Apprendre à <span className="text-[#008953]">aimer</span> ALLAH
+              Apprendre à <span className="text-ishes-blue">aimer</span> ALLAH
             </h2>
             <p className="text-gray-500 font-medium mt-4 text-lg">
               Dans ce cours, l’enfant apprend progressivement à connecter son cœur avec Son Créateur.
@@ -184,7 +184,7 @@ export default function FormationTarbyaPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Connaitre son createur */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-start gap-4 shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-50 text-[#008953] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center shrink-0 mt-1">
                 <Check className="w-4 h-4 font-black" />
               </div>
               <div>
@@ -195,7 +195,7 @@ export default function FormationTarbyaPage() {
 
             {/* Aimer Allah & Prophete */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-start gap-4 shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-50 text-[#008953] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center shrink-0 mt-1">
                 <Heart className="w-4 h-4 font-black" />
               </div>
               <div>
@@ -206,7 +206,7 @@ export default function FormationTarbyaPage() {
 
             {/* Respecter ses parents */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-start gap-4 shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-50 text-[#008953] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center shrink-0 mt-1">
                 <Smile className="w-4 h-4 font-black" />
               </div>
               <div>
@@ -217,7 +217,7 @@ export default function FormationTarbyaPage() {
 
             {/* Purifier son comportement */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-start gap-4 shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-50 text-[#008953] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center shrink-0 mt-1">
                 <ShieldCheck className="w-4 h-4 font-black" />
               </div>
               <div>
@@ -228,7 +228,7 @@ export default function FormationTarbyaPage() {
 
             {/* Satisfaire Allah */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-start gap-4 shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-50 text-[#008953] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center shrink-0 mt-1">
                 <Sparkles className="w-4 h-4 font-black" />
               </div>
               <div>
@@ -239,7 +239,7 @@ export default function FormationTarbyaPage() {
 
             {/* Eveil du coeur */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-start gap-4 shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-50 text-[#008953] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center shrink-0 mt-1">
                 <GraduationCap className="w-4 h-4 font-black" />
               </div>
               <div>
@@ -250,7 +250,7 @@ export default function FormationTarbyaPage() {
           </div>
 
           {/* Golden Quote */}
-          <div className="mt-12 bg-gradient-to-br from-[#c8a96e]/5 to-[#c8a96e]/15 border border-[#c8a96e]/30 rounded-2xl p-6 text-center max-w-2xl mx-auto shadow-sm">
+          <div className="mt-12 bg-gradient-to-br from-ishes-gold/5 to-ishes-gold/15 border border-ishes-gold/30 rounded-2xl p-6 text-center max-w-2xl mx-auto shadow-sm">
             <p className="text-sm md:text-base font-black text-[#8f6d33] italic leading-relaxed">
               "Car une foi solide ne se construit pas uniquement par des informations… mais par l’éveil du cœur."
             </p>
@@ -262,11 +262,11 @@ export default function FormationTarbyaPage() {
       <section className="py-24 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-5xl mx-auto bg-gray-50 rounded-[3rem] border border-gray-100 p-8 md:p-16 flex flex-col lg:flex-row items-center gap-12">
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-green-50 text-[#008953] rounded-full flex items-center justify-center shrink-0 border-4 border-white shadow-xl">
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-green-50 text-ishes-blue rounded-full flex items-center justify-center shrink-0 border-4 border-white shadow-xl">
               <Award className="w-12 h-12 md:w-16 md:h-16" />
             </div>
             <div className="space-y-6 flex-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#008953] bg-white border border-gray-100 px-3 py-1.5 rounded-full shadow-sm">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue bg-white border border-gray-100 px-3 py-1.5 rounded-full shadow-sm">
                 🎓 Profil Enseignante
               </span>
               <h3 className="text-3xl font-black text-[#101828]">Une enseignante formée & expérimentée</h3>
@@ -275,13 +275,13 @@ export default function FormationTarbyaPage() {
               </p>
               <div className="grid sm:grid-cols-3 gap-4 text-xs font-black uppercase tracking-wider text-gray-700">
                 <div className="flex items-center gap-2 p-3 bg-white rounded-xl border border-gray-100">
-                  <CheckCircle2 className="w-4 h-4 text-[#008953]" /> Pédagogie active
+                  <CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Pédagogie active
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-white rounded-xl border border-gray-100">
-                  <CheckCircle2 className="w-4 h-4 text-[#008953]" /> Bienveillance
+                  <CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Bienveillance
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-white rounded-xl border border-gray-100">
-                  <CheckCircle2 className="w-4 h-4 text-[#008953]" /> Transmission adaptée
+                  <CheckCircle2 className="w-4 h-4 text-ishes-blue" /> Transmission adaptée
                 </div>
               </div>
             </div>
@@ -293,11 +293,11 @@ export default function FormationTarbyaPage() {
       <section className="py-24 bg-[#FAFAFA] border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#008953] bg-green-50 px-4 py-2 rounded-full border border-green-100">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue bg-green-50 px-4 py-2 rounded-full border border-green-100">
               🎭 Méthodologie active
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-[#101828] mt-6 tracking-tight">
-              Une pédagogie adaptée <br /> aux <span className="text-[#008953]">enfants</span>
+              Une pédagogie adaptée <br /> aux <span className="text-ishes-blue">enfants</span>
             </h2>
             <p className="text-gray-500 font-medium mt-4 text-lg">
               Chaque séance cherche à faire aimer la religion et à donner envie de progresser sereinement.
@@ -348,7 +348,7 @@ export default function FormationTarbyaPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
             <div className="space-y-6">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#008953] bg-green-50 px-4 py-2 rounded-full border border-green-100">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue bg-green-50 px-4 py-2 rounded-full border border-green-100">
                 👧 🧒 Pour Qui ?
               </span>
               <h3 className="text-3xl md:text-4xl font-black text-[#101828]">Un enseignement adapté selon les tranches d'âge</h3>
@@ -381,18 +381,18 @@ export default function FormationTarbyaPage() {
       <section className="py-24 bg-[#FAFAFA] border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#008953] bg-green-50 px-4 py-2 rounded-full border border-green-100">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue bg-green-50 px-4 py-2 rounded-full border border-green-100">
               💻 Déroulement Logistique
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-[#101828] mt-6 tracking-tight">
-              Une organisation <br /> souple et <span className="text-[#008953]">suivie</span>
+              Une organisation <br /> souple et <span className="text-ishes-blue">suivie</span>
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
             {/* Deroule 1 */}
             <div className="flex flex-col items-center text-center relative group">
-              <div className="w-16 h-16 rounded-full bg-green-50 text-[#008953] flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-[#008953] group-hover:text-white transition-all duration-300">
+              <div className="w-16 h-16 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-ishes-blue group-hover:text-white transition-all duration-300">
                 <Laptop className="w-6 h-6" />
               </div>
               <h4 className="font-black text-lg text-[#101828] mb-2">Direct Zoom</h4>
@@ -403,7 +403,7 @@ export default function FormationTarbyaPage() {
 
             {/* Deroule 2 */}
             <div className="flex flex-col items-center text-center relative group">
-              <div className="w-16 h-16 rounded-full bg-green-50 text-[#008953] flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-[#008953] group-hover:text-white transition-all duration-300">
+              <div className="w-16 h-16 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-ishes-blue group-hover:text-white transition-all duration-300">
                 <Clock className="w-6 h-6" />
               </div>
               <h4 className="font-black text-lg text-[#101828] mb-2">Replays</h4>
@@ -414,7 +414,7 @@ export default function FormationTarbyaPage() {
 
             {/* Deroule 3 */}
             <div className="flex flex-col items-center text-center relative group">
-              <div className="w-16 h-16 rounded-full bg-green-50 text-[#008953] flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-[#008953] group-hover:text-white transition-all duration-300">
+              <div className="w-16 h-16 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-ishes-blue group-hover:text-white transition-all duration-300">
                 <MessageSquare className="w-6 h-6" />
               </div>
               <h4 className="font-black text-lg text-[#101828] mb-2">Suivi Parent</h4>
@@ -425,7 +425,7 @@ export default function FormationTarbyaPage() {
 
             {/* Deroule 4 */}
             <div className="flex flex-col items-center text-center relative group">
-              <div className="w-16 h-16 rounded-full bg-green-50 text-[#008953] flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-[#008953] group-hover:text-white transition-all duration-300">
+              <div className="w-16 h-16 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-ishes-blue group-hover:text-white transition-all duration-300">
                 <BookOpenCheck className="w-6 h-6" />
               </div>
               <h4 className="font-black text-lg text-[#101828] mb-2">Progressif</h4>
@@ -436,7 +436,7 @@ export default function FormationTarbyaPage() {
 
             {/* Deroule 5 */}
             <div className="flex flex-col items-center text-center relative group">
-              <div className="w-16 h-16 rounded-full bg-green-50 text-[#008953] flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-[#008953] group-hover:text-white transition-all duration-300">
+              <div className="w-16 h-16 rounded-full bg-green-50 text-ishes-blue flex items-center justify-center font-black text-xl mb-6 shadow-sm border border-green-100 group-hover:bg-ishes-blue group-hover:text-white transition-all duration-300">
                 <Sparkles className="w-6 h-6" />
               </div>
               <h4 className="font-black text-lg text-[#101828] mb-2">Équilibre</h4>
@@ -472,7 +472,7 @@ export default function FormationTarbyaPage() {
             <div className="pt-8 flex flex-col items-center gap-4">
               <Link 
                 href={`/inscription?plan=${id}&audience=enfant`}
-                className="px-10 py-5 bg-[#008953] text-white font-black text-lg rounded-2xl shadow-xl shadow-[#008953]/30 hover:bg-[#007044] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3"
+                className="px-10 py-5 bg-ishes-blue text-white font-black text-lg rounded-2xl shadow-xl shadow-ishes-blue/30 hover:bg-[#007044] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3"
               >
                 👉 Je découvre le cours de Tarbiya Islamiya <ArrowRight className="w-5 h-5" />
               </Link>

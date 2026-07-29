@@ -43,7 +43,7 @@ export function SocialSection() {
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-[11px] font-bold tracking-[0.3em] text-ishes-green uppercase mb-4">Communauté</p>
+          <p className="text-[11px] font-bold tracking-[0.3em] text-ishes-blue uppercase mb-4">Communauté</p>
           <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-3">
             Rejoignez-nous sur les réseaux
           </h2>

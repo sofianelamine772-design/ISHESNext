@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function ProgrammesPage() {
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-[#008953] selection:text-white pb-24 overflow-hidden">
+    <div className="min-h-screen bg-white font-sans selection:bg-ishes-blue selection:text-white pb-24 overflow-hidden">
       <Suspense fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="w-10 h-10 text-ishes-green animate-spin" />
+          <Loader2 className="w-10 h-10 text-ishes-blue animate-spin" />
         </div>
       }>
         <ProgramContent />

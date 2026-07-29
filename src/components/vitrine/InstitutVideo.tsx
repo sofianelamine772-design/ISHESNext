@@ -7,35 +7,6 @@ export function InstitutVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // When video enters view, try to unmute it
-            videoElement.muted = false;
-            setIsMuted(false);
-          } else {
-            // When video leaves view, mute it
-            videoElement.muted = true;
-            setIsMuted(true);
-          }
-        });
-      },
-      {
-        threshold: 0.5, // Trigger when 50% of the video is visible
-      }
-    );
-
-    observer.observe(videoElement);
-
-    return () => {
-      observer.unobserve(videoElement);
-    };
-  }, []);
 
   const toggleMute = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -57,7 +28,7 @@ export function InstitutVideo() {
         playsInline
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-ishes-green/10 mix-blend-overlay pointer-events-none" />
+      <div className="absolute inset-0 bg-ishes-blue/10 mix-blend-overlay pointer-events-none" />
       
       {/* Custom Mute/Unmute Button */}
       <button

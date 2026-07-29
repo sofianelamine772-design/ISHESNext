@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-ishes-green: #086b51;
-  --color-ishes-green-hover: #065440;
+  --color-ishes-blue: #203e60;
+  --color-ishes-blue-hover: #14273c;
   --color-ishes-dark: #152233;
   --color-ishes-gold: #c8a96e;
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
@@ -20,7 +20,7 @@
     @apply font-black italic uppercase tracking-tighter;
   }
   .ishes-label {
-    @apply font-bold uppercase tracking-widest text-ishes-green text-xs;
+    @apply font-bold uppercase tracking-widest text-ishes-blue text-xs;
   }
 }
 

@@ -191,7 +191,7 @@ export default function ReinscriptionPage() {
             {/* Animated Background */}
             <div className="absolute inset-0 bg-[#111c18] z-0"></div>
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#086b51] rounded-full blur-[120px] opacity-20 -translate-x-1/2 -translate-y-1/2 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none z-0"></div>
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#c8a96e] rounded-full blur-[120px] opacity-10 translate-x-1/3 translate-y-1/3 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none z-0"></div>
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-ishes-gold rounded-full blur-[120px] opacity-10 translate-x-1/3 translate-y-1/3 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none z-0"></div>
             <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay z-0 pointer-events-none"></div>
 
             <div className="relative z-10 grid lg:grid-cols-2 gap-16 items-center">
@@ -234,17 +234,17 @@ export default function ReinscriptionPage() {
                 <div className="pt-4 flex flex-col items-start">
                   <div className="text-6xl font-black text-white tracking-tighter drop-shadow-2xl flex items-start gap-1">
                     {activeCourse.price.replace('€', '').trim()}
-                    <span className="text-3xl text-[#c8a96e] mt-1">€</span>
+                    <span className="text-3xl text-ishes-gold mt-1">€</span>
                   </div>
                   <div className="mt-2 inline-flex items-center gap-2">
-                    <div className="h-[1px] w-8 bg-gradient-to-r from-[#c8a96e] to-transparent"></div>
-                    <p className="text-[#c8a96e] text-[10px] font-black uppercase tracking-[0.2em]">Frais d'inscription inclus</p>
+                    <div className="h-[1px] w-8 bg-gradient-to-r from-ishes-gold to-transparent"></div>
+                    <p className="text-ishes-gold text-[10px] font-black uppercase tracking-[0.2em]">Frais d'inscription inclus</p>
                   </div>
                 </div>
               </div>
 
               <div className="relative group/card">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#086b51] to-[#c8a96e] rounded-[3rem] blur-2xl opacity-20 group-hover/card:opacity-40 transition-opacity duration-500 -z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-[#086b51] to-ishes-gold rounded-[3rem] blur-2xl opacity-20 group-hover/card:opacity-40 transition-opacity duration-500 -z-10"></div>
                 <div className="bg-[#ffffff]/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-10 md:p-12 space-y-8 relative z-10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] hover:border-white/20 transition-colors duration-500">
                   <div className="flex flex-col items-center gap-2 mb-8">
                     <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-2">

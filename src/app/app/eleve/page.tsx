@@ -459,7 +459,7 @@ export default function EleveDashboard() {
           )}
 
           {/* ─── PACK ACCOMPAGNEMENT (CADEAU) ─── */}
-          <div className="bg-gradient-to-br from-[#c8a96e] to-[#b0935b] border border-[#c8a96e]/30 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden mb-8 transform transition-all hover:scale-[1.01]">
+          <div className="bg-gradient-to-br from-ishes-gold to-[#b0935b] border border-ishes-gold/30 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden mb-8 transform transition-all hover:scale-[1.01]">
             {/* Background ornaments */}
             <div className="absolute -top-12 -right-12 p-8 opacity-10">
               <svg className="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -499,7 +499,7 @@ export default function EleveDashboard() {
               href="https://chat.whatsapp.com/D6RJbgk405AE0PoMnzrrW1"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white text-[#c8a96e] hover:text-[#b0935b] hover:bg-gray-50 px-8 py-4 rounded-[1.8rem] font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2.5 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10 cursor-pointer w-full md:w-auto shrink-0 relative z-10 border border-white/50"
+              className="bg-white text-ishes-gold hover:text-[#b0935b] hover:bg-gray-50 px-8 py-4 rounded-[1.8rem] font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2.5 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10 cursor-pointer w-full md:w-auto shrink-0 relative z-10 border border-white/50"
             >
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
@@ -610,12 +610,12 @@ export default function EleveDashboard() {
               {/* Header */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-[1px] bg-ishes-green"></div>
-                  <span className="text-ishes-green text-[10px] font-black uppercase tracking-[0.3em]">Application Mobile</span>
+                  <div className="w-8 h-[1px] bg-ishes-blue"></div>
+                  <span className="text-ishes-blue text-[10px] font-black uppercase tracking-[0.3em]">Application Mobile</span>
                 </div>
                 <h3 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight uppercase tracking-tight">
                   Installez l'application<br />
-                  <span className="text-ishes-green italic font-amiri capitalize">sur votre appareil.</span>
+                  <span className="text-ishes-blue italic font-amiri capitalize">sur votre appareil.</span>
                 </h3>
                 <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-xl">
                   Accédez à vos cours en un clic, directement depuis votre écran d'accueil — sans passer par le navigateur.
@@ -624,7 +624,7 @@ export default function EleveDashboard() {
 
               {/* Install button or status */}
               {isInstalled ? (
-                <div className="inline-flex items-center gap-3 bg-ishes-green/10 border border-ishes-green/20 text-[#086b51] px-8 py-4 rounded-[1.5rem] font-bold text-sm">
+                <div className="inline-flex items-center gap-3 bg-ishes-blue/10 border border-ishes-blue/20 text-[#086b51] px-8 py-4 rounded-[1.5rem] font-bold text-sm">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                   Application déjà installée ✓
                 </div>
@@ -633,7 +633,7 @@ export default function EleveDashboard() {
                 <div className="space-y-4">
                   <button
                     onClick={handleInstallApp}
-                    className="inline-flex items-center gap-3 bg-ishes-green hover:bg-[#075943] text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-ishes-green/20 cursor-pointer"
+                    className="inline-flex items-center gap-3 bg-ishes-blue hover:bg-[#075943] text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-ishes-blue/20 cursor-pointer"
                   >
                     <MonitorDown className="w-5 h-5" />
                     Installer l'application
@@ -650,8 +650,8 @@ export default function EleveDashboard() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
                     {/* iOS */}
-                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
-                      <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-blue/30 hover:bg-white transition-all shadow-sm">
+                      <div className="flex items-center gap-2 text-ishes-blue font-black text-xs uppercase tracking-wider">
                         <span className="text-lg">🍎</span> iPhone / iPad (iOS)
                       </div>
                       <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
@@ -663,8 +663,8 @@ export default function EleveDashboard() {
                     </div>
 
                     {/* macOS (Safari) */}
-                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
-                      <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-blue/30 hover:bg-white transition-all shadow-sm">
+                      <div className="flex items-center gap-2 text-ishes-blue font-black text-xs uppercase tracking-wider">
                         <span className="text-lg">💻</span> Mac (Safari)
                       </div>
                       <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
@@ -676,8 +676,8 @@ export default function EleveDashboard() {
                     </div>
 
                     {/* Android (Chrome) */}
-                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
-                      <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-blue/30 hover:bg-white transition-all shadow-sm">
+                      <div className="flex items-center gap-2 text-ishes-blue font-black text-xs uppercase tracking-wider">
                         <span className="text-lg">🤖</span> Android (Chrome / Edge)
                       </div>
                       <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
@@ -688,8 +688,8 @@ export default function EleveDashboard() {
                     </div>
 
                     {/* Windows / Mac / Linux (Chrome / Edge Desktop) */}
-                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-green/30 hover:bg-white transition-all shadow-sm">
-                      <div className="flex items-center gap-2 text-ishes-green font-black text-xs uppercase tracking-wider">
+                    <div className="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 space-y-4 hover:border-ishes-blue/30 hover:bg-white transition-all shadow-sm">
+                      <div className="flex items-center gap-2 text-ishes-blue font-black text-xs uppercase tracking-wider">
                         <span className="text-lg">🖥️</span> Windows / Mac (Chrome / Edge)
                       </div>
                       <ol className="text-gray-600 text-xs space-y-2 list-decimal list-inside font-semibold leading-relaxed">
@@ -1004,32 +1004,32 @@ export default function EleveDashboard() {
                 {/* Outer emerald border */}
                 <div className="absolute inset-4 border-[8px] border-[#086b51] pointer-events-none rounded-sm"></div>
                 {/* Inner gold border */}
-                <div className="absolute inset-6 border-[2px] border-[#c8a96e] pointer-events-none"></div>
+                <div className="absolute inset-6 border-[2px] border-ishes-gold pointer-events-none"></div>
 
                 {/* Corner Ornaments */}
                 {/* Top Left */}
-                <div className="absolute top-7 left-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80">
+                <div className="absolute top-7 left-7 text-ishes-gold w-8 h-8 pointer-events-none opacity-80">
                   <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
                     <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
                     <circle cx="20" cy="20" r="8" />
                   </svg>
                 </div>
                 {/* Top Right */}
-                <div className="absolute top-7 right-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80 rotate-90">
+                <div className="absolute top-7 right-7 text-ishes-gold w-8 h-8 pointer-events-none opacity-80 rotate-90">
                   <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
                     <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
                     <circle cx="20" cy="20" r="8" />
                   </svg>
                 </div>
                 {/* Bottom Left */}
-                <div className="absolute bottom-7 left-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80 -rotate-90">
+                <div className="absolute bottom-7 left-7 text-ishes-gold w-8 h-8 pointer-events-none opacity-80 -rotate-90">
                   <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
                     <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
                     <circle cx="20" cy="20" r="8" />
                   </svg>
                 </div>
                 {/* Bottom Right */}
-                <div className="absolute bottom-7 right-7 text-[#c8a96e] w-8 h-8 pointer-events-none opacity-80 rotate-180">
+                <div className="absolute bottom-7 right-7 text-ishes-gold w-8 h-8 pointer-events-none opacity-80 rotate-180">
                   <svg viewBox="0 0 100 100" className="w-full h-full fill-current">
                     <path d="M0,0 L100,0 L100,10 L30,10 C20,10 10,20 10,30 L10,100 L0,100 Z" />
                     <circle cx="20" cy="20" r="8" />
@@ -1052,7 +1052,7 @@ export default function EleveDashboard() {
                       <h1 className="text-[16px] font-bold tracking-[0.25em] font-cinzel text-gray-900 uppercase">
                         Institut des Sciences Humaines & Spirituelles
                       </h1>
-                      <p className="text-[12px] font-amiri font-bold text-[#c8a96e] tracking-wide">
+                      <p className="text-[12px] font-amiri font-bold text-ishes-gold tracking-wide">
                         مَعْهَدُ الْعُلُومِ الْإِنْسَانِيَّةِ وَالرُّوحِيَّةِ
                       </p>
                       <p className="text-[8px] font-sans font-bold tracking-widest text-gray-400 uppercase mt-0.5">
@@ -1061,9 +1061,9 @@ export default function EleveDashboard() {
                     </div>
 
                     <div className="flex items-center justify-center gap-4 my-2 select-none">
-                      <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#c8a96e]"></div>
-                      <div className="text-[#c8a96e] text-xs">◆</div>
-                      <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#c8a96e]"></div>
+                      <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-ishes-gold"></div>
+                      <div className="text-ishes-gold text-xs">◆</div>
+                      <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-ishes-gold"></div>
                     </div>
 
                     <div className="space-y-1">
@@ -1094,7 +1094,7 @@ export default function EleveDashboard() {
                       est inscrit(e) et suit régulièrement les enseignements théoriques et pratiques dispensés au sein de notre établissement pour le cursus d'excellence :
                     </p>
 
-                    <div className="bg-[#FAF8F5]/80 backdrop-blur-sm border border-[#c8a96e]/30 rounded-2xl p-6 mx-auto max-w-xl shadow-sm space-y-2 relative">
+                    <div className="bg-[#FAF8F5]/80 backdrop-blur-sm border border-ishes-gold/30 rounded-2xl p-6 mx-auto max-w-xl shadow-sm space-y-2 relative">
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#086b51] text-[#FAF8F5] text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-full whitespace-nowrap">
                         Cursus Validé
                       </div>
@@ -1103,7 +1103,7 @@ export default function EleveDashboard() {
                       </h4>
                       <div className="flex items-center justify-center gap-4 text-[10px] font-sans font-black text-gray-500 uppercase tracking-widest pt-1">
                         <span>Groupe : {certData.className}</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#c8a96e]"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></span>
                         <span>Mode : {certData.classType}</span>
                       </div>
                     </div>
@@ -1114,10 +1114,10 @@ export default function EleveDashboard() {
                   </div>
 
                   {/* Certificate Footer */}
-                  <div className="flex items-end justify-between border-t border-[#c8a96e]/20 pt-5 select-none">
+                  <div className="flex items-end justify-between border-t border-ishes-gold/20 pt-5 select-none">
                     {/* Official Seal / Stamp */}
                     <div className="flex flex-col items-center space-y-1">
-                      <div className="w-20 h-20 text-[#c8a96e] opacity-90 relative flex items-center justify-center">
+                      <div className="w-20 h-20 text-ishes-gold opacity-90 relative flex items-center justify-center">
                         {/* Elegant stamp SVG representation */}
                         <svg className="w-full h-full" viewBox="0 0 100 100">
                           <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,3" fill="none" />
@@ -1142,7 +1142,7 @@ export default function EleveDashboard() {
                       <span className="text-[10px] font-playfair font-bold text-gray-700 italic">
                         Fait à Toulouse, le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </span>
-                      <span className="text-[8px] font-sans font-bold font-mono text-[#c8a96e] uppercase tracking-wider bg-[#FAF8F5] border border-[#c8a96e]/20 px-3 py-1 rounded-md">
+                      <span className="text-[8px] font-sans font-bold font-mono text-ishes-gold uppercase tracking-wider bg-[#FAF8F5] border border-ishes-gold/20 px-3 py-1 rounded-md">
                         N° CERT-ISHES-2026-{certData.inscriptionId?.slice(-8).toUpperCase()}
                       </span>
                     </div>
@@ -1188,7 +1188,7 @@ export default function EleveDashboard() {
               </button>
               <button
                 onClick={handlePrint}
-                className="bg-[#c8a96e] hover:bg-[#b2935b] text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#c8a96e]/10 flex items-center gap-2 cursor-pointer"
+                className="bg-ishes-gold hover:bg-[#b2935b] text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-ishes-gold/10 flex items-center gap-2 cursor-pointer"
               >
                 <FileText className="w-3.5 h-3.5" /> Imprimer
               </button>

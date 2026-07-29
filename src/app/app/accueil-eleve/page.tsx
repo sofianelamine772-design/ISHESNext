@@ -7,11 +7,11 @@ export default function AccueilEleve() {
       {/* Header */}
       <header className="w-full flex items-center justify-between px-8 py-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#152233] rounded-lg flex items-center justify-center shadow-md">
+          <div className="w-10 h-10 bg-ishes-dark rounded-lg flex items-center justify-center shadow-md">
             <GraduationCap className="w-6 h-6 text-white" />
           </div>
-          <span className="text-xl font-black italic tracking-tight text-[#152233]">
-            ISHEE<span className="text-ishes-green">COLE</span>
+          <span className="text-xl font-black italic tracking-tight text-ishes-dark">
+            ISHEE<span className="text-ishes-blue">COLE</span>
           </span>
         </div>
         <Link href="/app" className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-400 hover:text-gray-600 transition-colors uppercase">
@@ -33,7 +33,7 @@ export default function AccueilEleve() {
           </div>
           
           <div className="space-y-1">
-             <h1 className="text-4xl md:text-[50px] font-black tracking-tight text-[#152233] leading-tight">
+             <h1 className="text-4xl md:text-[50px] font-black tracking-tight text-ishes-dark leading-tight">
                Bonjour <span className="text-[#086b51]">Sofiane Elamine</span>,
              </h1>
              <p className="text-gray-400 text-lg font-medium italic">
@@ -50,7 +50,7 @@ export default function AccueilEleve() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {/* Card 1: Accès Direct */}
           <Link href="/app/eleve" className="group">
-             <div className="bg-[#152233] rounded-3xl p-6 md:p-8 flex items-center gap-6 shadow-2xl shadow-gray-200 hover:scale-[1.02] transition-transform duration-300 h-[140px]">
+             <div className="bg-ishes-dark rounded-3xl p-6 md:p-8 flex items-center gap-6 shadow-2xl shadow-gray-200 hover:scale-[1.02] transition-transform duration-300 h-[140px]">
                 <div className="w-16 h-16 rounded-2xl bg-[#24334a] flex items-center justify-center flex-shrink-0 group-hover:bg-[#2c3d5a] transition-colors">
                    <Video className="w-8 h-8 text-emerald-400" />
                 </div>
@@ -68,7 +68,7 @@ export default function AccueilEleve() {
                    <PlayCircle className="w-8 h-8 text-[#086b51]" />
                 </div>
                 <div>
-                   <h2 className="text-[#152233] text-xl font-black italic tracking-wide mb-1">MES REPLAYS</h2>
+                   <h2 className="text-ishes-dark text-xl font-black italic tracking-wide mb-1">MES REPLAYS</h2>
                    <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase">Visionner les cours passés</p>
                 </div>
              </div>
@@ -81,7 +81,7 @@ export default function AccueilEleve() {
                    <FileText className="w-8 h-8 text-blue-500" />
                 </div>
                 <div>
-                   <h2 className="text-[#152233] text-xl font-black italic tracking-wide mb-1">SUPPORTS PDF</h2>
+                   <h2 className="text-ishes-dark text-xl font-black italic tracking-wide mb-1">SUPPORTS PDF</h2>
                    <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase">Manuels & exercices</p>
                 </div>
              </div>
@@ -94,7 +94,7 @@ export default function AccueilEleve() {
                    <MessageCircle className="w-8 h-8 text-green-500" />
                 </div>
                 <div>
-                   <h2 className="text-[#152233] text-xl font-black italic tracking-wide mb-1">GROUPE CLASSE</h2>
+                   <h2 className="text-ishes-dark text-xl font-black italic tracking-wide mb-1">GROUPE CLASSE</h2>
                    <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase">Échanger sur WhatsApp</p>
                 </div>
              </div>

@@ -7,19 +7,19 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 
 export default function ConseilSpiritualitePage() {
   return (
-    <div className="min-h-screen bg-[#fafafc] font-sans selection:bg-ishes-green selection:text-white pb-32">
+    <div className="min-h-screen bg-[#fafafc] font-sans selection:bg-ishes-blue selection:text-white pb-32">
       
       {/* --- HERO SECTION --- */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white">
         <ArabicBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-ishes-green/[0.03] to-transparent -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ishes-blue/[0.03] to-transparent -z-10" />
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#c8a96e]/10 text-[#c8a96e] rounded-full mb-8 border border-[#c8a96e]/20"
+              className="inline-flex items-center gap-2 px-4 py-1.5 bg-ishes-gold/10 text-ishes-gold rounded-full mb-8 border border-ishes-gold/20"
             >
               <Sparkles className="w-4 h-4" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Accompagnement Spirituel</span>
@@ -31,7 +31,7 @@ export default function ConseilSpiritualitePage() {
               transition={{ duration: 0.8 }}
               className="text-5xl md:text-7xl font-black text-ishes-dark leading-[1.05] tracking-tight mb-8"
             >
-              Éclairez votre <span className="text-ishes-green italic">cheminement</span> intérieur.
+              Éclairez votre <span className="text-ishes-blue italic">cheminement</span> intérieur.
             </motion.h1>
             
             <motion.p 
@@ -75,7 +75,7 @@ export default function ConseilSpiritualitePage() {
                   { icon: <Heart />, text: "Améliorer sa pratique au quotidien pour qu'elle ait un sens." }
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-6 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
-                    <div className="w-14 h-14 rounded-2xl bg-ishes-green/10 text-ishes-green flex items-center justify-center shrink-0 group-hover:bg-ishes-green group-hover:text-white transition-colors">
+                    <div className="w-14 h-14 rounded-2xl bg-ishes-blue/10 text-ishes-blue flex items-center justify-center shrink-0 group-hover:bg-ishes-blue group-hover:text-white transition-colors">
                       {item.icon}
                     </div>
                     <p className="text-lg font-bold text-ishes-dark leading-tight">{item.text}</p>
@@ -93,7 +93,7 @@ export default function ConseilSpiritualitePage() {
             >
               <div className="bg-ishes-dark rounded-[3rem] p-10 md:p-16 text-white w-full flex flex-col justify-center relative overflow-hidden">
                 {/* Decorative circle */}
-                <div className="absolute -top-20 -right-20 w-64 h-64 bg-ishes-green opacity-10 rounded-full blur-[80px]" />
+                <div className="absolute -top-20 -right-20 w-64 h-64 bg-ishes-blue opacity-10 rounded-full blur-[80px]" />
                 
                 <h3 className="text-3xl font-black mb-8 relative z-10 leading-tight">Obtenir un conseil <br /> par email</h3>
                 
@@ -103,14 +103,14 @@ export default function ConseilSpiritualitePage() {
 
                 <Link 
                   href="/contact" 
-                  className="inline-flex items-center justify-center gap-3 bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[16px] font-bold transition-all hover:scale-105 shadow-xl shadow-ishes-green/20 relative z-10 group"
+                  className="inline-flex items-center justify-center gap-3 bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl text-[16px] font-bold transition-all hover:scale-105 shadow-xl shadow-ishes-blue/20 relative z-10 group"
                 >
                   Contacter un conseiller
                   <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <div className="mt-12 flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/5 relative z-10">
-                  <ShieldCheck className="w-6 h-6 text-ishes-green shrink-0 mt-1" />
+                  <ShieldCheck className="w-6 h-6 text-ishes-blue shrink-0 mt-1" />
                   <p className="text-sm text-gray-400 font-medium leading-relaxed">
                     Ces informations servent à répondre aux demandes des utilisateurs et ne sont pas utilisées ni transmises pour du démarchage.
                   </p>
@@ -125,7 +125,7 @@ export default function ConseilSpiritualitePage() {
       {/* --- FAQ / SEO BOTTOM --- */}
       <section className="bg-white py-24 md:py-32 border-t border-gray-100">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <MessageCircle className="w-12 h-12 text-ishes-green mx-auto mb-8 opacity-20" strokeWidth={1} />
+          <MessageCircle className="w-12 h-12 text-ishes-blue mx-auto mb-8 opacity-20" strokeWidth={1} />
           <h2 className="text-3xl font-black text-ishes-dark mb-10 tracking-tight">Une écoute bienveillante</h2>
           <div className="grid md:grid-cols-2 gap-12 text-left">
             <div>

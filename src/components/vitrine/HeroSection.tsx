@@ -18,9 +18,9 @@ export function HeroSection() {
         className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-7"
       >
         <h1 className="text-[38px] sm:text-[52px] md:text-[72px] lg:text-[84px] font-black text-ishes-dark leading-[1.08] tracking-tight">
-          L'excellence de <span className="text-ishes-green italic">la</span><br />
-          <span className="text-ishes-green italic">langue arabe</span> et des<br />
-          <span className="bg-[#c8a96e] text-white italic px-1.5 py-0 rounded-none sm:inline-flex sm:items-center sm:h-[1.1em] sm:align-bottom inline box-decoration-clone">sciences islamiques</span> à<br />
+          L'excellence de <span className="text-ishes-blue italic">la</span><br />
+          <span className="text-ishes-blue italic">langue arabe</span> et des<br />
+          <span className="bg-ishes-gold text-white italic px-1.5 py-0 rounded-none sm:inline-flex sm:items-center sm:h-[1.1em] sm:align-bottom inline box-decoration-clone">sciences islamiques</span> à<br />
           votre portée.
         </h1>
 
@@ -33,7 +33,7 @@ export function HeroSection() {
             animate={{ scale: [1, 1.08, 1] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5 }}
           >
-            <Link href="/program?mode=distanciel" className="group relative flex items-center justify-center gap-3 w-64 bg-ishes-green hover:bg-[#005a35] text-white py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(0,106,66,0.6)] active:scale-95">
+            <Link href="/program?mode=distanciel" className="group relative flex items-center justify-center gap-3 w-64 bg-ishes-blue hover:bg-[#005a35] text-white py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(0,106,66,0.6)] active:scale-95">
               Distanciel
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
             </Link>
@@ -43,7 +43,7 @@ export function HeroSection() {
             animate={{ scale: [1, 1.08, 1] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: 1 }}
           >
-            <Link href="/program?mode=presentiel" className="group relative flex items-center justify-center gap-3 w-64 bg-white border-2 border-[#c8a96e]/30 text-[#c8a96e] hover:border-[#c8a96e] hover:bg-[#c8a96e]/5 py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(200,169,110,0.3)] active:scale-95">
+            <Link href="/program?mode=presentiel" className="group relative flex items-center justify-center gap-3 w-64 bg-white border-2 border-ishes-gold/30 text-ishes-gold hover:border-ishes-gold hover:bg-ishes-gold/5 py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(200,169,110,0.3)] active:scale-95">
               Présentiel
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
             </Link>

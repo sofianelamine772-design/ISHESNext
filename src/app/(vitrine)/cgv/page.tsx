@@ -68,20 +68,20 @@ export default function CGVPage() {
         >
           {/* Header */}
           <div className="mb-16">
-            <span className="ishes-label text-ishes-green mb-4 block">Conditions de vente</span>
+            <span className="ishes-label text-ishes-blue mb-4 block">Conditions de vente</span>
             <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
               CGV.<br />
-              <span className="text-ishes-green italic">Conditions Générales.</span>
+              <span className="text-ishes-blue italic">Conditions Générales.</span>
             </h1>
             <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
-              <ScrollText className="w-4 h-4 text-ishes-green" />
+              <ScrollText className="w-4 h-4 text-ishes-blue" />
               <span>Dernière mise à jour : Juin 2026 — Institut ISHES</span>
             </div>
           </div>
 
           {/* Quick legal note banner */}
           <div className="bg-green-50 border border-green-100 rounded-3xl p-6 mb-10 flex gap-4 items-start">
-            <ShieldCheck className="w-6 h-6 text-ishes-green shrink-0 mt-0.5" />
+            <ShieldCheck className="w-6 h-6 text-ishes-blue shrink-0 mt-0.5" />
             <div>
               <h3 className="font-bold text-ishes-dark text-sm mb-1">Garantie & Rétractation de 14 jours</h3>
               <p className="text-xs text-gray-500 font-medium leading-relaxed">
@@ -99,7 +99,7 @@ export default function CGVPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
-                className="bg-white rounded-3xl p-8 border border-gray-100 hover:border-ishes-green/10 transition-colors shadow-sm"
+                className="bg-white rounded-3xl p-8 border border-gray-100 hover:border-ishes-blue/10 transition-colors shadow-sm"
               >
                 <h2 className="ishes-label text-ishes-dark mb-6 pb-4 border-b border-gray-100 font-bold text-lg">
                   {section.title}
@@ -110,7 +110,7 @@ export default function CGVPage() {
                       {paragraph.includes("contact@ishes.fr") ? (
                         <>
                           Toute demande de rétractation ou de remboursement dans la limite de ces 14 jours doit être adressée par écrit à l'adresse e-mail :{" "}
-                          <a href="mailto:contact@ishes.fr" className="text-ishes-green font-black hover:underline">
+                          <a href="mailto:contact@ishes.fr" className="text-ishes-blue font-black hover:underline">
                             contact@ishes.fr
                           </a>
                           .
@@ -125,12 +125,12 @@ export default function CGVPage() {
 
           {/* Help Center CTA */}
           <div className="mt-12 bg-gray-50 border border-gray-100 rounded-3xl p-8 text-center max-w-xl mx-auto">
-            <HelpCircle className="w-8 h-8 text-ishes-green mx-auto mb-4" />
+            <HelpCircle className="w-8 h-8 text-ishes-blue mx-auto mb-4" />
             <h3 className="font-bold text-ishes-dark text-base mb-2">Des questions sur nos conditions ?</h3>
             <p className="text-xs text-gray-400 font-medium leading-relaxed mb-4">
               Notre équipe d'assistance administrative est à votre disposition pour vous éclairer sur le règlement ou les facilités de paiement.
             </p>
-            <a href="/contact" className="inline-flex items-center gap-2 bg-[#008953] text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#007044] transition-all">
+            <a href="/contact" className="inline-flex items-center gap-2 bg-ishes-blue text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#007044] transition-all">
               Nous contacter
             </a>
           </div>

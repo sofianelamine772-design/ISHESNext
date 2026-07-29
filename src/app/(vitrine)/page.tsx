@@ -26,7 +26,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#fafafa]">
       {/* Background decoration */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-ishes-green/5 blur-[120px] rounded-full" />
+        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-ishes-blue/5 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-10%] left-0 w-[600px] h-[600px] bg-gray-100/50 blur-[100px] rounded-full" />
       </div>
 
@@ -38,9 +38,9 @@ export default function Home() {
       <StatsSection />
 
       {/* ===== EMOTIONAL / JOURNEY SECTION (MINIMALIST & LIGHT) ===== */}
-      <section className="bg-[#fcfbf9] py-24 relative overflow-hidden">
+      <section className="bg-[#fcfbf9] py-32 relative overflow-hidden">
         {/* Subtle geometric pattern background */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#008953 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(var(--color-ishes-blue) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
 
@@ -49,10 +49,10 @@ export default function Home() {
             {/* Les 3 mots d'ordre */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
               <span className="px-5 py-2 bg-white border border-gray-200/60 rounded-full text-xs font-black text-gray-600 shadow-sm uppercase tracking-widest flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#8b7355]" /> Légitimité
+                <ShieldCheck className="w-4 h-4 text-ishes-gold" /> Légitimité
               </span>
               <span className="px-5 py-2 bg-white border border-gray-200/60 rounded-full text-xs font-black text-gray-600 shadow-sm uppercase tracking-widest flex items-center gap-2">
-                <Heart className="w-4 h-4 text-[#c8a96e]" /> Spiritualité
+                <Heart className="w-4 h-4 text-ishes-gold" /> Spiritualité
               </span>
               <span className="px-5 py-2 bg-white border border-gray-200/60 rounded-full text-xs font-black text-gray-600 shadow-sm uppercase tracking-widest flex items-center gap-2">
                 <Users className="w-4 h-4 text-[#4a7c59]" /> Accompagnement
@@ -68,7 +68,7 @@ export default function Home() {
 
             {/* Nouveau Bloc "Le Problème" */}
             <div className="mt-12 max-w-3xl mx-auto bg-[#fcfaf7] p-8 md:p-10 rounded-[2.5rem] border border-[#f5f0e6] text-left shadow-sm relative overflow-hidden">
-               <h3 className="text-xs font-black text-[#8b7355] tracking-widest uppercase mb-6 inline-block bg-[#f0e6d2]/50 px-4 py-1.5 rounded-full">Le Problème</h3>
+               <h3 className="text-xs font-black text-ishes-gold tracking-widest uppercase mb-6 inline-block bg-[#f0e6d2]/50 px-4 py-1.5 rounded-full">Le Problème</h3>
                <p className="text-[#2d3748] font-black text-xl md:text-3xl leading-snug mb-6">
                  Aujourd’hui, beaucoup veulent apprendre…<br/>
                  <span className="font-medium text-gray-500 text-lg md:text-xl">mais sans cadre, sans méthode et sans accompagnement.</span>
@@ -76,7 +76,7 @@ export default function Home() {
                
                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                  <div className="text-gray-500 font-medium text-lg">
-                   <strong className="text-[#8b7355] uppercase tracking-wider text-xs block mb-1">Résultat</strong>
+                   <strong className="text-ishes-gold uppercase tracking-wider text-xs block mb-1">Résultat</strong>
                    <span className="text-[#2d3748] font-bold">Tu avances seul… puis tu t’arrêtes.</span>
                  </div>
                </div>
@@ -91,127 +91,66 @@ export default function Home() {
           {/* === LA SOLUTION ISHES === */}
           <div className="max-w-7xl mx-auto mt-24">
             <div className="text-center mb-16">
-              <span className="px-5 py-2 rounded-full bg-ishes-green/10 text-ishes-green text-xs font-black uppercase tracking-widest border border-ishes-green/20">Notre Approche</span>
-              <h3 className="text-3xl md:text-5xl font-black text-ishes-dark mt-6 tracking-tight">Une solution pensée pour chacun</h3>
+              <h3 className="text-3xl md:text-5xl font-black text-ishes-dark tracking-tight">Une solution pensée pour chacun : enfant, adulte, enseignant</h3>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 lg:gap-10">
               
               {/* Carte 1 : Adulte */}
-              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#8b7355]/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
+              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
                 
                 <div className="text-4xl mb-6 relative z-10">👤</div>
                 <h4 className="text-2xl font-black text-ishes-dark mb-1 relative z-10">Adulte</h4>
-                <div className="text-[#8b7355] text-xs font-black uppercase tracking-widest mb-8 relative z-10">Solution ISHES</div>
+                <div className="text-ishes-gold text-xs font-black uppercase tracking-widest mb-4 relative z-10">Solution ISHES</div>
                 
-                <p className="text-gray-500 font-medium leading-relaxed mb-8 relative z-10 h-14">
+                <p className="text-gray-500 font-medium leading-relaxed mb-8 relative z-10 flex-grow">
                   Pour les frères et sœurs en quête de science religieuse.
                 </p>
 
-                <div className="space-y-5 relative z-10 border-t border-gray-100 pt-8">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#8b7355]/10 flex items-center justify-center text-[#8b7355]">
-                      <ShieldCheck strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-gray-700">Structure & Cadre</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#8b7355]/10 flex items-center justify-center text-[#8b7355]">
-                      <Users strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-gray-700">Accompagnement</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#8b7355]/10 flex items-center justify-center text-[#8b7355]">
-                      <Heart strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-gray-700">Pédagogie Adaptée</span>
-                  </div>
-                </div>
-
-                <div className="relative z-10 text-center mt-8">
-                  <Link href="/program" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
+                <div className="relative z-10 text-center mt-auto pt-4 border-t border-gray-100">
+                  <Link href="/program" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-gray-900 transition-all hover:scale-[1.02] shadow-md">
                     Découvrir nos cours
                   </Link>
                 </div>
               </div>
 
               {/* Carte 2 : Enfant / Adolescent - HIGHLIGHTED */}
-              <div className="bg-gradient-to-b from-[#c8a96e] to-[#a88a53] rounded-[2.5rem] p-8 lg:p-10 border border-[#c8a96e] shadow-2xl hover:shadow-[#c8a96e]/30 hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4"></div>
+              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border-2 border-ishes-gold shadow-[0_8px_30px_rgb(200,169,110,0.15)] hover:shadow-[0_20px_40px_rgb(200,169,110,0.25)] hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4 flex flex-col h-full">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-ishes-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 transition-transform group-hover:scale-110"></div>
                 
                 <div className="text-4xl mb-6 relative z-10">🧑🧒</div>
-                <h4 className="text-2xl font-black text-white mb-1 relative z-10">Enfant / Adolescent</h4>
-                <div className="text-white/70 text-xs font-black uppercase tracking-widest mb-8 relative z-10">Solution ISHES</div>
+                <h4 className="text-2xl font-black text-ishes-dark mb-1 relative z-10">Enfant / Adolescent</h4>
+                <div className="text-ishes-gold text-xs font-black uppercase tracking-widest mb-4 relative z-10 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-ishes-gold animate-pulse"></span>
+                  Solution ISHES
+                </div>
                 
-                <p className="text-white/80 font-medium leading-relaxed mb-8 relative z-10 h-14">
+                <p className="text-gray-500 font-medium leading-relaxed mb-8 relative z-10 flex-grow">
                   Pour transmettre la religion et les valeurs à la nouvelle génération.
                 </p>
 
-                <div className="space-y-5 relative z-10 border-t border-white/10 pt-8">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm">
-                      <ShieldCheck strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-white">Structure & Cadre</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm">
-                      <Users strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-white">Accompagnement</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm">
-                      <Heart strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-white">Pédagogie Adaptée</span>
-                  </div>
-                </div>
-
-                <div className="relative z-10 text-center mt-8">
-                  <Link href="/program" className="inline-block w-full py-4 px-6 rounded-2xl bg-white text-[#c8a96e] font-black hover:bg-gray-50 transition-all hover:scale-[1.02] shadow-lg">
+                <div className="relative z-10 text-center mt-auto pt-4 border-t border-gray-100">
+                  <Link href="/program" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-gold text-white font-black hover:bg-[#b59659] transition-all hover:scale-[1.02] shadow-lg shadow-ishes-gold/30">
                     Découvrir nos cours
                   </Link>
                 </div>
               </div>
 
               {/* Carte 3 : Futur enseignant */}
-              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#c8a96e]/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
+              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
                 
                 <div className="text-4xl mb-6 relative z-10">👩‍🏫</div>
                 <h4 className="text-2xl font-black text-ishes-dark mb-1 relative z-10">Enseignant</h4>
-                <div className="text-[#c8a96e] text-xs font-black uppercase tracking-widest mb-8 relative z-10">Solution ISHES</div>
+                <div className="text-ishes-gold text-xs font-black uppercase tracking-widest mb-4 relative z-10">Solution ISHES</div>
                 
-                <p className="text-gray-500 font-medium leading-relaxed mb-8 relative z-10 h-14">
+                <p className="text-gray-500 font-medium leading-relaxed mb-8 relative z-10 flex-grow">
                   Pour se former, se légitimer et enseigner à son tour.
                 </p>
 
-                <div className="space-y-5 relative z-10 border-t border-gray-100 pt-8">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#c8a96e]/10 flex items-center justify-center text-[#c8a96e]">
-                      <ShieldCheck strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-gray-700">Structure & Cadre</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#c8a96e]/10 flex items-center justify-center text-[#c8a96e]">
-                      <Users strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-gray-700">Accompagnement</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#c8a96e]/10 flex items-center justify-center text-[#c8a96e]">
-                      <Heart strokeWidth={2} className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-gray-700">Pédagogie Adaptée</span>
-                  </div>
-                </div>
-
-                <div className="relative z-10 text-center mt-8">
-                  <Link href="/formation-enseignant" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-[#1a202c] transition-all hover:scale-[1.02] shadow-md">
+                <div className="relative z-10 text-center mt-auto pt-4 border-t border-gray-100">
+                  <Link href="/formation-enseignant" className="inline-block w-full py-4 px-6 rounded-2xl bg-ishes-dark text-white font-black hover:bg-gray-900 transition-all hover:scale-[1.02] shadow-md">
                     Découvrir nos cours
                   </Link>
                 </div>
@@ -222,59 +161,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== MINI FORMATION SECTION ===== */}
-      <section className="bg-[#fafafa] py-4 border-b border-gray-100/30">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-[#fafafa] border border-gray-100 rounded-[2.5rem] p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 hover:shadow-xl hover:shadow-gray-200/20 transition-all duration-500">
-            <div className="max-w-2xl text-center lg:text-left">
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-4">
-                {["Sciences Islamiques", "Langue Arabe", "Tajwid"].map((tag) => (
-                  <span key={tag} className="px-3 py-1 bg-ishes-green/5 text-ishes-green text-[10px] font-black uppercase tracking-widest rounded-md border border-ishes-green/10">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <h3 className="text-ishes-dark font-black text-2xl md:text-3xl mb-4 leading-tight">
-                Formation à <span className="text-ishes-green italic">Toulouse</span> & <span className="text-[#c8a96e] italic">à distance</span>.
-              </h3>
-              <p className="text-gray-500 font-medium leading-relaxed text-lg">
-                Nous proposons des formations basées sur Toulouse. Certaines formations sont disponibles en <strong className="text-ishes-dark">présentiel</strong> sur Toulouse, d'autres en <strong className="text-ishes-dark">distanciel</strong>.
-              </p>
-            </div>
-            <Link
-              href="/program"
-              className="group flex items-center gap-3 bg-ishes-green hover:bg-ishes-green-hover text-white px-10 py-5 rounded-2xl text-[15px] font-bold transition-all shadow-xl shadow-ishes-green/20 shrink-0 hover:-translate-y-1"
-            >
-              Voir nos formations
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
-            </Link>
-          </div>
-        </div>
-      </section>
+
 
       {/* ===== ZOOM & WHATSAPP SECTION ===== */}
-      <section className="bg-white py-16 border-b border-gray-100/30 relative overflow-hidden">
+      <section className="bg-white py-24 border-b border-gray-100/30 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-ishes-dark leading-tight mb-4">
-              Un apprentissage <span className="text-[#0b5cff] italic">interactif</span> & un suivi <span className="text-[#25D366] italic">continu</span>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
+              Un apprentissage <span className="text-ishes-blue italic">interactif</span> & un suivi <span className="text-ishes-gold italic">continu</span>
             </h2>
             <p className="text-gray-500 font-medium text-lg">Où que vous soyez, profitez d'une expérience d'apprentissage immersive et d'une communauté soudée.</p>
           </div>
 
           <div className="flex flex-col md:flex-row items-stretch justify-center gap-8">
             {/* Zoom Card */}
-            <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#fafafa] border-2 border-blue-50 rounded-[3rem] shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-[#0b5cff]/30 transition-all w-full">
-              <div className="w-24 h-24 bg-white rounded-[2rem] shadow-sm flex items-center justify-center mb-8 rotate-[-3deg] hover:rotate-0 transition-transform">
+            <div className="flex-1 flex flex-col items-center text-center p-10 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
+              <div className="w-24 h-24 bg-[#fafafa] rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Cours en direct & Replays</h4>
-              <p className="text-gray-500 font-medium leading-relaxed text-lg">Suivez nos formations à distance de chez vous. Si vous manquez un cours, le <strong className="text-[#0b5cff]">replay vidéo</strong> est disponible dès la fin de chaque séance.</p>
+              <p className="text-gray-500 font-medium leading-relaxed text-lg">Suivez nos formations à distance de chez vous. Si vous manquez un cours, le <strong className="text-ishes-blue">replay vidéo</strong> est disponible dès la fin de chaque séance.</p>
             </div>
 
             {/* WhatsApp Card */}
-            <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#fafafa] border-2 border-green-50 rounded-[3rem] shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-[#25D366]/30 transition-all w-full">
-              <div className="w-24 h-24 bg-white rounded-[2rem] shadow-sm flex items-center justify-center mb-8 rotate-[3deg] hover:rotate-0 transition-transform">
+            <div className="flex-1 flex flex-col items-center text-center p-10 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
+              <div className="w-24 h-24 bg-[#fafafa] rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-14 w-14 object-cover rounded-full" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi pédagogique</h4>
@@ -293,13 +204,13 @@ export default function Home() {
             {/* Content Column */}
             <div>
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-6 h-[2px] bg-ishes-green" />
-                <span className="text-[11px] font-bold tracking-[0.3em] text-ishes-green uppercase">Notre Institut</span>
+                <div className="w-6 h-[2px] bg-ishes-blue" />
+                <span className="text-[11px] font-bold tracking-[0.3em] text-ishes-blue uppercase">Notre Institut</span>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-8">
                 Un savoir qui transforme<br />
-                <span className="text-ishes-green italic">chaque musulman.</span>
+                <span className="text-ishes-blue italic">chaque musulman.</span>
               </h2>
 
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium">
@@ -311,14 +222,14 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="mt-12 relative pl-7 border-l-4 border-ishes-green">
+              <div className="mt-12 relative pl-7 border-l-4 border-ishes-blue">
                 <p className="text-ishes-dark text-xl leading-relaxed font-bold italic">
                   "Notre mission : ouvrir les portes d'un savoir qui transforme, pour que chaque musulman puisse vivre sa religion avec conscience, équilibre et profondeur."
                 </p>
               </div>
 
               <div className="mt-10 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-ishes-green/10 flex items-center justify-center text-ishes-green">
+                <div className="w-12 h-12 rounded-full bg-ishes-blue/10 flex items-center justify-center text-ishes-blue">
                   <Heart className="w-6 h-6" />
                 </div>
                 <div>
