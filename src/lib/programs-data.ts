@@ -318,7 +318,7 @@ export const PROGRAMS_DATA: Record<string, any> = {
     hook: "Découvre l’histoire vivante du Livre d’ALLAH.",
     description: "📖 SCIENCES DU CORAN\nDécouvre l’histoire vivante du Livre d’ALLAH.\nLe Coran n’est pas simplement un livre récité depuis plus de 1400 ans.\nC’est une révélation descendue du ciel, préservée génération après génération, transmise par les cœurs avant les pages.\nMais comment ce Livre nous est-il réellement parvenu ?\nComment a-t-il été révélé au Prophète ﷺ ?\nComment les Compagnons l’ont-ils appris, mémorisé, écrit et transmis ?\nPourquoi le Coran que nous lisons aujourd’hui est-il identique à celui récité par le Messager d’ALLAH ﷺ ?\nEt en quoi cette préservation constitue-t-elle un miracle unique dans l’histoire de l’humanité ?\n\n🎓 POUR QUI ?\nCe cours est destiné aux débutants souhaitant découvrir les Sciences du Coran, aux étudiants en sciences islamiques, aux enseignants, aux parents, et à toute personne désirant comprendre l’histoire et la transmission du Coran avec méthode et profondeur. Aucun niveau avancé en arabe n’est requis.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cours hebdomadaire en direct sur Zoom\n• Replays accessibles à vie\n• Groupe WhatsApp dédié aux étudiants\n• Enseignement structuré et progressif\n• Certificat de fin de parcours délivré par l’Institut ISHES",
     videoUrl: "https://www.youtube.com/embed/NGiWynfi1ac",
-    flyerUrl: "/images/flyer-sciences-du-coran.jpeg",
+    flyerUrl: "/pdf/sciences-du-coran-descriptif.pdf",
     features: [
       { t: "La Descente", d: "Les circonstances de la révélation et la manière dont le Coran descendait sur le Prophète ﷺ." },
       { t: "Les Compagnons", d: "Le rôle héroïque des Compagnons dans sa mémorisation et sa transmission." },
@@ -338,7 +338,7 @@ export const PROGRAMS_DATA: Record<string, any> = {
     tag: "Présentiel & Distanciel | 4-15 ans",
     price: "480 €",
     hook: "Une méthode fusionnée et ludique pour faire aimer la langue arabe et le Coran à vos enfants en présentiel à Toulouse ou en ligne.",
-    description: "Le cursus complet pour donner des bases solides et durables à vos enfants.\n\n❌ LE PROBLÈME DE L'APPRENTISSAGE TRADITIONNEL\nBeaucoup d'enfants s'ennuient dans les cours d'arabe classiques car les méthodes sont souvent rigides ou trop théoriques.\nDe plus, on sépare généralement l'apprentissage de la langue et celui du Coran.\nL'enfant se retrouve à devoir mémoriser des versets qu'il ne sait pas déchiffrer, ou à apprendre des règles de grammaire sans lien avec le Coran, ce qui crée de la confusion et de la démotivation.\n\n✨ NOTRE SOLUTION : LA MÉTHODE FUSIONNÉE ET ACTIVE\nPour résoudre ce problème, notre programme 'Scolarité Enfants' combine intelligemment l'Arabe et le Coran & Tajwid dans un seul et même cursus pédagogique.\nL'enfant apprend à lire et écrire la langue arabe tout en appliquant immédiatement ces notions pour prononcer correctement et mémoriser le Coran.\n\n• Volet Arabe : Acquisition de la lecture et de l'écriture progressive, développement du vocabulaire de base et expression orale.\n• Volet Coran & Tajwid : Apprentissage de la récitation fluide à l'aide de notre méthode 'Les Clés du Coran' (Nour Al Bayane), correction méthodique de la prononciation (Makharij) et mémorisation adaptée au rythme de l'enfant.\n• Tarbiya & Comportement : Des histoires prophétiques et des leçons d'éthique musulmane (Adab) pour éveiller la spiritualité des plus jeunes.\n\n💛 UNE PÉDAGOGIE BIENVEILLANTE ET LUDIQUE\nPour maintenir l'engagement et l'enthousiasme de votre enfant :\n• Nous utilisons des supports visuels exclusifs, des jeux éducatifs et des coloriages adaptés selon les âges.\n• L'apprentissage se fait par le jeu et le renforcement positif.\n• Les classes sont limitées en nombre pour garantir un suivi individuel précis de chaque élève.\n\n👤 POUR QUI ?\nAccessible aux enfants et adolescents de 4 à 15 ans :\n• Cursus adapté selon les tranches d'âge (Maternelle à Ado).\n• Groupes de niveaux homogènes, du grand débutant à l'élève déjà lecteur.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cursus annuel de septembre à juin\n• En présentiel à Toulouse (Mercredi, Samedi ou Dimanche) ou en ligne\n• Suivi régulier des parents via un groupe WhatsApp dédié\n• Supports pédagogiques (manuels d'activités physiques) inclus dans la formation",
+    description: "Bien plus qu'un cours : un lieu où votre enfant grandit avec le Coran, la langue arabe et les valeurs de l'Islam.\nL'enfance est le moment où se construisent les habitudes, les repères et l'identité.\nC'est pourquoi notre scolarité ne se limite pas à enseigner l'arabe ou le Coran. Nous souhaitons offrir aux enfants un environnement dans lequel ils grandissent entourés d'enseignants, de camarades et d'une pédagogie qui les rapproche naturellement de leur religion.\nDepuis plus de 15 ans, l'Institut ISHES accompagne des centaines d'enfants avec une méthode qui allie exigence, bienveillance et plaisir d'apprendre.\n\n✨ UN PROGRAMME COMPLET\nChaque semaine, votre enfant bénéficie d'un enseignement autour de quatre apprentissages essentiels :\n• Langue arabe : lire, comprendre et s'exprimer progressivement.\n• Coran & Hifz : lecture, mémorisation et révision.\n• Tajwid : réciter le Coran avec justesse dès le plus jeune âge.\n• Tarbya Islamiya : développer la foi, le bon comportement et les valeurs musulmanes.\n\n💛 UNE PÉDAGOGIE QUI DONNE ENVIE D'APPRENDRE\nNos cours alternent explications, échanges, mises en pratique et activités pédagogiques afin de maintenir l'attention des enfants et de les rendre acteurs de leurs apprentissages.\nNotre objectif est qu'ils viennent en cours avec plaisir et repartent avec l'envie de continuer à apprendre.\n\n🚀 UNE PROGRESSION CLAIRE\nChaque niveau suit un programme structuré avec des objectifs précis.\nDes évaluations régulières permettent de mesurer les acquis, d'encourager les progrès et de préparer sereinement le passage au niveau suivant.\n\n🎓 UN ENVIRONNEMENT ÉDUCATIF\nAu-delà des apprentissages, les enfants évoluent dans un cadre où ils développent le respect, l'entraide, l'autonomie et le goût de l'effort.\nIls construisent des amitiés, prennent confiance en eux et grandissent au contact d'autres enfants partageant les mêmes valeurs.\n\n🎯 CERTIFICAT DE FIN D'ANNÉE\nLes élèves ayant validé leur niveau reçoivent un certificat délivré par l'Institut ISHES attestant de leur progression.\n\n👤 POUR QUI ?\nLa scolarité est ouverte aux enfants de 4 à 15 ans, débutants ou ayant déjà des bases.\nLes classes sont organisées par âge et par niveau afin de permettre à chacun de progresser dans les meilleures conditions.\n\n💻 COMMENT SE DÉROULE LA SCOLARITÉ ?\n• Cours en présentiel à Toulouse ;\n• Classes à effectif limité ;\n• Arabe, Coran, Hifz, Tajwid et Tarbya Islamiya ;\n• Activités pédagogiques adaptées à chaque âge ;\n• Supports pédagogiques inclus ;\n• Évaluations tout au long de l'année ;\n• Certificat de fin d'année.",
     features: [
       { t: "Pédagogie active", d: "Coloriages, jeux et supports interactifs pour maintenir l'enthousiasme." },
       { t: "Méthode Fusionnée", d: "Arabe, Coran et Tajwid réunis pour une progression naturelle." },
@@ -453,21 +453,23 @@ export const PROGRAMS_DATA: Record<string, any> = {
     price: "Sur Devis",
     hook: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     videoUrl: "https://www.youtube.com/embed/8QiflPosqYU?si=TnSm478CtqEXACvl",
-    description: "Tu connais peut-être déjà les règles du Tajwid. Tu récites correctement. Mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science… et savoir l'enseigner.\n\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.",
-    objectifs: [
-      "Construire une progression pédagogique logique",
-      "Présenter chaque règle avec simplicité",
-      "Gérer une classe et maintenir l'attention",
-      "Corriger efficacement sans décourager",
-      "S'adapter selon le niveau de chaque élève"
-    ],
-    deroulement: [
-      "Deux cours par semaine : le lundi et le jeudi, en direct sur Zoom",
-      "Replays accessibles pendant toute la durée",
-      "Formation organisée en trois modules",
-      "Vérification de la récitation (Module 3)",
-      "Évaluations et examens de validation"
-    ],
+    description: "Transmettre est plus qu'un métier, c'est une vocation.\nApprendre à lire le Coran, éduquer selon les principes islamiques ou transmettre la langue arabe est l'une des missions les plus nobles qui soient.\n\n✨ SAVOIR ≠ ENSEIGNER\nAvoir des connaissances est une chose. Savoir les transmettre avec pédagogie, capter l'attention de ses élèves et structurer un cours en est une autre.\nTu connais peut-être déjà les règles du Tajwid, tu récites correctement, mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science et savoir l'enseigner.\nSans une méthode claire, on risque l'échec et le découragement.\n\n💛 MÉTHODOLOGIE & LÉGITIMITÉ\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.\nNos formations vous apportent des méthodes éprouvées (comme Les Clés du Coran) pour enseigner avec excellence. À l'issue du cursus, une certification asseoit votre légitimité auprès des instituts et des parents.\n\n👤 POUR QUI ?\n• Futurs enseignants ou enseignants en poste\n• Étudiants en sciences islamiques\n• Responsables d'écoles, mosquées, associations\n• Parents souhaitant transmettre le Coran\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Deux cours par semaine : le lundi et le jeudi, en direct sur Zoom\n• Replays accessibles pendant toute la durée\n• Formation organisée en trois modules\n• Tous les supports sont inclus (Méthode Les Clés du Coran, ressources pédagogiques)\n• Accompagnement et supervision possibles même après la certification",
+    fullProgram: {
+      objectifs: [
+        "Construire une progression pédagogique logique",
+        "Présenter chaque règle avec simplicité",
+        "Gérer une classe et maintenir l'attention",
+        "Corriger efficacement sans décourager",
+        "S'adapter selon le niveau de chaque élève"
+      ],
+      deroulement: [
+        "Deux cours par semaine : le lundi et le jeudi, en direct sur Zoom",
+        "Replays accessibles pendant toute la durée",
+        "Formation organisée en trois modules",
+        "Vérification de la récitation (Module 3)",
+        "Évaluations et examens de validation"
+      ]
+    },
     features: [
       { t: "Module 1", d: "Enseigner le Tajwid (Méthode Les Clés du Coran)" },
       { t: "Module 2", d: "« Apprendre à apprendre » (Pédagogie & Psychologie)" },
