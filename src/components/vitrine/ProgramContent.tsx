@@ -507,83 +507,90 @@ export function ProgramContent() {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 overflow-hidden">
-        <ArabicBackground />
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 relative z-10">
-          <div className="max-w-2xl relative">
-            {/* USER SKETCH CLEAN MANGA BUBBLE (Desktop only) */}
-            <div className="hidden lg:block absolute -right-64 top-[-50px] z-20 w-[240px] h-[240px]">
-              <Image
-                src="/images/bulle-manga-pedagogique-ishes.png"
-                alt="Manga Bubble"
-                fill
-                sizes="240px"
-                className="object-contain"
-              />
-              <div className="absolute inset-0 flex items-center justify-center text-center p-8 pr-10 pb-16 font-sans">
-                <p className="text-[#101828] text-xs font-black uppercase tracking-widest leading-relaxed">
-                  Sélectionnez ici <br /> pour choisir <br /> la formation !
-                </p>
+      <section className="relative w-full overflow-hidden bg-[#fafafa]">
+        {/* Quran Background Image - Right Side */}
+        <div className="absolute top-0 right-0 w-full lg:w-[55%] h-full z-0">
+          <div className="absolute inset-y-0 left-0 w-full sm:w-1/2 bg-gradient-to-r from-[#fafafa] to-transparent z-10" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#fafafa] to-transparent z-10 lg:hidden" />
+          <Image
+            src="/images/quran-coffee.png"
+            alt="Coran et apprentissage"
+            fill
+            className="object-cover object-center lg:object-left opacity-20 lg:opacity-100"
+            priority
+          />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 z-10">
+          <ArabicBackground />
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-16 relative z-20">
+            <div className="max-w-2xl relative">
+              <div className="font-black tracking-widest text-xs uppercase mb-6 text-ishes-gold">
+                Nos Formations
+              </div>
+              <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-6xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-6">
+                Choisis ton parcours, <br />
+                <span className="text-ishes-gold italic font-serif">avance à ton rythme.</span>
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-500 font-medium max-w-lg leading-relaxed">
+                Présentiel ou à distance, adulte ou enfant : découvre le parcours qui t'aidera à apprendre, comprendre et transmettre ta religion.
+              </p>
+            </div>
+
+          <div className="flex flex-col gap-6 w-full lg:w-auto relative bg-white/90 backdrop-blur-md p-8 sm:p-10 rounded-[2.5rem] shadow-2xl shadow-black/5 border border-white/50">
+            <div className="text-center mb-2 hidden lg:block">
+              <span className="text-ishes-dark font-black text-[11px] uppercase tracking-widest">
+                Sélectionnez ici<br/>pour choisir<br/>la formation !
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              {/* Mode Toggle Switch (Présentiel / Distanciel) */}
+              <div className="bg-gray-50 p-1.5 rounded-2xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[340px]">
+                <button
+                  onClick={() => setActiveMode("presentiel")}
+                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-3.5 rounded-xl font-bold text-sm transition-all ${activeMode === "presentiel"
+                    ? "bg-white text-ishes-gold shadow-md transform scale-100 border border-gray-100"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
+                >
+                  <MapPin className="w-4 h-4" /> Présentiel
+                </button>
+                <button
+                  onClick={() => setActiveMode("distanciel")}
+                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-3.5 rounded-xl font-bold text-sm transition-all ${activeMode === "distanciel"
+                    ? "bg-ishes-dark text-white shadow-md transform scale-100"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
+                >
+                  <Monitor className="w-4 h-4" /> Distanciel
+                </button>
+              </div>
+
+              {/* Audience Toggle Switch (Adulte / Enfant) */}
+              <div className="bg-gray-50 p-1.5 rounded-2xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[340px]">
+                <button
+                  onClick={() => setActiveAudience("adulte")}
+                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-3.5 rounded-xl font-bold text-sm transition-all ${activeAudience === "adulte"
+                    ? "bg-ishes-dark text-white shadow-md transform scale-100"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
+                >
+                  <User className="w-4 h-4" /> Adulte
+                </button>
+                <button
+                  onClick={() => setActiveAudience("enfant")}
+                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-3.5 rounded-xl font-bold text-sm transition-all ${activeAudience === "enfant"
+                    ? "bg-white text-gray-700 shadow-md transform scale-100 border border-gray-100"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
+                >
+                  <Baby className="w-4 h-4" /> Enfant
+                </button>
               </div>
             </div>
-
-            <div className={`font-black tracking-widest text-xs uppercase mb-6 ${activeMode === "presentiel" ? "text-ishes-gold" : "text-ishes-blue"}`}>
-              Nos Formations
-            </div>
-            <h1 className="text-[32px] sm:text-5xl md:text-6xl font-black text-[#101828] leading-[1.1] tracking-tight mb-6">
-              Choisissez votre <br />
-              <span className={`italic ${activeMode === "presentiel" ? "text-ishes-gold" : "text-ishes-blue"}`}>mode d'apprentissage.</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-500 font-medium">
-              Que vous soyez à Toulouse ou ailleurs, nous avons le programme idéal pour votre progression.
-            </p>
           </div>
-
-          <div className="flex flex-col gap-4 w-full sm:w-auto relative">
-            {/* Mode Toggle Switch (Présentiel / Distanciel) */}
-            <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
-              <button
-                onClick={() => setActiveMode("presentiel")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "presentiel"
-                  ? "bg-white text-ishes-gold shadow-lg shadow-black/5 transform scale-100"
-                  : "text-gray-500 hover:text-gray-700"
-                  }`}
-              >
-                <MapPin className="w-4 h-4" /> Présentiel
-              </button>
-              <button
-                onClick={() => setActiveMode("distanciel")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "distanciel"
-                  ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
-                  : "text-gray-500 hover:text-gray-700"
-                  }`}
-              >
-                <Monitor className="w-4 h-4" /> Distanciel
-              </button>
-            </div>
-
-            {/* Audience Toggle Switch (Adulte / Enfant) */}
-            <div className="bg-gray-100 p-1 rounded-3xl flex items-center shadow-inner shrink-0 w-full sm:min-w-[320px] overflow-hidden">
-              <button
-                onClick={() => setActiveAudience("adulte")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "adulte"
-                  ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
-                  : "text-gray-500 hover:text-gray-700"
-                  }`}
-              >
-                <User className="w-4 h-4" /> Adulte
-              </button>
-              <button
-                onClick={() => setActiveAudience("enfant")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "enfant"
-                  ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
-                  : "text-gray-500 hover:text-gray-700"
-                  }`}
-              >
-                <Baby className="w-4 h-4" /> Enfant
-              </button>
-            </div>
-          </div>
+        </div>
         </div>
       </section>
 

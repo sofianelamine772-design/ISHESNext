@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { CourseDetailView } from "@/components/CourseDetailView";
-import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { TajwidStandardView } from "@/components/vitrine/TajwidStandardView";
 
 export const metadata: Metadata = {
   title: "Cours de Tajwid Standard | Maîtrise de la Lecture | ISHES",
@@ -9,8 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function CoursLectureTajwidPage() {
-  const id = "tajwid_standard";
-  const course = PROGRAMS_DATA[id];
-  
-  return <CourseDetailView course={course} id={id} />;
+  return <TajwidStandardView />;
 }
