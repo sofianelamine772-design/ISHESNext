@@ -52,7 +52,7 @@ export default function SignInPage() {
                 headerSubtitle: "hidden",
                 socialButtonsBlockButton: "rounded-xl border-gray-200 hover:bg-gray-50 transition-all font-bold",
                 formButtonPrimary: "bg-ishes-gold hover:bg-[#b0935b] text-white font-bold py-3 rounded-xl shadow-lg shadow-ishes-gold/10 transition-all h-12 uppercase tracking-widest text-xs",
-                formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-[#c8a96e]/20 focus:border-ishes-gold transition-all",
+                formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-ishes-gold/20 focus:border-ishes-gold transition-all",
                 footerAction: "!hidden",
                 footer: "!hidden",
                 footerActionLink: "!hidden",

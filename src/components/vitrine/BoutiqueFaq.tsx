@@ -30,12 +30,12 @@ export function BoutiqueFaq() {
   ];
 
   return (
-    <section className="py-24 bg-white border-t border-gray-100">
+    <section className="py-24 bg-[#fafafa] border-t border-gray-100/30">
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">Aide & Support</span>
+          <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Aide & Support</span>
           <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
-            Questions sur la <span className="text-ishes-blue italic">boutique.</span>
+            Questions sur la <span className="text-ishes-gold italic font-serif">boutique.</span>
           </h2>
         </div>
 
@@ -45,21 +45,21 @@ export function BoutiqueFaq() {
             return (
               <div 
                 key={idx} 
-                className="border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 bg-[#fafafa]"
+                className="border border-ishes-gold/10 rounded-[2rem] overflow-hidden transition-all duration-300 bg-[#f9f5f0]"
               >
                 <button
                   onClick={() => setActiveFaq(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-blue transition-colors"
+                  className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-gold transition-colors"
                 >
                   <span>{item.q}</span>
                   <ChevronRight 
-                    className={`w-5 h-5 text-ishes-blue transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                    className={`w-5 h-5 text-ishes-gold transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
                   />
                 </button>
                 <div 
                   className={`transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-                  } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
+                    isOpen ? 'max-h-[500px] border-t border-ishes-gold/10 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                  } bg-[#f9f5f0] text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
                 >
                   {item.a}
                 </div>

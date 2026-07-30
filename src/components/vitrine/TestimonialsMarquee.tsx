@@ -52,11 +52,11 @@ export function TestimonialsMarquee() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block bg-ishes-blue/10 text-ishes-blue text-[10px] font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6">
+          <span className="inline-block bg-ishes-gold/10 text-ishes-gold text-[10px] font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6">
             Approuvé par la communauté
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight flex items-center justify-center gap-3 flex-wrap">
-            Ce que nos <span className="text-ishes-blue italic">étudiants</span> pensent.
+            Ce que nos <span className="text-ishes-gold italic font-serif">étudiants</span> pensent.
           </h2>
         </motion.div>
       </div>
@@ -83,10 +83,10 @@ export function TestimonialsMarquee() {
 
 function TestimonialCard({ testimonial }: { testimonial: any }) {
   return (
-    <div className="w-[340px] shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col gap-5 relative group overflow-hidden cursor-default">
+    <div className="w-[340px] shrink-0 bg-[#f9f5f0] rounded-[2.5rem] border border-ishes-gold/10 shadow-sm hover:shadow-md hover:border-ishes-gold/30 hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col gap-5 relative group overflow-hidden cursor-default">
       
       {/* Background Quote SVG - Fixed opacity and color so it's not a massive black block */}
-      <svg className="absolute top-4 right-4 w-16 h-16 text-gray-100 opacity-50 group-hover:text-ishes-blue/5 transition-colors duration-500 select-none pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
+      <svg className="absolute top-4 right-4 w-16 h-16 text-gray-100 opacity-50 group-hover:text-ishes-gold/10 transition-colors duration-500 select-none pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
       </svg>
 

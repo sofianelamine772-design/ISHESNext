@@ -1,5 +1,5 @@
 "use client";
- 
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, GraduationCap, Monitor, CreditCard, ChevronRight, FileText, Heart, Sparkles } from "lucide-react";
@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
- 
+
 const formations = [
   {
     id: "nour-al-bayan",
@@ -103,7 +103,7 @@ const formations = [
     badgeColor: "bg-ishes-blue/10 text-ishes-blue"
   }
 ];
- 
+
 export default function FormationEnseignantPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
@@ -136,20 +136,20 @@ export default function FormationEnseignantPage() {
       <section className="relative pt-44 pb-32 md:pt-56 md:pb-48 overflow-hidden">
         <ArabicBackground />
         <div className="absolute top-0 right-1/2 translate-x-1/2 w-[800px] h-[600px] bg-ishes-blue/5 blur-[120px] rounded-full pointer-events-none -z-10" />
-        
+
         <div className="max-w-7xl mx-auto px-6 text-center">
           <div className="max-w-5xl mx-auto">
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl md:text-7xl lg:text-[95px] font-black text-ishes-dark leading-[0.9] tracking-tighter mb-10 uppercase"
             >
               <span className="block">Devenez</span>
-              <span className="text-ishes-blue italic whitespace-nowrap">Enseignant certifié.</span>
+              <span className="text-ishes-gold italic font-serif whitespace-nowrap">Enseignant certifié.</span>
             </motion.h1>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -168,16 +168,16 @@ export default function FormationEnseignantPage() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-20 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left relative z-20"
             >
               {formations.map((f, idx) => (
-                <div key={f.id} className="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-blue/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
-                  
+                <div key={f.id} className="bg-[#f9f5f0] rounded-[2.5rem] p-8 border border-ishes-gold/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:border-ishes-gold/30 hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
+
                   <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-6">
                       <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full ${f.badgeColor}`}>
@@ -193,7 +193,7 @@ export default function FormationEnseignantPage() {
                     <h3 className="text-2xl font-black text-ishes-dark leading-tight mb-3 pr-4 group-hover:text-ishes-blue transition-colors">
                       {f.title}
                     </h3>
-                    
+
                     <p className="text-gray-500 text-[15px] font-medium leading-relaxed mb-6">
                       {f.subtitle}
                     </p>
@@ -215,9 +215,9 @@ export default function FormationEnseignantPage() {
                         <span className="text-lg font-black text-ishes-dark">{f.pricing}</span>
                       </div>
                     </div>
-                    <Link 
+                    <Link
                       href={`/program/${f.id}`}
-                      className="w-full text-center py-4 rounded-2xl bg-gray-50 text-ishes-dark font-black hover:bg-ishes-blue hover:text-white transition-all duration-300 border border-gray-100 text-sm uppercase tracking-widest"
+                      className="w-full text-center py-4 rounded-2xl bg-ishes-gold text-white hover:brightness-95 font-black transition-all duration-300 border border-ishes-gold/10 shadow-lg shadow-ishes-gold/20 text-sm uppercase tracking-widest hover:scale-[1.02]"
                     >
                       Voir le programme
                     </Link>
@@ -228,7 +228,7 @@ export default function FormationEnseignantPage() {
           </div>
         </div>
       </section>
-      
+
       {/* --- CHIFFRES CLES --- */}
       <section className="relative z-20 -mt-16 mb-16 px-6">
         <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
@@ -253,11 +253,11 @@ export default function FormationEnseignantPage() {
       <section className="pt-20 pb-10 relative z-10">
         <div className="max-w-4xl mx-auto px-6">
           <div className="space-y-8 md:space-y-12">
-            
+
             {/* Hook Vocation */}
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-black text-ishes-dark mb-6 tracking-tight leading-tight">
-                Transmettre est <span className="text-ishes-blue italic">plus qu'un métier</span>,<br/>c'est une vocation.
+                Transmettre est <span className="text-ishes-gold italic font-serif">plus qu'un métier</span>,<br />c'est une vocation.
               </h2>
               <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
                 Apprendre à lire le Coran, éduquer selon les principes islamiques ou transmettre la langue arabe est l'une des missions les plus nobles qui soient.
@@ -266,7 +266,7 @@ export default function FormationEnseignantPage() {
 
             <div className="grid md:grid-cols-2 gap-8">
               {/* Problème */}
-              <div className="bg-[#fcfaf7] p-8 md:p-10 rounded-[2rem] border border-[#f5f0e6] shadow-sm">
+              <div className="bg-[#f9f5f0] p-8 md:p-10 rounded-[2.5rem] border border-ishes-gold/10 shadow-sm">
                 <h3 className="text-2xl font-black text-ishes-gold mb-4">Savoir ≠ Enseigner</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-lg">
                   Avoir des connaissances est une chose. Savoir les transmettre avec pédagogie, capter l'attention de ses élèves et structurer un cours en est une autre. <strong className="text-ishes-dark">Sans une méthode claire, on risque l'échec et le découragement.</strong>
@@ -274,8 +274,8 @@ export default function FormationEnseignantPage() {
               </div>
 
               {/* Solution */}
-              <div className="bg-[#f2f7f4] p-8 md:p-10 rounded-[2rem] border border-[#e0ece5] shadow-sm">
-                <h3 className="text-2xl font-black text-[#4a7c59] mb-4">Méthodologie & Légitimité</h3>
+              <div className="bg-[#f9f5f0] p-8 md:p-10 rounded-[2.5rem] border border-ishes-gold/10 shadow-sm">
+                <h3 className="text-2xl font-black text-ishes-gold mb-4">Méthodologie & Légitimité</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-lg">
                   Nos formations vous apportent des méthodes éprouvées (Nour Al Bayan, Tarbya) pour enseigner avec excellence. À l'issue du cursus, une <strong className="text-ishes-dark">certification asseoit votre légitimité</strong> auprès des instituts et des parents.
                 </p>
@@ -287,7 +287,7 @@ export default function FormationEnseignantPage() {
       </section>
 
 
- 
+
       {/* --- REASSURANCE --- */}
       <section className="bg-ishes-blue/5 py-24 border-y border-ishes-blue/10 relative overflow-hidden">
         <ArabicBackground />
@@ -321,8 +321,8 @@ export default function FormationEnseignantPage() {
             {faqItems.map((item, idx) => {
               const isOpen = activeFaq === idx;
               return (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   className="border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 bg-[#fafafa]"
                 >
                   <button
@@ -330,14 +330,13 @@ export default function FormationEnseignantPage() {
                     className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-blue transition-colors"
                   >
                     <span>{item.q}</span>
-                    <ChevronRight 
-                      className={`w-5 h-5 text-ishes-blue transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
+                    <ChevronRight
+                      className={`w-5 h-5 text-ishes-blue transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
                     />
                   </button>
-                  <div 
-                    className={`transition-all duration-300 ease-in-out ${
-                      isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-                    } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
+                  <div
+                    className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                      } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
                   >
                     {item.a}
                   </div>

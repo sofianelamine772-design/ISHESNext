@@ -17,7 +17,7 @@ export function ContactContent() {
       >
         <span className="ishes-label text-ishes-blue mb-5 block">Nous contacter</span>
         <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-dark leading-none mb-8 uppercase tracking-tighter">
-          Parlons-<span className="text-ishes-blue italic">nous.</span>
+          Parlons-<span className="text-ishes-gold italic font-serif">nous.</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.
@@ -32,9 +32,9 @@ export function ContactContent() {
         className="grid md:grid-cols-2 gap-6 mb-8"
       >
         {/* PRÉSENTIEL */}
-        <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+        <div className="group relative overflow-hidden bg-[#f9f5f0] rounded-[2.5rem] border border-ishes-gold/10 hover:border-ishes-gold/30 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
           <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">Institut ISHES</h2>
-          <p className="ishes-heading text-xl text-ishes-blue mb-6">PRÉSENTIEL</p>
+          <p className="ishes-heading text-xl text-ishes-gold mb-6">PRÉSENTIEL</p>
           
           <a href="tel:+33768652091" className="flex items-center gap-4 mb-8 group/phone">
             <div className="w-16 h-16 rounded-2xl bg-ishes-dark flex items-center justify-center shrink-0 shadow-lg shadow-ishes-dark/20 group-hover/phone:scale-110 transition-transform">
@@ -70,7 +70,7 @@ export function ContactContent() {
         </div>
 
         {/* DISTANCE (WhatsApp) */}
-        <div className="group relative overflow-hidden bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+        <div className="group relative overflow-hidden bg-[#f9f5f0] rounded-[2.5rem] border border-ishes-gold/10 hover:border-ishes-gold/30 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
           <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">ISHES DISTANCIEL</h2>
           <p className="ishes-heading text-xl text-ishes-gold mb-6">DISTANCE</p>
           

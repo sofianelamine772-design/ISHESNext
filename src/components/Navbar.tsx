@@ -6,15 +6,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-const navLinks = [
-  { name: "Accueil", href: "/" },
-  { 
-    name: "Notre histoire", 
-    href: "/institut",
-    subLinks: [
-      { name: "Boutique", href: "/boutique" }
-    ]
-  },
+type NavLink = {
+  name: string;
+  href: string;
+  subLinks?: { name: string; href: string }[];
+};
+
+const navLinks: NavLink[] = [
+  { name: "Notre histoire", href: "/notre-histoire" },
+  { name: "Boutique", href: "/boutique" },
   { name: "Nos formations", href: "/program" },
   { name: "Devenir enseignant", href: "/formation-enseignant" },
   { name: "Pack accompagnement", href: "/pack-accompagnement" },
@@ -35,8 +35,8 @@ export function Navbar() {
 
   return (
     <>
-      <header className="w-full fixed top-0 lg:top-4 z-50 px-0 lg:px-4 pointer-events-none">
-        <div className="max-w-[1200px] mx-auto pointer-events-auto bg-white h-20 lg:h-[72px] flex items-center justify-between px-6 lg:px-6 lg:rounded-full border-b lg:border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.08)] transition-all">
+      <header className="w-full fixed top-0 xl:top-4 z-50 px-0 xl:px-4 pointer-events-none">
+        <div className="max-w-[1440px] mx-auto pointer-events-auto bg-white h-20 xl:h-[72px] flex items-center justify-between px-6 xl:px-4 xl:rounded-full border-b xl:border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.08)] transition-all">
 
           <div className="flex-shrink-0">
             <Link href="/" className="group flex items-center transition-transform hover:scale-105 active:scale-95">
@@ -54,12 +54,12 @@ export function Navbar() {
           </div>
 
           {/* Desktop nav */}
-          <nav className="hidden xl:flex items-center gap-1.5 relative" onMouseLeave={() => setHoveredIndex(null)}>
+          <nav className="hidden xl:flex items-center gap-1 lg:gap-2 relative" onMouseLeave={() => setHoveredIndex(null)}>
             {navLinks.map((link, idx) => (
               <div key={link.name} className="relative group" onMouseEnter={() => setHoveredIndex(idx)}>
                 <Link
                   href={link.href}
-                  className={`relative px-3 py-2 text-[16px] font-bold tracking-tight transition-colors z-10 whitespace-nowrap flex items-center gap-1 ${hoveredIndex === idx ? "text-ishes-blue" : "text-gray-500"
+                  className={`relative px-2 xl:px-3 py-2 text-[15px] 2xl:text-[16px] font-bold tracking-tight transition-colors z-10 whitespace-nowrap flex items-center gap-1 ${hoveredIndex === idx ? "text-ishes-gold" : "text-gray-500"
                     }`}
                 >
                   {link.name}
@@ -67,7 +67,7 @@ export function Navbar() {
                   {hoveredIndex === idx && (
                     <motion.div
                       layoutId="navHoverPill"
-                      className="absolute inset-0 bg-ishes-blue/[0.08] border border-ishes-blue/10 rounded-full -z-10"
+                      className="absolute inset-0 bg-ishes-gold/[0.08] border border-ishes-gold/10 rounded-full -z-10"
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
@@ -81,7 +81,7 @@ export function Navbar() {
                         <Link
                           key={subLink.name}
                           href={subLink.href}
-                          className="block px-4 py-2.5 text-[15px] font-bold text-gray-600 hover:text-ishes-blue hover:bg-gray-50 transition-colors text-center"
+                          className="block px-4 py-2.5 text-[15px] font-bold text-gray-600 hover:text-ishes-gold hover:bg-gray-50 transition-colors text-center"
                         >
                           {subLink.name}
                         </Link>
@@ -93,11 +93,11 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <Link href="/app" className="hidden lg:flex items-center justify-center px-6 py-2.5 rounded-full text-[15px] uppercase tracking-[0.15em] font-black text-gray-600 hover:text-ishes-blue hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all active:scale-95">
+          <div className="flex items-center gap-3 lg:gap-4">
+            <Link href="/app" className="hidden xl:flex items-center justify-center px-4 xl:px-6 py-2.5 rounded-full text-[14px] 2xl:text-[15px] uppercase tracking-[0.15em] font-black text-gray-600 hover:text-ishes-gold hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all active:scale-95">
               Connexion
             </Link>
-            <Link href="/program" className="hidden sm:block bg-ishes-blue hover:bg-ishes-blue-hover text-white px-7 py-2.5 rounded-full text-[16px] uppercase tracking-wider font-black transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-ishes-blue/20 border border-transparent">
+            <Link href="/program" className="bg-ishes-gold hover:brightness-95 text-white px-5 sm:px-8 py-2 sm:py-2.5 rounded-full text-[13px] sm:text-[15px] 2xl:text-[16px] uppercase tracking-wider font-black transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-ishes-gold/20 border border-transparent pointer-events-auto flex items-center justify-center text-center">
               S'inscrire
             </Link>
             <button
@@ -121,7 +121,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 xl:hidden"
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setMobileOpen(false)}
             />
 
@@ -131,7 +131,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="fixed top-20 left-0 right-0 z-50 xl:hidden mx-3"
+              className="fixed top-20 left-0 right-0 z-50 lg:hidden mx-3"
             >
               <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-100px)]">
                 <div className="overflow-y-auto flex-1">

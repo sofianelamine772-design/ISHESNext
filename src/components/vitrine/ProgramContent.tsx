@@ -545,8 +545,8 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveMode("presentiel")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "presentiel"
-                    ? "bg-white text-ishes-gold shadow-lg shadow-black/5 transform scale-100"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white text-ishes-gold shadow-lg shadow-black/5 transform scale-100"
+                  : "text-gray-500 hover:text-gray-700"
                   }`}
               >
                 <MapPin className="w-4 h-4" /> Présentiel
@@ -554,8 +554,8 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveMode("distanciel")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeMode === "distanciel"
-                    ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
+                  : "text-gray-500 hover:text-gray-700"
                   }`}
               >
                 <Monitor className="w-4 h-4" /> Distanciel
@@ -567,8 +567,8 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveAudience("adulte")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "adulte"
-                    ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
+                  : "text-gray-500 hover:text-gray-700"
                   }`}
               >
                 <User className="w-4 h-4" /> Adulte
@@ -576,8 +576,8 @@ export function ProgramContent() {
               <button
                 onClick={() => setActiveAudience("enfant")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeAudience === "enfant"
-                    ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white text-ishes-blue shadow-lg shadow-black/5 transform scale-100"
+                  : "text-gray-500 hover:text-gray-700"
                   }`}
               >
                 <Baby className="w-4 h-4" /> Enfant
@@ -620,21 +620,21 @@ export function ProgramContent() {
                   (program.id === 'arabe_adulte' || program.id === 'arabe-adulte-presentiel') ? '/fr/cours-arabe-adulte' :
                     program.id === 'femme-debutante-presentiel' ? '/fr/cours-presentiel-femme-debutante' :
                       program.id === 'femme-intermediaire-presentiel' ? '/fr/cours-presentiel-femme-intermediaire' :
-                      program.id === 'tajwid_enfant_distance' ? '/fr/cours-tajwid-enfant' :
-                      (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
-                        program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
-                          program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
-                            program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
-                              program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
-                                program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
-                                  program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
-                                    program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
-                                      program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
-                                        program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
-                                          program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
-                                            program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
-                                              program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                                                  `/program/${program.id}`;
+                        program.id === 'tajwid_enfant_distance' ? '/fr/cours-tajwid-enfant' :
+                          (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
+                            program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
+                              program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
+                                program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
+                                  program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
+                                    program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
+                                      program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
+                                        program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :
+                                          program.id === 'correction_fatiha' ? '/fr/correction-fatiha' :
+                                            program.id === 'cours_particuliers' ? '/fr/cours-particuliers' :
+                                              program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
+                                                program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
+                                                  program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
+                                                    `/program/${program.id}`;
 
             return (
               <motion.div
@@ -645,8 +645,8 @@ export function ProgramContent() {
                 transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
                 onClick={() => router.push(infoUrl)}
                 className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${program.isRecommended
-                    ? "border-[3px] border-ishes-blue shadow-md"
-                    : "border border-gray-100 shadow-sm"
+                  ? "border-[3px] border-ishes-blue shadow-md"
+                  : "border border-gray-100 shadow-sm"
                   }`}
               >
                 {/* RECOMMENDED BADGE */}
@@ -663,8 +663,8 @@ export function ProgramContent() {
                       {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
                     </span>
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${isPresentiel
-                        ? "bg-ishes-blue/10 text-ishes-blue border-ishes-blue/20"
-                        : "bg-blue-50 text-blue-700 border-blue-100"
+                      ? "bg-ishes-blue/10 text-ishes-blue border-ishes-blue/20"
+                      : "bg-blue-50 text-blue-700 border-blue-100"
                       }`}>
                       <span>📅</span> {program.durationText}
                     </span>
@@ -678,34 +678,34 @@ export function ProgramContent() {
 
                   {/* ICONS GRID */}
                   {!(program.id === 'tajwid_intensif' || program.id === 'fiqh_malikite' || program.id === 'memoriser_coran' || program.id === 'sciences_du_coran') && (
-                  <div className="grid grid-cols-2 gap-3 mb-5">
-                    <div className="flex items-center gap-2">
-                      <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400">
-                        {isPresentiel ? program.durationText : (program.id === 'tajwid_standard' ? '1h' : '1h30/sem')}
-                      </span>
-                    </div>
-                    {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && !program.id.includes("enfant") && (
+                    <div className="grid grid-cols-2 gap-3 mb-5">
                       <div className="flex items-center gap-2">
-                        <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
+                        <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
                         <span className="text-[10px] font-bold text-gray-400">
-                          {program.id === 'tajwid_standard' ? 'Support inclus' : 'Manuel inclus'}
+                          {isPresentiel ? program.durationText : (program.id === 'tajwid_standard' ? '1h' : '1h30/sem')}
                         </span>
                       </div>
-                    )}
-                    <div className="flex items-center gap-2">
-                      <Users className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400">
-                        {program.id === 'tajwid_standard' ? '10' : (program.id.includes("enfant") ? "Max 16" : "Max 20")}
-                      </span>
+                      {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && !program.id.includes("enfant") && (
+                        <div className="flex items-center gap-2">
+                          <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
+                          <span className="text-[10px] font-bold text-gray-400">
+                            {program.id === 'tajwid_standard' ? 'Support inclus' : 'Manuel inclus'}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <Users className={`w-3.5 h-3.5 ${accentColor}`} />
+                        <span className="text-[10px] font-bold text-gray-400">
+                          {program.id === 'tajwid_standard' ? '10' : (program.id.includes("enfant") ? "Max 16" : "Max 20")}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Award className={`w-3.5 h-3.5 ${accentColor}`} />
+                        <span className="text-[10px] font-bold text-gray-400 uppercase">
+                          {program.id === 'tajwid_standard' ? 'Diplôme' : 'Certifié'}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Award className={`w-3.5 h-3.5 ${accentColor}`} />
-                      <span className="text-[10px] font-bold text-gray-400 uppercase">
-                        {program.id === 'tajwid_standard' ? 'Diplôme' : 'Certifié'}
-                      </span>
-                    </div>
-                  </div>
                   )}
 
                   {/* FEATURES LIST */}
@@ -756,8 +756,8 @@ export function ProgramContent() {
                       >
                         Info
                       </Link>
-                      <motion.div 
-                        animate={{ scale: [1, 1.05, 1] }} 
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: index * 0.5 }}
                         className="flex"
                       >

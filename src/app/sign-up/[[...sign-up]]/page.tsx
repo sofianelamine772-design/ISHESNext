@@ -61,7 +61,7 @@ export default async function SignUpPage({
                 headerSubtitle: "hidden",
                 socialButtonsBlockButton: "rounded-xl border-gray-200 hover:bg-gray-50 transition-all font-bold",
                 formButtonPrimary: "bg-ishes-gold hover:bg-[#b0935b] text-white font-bold py-3 rounded-xl shadow-lg shadow-ishes-gold/10 transition-all h-12 uppercase tracking-widest text-xs",
-                formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-[#c8a96e]/20 focus:border-ishes-gold transition-all",
+                formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-ishes-gold/20 focus:border-ishes-gold transition-all",
                 footerActionLink: "text-ishes-gold font-bold hover:text-[#b0935b]",
                 identityPreviewEditButton: "text-ishes-gold",
                 formFieldLabel: "font-bold text-gray-700 text-xs mb-2 uppercase tracking-wide",

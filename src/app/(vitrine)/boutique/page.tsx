@@ -24,7 +24,7 @@ export default function BoutiquePage() {
           <div className="bg-ishes-gold border-2 border-white/20 rounded-[3rem] p-12 md:p-20 text-ishes-dark relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl shadow-ishes-gold/20">
             <div className="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none" />
             <div className="relative z-10 max-w-xl">
-               <h2 className="ishes-heading text-4xl md:text-5xl mb-6">L'excellence au service du <span className="text-white italic">Savoir</span></h2>
+               <h2 className="ishes-heading text-4xl md:text-5xl mb-6">L'excellence au service du <span className="text-white italic font-serif">Savoir</span></h2>
                <p className="text-ishes-dark/70 font-medium text-lg leading-relaxed">
                  Toutes nos éditions sont relues et validées par nos enseignants pour garantir une transmission fidèle et adaptée.
                </p>

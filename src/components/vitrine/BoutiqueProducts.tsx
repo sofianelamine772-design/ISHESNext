@@ -60,7 +60,7 @@ export function BoutiqueProducts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="group flex flex-col md:flex-row lg:flex-col xl:flex-row gap-8 items-center md:items-start lg:items-center xl:items-start bg-white p-8 rounded-[2.5rem] border border-gray-100 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
+              className="group flex flex-col md:flex-row lg:flex-col xl:flex-row gap-8 items-center md:items-start lg:items-center xl:items-start bg-[#f9f5f0] p-8 rounded-[2.5rem] border border-ishes-gold/10 hover:border-ishes-gold/30 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
             >
               {/* Product Image */}
               <div className="w-[60%] sm:w-64 md:w-56 lg:w-[60%] xl:w-56 aspect-[3/4] mx-auto md:mx-0 lg:mx-auto xl:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/10 shrink-0 relative">
@@ -79,7 +79,7 @@ export function BoutiqueProducts() {
                   <h2 className="ishes-heading text-2xl text-ishes-gold mb-2 transition-colors leading-tight">
                     {product.title}
                   </h2>
-                  <p className="ishes-label text-[10px] text-ishes-blue mb-4 leading-tight opacity-80">
+                  <p className="ishes-label text-[10px] text-ishes-gold mb-4 leading-tight opacity-80">
                     {product.subtitle}
                   </p>
                   <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">

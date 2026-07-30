@@ -7,6 +7,16 @@ export function InstitutVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
+  // Force autoplay for iOS Safari which sometimes blocks React's autoPlay attribute
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch((err) => {
+        console.warn("Autoplay prevented by browser", err);
+      });
+    }
+  }, []);
 
   const toggleMute = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,9 +36,10 @@ export function InstitutVideo() {
         loop
         muted={isMuted}
         playsInline
+        poster="/images/quran-coffee.png"
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-ishes-blue/10 mix-blend-overlay pointer-events-none" />
+      <div className="absolute inset-0 bg-ishes-gold/10 mix-blend-overlay pointer-events-none" />
       
       {/* Custom Mute/Unmute Button */}
       <button

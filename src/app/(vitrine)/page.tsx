@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#fcfaf7]">
+    <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#fafafa]">
       {/* Background decoration */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-ishes-blue/5 blur-[120px] rounded-full" />
@@ -38,7 +38,7 @@ export default function Home() {
       <StatsSection />
 
       {/* ===== EMOTIONAL / JOURNEY SECTION (MINIMALIST & LIGHT) ===== */}
-      <section className="bg-[#fcfbf9] py-32 relative overflow-hidden">
+      <section className="bg-[#fafafa] py-32 relative overflow-hidden">
         {/* Subtle geometric pattern background */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(var(--color-ishes-blue) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
@@ -59,7 +59,7 @@ export default function Home() {
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#2d3748] leading-[1.15] mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-ishes-dark leading-[1.15] mb-6 tracking-tight">
               Tu veux avancer dans ta relation avec ALLAH… mais sans cadre, tu stagnes.
             </h2>
             <p className="text-gray-600 font-medium text-lg md:text-xl leading-relaxed max-w-3xl mx-auto">
@@ -67,9 +67,9 @@ export default function Home() {
             </p>
 
             {/* Nouveau Bloc "Le Problème" */}
-            <div className="mt-12 max-w-3xl mx-auto bg-[#fcfaf7] p-8 md:p-10 rounded-[2.5rem] border border-[#f5f0e6] text-left shadow-sm relative overflow-hidden">
+            <div className="mt-12 max-w-3xl mx-auto bg-[#f9f5f0] p-8 md:p-10 rounded-[2.5rem] border border-ishes-gold/10 text-left shadow-sm relative overflow-hidden">
               <h3 className="text-xs font-black text-ishes-gold tracking-widest uppercase mb-6 inline-block bg-[#f0e6d2]/50 px-4 py-1.5 rounded-full">Le Problème</h3>
-              <p className="text-[#2d3748] font-black text-xl md:text-3xl leading-snug mb-6">
+              <p className="text-ishes-dark font-black text-xl md:text-3xl leading-snug mb-6">
                 Aujourd’hui, beaucoup veulent apprendre…<br />
                 <span className="font-medium text-gray-500 text-lg md:text-xl">mais sans cadre, sans méthode et sans accompagnement.</span>
               </p>
@@ -77,11 +77,11 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                 <div className="text-gray-500 font-medium text-lg">
                   <strong className="text-ishes-gold uppercase tracking-wider text-xs block mb-1">Résultat</strong>
-                  <span className="text-[#2d3748] font-bold">Tu avances seul… puis tu t’arrêtes.</span>
+                  <span className="text-ishes-dark font-bold text-ishes-gold italic font-serif text-2xl">Tu avances seul… puis tu t’arrêtes.</span>
                 </div>
               </div>
 
-              <p className="text-[#2d3748] font-black text-lg md:text-xl flex items-start sm:items-center gap-4 bg-ishes-blue/5 p-6 rounded-2xl border border-ishes-blue/10">
+              <p className="text-ishes-dark font-black text-lg md:text-xl flex items-start sm:items-center gap-4 bg-ishes-blue/5 p-6 rounded-[2rem] border border-ishes-blue/10">
                 <span className="text-2xl shrink-0 mt-1 sm:mt-0">👉</span>
                 <span><strong className="text-ishes-blue">Sans accompagnement</strong>, il n’y a pas de progression durable.</span>
               </p>
@@ -92,7 +92,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto mt-20 mb-12 px-6">
             <div className="grid md:grid-cols-3 gap-6">
               {/* Carte 1 */}
-              <div className="bg-[#fcfaf7] border border-[#f5f0e6] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
+              <div className="bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2rem] p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
                 <div className="w-14 h-14 shrink-0 rounded-full bg-ishes-blue flex items-center justify-center text-white shadow-sm">
                   <ShieldCheck className="w-7 h-7" strokeWidth={1.5} />
                 </div>
@@ -109,7 +109,7 @@ export default function Home() {
               </div>
 
               {/* Carte 2 */}
-              <div className="bg-[#fcfaf7] border border-[#f5f0e6] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
+              <div className="bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2rem] p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
                 <div className="w-14 h-14 shrink-0 rounded-full bg-ishes-gold flex items-center justify-center text-white shadow-sm">
                   <BookHeart className="w-7 h-7" strokeWidth={1.5} />
                 </div>
@@ -126,7 +126,7 @@ export default function Home() {
               </div>
 
               {/* Carte 3 */}
-              <div className="bg-[#fcfaf7] border border-[#f5f0e6] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
+              <div className="bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2rem] p-6 flex flex-col sm:flex-row gap-5 items-start transition-all hover:shadow-md hover:-translate-y-1">
                 <div className="w-14 h-14 shrink-0 rounded-full bg-ishes-blue flex items-center justify-center text-white shadow-sm">
                   <Users className="w-7 h-7" strokeWidth={1.5} />
                 </div>
@@ -153,7 +153,7 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-6 lg:gap-10">
 
               {/* Carte 1 : Adulte */}
-              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
+              <div className="bg-[#f9f5f0] rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
 
                 <div className="text-4xl mb-6 relative z-10">👤</div>
@@ -171,7 +171,7 @@ export default function Home() {
               </div>
 
               {/* Carte 2 : Enfant / Adolescent - HIGHLIGHTED */}
-              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border-2 border-ishes-gold shadow-[0_8px_30px_rgb(200,169,110,0.15)] hover:shadow-[0_20px_40px_rgb(200,169,110,0.25)] hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4 flex flex-col h-full">
+              <div className="bg-[#f9f5f0] rounded-[2.5rem] p-8 lg:p-10 border-2 border-ishes-gold shadow-[0_8px_30px_rgb(200,169,110,0.15)] hover:shadow-[0_20px_40px_rgb(200,169,110,0.25)] hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden md:-mt-4 md:mb-4 flex flex-col h-full">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-ishes-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 transition-transform group-hover:scale-110"></div>
 
                 <div className="text-4xl mb-6 relative z-10">🧑🧒</div>
@@ -189,7 +189,7 @@ export default function Home() {
               </div>
 
               {/* Carte 3 : Futur enseignant */}
-              <div className="bg-white rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
+              <div className="bg-[#f9f5f0] rounded-[2.5rem] p-8 lg:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
 
                 <div className="text-4xl mb-6 relative z-10">👩‍🏫</div>
@@ -218,15 +218,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
-              Un apprentissage <span className="text-ishes-blue italic">interactif</span> & un suivi <span className="text-ishes-gold italic">continu</span>
+              Un apprentissage <span className="text-ishes-gold italic font-serif">interactif</span> & un suivi <span className="text-ishes-gold italic font-serif">continu</span>
             </h2>
             <p className="text-gray-500 font-medium text-lg">Où que vous soyez, profitez d'une expérience d'apprentissage immersive et d'une communauté soudée.</p>
           </div>
 
           <div className="flex flex-col md:flex-row items-stretch justify-center gap-8">
             {/* Zoom Card */}
-            <div className="flex-1 flex flex-col items-center text-center p-10 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
-              <div className="w-24 h-24 bg-[#fafafa] rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+            <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
+              <div className="w-24 h-24 bg-white rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Cours en direct & Replays</h4>
@@ -234,8 +234,8 @@ export default function Home() {
             </div>
 
             {/* WhatsApp Card */}
-            <div className="flex-1 flex flex-col items-center text-center p-10 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
-              <div className="w-24 h-24 bg-[#fafafa] rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
+            <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
+              <div className="w-24 h-24 bg-white rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-14 w-14 object-cover rounded-full" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi pédagogique</h4>
@@ -248,17 +248,17 @@ export default function Home() {
       {/* ===== PACK ACCOMPAGNEMENT CTA ===== */}
       <section className="py-8 relative overflow-hidden border-b border-gray-100/30">
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-          
+
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#fef2f2] text-[#ef4444] rounded-full font-black text-[10px] uppercase tracking-[0.2em] mb-6 shadow-sm border border-[#fef2f2]">
             <Gift className="w-3.5 h-3.5" />
             Offre Exceptionnelle
           </div>
-          
+
           <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
-            Le Pack <span className="text-ishes-gold italic">Accompagnement</span>
+            Le Pack <span className="text-ishes-gold italic font-serif">Accompagnement</span>
           </h2>
-          
-          <div className="bg-white/60 border border-gray-200/60 rounded-3xl p-6 md:p-8 max-w-3xl mx-auto mb-10 shadow-sm backdrop-blur-sm">
+
+          <div className="bg-[#f9f5f0]/80 border border-ishes-gold/20 rounded-3xl p-6 md:p-8 max-w-3xl mx-auto mb-10 shadow-sm backdrop-blur-sm">
             <p className="text-ishes-dark font-black text-lg md:text-xl mb-3">
               🎉 <span className="text-ishes-blue">100% OFFERT</span> (Valeur de 399€) pour tout achat d'une de nos formations !
             </p>
@@ -266,10 +266,10 @@ export default function Home() {
               Ne cheminez plus seul vers ALLAH. En rejoignant ISHES, vous débloquez immédiatement un accès gratuit à notre communauté privée, nos lives exclusifs et notre suivi spirituel personnalisé.
             </p>
           </div>
-          
-          <Link 
-            href="/fr/pack-accompagnement" 
-            className="inline-flex items-center gap-3 bg-white border border-gray-200 text-ishes-dark px-10 py-4 rounded-full text-[15px] font-black uppercase tracking-widest transition-all shadow-sm hover:-translate-y-1 hover:shadow-xl hover:border-ishes-gold/30 active:scale-95 group"
+
+          <Link
+            href="/fr/pack-accompagnement"
+            className="inline-flex items-center gap-3 bg-ishes-gold text-white px-10 py-4 rounded-full text-[15px] font-black uppercase tracking-widest transition-all shadow-sm hover:-translate-y-1 hover:shadow-xl hover:brightness-95 active:scale-95 group"
           >
             Découvrir le Pack
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -285,14 +285,14 @@ export default function Home() {
 
             {/* Content Column */}
             <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-6 h-[2px] bg-ishes-blue" />
-                <span className="text-[11px] font-bold tracking-[0.3em] text-ishes-blue uppercase">Notre Institut</span>
+              <div className="flex items-center gap-2 mb-8 mt-6">
+                <div className="w-12 h-px bg-ishes-gold"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-8">
                 Un savoir qui transforme<br />
-                <span className="text-ishes-blue italic">chaque musulman.</span>
+                <span className="text-ishes-gold italic font-serif">chaque musulman.</span>
               </h2>
 
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium">

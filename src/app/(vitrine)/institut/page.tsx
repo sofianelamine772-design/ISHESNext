@@ -174,7 +174,7 @@ export default function InstitutPage() {
           >
             <h1 className="text-5xl sm:text-7xl md:text-[100px] font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
               L'INSTITUT <br />
-              <span className="text-ishes-gold italic">présentiel.</span>
+              <span className="text-ishes-gold italic font-serif">présentiel.</span>
             </h1>
             <p className="text-xl text-white/80 font-medium leading-relaxed max-w-2xl mx-auto mb-10">
               Un lieu d'apprentissage privilégié à Toulouse pour approfondir vos connaissances et cheminer ensemble.
@@ -193,10 +193,14 @@ export default function InstitutPage() {
           
           {/* Section Header */}
           <div className="max-w-3xl mb-16">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-12 h-px bg-ishes-gold"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
+            </div>
             <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
             <h2 className="text-4xl md:text-6xl font-black text-ishes-dark leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
-              <span className="text-ishes-gold italic">en présentiel.</span>
+              <span className="text-ishes-gold italic font-serif">en présentiel.</span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
               Pour ceux qui privilégient le contact direct avec l'enseignant, l'émulation collective et la rigueur d'un cadre académique moderne.
@@ -213,9 +217,9 @@ export default function InstitutPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 onClick={() => router.push(program.link)}
-                className="cursor-pointer group relative flex flex-col rounded-[2rem] bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 overflow-hidden"
+                className="cursor-pointer group relative flex flex-col rounded-[2.5rem] bg-[#f9f5f0] border border-ishes-gold/10 shadow-sm hover:shadow-2xl hover:border-ishes-gold/30 transition-all duration-500 hover:-translate-y-1.5 overflow-hidden"
               >
-                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#c8a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-ishes-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
                 <div className="p-5 sm:p-6 flex-1 flex flex-col relative z-20">
                   {/* TAGS ROW */}
