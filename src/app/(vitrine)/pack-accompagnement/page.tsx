@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, Heart, TrendingUp, ShieldCheck, MessageCircle, BookOpen, Scale, Calendar, Video, FileCheck, Phone, Mail, Gift, BadgeCheck } from "lucide-react";
+import { Users, Heart, TrendingUp, ShieldCheck, MessageCircle, BookOpen, Scale, Calendar, Video, FileCheck, Phone, Mail, Gift, BadgeCheck, Search, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArabicBackground } from "@/components/ArabicBackground";
