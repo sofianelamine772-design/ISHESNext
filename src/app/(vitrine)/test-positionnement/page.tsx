@@ -117,7 +117,7 @@ export default function TestPositionnement() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans">
-      <Navbar />
+      {/* Navbar provided by layout */}
 
       <main className="pt-32 pb-20 px-6 relative overflow-hidden">
         <ArabicBackground />
@@ -324,7 +324,7 @@ export default function TestPositionnement() {
         </div>
       </main>
 
-      <Footer />
+      {/* Footer provided by layout */}
     </div>
   );
 }

@@ -52,7 +52,7 @@ export default function CoursParticuliersPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-ishes-blue selection:text-white">
-      <Navbar />
+      {/* Navbar provided by layout */}
 
       {/* ─── HERO SECTION ─── */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-[#fafafa]">
@@ -217,7 +217,7 @@ export default function CoursParticuliersPage() {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer provided by layout */}
     </div>
   );
 }

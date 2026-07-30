@@ -1,23 +1,37 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 const navLinks = [
   { name: "Accueil", href: "/" },
-  { name: "Programmes", href: "/program" },
-  { name: "Formation Enseignant", href: "/formation-enseignant" },
-  { name: "L'Institut", href: "/institut" },
-  { name: "Boutique", href: "/boutique" },
+  { 
+    name: "Notre histoire", 
+    href: "/institut",
+    subLinks: [
+      { name: "Boutique", href: "/boutique" }
+    ]
+  },
+  { name: "Nos formations", href: "/program" },
+  { name: "Devenir enseignant", href: "/formation-enseignant" },
+  { name: "Pack accompagnement", href: "/pack-accompagnement" },
   { name: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSublinksOpen, setMobileSublinksOpen] = useState<Record<string, boolean>>({});
+
+  const toggleMobileSublink = (name: string) => {
+    setMobileSublinksOpen(prev => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
+  };
 
   return (
     <>
@@ -42,22 +56,40 @@ export function Navbar() {
           {/* Desktop nav */}
           <nav className="hidden xl:flex items-center gap-1.5 relative" onMouseLeave={() => setHoveredIndex(null)}>
             {navLinks.map((link, idx) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onMouseEnter={() => setHoveredIndex(idx)}
-                className={`relative px-3 py-2 text-[16px] font-bold tracking-tight transition-colors z-10 whitespace-nowrap ${hoveredIndex === idx ? "text-ishes-blue" : "text-gray-500"
-                  }`}
-              >
-                {link.name}
-                {hoveredIndex === idx && (
-                  <motion.div
-                    layoutId="navHoverPill"
-                    className="absolute inset-0 bg-ishes-blue/[0.08] border border-ishes-blue/10 rounded-full -z-10"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
+              <div key={link.name} className="relative group" onMouseEnter={() => setHoveredIndex(idx)}>
+                <Link
+                  href={link.href}
+                  className={`relative px-3 py-2 text-[16px] font-bold tracking-tight transition-colors z-10 whitespace-nowrap flex items-center gap-1 ${hoveredIndex === idx ? "text-ishes-blue" : "text-gray-500"
+                    }`}
+                >
+                  {link.name}
+                  {link.subLinks && <ChevronDown className="w-4 h-4 opacity-50" />}
+                  {hoveredIndex === idx && (
+                    <motion.div
+                      layoutId="navHoverPill"
+                      className="absolute inset-0 bg-ishes-blue/[0.08] border border-ishes-blue/10 rounded-full -z-10"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </Link>
+
+                {/* Dropdown for sublinks */}
+                {link.subLinks && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="bg-white rounded-xl shadow-[0_10px_40px_rgb(0,0,0,0.08)] border border-gray-100 py-2 w-48 relative overflow-hidden">
+                      {link.subLinks.map(subLink => (
+                        <Link
+                          key={subLink.name}
+                          href={subLink.href}
+                          className="block px-4 py-2.5 text-[15px] font-bold text-gray-600 hover:text-ishes-blue hover:bg-gray-50 transition-colors text-center"
+                        >
+                          {subLink.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 )}
-              </Link>
+              </div>
             ))}
           </nav>
 
@@ -70,7 +102,7 @@ export function Navbar() {
             </Link>
             <button
               onClick={() => setMobileOpen((o) => !o)}
-              className="xl:hidden p-2 text-[#101828] hover:bg-gray-100 rounded-full transition-colors"
+              className="xl:hidden p-2 text-[#101828] hover:bg-gray-100 rounded-full transition-colors pointer-events-auto"
               aria-label="Menu"
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -101,20 +133,61 @@ export function Navbar() {
               transition={{ duration: 0.25, ease: "easeOut" }}
               className="fixed top-20 left-0 right-0 z-50 xl:hidden mx-3"
             >
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden">
-                <nav className="flex flex-col py-3">
-                  {navLinks.map((link, idx) => (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="px-6 py-4 text-[15px] font-bold text-gray-700 hover:text-ishes-blue hover:bg-ishes-blue/5 transition-colors border-b border-gray-50 last:border-0"
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </nav>
-                <div className="px-6 py-5 bg-gray-50 border-t border-gray-100 flex flex-col gap-4">
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-100px)]">
+                <div className="overflow-y-auto flex-1">
+                  <nav className="flex flex-col py-3">
+                    {navLinks.map((link, idx) => (
+                      <div key={link.name} className="flex flex-col border-b border-gray-50 last:border-0">
+                        <div className="flex items-center justify-between px-6 py-4">
+                          <Link
+                            href={link.href}
+                            onClick={() => setMobileOpen(false)}
+                            className="text-[15px] font-bold text-gray-700 hover:text-ishes-blue transition-colors flex-1"
+                          >
+                            {link.name}
+                          </Link>
+                          {link.subLinks && (
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleMobileSublink(link.name);
+                              }}
+                              className="p-2 -mr-2 text-gray-400 hover:text-ishes-blue transition-colors"
+                            >
+                              <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${mobileSublinksOpen[link.name] ? 'rotate-180 text-ishes-blue' : ''}`} />
+                            </button>
+                          )}
+                        </div>
+                        
+                        {link.subLinks && (
+                          <AnimatePresence>
+                            {mobileSublinksOpen[link.name] && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden bg-gray-50/50"
+                              >
+                                {link.subLinks.map(subLink => (
+                                  <Link
+                                    key={subLink.name}
+                                    href={subLink.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block px-10 py-3.5 text-[14px] font-semibold text-gray-600 hover:text-ishes-blue hover:bg-gray-100/50 transition-colors border-t border-gray-100/50 first:border-0"
+                                  >
+                                    {subLink.name}
+                                  </Link>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        )}
+                      </div>
+                    ))}
+                  </nav>
+                </div>
+                <div className="px-6 py-5 bg-gray-50 border-t border-gray-100 flex flex-col gap-4 mt-auto">
                   <Link
                     href="/app"
                     onClick={() => setMobileOpen(false)}

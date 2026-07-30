@@ -149,7 +149,7 @@ export default function InstitutPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white">
-      <Navbar />
+      {/* Navbar provided by layout */}
 
       {/* --- HERO CINEMATIC --- */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
@@ -483,7 +483,7 @@ export default function InstitutPage() {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer provided by layout */}
     </div>
   );
 }

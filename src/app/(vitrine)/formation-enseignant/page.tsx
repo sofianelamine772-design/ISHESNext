@@ -149,14 +149,24 @@ export default function FormationEnseignantPage() {
               <span className="text-ishes-blue italic whitespace-nowrap">Enseignant certifié.</span>
             </motion.h1>
             
-            <motion.p 
+            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-400 font-medium leading-relaxed"
+              className="max-w-4xl mx-auto text-center"
             >
-              Transmettez le savoir avec excellence. Nos formations diplômantes vous ouvrent les portes d'une pédagogie moderne et reconnue.
-            </motion.p>
+              <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-6">
+                Parce qu'un bon étudiant ne fait pas forcément un bon enseignant…
+              </h2>
+              <div className="space-y-4 text-lg text-gray-500 font-medium leading-relaxed">
+                <p>
+                  Enseigner la religion est l'une des plus grandes responsabilités. C'est pourquoi l'Institut ISHES a créé la seule formation actuellement en France dédiée à la professionnalisation des enseignants en Tarbya Islamiya et en Tajwid.
+                </p>
+                <p>
+                  Une méthode éprouvée au service des associations, des mosquées et des familles qui souhaitent transmettre l'Islam avec pédagogie, rigueur et bienveillance.
+                </p>
+              </div>
+            </motion.div>
 
             <motion.div 
               initial={{ opacity: 0, y: 20 }}

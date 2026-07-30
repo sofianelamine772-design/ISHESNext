@@ -30,9 +30,9 @@ export default function CoursSciencesCoranPage() {
   
   return (
     <div className="bg-white">
-      <Navbar />
+      {/* Navbar provided by layout */}
       <CourseDetailView course={course} id={id} />
-      <Footer />
+      {/* Footer provided by layout */}
     </div>
   );
 }

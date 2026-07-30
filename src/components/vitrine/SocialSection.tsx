@@ -35,7 +35,7 @@ export function SocialSection() {
   });
 
   return (
-    <section className="bg-white border-t border-gray-100 py-20 md:py-24 overflow-hidden">
+    <section className="border-t border-gray-100 py-20 md:py-24 overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

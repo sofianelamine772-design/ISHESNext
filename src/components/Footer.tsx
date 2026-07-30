@@ -5,7 +5,7 @@ import { MapPin, Mail, Phone } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 pt-14 pb-8">
+    <footer className="bg-[#fcfaf7] border-t border-gray-100 pt-14 pb-8">
       <div className="max-w-7xl mx-auto px-5 sm:px-6">
 
         {/* Main grid : logo + 4 colonnes de liens */}

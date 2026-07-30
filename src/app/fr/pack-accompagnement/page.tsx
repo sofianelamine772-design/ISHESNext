@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ArabicBackground } from "@/components/ArabicBackground";
 
 export default function PackAccompagnementPage() {
   const benefits = [
@@ -47,26 +48,15 @@ export default function PackAccompagnementPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-ishes-blue selection:text-white">
-      <Navbar />
 
       {/* ─── HERO SECTION ─── */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-[#fafafa]">
+        <ArabicBackground />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-ishes-blue/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-50 rounded-full blur-[100px] -ml-24 -mb-24 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10 pt-10 text-center">
-           <nav className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">
-              <Link href="/" className="hover:text-ishes-blue transition-colors">Accueil</Link>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-ishes-blue">Pack Accompagnement</span>
-           </nav>
-           
-           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-ishes-blue/10 rounded-full shadow-sm mb-6">
-              <Sparkles className="w-4 h-4 text-ishes-blue" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">
-                Un espace privilégié
-              </span>
-           </div>
+
 
            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-8">
              Ne cheminez plus <br />
@@ -171,7 +161,7 @@ export default function PackAccompagnementPage() {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer is provided by layout */}
     </div>
   );
 }

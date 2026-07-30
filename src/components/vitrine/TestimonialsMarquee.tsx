@@ -42,9 +42,9 @@ const getGoogleColor = (char: string) => {
 
 export function TestimonialsMarquee() {
   return (
-    <section className="bg-gradient-to-b from-[#fafafa] to-white border-t border-gray-100 py-20 md:py-24 overflow-hidden relative">
+    <section className="border-t border-gray-100 py-20 md:py-24 overflow-hidden relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-ishes-blue/[0.02] rounded-full blur-3xl pointer-events-none" />
-      
+
       <div className="max-w-4xl mx-auto px-6 text-center mb-14 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -83,24 +83,24 @@ export function TestimonialsMarquee() {
 
 function TestimonialCard({ testimonial }: { testimonial: any }) {
   return (
-    <div className="w-[360px] md:w-[400px] shrink-0 bg-white rounded-[2rem] border border-gray-100/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(32,62,96,0.08)] hover:-translate-y-2 hover:border-ishes-blue/20 transition-all duration-500 p-8 flex flex-col gap-6 relative group overflow-hidden cursor-default">
+    <div className="w-[340px] shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col gap-5 relative group overflow-hidden cursor-default">
       
-      {/* Background Quote SVG */}
-      <svg className="absolute top-4 right-6 w-20 h-20 text-ishes-blue/[0.03] group-hover:text-ishes-blue/[0.06] transition-colors duration-500 select-none pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
+      {/* Background Quote SVG - Fixed opacity and color so it's not a massive black block */}
+      <svg className="absolute top-4 right-4 w-16 h-16 text-gray-100 opacity-50 group-hover:text-ishes-blue/5 transition-colors duration-500 select-none pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
       </svg>
 
-      <div className="flex items-center gap-4 relative z-10">
-        <div className={`w-12 h-12 rounded-full ${getGoogleColor(testimonial.name[0])} flex items-center justify-center text-white text-[18px] font-bold shrink-0 shadow-sm group-hover:scale-110 transition-transform duration-500`}>
+      <div className="flex items-center gap-3 relative z-10">
+        <div className={`w-10 h-10 rounded-full ${getGoogleColor(testimonial.name[0])} flex items-center justify-center text-white text-[16px] font-bold shrink-0 shadow-sm`}>
           {testimonial.name[0]}
         </div>
         <div className="text-left flex-1">
-          <p className="text-[15px] font-bold text-ishes-dark leading-tight mb-1">{testimonial.name}</p>
-          <div className="flex gap-0.5 text-ishes-gold text-[16px] tracking-widest">{"★★★★★"}</div>
+          <p className="text-[14px] font-bold text-ishes-dark leading-tight">{testimonial.name}</p>
+          <div className="flex gap-0.5 text-ishes-gold text-[12px] tracking-widest mt-0.5">{"★★★★★"}</div>
         </div>
         
         {/* Fake Google Logo Icon */}
-        <svg viewBox="0 0 24 24" className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 24 24" className="w-5 h-5 opacity-60 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -108,9 +108,9 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
         </svg>
       </div>
       
-      <p className="text-gray-600 group-hover:text-gray-900 italic transition-colors text-[15px] leading-[1.7] flex-1 relative z-10">"{testimonial.text}"</p>
+      <p className="text-gray-600 group-hover:text-gray-900 italic transition-colors text-[14px] leading-relaxed flex-1 relative z-10">"{testimonial.text}"</p>
       
-      <div className="text-[11px] font-black tracking-[0.2em] text-ishes-gold/80 uppercase pt-4 border-t border-gray-100 relative z-10">
+      <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase pt-4 border-t border-gray-50 relative z-10">
         {testimonial.role}
       </div>
     </div>
