@@ -40,6 +40,7 @@ const isPublicRoute = createRouteMatcher([
   '/inscription(.*)',
   '/test-positionnement(.*)',
   '/unauthorized(.*)',
+  '/notre-histoire(.*)',
   '/__clerk(.*)',
   '/manifest.json'
 ]);
