@@ -278,13 +278,19 @@ export default function Home() {
       </section>
 
       {/* ===== NOTRE INSTITUT SECTION (HAS ARABIC TEXT) ===== */}
-      <section className="relative overflow-hidden pt-8 pb-24 md:pb-32">
-        <ArabicBackground />
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <section className="relative w-full overflow-hidden bg-[#fafafa] pt-16 pb-24 md:pb-32">
+        {/* Background Video/Image - Right Side */}
+        <div className="absolute top-0 right-0 w-full lg:w-[55%] h-full z-0">
+          <div className="absolute inset-y-0 left-0 w-full sm:w-1/2 bg-gradient-to-r from-[#fafafa] to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#fafafa] to-transparent z-10 lg:hidden pointer-events-none" />
+          <InstitutVideo />
+        </div>
 
+        <div className="relative max-w-7xl mx-auto px-6 z-10">
+          <ArabicBackground />
+          <div className="flex flex-col lg:flex-row justify-between gap-16 relative z-20">
             {/* Content Column */}
-            <div>
+            <div className="max-w-2xl relative">
               <div className="flex items-center gap-2 mb-8 mt-6">
                 <div className="w-12 h-px bg-ishes-gold"></div>
                 <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
@@ -295,7 +301,7 @@ export default function Home() {
                 <span className="text-ishes-gold italic font-serif">chaque musulman.</span>
               </h2>
 
-              <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium">
+              <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium relative z-20">
                 <p>
                   L'Institut des Sciences Humaines et Spirituelles de Toulouse est porté par un couple — également fondateur de l'école <strong className="text-ishes-dark">Transmettre</strong> —, forts de <strong className="text-ishes-dark">plus de 15 ans d'expérience</strong> dans l'enseignement.
                 </p>
@@ -304,26 +310,25 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="mt-12 relative pl-7 border-l-4 border-ishes-blue">
+              <div className="mt-12 relative pl-7 border-l-4 border-ishes-blue bg-white/60 backdrop-blur-md p-6 rounded-2xl shadow-sm z-20">
                 <p className="text-ishes-dark text-xl leading-relaxed font-bold italic">
                   "Notre mission : ouvrir les portes d'un savoir qui transforme, pour que chaque musulman puisse vivre sa religion avec conscience, équilibre et profondeur."
                 </p>
               </div>
 
-              <div className="mt-10 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-ishes-blue/10 flex items-center justify-center text-ishes-blue">
+              <div className="mt-10 flex items-center gap-4 bg-white/60 backdrop-blur-md p-4 pr-6 rounded-full inline-flex shadow-sm relative z-20">
+                <div className="w-12 h-12 rounded-full bg-ishes-blue/10 flex items-center justify-center text-ishes-blue shrink-0">
                   <Heart className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="text-sm font-black text-ishes-dark uppercase tracking-widest">Mr & Mme Latreche</div>
-                  <div className="text-xs text-gray-400 font-bold">Fondateurs de l'ISHES</div>
+                  <div className="text-xs text-gray-500 font-bold">Fondateurs de l'ISHES</div>
                 </div>
               </div>
             </div>
 
-            {/* Visual Column */}
-            <InstitutVideo />
-
+            {/* Right column empty to leave space for the background video */}
+            <div className="hidden lg:block w-full"></div>
           </div>
         </div>
       </section>

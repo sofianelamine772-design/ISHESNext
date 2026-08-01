@@ -28,7 +28,7 @@ export function InstitutVideo() {
   };
 
   return (
-    <div className="relative aspect-[4/5] lg:aspect-square rounded-[3rem] overflow-hidden shadow-2xl group bg-black">
+    <div className="absolute inset-0 w-full h-full overflow-hidden group bg-black z-0">
       <video
         ref={videoRef}
         src="/videos/institut-video.mp4"
@@ -37,7 +37,7 @@ export function InstitutVideo() {
         muted={isMuted}
         playsInline
         poster="/images/quran-coffee.png"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        className="w-full h-full object-cover transition-transform duration-700 opacity-60 lg:opacity-100"
       />
       <div className="absolute inset-0 bg-ishes-gold/10 mix-blend-overlay pointer-events-none" />
       
