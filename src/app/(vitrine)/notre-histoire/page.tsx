@@ -63,23 +63,30 @@ export default function NotreHistoirePage() {
           <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-24">16 années d'engagement et de développement</h2>
           
           <div className="relative">
-            <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[2px] bg-ishes-gold/30 z-0"></div>
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[2px] bg-ishes-gold/30 z-0 origin-left"
+            ></motion.div>
             
             <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-4 relative z-10">
               {timeline.map((item, idx) => (
                 <motion.div 
                   key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  className="flex flex-col items-center relative"
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  whileHover={{ y: -5 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.2 }}
+                  className="flex flex-col items-center relative group"
                 >
-                  <div className="w-24 h-24 rounded-full bg-[#fdfaf5] border border-ishes-gold/30 shadow-md flex items-center justify-center text-ishes-gold mb-6 relative">
+                  <div className="w-24 h-24 rounded-full bg-[#fdfaf5] border border-ishes-gold/30 shadow-md flex items-center justify-center text-ishes-gold mb-6 relative group-hover:bg-ishes-gold group-hover:text-white transition-colors duration-300">
                     <item.icon className="w-8 h-8" />
-                    <div className="absolute -bottom-[38px] w-4 h-4 bg-ishes-gold rounded-full border-[3px] border-[#fcfaf7] shadow-sm hidden md:block"></div>
+                    <div className="absolute -bottom-[38px] w-4 h-4 bg-ishes-gold rounded-full border-[3px] border-[#fcfaf7] shadow-sm hidden md:block group-hover:scale-150 transition-transform duration-300"></div>
                   </div>
-                  <h3 className="text-xl font-black text-ishes-gold mb-4 mt-6 md:mt-2">{item.year}</h3>
+                  <h3 className="text-xl font-black text-ishes-gold mb-4 mt-6 md:mt-2 group-hover:text-ishes-dark transition-colors duration-300">{item.year}</h3>
                   <p className="text-sm text-gray-600 font-medium px-2 leading-relaxed">{item.title}</p>
                 </motion.div>
               ))}
