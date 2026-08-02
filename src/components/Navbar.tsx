@@ -14,10 +14,10 @@ type NavLink = {
 
 const navLinks: NavLink[] = [
   { name: "Notre histoire", href: "/notre-histoire" },
-  { name: "Boutique", href: "/boutique" },
   { name: "Nos formations", href: "/program" },
   { name: "Devenir enseignant", href: "/formation-enseignant" },
   { name: "Pack accompagnement", href: "/pack-accompagnement" },
+  { name: "Boutique", href: "/boutique" },
   { name: "Contact", href: "/contact" },
 ];
 

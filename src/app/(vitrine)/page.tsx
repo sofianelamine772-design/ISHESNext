@@ -282,7 +282,8 @@ export default function Home() {
         {/* Background Video/Image - Right Side */}
         <div className="absolute top-0 right-0 w-full lg:w-[55%] h-full z-0">
           <div className="absolute inset-y-0 left-0 w-full sm:w-1/2 bg-gradient-to-r from-[#fafafa] to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#fafafa] to-transparent z-10 lg:hidden pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-24 sm:h-32 bg-gradient-to-b from-[#fafafa] to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-32 sm:h-48 bg-gradient-to-t from-[#fafafa] to-transparent z-10 pointer-events-none" />
           <InstitutVideo />
         </div>
 

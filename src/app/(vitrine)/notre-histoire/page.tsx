@@ -108,39 +108,9 @@ export default function NotreHistoirePage() {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-            {/* Oustedh Riad */}
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col sm:flex-row h-full"
-            >
-              <div className="w-full sm:w-[45%] h-64 sm:h-auto relative shrink-0">
-                <Image src="/images/oustedhRyad.jpeg" alt="Oustedh Riad" fill className="object-cover" />
-              </div>
-              <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
-                <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedh Riad</h3>
-                <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur</div>
-                <ul className="space-y-4">
-                  {[
-                    "Formateur d'enseignants de Tajwid",
-                    "Responsable communication",
-                    "Diplômé en sciences religieuses",
-                    "Spécialiste du Tajwid"
-                  ].map((feat, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
-                      <span className="text-sm font-medium text-gray-800 leading-tight">{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-
             {/* Oustedha Rachida */}
             <motion.div 
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
@@ -157,6 +127,35 @@ export default function NotreHistoirePage() {
                     "Formatrice d'enseignants en Tarbiya Islamiya",
                     "Diplômée en sciences religieuses",
                     "Experte en accompagnement spirituel et éducatif"
+                  ].map((feat, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
+                      <span className="text-sm font-medium text-gray-800 leading-tight">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Oustedh Riad */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col sm:flex-row h-full"
+            >
+              <div className="w-full sm:w-[45%] h-64 sm:h-auto relative shrink-0">
+                <Image src="/images/oustedhRyad.jpeg" alt="Oustedh Riad" fill className="object-cover" />
+              </div>
+              <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
+                <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedh Riad</h3>
+                <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur</div>
+                <ul className="space-y-4">
+                  {[
+                    "Formateur d'enseignants de Tajwid",
+                    "Responsable communication",
+                    "Spécialiste du Tajwid"
                   ].map((feat, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
