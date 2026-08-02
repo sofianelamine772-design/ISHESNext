@@ -110,7 +110,7 @@ export default function NotreHistoirePage() {
               className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col sm:flex-row h-full"
             >
               <div className="w-full sm:w-[45%] h-64 sm:h-auto relative shrink-0">
-                <Image src="/images/oustedh-riad.png" alt="Oustedh Riad" fill className="object-cover" />
+                <Image src="/images/oustedhRyad.jpeg" alt="Oustedh Riad" fill className="object-cover" />
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
                 <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedh Riad</h3>
@@ -140,7 +140,7 @@ export default function NotreHistoirePage() {
               className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col sm:flex-row h-full"
             >
               <div className="w-full sm:w-[45%] h-64 sm:h-auto relative shrink-0">
-                <Image src="/images/oustedha-rachida.png" alt="Oustedha Rachida" fill className="object-cover" />
+                <Image src="/images/OustedhaRahida.jpeg" alt="Oustedha Rachida" fill className="object-cover" />
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
                 <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedha Rachida</h3>
