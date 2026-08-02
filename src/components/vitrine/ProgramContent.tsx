@@ -25,12 +25,14 @@ type Program = {
   day?: string;
   formationId?: string;
   slotId?: string;
+  imageUrl?: string;
 };
 
 export const PROGRAMS: Program[] = [
   {
     id: "femme-debutante-presentiel",
     formationId: "presentiel-global",
+    imageUrl: "/images/ai_femmes.png",
     title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
@@ -46,6 +48,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "femme-intermediaire-presentiel",
     formationId: "presentiel-global",
+    imageUrl: "/images/ai_femmes.png",
     title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
@@ -61,6 +64,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "enfant-mercredi-presentiel",
     formationId: "presentiel-global",
+    imageUrl: "/images/ai_enfants.png",
     title: "Scolarité Enfants",
     subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
@@ -76,6 +80,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "enfant-samedi-presentiel",
     formationId: "presentiel-global",
+    imageUrl: "/images/ai_enfants.png",
     title: "Scolarité Enfants",
     subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
@@ -91,6 +96,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "enfant-dimanche-presentiel",
     formationId: "presentiel-global",
+    imageUrl: "/images/ai_enfants.png",
     title: "Scolarité Enfants",
     subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
@@ -105,6 +111,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tajwid_standard",
+    imageUrl: "/images/ai_quran.png",
     title: "Tajwid Standard",
     subtitle: "Apprendre à lire le Coran avec les règles de Tajwid. Cursus sur 2 années",
     tagText: "STANDARD",
@@ -123,6 +130,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tajwid_intensif",
+    imageUrl: "/images/ai_quran.png",
     title: "Tajwid Intensif",
     subtitle: "Apprendre à lire le Coran avec les règles de Tajwid en 3 Mois",
     tagText: "INTENSIF",
@@ -142,6 +150,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "fiqh_malikite",
+    imageUrl: "/images/ai_kaaba.png",
     title: "Fiqh Mâlikite",
     subtitle: "Apprendre à pratiquer les actes d'adoration correctement selon l'école Malikite",
     tagText: "DROIT",
@@ -160,6 +169,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "sciences_du_coran",
+    imageUrl: "/images/ai_arabe.png",
     title: "Sciences du Coran",
     subtitle: "Découvrez l'histoire de la révélation et de la préservation du Livre Saint. Module passionnant.",
     tagText: "HISTOIRE",
@@ -199,6 +209,7 @@ export const PROGRAMS: Program[] = [
   */
   {
     id: "memoriser_coran",
+    imageUrl: "/images/ai_quran.png",
     title: "Mémorisation du Coran",
     subtitle: "Accompagnement personnalisé pour mémoriser le Livre d'Allah à votre rythme.",
     tagText: "HIFZ",
@@ -217,6 +228,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "al_aqida",
+    imageUrl: "/images/ai_mosque.png",
     title: "Al-'Aqîda",
     subtitle: "Étude de la Tahawiya pour comprendre les fondements de la foi musulmane sunnite.",
     tagText: "FOI",
@@ -235,6 +247,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "as_sirah",
+    imageUrl: "/images/ai_medina.png",
     title: "Sîrah An-Nabawiyya",
     subtitle: "Découvrez la vie du Prophète ﷺ, de sa naissance à Médine, un guide pour l'humanité.",
     tagText: "BIOGRAPHIE",
@@ -253,6 +266,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "spiritualite_islam",
+    imageUrl: "/images/ai_spirit.png",
     title: "Spiritualité Musulmane",
     subtitle: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam.",
     tagText: "ÉDUCATION",
@@ -271,6 +285,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "correction_fatiha",
+    imageUrl: "/images/ai_quran.png",
     title: "Correction al Fatiha",
     subtitle: "Corrigez la lecture de la Fatiha et des 3 dernières sourates. Module offert.",
     tagText: "OFFERT",
@@ -289,6 +304,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "cours_particuliers",
+    imageUrl: "/images/ai_pro.png",
     title: "Cours Particuliers",
     subtitle: "Apprentissage individuel du Coran et Tajwid pour adultes et enfants.",
     tagText: "SUR-MESURE",
@@ -307,6 +323,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "arabe_enfant_distance",
+    imageUrl: "/images/ai_enfants.png",
     title: "ARABE (Enfant)",
     subtitle: "Méthode d’apprentissage de la langue arabe avec interactivité et suivi progressif.",
     tagText: "ENFANT",
@@ -327,6 +344,7 @@ export const PROGRAMS: Program[] = [
 
   {
     id: "tajwid_enfant_distance",
+    imageUrl: "/images/ai_enfants.png",
     title: "Tajwid (Enfant)",
     subtitle: "Cours de Tajwid en ligne pour enfants. Apprendre et réciter le Coran correctement.",
     tagText: "ENFANT",
@@ -345,6 +363,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "formation_enseignante_tajwid",
+    imageUrl: "/images/ai_pro.png",
     title: "Formation Enseignant Tajwid",
     subtitle: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     tagText: "PRO",
@@ -363,6 +382,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "formation_enseignante_tarbya",
+    imageUrl: "/images/ai_pro.png",
     title: "Formation Enseignant Tarbya",
     subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
     tagText: "PRO",
@@ -381,6 +401,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tarbiya_islamiya",
+    imageUrl: "/images/ai_spirit.png",
     title: "Tarbiya Islamiya",
     subtitle: "Éveil du cœur et amour d'Allah. Un cours pour préserver la Fitra de vos enfants.",
     tagText: "SPIRITUALITÉ",
@@ -400,6 +421,7 @@ export const PROGRAMS: Program[] = [
 
   {
     id: "arabe_adulte",
+    imageUrl: "/images/ai_arabe.png",
     title: "Arabe Littéraire (Adulte)",
     subtitle: "Apprenez l'arabe de chez vous avec des professeurs natifs et une méthode interactive.",
     tagText: "LANGUE",
@@ -418,6 +440,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "pack_accompagnement",
+    imageUrl: "/images/ai_pro.png",
     title: "Pack Accompagnement",
     subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
     tagText: "SOUTIEN",
@@ -651,32 +674,44 @@ export function ProgramContent() {
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
                 onClick={() => router.push(infoUrl)}
-                className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 ${program.isRecommended
+                className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 overflow-hidden ${program.isRecommended
                   ? "border-[3px] border-ishes-blue shadow-md"
                   : "border border-gray-100 shadow-sm"
                   }`}
               >
-                {/* RECOMMENDED BADGE */}
-                {program.isRecommended && (
-                  <div className="bg-ishes-blue text-white text-xs font-bold uppercase tracking-widest text-center py-2.5 rounded-t-[1.8rem] flex items-center justify-center gap-2">
-                    <Star className="w-3.5 h-3.5 fill-white" /> Recommandé
-                  </div>
-                )}
+                {/* IMAGE COVER */}
+                <div className="w-full h-40 sm:h-48 relative bg-gray-100 shrink-0">
+                  <Image 
+                    src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
+                    alt={program.title} 
+                    fill 
+                    className="object-cover"
+                  />
+                  {/* Gradient Overlay for tags */}
+                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent z-0" />
+                  
+                  {/* RECOMMENDED BADGE - MOVED OVER THE IMAGE */}
+                  {program.isRecommended && (
+                    <div className="absolute top-0 inset-x-0 bg-ishes-blue text-white text-xs font-bold uppercase tracking-widest text-center py-2 flex items-center justify-center gap-2 shadow-sm z-10">
+                      <Star className="w-3.5 h-3.5 fill-white" /> Recommandé
+                    </div>
+                  )}
 
-                <div className="p-5 sm:p-6 flex-1 flex flex-col">
-                  {/* TAGS ROW */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase ${program.tagColor || "bg-ishes-blue/10 text-ishes-blue"}`}>
+                  {/* TAGS ROW - MOVED OVER THE IMAGE */}
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10">
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase shadow-sm ${program.tagColor ? program.tagColor.replace('bg-', 'bg-white/90 text-') : 'bg-white/90 text-ishes-blue'}`}>
                       {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
                     </span>
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border ${isPresentiel
-                      ? "bg-ishes-blue/10 text-ishes-blue border-ishes-blue/20"
-                      : "bg-blue-50 text-blue-700 border-blue-100"
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border shadow-sm ${isPresentiel
+                      ? "bg-white/90 text-ishes-blue border-white"
+                      : "bg-white/90 text-blue-700 border-white"
                       }`}>
                       <span>📅</span> {program.durationText}
                     </span>
                   </div>
+                </div>
 
+                <div className="p-5 sm:p-6 flex-1 flex flex-col pt-4">
                   {/* TITLE & DESC */}
                   <h2 className="text-xl font-black text-[#101828] mb-2 tracking-tight">{program.title}</h2>
                   <p className="text-xs sm:text-sm text-gray-500 leading-relaxed min-h-auto mb-4 font-medium">
