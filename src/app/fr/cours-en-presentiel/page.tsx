@@ -361,7 +361,7 @@ export default function CoursPresentielPage() {
                   EXPLORER NOS 6 FORMATIONS
                 </a>
                 <Link 
-                  href="/inscription?plan=presentiel-global" 
+                  href="/inscription?plan=presentiel-global&audience=adulte" 
                   className="w-full sm:w-auto text-center bg-white border-2 border-gray-100 hover:border-gray-200 text-[#101828] px-8 py-5 rounded-2xl text-[15px] font-black transition-all hover:bg-gray-50 active:scale-95"
                 >
                   INSCRIPTION DIRECTE
@@ -569,7 +569,7 @@ export default function CoursPresentielPage() {
                         </Link>
                       )}
                       <Link 
-                        href={`/inscription?plan=presentiel-global&slot=${course.slot}`}
+                        href={`/inscription?plan=presentiel-global&slot=${course.slot}&audience=adulte`}
                         className="inline-flex items-center gap-2 bg-ishes-blue hover:bg-[#007044] text-white px-5 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-ishes-blue/10 hover:shadow-lg active:scale-95"
                       >
                         <span>S'inscrire</span>
@@ -609,7 +609,7 @@ export default function CoursPresentielPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10 shrink-0">
             <Link 
-              href="/inscription?plan=presentiel-global" 
+              href="/inscription?plan=presentiel-global&audience=adulte" 
               className="w-full sm:w-auto text-center bg-white hover:bg-gray-50 text-ishes-blue px-10 py-5 rounded-2xl text-[14px] font-black tracking-wider transition-all shadow-xl hover:-translate-y-0.5 active:scale-95"
             >
               RÉSERVER MA PLACE (150 €)

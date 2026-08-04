@@ -16,21 +16,19 @@ import {
   ArrowRight,
   PlayCircle,
   GraduationCap,
-  BrainCircuit,
-  Video,
-  Rocket
+  BrainCircuit
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
-  title: "Cours de Tajwid Intensif | ISHES",
-  description: "Lis le Coran avec assurance en seulement 3 mois avec une méthode intensive.",
-  keywords: "tajwid intensif, apprendre coran, cours tajwid accéléré, ishes"
+  title: "Formation Enseignant Tarbya Islamiyya | ISHES",
+  description: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
+  keywords: "enseigner islam, professeur education islamique, formation enseignant tarbya, ishes"
 };
 
-export default function CoursTajwidIntensifPage() {
-  const course = PROGRAMS_DATA["tajwid_intensif"];
+export default function FormationEnseignantTarbyaPage() {
+  const course = PROGRAMS_DATA["formation_enseignante_tarbya"];
   const videoUrl = course?.videoUrl;
 
   return (
@@ -41,25 +39,25 @@ export default function CoursTajwidIntensifPage() {
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 space-y-6">
             <div className="inline-flex items-center gap-2">
-              <Rocket className="w-4 h-4 text-ishes-gold" />
+              <GraduationCap className="w-4 h-4 text-ishes-gold" />
               <span className="text-ishes-dark font-black text-xs tracking-[0.15em] uppercase">
-                INTENSIF
+                PROFESSIONNALISATION
               </span>
             </div>
             
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
-              Cours de <br />
-              Tajwid <br />
-              Intensif
+              Formation <br />
+              Enseignant <br />
+              Tarbya Islamiyya
             </h1>
             <p className="text-gray-600 font-medium max-w-md text-lg leading-relaxed border-l-2 border-ishes-gold pl-4">
-              Lis le Coran avec assurance en seulement 3 mois grâce à un suivi personnalisé et une méthode accélérée.
+              Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.
             </p>
             <div className="w-12 h-0.5 bg-transparent my-4"></div>
             
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link 
-                href="/inscription?plan=tajwid_intensif&audience=adulte" 
+                href="/inscription?plan=formation_enseignante_tarbya&audience=adulte" 
                 className="inline-flex items-center justify-center gap-2 bg-ishes-dark hover:bg-ishes-dark/90 text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-dark/20 hover:-translate-y-1"
               >
                 JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
@@ -84,7 +82,7 @@ export default function CoursTajwidIntensifPage() {
               ) : (
                 <Image 
                   src="/images/ai_pro.png" 
-                  alt="Cours de Tajwid Intensif"
+                  alt="Formation Enseignant Tarbya Islamiyya"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -104,7 +102,7 @@ export default function CoursTajwidIntensifPage() {
           
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">1 cours / semaine<br/><span className="text-gray-500 font-medium">Samedi à 10h30</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">2 cours / semaine<br/><span className="text-gray-500 font-medium">Lundi & Jeudi<br/>et Vendredi à 20h00</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -116,13 +114,13 @@ export default function CoursTajwidIntensifPage() {
 
           <div className="flex items-center gap-3">
             <Hourglass className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">3 mois</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">4 mois</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3">
             <Award className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Certification<br/><span className="text-gray-500 font-medium">Diplôme ISHES</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Certification<br/><span className="text-gray-500 font-medium">Formation Enseignant ISHES</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -141,10 +139,10 @@ export default function CoursTajwidIntensifPage() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: BookOpen, title: "Tu connais déjà\nles lettres arabes\net tu veux apprendre\nles règles du Tajwid." },
-            { icon: Hourglass, title: "Tu manques\nde régularité et\nas besoin d'un\ncadre intensif." },
-            { icon: Rocket, title: "Tu veux progresser\nvite et obtenir en\n3 mois ce qui prend\nsouvent une année." },
-            { icon: Shield, title: "Tu souhaites un\nsuivi rigoureux avec\ndes corrections\npersonnalisées." }
+            { icon: Presentation, title: "Tu souhaites enseigner\nl'éducation islamique\naux enfants avec\nméthode et impact." },
+            { icon: BookOpen, title: "Tu maîtrises déjà\ndes connaissances\nreligieuses mais tu ne\nsais pas comment les\ntransmettre." },
+            { icon: Shield, title: "Tu veux obtenir une\nvéritable légitimité pour\nenseigner dans une\nmosquée, une association\nou une école." },
+            { icon: Heart, title: "Tu recherches un\naccompagnement sérieux\npour devenir un enseignant\ncompétent, bienveillant\net structuré." }
           ].map((item, i) => (
             <div key={i} className="bg-[#f2ece4] rounded-2xl p-8 text-center flex flex-col items-center gap-6 hover:shadow-lg transition-shadow border border-transparent hover:border-ishes-gold/20">
               <div className="w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center shadow-lg">
@@ -174,11 +172,11 @@ export default function CoursTajwidIntensifPage() {
             </div>
             <div>
               <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-6 shadow-md text-ishes-dark">
-                <BookOpen className="w-6 h-6" />
+                <Presentation className="w-6 h-6" />
               </div>
-              <h3 className="text-[22px] font-black text-white mb-4 leading-tight">Théorie & Pratique<br/>du Tajwid</h3>
+              <h3 className="text-[22px] font-black text-white mb-4 leading-tight">Enseigner l'éducation islamique<br/>(Tarbya Islamiyya)</h3>
               <p className="text-gray-300 font-medium text-sm leading-relaxed">
-                Apprentissage accéléré des règles de récitation fondamentales, reconnaissance des symboles du Moushaf, et application immédiate sur les petites sourates. Une approche qui va droit au but.
+                Apprends à structurer et animer des cours complets : fondements de la spiritualité, piliers de l'Islam, récits des Prophètes, adorations, éthique, adab et calendrier musulman. Une pédagogie vivante basée sur les histoires et des valeurs concrètes.
               </p>
             </div>
           </div>
@@ -191,11 +189,11 @@ export default function CoursTajwidIntensifPage() {
             </div>
             <div>
               <div className="w-12 h-12 bg-ishes-dark rounded-full flex items-center justify-center mb-6 shadow-md text-white">
-                <Heart className="w-6 h-6" />
+                <BrainCircuit className="w-6 h-6" />
               </div>
-              <h3 className="text-[22px] font-black text-ishes-dark mb-4 leading-tight">Coaching & Suivi<br/>Personnalisé</h3>
+              <h3 className="text-[22px] font-black text-ishes-dark mb-4 leading-tight">Les méthodologies<br/>d'apprendre à apprendre</h3>
               <p className="text-ishes-dark/80 font-medium text-sm leading-relaxed">
-                Des corrections audios sur-mesure pour gommer vos défauts de prononciation. Vous n'êtes jamais seul face à vos difficultés, un enseignant vous guide pas à pas.
+                Découvre des approches efficaces pour aider les enfants à mémoriser, comprendre et appliquer ce qu'ils apprennent. Gestion de classe, motivation, activités interactives, gestion des conflits et accompagnement personnalisé.
               </p>
             </div>
           </div>
@@ -212,7 +210,7 @@ export default function CoursTajwidIntensifPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/tajwid_students.png" 
-               alt="Apprentissage Intensif du Tajwid"
+               alt="Livres Tarbya Islamiyya et appel Zoom"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -220,11 +218,11 @@ export default function CoursTajwidIntensifPage() {
           </div>
           <div className="space-y-6">
             {[
-              "Une progression intensive et redoutablement efficace en 12 semaines.",
-              "Des corrections audios personnalisées pour ne pas rester bloqué.",
-              "Des exercices pratiques à chaque étape pour valider vos acquis.",
-              "Un suivi régulier par des enseignants expérimentés.",
-              "La méthode exclusive Les Clés du Coran adaptée aux francophones."
+              "Une pédagogie claire, structurée et adaptée aux enfants d'aujourd'hui.",
+              "Des méthodes concrètes pour transmettre les valeurs avec amour et sagesse.",
+              "Des outils prêts à l'emploi pour animer des cours captivants et interactifs.",
+              "Un accompagnement par des formateurs expérimentés et bienveillants.",
+              "À l'issue de la formation, tu repartiras avec une assurance et une légitimité pour enseigner avec impact."
             ].map((text, i) => (
               <div key={i} className="flex gap-4 items-start">
                 <CheckCircle2 className="w-7 h-7 text-ishes-gold shrink-0 mt-0.5" />
@@ -246,7 +244,7 @@ export default function CoursTajwidIntensifPage() {
               <h4 className="font-black text-ishes-dark tracking-widest text-sm uppercase mb-1">FORMATION CLÉ EN MAIN</h4>
               <h3 className="font-bold text-ishes-dark text-xl mb-3 leading-tight">Tous les supports sont inclus</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                Le manuel de formation, les fiches de révision et les exercices sont directement fournis.
+                Cours, manuels, fiches, activités, modèles de leçons et ressources prêtes à utiliser.
               </p>
             </div>
           </div>
@@ -261,7 +259,7 @@ export default function CoursTajwidIntensifPage() {
             <div>
               <h3 className="font-bold text-ishes-dark text-xl mb-3 leading-tight mt-1">TOUT EST PRÊT POUR VOUS</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                Connectez-vous et laissez-vous guider par notre méthode pour maîtriser votre récitation.
+                Contenu, outils, méthodes et accompagnement : vous n'avez plus qu'à enseigner avec confiance.
               </p>
             </div>
           </div>
@@ -283,8 +281,8 @@ export default function CoursTajwidIntensifPage() {
           <div className="flex items-center gap-4 flex-1 border-r border-white/10 px-6 min-w-[200px]">
             <Clock className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
-              <p className="text-xs font-bold text-gray-300">1 cours / semaine</p>
-              <h3 className="text-sm font-black text-white mt-0.5 leading-snug">Samedi à 10h30</h3>
+              <p className="text-xs font-bold text-gray-300">2 cours / semaine</p>
+              <h3 className="text-sm font-black text-white mt-0.5 leading-snug">Lundi, Jeudi & Vendredi<br/>à 20h00</h3>
             </div>
           </div>
 
@@ -292,21 +290,21 @@ export default function CoursTajwidIntensifPage() {
             <Hourglass className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
               <p className="text-xs font-bold text-gray-300">Durée</p>
-              <h3 className="text-sm font-black text-white mt-0.5">3 mois</h3>
+              <h3 className="text-sm font-black text-white mt-0.5">4 mois</h3>
             </div>
           </div>
 
           <div className="flex items-center gap-4 flex-1 border-r border-white/10 px-6 min-w-[200px]">
             <BookOpen className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
-              <p className="text-xs font-bold text-gray-300">Tarif Unique</p>
-              <h3 className="text-sm font-black text-white mt-0.5 text-xl text-ishes-gold">649 €</h3>
+              <p className="text-xs font-bold text-gray-300">2 modules complets</p>
+              <h3 className="text-sm font-black text-white mt-0.5">Tous les supports<br/>inclus</h3>
             </div>
           </div>
 
           <div className="flex flex-col items-center md:items-end gap-2 shrink-0 pl-6 w-full md:w-auto mt-4 md:mt-0">
             <Link 
-              href="/inscription?plan=tajwid_intensif&audience=adulte" 
+              href="/inscription?plan=formation_enseignante_tarbya&audience=adulte" 
               className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-3 rounded-md text-[14px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"
             >
               JE M'INSCRIS MAINTENANT <ArrowRight className="w-4 h-4" />

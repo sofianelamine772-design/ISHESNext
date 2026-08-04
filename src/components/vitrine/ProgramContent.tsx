@@ -142,7 +142,7 @@ export const PROGRAMS: Program[] = [
       "Coach en direct + audio 24/24h",
       "Diplôme final"
     ],
-    price: "799 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     isRecommended: true,
     type: "distanciel",
@@ -368,15 +368,15 @@ export const PROGRAMS: Program[] = [
     subtitle: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     tagText: "PRO",
     tagColor: "bg-blue-100 text-blue-700",
-    durationText: "Sur demande",
+    durationText: "3 modules",
     features: [
       "Méthode Les Clés du Coran",
       "Pédagogie & didactique",
       "Gestion de classe",
       "Certification ISHES"
     ],
-    price: "Devis",
-    priceSub: "/ PERSONNALISÉ",
+    price: "2 450 €",
+    priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
   },
@@ -664,7 +664,9 @@ export function ProgramContent() {
                                               program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
                                                 program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
                                                   program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                                                    `/program/${program.id}`;
+                                                    program.id === 'formation_enseignante_tarbya' ? '/fr/formation-enseignant-tarbya' :
+                                                      program.id === 'formation_enseignante_tajwid' ? '/fr/formation-enseignant-tajwid' :
+                                                        `/program/${program.id}`;
 
             return (
               <motion.div

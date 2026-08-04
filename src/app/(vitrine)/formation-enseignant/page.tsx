@@ -11,6 +11,7 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 const formations = [
   {
     id: "nour-al-bayan",
+    link: "/fr/formation-enseignant-tajwid",
     title: "Formation Enseignant de Tajwid",
     subtitle: "Méthode Les Clés du Coran",
     availableRemote: true,
@@ -59,6 +60,7 @@ const formations = [
   },
   {
     id: "tarbya-islamya",
+    link: "/fr/formation-enseignant-tarbya",
     title: "Formation Enseignant Tarbya Islamiya",
     subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
     availableRemote: true,
@@ -216,7 +218,7 @@ export default function FormationEnseignantPage() {
                       </div>
                     </div>
                     <Link
-                      href={`/program/${f.id}`}
+                      href={f.link}
                       className="w-full text-center py-4 rounded-2xl bg-ishes-gold text-white hover:brightness-95 font-black transition-all duration-300 border border-ishes-gold/10 shadow-lg shadow-ishes-gold/20 text-sm uppercase tracking-widest hover:scale-[1.02]"
                     >
                       Voir le programme
