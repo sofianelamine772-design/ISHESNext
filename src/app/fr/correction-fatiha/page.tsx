@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { 
-  Calendar, 
-  Clock, 
-  Monitor, 
+import {
+  Calendar,
+  Clock,
+  Monitor,
   Ban,
   Hourglass,
   Tag,
@@ -31,7 +31,7 @@ export default function CorrectionFatihaPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -42,7 +42,7 @@ export default function CorrectionFatihaPage() {
                 FONDAMENTAUX
               </span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
               Correction <br />
               al Fatiha
@@ -51,34 +51,34 @@ export default function CorrectionFatihaPage() {
               Maîtrisez la récitation de la Fatiha et des 3 dernières sourates pour une prière valide.
             </p>
             <div className="w-12 h-0.5 bg-ishes-gold my-6"></div>
-            
+
             <div className="pt-2 flex flex-wrap items-center gap-4">
-              <Link 
-                href="/inscription?plan=correction_fatiha&audience=adulte" 
+              <Link
+                href="/inscription?plan=correction_fatiha&audience=adulte"
                 className="inline-flex items-center justify-center gap-2 bg-ishes-blue hover:bg-ishes-blue/90 text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1"
               >
                 JE M'INSCRIS MAINTENANT <ArrowRightIcon />
               </Link>
-              <button 
+              <button
                 className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
               >
                 <PlayCircle className="w-5 h-5" /> Voir le teaser
               </button>
             </div>
           </div>
-          
+
           <div className="flex-1 w-full">
             <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-ishes-blue">
               {videoUrl ? (
-                <iframe 
+                <iframe
                   src={videoUrl}
                   className="absolute inset-0 w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               ) : (
-                <Image 
-                  src="/images/ai_pro.png" 
+                <Image
+                  src="/images/ai_pro.png"
                   alt="Correction al Fatiha"
                   fill
                   className="object-cover"
@@ -89,50 +89,50 @@ export default function CorrectionFatihaPage() {
           </div>
         </div>
 
-        {/* ─── INFO BAR ─── */}
+        {/* ─── INFccO BAR ─── */}
         <div className="flex flex-wrap items-center gap-x-8 gap-y-6 pt-12 mt-12 border-t border-gray-200">
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Début<br/><span className="text-gray-500 font-medium">Octobre 2026</span></span>
-          </div>
-          <div className="hidden md:block w-px h-8 bg-gray-200"></div>
-          
-          <div className="flex items-center gap-3">
-            <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">1 séance<br/><span className="text-gray-500 font-medium">unique</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Début<br /><span className="text-gray-500 font-medium">Octobre 2026</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Dimanche<br/><span className="text-gray-500 font-medium">11h00 (France)</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">1 séance<br /><span className="text-gray-500 font-medium">unique</span></span>
+          </div>
+          <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+          <div className="flex items-center gap-3">
+            <Clock className="w-6 h-6 text-ishes-gold" />
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Dimanche<br /><span className="text-gray-500 font-medium">11h00 (France)</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3">
             <Monitor className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">En direct<br/><span className="text-gray-500 font-medium">sur Zoom</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">En direct<br /><span className="text-gray-500 font-medium">sur Zoom</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3 relative">
-             <div className="relative">
-                <Award className="w-6 h-6 text-ishes-gold" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-[2px] bg-ishes-gold rotate-45"></div>
-             </div>
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Pas de<br/><span className="text-gray-500 font-medium">diplôme</span></span>
+            <div className="relative">
+              <Award className="w-6 h-6 text-ishes-gold" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-[2px] bg-ishes-gold rotate-45"></div>
+            </div>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Pas de<br /><span className="text-gray-500 font-medium">diplôme</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3">
             <Hourglass className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">Une session</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br /><span className="text-gray-500 font-medium">Une session</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3">
             <Tag className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Gratuit<br/><span className="text-gray-500 font-medium">100% offert</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Gratuit<br /><span className="text-gray-500 font-medium">100% offert</span></span>
           </div>
         </div>
       </section>
@@ -169,31 +169,31 @@ export default function CorrectionFatihaPage() {
         </div>
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
-             <Image 
-               src="/images/livre_ramadan.png" 
-               alt="Livre avec une lanterne"
-               fill
-               className="object-cover"
-               sizes="(max-width: 768px) 100vw, 50vw"
-             />
+            <Image
+              src="/images/livre_ramadan.png"
+              alt="Livre avec une lanterne"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </div>
           <div className="space-y-10">
             {[
-              { 
-                title: "Écoute attentive et bienveillante", 
-                desc: "Un espace où tu seras écouté(e) avec attention et bienveillance pour comprendre tes difficultés et t'aider à progresser." 
+              {
+                title: "Écoute attentive et bienveillante",
+                desc: "Un espace où tu seras écouté(e) avec attention et bienveillance pour comprendre tes difficultés et t'aider à progresser."
               },
-              { 
-                title: "Conseils personnalisés", 
-                desc: "Des conseils adaptés à ton niveau et à tes besoins pour améliorer ta récitation de manière concrète." 
+              {
+                title: "Conseils personnalisés",
+                desc: "Des conseils adaptés à ton niveau et à tes besoins pour améliorer ta récitation de manière concrète."
               },
-              { 
-                title: "Corrections précises", 
-                desc: "Des retours et corrections en direct sur ta récitation de la Fatiha et des 3 dernières sourates pour t'aider à prier en toute validité." 
+              {
+                title: "Corrections précises",
+                desc: "Des retours et corrections en direct sur ta récitation de la Fatiha et des 3 dernières sourates pour t'aider à prier en toute validité."
               },
-              { 
-                title: "Orientation si nécessaire", 
-                desc: "Si des bases en Tajwid doivent être renforcées, tu seras orienté(e) vers nos cours de Tajwid adaptés à ton niveau." 
+              {
+                title: "Orientation si nécessaire",
+                desc: "Si des bases en Tajwid doivent être renforcées, tu seras orienté(e) vers nos cours de Tajwid adaptés à ton niveau."
               }
             ].map((item, i) => (
               <div key={i} className="flex gap-4">
@@ -214,6 +214,6 @@ export default function CorrectionFatihaPage() {
 
 function ArrowRightIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
   );
 }
