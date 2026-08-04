@@ -4,7 +4,6 @@ import {
   Calendar, 
   Clock, 
   Monitor, 
-  AwardOff,
   Ban,
   Hourglass,
   Tag,
