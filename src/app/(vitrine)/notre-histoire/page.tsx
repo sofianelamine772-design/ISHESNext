@@ -190,7 +190,7 @@ export default function NotreHistoirePage() {
                 <h3 className="text-3xl font-black mb-4">Une question sur notre institut ?</h3>
                 <p className="text-white/80 font-medium mb-10 max-w-sm">Notre équipe est là pour t'accompagner et répondre à toutes tes questions.</p>
                 <div className="flex flex-col sm:flex-row items-center gap-6">
-                  <Link href="https://wa.me/33686911301" target="_blank" className="bg-ishes-gold hover:bg-[#b0935b] text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg flex items-center gap-3 w-full sm:w-auto justify-center">
+                  <Link href="https://wa.me/33666033519" target="_blank" className="bg-ishes-gold hover:bg-[#b0935b] text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg flex items-center gap-3 w-full sm:w-auto justify-center">
                     <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="w-6 h-6 rounded-full object-cover" />
                     Nous contacter sur WhatsApp
                   </Link>
