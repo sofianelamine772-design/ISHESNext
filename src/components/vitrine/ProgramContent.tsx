@@ -651,7 +651,8 @@ export function ProgramContent() {
                     program.id === 'femme-debutante-presentiel' ? '/fr/cours-presentiel-femme-debutante' :
                       program.id === 'femme-intermediaire-presentiel' ? '/fr/cours-presentiel-femme-intermediaire' :
                         program.id === 'tajwid_enfant_distance' ? '/fr/cours-tajwid-enfant' :
-                          (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
+                          (program.id.includes('enfant-') && program.id.includes('-presentiel')) ? '/fr/cours-presentiel-enfant' :
+                            (program.id === 'arabe_coran_junior' || program.id.includes('enfant')) ? '/fr/cours-arabe-enfant' :
                             program.id === 'tarbiya_islamiya' ? '/fr/formation-tarbya-islamya' :
                               program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
                                 program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
