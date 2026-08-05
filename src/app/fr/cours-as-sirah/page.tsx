@@ -16,7 +16,9 @@ import {
   Lock,
   CreditCard,
   ArrowRight,
-  PlayCircle
+  PlayCircle,
+  Monitor,
+  Gift
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
@@ -62,26 +64,40 @@ export default function CoursAsSirahPage() {
               </button>
             </div>
             
-            <div className="flex flex-wrap items-center gap-6 pt-8 border-t border-gray-200 mt-8">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-ishes-gold" />
-                <span className="text-xs font-bold text-ishes-dark">Début<br/><span className="text-gray-500 font-medium">Octobre 2026</span></span>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-6 pt-12 mt-12 border-t border-gray-200">
+              <div className="flex items-center gap-3">
+                <Calendar className="w-6 h-6 text-ishes-gold" />
+                <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-ishes-gold" />
-                <span className="text-xs font-bold text-ishes-dark">1 x par semaine<br/><span className="text-gray-500 font-medium">Samedi 10h30</span></span>
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+              
+              <div className="flex items-center gap-3">
+                <Clock className="w-6 h-6 text-ishes-gold" />
+                <span className="text-xs font-bold text-ishes-dark leading-tight">1 cours / semaine<br/><span className="text-gray-500 font-medium">Samedi à 10h30</span></span>
               </div>
-              <div className="flex items-center gap-2">
-                <Video className="w-5 h-5 text-ishes-gold" />
-                <span className="text-xs font-bold text-ishes-dark">En direct<br/><span className="text-gray-500 font-medium">sur Zoom</span></span>
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+              <div className="flex items-center gap-3">
+                <Monitor className="w-6 h-6 text-ishes-gold" />
+                <span className="text-xs font-bold text-ishes-dark leading-tight">En direct<br/><span className="text-gray-500 font-medium">Zoom + Replays</span></span>
               </div>
-              <div className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-ishes-gold" />
-                <span className="text-xs font-bold text-ishes-dark">Diplôme<br/><span className="text-gray-500 font-medium">de fin de parcours</span></span>
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+              <div className="flex items-center gap-3">
+                <Hourglass className="w-6 h-6 text-ishes-gold" />
+                <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">8 mois</span></span>
               </div>
-              <div className="flex items-center gap-2">
-                <Hourglass className="w-5 h-5 text-ishes-gold" />
-                <span className="text-xs font-bold text-ishes-dark">Durée<br/><span className="text-gray-500 font-medium">2 années</span></span>
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+              <div className="flex items-center gap-3">
+                <Award className="w-6 h-6 text-ishes-gold" />
+                <span className="text-xs font-bold text-ishes-dark leading-tight">Certification<br/><span className="text-gray-500 font-medium">Diplôme ISHES</span></span>
+              </div>
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+              <div className="flex items-center gap-3">
+                <Gift className="w-6 h-6 text-ishes-gold" />
+                <span className="text-xs font-bold text-ishes-dark leading-tight">Tous les supports<br/><span className="text-gray-500 font-medium">inclus</span></span>
               </div>
             </div>
           </div>
@@ -156,7 +172,7 @@ export default function CoursAsSirahPage() {
                 "Leçons de vie applicables à notre quotidien",
                 "Événements clés expliqués avec clarté",
                 "Renforcement de l'amour et du lien avec le Prophète",
-                "Programme progressif sur 2 années"
+                "Programme progressif sur 8 mois"
               ].map((text, i) => (
                 <div key={i} className="flex items-center gap-4">
                   <CheckCircle2 className="w-6 h-6 text-ishes-gold shrink-0" />
@@ -204,7 +220,7 @@ export default function CoursAsSirahPage() {
               { num: 2, icon: Mail, title: "Tu reçois tes accès", desc: "Accès immédiat à la plateforme et au groupe WhatsApp." },
               { num: 3, icon: Video, title: "Tu assistes aux cours", desc: "En direct sur Zoom 1 fois par semaine." },
               { num: 4, icon: PenTool, title: "Tu participes aux évaluations", desc: "QCM, exercices et activités pour suivre ta progression." },
-              { num: 5, icon: Award, title: "Tu valides ton diplôme", desc: "À la fin des 2 années après validation des examens." }
+              { num: 5, icon: Award, title: "Tu valides ton diplôme", desc: "À la fin des 8 mois après validation des examens." }
             ].map((step, i) => (
               <div key={i} className="relative flex flex-col items-center text-center group">
                 <div className="w-12 h-12 bg-ishes-dark text-white rounded-full flex items-center justify-center font-black text-xl mb-6 relative z-10 border-4 border-white shadow-lg group-hover:scale-110 transition-transform">
@@ -226,7 +242,7 @@ export default function CoursAsSirahPage() {
           {/* Section Gauche : Prix */}
           <div className="text-center md:text-left space-y-2 flex-1 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0">
             <div className="text-5xl md:text-6xl font-black text-ishes-gold">649 €</div>
-            <h3 className="text-lg font-medium text-gray-300">Formation complète – 2 années</h3>
+            <h3 className="text-lg font-medium text-gray-300">Formation complète – 8 mois</h3>
           </div>
 
           {/* Section Milieu : Payable en 3X */}
