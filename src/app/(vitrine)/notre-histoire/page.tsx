@@ -18,34 +18,30 @@ export default function NotreHistoirePage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-0">
       {/* HERO SECTION */}
-      <section className="relative pt-44 pb-32 md:pt-48 md:pb-40 overflow-hidden bg-[#fafafa]">
+      <section className="relative pt-40 pb-16 md:pt-44 md:pb-20 overflow-hidden bg-[#fafafa]">
         <ArabicBackground />
         
         {/* Faded Background Image */}
-        <div className="absolute right-0 top-0 w-full lg:w-[65%] h-full z-0 opacity-90">
+        <div className="absolute inset-0 w-full h-full z-0 opacity-70">
           <div className="absolute inset-0 bg-gradient-to-r from-[#fafafa] via-[#fafafa]/80 to-transparent z-10 hidden lg:block" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#fafafa] via-[#fafafa]/90 to-transparent z-10 lg:hidden" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#fafafa] via-transparent to-transparent z-10" />
           
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover object-right"
-          >
-            <source src="/videos/institut-video.mp4" type="video/mp4" />
-            Votre navigateur ne supporte pas la balise vidéo.
-          </video>
+          <Image 
+            src="/images/ai_medina.png" 
+            alt="Médina"
+            fill
+            priority
+            className="object-cover object-center"
+          />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="max-w-xl">
+          <div className="max-w-3xl">
             <span className="text-ishes-gold font-black uppercase tracking-widest text-xs block mb-4">NOTRE HISTOIRE</span>
             
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-dark leading-[1.05] tracking-tight mb-8">
-              Tout a commencé par une <br />
-              <span className="text-ishes-gold italic font-serif">soif d’apprendre…</span>
+              Tout a commencé par une <span className="text-ishes-gold italic font-serif">soif d’apprendre…</span>
             </h1>
             
             <div className="flex items-center gap-2 mb-8">
@@ -61,7 +57,7 @@ export default function NotreHistoirePage() {
       </section>
 
       {/* TIMELINE SECTION */}
-      <section className="py-24 bg-[#fcfaf7] relative">
+      <section className="pt-12 pb-24 bg-[#fcfaf7] relative">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-24">16 années d'engagement et de développement</h2>
           
@@ -153,7 +149,7 @@ export default function NotreHistoirePage() {
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
                 <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedh Riad</h3>
-                <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur et gérant</div>
+                <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur et Dirigeant</div>
                 <ul className="space-y-4">
                   {[
                     "Formateur d’enseignant de Tajwid",

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Book, Users, GraduationCap, Moon, MapPin, MonitorPlay, ArrowRight, FileText, Gift, Video, Heart, Sparkles } from "lucide-react";
+import { BookOpen, Book, Users, GraduationCap, Moon, MapPin, MonitorPlay, ArrowRight, FileText, Gift, Video, Heart, Sparkles, ShieldCheck } from "lucide-react";
 
 export function NewHomeSections() {
   return (
@@ -39,6 +39,60 @@ export function NewHomeSections() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── POURQUOI CHOISIR ISHES ─── */}
+      <section className="py-24 bg-[#f9f5f0] relative z-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-black text-[#0a192f]">Pourquoi des milliers d'élèves choisissent ISHES ?</h2>
+            <div className="w-16 h-1 bg-[#C69C6D] mx-auto mt-4 rounded-full"></div>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Légitimité */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-8 h-8 text-[#C69C6D]" />
+                </div>
+                <h3 className="font-black text-[#0a192f] text-xl leading-tight">Une légitimité reconnue</h3>
+              </div>
+              <p className="text-gray-600 font-medium leading-relaxed mb-4">
+                Plus de 16 ans d'expérience au service de milliers d'élèves.
+              </p>
+              <p className="text-sm text-gray-500 font-bold border-t border-gray-100 pt-4 mt-auto">
+                Le seul institut spécialisé dans la formation des enseignants en Tarbiya Islamiyya et Tajwid en France.
+              </p>
+            </div>
+
+            {/* Accompagnement */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
+                  <Users className="w-8 h-8 text-[#C69C6D]" />
+                </div>
+                <h3 className="font-black text-[#0a192f] text-xl leading-tight">Un accompagnement qui dure</h3>
+              </div>
+              <p className="text-gray-600 font-medium leading-relaxed">
+                Avec notre Pack Accompagnement, vous bénéficiez d'une communauté privée, de lives mensuels, d'un programme de spiritualité et d'un suivi qui vous aide à progresser durablement.
+              </p>
+            </div>
+
+            {/* Spiritualité */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
+                  <Moon className="w-8 h-8 text-[#C69C6D]" />
+                </div>
+                <h3 className="font-black text-[#0a192f] text-xl leading-tight">Une spiritualité vivante</h3>
+              </div>
+              <p className="text-gray-600 font-medium leading-relaxed">
+                Notre objectif est de vous aider à renforcer votre lien avec ALLAH et Son Messager ﷺ, tout en cheminant vers une véritable purification du cœur (tazkiyat an-nafs).
+              </p>
+            </div>
           </div>
         </div>
       </section>

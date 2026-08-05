@@ -318,7 +318,7 @@ export const PROGRAMS: Program[] = [
       "Adultes & Enfants"
     ],
     price: "Sur Devis",
-    priceSub: "PERSONNALISÉ",
+    priceSub: "/ PERSONNALISÉ",
     type: "distanciel",
     audience: "adulte"
   },
@@ -377,7 +377,7 @@ export const PROGRAMS: Program[] = [
       "Certification ISHES"
     ],
     price: "Sur Devis",
-    priceSub: "",
+    priceSub: "/ PERSONNALISÉ",
     type: "distanciel",
     audience: "adulte"
   },
@@ -395,7 +395,7 @@ export const PROGRAMS: Program[] = [
       "Gestion de classe",
       "Certification ISHES"
     ],
-    price: "Devis",
+    price: "Sur Devis",
     priceSub: "/ PERSONNALISÉ",
     type: "distanciel",
     audience: "adulte"
@@ -725,12 +725,14 @@ export function ProgramContent() {
 
                   {/* INFORMATIONS CLÉS */}
                   <div className="flex flex-col gap-2.5 mb-5 mt-2">
-                    <div className="flex items-start gap-3">
-                      <Clock className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                        Durée : {isPresentiel ? "1 an" : program.durationText}
-                      </span>
-                    </div>
+                    {!program.id.includes("enseignant") && (
+                      <div className="flex items-start gap-3">
+                        <Clock className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                          Durée : {isPresentiel ? "1 an" : program.durationText}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-start gap-3">
                       <Users className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
                       <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
@@ -743,17 +745,19 @@ export function ProgramContent() {
                         Format : {isPresentiel ? "Présentiel" : "À distance"}
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <CalendarDays className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                        {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h / semaine" : (program.id === 'tajwid_intensif' ? "Rythme : 2h / semaine" : "Rythme : 1h30 / semaine"))}
-                      </span>
-                    </div>
+                    {!program.id.includes("enseignant") && (
+                      <div className="flex items-start gap-3">
+                        <CalendarDays className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                          {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h / semaine" : (program.id === 'tajwid_intensif' ? "Rythme : 2h / semaine" : "Rythme : 1h / semaine"))}
+                        </span>
+                      </div>
+                    )}
                     {!isPresentiel && program.id !== "cours_particuliers" && (
                       <div className="flex items-start gap-3">
                         <Play className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
                         <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                          Replays inclus à vie
+                          {program.id.includes("enseignant") ? "Replays" : "Replays inclus à vie"}
                         </span>
                       </div>
                     )}
@@ -761,7 +765,7 @@ export function ProgramContent() {
                       <div className="flex items-start gap-3">
                         <Award className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
                         <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                          {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin de parcours" : "Certification ISHES"}
+                          {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin de parcours" : "Diplôme ISHES"}
                         </span>
                       </div>
                     )}
@@ -780,7 +784,7 @@ export function ProgramContent() {
                         <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
                           {program.priceSub}
                         </div>
-                        {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "GRATUIT" && (
+                        {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "Devis" && program.price !== "GRATUIT" && (
                           <div className="text-[10px] font-bold text-ishes-blue uppercase tracking-wide mt-1.5 flex items-center gap-1">
                             <span>💳</span> Paiement en 1x, 3x ou 5x
                           </div>
@@ -821,7 +825,7 @@ export function ProgramContent() {
                             onClick={(e) => e.stopPropagation()}
                             className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
                           >
-                            S'inscrire sur devis
+                            S'inscrire
                           </Link>
                         ) : isPresentiel ? (
                           <Link

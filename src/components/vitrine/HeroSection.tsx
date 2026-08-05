@@ -1,55 +1,64 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search, Trophy, Award } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 export function HeroSection() {
   return (
-    <main className="relative z-10 flex flex-col items-center text-center px-4 pt-28 sm:pt-32 md:pt-44 pb-12">
+    <main className="relative z-10 w-full overflow-hidden bg-[#fafafa]">
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+        <Image src="/images/ai_medina.png" alt="Medina Background" fill className="object-cover" priority />
+      </div>
       <ArabicBackground />
 
-      {/* Hero content */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-7"
-      >
-        <h1 className="text-[38px] sm:text-[52px] md:text-[72px] lg:text-[84px] font-black text-ishes-dark leading-[1.08] tracking-tight">
-          L'excellence de <span className="text-ishes-blue">la</span><br />
-          <span className="text-ishes-blue">langue arabe</span> et des<br />
-          <span className="bg-ishes-gold text-white px-2 py-0 rounded-none sm:inline-flex sm:items-center sm:h-[1.1em] sm:align-bottom inline box-decoration-clone">sciences islamiques</span> à<br />
-          votre portée.
-        </h1>
-
-        <p className="max-w-[620px] text-base sm:text-lg md:text-[20px] text-gray-500 leading-[1.7] font-medium">
-          Institut des Sciences Humaines et Spirituelles. Pédagogie certifiée pour une maîtrise complète, du niveau débutant à l'expertise.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-2">
+      <div className="max-w-[90rem] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-24">
+        <div className="flex flex-col items-center justify-center relative z-10">
+          
+          {/* Content */}
           <motion.div
-            animate={{ scale: [1, 1.08, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full max-w-5xl flex flex-col items-center text-center"
           >
-            <Link href="/program?mode=distanciel" className="group relative flex items-center justify-center gap-3 w-64 bg-ishes-gold hover:brightness-95 text-white py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(200,169,110,0.6)] active:scale-95">
-              Distanciel
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
-            </Link>
+            <h1 className="text-[42px] sm:text-[56px] md:text-[64px] lg:text-[72px] font-black text-[#0a192f] leading-[1.05] tracking-tight">
+              Apprenez votre religion avec confiance.
+              <span className="block text-ishes-blue mt-2">
+                Rapprochez-vous d'ALLAH avec une science authentique.
+              </span>
+            </h1>
+
+            <p className="max-w-[750px] text-base md:text-lg text-gray-600 leading-relaxed font-medium mt-8">
+              Depuis plus de 16 ans, l'Institut ISHES accompagne les francophones dans l'apprentissage de la langue arabe, du Coran et des sciences islamiques grâce à une pédagogie reconnue alliant science, spiritualité et accompagnement.
+            </p>
+
+            {/* Badge */}
+            <div className="flex items-center gap-4 bg-[#f9f5f0] border border-[#C69C6D]/20 p-5 rounded-2xl mt-10 max-w-[600px] shadow-sm text-left">
+              <Trophy className="text-[#C69C6D] w-8 h-8 shrink-0" strokeWidth={1.5} />
+              <p className="text-sm font-bold text-[#0a192f] leading-snug">
+                Le seul institut spécialisé dans la formation des enseignants en Tarbiya Islamiyya et Tajwid en France.
+              </p>
+              <Award className="text-[#C69C6D] w-8 h-8 shrink-0" strokeWidth={1.5} />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 mt-10 w-full sm:w-auto">
+              <Link href="/program" className="bg-[#0a192f] text-white px-8 py-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 hover:bg-[#0f2547] transition-all shadow-md group">
+                Découvrir nos formations 
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link href="/program" className="bg-white border-2 border-gray-200 text-[#0a192f] px-8 py-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 hover:border-gray-300 transition-colors group">
+                Trouver mon parcours 
+                <Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              </Link>
+            </div>
           </motion.div>
 
-          <motion.div
-            animate={{ scale: [1, 1.08, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: 1 }}
-          >
-            <Link href="/program?mode=presentiel" className="group relative flex items-center justify-center gap-3 w-64 bg-[#f9f5f0] border-2 border-ishes-gold/20 text-ishes-dark hover:border-ishes-gold/50 hover:bg-white py-5 rounded-full text-[17px] font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-10px_rgba(200,169,110,0.2)] active:scale-95">
-              Présentiel
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110 text-ishes-gold" strokeWidth={2.5} />
-            </Link>
-          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </main>
   );
 }

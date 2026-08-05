@@ -60,10 +60,10 @@ export function BoutiqueProducts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="group flex flex-col md:flex-row lg:flex-col xl:flex-row gap-8 items-center md:items-start lg:items-center xl:items-start bg-[#f9f5f0] p-8 rounded-[2.5rem] border border-ishes-gold/10 hover:border-ishes-gold/30 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
+              className="group flex flex-col md:flex-row lg:flex-col xl:flex-row gap-8 items-center md:items-start lg:items-center xl:items-start bg-ishes-dark p-8 rounded-[2.5rem] border border-ishes-gold/20 hover:border-ishes-gold/40 hover:shadow-2xl hover:shadow-black/20 transition-all duration-500"
             >
               {/* Product Image */}
-              <div className="w-[60%] sm:w-64 md:w-56 lg:w-[60%] xl:w-56 aspect-[3/4] mx-auto md:mx-0 lg:mx-auto xl:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/10 shrink-0 relative">
+              <div className="w-[60%] sm:w-64 md:w-56 lg:w-[60%] xl:w-56 aspect-[3/4] mx-auto md:mx-0 lg:mx-auto xl:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/30 shrink-0 relative">
                 <Image 
                   src={product.image} 
                   alt={product.title}
@@ -74,25 +74,25 @@ export function BoutiqueProducts() {
               </div>
 
               {/* Product Content */}
-              <div className="flex-1 flex flex-col h-full justify-between py-2">
+              <div className="flex-1 flex flex-col min-w-0 h-full justify-between py-2 w-full">
                 <div>
-                  <h2 className="ishes-heading text-2xl text-ishes-gold mb-2 transition-colors leading-tight">
+                  <h2 className="ishes-heading text-2xl text-ishes-gold mb-2 transition-colors leading-tight group-hover:text-white truncate whitespace-normal">
                     {product.title}
                   </h2>
                   <p className="ishes-label text-[10px] text-ishes-gold mb-4 leading-tight opacity-80">
                     {product.subtitle}
                   </p>
-                  <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">
+                  <p className="text-gray-400 text-sm font-medium leading-relaxed mb-6">
                     {product.description}
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-8 mt-auto pt-6 border-t border-gray-50">
-                  <span className="ishes-heading text-xl text-ishes-dark whitespace-nowrap">
+                <div className="flex flex-wrap items-center justify-between gap-4 mt-auto pt-6 border-t border-gray-800">
+                  <span className="ishes-heading text-xl text-white whitespace-nowrap">
                     {product.price}
                   </span>
-                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto shrink-0">
-                    <Button variant="ishes-gold" className="w-full sm:w-auto h-12 px-6 gap-2">
+                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto xl:w-full 2xl:w-auto shrink-0 max-w-full">
+                    <Button variant="ishes-gold" className="w-full sm:w-auto xl:w-full 2xl:w-auto h-12 px-4 md:px-6 gap-2 text-xs md:text-sm">
                       Acheter en ligne <ShoppingBag className="w-4 h-4" />
                     </Button>
                   </a>

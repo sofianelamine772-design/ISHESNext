@@ -1061,7 +1061,7 @@ function InscriptionForm() {
                       planId === 'tajwid_intensif' ? (
                         <>Durée 3 mois / Cours en direct: 2h/ semaine + audio 24h/24</>
                       ) : (
-                        <>Durée : du 1er octobre au 30 juin | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : planId === 'tajwid_standard' ? '1h/semaine' : '1h30/semaine'}</>
+                        <>Durée : du 1er octobre au 30 juin | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : planId === 'tajwid_standard' ? '1h/semaine' : '1h/semaine'}</>
                       )}
                     </p>
                   </div>

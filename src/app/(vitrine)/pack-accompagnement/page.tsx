@@ -10,7 +10,7 @@ export default function PackAccompagnementPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-0">
       {/* HERO SECTION */}
-      <section className="relative pt-44 pb-32 md:pt-48 md:pb-40 overflow-hidden bg-[#fafafa]">
+      <section className="relative pt-44 pb-12 md:pt-48 md:pb-16 overflow-hidden bg-[#fafafa]">
         {/* Faded Background Image */}
         <div className="absolute right-0 top-0 w-full lg:w-[65%] h-full z-0 opacity-90">
           <div className="absolute inset-0 bg-gradient-to-r from-[#fafafa] via-[#fafafa]/80 to-transparent z-10 hidden lg:block" />
@@ -67,7 +67,7 @@ export default function PackAccompagnementPage() {
 
 
       {/* FEATURES CARDS */}
-      <section className="py-24 bg-[#fafafa]">
+      <section className="pt-8 pb-24 bg-[#fafafa]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-6">Ce que comprend ton Pack Accompagnement</h2>
@@ -81,7 +81,7 @@ export default function PackAccompagnementPage() {
             {/* Card 1 */}
             <div className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col relative group">
               <div className="h-56 relative overflow-hidden">
-                <Image src="/images/pack-card-1.png" alt="Communauté" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                <Image src="/images/formations/pack-acc-1.png" alt="Communauté" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
               <div className="p-8 pt-12 relative flex-1">
                 <div className="absolute -top-10 left-8 w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center border-4 border-[#f9f5f0] shadow-md text-ishes-gold">
@@ -107,7 +107,7 @@ export default function PackAccompagnementPage() {
             {/* Card 2 */}
             <div className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col relative group">
               <div className="h-56 relative overflow-hidden">
-                <Image src="/images/pack-card-2.png" alt="Coran" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                <Image src="/images/formations/pack-acc-live.png" alt="Coran" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
               <div className="p-8 pt-12 relative flex-1">
                 <div className="absolute -top-10 left-8 w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center border-4 border-[#f9f5f0] shadow-md text-ishes-gold">
@@ -135,7 +135,7 @@ export default function PackAccompagnementPage() {
             {/* Card 3 */}
             <div className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col relative group">
               <div className="h-56 relative overflow-hidden">
-                <Image src="/images/pack-card-3.png" alt="Lives" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                <Image src="/images/formations/pack-acc-group-watsapp.jpg" alt="Lives" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
               <div className="p-8 pt-12 relative flex-1">
                 <div className="absolute -top-10 left-8 w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center border-4 border-[#f9f5f0] shadow-md text-ishes-gold">

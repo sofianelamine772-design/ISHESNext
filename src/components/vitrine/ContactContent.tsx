@@ -102,7 +102,7 @@ export function ContactContent() {
                 </svg>
               </div>
               <div>
-                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appel / WhatsApp (Premier contact)</span>
+                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appelez-nous ou laissez-nous un message WhatsApp</span>
                 <span className="ishes-heading text-xl text-ishes-dark group-hover/phone:text-ishes-blue transition-colors">+33 6 66 03 35 19</span>
               </div>
             </a>
@@ -114,7 +114,7 @@ export function ContactContent() {
                 </svg>
               </div>
               <div>
-                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appel / WhatsApp (Deuxième contact)</span>
+                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appelez-nous ou laissez-nous un message WhatsApp</span>
                 <span className="ishes-heading text-xl text-ishes-dark group-hover/phone:text-ishes-blue transition-colors">+33 6 86 91 13 01</span>
               </div>
             </a>
