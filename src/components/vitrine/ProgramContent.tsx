@@ -639,8 +639,8 @@ export function ProgramContent() {
       </div>
 
       {/* PROGRAMS GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {filteredPrograms.map((program, index) => {
             const isPresentiel = program.type === "presentiel";
             const accentColor = isPresentiel ? "text-ishes-gold" : "text-ishes-blue";
@@ -685,7 +685,7 @@ export function ProgramContent() {
                   }`}
               >
                 {/* IMAGE COVER */}
-                <div className="w-full h-40 sm:h-48 relative bg-gray-100 shrink-0">
+                <div className="w-full h-32 sm:h-48 relative bg-gray-100 shrink-0">
                   <Image 
                     src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
                     alt={program.title} 
@@ -716,72 +716,72 @@ export function ProgramContent() {
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 flex-1 flex flex-col pt-4">
+                <div className="p-3 sm:p-6 flex-1 flex flex-col pt-3 sm:pt-4">
                   {/* TITLE & DESC */}
-                  <h2 className="text-xl font-black text-[#101828] mb-2 tracking-tight">{program.title}</h2>
-                  <p className="text-xs sm:text-sm text-gray-500 leading-relaxed min-h-auto mb-4 font-medium">
+                  <h2 className="text-sm sm:text-xl font-black text-[#101828] mb-1 sm:mb-2 tracking-tight line-clamp-2">{program.title}</h2>
+                  <p className="text-[10px] sm:text-sm text-gray-500 leading-snug sm:leading-relaxed min-h-auto mb-2 sm:mb-4 font-medium line-clamp-2 sm:line-clamp-3">
                     {program.subtitle}
                   </p>
 
                   {/* INFORMATIONS CLÉS */}
-                  <div className="flex flex-col gap-2.5 mb-5 mt-2">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 sm:gap-x-4 sm:gap-y-2.5 mb-3 sm:mb-5 mt-1 sm:mt-2">
                     {!program.id.includes("enseignant") && (
-                      <div className="flex items-start gap-3">
-                        <Clock className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <Clock className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
                           Durée : {isPresentiel ? "1 an" : program.durationText}
                         </span>
                       </div>
                     )}
-                    <div className="flex items-start gap-3">
-                      <Users className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                    <div className="flex items-start gap-1.5 sm:gap-2">
+                      <Users className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                      <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
                         Public : {program.audience === 'enfant' ? "Enfants" : (program.id.includes("femme") ? "Femmes" : "Adultes")}
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <Monitor className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                        Format : {isPresentiel ? "Présentiel" : "À distance"}
+                    <div className="flex items-start gap-1.5 sm:gap-2">
+                      <Monitor className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                      <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                        Format : {isPresentiel ? "Présentiel" : "À dist."}
                       </span>
                     </div>
                     {!program.id.includes("enseignant") && (
-                      <div className="flex items-start gap-3">
-                        <CalendarDays className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                          {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h / semaine" : (program.id === 'tajwid_intensif' ? "Rythme : 2h / semaine" : "Rythme : 1h / semaine"))}
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <CalendarDays className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                          {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h/sem." : (program.id === 'tajwid_intensif' ? "Rythme : 2h/sem." : "Rythme : 1h/sem."))}
                         </span>
                       </div>
                     )}
                     {!isPresentiel && program.id !== "cours_particuliers" && (
-                      <div className="flex items-start gap-3">
-                        <Play className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                          {program.id.includes("enseignant") ? "Replays" : "Replays inclus à vie"}
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <Play className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                          {program.id.includes("enseignant") ? "Replays" : "Replays inclus"}
                         </span>
                       </div>
                     )}
                     {program.id !== "cours_particuliers" && program.id !== "correction_fatiha" && program.id !== "pack_accompagnement" && (
-                      <div className="flex items-start gap-3">
-                        <Award className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
-                          {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin de parcours" : "Diplôme ISHES"}
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <Award className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                          {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin" : "Diplôme ISHES"}
                         </span>
                       </div>
                     )}
                   </div>
 
                   {/* PRICE & CTA */}
-                  <div className="flex flex-col gap-3 mt-auto pt-3 border-t border-gray-50">
+                  <div className="flex flex-col gap-2 sm:gap-3 mt-auto pt-2 sm:pt-3 border-t border-gray-50">
                     <div className="flex items-end justify-between mb-1">
                       <div>
                         {program.originalPrice && (
-                          <div className="text-sm font-bold text-gray-400 line-through mb-1">
+                          <div className="text-[10px] sm:text-sm font-bold text-gray-400 line-through mb-0.5 sm:mb-1">
                             Valeur : {program.originalPrice}
                           </div>
                         )}
-                        <div className="text-3xl font-black text-[#101828] tracking-tight">{program.price}</div>
-                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                        <div className="text-lg sm:text-3xl font-black text-[#101828] tracking-tight leading-none">{program.price}</div>
+                        <div className="text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-0.5 sm:mt-1">
                           {program.priceSub}
                         </div>
                         {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "Devis" && program.price !== "GRATUIT" && (
@@ -806,11 +806,11 @@ export function ProgramContent() {
                         )}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 font-black text-[9px] sm:text-[10px] tracking-widest uppercase">
                       <Link
                         href={infoUrl}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-3.5 rounded-xl transition-all shadow-sm"
+                        className="flex items-center justify-center bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 py-2.5 sm:py-3.5 rounded-xl transition-all shadow-sm"
                       >
                         Info
                       </Link>
@@ -823,7 +823,7 @@ export function ProgramContent() {
                           <Link
                             href="/fr/contact"
                             onClick={(e) => e.stopPropagation()}
-                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all`}
                           >
                             S'inscrire
                           </Link>
@@ -831,19 +831,19 @@ export function ProgramContent() {
                           <Link
                             href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
                             onClick={(e) => e.stopPropagation()}
-                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
                               }`}
                           >
                             {getSlotStatus(program.day)?.est_plein
                               ? "COMPLET"
-                              : (program.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")
+                              : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")
                             }
                           </Link>
                         ) : program.id === 'cours_particuliers' ? (
                           <Link
                             href="/fr/contact"
                             onClick={(e) => e.stopPropagation()}
-                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all`}
                           >
                             Nous Contacter
                           </Link>
@@ -851,7 +851,7 @@ export function ProgramContent() {
                           <Link
                             href={`/inscription?plan=${program.id}&audience=${program.audience}`}
                             onClick={(e) => e.stopPropagation()}
-                            className={`w-full flex items-center justify-center ${btnColor} text-white py-3.5 rounded-xl shadow-md transition-all`}
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all`}
                           >
                             S'inscrire
                           </Link>
