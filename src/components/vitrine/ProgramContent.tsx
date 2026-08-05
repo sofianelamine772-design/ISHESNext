@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays } from "lucide-react";
+import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays, Play } from "lucide-react";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
@@ -723,46 +723,48 @@ export function ProgramContent() {
                     {program.subtitle}
                   </p>
 
-                  {/* ICONS GRID */}
-                  {!(program.id === 'tajwid_intensif' || program.id === 'fiqh_malikite' || program.id === 'memoriser_coran' || program.id === 'sciences_du_coran') && (
-                    <div className="grid grid-cols-2 gap-3 mb-5">
-                      <div className="flex items-center gap-2">
-                        <Clock className={`w-3.5 h-3.5 ${accentColor}`} />
-                        <span className="text-[10px] font-bold text-gray-400">
-                          {isPresentiel ? program.durationText : (program.id === 'tajwid_standard' ? '1h' : '1h30/sem')}
-                        </span>
-                      </div>
-                      {program.id !== "femme-debutante-presentiel" && program.id !== "femme-intermediaire-presentiel" && !program.id.includes("enfant") && (
-                        <div className="flex items-center gap-2">
-                          <BookOpen className={`w-3.5 h-3.5 ${accentColor}`} />
-                          <span className="text-[10px] font-bold text-gray-400">
-                            {program.id === 'tajwid_standard' ? 'Support inclus' : 'Manuel inclus'}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <Users className={`w-3.5 h-3.5 ${accentColor}`} />
-                        <span className="text-[10px] font-bold text-gray-400">
-                          {program.id === 'tajwid_standard' ? '10' : (program.id.includes("enfant") ? "Max 16" : "Max 20")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Award className={`w-3.5 h-3.5 ${accentColor}`} />
-                        <span className="text-[10px] font-bold text-gray-400 uppercase">
-                          {program.id === 'tajwid_standard' ? 'Diplôme' : 'Certifié'}
-                        </span>
-                      </div>
+                  {/* INFORMATIONS CLÉS */}
+                  <div className="flex flex-col gap-2.5 mb-5 mt-2">
+                    <div className="flex items-start gap-3">
+                      <Clock className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                        Durée : {isPresentiel ? "1 an" : program.durationText}
+                      </span>
                     </div>
-                  )}
-
-                  {/* FEATURES LIST */}
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 mb-4">
-                    {program.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">{feature}</span>
+                    <div className="flex items-start gap-3">
+                      <Users className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                        Public : {program.audience === 'enfant' ? "Enfants" : (program.id.includes("femme") ? "Femmes" : "Adultes")}
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Monitor className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                        Format : {isPresentiel ? "Présentiel" : "À distance"}
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CalendarDays className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                      <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                        {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h / semaine" : (program.id === 'tajwid_intensif' ? "Rythme : 2h / semaine" : "Rythme : 1h30 / semaine"))}
+                      </span>
+                    </div>
+                    {!isPresentiel && program.id !== "cours_particuliers" && (
+                      <div className="flex items-start gap-3">
+                        <Play className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                          Replays inclus à vie
+                        </span>
                       </div>
-                    ))}
+                    )}
+                    {program.id !== "cours_particuliers" && program.id !== "correction_fatiha" && program.id !== "pack_accompagnement" && (
+                      <div className="flex items-start gap-3">
+                        <Award className={`w-4 h-4 ${accentColor} shrink-0 mt-0.5`} />
+                        <span className="text-xs sm:text-sm text-gray-700 font-bold leading-tight">
+                          {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin de parcours" : "Certification ISHES"}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* PRICE & CTA */}

@@ -153,10 +153,9 @@ export default function NotreHistoirePage() {
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
                 <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedh Riad</h3>
-                <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur</div>
+                <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur et gérant</div>
                 <ul className="space-y-4">
                   {[
-                    "Co-fondateur et dirigeant",
                     "Formateur d’enseignant de Tajwid",
                     "Responsable communication",
                     "Spécialiste du Tajwid (IJAZA Jazaria)"
