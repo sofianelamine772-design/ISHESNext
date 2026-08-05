@@ -133,7 +133,7 @@ export default function TestPositionnement() {
                 Orientation Enfants
               </span>
               <h1 className="text-4xl md:text-6xl font-black text-ishes-dark mb-6 uppercase leading-tight">
-                Test de <br /><span className="text-ishes-gold italic">Niveau.</span>
+                Test de <br /><span className="text-ishes-gold ">Niveau.</span>
               </h1>
               <p className="text-gray-500 font-medium mb-12 max-w-xl mx-auto">
                 Ce test rapide nous permet d'orienter au mieux votre enfant pour qu'il progresse sereinement bi idhniLLAH.
@@ -213,7 +213,7 @@ export default function TestPositionnement() {
                   </h2>
 
                   {currentQuestion.example && (
-                    <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 mb-10 italic text-sm text-gray-500 font-medium">
+                    <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 mb-10 text-sm text-gray-500 font-medium">
                       {currentQuestion.example}
                     </div>
                   )}

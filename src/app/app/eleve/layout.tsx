@@ -41,7 +41,7 @@ export default function EleveLayout({
             <div className="w-10 h-10 bg-[#086b51] rounded-xl flex items-center justify-center shadow-lg shadow-[#086b51]/20">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-black italic tracking-tight text-[#086b51]">
+            <span className="text-2xl font-black tracking-tight text-[#086b51]">
               ISHEECOLE
             </span>
           </Link>

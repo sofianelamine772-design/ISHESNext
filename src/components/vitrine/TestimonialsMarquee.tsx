@@ -56,7 +56,7 @@ export function TestimonialsMarquee() {
             Approuvé par la communauté
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight flex items-center justify-center gap-3 flex-wrap">
-            Ce que nos <span className="text-ishes-gold italic font-serif">étudiants</span> pensent.
+            Ce que nos <span className="text-ishes-gold font-serif">étudiants</span> pensent.
           </h2>
         </motion.div>
       </div>
@@ -108,7 +108,7 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
         </svg>
       </div>
       
-      <p className="text-gray-600 group-hover:text-gray-900 italic transition-colors text-[14px] leading-relaxed flex-1 relative z-10">"{testimonial.text}"</p>
+      <p className="text-gray-600 group-hover:text-gray-900 transition-colors text-[14px] leading-relaxed flex-1 relative z-10">"{testimonial.text}"</p>
       
       <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase pt-4 border-t border-gray-50 relative z-10">
         {testimonial.role}

@@ -553,7 +553,7 @@ export default function FacturationPage() {
                     <AlertCircle className="w-12 h-12" />
                   </div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-ishes-blue mb-4">Rapport d'erreur</h4>
-                  <p className="text-sm font-medium text-white/80 leading-relaxed italic">
+                  <p className="text-sm font-medium text-white/80 leading-relaxed ">
                     "{selectedPayment.reason || "Aucun motif spécifié par l'émetteur."}"
                   </p>
                 </div>

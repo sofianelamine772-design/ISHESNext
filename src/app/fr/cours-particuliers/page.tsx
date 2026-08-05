@@ -77,7 +77,7 @@ export default function CoursParticuliersPage() {
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
                 Cours de Coran <br />
-                <span className="text-ishes-blue italic">Particuliers</span>.
+                <span className="text-ishes-blue ">Particuliers</span>.
               </h1>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
@@ -89,7 +89,7 @@ export default function CoursParticuliersPage() {
                 </Link>
                 <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-gray-100">
                    <p className="text-sm font-black text-ishes-dark uppercase tracking-widest text-nowrap">Adultes & Enfants</p>
-                   <p className="text-ishes-blue text-lg font-black italic text-nowrap">À partir de débutant</p>
+                   <p className="text-ishes-blue text-lg font-black text-nowrap">À partir de débutant</p>
                 </div>
               </div>
 
@@ -111,7 +111,7 @@ export default function CoursParticuliersPage() {
                   <div className="absolute top-0 left-0 w-full h-2 bg-ishes-blue" />
                   <Sparkles className="w-24 h-24 text-ishes-blue/20 group-hover:scale-110 transition-transform duration-500" />
                   <h3 className="text-2xl font-black text-ishes-dark">Excellence & Proximité</h3>
-                  <p className="text-gray-500 font-medium leading-relaxed italic">
+                  <p className="text-gray-500 font-medium leading-relaxed ">
                     "Une expérience d'apprentissage unique, centrée sur votre progression et votre épanouissement spirituel."
                   </p>
                </div>

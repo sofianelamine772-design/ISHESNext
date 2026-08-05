@@ -346,7 +346,7 @@ export default function CoursPresentielPage() {
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-[#101828] leading-[1.05] tracking-tight">
                 Vivez l'excellence <br />
-                <span className="text-ishes-blue italic">de l'apprentissage.</span>
+                <span className="text-ishes-blue ">de l'apprentissage.</span>
               </h1>
 
               <p className="text-lg md:text-xl text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
@@ -377,7 +377,7 @@ export default function CoursPresentielPage() {
                      <Building2 className="w-10 h-10 text-ishes-gold group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div className="text-center space-y-4 px-4">
-                     <h3 className="text-2xl font-black text-[#101828] italic">"La proximité est la clé de la transmission du cœur"</h3>
+                     <h3 className="text-2xl font-black text-[#101828] ">"La proximité est la clé de la transmission du cœur"</h3>
                      <p className="text-gray-400 font-medium text-sm">
                        Un environnement d'étude structuré, fraternel et propice à l'élévation spirituelle.
                      </p>

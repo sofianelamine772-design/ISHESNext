@@ -42,7 +42,7 @@ export default function CoursAnglaisPage() {
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
                 Unlock your <br />
-                <span className="text-ishes-blue italic">Potential.</span>
+                <span className="text-ishes-blue ">Potential.</span>
               </h1>
 
               <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0">
@@ -58,7 +58,7 @@ export default function CoursAnglaisPage() {
                 </Link>
                 <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-gray-100">
                    <p className="text-sm font-black text-ishes-dark uppercase tracking-widest">Niveau</p>
-                   <p className="text-ishes-blue text-lg font-black italic">A1 à C1</p>
+                   <p className="text-ishes-blue text-lg font-black ">A1 à C1</p>
                 </div>
               </div>
 
@@ -76,7 +76,7 @@ export default function CoursAnglaisPage() {
                   <div className="absolute top-0 left-0 w-full h-2 bg-blue-600" />
                   <Award className="w-32 h-32 text-blue-600/20 group-hover:scale-110 transition-transform duration-500" />
                   <div className="text-center space-y-4 px-6">
-                    <h3 className="text-2xl font-black text-ishes-dark italic">"English is the bridge to global knowledge and opportunities"</h3>
+                    <h3 className="text-2xl font-black text-ishes-dark ">"English is the bridge to global knowledge and opportunities"</h3>
                     <p className="text-gray-500 font-medium text-sm">Une pédagogie interactive et stimulante.</p>
                   </div>
                </div>

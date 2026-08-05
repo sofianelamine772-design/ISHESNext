@@ -13,7 +13,7 @@ export function NewHomeSections() {
             <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
             {[
               { img: "/images/ai_arabe.png", icon: BookOpen, title: "Apprendre\nl'arabe", desc: "Comprendre, lire, écrire et s'exprimer avec confiance.", link: "/program" },
               { img: "/images/quran-coffee.png", icon: Book, title: "Apprendre à lire\nle Coran", desc: "Maîtriser la lecture, le Tajwid et comprendre les sens profonds.", link: "/program" },
@@ -21,20 +21,20 @@ export function NewHomeSections() {
               { img: "/images/ai_pro.png", icon: GraduationCap, title: "Devenir\nenseignant", desc: "Se former pour transmettre avec science, pédagogie et spiritualité.", link: "/formation-enseignant" },
               { img: "/images/ai_spirit.png", icon: Moon, title: "Progresser\nspirituellement", desc: "Des enseignements pour renforcer ta foi et te rapprocher d'ALLAH.", link: "/program" },
             ].map((item, idx) => (
-              <div key={idx} className="bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/60 group hover:-translate-y-1 transition-transform duration-300 flex flex-col">
+              <div key={idx} className="bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/60 group hover:-translate-y-1 transition-transform duration-300 flex flex-col">
                 <div className="relative">
-                  <div className="relative h-56 w-full overflow-hidden">
+                  <div className="relative h-32 sm:h-56 w-full overflow-hidden">
                     <Image src={item.img} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 20vw" />
                   </div>
-                  <div className="absolute -bottom-6 left-6 w-12 h-12 bg-[#0a192f] rounded-full border-4 border-white flex items-center justify-center shadow-sm z-10 group-hover:scale-110 transition-transform">
-                    <item.icon className="w-5 h-5 text-[#C69C6D]" />
+                  <div className="absolute -bottom-5 sm:-bottom-6 left-4 sm:left-6 w-10 h-10 sm:w-12 sm:h-12 bg-[#0a192f] rounded-full border-2 sm:border-4 border-white flex items-center justify-center shadow-sm z-10 group-hover:scale-110 transition-transform">
+                    <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#C69C6D]" />
                   </div>
                 </div>
-                <div className="p-6 pt-10 flex-grow flex flex-col">
-                  <h3 className="font-black text-[#0a192f] text-lg whitespace-pre-line leading-tight mb-3">{item.title}</h3>
-                  <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6 flex-grow">{item.desc}</p>
-                  <Link href={item.link} className="inline-flex items-center gap-1.5 text-xs font-black text-[#0a192f] uppercase tracking-widest hover:text-[#C69C6D] transition-colors mt-auto group/link">
-                    Découvrir <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                <div className="p-4 sm:p-6 pt-8 sm:pt-10 flex-grow flex flex-col">
+                  <h3 className="font-black text-[#0a192f] text-sm sm:text-lg whitespace-pre-line leading-tight mb-2 sm:mb-3">{item.title}</h3>
+                  <p className="text-gray-500 text-[10px] sm:text-sm font-medium leading-snug sm:leading-relaxed mb-4 sm:mb-6 flex-grow">{item.desc}</p>
+                  <Link href={item.link} className="inline-flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-xs font-black text-[#0a192f] uppercase tracking-widest hover:text-[#C69C6D] transition-colors mt-auto group/link">
+                    Découvrir <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover/link:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>
@@ -191,8 +191,8 @@ export function NewHomeSections() {
       {/* ─── QUI SOMMES-NOUS ? ─── */}
       <section className="py-24 bg-[#0a192f] relative z-10 border-t border-[#0a192f]">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="bg-[#f2ece4] rounded-[3rem] overflow-hidden flex flex-col md:flex-row items-stretch shadow-2xl relative">
-            <div className="w-full md:w-[45%] flex relative aspect-[2/1] md:aspect-auto md:h-auto min-h-[300px]">
+          <div className="bg-[#f2ece4] rounded-3xl sm:rounded-[3rem] overflow-hidden flex flex-col md:flex-row items-stretch shadow-2xl relative">
+            <div className="w-full md:w-[45%] flex relative aspect-[4/3] sm:aspect-[2/1] md:aspect-auto md:h-auto min-h-[250px] sm:min-h-[300px]">
               <div className="w-1/2 relative h-full">
                 <Image src="/images/oustedhRyad.jpeg" alt="Oustadh Riad" fill className="object-cover object-top" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
@@ -200,16 +200,16 @@ export function NewHomeSections() {
                 <Image src="/images/OustedhaRahida.jpeg" alt="Oustadha Rachida" fill className="object-cover object-top" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
             </div>
-            <div className="p-10 md:p-16 flex-1 flex flex-col justify-center">
-              <h3 className="text-2xl md:text-3xl font-black text-[#0a192f] mb-2">Qui sommes-nous ?</h3>
-              <h4 className="text-xl font-bold text-[#C69C6D] mb-8 italic font-serif">Oustadh Riad et Oustadha Rachida</h4>
-              <p className="text-[#0a192f]/80 font-medium text-base leading-relaxed mb-6">
+            <div className="p-6 pb-10 sm:p-10 md:p-16 flex-1 flex flex-col justify-center">
+              <h3 className="text-2xl md:text-3xl font-black text-[#0a192f] mb-1 sm:mb-2">Qui sommes-nous ?</h3>
+              <h4 className="text-lg sm:text-xl font-bold text-[#C69C6D] mb-4 sm:mb-8 font-serif">Oustadh Riad et Oustadha Rachida</h4>
+              <p className="text-[#0a192f]/80 font-medium text-sm sm:text-base leading-relaxed mb-4 sm:mb-6">
                 Depuis plus de 16 ans, nous formons des milliers d'élèves francophones à la langue arabe, au Coran et aux sciences islamiques, avec une approche profonde alliant savoir, spiritualité et accompagnement.
               </p>
-              <p className="text-[#0a192f]/80 font-medium text-base leading-relaxed mb-10">
+              <p className="text-[#0a192f]/80 font-medium text-sm sm:text-base leading-relaxed mb-8 sm:mb-10">
                 Notre mission est de <a href="https://www.ecoletransmettre.fr/fr/" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#C69C6D] hover:underline transition-colors">transmettre</a> une science bénéfique qui transforme les cœurs et élève les générations.
               </p>
-              <Link href="/notre-histoire" className="inline-flex items-center gap-2 bg-[#0a192f] text-white px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-gray-900 shadow-md w-fit group">
+              <Link href="/notre-histoire" className="inline-flex justify-center items-center gap-2 bg-[#0a192f] text-white px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-[15px] font-black transition-all hover:bg-gray-900 shadow-md w-full sm:w-fit group">
                 Découvrir notre histoire <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

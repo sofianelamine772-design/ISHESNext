@@ -132,7 +132,7 @@ export default async function AdminOverview() {
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Élèves inscrits</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{totalStudents || 0}</h3>
-                    <span className="text-[10px] font-black italic text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+12%</span>
+                    <span className="text-[10px] font-black text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+12%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
@@ -144,7 +144,7 @@ export default async function AdminOverview() {
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(monthlyRevenue)}</h3>
-                    <span className="text-[10px] font-black italic text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
+                    <span className="text-[10px] font-black text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
@@ -167,7 +167,7 @@ export default async function AdminOverview() {
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Dossiers finalisés</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">89%</h3>
-                    <span className="text-[10px] font-black italic text-gray-400 bg-gray-50 px-2 py-0.5 rounded mb-1">-2%</span>
+                    <span className="text-[10px] font-black text-gray-400 bg-gray-50 px-2 py-0.5 rounded mb-1">-2%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
@@ -231,7 +231,7 @@ export default async function AdminOverview() {
                         <span className="text-xl">💳</span>
                       </div>
                       <p className="font-bold text-xs">Aucune transaction</p>
-                      <p className="text-[10px] italic">Les paiements s'afficheront ici en direct.</p>
+                      <p className="text-[10px] ">Les paiements s'afficheront ici en direct.</p>
                     </div>
                   )}
                 </div>

@@ -148,7 +148,7 @@ export default function FormationEnseignantPage() {
               className="text-5xl md:text-7xl lg:text-[95px] font-black text-ishes-dark leading-[0.9] tracking-tighter mb-10 uppercase"
             >
               <span className="block text-ishes-gold">DEVENEZ</span>
-              <span className="text-ishes-dark italic font-serif whitespace-nowrap">ENSEIGNANT CERTIFIÉ</span>
+              <span className="text-ishes-dark font-serif whitespace-nowrap">ENSEIGNANT CERTIFIÉ</span>
             </motion.h1>
 
             <motion.div
@@ -253,7 +253,7 @@ export default function FormationEnseignantPage() {
           <div className="text-center mb-16">
             <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
-              Tout savoir sur la <span className="text-ishes-blue italic">certification.</span>
+              Tout savoir sur la <span className="text-ishes-blue ">certification.</span>
             </h2>
           </div>
 

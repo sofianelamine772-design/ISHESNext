@@ -411,7 +411,7 @@ export default function AdminDashboard() {
                       <Monitor className="w-4 h-4 text-ishes-dark" />
                     </div>
                     <h3 className="ishes-label text-ishes-dark text-[10px] md:text-xs">Formations (Distanciel)</h3>
-                    <span className="ml-auto bg-gray-100 text-ishes-dark text-[10px] font-black italic px-2 py-0.5 rounded-full">
+                    <span className="ml-auto bg-gray-100 text-ishes-dark text-[10px] font-black px-2 py-0.5 rounded-full">
                       {filteredDistancielClasses.length}
                     </span>
                   </div>
@@ -448,7 +448,7 @@ export default function AdminDashboard() {
                       <School className="w-4 h-4 text-ishes-blue" />
                     </div>
                     <h3 className="ishes-label text-[10px] md:text-xs">Classes (Présentiel)</h3>
-                    <span className="ml-auto bg-ishes-blue text-white text-[10px] font-black italic px-2 py-0.5 rounded-full">
+                    <span className="ml-auto bg-ishes-blue text-white text-[10px] font-black px-2 py-0.5 rounded-full">
                       {filteredPresentielClasses.length}
                     </span>
                   </div>
@@ -467,7 +467,7 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-1">
                             <Users className="w-3.5 h-3.5" /> {c.students.length} inscrits
                           </div>
-                          <div className="font-black italic text-ishes-blue">
+                          <div className="font-black text-ishes-blue">
                             {c.students.length}/{c.capacity_limit}
                           </div>
                         </div>
@@ -507,11 +507,11 @@ export default function AdminDashboard() {
                         <span className="ishes-label mb-1 block text-[10px]">Gestion de classe</span>
                         <h2 className="text-xl md:text-2xl xl:text-3xl ishes-heading text-ishes-dark leading-snug break-words">{selectedClass.name}</h2>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
-                          <span className={`text-[8px] md:text-[10px] font-black uppercase italic px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
+                          <span className={`text-[8px] md:text-[10px] font-black uppercase px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
                             Mode {selectedClass.type}
                           </span>
-                          <span className="text-[10px] font-black text-ishes-dark italic bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
+                          <span className="text-[10px] font-black text-ishes-dark bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
                             Capacité : {selectedClass.students.length} / {selectedClass.capacity_limit}
                           </span>
                         </div>
@@ -587,7 +587,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="ishes-label flex flex-col items-end shrink-0">
                       <span className="text-[10px] text-gray-400">Total</span>
-                      <span className="text-ishes-dark text-base md:text-lg font-black italic leading-none">{filteredStudents?.length}</span>
+                      <span className="text-ishes-dark text-base md:text-lg font-black leading-none">{filteredStudents?.length}</span>
                     </div>
                   </div>
                 </div>
@@ -608,7 +608,7 @@ export default function AdminDashboard() {
                           )}
                         >
                           <div className="flex items-center gap-3 md:gap-5 min-w-0">
-                            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-ishes-dark flex items-center justify-center font-black italic text-white text-sm md:text-lg shadow-lg shadow-ishes-dark/10 shrink-0">
+                            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-ishes-dark flex items-center justify-center font-black text-white text-sm md:text-lg shadow-lg shadow-ishes-dark/10 shrink-0">
                               {student.avatar}
                             </div>
                             <div className="min-w-0">
@@ -621,7 +621,7 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-4 md:gap-8 shrink-0">
                             <div className="text-right hidden md:block">
                               <div className="ishes-label text-[9px] mb-0.5 opacity-40">Inscription</div>
-                              <div className="font-black italic text-ishes-dark text-sm">{student.dateJoined.toUpperCase()}</div>
+                              <div className="font-black text-ishes-dark text-sm">{student.dateJoined.toUpperCase()}</div>
                             </div>
                             <div className="flex items-center gap-2">
 
@@ -698,7 +698,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex-1 pb-2">
                         <h2 className="text-3xl font-black text-ishes-dark tracking-tight mb-1">{studentDetail.first_name} {studentDetail.last_name}</h2>
-                        <p className="text-ishes-dark/70 text-[10px] font-bold uppercase tracking-widest italic">Membre depuis le {new Date(studentDetail.created_at).toLocaleDateString()}</p>
+                        <p className="text-ishes-dark/70 text-[10px] font-bold uppercase tracking-widest ">Membre depuis le {new Date(studentDetail.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
 
@@ -858,7 +858,7 @@ export default function AdminDashboard() {
                 waitingStudents.map(student => (
                   <div key={student.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-ishes-blue/30 transition-colors group">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-ishes-dark rounded-xl flex items-center justify-center text-white font-black italic text-xs">
+                      <div className="w-10 h-10 bg-ishes-dark rounded-xl flex items-center justify-center text-white font-black text-xs">
                         {(student.first_name?.[0] || '') + (student.last_name?.[0] || '')}
                       </div>
                       <div>
@@ -879,7 +879,7 @@ export default function AdminDashboard() {
                 <div className="py-20 text-center text-gray-400">
                   <AlertCircle className="w-12 h-12 mx-auto mb-4 opacity-20" />
                   <p className="font-bold">Aucun élève en attente</p>
-                  <p className="text-xs max-w-[200px] mx-auto mt-2 leading-relaxed italic">Tous les élèves inscrits ont déjà été affectés à une classe.</p>
+                  <p className="text-xs max-w-[200px] mx-auto mt-2 leading-relaxed ">Tous les élèves inscrits ont déjà été affectés à une classe.</p>
                 </div>
               )}
             </div>
@@ -910,7 +910,7 @@ export default function AdminDashboard() {
 
               <div className="mb-8 p-4 bg-gray-50 rounded-2xl border border-gray-100">
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Élève sélectionné</p>
-                <p className="text-sm font-bold text-ishes-dark italic">{studentToTransfer?.name}</p>
+                <p className="text-sm font-bold text-ishes-dark ">{studentToTransfer?.name}</p>
               </div>
 
               <div className="space-y-4">
@@ -1110,7 +1110,7 @@ export default function AdminDashboard() {
                 <div className="mb-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
                   <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Classe destinataire</p>
                   <p className="text-sm font-bold text-ishes-dark">{selectedClass.name}</p>
-                  <p className="text-[10px] text-gray-500 mt-1 italic">
+                  <p className="text-[10px] text-gray-500 mt-1 ">
                     💡 {selectedClass.students.length} élève{selectedClass.students.length > 1 ? 's' : ''} recevront cet e-mail.
                   </p>
                 </div>

@@ -17,7 +17,7 @@ export function ContactContent() {
       >
         <span className="ishes-label text-ishes-blue mb-5 block">Nous contacter</span>
         <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-dark leading-none mb-8 uppercase tracking-tighter">
-          Parlons-<span className="text-ishes-gold italic font-serif">nous.</span>
+          Parlons-<span className="text-ishes-gold font-serif">nous.</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.
@@ -71,19 +71,19 @@ export function ContactContent() {
           <div className="bg-gray-50 rounded-2xl p-6">
             <span className="ishes-label text-[9px] opacity-40 block mb-4">Horaires d'ouverture</span>
             <div className="space-y-3">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
                 <span className="ishes-heading text-sm text-ishes-dark">MERCREDI</span>
-                <span className="font-black italic text-ishes-blue text-sm">13h30 — 16h30</span>
+                <span className="font-black text-ishes-blue text-sm sm:text-right">13h30 — 16h30</span>
               </div>
               <div className="h-px bg-gray-100"></div>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
                 <span className="ishes-heading text-sm text-ishes-dark">SAMEDI</span>
-                <span className="font-black italic text-ishes-blue text-sm">9h — 12h / 13h30 — 16h30</span>
+                <span className="font-black text-ishes-blue text-sm sm:text-right">9h — 12h / 13h30 — 16h30</span>
               </div>
               <div className="h-px bg-gray-100"></div>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
                 <span className="ishes-heading text-sm text-ishes-dark">DIMANCHE</span>
-                <span className="font-black italic text-ishes-blue text-sm">11h30 — 15h</span>
+                <span className="font-black text-ishes-blue text-sm sm:text-right">11h30 — 15h</span>
               </div>
             </div>
           </div>
@@ -217,7 +217,7 @@ export function ContactContent() {
           
           <h2 className="ishes-heading text-5xl md:text-7xl text-white leading-none mb-6">
             TOULOUSE<br />
-            <span className="text-ishes-blue italic">Institut.</span>
+            <span className="text-ishes-blue ">Institut.</span>
           </h2>
           
           <div className="space-y-4 mb-10">

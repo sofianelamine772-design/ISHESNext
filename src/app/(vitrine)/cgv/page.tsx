@@ -71,7 +71,7 @@ export default function CGVPage() {
             <span className="ishes-label text-ishes-blue mb-4 block">Conditions de vente</span>
             <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
               CGV.<br />
-              <span className="text-ishes-blue italic">Conditions Générales.</span>
+              <span className="text-ishes-blue ">Conditions Générales.</span>
             </h1>
             <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
               <ScrollText className="w-4 h-4 text-ishes-blue" />

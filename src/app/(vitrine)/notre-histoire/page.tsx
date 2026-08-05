@@ -41,7 +41,7 @@ export default function NotreHistoirePage() {
             <span className="text-ishes-gold font-black uppercase tracking-widest text-xs block mb-4">NOTRE HISTOIRE</span>
             
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-dark leading-[1.05] tracking-tight mb-8">
-              Tout a commencé par une <span className="text-ishes-gold italic font-serif">soif d’apprendre…</span>
+              Tout a commencé par une <span className="text-ishes-gold">soif d’apprendre…</span>
             </h1>
             
             <div className="flex items-center gap-2 mb-8">

@@ -6,7 +6,7 @@ export default function Loading() {
       <div className="relative">
         <div className="w-16 h-16 border-4 border-ishes-blue/20 border-t-ishes-blue rounded-full animate-spin"></div>
         <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[10px] font-black text-ishes-blue italic">ISHES</span>
+            <span className="text-[10px] font-black text-ishes-blue ">ISHES</span>
         </div>
       </div>
       <p className="mt-6 text-sm font-black text-ishes-dark uppercase tracking-[0.3em] animate-pulse">

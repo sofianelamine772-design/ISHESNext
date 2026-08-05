@@ -520,7 +520,7 @@ function EtudiantsContent() {
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Base Étudiants</h1>
-            <span className="hidden sm:inline-block px-3 py-1 bg-ishes-blue/5 text-ishes-blue text-[10px] font-black italic rounded-full border border-ishes-blue/10">
+            <span className="hidden sm:inline-block px-3 py-1 bg-ishes-blue/5 text-ishes-blue text-[10px] font-black rounded-full border border-ishes-blue/10">
               {students.length} INSCRITS
             </span>
           </div>
@@ -594,7 +594,7 @@ function EtudiantsContent() {
                         }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-2xl flex flex-shrink-0 items-center justify-center font-black italic text-sm shadow-sm
+                        <div className={`w-12 h-12 rounded-2xl flex flex-shrink-0 items-center justify-center font-black text-sm shadow-sm
                           ${selectedStudentId === student.id ? 'bg-ishes-dark text-white' : 'bg-ishes-dark/10 text-ishes-dark'}
                         `}>
                           {student.avatar}
@@ -662,7 +662,7 @@ function EtudiantsContent() {
                   <div className="flex flex-col xl:flex-row xl:items-end justify-between -mt-16 md:-mt-20 mb-10 md:mb-12 gap-6 relative z-10">
                     <div className="flex items-end gap-4 md:gap-6 flex-1 min-w-0">
                       <div className="w-24 h-24 md:w-28 md:h-28 rounded-[1.5rem] md:rounded-[2rem] bg-white p-1 md:p-1.5 shadow-xl shadow-black/5 border border-gray-100 shrink-0">
-                        <div className="w-full h-full bg-gray-50 border border-gray-100 rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black italic text-ishes-dark">
+                        <div className="w-full h-full bg-gray-50 border border-gray-100 rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center text-2xl md:text-3xl font-black text-ishes-dark">
                           {selectedStudent.avatar}
                         </div>
                       </div>
@@ -1004,7 +1004,7 @@ function EtudiantsContent() {
                                       </div>
                                     );
                                   })}
-                                  <p className="text-[9px] text-gray-400 italic pt-1 leading-relaxed">
+                                  <p className="text-[9px] text-gray-400 pt-1 leading-relaxed">
                                     💡 Ce règlement de <strong>{amountFormatted}</strong> couvre <strong>{membersCount} élève{membersCount > 1 ? 's' : ''}</strong>.
                                     En cas de résiliation d’un élève, le paiement reste enregistré pour la famille.
                                   </p>

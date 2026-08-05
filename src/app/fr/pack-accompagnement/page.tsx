@@ -33,7 +33,7 @@ export default function PackAccompagnementPage() {
             
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-dark leading-[1.05] tracking-tight mb-4">
               Tu ne t'inscris pas seulement à une plateforme. <br />
-              <span className="text-ishes-gold italic font-serif">Tu rejoins une communauté qui t'accompagne dans ton cheminement.</span>
+              <span className="text-ishes-gold font-serif">Tu rejoins une communauté qui t'accompagne dans ton cheminement.</span>
             </h1>
             
             <div className="flex items-center gap-2 mb-8 mt-6">
@@ -164,7 +164,7 @@ export default function PackAccompagnementPage() {
             <div className="text-ishes-gold text-xs font-black uppercase tracking-widest mb-4">POURQUOI AVONS-NOUS CRÉÉ CE PACK ?</div>
             <h2 className="text-3xl md:text-4xl font-black text-white leading-tight">
               Nous ne voulons pas former des élèves qui suivent des cours.<br />
-              <span className="text-ishes-gold italic font-serif">Nous voulons former des hommes et des femmes qui cheminent.</span>
+              <span className="text-ishes-gold font-serif">Nous voulons former des hommes et des femmes qui cheminent.</span>
             </h2>
           </div>
           
@@ -267,7 +267,7 @@ export default function PackAccompagnementPage() {
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
             Tu ne rejoins pas seulement un institut.<br />
-            <span className="text-ishes-gold italic font-serif">Tu rejoins une famille qui prie pour ta réussite, répond à tes questions et t'accompagne jusqu'au bout.</span>
+            <span className="text-ishes-gold font-serif">Tu rejoins une famille qui prie pour ta réussite, répond à tes questions et t'accompagne jusqu'au bout.</span>
           </h2>
           <p className="text-lg text-white/80 font-medium mb-10 max-w-2xl mx-auto">
             Parce que l'objectif n'est pas seulement que tu apprennes.<br />

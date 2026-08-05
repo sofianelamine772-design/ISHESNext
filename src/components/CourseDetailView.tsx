@@ -463,7 +463,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                     </div>
                                  ))}
                               </div>
-                              <p className="text-xs text-gray-400 font-medium leading-relaxed italic">
+                              <p className="text-xs text-gray-400 font-medium leading-relaxed ">
                                  Les horaires sont donnés à titre indicatif et peuvent être ajustés selon les groupes.
                               </p>
                            </div>
@@ -493,7 +493,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight tracking-tight uppercase">
                            Organisation de la <br />
-                           <span className="text-ishes-gold italic">formation en présentiel.</span>
+                           <span className="text-ishes-gold ">formation en présentiel.</span>
                         </h2>
                         <p className="text-sm text-gray-400 font-medium mt-2 max-w-xl">
                            {id === "arabe_coran_junior"

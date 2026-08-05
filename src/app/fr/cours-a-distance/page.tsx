@@ -55,7 +55,7 @@ export default function CoursDistancePage() {
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
                 Apprenez la science <br />
-                <span className="text-ishes-blue italic">d'où vous voulez.</span>
+                <span className="text-ishes-blue ">d'où vous voulez.</span>
               </h1>
 
               <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
@@ -123,7 +123,7 @@ export default function CoursDistancePage() {
           <div className="text-center mb-20">
             <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">La Technologie au Service du Savoir</span>
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight">
-              Une expérience <span className="text-ishes-blue italic">immersive.</span>
+              Une expérience <span className="text-ishes-blue ">immersive.</span>
             </h2>
           </div>
 
@@ -212,7 +212,7 @@ export default function CoursDistancePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight">
-              Nos programmes <span className="text-ishes-gold italic">phares</span>
+              Nos programmes <span className="text-ishes-gold ">phares</span>
             </h2>
             <p className="text-gray-500 mt-6 max-w-2xl mx-auto font-medium text-lg">
               Des cursus complets et structurés pour vous accompagner dans votre cheminement, quel que soit votre niveau.
@@ -296,14 +296,14 @@ export default function CoursDistancePage() {
                    <div className="flex items-center gap-2 mb-2">
                       {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 text-ishes-gold fill-current" />)}
                    </div>
-                   <p className="text-gray-600 text-sm font-medium italic">"L'organisation est parfaite, les professeurs sont passionnés, on se sent vraiment accompagnés même à travers l'écran."</p>
+                   <p className="text-gray-600 text-sm font-medium ">"L'organisation est parfaite, les professeurs sont passionnés, on se sent vraiment accompagnés même à travers l'écran."</p>
                    <p className="mt-3 font-bold text-ishes-dark text-xs uppercase">— Sarah M.</p>
                 </div>
              </div>
 
              <div className="space-y-8">
                <h2 className="text-4xl font-black text-ishes-dark leading-tight">
-                 Le distanciel sans <span className="text-ishes-blue italic">les inconvénients.</span>
+                 Le distanciel sans <span className="text-ishes-blue ">les inconvénients.</span>
                </h2>
                <p className="text-gray-500 font-medium text-lg leading-relaxed">
                  Chez ISHES, nous avons conçu notre plateforme pour pallier les défauts habituels de l'apprentissage en ligne. 
@@ -352,7 +352,7 @@ export default function CoursDistancePage() {
           <div className="relative z-10 space-y-8">
             <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
               Prêt à commencer <br />
-              <span className="text-ishes-blue italic">votre apprentissage ?</span>
+              <span className="text-ishes-blue ">votre apprentissage ?</span>
             </h2>
             <p className="text-white/60 text-lg font-medium max-w-2xl mx-auto">
               Rejoignez l'Institut ISHES aujourd'hui et donnez à votre foi les bases solides qu'elle mérite.

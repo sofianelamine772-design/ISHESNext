@@ -174,7 +174,7 @@ export default function InstitutPage() {
           >
             <h1 className="text-5xl sm:text-7xl md:text-[100px] font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
               L'INSTITUT <br />
-              <span className="text-ishes-gold italic font-serif">présentiel.</span>
+              <span className="text-ishes-gold font-serif">présentiel.</span>
             </h1>
             <p className="text-xl text-white/80 font-medium leading-relaxed max-w-2xl mx-auto mb-10">
               Un lieu d'apprentissage privilégié à Toulouse pour approfondir vos connaissances et cheminer ensemble.
@@ -200,7 +200,7 @@ export default function InstitutPage() {
             <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
             <h2 className="text-4xl md:text-6xl font-black text-ishes-dark leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
-              <span className="text-ishes-gold italic font-serif">en présentiel.</span>
+              <span className="text-ishes-gold font-serif">en présentiel.</span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
               Pour ceux qui privilégient le contact direct avec l'enseignant, l'émulation collective et la rigueur d'un cadre académique moderne.
@@ -358,7 +358,7 @@ export default function InstitutPage() {
               
               <div className="flex-1 text-center md:text-left">
                 <span className="text-ishes-gold font-black uppercase tracking-[0.2em] text-[10px] mb-3 block">Orientation pédagogique</span>
-                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de niveau <span className="text-ishes-gold italic">Enfants</span></h3>
+                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de niveau <span className="text-ishes-gold ">Enfants</span></h3>
                 <p className="text-gray-500 font-medium leading-relaxed mb-8">
                   Un doute sur le niveau de votre enfant ? Notre test interactif vous aide à choisir entre le niveau <strong className="text-ishes-dark">Débutant</strong> ou <strong className="text-ishes-dark">1+</strong> en moins de 2 minutes.
                 </p>
@@ -395,7 +395,7 @@ export default function InstitutPage() {
                 </div>
 
                 <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
-                   NOTRE <br /> <span className="text-ishes-gold italic">institut.</span>
+                   NOTRE <br /> <span className="text-ishes-gold ">institut.</span>
                 </h2>
 
                 <div className="space-y-6 mb-12">
@@ -452,7 +452,7 @@ export default function InstitutPage() {
           <div className="text-center mb-16">
             <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
             <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
-              Des réponses à vos <span className="text-ishes-gold italic">questions.</span>
+              Des réponses à vos <span className="text-ishes-gold ">questions.</span>
             </h2>
           </div>
 

@@ -287,7 +287,7 @@ export default function EleveDashboard() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-            Assalamou alaykoum, <span className="text-[#086b51] italic">{user?.firstName} {user?.lastName}</span>
+            Assalamou alaykoum, <span className="text-[#086b51] ">{user?.firstName} {user?.lastName}</span>
           </h2>
           <p className="text-gray-400 font-medium mt-4 text-lg">
             Heureux de vous retrouver pour votre apprentissage.
@@ -615,7 +615,7 @@ export default function EleveDashboard() {
                 </div>
                 <h3 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight uppercase tracking-tight">
                   Installez l'application<br />
-                  <span className="text-ishes-blue italic font-amiri capitalize">sur votre appareil.</span>
+                  <span className="text-ishes-blue font-amiri capitalize">sur votre appareil.</span>
                 </h3>
                 <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-xl">
                   Accédez à vos cours en un clic, directement depuis votre écran d'accueil — sans passer par le navigateur.
@@ -804,7 +804,7 @@ export default function EleveDashboard() {
                         </div>
                       </div>
 
-                      <div className="text-[9px] text-gray-400 font-semibold italic">
+                      <div className="text-[9px] text-gray-400 font-semibold ">
                         {item.status === 'paid' ? '✓ Transaction validée' : '⏳ Automatique'}
                       </div>
                     </div>
@@ -1070,7 +1070,7 @@ export default function EleveDashboard() {
                       <h2 className="text-[30px] font-bold tracking-[0.18em] text-[#086b51] uppercase font-cinzel">
                         Certificat de Scolarité
                       </h2>
-                      <p className="text-[11px] font-playfair italic font-medium text-gray-500 tracking-wider">
+                      <p className="text-[11px] font-playfair font-medium text-gray-500 tracking-wider">
                         Attestation officielle d'inscription pour l'année académique {academicYear.replace('-', ' - ')}
                       </p>
                     </div>
@@ -1078,7 +1078,7 @@ export default function EleveDashboard() {
 
                   {/* Certificate Body */}
                   <div className="my-6 space-y-6 px-8 text-center leading-relaxed">
-                    <p className="font-playfair italic text-gray-600 text-[14px]">
+                    <p className="font-playfair text-gray-600 text-[14px]">
                       Le Secrétariat Académique de l'Institut des Sciences Humaines et Spirituelles (ISHES) certifie par la présente que :
                     </p>
 
@@ -1108,7 +1108,7 @@ export default function EleveDashboard() {
                       </div>
                     </div>
 
-                    <p className="font-playfair italic text-gray-500 text-[11px] pt-1">
+                    <p className="font-playfair text-gray-500 text-[11px] pt-1">
                       Ce certificat est délivré pour servir et valoir ce que de droit.
                     </p>
                   </div>
@@ -1139,7 +1139,7 @@ export default function EleveDashboard() {
 
                     {/* Authenticity Identifier */}
                     <div className="text-center space-y-1 flex flex-col items-center">
-                      <span className="text-[10px] font-playfair font-bold text-gray-700 italic">
+                      <span className="text-[10px] font-playfair font-bold text-gray-700 ">
                         Fait à Toulouse, le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </span>
                       <span className="text-[8px] font-sans font-bold font-mono text-ishes-gold uppercase tracking-wider bg-[#FAF8F5] border border-ishes-gold/20 px-3 py-1 rounded-md">
@@ -1156,7 +1156,7 @@ export default function EleveDashboard() {
                           <path d="M10,25 C25,25 35,5 45,25 C55,45 65,15 75,25 C80,30 90,30 95,20 M20,15 C35,15 45,15 50,30" />
                         </svg>
                       </div>
-                      <span className="text-[9px] font-playfair font-bold text-gray-800 italic">Direction de l'Enseignement</span>
+                      <span className="text-[9px] font-playfair font-bold text-gray-800 ">Direction de l'Enseignement</span>
                     </div>
                   </div>
 

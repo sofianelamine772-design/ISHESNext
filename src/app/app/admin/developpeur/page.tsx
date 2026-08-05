@@ -150,7 +150,7 @@ export default function DeveloperPage() {
                         {test.id === 'supabase_key_role' && <Database className="w-5 h-5" />}
                       </div>
                       <div>
-                        <h4 className="font-black italic text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
+                        <h4 className="font-black text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
                         <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">{test.id}</p>
                       </div>
                     </div>
@@ -160,7 +160,7 @@ export default function DeveloperPage() {
                   </div>
 
                   <div className="bg-gray-50/50 rounded-xl p-3 mb-4">
-                    <p className="text-[10px] font-bold text-gray-400 italic">"{test.message}"</p>
+                    <p className="text-[10px] font-bold text-gray-400 ">"{test.message}"</p>
                   </div>
 
                   <div className="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden">
@@ -254,7 +254,7 @@ export default function DeveloperPage() {
                 {logs ? (
                   logs
                 ) : (
-                  <span className="text-gray-600 italic">
+                  <span className="text-gray-600 ">
                     Console en attente de diagnostic. Cliquez sur "Lancer les tests" ci-dessus pour inspecter les détails et erreurs de l'application.
                   </span>
                 )}

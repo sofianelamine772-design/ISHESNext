@@ -47,7 +47,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
-              Un apprentissage <span className="text-ishes-gold italic font-serif">interactif</span> & un suivi <span className="text-ishes-gold italic font-serif">continu</span>
+              Un apprentissage <span className="text-ishes-gold font-serif">interactif</span> & un suivi <span className="text-ishes-gold font-serif">continu</span>
             </h2>
             <p className="text-gray-500 font-medium text-lg">Où que vous soyez, profitez d'une expérience d'apprentissage immersive et d'une communauté soudée.</p>
           </div>
@@ -84,7 +84,7 @@ export default function Home() {
           </div>
 
           <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
-            Le Pack <span className="text-ishes-gold italic font-serif">Accompagnement</span>
+            Le Pack <span className="text-ishes-gold font-serif">Accompagnement</span>
           </h2>
 
           <div className="bg-[#f9f5f0]/80 border border-ishes-gold/20 rounded-3xl p-6 md:p-8 max-w-3xl mx-auto mb-10 shadow-sm backdrop-blur-sm">

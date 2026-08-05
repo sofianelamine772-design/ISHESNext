@@ -75,7 +75,7 @@ export default function PolitiqueConfidentialitePage() {
             <span className="ishes-label text-ishes-blue mb-4 block">Confidentialité & Sécurité</span>
             <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
               Politique de<br />
-              <span className="text-ishes-blue italic">confidentialité.</span>
+              <span className="text-ishes-blue ">confidentialité.</span>
             </h1>
             <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
               <Lock className="w-4 h-4 text-ishes-blue" />

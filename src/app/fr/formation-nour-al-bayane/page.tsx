@@ -46,7 +46,7 @@ export default function NourAlBayanePage() {
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
                 La Clé de la <br />
-                <span className="text-ishes-blue italic">Récitation.</span>
+                <span className="text-ishes-blue ">Récitation.</span>
               </h1>
 
               <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0">
@@ -62,7 +62,7 @@ export default function NourAlBayanePage() {
                 </Link>
                 <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-gray-100">
                    <p className="text-sm font-black text-ishes-dark uppercase tracking-widest">Type de cours</p>
-                   <p className="text-ishes-blue text-lg font-black italic">Accéléré</p>
+                   <p className="text-ishes-blue text-lg font-black ">Accéléré</p>
                 </div>
               </div>
 
@@ -80,7 +80,7 @@ export default function NourAlBayanePage() {
                   <div className="absolute top-0 left-0 w-full h-2 bg-ishes-blue" />
                   <BookOpen className="w-32 h-32 text-ishes-blue/20 group-hover:scale-110 transition-transform duration-500" />
                   <div className="text-center space-y-4 px-6">
-                    <h3 className="text-2xl font-black text-ishes-dark italic">"Nour Al Bayane : illuminer le chemin de la lecture coranique"</h3>
+                    <h3 className="text-2xl font-black text-ishes-dark ">"Nour Al Bayane : illuminer le chemin de la lecture coranique"</h3>
                     <p className="text-gray-500 font-medium text-sm">Une méthode adoptée par des millions de personnes dans le monde.</p>
                   </div>
                </div>

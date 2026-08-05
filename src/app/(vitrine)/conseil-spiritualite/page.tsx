@@ -31,7 +31,7 @@ export default function ConseilSpiritualitePage() {
               transition={{ duration: 0.8 }}
               className="text-5xl md:text-7xl font-black text-ishes-dark leading-[1.05] tracking-tight mb-8"
             >
-              Éclairez votre <span className="text-ishes-blue italic">cheminement</span> intérieur.
+              Éclairez votre <span className="text-ishes-blue ">cheminement</span> intérieur.
             </motion.h1>
             
             <motion.p 

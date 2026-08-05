@@ -9,11 +9,11 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-5 sm:px-6">
 
         {/* Main grid : logo + 4 colonnes de liens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-x-4 gap-y-10 sm:gap-10 mb-12">
 
           {/* Logo + réseaux */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="mb-6 inline-block transition-transform hover:scale-105 active:scale-95">
+          <div className="col-span-2 lg:col-span-1">
+            <Link href="/" className="mb-4 sm:mb-6 inline-block transition-transform hover:scale-105 active:scale-95">
               <img src="/logo.png" alt="ISHES Logo" className="h-14 w-auto object-contain" />
             </Link>
             <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">
@@ -38,7 +38,7 @@ export function Footer() {
           {/* Coran & Langues */}
           <div>
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Coran & Langues</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link href="/fr/cours-lecture-tajwid" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Cours de Tajwid</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Distance & Présentiel</span>
@@ -65,7 +65,7 @@ export function Footer() {
           {/* Sciences Islamiques */}
           <div>
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Sciences</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link href="/fr/cours-al-aqida" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Al-'Aqîda (Tahawiya)</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Disponible à distance</span>
@@ -92,7 +92,7 @@ export function Footer() {
           {/* Junior & Autres */}
           <div>
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Cursus Spéciaux</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link href="/fr/cours-arabe-enfant" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Junior (4-15 ans)</Link>
                 <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Distance & Présentiel</span>
@@ -119,7 +119,7 @@ export function Footer() {
           {/* Institut & Contact */}
           <div>
             <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">L'Institut</h4>
-            <ul className="space-y-4 mb-8">
+            <ul className="space-y-2 sm:space-y-4 mb-8">
               <li><Link href="/institut" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">À propos</Link></li>
               <li><Link href="/boutique" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Boutique</Link></li>
               <li><Link href="/app/admin" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Espace Membre</Link></li>

@@ -232,7 +232,7 @@ export async function sendNewMessageEmail({
           Vous avez reçu un nouveau message de la part de l'administration de l'institut <strong>ISHEECOLE</strong>.
         </p>
         ${title ? `<p style="color: #333; font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 5px;">Sujet : ${title}</p>` : ''}
-        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: italic;">
+        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
@@ -307,7 +307,7 @@ export async function sendAdminNewMessageEmail({
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Vous avez reçu un nouveau message de la part de l'élève <strong>${studentName}</strong> (Email : ${studentEmail}).
         </p>
-        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: italic;">
+        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
