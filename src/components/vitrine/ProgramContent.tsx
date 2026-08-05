@@ -19,6 +19,7 @@ type Program = {
   features: string[];
   price: string;
   priceSub: string;
+  originalPrice?: string;
   isRecommended?: boolean;
   type: "presentiel" | "distanciel";
   audience: "adulte" | "enfant";
@@ -375,8 +376,8 @@ export const PROGRAMS: Program[] = [
       "Gestion de classe",
       "Certification ISHES"
     ],
-    price: "2 450 €",
-    priceSub: "/ SESSION",
+    price: "Sur Devis",
+    priceSub: "",
     type: "distanciel",
     audience: "adulte"
   },
@@ -452,8 +453,9 @@ export const PROGRAMS: Program[] = [
       "Cours de spiritualité",
       "Accès Early Bird"
     ],
-    price: "149 €",
-    priceSub: "/ SESSION",
+    price: "49 €",
+    originalPrice: "399 €",
+    priceSub: "/ AN",
     type: "distanciel",
     audience: "adulte"
   }
@@ -553,7 +555,7 @@ export function ProgramContent() {
               </div>
               <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-6xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-6">
                 Choisis ton parcours, <br />
-                <span className="text-ishes-gold italic font-serif">avance à ton rythme.</span>
+                <span className="text-ishes-gold">avance à ton rythme.</span>
               </h1>
               <p className="text-lg sm:text-xl text-gray-500 font-medium max-w-lg leading-relaxed">
                 Présentiel ou à distance, adulte ou enfant : découvre le parcours qui t'aidera à apprendre, comprendre et transmettre ta religion.
@@ -767,6 +769,11 @@ export function ProgramContent() {
                   <div className="flex flex-col gap-3 mt-auto pt-3 border-t border-gray-50">
                     <div className="flex items-end justify-between mb-1">
                       <div>
+                        {program.originalPrice && (
+                          <div className="text-sm font-bold text-gray-400 line-through mb-1">
+                            Valeur : {program.originalPrice}
+                          </div>
+                        )}
                         <div className="text-3xl font-black text-[#101828] tracking-tight">{program.price}</div>
                         <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
                           {program.priceSub}

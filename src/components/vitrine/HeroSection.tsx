@@ -18,9 +18,9 @@ export function HeroSection() {
         className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-7"
       >
         <h1 className="text-[38px] sm:text-[52px] md:text-[72px] lg:text-[84px] font-black text-ishes-dark leading-[1.08] tracking-tight">
-          L'excellence de <span className="text-ishes-gold italic font-serif">la</span><br />
-          <span className="text-ishes-gold italic font-serif">langue arabe</span> et des<br />
-          <span className="bg-ishes-gold font-serif text-white italic px-2 py-0 rounded-none sm:inline-flex sm:items-center sm:h-[1.1em] sm:align-bottom inline box-decoration-clone">sciences islamiques</span> à<br />
+          L'excellence de <span className="text-ishes-blue">la</span><br />
+          <span className="text-ishes-blue">langue arabe</span> et des<br />
+          <span className="bg-ishes-gold text-white px-2 py-0 rounded-none sm:inline-flex sm:items-center sm:h-[1.1em] sm:align-bottom inline box-decoration-clone">sciences islamiques</span> à<br />
           votre portée.
         </h1>
 

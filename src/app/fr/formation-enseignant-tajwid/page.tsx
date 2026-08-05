@@ -258,7 +258,7 @@ export default function FormationEnseignantTajwidPage() {
 
           <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-12 w-full md:w-auto">
             <div className="text-center md:text-left">
-              <h3 className="text-3xl md:text-4xl font-black text-ishes-gold">2 450 €</h3>
+              <h3 className="text-3xl md:text-4xl font-black text-ishes-gold">Sur Devis</h3>
             </div>
             
             <div className="hidden md:block w-px h-12 bg-white/20"></div>
