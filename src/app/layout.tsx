@@ -31,7 +31,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider localization={frFR}>
+    <ClerkProvider 
+      localization={frFR}
+      appearance={{
+        layout: {
+          logoImageUrl: "/logo.png",
+        },
+        elements: {
+          logoImage: "h-20 sm:h-24 w-auto object-contain",
+          logoBox: "flex justify-center w-full mb-6"
+        }
+      }}
+    >
       <html
         lang="fr"
         className={cn("antialiased", "h-full", outfit.variable, "font-sans", geist.variable)}

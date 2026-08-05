@@ -52,7 +52,7 @@ export async function sendEmail({ to, subject, html, text, from, provider, attac
 
     if (useSmtp) {
       const mailOptions = {
-        from: from || `ISHEECOLE <${smtpUser}>`,
+        from: from || `ISHES <${smtpUser}>`,
         to: Array.isArray(to) ? to.join(', ') : to,
         subject,
         html,
@@ -67,7 +67,7 @@ export async function sendEmail({ to, subject, html, text, from, provider, attac
 
     // Sinon, on utilise Resend
     const data = await resend.emails.send({
-      from: from || 'ISHEECOLE <onboarding@resend.dev>', // Remplacer par contact@isheecole.fr quand le domaine est vérifié
+      from: from || 'ISHES <onboarding@resend.dev>', // Remplacer par contact@ishes-toulouse.fr quand le domaine est vérifié
       to,
       subject,
       html,
@@ -93,19 +93,19 @@ export async function sendEmail({ to, subject, html, text, from, provider, attac
 }
 
 const emailHeader = `
-<div style="background-color: #086b51; padding: 30px; text-align: center; border-radius: 16px 16px 0 0;">
-  <h1 style="color: white; margin: 0; font-family: Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; letter-spacing: 2px;">ISHEECOLE</h1>
+<div style="background-color: #ffffff; padding: 30px; text-align: center; border-radius: 16px 16px 0 0; border-bottom: 3px solid #C69C6D;">
+  <img src="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishes-toulouse.fr'}/logo.png" alt="ISHES" style="height: 60px; object-fit: contain;" />
 </div>
 `;
 
 const emailFooter = `
 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 12px; font-family: Helvetica, Arial, sans-serif;">
   <p>Institut des Sciences Humaines et d'Études de l'Éducation</p>
-  <p>© ${new Date().getFullYear()} ISHEECOLE. Tous droits réservés.</p>
+  <p>© ${new Date().getFullYear()} ISHES. Tous droits réservés.</p>
 </div>
 `;
 
-const buttonStyle = "display: inline-block; padding: 14px 28px; background-color: #086b51; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; margin-top: 20px;";
+const buttonStyle = "display: inline-block; padding: 14px 28px; background-color: #0a192f; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; margin-top: 20px;";
 
 export async function sendWelcomeEmail(email: string, firstName: string) {
   const html = `
@@ -114,7 +114,7 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
       <div style="padding: 40px 30px;">
         <h2 style="color: #333; margin-top: 0; font-size: 24px;">Ahlan wa Sahlan, ${firstName} ! 🎉</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Un immense merci pour votre inscription à <strong>ISHEECOLE</strong>. C'est avec une immense joie que nous vous accueillons au sein de notre institut.
+          Un immense merci pour votre inscription à <strong>ISHES</strong>. C'est avec une immense joie que nous vous accueillons au sein de notre institut.
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Nous avons tout préparé pour que votre apprentissage soit exceptionnel. Vous allez passer d'excellents moments en notre compagnie, riches en savoir et en partage. Toute notre équipe pédagogique est là pour vous accompagner pas à pas vers la réussite.
@@ -157,7 +157,7 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
 
   return sendEmail({
     to: email,
-    subject: "✨ Bienvenue dans la famille ISHEECOLE ! Votre espace vous attend",
+    subject: "✨ Bienvenue dans la famille ISHES ! Votre espace vous attend",
     html,
     provider: 'resend'
   });
@@ -196,7 +196,7 @@ export async function sendPaymentReminderEmail(email: string, firstName: string,
 
   return sendEmail({
     to: email,
-    subject: "ISHEECOLE - Action requise concernant votre paiement",
+    subject: "ISHES - Action requise concernant votre paiement",
     html,
     provider: 'resend'
   });
@@ -229,10 +229,10 @@ export async function sendNewMessageEmail({
           Bonjour ${firstName},
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Vous avez reçu un nouveau message de la part de l'administration de l'institut <strong>ISHEECOLE</strong>.
+          Vous avez reçu un nouveau message de la part de l'administration de l'institut <strong>ISHES</strong>.
         </p>
         ${title ? `<p style="color: #333; font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 5px;">Sujet : ${title}</p>` : ''}
-        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
+        <div style="background-color: #f9f9f9; border-left: 4px solid #0a192f; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
@@ -245,7 +245,7 @@ export async function sendNewMessageEmail({
 
   return sendEmail({
     to: email,
-    subject: title ? `✉️ ISHEECOLE : ${title}` : "✉️ Nouveau message de l'administration ISHEECOLE",
+    subject: title ? `✉️ ISHES : ${title}` : "✉️ Nouveau message de l'administration ISHES",
     html,
     provider: 'smtp'
   });
@@ -279,7 +279,7 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
 
   return sendEmail({
     to: email,
-    subject: "✅ ISHEECOLE - Votre classe et groupe WhatsApp",
+    subject: "✅ ISHES - Votre classe et groupe WhatsApp",
     html,
     provider: 'resend'
   });
@@ -307,7 +307,7 @@ export async function sendAdminNewMessageEmail({
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Vous avez reçu un nouveau message de la part de l'élève <strong>${studentName}</strong> (Email : ${studentEmail}).
         </p>
-        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
+        <div style="background-color: #f9f9f9; border-left: 4px solid #0a192f; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
@@ -346,7 +346,7 @@ export async function sendBackupReportEmail(params: {
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #086b51; margin-top: 0; font-size: 20px;">📦 Sauvegarde de base de données réussie !</h2>
+        <h2 style="color: #0a192f; margin-top: 0; font-size: 20px;">📦 Sauvegarde de base de données réussie !</h2>
         <p style="color: #555; line-height: 1.6; font-size: 15px;">
           Bonjour Administrateur,
         </p>
@@ -362,27 +362,27 @@ export async function sendBackupReportEmail(params: {
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Élèves (etudiants)</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.etudiants}</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.etudiants}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Inscriptions</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.inscriptions}</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.inscriptions}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Paiements</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.paiements}</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.paiements}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Classes</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.classes}</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.classes}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Messages (Messagerie)</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${stats.messages}</td>
+            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.messages}</td>
           </tr>
         </table>
 
-        <div style="background-color: #f4faf8; border-left: 4px solid #086b51; padding: 15px; margin: 25px 0; border-radius: 8px; color: #086b51; font-size: 13px; font-weight: 600;">
+        <div style="background-color: #f4faf8; border-left: 4px solid #0a192f; padding: 15px; margin: 25px 0; border-radius: 8px; color: #0a192f; font-size: 13px; font-weight: 600;">
           💡 Les fichiers de sauvegarde ont été téléversés de manière sécurisée dans votre bucket privé Supabase Storage (backups).
         </div>
 
