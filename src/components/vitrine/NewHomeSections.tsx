@@ -61,10 +61,10 @@ export function NewHomeSections() {
                 <h3 className="font-black text-[#0a192f] text-xl leading-tight">Une légitimité reconnue</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed mb-4">
-                Plus de 16 ans d'expérience au service de milliers d'élèves.
+                Plus de 16 ans d'expérience au service de milliers d'élèves
               </p>
               <p className="text-sm text-gray-500 font-bold border-t border-gray-100 pt-4 mt-auto">
-                Le seul institut spécialisé dans la formation des enseignants en Tarbiya Islamiyya et Tajwid en France.
+                Le seul institut spécialisé dans la formation des enseignants en Tarbiya Islamiyya et Tajwid en France
               </p>
             </div>
 
@@ -77,7 +77,7 @@ export function NewHomeSections() {
                 <h3 className="font-black text-[#0a192f] text-xl leading-tight">Un accompagnement qui dure</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed">
-                Avec notre Pack Accompagnement, vous bénéficiez d'une communauté privée, de lives mensuels, d'un programme de spiritualité et d'un suivi qui vous aide à progresser durablement.
+                Avec notre Pack Accompagnement, vous bénéficiez d'une communauté privée, de lives mensuels, d'un programme de spiritualité et d'un suivi qui vous aide à progresser durablement
               </p>
             </div>
 
@@ -90,7 +90,7 @@ export function NewHomeSections() {
                 <h3 className="font-black text-[#0a192f] text-xl leading-tight">Une spiritualité vivante</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed">
-                Notre objectif est de vous aider à renforcer votre lien avec ALLAH et Son Messager ﷺ, tout en cheminant vers une véritable purification du cœur (tazkiyat an-nafs).
+                Notre objectif est de vous aider à renforcer votre lien avec ALLAH et Son Messager ﷺ, tout en cheminant vers une véritable purification du cœur (tazkiyat an-nafs)
               </p>
             </div>
           </div>
@@ -114,7 +114,7 @@ export function NewHomeSections() {
                 </div>
                 <h3 className="text-3xl md:text-4xl font-black text-white mb-4">À Toulouse</h3>
                 <p className="text-gray-300 font-medium leading-relaxed mb-8 text-sm">
-                  Suivez nos cours dans un cadre bienveillant à Toulouse avec une ambiance propice à l'apprentissage.
+                  Suivez nos cours dans un cadre bienveillant à Toulouse avec une ambiance propice à l'apprentissage
                 </p>
                 <Link href="/program?type=presentiel" className="inline-flex items-center justify-center gap-2 bg-white text-[#0a192f] px-6 py-3.5 rounded-xl text-sm font-black transition-all hover:bg-gray-100 w-fit group/btn">
                   Découvrir nos formations <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -135,7 +135,7 @@ export function NewHomeSections() {
                 </div>
                 <h3 className="text-3xl md:text-4xl font-black text-white mb-4">En ligne</h3>
                 <p className="text-gray-300 font-medium leading-relaxed mb-8 text-sm">
-                  Apprenez depuis chez vous avec un accompagnement personnalisé et interactif.
+                  Apprenez depuis chez vous avec un accompagnement personnalisé et interactif
                 </p>
                 <Link href="/program?type=distance" className="inline-flex items-center justify-center gap-2 bg-white text-[#0a192f] px-6 py-3.5 rounded-xl text-sm font-black transition-all hover:bg-gray-100 w-fit group/btn">
                   Découvrir nos formations <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -157,7 +157,7 @@ export function NewHomeSections() {
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-black text-[#0a192f] mb-4">Nouveau musulman ? Commencez ici.</h2>
             <p className="text-gray-500 font-medium text-base max-w-2xl mx-auto">
-              Découvrez des ressources gratuites pour mieux comprendre l'Islam et avancer sereinement dans votre nouveau chemin.
+              Découvrez des ressources gratuites pour mieux comprendre l'Islam et avancer sereinement dans votre nouveau chemin
             </p>
           </div>
           
@@ -204,10 +204,10 @@ export function NewHomeSections() {
               <h3 className="text-2xl md:text-3xl font-black text-[#0a192f] mb-1 sm:mb-2">Qui sommes-nous ?</h3>
               <h4 className="text-lg sm:text-xl font-bold text-[#C69C6D] mb-4 sm:mb-8 font-serif">Oustadh Riad et Oustadha Rachida</h4>
               <p className="text-[#0a192f]/80 font-medium text-sm sm:text-base leading-relaxed mb-4 sm:mb-6">
-                Depuis plus de 16 ans, nous formons des milliers d'élèves francophones à la langue arabe, au Coran et aux sciences islamiques, avec une approche profonde alliant savoir, spiritualité et accompagnement.
+                Depuis plus de 16 ans, nous formons des milliers d'élèves francophones à la langue arabe, au Coran et aux sciences islamiques, avec une approche profonde alliant savoir, spiritualité et accompagnement
               </p>
               <p className="text-[#0a192f]/80 font-medium text-sm sm:text-base leading-relaxed mb-8 sm:mb-10">
-                Notre mission est de <a href="https://www.ecoletransmettre.fr/fr/" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#C69C6D] hover:underline transition-colors">transmettre</a> une science bénéfique qui transforme les cœurs et élève les générations.
+                Notre mission est de <a href="https://www.ecoletransmettre.fr/fr/" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#C69C6D] hover:underline transition-colors">transmettre</a> une science bénéfique qui transforme les cœurs et élève les générations
               </p>
               <Link href="/notre-histoire" className="inline-flex justify-center items-center gap-2 bg-[#0a192f] text-white px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-[15px] font-black transition-all hover:bg-gray-900 shadow-md w-full sm:w-fit group">
                 Découvrir notre histoire <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -229,7 +229,7 @@ export function NewHomeSections() {
             </div>
             <h2 className="text-2xl md:text-3xl font-black text-white leading-snug">
               Quel que soit votre niveau,<br className="hidden md:block"/>
-              votre cheminement commence aujourd'hui.
+              votre cheminement commence aujourd'hui
             </h2>
           </div>
           
