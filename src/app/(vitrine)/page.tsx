@@ -307,7 +307,7 @@ export default function Home() {
 
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-medium relative z-20">
                 <p>
-                  L'Institut des Sciences Humaines et Spirituelles de Toulouse est porté par un couple — également fondateur de l'école <strong className="text-ishes-dark">Transmettre</strong> —, forts de <strong className="text-ishes-dark">plus de 15 ans d'expérience</strong> dans l'enseignement.
+                  L'Institut des Sciences Humaines et Spirituelles de Toulouse est porté par un couple — également fondateur de l'école <a href="https://www.ecoletransmettre.fr/fr/" target="_blank" rel="noopener noreferrer" className="text-ishes-dark font-black hover:text-ishes-blue hover:underline transition-colors">Transmettre</a> —, forts de <strong className="text-ishes-dark">plus de 15 ans d'expérience</strong> dans l'enseignement.
                 </p>
                 <p>
                   Ils ont souhaité élargir l'accès à un véritable cheminement spirituel, en offrant à chacun la possibilité d'apprendre où qu'il se trouve, à son rythme.

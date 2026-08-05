@@ -6,10 +6,10 @@ export function NewHomeSections() {
   return (
     <>
       {/* ─── QUEL EST VOTRE OBJECTIF ─── */}
-      <section className="py-20 bg-[#fafafa] relative z-10 border-t border-gray-100">
+      <section className="py-20 bg-[#0a192f] relative z-10 border-t border-[#0a192f]">
         <div className="max-w-[90rem] mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Quel est votre objectif ?</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-white">Quel est votre objectif ?</h2>
             <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
           </div>
           
@@ -22,9 +22,11 @@ export function NewHomeSections() {
               { img: "/images/ai_spirit.png", icon: Moon, title: "Progresser\nspirituellement", desc: "Des enseignements pour renforcer ta foi et te rapprocher d'ALLAH.", link: "/program" },
             ].map((item, idx) => (
               <div key={idx} className="bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/60 group hover:-translate-y-1 transition-transform duration-300 flex flex-col">
-                <div className="relative h-56 w-full overflow-hidden">
-                  <Image src={item.img} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 20vw" />
-                  <div className="absolute -bottom-5 left-6 w-12 h-12 bg-[#0a192f] rounded-full border-4 border-white flex items-center justify-center shadow-sm z-10 group-hover:scale-110 transition-transform">
+                <div className="relative">
+                  <div className="relative h-56 w-full overflow-hidden">
+                    <Image src={item.img} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 20vw" />
+                  </div>
+                  <div className="absolute -bottom-6 left-6 w-12 h-12 bg-[#0a192f] rounded-full border-4 border-white flex items-center justify-center shadow-sm z-10 group-hover:scale-110 transition-transform">
                     <item.icon className="w-5 h-5 text-[#C69C6D]" />
                   </div>
                 </div>
@@ -121,21 +123,21 @@ export function NewHomeSections() {
               </div>
             ))}
             
-            <Link href="/ressources" className="bg-[#0a192f] rounded-2xl p-6 flex flex-col items-center justify-center text-center flex-1 min-w-[170px] max-w-[220px] hover:bg-[#0f2547] transition-all shadow-xl group border-2 border-transparent hover:border-[#C69C6D]/20">
+            <a href="https://www.youtube.com/@institutishes" target="_blank" rel="noopener noreferrer" className="bg-[#0a192f] rounded-2xl p-6 flex flex-col items-center justify-center text-center flex-1 min-w-[170px] max-w-[220px] hover:bg-[#0f2547] transition-all shadow-xl group border-2 border-transparent hover:border-[#C69C6D]/20">
               <Gift className="w-8 h-8 text-[#C69C6D] mb-5 group-hover:scale-110 transition-transform" />
               <h4 className="font-black text-white text-[15px] mb-4">Accéder aux ressources gratuites</h4>
               <span className="text-[11px] font-black text-[#C69C6D] flex items-center gap-1.5 uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full">
                 Maintenant <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </span>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
 
       {/* ─── QUI SOMMES-NOUS ? ─── */}
-      <section className="py-24 bg-[#fafafa] relative z-10 border-t border-gray-100/50">
+      <section className="py-24 bg-[#0a192f] relative z-10 border-t border-[#0a192f]">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="bg-[#f2ece4] rounded-[3rem] overflow-hidden flex flex-col md:flex-row items-stretch border border-gray-200/50 shadow-sm relative">
+          <div className="bg-[#f2ece4] rounded-[3rem] overflow-hidden flex flex-col md:flex-row items-stretch shadow-2xl relative">
             <div className="w-full md:w-[45%] flex relative aspect-[2/1] md:aspect-auto md:h-auto min-h-[300px]">
               <div className="w-1/2 relative h-full">
                 <Image src="/images/oustedhRyad.jpeg" alt="Oustadh Riad" fill className="object-cover object-top" sizes="(max-width: 768px) 50vw, 25vw" />
@@ -151,9 +153,9 @@ export function NewHomeSections() {
                 Depuis plus de 16 ans, nous formons des milliers d'élèves francophones à la langue arabe, au Coran et aux sciences islamiques, avec une approche profonde alliant savoir, spiritualité et accompagnement.
               </p>
               <p className="text-[#0a192f]/80 font-medium text-base leading-relaxed mb-10">
-                Notre mission est de transmettre une science bénéfique qui transforme les cœurs et élève les générations.
+                Notre mission est de <a href="https://www.ecoletransmettre.fr/fr/" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#C69C6D] hover:underline transition-colors">transmettre</a> une science bénéfique qui transforme les cœurs et élève les générations.
               </p>
-              <Link href="/institut" className="inline-flex items-center gap-2 bg-[#0a192f] text-white px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-gray-900 shadow-md w-fit group">
+              <Link href="/notre-histoire" className="inline-flex items-center gap-2 bg-[#0a192f] text-white px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-gray-900 shadow-md w-fit group">
                 Découvrir notre histoire <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

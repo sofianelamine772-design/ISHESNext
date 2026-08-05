@@ -147,8 +147,8 @@ export default function FormationEnseignantPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl md:text-7xl lg:text-[95px] font-black text-ishes-dark leading-[0.9] tracking-tighter mb-10 uppercase"
             >
-              <span className="block">Devenez</span>
-              <span className="text-ishes-gold italic font-serif whitespace-nowrap">Enseignant certifié.</span>
+              <span className="block text-ishes-gold">DEVENEZ</span>
+              <span className="text-ishes-dark italic font-serif whitespace-nowrap">ENSEIGNANT CERTIFIÉ</span>
             </motion.h1>
 
             <motion.div
@@ -158,14 +158,14 @@ export default function FormationEnseignantPage() {
               className="max-w-4xl mx-auto text-center"
             >
               <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-6">
-                Parce qu'un bon étudiant ne fait pas forcément un bon enseignant…
+                Transmettre avec légitimité, amour, et pédagogie.
               </h2>
               <div className="space-y-4 text-lg text-gray-500 font-medium leading-relaxed">
                 <p>
-                  Enseigner la religion est l'une des plus grandes responsabilités. C'est pourquoi l'Institut ISHES a créé la seule formation actuellement en France dédiée à la professionnalisation des enseignants en Tarbya Islamiya et en Tajwid.
+                  Vous aspirez à enseigner notre noble religion avec amour, légitimité et rigueur ? L'Institut ISHES vous forme à cette noble mission. Seul institut en France spécialisé dans la formation certifiante des enseignants en Tarbya Islamiyya et en Tajwid.
                 </p>
                 <p>
-                  Une méthode éprouvée au service des associations, des mosquées et des familles qui souhaitent transmettre l'Islam avec pédagogie, rigueur et bienveillance.
+                  Formation au service des associations, mosquées ou familles
                 </p>
               </div>
             </motion.div>
@@ -177,52 +177,25 @@ export default function FormationEnseignantPage() {
               className="mt-20 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left relative z-20"
             >
               {formations.map((f, idx) => (
-                <div key={f.id} className="bg-[#f9f5f0] rounded-[2.5rem] p-8 border border-ishes-gold/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:border-ishes-gold/30 hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] -z-0 transition-transform group-hover:scale-110"></div>
+                <div key={f.id} className="bg-ishes-dark rounded-[2.5rem] p-10 border border-ishes-gold/20 shadow-xl hover:shadow-2xl hover:border-ishes-gold/40 hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden items-center text-center">
+                  {/* Decorative background element */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
 
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-2 mb-6">
-                      <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full ${f.badgeColor}`}>
-                        Certification
-                      </span>
-                      {f.availableRemote && (
-                        <span className="flex items-center gap-1.5 text-[10px] font-black text-gray-500 uppercase tracking-widest bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
-                          <Monitor className="w-3.5 h-3.5" /> Distanciel
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="text-2xl font-black text-ishes-dark leading-tight mb-3 pr-4 group-hover:text-ishes-blue transition-colors">
+                  <div className="relative z-10 flex flex-col h-full w-full justify-between gap-12">
+                    <h3 className="text-2xl md:text-3xl font-black text-white leading-tight mt-4 group-hover:text-ishes-gold transition-colors uppercase">
                       {f.title}
                     </h3>
 
-                    <p className="text-gray-500 text-[15px] font-medium leading-relaxed mb-6">
-                      {f.subtitle}
-                    </p>
-
-                    <div className="space-y-3 mb-8">
-                      {f.tags.map((tag, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-ishes-gold shrink-0" />
-                          <span className="text-gray-600 font-bold text-sm">{tag}</span>
-                        </div>
-                      ))}
+                    <div className="flex flex-col items-center gap-6 w-full">
+                      <span className="text-xl font-black text-white">{f.pricing}</span>
+                      
+                      <Link
+                        href={f.link}
+                        className="w-full py-4 rounded-2xl border-2 border-ishes-gold text-ishes-gold hover:bg-ishes-gold hover:text-white font-black transition-all duration-300 text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+                      >
+                        Voir le programme
+                      </Link>
                     </div>
-                  </div>
-
-                  <div className="mt-auto relative z-10 pt-6 border-t border-gray-100 flex flex-col gap-4">
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Investissement</span>
-                        <span className="text-lg font-black text-ishes-dark">{f.pricing}</span>
-                      </div>
-                    </div>
-                    <Link
-                      href={f.link}
-                      className="w-full text-center py-4 rounded-2xl bg-ishes-gold text-white hover:brightness-95 font-black transition-all duration-300 border border-ishes-gold/10 shadow-lg shadow-ishes-gold/20 text-sm uppercase tracking-widest hover:scale-[1.02]"
-                    >
-                      Voir le programme
-                    </Link>
                   </div>
                 </div>
               ))}
@@ -251,42 +224,7 @@ export default function FormationEnseignantPage() {
         </div>
       </section>
 
-      {/* --- STORYTELLING : VOCATION, PROBLÈME, SOLUTION --- */}
-      <section className="pt-20 pb-10 relative z-10">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="space-y-8 md:space-y-12">
 
-            {/* Hook Vocation */}
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-black text-ishes-dark mb-6 tracking-tight leading-tight">
-                Transmettre est <span className="text-ishes-gold italic font-serif">plus qu'un métier</span>,<br />c'est une vocation.
-              </h2>
-              <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
-                Apprendre à lire le Coran, éduquer selon les principes islamiques ou transmettre la langue arabe est l'une des missions les plus nobles qui soient.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Problème */}
-              <div className="bg-[#f9f5f0] p-8 md:p-10 rounded-[2.5rem] border border-ishes-gold/10 shadow-sm">
-                <h3 className="text-2xl font-black text-ishes-gold mb-4">Savoir ≠ Enseigner</h3>
-                <p className="text-gray-600 font-medium leading-relaxed text-lg">
-                  Avoir des connaissances est une chose. Savoir les transmettre avec pédagogie, capter l'attention de ses élèves et structurer un cours en est une autre. <strong className="text-ishes-dark">Sans une méthode claire, on risque l'échec et le découragement.</strong>
-                </p>
-              </div>
-
-              {/* Solution */}
-              <div className="bg-[#f9f5f0] p-8 md:p-10 rounded-[2.5rem] border border-ishes-gold/10 shadow-sm">
-                <h3 className="text-2xl font-black text-ishes-gold mb-4">Méthodologie & Légitimité</h3>
-                <p className="text-gray-600 font-medium leading-relaxed text-lg">
-                  Nos formations vous apportent des méthodes éprouvées (Nour Al Bayan, Tarbya) pour enseigner avec excellence. À l'issue du cursus, une <strong className="text-ishes-dark">certification asseoit votre légitimité</strong> auprès des instituts et des parents.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
 
 
 

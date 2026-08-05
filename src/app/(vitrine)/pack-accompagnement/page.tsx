@@ -45,15 +45,7 @@ export default function PackAccompagnementPage() {
               Chez ISHES, nous croyons qu'une heure de cours par semaine ne suffit pas à transformer une vie. C'est pourquoi chaque étudiant bénéficie d'un accompagnement pensé pour l'aider à progresser toute l'année, entouré, soutenu et guidé.
             </p>
 
-            <div className="bg-[#fdfaf5] border border-ishes-gold/20 rounded-[2rem] p-6 flex items-start gap-5 shadow-sm max-w-xl">
-              <div className="w-12 h-12 rounded-full bg-ishes-gold/10 flex items-center justify-center shrink-0 text-ishes-gold">
-                <Users className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-ishes-dark mb-1 leading-tight">OUVERT AUX ÉTUDIANTS ET AUX PARENTS QUI INSCRIVENT UN ENFANT (PRÉSENTIEL OU À DISTANCE)</h3>
-                <p className="text-sm text-gray-500 font-medium">Un même accompagnement pour toute la famille ISHES.</p>
-              </div>
-            </div>
+
 
             {/* Floating Price Badge for Desktop */}
             <div className="absolute top-10 -right-24 lg:-right-48 hidden md:flex flex-col items-center justify-center w-64 h-64 bg-ishes-dark rounded-full border border-white/10 shadow-2xl z-20 text-center p-6 hover:scale-105 transition-transform duration-500">
@@ -72,18 +64,7 @@ export default function PackAccompagnementPage() {
         </div>
       </section>
 
-      {/* QUOTE SECTION */}
-      <section className="py-24 bg-[#fcfaf7]">
-        <div className="max-w-4xl mx-auto px-6 text-center relative">
-          <div className="absolute -top-10 left-0 text-9xl text-ishes-gold/10 font-serif leading-none">"</div>
-          <div className="absolute -bottom-20 right-0 text-9xl text-ishes-gold/10 font-serif leading-none">"</div>
-          
-          <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight relative z-10">
-            Un institut ne doit pas être une plateforme.<br />
-            Il doit être <span className="text-ishes-gold italic font-serif">une présence.</span>
-          </h2>
-        </div>
-      </section>
+
 
       {/* FEATURES CARDS */}
       <section className="py-24 bg-[#fafafa]">

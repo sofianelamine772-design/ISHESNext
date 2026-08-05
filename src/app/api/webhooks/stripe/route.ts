@@ -185,12 +185,8 @@ async function upsertInscription(params: {
 }
 
 /**
- * Envoie l'email WhatsApp de classe avec un délai d'une minute en arrière-plan.
- * Utilise l'API after de Next.js pour s'assurer que le traitement s'exécute après le retour de la réponse HTTP.
- */
-/**
- * Envoie l'email WhatsApp de classe avec un délai d'une minute en arrière-plan.
- * Fonctionne dans n'importe quel environnement (Node, Edge, Serverless).
+ * Envoie l'email WhatsApp de classe.
+ * Auparavant, il y avait un délai d'une minute, mais supprimé car cela cause des Timeout sur l'environnement Serverless (Vercel).
  */
 async function scheduleClassAssignmentEmail(
   email: string,
@@ -198,14 +194,12 @@ async function scheduleClassAssignmentEmail(
   className: string,
   whatsappLink: string
 ) {
-  // Attente d'une minute avant d'envoyer l'email
-  await new Promise(resolve => setTimeout(resolve, 60_000));
   try {
     const { sendClassAssignmentEmail } = await import('@/lib/mail');
     await sendClassAssignmentEmail(email, firstName, className, whatsappLink);
-    console.log(`[WEBHOOK] Delayed WhatsApp email sent successfully to ${email} (1m delay)`);
+    console.log(`[WEBHOOK] WhatsApp email sent successfully to ${email}`);
   } catch (err) {
-    console.error('[WEBHOOK] Delayed WhatsApp email error:', err);
+    console.error('[WEBHOOK] WhatsApp email error:', err);
   }
 }
 

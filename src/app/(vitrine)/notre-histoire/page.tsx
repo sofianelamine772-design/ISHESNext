@@ -8,7 +8,7 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 
 export default function NotreHistoirePage() {
   const timeline = [
-    { year: "2010", icon: BookOpen, title: "Ouverture des premières classes de Coran et Tajwid enfants et adultes de l'Institut ISHES." },
+    { year: "2010", icon: BookOpen, title: <>Études des sciences religieuses Égypte<br/>Ouverture des premières classes de Coran et Tajwid enfants et adultes de l'Institut ISHES.</> },
     { year: "2013", icon: Building2, title: "Ouverture de l'école primaire musulmane Transmettre à Toulouse." },
     { year: "2020", icon: Monitor, title: "Ouverture de l'Institut ISHES à distance." },
     { year: "2022", icon: Map, title: "Enseignement des Sciences religieuses et spirituelles à distance." },
@@ -27,12 +27,16 @@ export default function NotreHistoirePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#fafafa] via-[#fafafa]/90 to-transparent z-10 lg:hidden" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#fafafa] via-transparent to-transparent z-10" />
           
-          <Image 
-            src="/images/quran-coffee.png" 
-            alt="Notre histoire - Livre d'Islam" 
-            fill 
-            className="object-cover object-right"
-          />
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-right"
+          >
+            <source src="/videos/institut-video.mp4" type="video/mp4" />
+            Votre navigateur ne supporte pas la balise vidéo.
+          </video>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -40,9 +44,8 @@ export default function NotreHistoirePage() {
             <span className="text-ishes-gold font-black uppercase tracking-widest text-xs block mb-4">NOTRE HISTOIRE</span>
             
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-dark leading-[1.05] tracking-tight mb-8">
-              Une mission née <br />
-              d'un amour pour le savoir <br />
-              <span className="text-ishes-gold italic font-serif">et d'un service à l'Ummah.</span>
+              Tout a commencé par une <br />
+              <span className="text-ishes-gold italic font-serif">soif d’apprendre…</span>
             </h1>
             
             <div className="flex items-center gap-2 mb-8">
@@ -51,7 +54,7 @@ export default function NotreHistoirePage() {
             </div>
 
             <p className="text-lg text-[#3d4b60] font-medium leading-relaxed max-w-md">
-              ISHES a été fondé par Oustedha Rachida et Oustedh Riad, unis par une même conviction : transmettre les sciences islamiques avec excellence, dans un esprit de bienveillance, de rigueur et d'élévation spirituelle.
+              ISHES a été fondé par Oustadha Rachida et Oustadh Riad, un couple ayant parcouru le chemin de la recherche des sciences religieuses, avec la conviction qu’un savoir authentique transforme les cœurs avant de transformer les vies.
             </p>
           </div>
         </div>
@@ -153,9 +156,10 @@ export default function NotreHistoirePage() {
                 <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur</div>
                 <ul className="space-y-4">
                   {[
-                    "Formateur d'enseignants de Tajwid",
+                    "Co-fondateur et dirigeant",
+                    "Formateur d’enseignant de Tajwid",
                     "Responsable communication",
-                    "Spécialiste du Tajwid"
+                    "Spécialiste du Tajwid (IJAZA Jazaria)"
                   ].map((feat, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
@@ -191,7 +195,7 @@ export default function NotreHistoirePage() {
                 <h3 className="text-3xl font-black mb-4">Une question sur notre institut ?</h3>
                 <p className="text-white/80 font-medium mb-10 max-w-sm">Notre équipe est là pour t'accompagner et répondre à toutes tes questions.</p>
                 <div className="flex flex-col sm:flex-row items-center gap-6">
-                  <Link href="https://wa.me/33621430935" target="_blank" className="bg-ishes-gold hover:bg-[#b0935b] text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg flex items-center gap-3 w-full sm:w-auto justify-center">
+                  <Link href="https://wa.me/33686911301" target="_blank" className="bg-ishes-gold hover:bg-[#b0935b] text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg flex items-center gap-3 w-full sm:w-auto justify-center">
                     <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="w-6 h-6 rounded-full object-cover" />
                     Nous contacter sur WhatsApp
                   </Link>

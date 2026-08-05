@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       if (formationId.includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire') {
         formationData = {
           title: "Cours en Présentiel",
-          price: 480
+          price: 649
         };
       } else {
         return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
@@ -106,7 +106,7 @@ export async function POST(req: Request) {
       metadata.niveau = body.niveau || '';
     }
 
-    if (installments === 3 || installments === 5) {
+    if (installments > 1) {
       const installmentAmount = Math.round(unitAmount / installments);
 
       // Création dynamique du tarif Stripe récurrent
