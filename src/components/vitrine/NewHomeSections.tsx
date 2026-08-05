@@ -53,7 +53,7 @@ export function NewHomeSections() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {/* Légitimité */}
-            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-8 h-8 text-[#C69C6D]" />
@@ -69,7 +69,7 @@ export function NewHomeSections() {
             </div>
 
             {/* Accompagnement */}
-            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
                   <Users className="w-8 h-8 text-[#C69C6D]" />
@@ -82,7 +82,7 @@ export function NewHomeSections() {
             </div>
 
             {/* Spiritualité */}
-            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
                   <Moon className="w-8 h-8 text-[#C69C6D]" />
@@ -107,8 +107,8 @@ export function NewHomeSections() {
           
           <div className="grid md:grid-cols-2 gap-8">
             {/* PRÉSENTIEL */}
-            <div className="bg-[#0a192f] rounded-[2.5rem] overflow-hidden flex flex-col sm:flex-row items-stretch shadow-2xl group hover:-translate-y-1 transition-transform duration-300">
-              <div className="p-10 flex-1 flex flex-col justify-center relative z-10">
+            <div className="bg-[#0a192f] rounded-3xl sm:rounded-[2.5rem] overflow-hidden flex flex-col sm:flex-row items-stretch shadow-2xl group hover:-translate-y-1 transition-transform duration-300">
+              <div className="p-6 sm:p-10 flex-1 flex flex-col justify-center relative z-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#C69C6D]/20 text-[#C69C6D] rounded-full text-[10px] font-black uppercase tracking-widest mb-6 w-fit border border-[#C69C6D]/30">
                   <MapPin className="w-3.5 h-3.5" /> Présentiel
                 </div>
@@ -128,8 +128,8 @@ export function NewHomeSections() {
             </div>
 
             {/* À DISTANCE */}
-            <div className="bg-[#0a192f] rounded-[2.5rem] overflow-hidden flex flex-col sm:flex-row items-stretch shadow-2xl group hover:-translate-y-1 transition-transform duration-300">
-              <div className="p-10 flex-1 flex flex-col justify-center relative z-10">
+            <div className="bg-[#0a192f] rounded-3xl sm:rounded-[2.5rem] overflow-hidden flex flex-col sm:flex-row items-stretch shadow-2xl group hover:-translate-y-1 transition-transform duration-300">
+              <div className="p-6 sm:p-10 flex-1 flex flex-col justify-center relative z-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#C69C6D]/20 text-[#C69C6D] rounded-full text-[10px] font-black uppercase tracking-widest mb-6 w-fit border border-[#C69C6D]/30">
                   <MonitorPlay className="w-3.5 h-3.5" /> À distance
                 </div>
@@ -219,7 +219,7 @@ export function NewHomeSections() {
 
       {/* ─── CTA FOOTER BANNER ─── */}
       <section className="py-12 bg-[#fafafa] relative z-10 px-6">
-        <div className="max-w-7xl mx-auto bg-[#0a192f] rounded-[2.5rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden border border-white/10">
+        <div className="max-w-7xl mx-auto bg-[#0a192f] rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden border border-white/10">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#C69C6D]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#C69C6D]/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
           

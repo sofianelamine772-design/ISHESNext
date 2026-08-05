@@ -54,8 +54,8 @@ export default function Home() {
 
           <div className="flex flex-col md:flex-row items-stretch justify-center gap-8">
             {/* Zoom Card */}
-            <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
-              <div className="w-24 h-24 bg-white rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+            <div className="flex-1 flex flex-col items-center text-center p-6 sm:p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-3xl sm:rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-6 sm:mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Cours en direct & Replays</h4>
@@ -63,9 +63,9 @@ export default function Home() {
             </div>
 
             {/* WhatsApp Card */}
-            <div className="flex-1 flex flex-col items-center text-center p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
-              <div className="w-24 h-24 bg-white rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
-                <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-14 w-14 object-cover rounded-full" />
+            <div className="flex-1 flex flex-col items-center text-center p-6 sm:p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-3xl sm:rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-6 sm:mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
+                <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-12 w-12 sm:h-14 sm:w-14 object-cover rounded-full" />
               </div>
               <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi pédagogique</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Intégrez le <strong className="text-[#25D366]">groupe WhatsApp de la classe</strong>. Posez vos questions, recevez les annonces et échangez avec vos camarades.</p>
