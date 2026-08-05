@@ -98,13 +98,13 @@ export default function CoursTajwidIntensifPage() {
         <div className="flex flex-wrap items-center gap-x-8 gap-y-6 pt-12 mt-12 border-t border-gray-200">
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Début<br/><span className="text-gray-500 font-medium">Octobre 2026</span></span>
+            <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
           
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">1 cours / semaine<br/><span className="text-gray-500 font-medium">Samedi à 10h30</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">2 cours / semaine<br/><span className="text-gray-500 font-medium">Mardis et vendredis 19h30</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -283,8 +283,8 @@ export default function CoursTajwidIntensifPage() {
           <div className="flex items-center gap-4 flex-1 border-r border-white/10 px-6 min-w-[200px]">
             <Clock className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
-              <p className="text-xs font-bold text-gray-300">1 cours / semaine</p>
-              <h3 className="text-sm font-black text-white mt-0.5 leading-snug">Samedi à 10h30</h3>
+              <p className="text-xs font-bold text-gray-300">2 cours / semaine</p>
+              <h3 className="text-sm font-black text-white mt-0.5 leading-snug">Mardis et vendredis 19h30</h3>
             </div>
           </div>
 

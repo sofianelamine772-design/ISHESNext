@@ -96,13 +96,13 @@ export default function FormationEnseignantTarbyaPage() {
         <div className="flex flex-wrap items-center gap-x-8 gap-y-6 pt-12 mt-12 border-t border-gray-200">
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Début<br/><span className="text-gray-500 font-medium">Octobre 2026</span></span>
+            <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
           
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">2 cours / semaine<br/><span className="text-gray-500 font-medium">Lundi & Jeudi<br/>et Vendredi à 20h00</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">2 cours / semaine<br/><span className="text-gray-500 font-medium">Mardi et vendredi</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 

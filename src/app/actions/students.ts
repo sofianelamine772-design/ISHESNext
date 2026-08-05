@@ -731,7 +731,7 @@ export async function updateStudentAction(id: string, data: any) {
         .from('paiements')
         .insert({
           etudiant_id: id,
-          amount: parseInt(data.amount_paid) || 150,
+          amount: parseFloat(data.amount_paid) || 150,
           status: 'succeeded',
           currency: 'EUR',
           stripe_session_id: `manual_${methodStr}_${Date.now()}`
@@ -741,7 +741,7 @@ export async function updateStudentAction(id: string, data: any) {
 
       // Débloquer l'étudiant (et toute la famille)
       const emailToUse = targetEmail || currentStudent?.email;
-      if (emailToUse) {
+      if (emailToUse && typeof emailToUse === 'string') {
         const baseEmail = emailToUse.split('@').length === 2
           ? `${emailToUse.split('@')[0].split('+')[0]}@${emailToUse.split('@')[1]}`.toLowerCase()
           : emailToUse.toLowerCase();
