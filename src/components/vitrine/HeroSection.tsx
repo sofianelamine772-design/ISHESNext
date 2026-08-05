@@ -32,7 +32,7 @@ export function HeroSection() {
           >
             <h1 className="text-[42px] sm:text-[52px] md:text-[60px] lg:text-[64px] font-black text-[#0a192f] leading-[1.05] tracking-tight">
               Apprenez votre religion avec confiance.
-              <span className="block text-ishes-blue mt-2">
+              <span className="block text-ishes-gold mt-2">
                 Rapprochez-vous d'ALLAH avec une science authentique.
               </span>
             </h1>

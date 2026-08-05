@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays, Play } from "lucide-react";
+import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays, Play, Hourglass, Gift } from "lucide-react";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
@@ -446,7 +446,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
     tagText: "SOUTIEN",
     tagColor: "bg-blue-100 text-blue-700",
-    durationText: "Accompagnement",
+    durationText: "4 mois",
     features: [
       "Vivre au quotidien",
       "Groupe d'entraide",
@@ -725,49 +725,125 @@ export function ProgramContent() {
 
                   {/* INFORMATIONS CLÉS */}
                   <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 sm:gap-x-4 sm:gap-y-2.5 mb-3 sm:mb-5 mt-1 sm:mt-2">
-                    {!program.id.includes("enseignant") && (
-                      <div className="flex items-start gap-1.5 sm:gap-2">
-                        <Clock className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                          Durée : {isPresentiel ? "1 an" : program.durationText}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex items-start gap-1.5 sm:gap-2">
-                      <Users className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
-                      <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                        Public : {program.audience === 'enfant' ? "Enfants" : (program.id.includes("femme") ? "Femmes" : "Adultes")}
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-1.5 sm:gap-2">
-                      <Monitor className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
-                      <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                        Format : {isPresentiel ? "Présentiel" : "À dist."}
-                      </span>
-                    </div>
-                    {!program.id.includes("enseignant") && (
-                      <div className="flex items-start gap-1.5 sm:gap-2">
-                        <CalendarDays className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                          {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h/sem." : (program.id === 'tajwid_intensif' ? "Rythme : 2h/sem." : "Rythme : 1h/sem."))}
-                        </span>
-                      </div>
-                    )}
-                    {!isPresentiel && program.id !== "cours_particuliers" && (
-                      <div className="flex items-start gap-1.5 sm:gap-2">
-                        <Play className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                          {program.id.includes("enseignant") ? "Replays" : "Replays inclus"}
-                        </span>
-                      </div>
-                    )}
-                    {program.id !== "cours_particuliers" && program.id !== "correction_fatiha" && program.id !== "pack_accompagnement" && (
-                      <div className="flex items-start gap-1.5 sm:gap-2">
-                        <Award className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
-                        <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                          {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin" : "Diplôme ISHES"}
-                        </span>
-                      </div>
+                    {program.id === "formation_enseignante_tajwid" ? (
+                      <>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <CalendarDays className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Octobre 2026</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Clock className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">2 cours / semaine</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Lundi & Jeudi - 19h30</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Monitor className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">En direct</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Zoom + Replays</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Award className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Certification</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Enseignant ISHES</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2 col-span-2">
+                          <Hourglass className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Durée</span><br/><span className="font-medium text-[8px] sm:text-[10px]">4 à 5 mois</span>
+                          </span>
+                        </div>
+                      </>
+                    ) : program.id === "formation_enseignante_tarbya" ? (
+                      <>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <CalendarDays className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Octobre 2026</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Clock className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">2 cours / semaine</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Mardi et vendredi</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Monitor className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">En direct</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Zoom + Replays</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Award className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Certification</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Enseignant ISHES</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Hourglass className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Durée</span><br/><span className="font-medium text-[8px] sm:text-[10px]">4 mois</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Gift className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
+                            <span className="font-bold">Tous les supports</span><br/><span className="font-medium text-[8px] sm:text-[10px]">inclus</span>
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {!program.id.includes("enseignant") && (
+                          <div className="flex items-start gap-1.5 sm:gap-2">
+                            <Clock className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                            <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                              Durée : {isPresentiel ? (program.audience === 'enfant' ? "1 année scolaire" : "1 an") : program.durationText}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Users className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                            Public : {program.audience === 'enfant' ? "Enfants" : (program.id.includes("femme") ? "Femmes" : "Adultes")}
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-1.5 sm:gap-2">
+                          <Monitor className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                          <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                            Format : {isPresentiel ? "Présentiel" : "À dist."}
+                          </span>
+                        </div>
+                        {!program.id.includes("enseignant") && program.id !== "pack_accompagnement" && (
+                          <div className="flex items-start gap-1.5 sm:gap-2">
+                            <CalendarDays className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                            <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                              {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h/sem." : (program.id === 'tajwid_intensif' ? "Rythme : 2h/sem." : "Rythme : 1h/sem."))}
+                            </span>
+                          </div>
+                        )}
+                        {!isPresentiel && program.id !== "cours_particuliers" && program.id !== "pack_accompagnement" && (
+                          <div className="flex items-start gap-1.5 sm:gap-2">
+                            <Play className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                            <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                              {program.id.includes("enseignant") ? "Replays" : "Replays inclus"}
+                            </span>
+                          </div>
+                        )}
+                        {program.id !== "cours_particuliers" && program.id !== "correction_fatiha" && program.id !== "pack_accompagnement" && !(isPresentiel && program.audience === 'enfant') && (
+                          <div className="flex items-start gap-1.5 sm:gap-2">
+                            <Award className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                            <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                              {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin" : "Diplôme ISHES"}
+                            </span>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
 

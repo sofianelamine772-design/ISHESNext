@@ -237,7 +237,7 @@ export function NewHomeSections() {
             <Link href="/program" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#b88c4d] text-white px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-[#a67b3f] shadow-lg shadow-[#C69C6D]/20">
               Je découvre les formations <ArrowRight className="w-4 h-4" />
             </Link>
-            <a href="https://wa.me/33600000000" target="_blank" rel="noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#0a192f] px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-gray-100 shadow-sm border border-transparent">
+            <a href="https://wa.me/33666033519" target="_blank" rel="noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#0a192f] px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-gray-100 shadow-sm border border-transparent">
               Nous contacter <img src="/images/whatsapp-logo.avif" className="w-5 h-5 rounded-full" alt="WhatsApp" />
             </a>
           </div>

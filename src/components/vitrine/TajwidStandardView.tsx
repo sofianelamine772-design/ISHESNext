@@ -363,11 +363,11 @@ export function TajwidStandardView() {
               <h3 className="text-[13px] font-black mb-3 uppercase tracking-widest text-white">Besoin d'aide ?</h3>
               <p className="text-[13px] text-gray-300 mb-6 leading-relaxed">Notre équipe est là pour t'aider à faire le bon choix.</p>
               <div className="space-y-3">
-                <a href="https://wa.me/33600000000" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 w-full py-3.5 bg-[#25D366] hover:bg-[#1EBE5A] text-white font-bold rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-[#25D366]/20 text-[13px] uppercase tracking-wider">
+                <a href="https://wa.me/33666033519" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 w-full py-3.5 bg-[#25D366] hover:bg-[#1EBE5A] text-white font-bold rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-[#25D366]/20 text-[13px] uppercase tracking-wider">
                   <Image src="/images/whatsapp-logo.avif" alt="WhatsApp" width={20} height={20} className="w-5 h-5 brightness-0 invert" />
                   WhatsApp
                 </a>
-                <a href="tel:+33600000000" className="flex items-center justify-center gap-3 w-full py-3.5 border border-white/20 hover:border-white/40 text-white font-bold rounded-xl transition-all hover:bg-white/5 text-[13px] uppercase tracking-wider">
+                <a href="tel:+33666033519" className="flex items-center justify-center gap-3 w-full py-3.5 border border-white/20 hover:border-white/40 text-white font-bold rounded-xl transition-all hover:bg-white/5 text-[13px] uppercase tracking-wider">
                   <PhoneCall className="w-4 h-4" />
                   Appeler
                 </a>

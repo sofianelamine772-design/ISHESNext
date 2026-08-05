@@ -76,29 +76,29 @@ export default function CoursPresentielFemmeIntermediairePage() {
           <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#C69C6D] rounded-full"></div>
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-6">
-          <div className="flex flex-col items-center md:border-r border-gray-100 last:border-0 lg:border-r">
+          <div className="flex flex-col items-center lg:border-r border-gray-100 last:border-0">
             <MapPin className="w-10 h-10 text-[#0a192f] mb-4" strokeWidth={1.5} />
-            <span className="font-bold text-[#0a192f] text-sm leading-snug">Présentiel<br />à Toulouse</span>
+            <span className="font-bold text-[#0a192f] text-sm md:text-base leading-snug text-center">Présentiel<br />à Toulouse</span>
           </div>
-          <div className="flex flex-col items-center md:border-r border-gray-100 last:border-0 lg:border-r">
+          <div className="flex flex-col items-center lg:border-r border-gray-100 last:border-0">
             <Calendar className="w-10 h-10 text-[#0a192f] mb-4" strokeWidth={1.5} />
-            <span className="font-bold text-[#0a192f] text-sm leading-snug">Tous les samedis<br />de 9h00 à 12h00</span>
+            <span className="font-bold text-[#0a192f] text-sm md:text-base leading-snug text-center">Tous les samedis<br />de 9h00 à 12h00</span>
           </div>
-          <div className="flex flex-col items-center md:border-r lg:border-r border-gray-100 md:border-r-0 lg:border-r-gray-100">
+          <div className="flex flex-col items-center lg:border-r border-gray-100 last:border-0">
             <Hourglass className="w-10 h-10 text-[#0a192f] mb-4" strokeWidth={1.5} />
-            <span className="font-bold text-[#0a192f] text-sm leading-snug">Durée :<br />8 mois</span>
+            <span className="font-bold text-[#0a192f] text-sm md:text-base leading-snug text-center">Durée :<br />9 mois</span>
           </div>
-          <div className="flex flex-col items-center md:border-r border-gray-100 last:border-0 lg:border-r">
+          <div className="flex flex-col items-center lg:border-r border-gray-100 last:border-0">
             <UserRound className="w-10 h-10 text-[#0a192f] mb-4" strokeWidth={1.5} />
-            <span className="font-bold text-[#0a192f] text-sm leading-snug">Réservé<br />aux femmes</span>
+            <span className="font-bold text-[#0a192f] text-sm md:text-base leading-snug text-center">Réservé<br />aux femmes</span>
           </div>
-          <div className="flex flex-col items-center md:border-r border-gray-100 last:border-0 lg:border-r">
+          <div className="flex flex-col items-center lg:border-r border-gray-100 last:border-0">
             <BookMarked className="w-10 h-10 text-[#0a192f] mb-4" strokeWidth={1.5} />
-            <span className="font-bold text-[#0a192f] text-sm leading-snug">Supports pédagogiques<br />inclus</span>
+            <span className="font-bold text-[#0a192f] text-sm md:text-base leading-snug text-center">Supports pédagogiques<br />certifiés</span>
           </div>
-          <div className="flex flex-col items-center col-span-2 md:col-span-1 lg:col-span-1">
+          <div className="flex flex-col items-center">
             <Award className="w-10 h-10 text-[#0a192f] mb-4" strokeWidth={1.5} />
-            <span className="font-bold text-[#0a192f] text-sm leading-snug">Diplôme de réussite<br />en fin de formation</span>
+            <span className="font-bold text-[#0a192f] text-sm md:text-base leading-snug text-center">Diplôme de réussite<br />en fin de formation</span>
           </div>
         </div>
       </div>

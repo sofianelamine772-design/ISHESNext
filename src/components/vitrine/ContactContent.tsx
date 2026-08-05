@@ -15,9 +15,8 @@ export function ContactContent() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-24"
       >
-        <span className="ishes-label text-ishes-blue mb-5 block">Nous contacter</span>
         <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-dark leading-none mb-8 uppercase tracking-tighter">
-          Parlons-<span className="text-ishes-gold font-serif">nous.</span>
+          Nous <span className="text-ishes-gold">contacter</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
           Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.

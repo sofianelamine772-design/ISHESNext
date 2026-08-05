@@ -89,10 +89,10 @@ export default function Home() {
 
           <div className="bg-[#f9f5f0]/80 border border-ishes-gold/20 rounded-3xl p-6 md:p-8 max-w-3xl mx-auto mb-10 shadow-sm backdrop-blur-sm">
             <p className="text-ishes-dark font-black text-lg md:text-xl mb-3">
-              🎉 <span className="text-ishes-blue">100% OFFERT</span> (Valeur de 399€) pour tout achat d'une de nos formations !
+              🎉 <span className="text-ishes-blue">POUR SEULEMENT 49€</span> (Valeur de 399€) pour tout achat d'une de nos formations !
             </p>
             <p className="text-gray-500 font-medium text-[15px] md:text-[16px] leading-relaxed">
-              Ne cheminez plus seul vers ALLAH. En rejoignant ISHES, vous débloquez immédiatement un accès gratuit à notre communauté privée, nos lives exclusifs et notre suivi spirituel personnalisé.
+              Ne cheminez plus seul vers ALLAH. En rejoignant ISHES, vous débloquez immédiatement un accès à notre communauté privée, nos lives exclusifs et notre suivi spirituel personnalisé.
             </p>
           </div>
 
