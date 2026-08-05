@@ -32,7 +32,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "femme-debutante-presentiel",
     formationId: "presentiel-global",
-    imageUrl: "/images/ai_femmes.png",
+    imageUrl: "/images/formations/femme-presentiel-1.jpg",
     title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
@@ -48,7 +48,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "femme-intermediaire-presentiel",
     formationId: "presentiel-global",
-    imageUrl: "/images/ai_femmes.png",
+    imageUrl: "/images/formations/presentiel-femme-interlediare-1.png",
     title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     tagText: "PRÉSENTIEL",
@@ -64,7 +64,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "enfant-mercredi-presentiel",
     formationId: "presentiel-global",
-    imageUrl: "/images/ai_enfants.png",
+    imageUrl: "/images/formations/presentiel-enfants-1.png",
     title: "Scolarité Enfants",
     subtitle: "Mercredi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
@@ -80,7 +80,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "enfant-samedi-presentiel",
     formationId: "presentiel-global",
-    imageUrl: "/images/ai_enfants.png",
+    imageUrl: "/images/formations/presentiel-enfants-mercredi.png",
     title: "Scolarité Enfants",
     subtitle: "Samedi : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
@@ -96,7 +96,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "enfant-dimanche-presentiel",
     formationId: "presentiel-global",
-    imageUrl: "/images/ai_enfants.png",
+    imageUrl: "/images/formations/presentiel-enfants-dimanche.png",
     title: "Scolarité Enfants",
     subtitle: "Dimanche : Arabe, Coran & Tajwid. Pédagogie active pour les 4-15 ans.",
     tagText: "PRÉSENTIEL",
@@ -111,7 +111,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tajwid_standard",
-    imageUrl: "/images/ai_quran.png",
+    imageUrl: "/images/formations/tajwid-standar-1.jpg",
     title: "Tajwid Standard",
     subtitle: "Apprendre à lire le Coran avec les règles de Tajwid. Cursus sur 2 années",
     tagText: "STANDARD",
@@ -130,7 +130,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tajwid_intensif",
-    imageUrl: "/images/ai_quran.png",
+    imageUrl: "/images/formations/tajwid-intensif-1.jpg",
     title: "Tajwid Intensif",
     subtitle: "Apprendre à lire le Coran avec les règles de Tajwid en 3 Mois",
     tagText: "INTENSIF",
@@ -150,7 +150,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "fiqh_malikite",
-    imageUrl: "/images/ai_kaaba.png",
+    imageUrl: "/images/formations/fiqh-distance-1.png",
     title: "Fiqh Mâlikite",
     subtitle: "Apprendre à pratiquer les actes d'adoration correctement selon l'école Malikite",
     tagText: "DROIT",
@@ -169,7 +169,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "sciences_du_coran",
-    imageUrl: "/images/ai_arabe.png",
+    imageUrl: "/images/formations/sc-du-coran-dsita-1.png",
     title: "Sciences du Coran",
     subtitle: "Découvrez l'histoire de la révélation et de la préservation du Livre Saint. Module passionnant.",
     tagText: "HISTOIRE",
@@ -209,7 +209,7 @@ export const PROGRAMS: Program[] = [
   */
   {
     id: "memoriser_coran",
-    imageUrl: "/images/ai_quran.png",
+    imageUrl: "/images/formations/memorisation-tilawa-1.jpg",
     title: "Mémorisation du Coran",
     subtitle: "Accompagnement personnalisé pour mémoriser le Livre d'Allah à votre rythme.",
     tagText: "HIFZ",
@@ -228,7 +228,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "al_aqida",
-    imageUrl: "/images/ai_mosque.png",
+    imageUrl: "/images/formations/aqida-distance-1.jpeg",
     title: "Al-'Aqîda",
     subtitle: "Étude de la Tahawiya pour comprendre les fondements de la foi musulmane sunnite.",
     tagText: "FOI",
@@ -247,7 +247,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "as_sirah",
-    imageUrl: "/images/ai_medina.png",
+    imageUrl: "/images/formations/sirah-distance-1.png",
     title: "Sîrah An-Nabawiyya",
     subtitle: "Découvrez la vie du Prophète ﷺ, de sa naissance à Médine, un guide pour l'humanité.",
     tagText: "BIOGRAPHIE",
@@ -266,7 +266,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "spiritualite_islam",
-    imageUrl: "/images/ai_spirit.png",
+    imageUrl: "/images/formations/spiritualite-distance.png",
     title: "Spiritualité Musulmane",
     subtitle: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam.",
     tagText: "ÉDUCATION",
@@ -304,7 +304,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "cours_particuliers",
-    imageUrl: "/images/ai_pro.png",
+    imageUrl: "/images/formations/cours-particulier-1.png",
     title: "Cours Particuliers",
     subtitle: "Apprentissage individuel du Coran et Tajwid pour adultes et enfants.",
     tagText: "SUR-MESURE",
@@ -323,7 +323,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "arabe_enfant_distance",
-    imageUrl: "/images/ai_enfants.png",
+    imageUrl: "/images/formations/arabe-enfant-distance-1.jpg",
     title: "ARABE (Enfant)",
     subtitle: "Méthode d’apprentissage de la langue arabe avec interactivité et suivi progressif.",
     tagText: "ENFANT",
@@ -344,7 +344,7 @@ export const PROGRAMS: Program[] = [
 
   {
     id: "tajwid_enfant_distance",
-    imageUrl: "/images/ai_enfants.png",
+    imageUrl: "/images/formations/tajwid-enfant-distance-1.jpg",
     title: "Tajwid (Enfant)",
     subtitle: "Cours de Tajwid en ligne pour enfants. Apprendre et réciter le Coran correctement.",
     tagText: "ENFANT",
@@ -363,7 +363,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "formation_enseignante_tajwid",
-    imageUrl: "/images/ai_pro.png",
+    imageUrl: "/images/formations/enseignant-tajwid-1.jpg",
     title: "Formation Enseignant Tajwid",
     subtitle: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     tagText: "PRO",
@@ -382,7 +382,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "formation_enseignante_tarbya",
-    imageUrl: "/images/ai_pro.png",
+    imageUrl: "/images/formations/enseignant-tarbya-islamya-1.jpg",
     title: "Formation Enseignant Tarbya",
     subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
     tagText: "PRO",
@@ -401,7 +401,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "tarbiya_islamiya",
-    imageUrl: "/images/ai_spirit.png",
+    imageUrl: "/images/formations/tarbya-islamya-distance-1.jpg",
     title: "Tarbiya Islamiya",
     subtitle: "Éveil du cœur et amour d'Allah. Un cours pour préserver la Fitra de vos enfants.",
     tagText: "SPIRITUALITÉ",
@@ -421,7 +421,7 @@ export const PROGRAMS: Program[] = [
 
   {
     id: "arabe_adulte",
-    imageUrl: "/images/ai_arabe.png",
+    imageUrl: "/images/formations/arabe-ditanvce-1.png",
     title: "Arabe Littéraire (Adulte)",
     subtitle: "Apprenez l'arabe de chez vous avec des professeurs natifs et une méthode interactive.",
     tagText: "LANGUE",
@@ -440,7 +440,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "pack_accompagnement",
-    imageUrl: "/images/ai_pro.png",
+    imageUrl: "/images/formations/pack-acc-1.png",
     title: "Pack Accompagnement",
     subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
     tagText: "SOUTIEN",

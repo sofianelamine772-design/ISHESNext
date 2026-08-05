@@ -191,7 +191,7 @@ export default function FormationEnseignantPage() {
                       
                       <Link
                         href={f.link}
-                        className="w-full py-4 rounded-2xl border-2 border-ishes-gold text-ishes-gold hover:bg-ishes-gold hover:text-white font-black transition-all duration-300 text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+                        className="w-full py-4 rounded-2xl bg-[#E8DCC4] text-ishes-dark hover:bg-[#D5C6AA] font-black transition-all duration-300 text-sm uppercase tracking-widest text-center shadow-lg hover:-translate-y-1 hover:shadow-xl"
                       >
                         Voir le programme
                       </Link>

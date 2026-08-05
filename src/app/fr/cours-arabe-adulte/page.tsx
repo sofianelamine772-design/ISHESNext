@@ -84,7 +84,7 @@ export default function CoursArabeAdultePage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/arabe-ditanvce-1.png" 
                   alt="Apprenez l'arabe et comprenez enfin le Coran"
                   fill
                   className="object-cover"
@@ -99,19 +99,19 @@ export default function CoursArabeAdultePage() {
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-6 pt-12 mt-12 border-t border-gray-200 w-full">
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-ishes-gold" />
-            <span className="text-[11px] font-bold text-ishes-dark leading-tight uppercase tracking-wider">Début<br/><span className="text-gray-500 font-medium capitalize tracking-normal">Octobre 2026</span></span>
+            <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
           
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-[11px] font-bold text-ishes-dark leading-tight uppercase tracking-wider">1 cours / semaine<br/><span className="text-gray-500 font-medium capitalize tracking-normal">Jeudi à 19h30 (sœurs)<br/>Vendredi à 19h30 (frères)</span></span>
+            <span className="text-[12px] font-bold text-gray-700 leading-tight">Vendredi à 19h30 (frères)</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           <div className="flex items-center gap-3">
             <Monitor className="w-6 h-6 text-ishes-gold" />
-            <span className="text-[11px] font-bold text-ishes-dark leading-tight uppercase tracking-wider">En direct sur Zoom<br/><span className="text-gray-500 font-medium capitalize tracking-normal">+ Replays à vie</span></span>
+            <span className="text-[11px] font-bold text-ishes-dark leading-tight uppercase tracking-wider">En direct sur Zoom</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -168,7 +168,7 @@ export default function CoursArabeAdultePage() {
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
-               src="/images/quran-coffee.png" 
+               src="/images/formations/arabe-distance-2.png" 
                alt="Livres d'arabe et café"
                fill
                className="object-cover"

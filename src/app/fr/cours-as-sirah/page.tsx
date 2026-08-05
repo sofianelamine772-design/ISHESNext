@@ -113,7 +113,7 @@ export default function CoursAsSirahPage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/sirah-distance-1.png" 
                   alt="Sîrah An-Nabawiyya"
                   fill
                   className="object-cover"
@@ -156,7 +156,7 @@ export default function CoursAsSirahPage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
-               src="/images/tajwid_students.png" 
+               src="/images/formations/sirah-dist-2.png" 
                alt="Étude de la Sîrah sur Zoom"
                fill
                className="object-cover"

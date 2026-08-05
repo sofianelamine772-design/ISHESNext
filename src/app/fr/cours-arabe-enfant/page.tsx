@@ -84,7 +84,7 @@ export default function CoursArabeEnfantPage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/arabe-enfant-distance-1.jpg" 
                   alt="Cours Arabe Enfant"
                   fill
                   className="object-cover"
@@ -168,7 +168,7 @@ export default function CoursArabeEnfantPage() {
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
-               src="/images/quran-coffee.png" 
+               src="/images/formations/arabe-enfant-distance-2.jpg" 
                alt="Livres d'arabe et café"
                fill
                className="object-cover"

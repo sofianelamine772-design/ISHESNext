@@ -105,7 +105,7 @@ export default function CoursMemoriserCoranPage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/memorisation-tilawa-1.jpg" 
                   alt="Mémorisation du Coran"
                   fill
                   className="object-cover"
@@ -148,7 +148,7 @@ export default function CoursMemoriserCoranPage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
              <Image 
-               src="/images/tajwid_students.png" 
+               src="/images/formations/memoristion-tilawa-1-ou-2.jpg" 
                alt="Cours en direct sur Zoom"
                fill
                className="object-cover"

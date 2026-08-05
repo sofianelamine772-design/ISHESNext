@@ -59,7 +59,7 @@ export default function CoursPresentielEnfantPage() {
           </div>
           <div className="flex-1 w-full relative">
             <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[4/3] border-[6px] border-white bg-white">
-              <Image src="/images/ai_enfants.png" alt="Enfants ISHES" fill className="object-cover" />
+              <Image src="/images/formations/presentiel-enfants-1.png" alt="Enfants ISHES" fill className="object-cover" />
             </div>
           </div>
         </div>

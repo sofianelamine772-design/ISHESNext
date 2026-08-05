@@ -83,7 +83,7 @@ export default function CoursTajwidIntensifPage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/tajwid-intensif-1.jpg" 
                   alt="Cours de Tajwid Intensif"
                   fill
                   className="object-cover"
@@ -211,7 +211,7 @@ export default function CoursTajwidIntensifPage() {
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
-               src="/images/tajwid_students.png" 
+               src="/images/formations/taj-int-2.png" 
                alt="Apprentissage Intensif du Tajwid"
                fill
                className="object-cover"

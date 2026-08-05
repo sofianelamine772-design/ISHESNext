@@ -108,7 +108,7 @@ export default function CoursSciencesCoranPage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/sc-du-coran-dsita-1.png" 
                   alt="Science du Coran"
                   fill
                   className="object-cover"
@@ -149,7 +149,7 @@ export default function CoursSciencesCoranPage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-[1fr_1.2fr] gap-16 items-center">
           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
              <Image 
-               src="/images/fiqh_students.png" 
+               src="/images/formations/sc-du-coran-distance-2.jpg" 
                alt="Zoom Étude"
                fill
                className="object-cover"

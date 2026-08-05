@@ -81,7 +81,7 @@ export default function FormationEnseignantTarbyaPage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/enseignant-tarbya-islamya-1.jpg" 
                   alt="Formation Enseignant Tarbya Islamiyya"
                   fill
                   className="object-cover"
@@ -209,7 +209,7 @@ export default function FormationEnseignantTarbyaPage() {
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
-               src="/images/tajwid_students.png" 
+               src="/images/formations/enseignant-tarbya-2.jpg" 
                alt="Livres Tarbya Islamiyya et appel Zoom"
                fill
                className="object-cover"
@@ -218,11 +218,12 @@ export default function FormationEnseignantTarbyaPage() {
           </div>
           <div className="space-y-6">
             {[
-              "Une pédagogie claire, structurée et adaptée aux enfants d'aujourd'hui.",
-              "Des méthodes concrètes pour transmettre les valeurs avec amour et sagesse.",
-              "Des outils prêts à l'emploi pour animer des cours captivants et interactifs.",
-              "Un accompagnement par des formateurs expérimentés et bienveillants.",
-              "À l'issue de la formation, tu repartiras avec une assurance et une légitimité pour enseigner avec impact."
+              "Prendre conscience de la noblesse et de la responsabilité de sa mission de transmetteur de la religion.",
+              "Une pédagogie claire, structurée et adaptée aux enfants d’aujourd’hui.",
+              "Des méthodes concrètes pour transmettre les valeurs avec amour, sagesse et bienveillance.",
+              "Des outils prêts à l’emploi pour concevoir et animer des cours captivants et interactifs.",
+              "Un accompagnement personnalisé par des formateurs expérimentés.",
+              "À l’issue de la formation, repartez avec les compétences, l’assurance et la légitimité nécessaires pour enseigner avec impact."
             ].map((text, i) => (
               <div key={i} className="flex gap-4 items-start">
                 <CheckCircle2 className="w-7 h-7 text-ishes-gold shrink-0 mt-0.5" />

@@ -113,7 +113,7 @@ export default function CoursFiqhMalikitePage() {
                 ></iframe>
               ) : (
                 <Image 
-                  src="/images/ai_pro.png" 
+                  src="/images/formations/fiqh-distance-1.png" 
                   alt="Fiqh Mâlikite"
                   fill
                   className="object-cover"
@@ -153,7 +153,7 @@ export default function CoursFiqhMalikitePage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
              <Image 
-               src="/images/fiqh_students.png" 
+               src="/images/formations/fiqh-distance-2.png" 
                alt="Étudiant en Fiqh"
                fill
                className="object-cover"

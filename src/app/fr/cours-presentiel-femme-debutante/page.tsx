@@ -59,7 +59,7 @@ export default function CoursPresentielFemmeDebutantePage() {
             </div>
           </div>
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl h-[300px] sm:h-[400px] lg:h-[500px] border-4 border-white">
-            <Image src="/images/ai_pro.png" alt="Femme Débutante ISHES" fill className="object-cover" />
+            <Image src="/images/formations/femme-presentiel-1.jpg" alt="Femme Débutante ISHES" fill className="object-cover" />
             <div className="absolute inset-0 bg-[#0a192f]/10" />
             {/* Play button overlay */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -171,7 +171,7 @@ export default function CoursPresentielFemmeDebutantePage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative rounded-[2rem] overflow-hidden h-[400px] lg:h-[600px] shadow-2xl border-8 border-[#fcfaf8]">
-            <Image src="/images/ai_femmes.png" alt="Pourquoi ce programme" fill className="object-cover" />
+            <Image src="/images/formations/femme-presentiel-2.jpg" alt="Pourquoi ce programme" fill className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/40 to-transparent" />
           </div>
           <div className="flex flex-col justify-center">

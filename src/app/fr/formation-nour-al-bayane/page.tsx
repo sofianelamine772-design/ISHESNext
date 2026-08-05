@@ -7,7 +7,11 @@ import {
   Award, 
   ChevronRight,
   GraduationCap,
-  Sparkles
+  Sparkles,
+  Calendar,
+  Clock,
+  Hourglass,
+  Gift
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -80,6 +84,44 @@ export default function NourAlBayanePage() {
                     <p className="text-gray-500 font-medium text-sm">Une méthode adoptée par des millions de personnes dans le monde.</p>
                   </div>
                </div>
+          </div>
+        </div>
+
+        {/* ─── INFO BAR ─── */}
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-6 pt-12 mt-12 border-t border-gray-200">
+            <div className="flex items-center gap-3">
+              <Calendar className="w-6 h-6 text-ishes-gold" />
+              <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
+            </div>
+            <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+            
+            <div className="flex items-center gap-3">
+              <Clock className="w-6 h-6 text-ishes-gold" />
+              <span className="text-xs font-bold text-ishes-dark leading-tight">1 cours / semaine<br/><span className="text-gray-500 font-medium">mercredi 20H30</span></span>
+            </div>
+            <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+            <div className="flex items-center gap-3">
+              <Monitor className="w-6 h-6 text-ishes-gold" />
+              <span className="text-xs font-bold text-ishes-dark leading-tight">En direct<br/><span className="text-gray-500 font-medium">Zoom + Replays</span></span>
+            </div>
+            <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+            <div className="flex items-center gap-3">
+              <Hourglass className="w-6 h-6 text-ishes-gold" />
+              <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">8 mois<br/>(sur 2 années scolaire)</span></span>
+            </div>
+            <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+            <div className="flex items-center gap-3">
+              <Award className="w-6 h-6 text-ishes-gold" />
+              <span className="text-xs font-bold text-ishes-dark leading-tight">Certification<br/><span className="text-gray-500 font-medium">Diplôme ISHES</span></span>
+            </div>
+            <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+            <div className="flex items-center gap-3">
+              <Gift className="w-6 h-6 text-ishes-gold" />
+              <span className="text-xs font-bold text-ishes-dark leading-tight">Tous les supports<br/><span className="text-gray-500 font-medium">inclus</span></span>
             </div>
           </div>
         </div>

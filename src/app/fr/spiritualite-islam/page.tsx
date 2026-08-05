@@ -138,7 +138,7 @@ export default function SpiritualiteIslamPage() {
                   ></iframe>
                 ) : (
                   <Image 
-                    src="/images/ai_pro.png" 
+                    src="/images/formations/spiritualite-distance.png" 
                     alt="Spiritualité Musulmane"
                     fill
                     className="object-cover"
@@ -181,7 +181,7 @@ export default function SpiritualiteIslamPage() {
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100">
                <Image 
-                 src="/images/tajwid_students.png" 
+                 src="/images/formations/spiritualite-distance-2.jpg" 
                  alt="Étude d'Al-Aqîda sur Zoom"
                  fill
                  className="object-cover"
