@@ -21,7 +21,7 @@ export default function SignInPage() {
         <div className="text-center mb-8">
           <div className="mx-auto mb-6 bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center justify-center h-16 w-48">
             <Image
-              src="/logo-ishes-institut-arabe.png"
+              src="/logo.png"
               alt="ISHES Logo"
               width={192}
               height={64}

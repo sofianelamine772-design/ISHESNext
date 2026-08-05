@@ -1042,7 +1042,7 @@ export default function EleveDashboard() {
                     {/* Logo ISHES */}
                     <div className="flex justify-center select-none pt-2">
                       <img
-                        src="/logo-ishes-institut-arabe.png"
+                        src="/logo.png"
                         alt="Logo ISHES"
                         className="h-20 w-auto object-contain"
                       />
