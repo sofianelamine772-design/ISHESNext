@@ -33,7 +33,7 @@ export default function CoursAlAqidaPage() {
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
       
       {/* ─── HERO SECTION ─── */}
-      <section className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
+      <section className="pt-28 pb-8 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 space-y-6">
             <h2 className="text-ishes-gold font-black text-sm tracking-[0.2em] uppercase">
@@ -100,7 +100,7 @@ export default function CoursAlAqidaPage() {
       </section>
 
       {/* ─── POUR QUI ─── */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
+      <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si...</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
@@ -159,7 +159,7 @@ export default function CoursAlAqidaPage() {
       </section>
 
       {/* ─── CE QUI EST INCLUS ─── */}
-      <section className="py-20 px-6 max-w-7xl mx-auto text-center">
+      <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-16">Ce qui est inclus</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
@@ -179,7 +179,7 @@ export default function CoursAlAqidaPage() {
       </section>
 
       {/* ─── DEROULEMENT ─── */}
-      <section className="py-20 px-6 max-w-7xl mx-auto bg-white rounded-[3rem] shadow-sm border border-gray-100">
+      <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto bg-white rounded-[3rem] shadow-sm border border-gray-100">
         <div className="text-center mb-20">
           <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Comment se déroule le programme ?</h2>
         </div>

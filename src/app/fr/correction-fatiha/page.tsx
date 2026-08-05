@@ -33,7 +33,7 @@ export default function CorrectionFatihaPage() {
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
 
       {/* ─── HERO SECTION ─── */}
-      <section className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
+      <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 space-y-6">
             <div className="inline-flex items-center gap-2 bg-[#f2ece4] px-4 py-1.5 rounded-full">
@@ -138,7 +138,7 @@ export default function CorrectionFatihaPage() {
       </section>
 
       {/* ─── POUR QUI ─── */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
+      <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si...</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
@@ -163,7 +163,7 @@ export default function CorrectionFatihaPage() {
       </section>
 
       {/* ─── POURQUOI DIFFERENT ─── */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
+      <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Pourquoi ce programme va tout changer ?</h2>
         </div>

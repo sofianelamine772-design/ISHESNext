@@ -24,7 +24,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="bg-[#fcfaf8] pt-32 pb-16 relative border-b border-gray-100">
+      <div className="bg-[#fcfaf8] pt-28 pb-6 relative border-b border-gray-100">
         <ArabicBackground />
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           <div>
@@ -255,7 +255,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Tarif</span>
-                <span className="text-2xl lg:text-3xl font-black text-[#C69C6D]">399 €</span>
+              <span className="text-2xl lg:text-3xl font-black text-[#C69C6D]">649 €</span>
               </div>
             </div>
             <div className="hidden md:block w-px h-10 bg-white/10"></div>

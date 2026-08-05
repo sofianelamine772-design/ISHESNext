@@ -10,6 +10,7 @@ import { SocialSection } from "@/components/vitrine/SocialSection";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { DynamicTestimonials } from "@/components/vitrine/DynamicTestimonials";
 import { InstitutVideo } from "@/components/vitrine/InstitutVideo";
+import { NewHomeSections } from "@/components/vitrine/NewHomeSections";
 
 export const metadata: Metadata = {
   title: "ISHES - L'excellence de la langue arabe à Toulouse",
@@ -36,6 +37,8 @@ export default function Home() {
 
       {/* Stats */}
       <StatsSection />
+
+      <NewHomeSections />
 
       {/* ===== EMOTIONAL / JOURNEY SECTION (MINIMALIST & LIGHT) ===== */}
       <section className="bg-[#fafafa] py-32 relative overflow-hidden">

@@ -21,7 +21,7 @@ export default function CoursPresentielEnfantPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
+      <div className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-bold text-[#C69C6D] bg-[#C69C6D]/10 px-4 py-2 rounded-full uppercase tracking-widest mb-6 border border-[#C69C6D]/20">
