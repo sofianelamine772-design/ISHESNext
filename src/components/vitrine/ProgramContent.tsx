@@ -446,7 +446,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
     tagText: "SOUTIEN",
     tagColor: "bg-blue-100 text-blue-700",
-    durationText: "4 mois",
+    durationText: "8 mois",
     features: [
       "Vivre au quotidien",
       "Groupe d'entraide",
@@ -553,7 +553,7 @@ export function ProgramContent() {
               <div className="font-black tracking-widest text-xs uppercase mb-6 text-ishes-gold">
                 Nos Formations
               </div>
-              <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-6xl font-black text-ishes-dark leading-[1.1] tracking-tight mb-6">
+              <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight mb-6">
                 Choisis ton parcours, <br />
                 <span className="text-ishes-gold">avance à ton rythme.</span>
               </h1>
@@ -769,7 +769,7 @@ export function ProgramContent() {
                         <div className="flex items-start gap-1.5 sm:gap-2">
                           <Clock className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
                           <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
-                            <span className="font-bold">2 cours / semaine</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Mardi et vendredi</span>
+                            <span className="font-bold">2 cours / semaine</span><br/><span className="font-medium text-[8px] sm:text-[10px]">Mardi et vendredi 19H30</span>
                           </span>
                         </div>
                         <div className="flex items-start gap-1.5 sm:gap-2">
@@ -787,7 +787,7 @@ export function ProgramContent() {
                         <div className="flex items-start gap-1.5 sm:gap-2">
                           <Hourglass className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
                           <span className="text-[9px] sm:text-xs text-gray-700 leading-tight">
-                            <span className="font-bold">Durée</span><br/><span className="font-medium text-[8px] sm:text-[10px]">4 mois</span>
+                            <span className="font-bold">Durée</span><br/><span className="font-medium text-[8px] sm:text-[10px]">4 à 5 mois</span>
                           </span>
                         </div>
                         <div className="flex items-start gap-1.5 sm:gap-2">

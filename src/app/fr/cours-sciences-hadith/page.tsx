@@ -80,14 +80,14 @@ export default function CoursSciencesHadithPage() {
       <section className="py-24 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-4xl font-black text-ishes-dark mb-4 uppercase tracking-tight">Programme Détaillé</h2>
+            <h2 className="text-4xl font-black text-ishes-blue mb-4 uppercase tracking-tight">Programme Détaillé</h2>
             <div className="w-20 h-1.5 bg-ishes-blue mx-auto rounded-full"></div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {detailedSyllabus.map((section, idx) => (
               <div key={idx} className="bg-[#FAFAFA] rounded-[2.5rem] p-10 border border-gray-100 hover:shadow-xl transition-all group">
-                <h3 className="text-xl font-black text-ishes-dark mb-6 flex items-center gap-3">
+                <h3 className="text-xl font-black text-ishes-blue mb-6 flex items-center gap-3">
                   <span className="w-8 h-8 rounded-lg bg-ishes-blue text-white flex items-center justify-center text-xs">
                     0{idx + 1}
                   </span>

@@ -64,11 +64,15 @@ export default function CoursTajwidIntensifPage() {
               >
                 JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
               </Link>
-              <button 
-                className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
-              >
-                <PlayCircle className="w-5 h-5" /> Voir le teaser
-              </button>
+              {videoUrl && (
+                <Link 
+                  href={videoUrl}
+                  target="_blank"
+                  className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
+                >
+                  <PlayCircle className="w-5 h-5" /> Voir le teaser
+                </Link>
+              )}
             </div>
           </div>
           
@@ -136,7 +140,7 @@ export default function CoursTajwidIntensifPage() {
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si...</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Ce cours est fait pour toi si...</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -151,7 +155,7 @@ export default function CoursTajwidIntensifPage() {
                 <item.icon className="w-10 h-10 text-ishes-gold" />
               </div>
               <div>
-                <h3 className="text-[15px] font-bold text-ishes-dark whitespace-pre-line leading-relaxed">{item.title}</h3>
+                <h3 className="text-[15px] font-bold text-ishes-blue whitespace-pre-line leading-relaxed">{item.title}</h3>
               </div>
             </div>
           ))}
@@ -161,7 +165,7 @@ export default function CoursTajwidIntensifPage() {
       {/* ─── LES 2 MODULES ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Les 2 modules de la formation</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Les 2 modules de la formation</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid md:grid-cols-2 gap-8">
@@ -193,7 +197,7 @@ export default function CoursTajwidIntensifPage() {
               <div className="w-12 h-12 bg-ishes-dark rounded-full flex items-center justify-center mb-6 shadow-md text-white">
                 <Heart className="w-6 h-6" />
               </div>
-              <h3 className="text-[22px] font-black text-ishes-dark mb-4 leading-tight">Coaching & Suivi<br/>Personnalisé</h3>
+              <h3 className="text-[22px] font-black text-ishes-blue mb-4 leading-tight">Coaching & Suivi<br/>Personnalisé</h3>
               <p className="text-ishes-dark/80 font-medium text-sm leading-relaxed">
                 Des corrections audios sur-mesure pour gommer vos défauts de prononciation. Vous n'êtes jamais seul face à vos difficultés, un enseignant vous guide pas à pas.
               </p>
@@ -206,7 +210,7 @@ export default function CoursTajwidIntensifPage() {
       {/* ─── POURQUOI DIFFERENT ─── */}
       <section className="py-16 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Pourquoi cette formation va tout changer ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Pourquoi cette formation va tout changer ?</h2>
         </div>
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
@@ -243,8 +247,8 @@ export default function CoursTajwidIntensifPage() {
               <BookOpen className="w-7 h-7 text-ishes-gold" />
             </div>
             <div>
-              <h4 className="font-black text-ishes-dark tracking-widest text-sm uppercase mb-1">FORMATION CLÉ EN MAIN</h4>
-              <h3 className="font-bold text-ishes-dark text-xl mb-3 leading-tight">Tous les supports sont inclus</h3>
+              <h4 className="font-black text-ishes-blue tracking-widest text-sm uppercase mb-1">FORMATION CLÉ EN MAIN</h4>
+              <h3 className="font-bold text-ishes-blue text-xl mb-3 leading-tight">Tous les supports sont inclus</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
                 Le manuel de formation, les fiches de révision et les exercices sont directement fournis.
               </p>
@@ -259,7 +263,7 @@ export default function CoursTajwidIntensifPage() {
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="font-bold text-ishes-dark text-xl mb-3 leading-tight mt-1">TOUT EST PRÊT POUR VOUS</h3>
+              <h3 className="font-bold text-ishes-blue text-xl mb-3 leading-tight mt-1">TOUT EST PRÊT POUR VOUS</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
                 Connectez-vous et laissez-vous guider par notre méthode pour maîtriser votre récitation.
               </p>

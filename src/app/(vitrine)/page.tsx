@@ -46,7 +46,7 @@ export default function Home() {
       <section className="pt-24 pb-8 border-b border-gray-100/30 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
+            <h2 className="text-3xl md:text-5xl font-black text-ishes-blue leading-tight mb-6">
               Un apprentissage <span className="text-ishes-gold font-serif">interactif</span> & un suivi <span className="text-ishes-gold font-serif">continu</span>
             </h2>
             <p className="text-gray-500 font-medium text-lg">Où que vous soyez, profitez d'une expérience d'apprentissage immersive et d'une communauté soudée.</p>
@@ -58,7 +58,7 @@ export default function Home() {
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-6 sm:mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
               </div>
-              <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Cours en direct & Replays</h4>
+              <h4 className="text-2xl font-black text-ishes-blue mb-4 tracking-tight">Cours en direct & Replays</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Suivez nos formations à distance de chez vous. Si vous manquez un cours, le <strong className="text-ishes-blue">replay vidéo</strong> est disponible dès la fin de chaque séance.</p>
             </div>
 
@@ -67,7 +67,7 @@ export default function Home() {
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-6 sm:mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
                 <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-12 w-12 sm:h-14 sm:w-14 object-cover rounded-full" />
               </div>
-              <h4 className="text-2xl font-black text-ishes-dark mb-4 tracking-tight">Suivi pédagogique</h4>
+              <h4 className="text-2xl font-black text-ishes-blue mb-4 tracking-tight">Suivi pédagogique</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Intégrez le <strong className="text-[#25D366]">groupe WhatsApp de la classe</strong>. Posez vos questions, recevez les annonces et échangez avec vos camarades.</p>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function Home() {
             Offre Exceptionnelle
           </div>
 
-          <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight mb-6">
+          <h2 className="text-3xl md:text-5xl font-black text-ishes-blue leading-tight mb-6">
             Le Pack <span className="text-ishes-gold font-serif">Accompagnement</span>
           </h2>
 

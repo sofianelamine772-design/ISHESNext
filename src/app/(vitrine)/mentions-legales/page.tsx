@@ -63,7 +63,7 @@ export default function MentionsLegales() {
           {/* Header */}
           <div className="mb-16">
             <span className="ishes-label text-ishes-blue mb-4 block">Transparence & Conformité</span>
-            <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
+            <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-blue mb-6">
               Mentions<br />
               <span className="text-ishes-blue ">légales.</span>
             </h1>
@@ -84,7 +84,7 @@ export default function MentionsLegales() {
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
                 className="bg-white rounded-3xl p-8 border border-gray-100 hover:border-ishes-blue/10 transition-colors"
               >
-                <h2 className="ishes-label text-ishes-dark mb-6 pb-4 border-b border-gray-100">
+                <h2 className="ishes-label text-ishes-blue mb-6 pb-4 border-b border-gray-100">
                   {section.title}
                 </h2>
                 <div className="space-y-4">

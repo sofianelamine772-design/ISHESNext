@@ -519,7 +519,7 @@ function EtudiantsContent() {
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
-            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Base Étudiants</h1>
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Base Étudiants</h1>
             <span className="hidden sm:inline-block px-3 py-1 bg-ishes-blue/5 text-ishes-blue text-[10px] font-black rounded-full border border-ishes-blue/10">
               {students.length} INSCRITS
             </span>
@@ -601,7 +601,7 @@ function EtudiantsContent() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
-                            <h3 className="ishes-heading text-sm truncate text-ishes-dark">{student.name}</h3>
+                            <h3 className="ishes-heading text-sm truncate text-ishes-blue">{student.name}</h3>
                             {(student.status === "en_attente") && <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/20" />}
                             {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-blue shadow-lg shadow-ishes-blue/20" />}
                           </div>
@@ -668,7 +668,7 @@ function EtudiantsContent() {
                       </div>
                       <div className="pb-1 md:pb-2 min-w-0 flex-1">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <h2 className="text-2xl md:text-4xl font-black text-ishes-dark tracking-tight leading-snug">{selectedStudent.name}</h2>
+                        <h2 className="text-2xl md:text-4xl font-black text-ishes-blue tracking-tight leading-snug">{selectedStudent.name}</h2>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-blue mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>
@@ -754,7 +754,7 @@ function EtudiantsContent() {
                     <div className="flex flex-col mt-4 lg:mt-0">
                       <div className="flex items-center gap-3 mb-6 md:mb-8">
                         <div className="w-1 h-4 bg-gray-300 rounded-full"></div>
-                        <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-dark">Scolarité</h3>
+                        <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-blue">Scolarité</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">
                         <div className="flex items-center justify-between group">
@@ -812,7 +812,7 @@ function EtudiantsContent() {
                               {member.avatar}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-ishes-dark text-sm truncate">{member.name}</h4>
+                              <h4 className="font-bold text-ishes-blue text-sm truncate">{member.name}</h4>
                               <p className="text-[10px] text-gray-500 truncate">{member.enrolledClass}</p>
                             </div>
                             <ChevronRight className="w-4 h-4 text-purple-300" />
@@ -851,7 +851,7 @@ function EtudiantsContent() {
                     {/* Formulaire Règlement Manuel */}
                     {!loadingPayments && billingData.resteAPayer > 0 && (
                       <div className="mb-8 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                        <h4 className="text-[10px] font-black uppercase tracking-widest text-ishes-dark mb-4">Saisir un règlement</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-ishes-blue mb-4">Saisir un règlement</h4>
                         <div className="flex flex-col sm:flex-row gap-4 items-end">
                           <div className="flex-1 w-full space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Méthode</label>
@@ -1037,7 +1037,7 @@ function EtudiantsContent() {
                 <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner">
                   <Users className="w-8 h-8 md:w-10 md:h-10 text-gray-200" />
                 </div>
-                <h3 className="text-xl md:text-2xl ishes-heading text-ishes-dark mb-2">Profil Étudiant</h3>
+                <h3 className="text-xl md:text-2xl ishes-heading text-ishes-blue mb-2">Profil Étudiant</h3>
                 <p className="ishes-label text-[10px] md:text-xs opacity-40 max-w-[200px] md:max-w-sm">Sélectionnez un étudiant pour visualiser son dossier complet.</p>
               </div>
             )}
@@ -1062,7 +1062,7 @@ function EtudiantsContent() {
           <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
             <div className="p-8 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-black text-ishes-dark tracking-tight">Nouveau Dossier Élève</h3>
+                <h3 className="text-xl font-black text-ishes-blue tracking-tight">Nouveau Dossier Élève</h3>
                 <p className="text-xs font-medium text-gray-400 mt-1">Saisissez manuellement les informations pour créer un compte.</p>
               </div>
               <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
@@ -1203,7 +1203,7 @@ function EtudiantsContent() {
           <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
             <div className="p-8 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-black text-ishes-dark tracking-tight">Modifier le Dossier</h3>
+                <h3 className="text-xl font-black text-ishes-blue tracking-tight">Modifier le Dossier</h3>
                 <p className="text-xs font-medium text-gray-400 mt-1">Mise à jour des informations personnelles de l'élève.</p>
               </div>
               <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
@@ -1324,7 +1324,7 @@ function EtudiantsContent() {
                   <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <GraduationCap className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-black text-ishes-dark tracking-tight">Modifier Scolarité</h3>
+                  <h3 className="text-xl font-black text-ishes-blue tracking-tight">Modifier Scolarité</h3>
                 </div>
                 <button onClick={() => setShowScolariteModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
                   <X className="w-5 h-5" />
@@ -1389,7 +1389,7 @@ function EtudiantsContent() {
                   <Mail className="w-5 h-5 text-[#086b51]" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-ishes-dark tracking-tight">Message à {selectedStudent.name}</h3>
+                  <h3 className="text-base font-black text-ishes-blue tracking-tight">Message à {selectedStudent.name}</h3>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{selectedStudent.email}</p>
                 </div>
               </div>
@@ -1452,7 +1452,7 @@ function EtudiantsContent() {
                 <span className="text-sm font-black text-[#086b51]">{selectedStudent.avatar}</span>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-black text-ishes-dark tracking-tight truncate">{selectedStudent.name}</h3>
+                <h3 className="text-sm font-black text-ishes-blue tracking-tight truncate">{selectedStudent.name}</h3>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
                   <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Élève · {selectedStudent.enrolledClass}</span>
@@ -1535,7 +1535,7 @@ function EtudiantsContent() {
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
               <Trash2 className="w-8 h-8 text-red-500" />
             </div>
-            <h3 className="text-xl font-black text-ishes-dark mb-2">Désinscrire l'élève ?</h3>
+            <h3 className="text-xl font-black text-ishes-blue mb-2">Désinscrire l'élève ?</h3>
             <p className="text-xs text-gray-500 mb-8 leading-relaxed">
               Êtes-vous sûr de vouloir supprimer définitivement cet élève ? Cette action est irréversible et supprimera tout son historique (y compris son accès).
             </p>
@@ -1562,7 +1562,7 @@ function EtudiantsContent() {
                 <AlertCircle className="w-8 h-8 text-red-500" />
               )}
             </div>
-            <h3 className="text-xl font-black text-ishes-dark mb-2">{popupMsg.title}</h3>
+            <h3 className="text-xl font-black text-ishes-blue mb-2">{popupMsg.title}</h3>
             <p className="text-sm text-gray-500 mb-8 leading-relaxed">
               {popupMsg.desc}
             </p>

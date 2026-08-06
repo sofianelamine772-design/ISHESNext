@@ -1057,12 +1057,7 @@ function InscriptionForm() {
                       : (planName || "Votre Formation")}
                     </h3>
                     <p className="text-xs font-bold text-ishes-blue uppercase tracking-widest mt-1">
-                      {planId === 'presentiel-global' && registrationType === 'child' ? "Durée : du 1er octobre au 30 juin" : 
-                      planId === 'tajwid_intensif' ? (
-                        <>Durée 3 mois / Cours en direct: 2h/ semaine + audio 24h/24</>
-                      ) : (
-                        <>Durée : du 1er octobre au 30 juin | Volume : {planId === 'arabe_coran_junior' ? '2h/semaine' : (planId === 'presentiel-global' || (planId || '').includes('presentiel')) ? '3h/semaine' : planId === 'tajwid_standard' ? '1h/semaine' : '1h/semaine'}</>
-                      )}
+                      Durée : {PROGRAMS_DATA[planId || ""]?.duration || "Selon programme"}
                     </p>
                   </div>
                 </div>
@@ -1124,7 +1119,7 @@ function InscriptionForm() {
                 <div className="w-24 h-24 bg-green-50 text-ishes-blue rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
                   <CheckCircle2 className="w-12 h-12" />
                 </div>
-                <h2 className="text-3xl font-black text-ishes-dark mb-4 tracking-tight">Dernière étape !</h2>
+                <h2 className="text-3xl font-black text-ishes-blue mb-4 tracking-tight">Dernière étape !</h2>
                 <p className="text-gray-500 font-medium max-w-lg mx-auto leading-relaxed">
                   Votre inscription pour <span className="text-ishes-dark font-bold">{planName}</span> est presque terminée.
                   Utilisez votre email <span className="text-ishes-blue font-bold">{formData.email}</span> pour finaliser la création de votre compte.
@@ -1226,7 +1221,7 @@ function InscriptionForm() {
                     <Monitor className="w-3.5 h-3.5" /> Accès au logiciel ISHEECOLE
                   </h4>
                   <p className="text-xs text-blue-900 font-medium leading-relaxed">
-                    Dès la validation de votre paiement, vous recevrez un email pour créer votre mot de passe. Votre espace vous permettra de suivre vos cours, vos absences, vos notes et de communiquer avec vos professeurs.
+                    Dès la validation de votre paiement, vous recevrez un email pour créer votre mot de passe. Votre espace vous permettra de suivre votre scolarité.
                   </p>
                 </div>
 

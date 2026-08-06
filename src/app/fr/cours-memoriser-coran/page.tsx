@@ -41,7 +41,7 @@ export default function CoursMemoriserCoranPage() {
             <h2 className="text-ishes-gold font-black text-sm tracking-[0.2em] uppercase">
               SCIENCE DU CORAN
             </h2>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
               Mémorisation / Lecture du Coran avec la Tilawa
             </h1>
             <p className="text-gray-600 font-medium max-w-md text-lg leading-relaxed">
@@ -120,7 +120,7 @@ export default function CoursMemoriserCoranPage() {
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si...</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Ce cours est fait pour toi si...</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -135,7 +135,7 @@ export default function CoursMemoriserCoranPage() {
                 <item.icon className="w-8 h-8 text-ishes-gold" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-ishes-dark whitespace-pre-line leading-tight">{item.title}</h3>
+                <h3 className="text-lg font-black text-ishes-blue whitespace-pre-line leading-tight">{item.title}</h3>
                 <p className="text-gray-600 font-medium text-sm mt-2 leading-tight">{item.desc}</p>
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function CoursMemoriserCoranPage() {
              />
           </div>
           <div className="space-y-10">
-            <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Pourquoi ce programme va tout changer ?</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Pourquoi ce programme va tout changer ?</h2>
             <div className="space-y-6">
               {[
                 "Mémorisation progressive adaptée à votre rythme",
@@ -177,7 +177,7 @@ export default function CoursMemoriserCoranPage() {
 
       {/* ─── CE QUI EST INCLUS ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-16">Ce qui est inclus</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-16">Ce qui est inclus</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
             { image: "/images/tajwid_students.png", title: "Cours en direct\n2 X par semaine\nMercredi 19h30\n& Dimanche 12h00" },
@@ -189,7 +189,7 @@ export default function CoursMemoriserCoranPage() {
               <div className="w-full h-40 relative mb-4">
                  <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
               </div>
-              <h3 className="font-bold text-ishes-dark text-sm whitespace-pre-line px-4">{item.title}</h3>
+              <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
             </div>
           ))}
         </div>
@@ -198,7 +198,7 @@ export default function CoursMemoriserCoranPage() {
       {/* ─── DEROULEMENT ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto bg-[#fafafa] rounded-[3rem]">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Comment se déroule le programme ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Comment se déroule le programme ?</h2>
         </div>
         
         <div className="relative">
@@ -218,7 +218,7 @@ export default function CoursMemoriserCoranPage() {
                   {step.num}
                 </div>
                 <step.icon className="w-10 h-10 text-ishes-gold mb-4" />
-                <h3 className="font-black text-ishes-dark mb-2">{step.title}</h3>
+                <h3 className="font-black text-ishes-blue mb-2">{step.title}</h3>
                 <p className="text-sm text-gray-600 font-medium">{step.desc}</p>
               </div>
             ))}

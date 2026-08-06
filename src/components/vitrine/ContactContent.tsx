@@ -15,7 +15,7 @@ export function ContactContent() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-24"
       >
-        <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-dark leading-none mb-8 uppercase tracking-tighter">
+        <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-blue leading-none mb-8 uppercase tracking-tighter">
           Nous <span className="text-ishes-gold">contacter</span>
         </h1>
         <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
@@ -32,7 +32,7 @@ export function ContactContent() {
       >
         {/* PRÉSENTIEL */}
         <div className="group relative overflow-hidden bg-[#f9f5f0] rounded-[2.5rem] border border-ishes-gold/10 hover:border-ishes-gold/30 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-          <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">Institut ISHES</h2>
+          <h2 className="ishes-heading text-3xl text-ishes-blue mb-2">Institut ISHES</h2>
           <p className="ishes-heading text-xl text-ishes-gold mb-6">PRÉSENTIEL</p>
           
           <a href="tel:+33768652091" className="flex items-center gap-4 mb-8 group/phone">
@@ -90,7 +90,7 @@ export function ContactContent() {
 
         {/* DISTANCE (WhatsApp) */}
         <div className="group relative overflow-hidden bg-[#f9f5f0] rounded-[2.5rem] border border-ishes-gold/10 hover:border-ishes-gold/30 p-10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-          <h2 className="ishes-heading text-3xl text-ishes-dark mb-2">ISHES DISTANCIEL</h2>
+          <h2 className="ishes-heading text-3xl text-ishes-blue mb-2">ISHES DISTANCIEL</h2>
           <p className="ishes-heading text-xl text-ishes-gold mb-6">DISTANCE</p>
           
           <div className="space-y-4 mb-8">
@@ -101,12 +101,22 @@ export function ContactContent() {
                 </svg>
               </div>
               <div>
-                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appelez-nous ou laissez-nous un message WhatsApp</span>
+                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appel et WhatsApp (Premier contact)</span>
                 <span className="ishes-heading text-xl text-ishes-dark group-hover/phone:text-ishes-blue transition-colors">+33 6 66 03 35 19</span>
               </div>
             </a>
 
-
+            <a href="https://wa.me/33686911301" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group/phone">
+              <div className="w-12 h-12 rounded-xl bg-ishes-dark flex items-center justify-center shrink-0 shadow-lg shadow-ishes-dark/20 group-hover/phone:scale-110 transition-transform">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                </svg>
+              </div>
+              <div>
+                <span className="ishes-label text-[10px] opacity-40 block mb-0.5">Appel et WhatsApp (Deuxième contact)</span>
+                <span className="ishes-heading text-xl text-ishes-dark group-hover/phone:text-ishes-blue transition-colors">+33 6 86 91 13 01</span>
+              </div>
+            </a>
           </div>
 
           <a 

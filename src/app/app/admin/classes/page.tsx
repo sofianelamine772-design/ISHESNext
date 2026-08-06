@@ -339,7 +339,7 @@ export default function AdminDashboard() {
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10">
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
-            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Formations & Classes</h1>
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Formations & Classes</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
             <Button variant="ishes-blue" size="sm" className="h-10 px-4 md:px-6" onClick={openNewClassModal}>
@@ -410,7 +410,7 @@ export default function AdminDashboard() {
                     <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
                       <Monitor className="w-4 h-4 text-ishes-dark" />
                     </div>
-                    <h3 className="ishes-label text-ishes-dark text-[10px] md:text-xs">Formations (Distanciel)</h3>
+                    <h3 className="ishes-label text-ishes-blue text-[10px] md:text-xs">Formations (Distanciel)</h3>
                     <span className="ml-auto bg-gray-100 text-ishes-dark text-[10px] font-black px-2 py-0.5 rounded-full">
                       {filteredDistancielClasses.length}
                     </span>
@@ -505,7 +505,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <span className="ishes-label mb-1 block text-[10px]">Gestion de classe</span>
-                        <h2 className="text-xl md:text-2xl xl:text-3xl ishes-heading text-ishes-dark leading-snug break-words">{selectedClass.name}</h2>
+                        <h2 className="text-xl md:text-2xl xl:text-3xl ishes-heading text-ishes-blue leading-snug break-words">{selectedClass.name}</h2>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
                           <span className={`text-[8px] md:text-[10px] font-black uppercase px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
@@ -697,7 +697,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       <div className="flex-1 pb-2">
-                        <h2 className="text-3xl font-black text-ishes-dark tracking-tight mb-1">{studentDetail.first_name} {studentDetail.last_name}</h2>
+                        <h2 className="text-3xl font-black text-ishes-blue tracking-tight mb-1">{studentDetail.first_name} {studentDetail.last_name}</h2>
                         <p className="text-ishes-dark/70 text-[10px] font-bold uppercase tracking-widest ">Membre depuis le {new Date(studentDetail.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
@@ -776,7 +776,7 @@ export default function AdminDashboard() {
                   <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <BookOpen className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-black text-ishes-dark tracking-tight">Nouvelle Classe</h3>
+                  <h3 className="text-xl font-black text-ishes-blue tracking-tight">Nouvelle Classe</h3>
                 </div>
                 <button onClick={() => setShowNewClassModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
                   <X className="w-5 h-5" />
@@ -845,7 +845,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[80vh]">
             <div className="p-8 border-b border-gray-100">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xl font-black text-ishes-dark tracking-tight">Affecter des élèves</h3>
+                <h3 className="text-xl font-black text-ishes-blue tracking-tight">Affecter des élèves</h3>
                 <button onClick={() => setShowAddStudentModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
                   <X className="w-5 h-5" />
                 </button>
@@ -901,7 +901,7 @@ export default function AdminDashboard() {
                   <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <History className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-black text-ishes-dark tracking-tight">Transférer l'élève</h3>
+                  <h3 className="text-xl font-black text-ishes-blue tracking-tight">Transférer l'élève</h3>
                 </div>
                 <button onClick={() => setShowTransferModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
                   <X className="w-5 h-5" />
@@ -949,7 +949,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
             <div className="p-8 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-black text-ishes-dark tracking-tight">Nouveau Dossier Élève</h3>
+                <h3 className="text-xl font-black text-ishes-blue tracking-tight">Nouveau Dossier Élève</h3>
                 <p className="text-xs font-medium text-gray-400 mt-1">Créez et inscrivez un élève directement dans cette classe.</p>
               </div>
               <button onClick={() => setShowAddStudentManualModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
@@ -1095,7 +1095,7 @@ export default function AdminDashboard() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-ishes-dark tracking-tight">Message à la classe</h3>
+                    <h3 className="text-xl font-black text-ishes-blue tracking-tight">Message à la classe</h3>
                     <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">
                       Envoyé par e-mail à tous les élèves de la classe
                     </p>

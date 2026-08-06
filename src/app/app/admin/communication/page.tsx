@@ -193,7 +193,7 @@ export default function AdminCommunicationPage() {
 
       <main className="flex-1 flex flex-col min-w-0 h-full">
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0 z-10 sticky top-0">
-          <h1 className="text-2xl ishes-heading text-ishes-dark font-black uppercase tracking-tight">Communication</h1>
+          <h1 className="text-2xl ishes-heading text-ishes-blue font-black uppercase tracking-tight">Communication</h1>
           <div className="flex p-1 bg-gray-100 rounded-2xl">
             <button onClick={() => { setActiveTab("inbox"); fetchConversations(); }} className={`flex items-center gap-2 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "inbox" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
               <Inbox className="w-4 h-4" /> Boîte de réception
@@ -263,7 +263,7 @@ export default function AdminCommunicationPage() {
                         {(selectedChat.first_name?.[0] || selectedChat.email?.[0] || '?').toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="text-sm font-black text-ishes-dark uppercase tracking-tight">
+                        <h3 className="text-sm font-black text-ishes-blue uppercase tracking-tight">
                           {[selectedChat.first_name, selectedChat.last_name].filter(Boolean).join(' ') || selectedChat.email || "Utilisateur sans nom"}
                         </h3>
                         <div className="flex items-center gap-1.5 mt-0.5">

@@ -198,7 +198,7 @@ export default function InstitutPage() {
               <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
             </div>
             <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
-            <h2 className="text-4xl md:text-6xl font-black text-ishes-dark leading-none tracking-tight mb-6 uppercase">
+            <h2 className="text-4xl md:text-6xl font-black text-ishes-blue leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
               <span className="text-ishes-gold font-serif">en présentiel.</span>
             </h2>
@@ -234,7 +234,7 @@ export default function InstitutPage() {
 
                   {/* TITLE & DESC */}
                   <div>
-                    <h2 className="text-xl font-black text-ishes-dark mb-2 tracking-tight leading-[1.1]">
+                    <h2 className="text-xl font-black text-ishes-blue mb-2 tracking-tight leading-[1.1]">
                       {program.title}
                     </h2>
                     <p className="text-xs sm:text-sm text-gray-500 leading-relaxed mb-4 font-medium">
@@ -358,7 +358,7 @@ export default function InstitutPage() {
               
               <div className="flex-1 text-center md:text-left">
                 <span className="text-ishes-gold font-black uppercase tracking-[0.2em] text-[10px] mb-3 block">Orientation pédagogique</span>
-                <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-4 uppercase">Test de niveau <span className="text-ishes-gold ">Enfants</span></h3>
+                <h3 className="text-2xl md:text-3xl font-black text-ishes-blue mb-4 uppercase">Test de niveau <span className="text-ishes-gold ">Enfants</span></h3>
                 <p className="text-gray-500 font-medium leading-relaxed mb-8">
                   Un doute sur le niveau de votre enfant ? Notre test interactif vous aide à choisir entre le niveau <strong className="text-ishes-dark">Débutant</strong> ou <strong className="text-ishes-dark">1+</strong> en moins de 2 minutes.
                 </p>
@@ -451,7 +451,7 @@ export default function InstitutPage() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
-            <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
+            <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight uppercase">
               Des réponses à vos <span className="text-ishes-gold ">questions.</span>
             </h2>
           </div>

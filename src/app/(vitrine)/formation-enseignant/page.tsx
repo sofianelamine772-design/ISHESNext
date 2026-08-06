@@ -157,7 +157,7 @@ export default function FormationEnseignantPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="max-w-4xl mx-auto text-center"
             >
-              <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-6">
+              <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-6">
                 Transmettre avec légitimité, amour, et pédagogie.
               </h2>
               <div className="space-y-4 text-lg text-gray-500 font-medium leading-relaxed">
@@ -208,7 +208,7 @@ export default function FormationEnseignantPage() {
       <section className="relative z-20 -mt-16 mb-16 px-6">
         <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
           <div className="flex-1 text-center">
-            <h3 className="text-4xl font-black text-ishes-dark mb-2">15+</h3>
+            <h3 className="text-4xl font-black text-ishes-blue mb-2">15+</h3>
             <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">années d'expérience dans la formation d'enseignants</p>
           </div>
           <div className="hidden md:block w-px h-16 bg-gray-100"></div>
@@ -218,7 +218,7 @@ export default function FormationEnseignantPage() {
           </div>
           <div className="hidden md:block w-px h-16 bg-gray-100"></div>
           <div className="flex-1 text-center">
-            <h3 className="text-4xl font-black text-ishes-dark mb-2">100%</h3>
+            <h3 className="text-4xl font-black text-ishes-blue mb-2">100%</h3>
             <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">Accompagnement avant, pendant et après</p>
           </div>
         </div>
@@ -235,7 +235,7 @@ export default function FormationEnseignantPage() {
           <div className="w-20 h-20 bg-ishes-blue/10 text-ishes-blue rounded-3xl flex items-center justify-center mx-auto mb-8">
             <Sparkles className="w-10 h-10" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-ishes-dark mb-6 tracking-tight uppercase">Besoin de plus d'informations ?</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-ishes-blue mb-6 tracking-tight uppercase">Besoin de plus d'informations ?</h2>
           <p className="text-xl text-gray-400 font-medium mb-12">
             Nos conseillers pédagogiques sont à votre disposition pour vous guider dans votre projet professionnel.
           </p>
@@ -252,7 +252,7 @@ export default function FormationEnseignantPage() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
-            <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
+            <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight uppercase">
               Tout savoir sur la <span className="text-ishes-blue ">certification.</span>
             </h2>
           </div>

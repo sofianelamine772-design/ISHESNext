@@ -32,10 +32,10 @@ export default function CoursPresentielFemmeIntermediairePage() {
               <MapPin className="w-4 h-4" />
               PRÉSENTIEL TOULOUSE • 100% FEMME
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-[60px] font-black text-[#0a192f] leading-[1.1] tracking-tight mb-4 flex items-center gap-4">
+            <h1 className="text-4xl md:text-5xl lg:text-[60px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-4 flex items-center gap-4">
               <span>🧕 Arabe & Tajwid</span>
             </h1>
-            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-serif text-[#0a192f] mb-8">
+            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-serif text-ishes-blue mb-8">
               — Femme Intermédiaire
             </h2>
             <p className="text-xl font-bold text-gray-600 mb-10 leading-relaxed max-w-lg">
@@ -71,7 +71,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
 
       {/* Stats Section */}
       <div className="max-w-7xl mx-auto px-6 py-20 text-center">
-        <h3 className="text-sm font-black text-[#0a192f] uppercase tracking-[0.2em] mb-12 relative inline-block">
+        <h3 className="text-sm font-black text-ishes-blue uppercase tracking-[0.2em] mb-12 relative inline-block">
           DÉROULEMENT PRATIQUE DE LA FORMATION
           <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#C69C6D] rounded-full"></div>
         </h3>
@@ -106,7 +106,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
       {/* Pour Qui Section */}
       <div className="bg-[#fcfaf8] py-24 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-sm font-black text-center text-[#0a192f] uppercase tracking-[0.2em] mb-16 relative inline-block left-1/2 -translate-x-1/2">
+          <h3 className="text-sm font-black text-center text-ishes-blue uppercase tracking-[0.2em] mb-16 relative inline-block left-1/2 -translate-x-1/2">
             CE COURS EST FAIT POUR TOI SI...
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#C69C6D] rounded-full"></div>
           </h3>
@@ -125,7 +125,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
                   </div>
                 </div>
                 <div className="p-8 pt-12 flex-1 flex flex-col">
-                  <h4 className="font-black text-[#0a192f] text-lg mb-3 leading-snug">{item.title}</h4>
+                  <h4 className="font-black text-ishes-blue text-lg mb-3 leading-snug">{item.title}</h4>
                   <p className="text-gray-600 font-medium text-sm leading-relaxed">{item.text}</p>
                 </div>
               </div>
@@ -136,7 +136,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
 
       {/* Progression Section */}
       <div id="programme" className="max-w-6xl mx-auto px-6 py-24">
-        <h3 className="text-sm font-black text-center text-[#0a192f] uppercase tracking-[0.2em] mb-20 relative inline-block left-1/2 -translate-x-1/2">
+        <h3 className="text-sm font-black text-center text-ishes-blue uppercase tracking-[0.2em] mb-20 relative inline-block left-1/2 -translate-x-1/2">
           UNE PROGRESSION SIMPLE ET RASSURANTE
           <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#C69C6D] rounded-full"></div>
         </h3>
@@ -159,7 +159,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
                     {step.icon}
                   </div>
                   <div>
-                    <h4 className="font-black text-[#0a192f] text-lg mb-3">{step.title}</h4>
+                    <h4 className="font-black text-ishes-blue text-lg mb-3">{step.title}</h4>
                     <p className="text-gray-500 text-sm font-medium leading-relaxed">{step.desc}</p>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
           </div>
           <div className="flex flex-col justify-center">
             <span className="text-[#C69C6D] font-black text-xs tracking-[0.2em] uppercase mb-4">POURQUOI CE PROGRAMME ?</span>
-            <h3 className="text-4xl md:text-5xl font-black text-[#0a192f] mb-8 leading-tight">Un cursus complet<br />et différent</h3>
+            <h3 className="text-4xl md:text-5xl font-black text-ishes-blue mb-8 leading-tight">Un cursus complet<br />et différent</h3>
             
             <div className="space-y-5 text-gray-600 font-medium mb-10 text-lg">
               <p>Ce programme unique relie la grammaire et la récitation pour te permettre de comprendre le Coran, pas seulement le lire.</p>
@@ -205,7 +205,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
                     <CheckCircle2 className="w-4 h-4 text-[#C69C6D]" />
                   </div>
                   <div>
-                    <h5 className="font-black text-[#0a192f] text-base mb-1.5">{item.title}</h5>
+                    <h5 className="font-black text-ishes-blue text-base mb-1.5">{item.title}</h5>
                     <p className="text-gray-500 text-sm font-medium leading-relaxed">{item.text}</p>
                   </div>
                 </div>
@@ -218,7 +218,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
       {/* Inclus Section */}
       <div className="bg-[#fcfaf8] py-24 border-t border-gray-100 mt-12">
         <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-sm font-black text-center text-[#0a192f] uppercase tracking-[0.2em] mb-16 relative inline-block left-1/2 -translate-x-1/2">
+          <h3 className="text-sm font-black text-center text-ishes-blue uppercase tracking-[0.2em] mb-16 relative inline-block left-1/2 -translate-x-1/2">
             CE QUI EST INCLUS
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#C69C6D] rounded-full"></div>
           </h3>

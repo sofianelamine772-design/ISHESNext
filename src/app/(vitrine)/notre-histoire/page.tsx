@@ -40,7 +40,7 @@ export default function NotreHistoirePage() {
           <div className="max-w-3xl">
             <span className="text-ishes-gold font-black uppercase tracking-widest text-xs block mb-4">NOTRE HISTOIRE</span>
             
-            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-dark leading-[1.05] tracking-tight mb-8">
+            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-blue leading-[1.05] tracking-tight mb-8">
               Tout a commencé par une <span className="text-ishes-gold">soif d’apprendre…</span>
             </h1>
             
@@ -59,7 +59,7 @@ export default function NotreHistoirePage() {
       {/* TIMELINE SECTION */}
       <section className="pt-12 pb-24 bg-[#fcfaf7] relative">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-24">16 années d'engagement et de développement</h2>
+          <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-24">16 années d'engagement et de développement</h2>
           
           <div className="relative">
             <motion.div 
@@ -85,7 +85,7 @@ export default function NotreHistoirePage() {
                     <item.icon className="w-8 h-8" />
                     <div className="absolute -bottom-[38px] w-4 h-4 bg-ishes-gold rounded-full border-[3px] border-[#fcfaf7] shadow-sm hidden md:block group-hover:scale-150 transition-transform duration-300"></div>
                   </div>
-                  <h3 className="text-xl font-black text-ishes-gold mb-4 mt-6 md:mt-2 group-hover:text-ishes-dark transition-colors duration-300">{item.year}</h3>
+                  <h3 className="text-xl font-black text-ishes-gold mb-4 mt-6 md:mt-2 group-hover:text-ishes-blue transition-colors duration-300">{item.year}</h3>
                   <p className="text-sm text-gray-600 font-medium px-2 leading-relaxed">{item.title}</p>
                 </motion.div>
               ))}
@@ -98,7 +98,7 @@ export default function NotreHistoirePage() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Nos fondateurs</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Nos fondateurs</h2>
             <div className="flex items-center justify-center gap-2 mt-4">
               <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
               <div className="w-12 h-px bg-ishes-gold"></div>
@@ -119,7 +119,7 @@ export default function NotreHistoirePage() {
                 <Image src="/images/OustedhaRahida.jpeg" alt="Oustedha Rachida" fill className="object-cover" />
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
-                <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedha Rachida</h3>
+                <h3 className="text-2xl font-black text-ishes-blue mb-1">Oustedha Rachida</h3>
                 <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondatrice & Directrice de l'Institut</div>
                 <ul className="space-y-4">
                   {[
@@ -148,7 +148,7 @@ export default function NotreHistoirePage() {
                 <Image src="/images/oustedhRyad.jpeg" alt="Oustedh Riad" fill className="object-cover" />
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
-                <h3 className="text-2xl font-black text-ishes-dark mb-1">Oustedh Riad</h3>
+                <h3 className="text-2xl font-black text-ishes-blue mb-1">Oustedh Riad</h3>
                 <div className="text-ishes-gold text-sm font-bold mb-8">Co-fondateur et Dirigeant</div>
                 <ul className="space-y-4">
                   {[
@@ -172,7 +172,7 @@ export default function NotreHistoirePage() {
       <section className="py-20 bg-[#fafafa]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-black text-ishes-dark">Un parcours commun, une vision partagée</h2>
+            <h2 className="text-3xl font-black text-ishes-blue">Un parcours commun, une vision partagée</h2>
             <div className="flex items-center justify-center gap-2 mt-4">
               <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
               <div className="w-12 h-px bg-ishes-gold"></div>

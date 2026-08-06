@@ -123,7 +123,7 @@ export default function CoursSciencesCoranPage() {
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si tu veux...</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Ce cours est fait pour toi si tu veux...</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {[
@@ -136,7 +136,7 @@ export default function CoursSciencesCoranPage() {
                 <item.icon className="w-8 h-8 text-ishes-gold" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-ishes-dark whitespace-pre-line leading-tight">{item.title}</h3>
+                <h3 className="text-lg font-black text-ishes-blue whitespace-pre-line leading-tight">{item.title}</h3>
                 <p className="text-gray-600 font-medium text-sm mt-3 whitespace-pre-line leading-tight">{item.desc}</p>
               </div>
             </div>
@@ -157,7 +157,7 @@ export default function CoursSciencesCoranPage() {
              />
           </div>
           <div className="space-y-10">
-            <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Pourquoi ce programme va tout changer ?</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Pourquoi ce programme va tout changer ?</h2>
             <div className="space-y-6">
               {[
                 "Le Coran devient une preuve vivante, pas seulement un texte récité",
@@ -178,7 +178,7 @@ export default function CoursSciencesCoranPage() {
 
       {/* ─── CE QUI EST INCLUS ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-16">Ce qui est inclus</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-16">Ce qui est inclus</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12">
           {[
             { image: "/images/fiqh_book.png", icon: BookOpen, title: "Support\npédagogique" },
@@ -194,7 +194,7 @@ export default function CoursSciencesCoranPage() {
                    <item.icon className="w-5 h-5 text-white" />
                  </div>
               </div>
-              <h3 className="font-bold text-ishes-dark text-sm whitespace-pre-line px-4">{item.title}</h3>
+              <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
             </div>
           ))}
         </div>
@@ -203,7 +203,7 @@ export default function CoursSciencesCoranPage() {
       {/* ─── DEROULEMENT ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto bg-white rounded-[3rem] shadow-sm border border-gray-100">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Comment se déroule le programme ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Comment se déroule le programme ?</h2>
         </div>
         
         <div className="relative">
@@ -223,7 +223,7 @@ export default function CoursSciencesCoranPage() {
                   {step.num}
                 </div>
                 <step.icon className="w-10 h-10 text-[#c19b6c] mb-4" />
-                <h3 className="font-black text-ishes-dark mb-2 text-sm md:text-base">{step.title}</h3>
+                <h3 className="font-black text-ishes-blue mb-2 text-sm md:text-base">{step.title}</h3>
                 <p className="text-xs text-gray-600 font-medium">{step.desc}</p>
               </div>
             ))}
@@ -234,7 +234,7 @@ export default function CoursSciencesCoranPage() {
       {/* ─── A LA FIN DE CETTE FORMATION ─── */}
       <section className="py-16 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-black text-ishes-dark">À la fin de cette formation, tu sauras :</h2>
+          <h2 className="text-2xl md:text-3xl font-black text-ishes-blue">À la fin de cette formation, tu sauras :</h2>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-[#f2ece4] rounded-2xl p-8">
            {[

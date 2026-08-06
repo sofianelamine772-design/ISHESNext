@@ -32,7 +32,7 @@ export function InstitutFacilities() {
                 {f.icon}
               </div>
               <div>
-                 <h5 className="font-black text-ishes-dark text-sm uppercase tracking-widest mb-1">{f.title}</h5>
+                 <h5 className="font-black text-ishes-blue text-sm uppercase tracking-widest mb-1">{f.title}</h5>
                  <p className="text-gray-400 font-medium text-sm">{f.desc}</p>
               </div>
             </motion.div>

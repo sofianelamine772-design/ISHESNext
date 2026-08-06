@@ -33,7 +33,7 @@ export default function AccueilEleve() {
           </div>
           
           <div className="space-y-1">
-             <h1 className="text-4xl md:text-[50px] font-black tracking-tight text-ishes-dark leading-tight">
+             <h1 className="text-4xl md:text-[50px] font-black tracking-tight text-ishes-blue leading-tight">
                Bonjour <span className="text-[#086b51]">Sofiane Elamine</span>,
              </h1>
              <p className="text-gray-400 text-lg font-medium ">
@@ -68,7 +68,7 @@ export default function AccueilEleve() {
                    <PlayCircle className="w-8 h-8 text-[#086b51]" />
                 </div>
                 <div>
-                   <h2 className="text-ishes-dark text-xl font-black tracking-wide mb-1">MES REPLAYS</h2>
+                   <h2 className="text-ishes-blue text-xl font-black tracking-wide mb-1">MES REPLAYS</h2>
                    <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase">Visionner les cours passés</p>
                 </div>
              </div>
@@ -81,7 +81,7 @@ export default function AccueilEleve() {
                    <FileText className="w-8 h-8 text-blue-500" />
                 </div>
                 <div>
-                   <h2 className="text-ishes-dark text-xl font-black tracking-wide mb-1">SUPPORTS PDF</h2>
+                   <h2 className="text-ishes-blue text-xl font-black tracking-wide mb-1">SUPPORTS PDF</h2>
                    <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase">Manuels & exercices</p>
                 </div>
              </div>
@@ -94,7 +94,7 @@ export default function AccueilEleve() {
                    <MessageCircle className="w-8 h-8 text-green-500" />
                 </div>
                 <div>
-                   <h2 className="text-ishes-dark text-xl font-black tracking-wide mb-1">GROUPE CLASSE</h2>
+                   <h2 className="text-ishes-blue text-xl font-black tracking-wide mb-1">GROUPE CLASSE</h2>
                    <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase">Échanger sur WhatsApp</p>
                 </div>
              </div>

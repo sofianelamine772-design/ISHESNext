@@ -31,7 +31,7 @@ export default function PackAccompagnementPage() {
               INCLUS AVEC CHAQUE FORMATION
             </span>
             
-            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-dark leading-[1.05] tracking-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-ishes-blue leading-[1.05] tracking-tight mb-4">
               Tu ne t'inscris pas seulement à une plateforme. <br />
               <span className="text-ishes-gold font-serif">Tu rejoins une communauté qui t'accompagne dans ton cheminement.</span>
             </h1>
@@ -70,7 +70,7 @@ export default function PackAccompagnementPage() {
       <section className="pt-8 pb-24 bg-[#fafafa]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-6">Ce que comprend ton Pack Accompagnement</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-6">Ce que comprend ton Pack Accompagnement</h2>
             <div className="flex items-center justify-center gap-2">
               <div className="w-12 h-px bg-ishes-gold"></div>
               <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
@@ -87,7 +87,7 @@ export default function PackAccompagnementPage() {
                 <div className="absolute -top-10 left-8 w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center border-4 border-[#f9f5f0] shadow-md text-ishes-gold">
                   <Users className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-black text-ishes-dark mb-6">Une communauté <br />qui t'élève</h3>
+                <h3 className="text-2xl font-black text-ishes-blue mb-6">Une communauté <br />qui t'élève</h3>
                 <ul className="space-y-4">
                   {[
                     "Groupe WhatsApp privé",
@@ -113,7 +113,7 @@ export default function PackAccompagnementPage() {
                 <div className="absolute -top-10 left-8 w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center border-4 border-[#f9f5f0] shadow-md text-ishes-gold">
                   <BookOpen className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-black text-ishes-dark mb-4">Nourrir ton cœur</h3>
+                <h3 className="text-2xl font-black text-ishes-blue mb-4">Nourrir ton cœur</h3>
                 <div className="text-xs font-bold uppercase tracking-wider text-ishes-gold mb-2">Le module exclusif</div>
                 <div className="font-bold text-ishes-dark mb-4">Les Fondamentaux de la Spiritualité</div>
                 <div className="text-sm text-gray-600 font-medium mb-4">4 séances essentielles pour :</div>
@@ -141,7 +141,7 @@ export default function PackAccompagnementPage() {
                 <div className="absolute -top-10 left-8 w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center border-4 border-[#f9f5f0] shadow-md text-ishes-gold">
                   <Wifi className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-black text-ishes-dark mb-6">Un accès privilégié <br />aux fondateurs</h3>
+                <h3 className="text-2xl font-black text-ishes-blue mb-6">Un accès privilégié <br />aux fondateurs</h3>
                 <p className="text-sm text-gray-700 font-medium leading-relaxed mb-4">
                   Chaque mois, des lives privés avec Oustedha Rachida et Oustedh Riad.
                 </p>
@@ -188,7 +188,7 @@ export default function PackAccompagnementPage() {
       {/* TIMELINE SECTION */}
       <section className="py-24 bg-[#fafafa]">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-16">Comment ça fonctionne ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-16">Comment ça fonctionne ?</h2>
           
           <div className="relative">
             <div className="hidden md:block absolute top-10 left-[10%] right-[10%] h-[2px] border-t-2 border-dashed border-gray-300 z-0"></div>
@@ -219,7 +219,7 @@ export default function PackAccompagnementPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
             <div className="p-10 md:p-16 flex-1 relative">
-              <h3 className="text-2xl md:text-3xl font-black text-ishes-dark mb-8">
+              <h3 className="text-2xl md:text-3xl font-black text-ishes-blue mb-8">
                 Une valeur réelle <br />de plus de <span className="text-ishes-gold">399 €</span>
               </h3>
               <ul className="space-y-4 relative z-10">

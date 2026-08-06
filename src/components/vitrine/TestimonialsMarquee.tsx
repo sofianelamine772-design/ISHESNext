@@ -55,7 +55,7 @@ export function TestimonialsMarquee() {
           <span className="inline-block bg-ishes-gold/10 text-ishes-gold text-[10px] font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6">
             Approuvé par la communauté
           </span>
-          <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight flex items-center justify-center gap-3 flex-wrap">
+          <h2 className="text-3xl md:text-5xl font-black text-ishes-blue leading-tight flex items-center justify-center gap-3 flex-wrap">
             Ce que nos <span className="text-ishes-gold font-serif">étudiants</span> pensent.
           </h2>
         </motion.div>

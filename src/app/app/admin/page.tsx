@@ -107,7 +107,7 @@ export default async function AdminOverview() {
           <div className="flex items-center gap-4">
             {/* Spacer for mobile menu button */}
             <div className="w-10 lg:hidden" />
-            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Vue d'ensemble</h1>
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Vue d'ensemble</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
             <UserButton
@@ -131,7 +131,7 @@ export default async function AdminOverview() {
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Élèves inscrits</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{totalStudents || 0}</h3>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{totalStudents || 0}</h3>
                     <span className="text-[10px] font-black text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+12%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
@@ -143,7 +143,7 @@ export default async function AdminOverview() {
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(monthlyRevenue)}</h3>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{formatRevenue(monthlyRevenue)}</h3>
                     <span className="text-[10px] font-black text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
@@ -155,7 +155,7 @@ export default async function AdminOverview() {
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Année)</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">{formatRevenue(yearlyRevenue)}</h3>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{formatRevenue(yearlyRevenue)}</h3>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
@@ -166,7 +166,7 @@ export default async function AdminOverview() {
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Dossiers finalisés</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-dark">89%</h3>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">89%</h3>
                     <span className="text-[10px] font-black text-gray-400 bg-gray-50 px-2 py-0.5 rounded mb-1">-2%</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
@@ -185,7 +185,7 @@ export default async function AdminOverview() {
               {/* Right: Recent Payments (1 col) */}
               <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 p-6 md:p-8 shadow-sm flex flex-col overflow-hidden h-[450px]">
                 <div className="flex flex-col mb-6">
-                  <h3 className="text-xl ishes-heading text-ishes-dark">Derniers Paiements</h3>
+                  <h3 className="text-xl ishes-heading text-ishes-blue">Derniers Paiements</h3>
                   <p className="text-xs font-medium text-gray-400 mt-1">Les derniers flux financiers en temps réel.</p>
                 </div>
 

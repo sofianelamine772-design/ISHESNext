@@ -69,7 +69,7 @@ export default function CGVPage() {
           {/* Header */}
           <div className="mb-16">
             <span className="ishes-label text-ishes-blue mb-4 block">Conditions de vente</span>
-            <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-dark mb-6">
+            <h1 className="ishes-heading text-5xl md:text-6xl text-ishes-blue mb-6">
               CGV.<br />
               <span className="text-ishes-blue ">Conditions Générales.</span>
             </h1>
@@ -83,7 +83,7 @@ export default function CGVPage() {
           <div className="bg-green-50 border border-green-100 rounded-3xl p-6 mb-10 flex gap-4 items-start">
             <ShieldCheck className="w-6 h-6 text-ishes-blue shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-bold text-ishes-dark text-sm mb-1">Garantie & Rétractation de 14 jours</h3>
+              <h3 className="font-bold text-ishes-blue text-sm mb-1">Garantie & Rétractation de 14 jours</h3>
               <p className="text-xs text-gray-500 font-medium leading-relaxed">
                 Conformément à la réglementation, vous bénéficiez de 14 jours pour vous rétracter de votre inscription et obtenir un remboursement intégral. Les paiements récurrents Stripe s'éteignent automatiquement après votre dernière mensualité.
               </p>
@@ -101,7 +101,7 @@ export default function CGVPage() {
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
                 className="bg-white rounded-3xl p-8 border border-gray-100 hover:border-ishes-blue/10 transition-colors shadow-sm"
               >
-                <h2 className="ishes-label text-ishes-dark mb-6 pb-4 border-b border-gray-100 font-bold text-lg">
+                <h2 className="ishes-label text-ishes-blue mb-6 pb-4 border-b border-gray-100 font-bold text-lg">
                   {section.title}
                 </h2>
                 <div className="space-y-4">
@@ -126,7 +126,7 @@ export default function CGVPage() {
           {/* Help Center CTA */}
           <div className="mt-12 bg-gray-50 border border-gray-100 rounded-3xl p-8 text-center max-w-xl mx-auto">
             <HelpCircle className="w-8 h-8 text-ishes-blue mx-auto mb-4" />
-            <h3 className="font-bold text-ishes-dark text-base mb-2">Des questions sur nos conditions ?</h3>
+            <h3 className="font-bold text-ishes-blue text-base mb-2">Des questions sur nos conditions ?</h3>
             <p className="text-xs text-gray-400 font-medium leading-relaxed mb-4">
               Notre équipe d'assistance administrative est à votre disposition pour vous éclairer sur le règlement ou les facilités de paiement.
             </p>

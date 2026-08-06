@@ -34,7 +34,7 @@ export function BoutiqueFaq() {
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Aide & Support</span>
-          <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight uppercase">
+          <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight uppercase">
             Questions sur la <span className="text-ishes-gold font-serif">boutique.</span>
           </h2>
         </div>

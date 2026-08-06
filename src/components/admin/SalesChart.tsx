@@ -57,7 +57,7 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-          <h3 className="text-xl md:text-2xl ishes-heading text-ishes-dark">Aperçu des Ventes</h3>
+          <h3 className="text-xl md:text-2xl ishes-heading text-ishes-blue">Aperçu des Ventes</h3>
           <p className="text-xs md:text-sm font-medium text-gray-400 mt-1">
             Visualisation interactive de vos revenus annuels. Survolez la courbe pour plus de détails.
           </p>

@@ -40,7 +40,7 @@ export default function CivilisationPage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
                 Un Héritage <br />
                 <span className="text-ishes-blue ">Universel.</span>
               </h1>
@@ -76,7 +76,7 @@ export default function CivilisationPage() {
                   <div className="absolute top-0 left-0 w-full h-2 bg-amber-600" />
                   <BookOpen className="w-32 h-32 text-amber-600/20 group-hover:scale-110 transition-transform duration-500" />
                   <div className="text-center space-y-4 px-6">
-                    <h3 className="text-2xl font-black text-ishes-dark ">"Celui qui ne connaît pas son passé ne peut construire son futur"</h3>
+                    <h3 className="text-2xl font-black text-ishes-blue ">"Celui qui ne connaît pas son passé ne peut construire son futur"</h3>
                     <p className="text-gray-500 font-medium text-sm">Une immersion dans l'intellect et la sagesse.</p>
                   </div>
                </div>
@@ -91,7 +91,7 @@ export default function CivilisationPage() {
           <div className="grid lg:grid-cols-12 gap-16">
             <div className="lg:col-span-7 space-y-12">
               <div className="space-y-6">
-                <h2 className="text-3xl font-black text-ishes-dark uppercase tracking-tight">Thématiques abordées</h2>
+                <h2 className="text-3xl font-black text-ishes-blue uppercase tracking-tight">Thématiques abordées</h2>
                 <p className="text-gray-600 font-medium leading-relaxed">
                   De Bagdad à Cordoue, nous retraçons le parcours des savants qui ont révolutionné la médecine, l'astronomie, les mathématiques et les arts, tout en restant ancrés dans leur foi.
                 </p>

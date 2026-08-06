@@ -62,11 +62,15 @@ export default function FormationEnseignantTarbyaPage() {
               >
                 JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
               </Link>
-              <button 
-                className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
-              >
-                <PlayCircle className="w-5 h-5" /> Voir le teaser
-              </button>
+              {videoUrl && (
+                <Link 
+                  href={videoUrl}
+                  target="_blank"
+                  className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
+                >
+                  <PlayCircle className="w-5 h-5" /> Voir le teaser
+                </Link>
+              )}
             </div>
           </div>
           
@@ -102,7 +106,7 @@ export default function FormationEnseignantTarbyaPage() {
           
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">2 cours / semaine<br/><span className="text-gray-500 font-medium">Mardi et vendredi</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">2 cours / semaine<br/><span className="text-gray-500 font-medium">Mardi et vendredi 19H30</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -114,7 +118,7 @@ export default function FormationEnseignantTarbyaPage() {
 
           <div className="flex items-center gap-3">
             <Hourglass className="w-6 h-6 text-ishes-gold" />
-            <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">4 mois</span></span>
+            <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">4 à 5 mois</span></span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -134,7 +138,7 @@ export default function FormationEnseignantTarbyaPage() {
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si...</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Ce cours est fait pour toi si...</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -149,7 +153,7 @@ export default function FormationEnseignantTarbyaPage() {
                 <item.icon className="w-10 h-10 text-ishes-gold" />
               </div>
               <div>
-                <h3 className="text-[15px] font-bold text-ishes-dark whitespace-pre-line leading-relaxed">{item.title}</h3>
+                <h3 className="text-[15px] font-bold text-ishes-blue whitespace-pre-line leading-relaxed">{item.title}</h3>
               </div>
             </div>
           ))}
@@ -159,7 +163,7 @@ export default function FormationEnseignantTarbyaPage() {
       {/* ─── LES 2 MODULES ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Les 2 modules de la formation</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Les 2 modules de la formation</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid md:grid-cols-2 gap-8">
@@ -176,7 +180,7 @@ export default function FormationEnseignantTarbyaPage() {
               </div>
               <h3 className="text-[22px] font-black text-white mb-4 leading-tight">Enseigner l'éducation islamique<br/>(Tarbya Islamiyya)</h3>
               <p className="text-gray-300 font-medium text-sm leading-relaxed">
-                Apprends à structurer et animer des cours complets : fondements de la spiritualité, piliers de l'Islam, récits des Prophètes, adorations, éthique, adab et calendrier musulman. Une pédagogie vivante basée sur les histoires et des valeurs concrètes.
+                Découvrez le rôle de l’enseignant et de l’élève dans la tradition islamique. Apprenez à concevoir et à animer des cours complets autour des grands thèmes de la Tarbya Islamiyya : fondements de la spiritualité, piliers de l’islam, récits des Prophètes, adorations, éthique, adab et calendrier musulman. Développez une pédagogie vivante, fondée sur les récits, la transmission des valeurs et des mises en pratique concrètes.
               </p>
             </div>
           </div>
@@ -191,7 +195,7 @@ export default function FormationEnseignantTarbyaPage() {
               <div className="w-12 h-12 bg-ishes-dark rounded-full flex items-center justify-center mb-6 shadow-md text-white">
                 <BrainCircuit className="w-6 h-6" />
               </div>
-              <h3 className="text-[22px] font-black text-ishes-dark mb-4 leading-tight">Les méthodologies<br/>d'apprendre à apprendre</h3>
+              <h3 className="text-[22px] font-black text-ishes-blue mb-4 leading-tight">Les méthodologies<br/>d'apprendre à apprendre</h3>
               <p className="text-ishes-dark/80 font-medium text-sm leading-relaxed">
                 Découvre des approches efficaces pour aider les enfants à mémoriser, comprendre et appliquer ce qu'ils apprennent. Gestion de classe, motivation, activités interactives, gestion des conflits et accompagnement personnalisé.
               </p>
@@ -204,7 +208,7 @@ export default function FormationEnseignantTarbyaPage() {
       {/* ─── POURQUOI DIFFERENT ─── */}
       <section className="py-16 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Pourquoi cette formation va tout changer ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Pourquoi cette formation va tout changer ?</h2>
         </div>
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
@@ -242,8 +246,8 @@ export default function FormationEnseignantTarbyaPage() {
               <BookOpen className="w-7 h-7 text-ishes-gold" />
             </div>
             <div>
-              <h4 className="font-black text-ishes-dark tracking-widest text-sm uppercase mb-1">FORMATION CLÉ EN MAIN</h4>
-              <h3 className="font-bold text-ishes-dark text-xl mb-3 leading-tight">Tous les supports sont inclus</h3>
+              <h4 className="font-black text-ishes-blue tracking-widest text-sm uppercase mb-1">FORMATION CLÉ EN MAIN</h4>
+              <h3 className="font-bold text-ishes-blue text-xl mb-3 leading-tight">Tous les supports sont inclus</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
                 Cours, manuels, fiches, activités, modèles de leçons et ressources prêtes à utiliser.
               </p>
@@ -258,7 +262,7 @@ export default function FormationEnseignantTarbyaPage() {
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="font-bold text-ishes-dark text-xl mb-3 leading-tight mt-1">TOUT EST PRÊT POUR VOUS</h3>
+              <h3 className="font-bold text-ishes-blue text-xl mb-3 leading-tight mt-1">TOUT EST PRÊT POUR VOUS</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
                 Contenu, outils, méthodes et accompagnement : vous n'avez plus qu'à enseigner avec confiance.
               </p>
@@ -271,39 +275,31 @@ export default function FormationEnseignantTarbyaPage() {
       <section className="py-8 px-6 max-w-[80rem] mx-auto mb-10">
         <div className="bg-ishes-dark rounded-[2rem] p-6 md:p-8 shadow-2xl text-white relative overflow-hidden flex flex-wrap md:flex-nowrap items-center gap-6">
           
-          <div className="flex items-center gap-4 flex-1 border-r border-white/10 pr-6 min-w-[200px]">
-            <Calendar className="w-8 h-8 text-ishes-gold shrink-0" />
+          <div className="flex items-center gap-4 flex-1 border-r border-white/10 pr-6 min-w-[250px]">
+            <Award className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
-              <p className="text-xs font-bold text-gray-300">Début de la formation</p>
-              <h3 className="text-sm font-black text-white mt-0.5">Octobre 2026</h3>
+              <p className="text-xs font-bold text-gray-300">Formation complète et diplomante</p>
+              <h3 className="text-sm font-black text-white mt-0.5">1ère session octobre 2026</h3>
             </div>
           </div>
 
           <div className="flex items-center gap-4 flex-1 border-r border-white/10 px-6 min-w-[200px]">
-            <Clock className="w-8 h-8 text-ishes-gold shrink-0" />
+            <Shield className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
-              <p className="text-xs font-bold text-gray-300">2 cours / semaine</p>
-              <h3 className="text-sm font-black text-white mt-0.5 leading-snug">Lundi, Jeudi & Vendredi<br/>à 20h00</h3>
+              <p className="text-xs font-bold text-gray-300">Tarif</p>
+              <h3 className="text-sm font-black text-white mt-0.5">Sur devis</h3>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 flex-1 border-r border-white/10 px-6 min-w-[150px]">
-            <Hourglass className="w-8 h-8 text-ishes-gold shrink-0" />
+          <div className="flex items-center gap-4 flex-1 px-6 min-w-[200px]">
+            <Heart className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
-              <p className="text-xs font-bold text-gray-300">Durée</p>
-              <h3 className="text-sm font-black text-white mt-0.5">4 mois</h3>
+              <p className="text-xs font-bold text-gray-300">Paiement</p>
+              <h3 className="text-sm font-black text-white mt-0.5">Facilité de paiement</h3>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 flex-1 border-r border-white/10 px-6 min-w-[200px]">
-            <BookOpen className="w-8 h-8 text-ishes-gold shrink-0" />
-            <div>
-              <p className="text-xs font-bold text-gray-300">2 modules complets</p>
-              <h3 className="text-sm font-black text-white mt-0.5">Tous les supports<br/>inclus</h3>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center md:items-end gap-2 shrink-0 pl-6 w-full md:w-auto mt-4 md:mt-0">
+          <div className="flex flex-col items-center md:items-end gap-2 shrink-0 pl-6 w-full md:w-auto mt-4 md:mt-0 border-t md:border-t-0 border-white/10 md:border-l pt-4 md:pt-0">
             <Link 
               href="/inscription?plan=formation_enseignante_tarbya&audience=adulte" 
               className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-3 rounded-md text-[14px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"

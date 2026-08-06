@@ -45,9 +45,9 @@ export function HeroSection() {
             </div>
 
             {/* Badge */}
-            <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm border border-[#C69C6D]/20 p-5 rounded-2xl mt-12 max-w-[600px] shadow-sm mx-auto w-full justify-center">
+            <div className="flex items-center gap-4 bg-[#0a192f] p-5 rounded-2xl mt-12 max-w-[600px] shadow-lg mx-auto w-full justify-center">
               <Trophy className="text-[#C69C6D] w-8 h-8 shrink-0" strokeWidth={1.5} />
-              <p className="text-sm font-bold text-[#0a192f] leading-snug text-center">
+              <p className="text-sm font-bold text-white leading-snug text-center">
                 Le seul institut spécialisé dans la formation des enseignants en Tarbiya Islamiyya et Tajwid en France
               </p>
               <Award className="text-[#C69C6D] w-8 h-8 shrink-0" strokeWidth={1.5} />
@@ -55,7 +55,7 @@ export function HeroSection() {
 
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 mt-8 w-full sm:w-auto mx-auto">
-              <Link href="/program" className="bg-[#0a192f] text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center justify-center gap-3 hover:bg-[#0f2547] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 transform group">
+              <Link href="/program" className="bg-[#C69C6D] text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center justify-center gap-3 hover:bg-[#b08b5e] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 transform group">
                 Découvrir nos formations 
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>

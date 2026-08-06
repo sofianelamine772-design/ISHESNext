@@ -122,14 +122,13 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </Link>
                      )}
                      {course.videoUrl && (
-                        <button 
-                           onClick={() => {
-                              document.getElementById('course-video')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                           }}
+                        <Link 
+                           href={course.videoUrl}
+                           target="_blank"
                            className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3 active:scale-95"
                         >
                            <Play className="w-5 h-5 fill-current" /> Voir le teaser
-                        </button>
+                        </Link>
                      )}
                      {course.flyerUrl && (
                         <button
@@ -346,7 +345,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         <div className="grid md:grid-cols-1 gap-12">
                            {course.fullProgram?.preIslamique && (
                               <div className="space-y-6">
-                                 <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <h3 className="text-xl font-black text-ishes-blue flex items-center gap-3">
                                     <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">01</span>
                                     La Période Pré-Islamique
                                  </h3>
@@ -363,7 +362,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
 
                            {course.fullProgram?.mecquoise && (
                               <div className="space-y-6">
-                                 <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <h3 className="text-xl font-black text-ishes-blue flex items-center gap-3">
                                     <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">02</span>
                                     La Période Mécquoise
                                  </h3>
@@ -380,7 +379,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
 
                            {course.fullProgram?.medinoise && (
                               <div className="space-y-6">
-                                 <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <h3 className="text-xl font-black text-ishes-blue flex items-center gap-3">
                                     <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">03</span>
                                     La Période Médinoise
                                  </h3>
@@ -396,7 +395,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                            )}
                            {course.fullProgram?.fondamentaux && (
                               <div className="space-y-6">
-                                 <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <h3 className="text-xl font-black text-ishes-blue flex items-center gap-3">
                                     <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">★</span>
                                     Les Principes Fondamentaux
                                  </h3>
@@ -412,7 +411,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                            )}
                            {course.fullProgram?.deroulement && (
                               <div className="space-y-6">
-                                 <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <h3 className="text-xl font-black text-ishes-blue flex items-center gap-3">
                                     <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">🚀</span>
                                     Déroulement de la Formation
                                  </h3>
@@ -429,7 +428,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
 
                            {course.fullProgram?.objectifs && (
                               <div className="space-y-6">
-                                 <h3 className="text-xl font-black text-ishes-dark flex items-center gap-3">
+                                 <h3 className="text-xl font-black text-ishes-blue flex items-center gap-3">
                                     <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs">🎯</span>
                                     Objectifs Pédagogiques
                                  </h3>
@@ -454,7 +453,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                  <Calendar className="w-4 h-4" />
                                  <span className="text-[10px] font-black uppercase tracking-widest">Horaires</span>
                               </div>
-                              <h3 className="text-2xl font-black text-ishes-dark">Sessions disponibles</h3>
+                              <h3 className="text-2xl font-black text-ishes-blue">Sessions disponibles</h3>
                               <div className="space-y-4">
                                  {course.horaires.map((h: string, i: number) => (
                                     <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
@@ -491,7 +490,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                               Planning & Créneaux
                            </span>
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black text-ishes-dark leading-tight tracking-tight uppercase">
+                        <h2 className="text-3xl md:text-5xl font-black text-ishes-blue leading-tight tracking-tight uppercase">
                            Organisation de la <br />
                            <span className="text-ishes-gold ">formation en présentiel.</span>
                         </h2>
@@ -572,7 +571,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
 
                               {/* Level and details */}
                               <div className="mb-6">
-                                 <h4 className="text-lg font-black text-ishes-dark leading-snug tracking-tight mb-2 group-hover:text-ishes-gold transition-colors">
+                                 <h4 className="text-lg font-black text-ishes-blue leading-snug tracking-tight mb-2 group-hover:text-ishes-gold transition-colors">
                                     {c.niveau}
                                  </h4>
                                  <div className="flex flex-wrap gap-2 text-[10px] font-bold text-gray-400">

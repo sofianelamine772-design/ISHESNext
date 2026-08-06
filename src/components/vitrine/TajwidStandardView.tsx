@@ -34,7 +34,7 @@ export function TajwidStandardView() {
             <div className="font-black tracking-widest text-xs uppercase mb-6 text-ishes-gold">
               TAJWID STANDARD
             </div>
-            <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-[64px] font-black text-ishes-dark leading-[1.1] tracking-tight mb-6">
+            <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-[64px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-6">
               Lis le Coran <br />
               avec assurance, <br />
               <span className="text-ishes-gold font-serif">même si tu pars de zéro.</span>
@@ -60,7 +60,7 @@ export function TajwidStandardView() {
           
           {/* SECTION 1: Peut-être que tu te reconnais */}
           <section>
-            <h2 className="text-2xl font-black text-ishes-dark mb-8 flex items-center gap-4">
+            <h2 className="text-2xl font-black text-ishes-blue mb-8 flex items-center gap-4">
               <span className="text-gray-300">1.</span> Peut-être que tu te reconnais...
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -112,7 +112,7 @@ export function TajwidStandardView() {
 
           {/* SECTION 2: Ce que tu vas réellement apprendre */}
           <section>
-            <h2 className="text-2xl font-black text-ishes-dark mb-8 flex items-center gap-4">
+            <h2 className="text-2xl font-black text-ishes-blue mb-8 flex items-center gap-4">
               <span className="text-gray-300">2.</span> Ce que tu vas réellement apprendre
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -149,7 +149,7 @@ export function TajwidStandardView() {
 
           {/* SECTION 3: Comment se déroule la formation */}
           <section>
-            <h2 className="text-2xl font-black text-ishes-dark mb-12 flex items-center gap-4">
+            <h2 className="text-2xl font-black text-ishes-blue mb-12 flex items-center gap-4">
               <span className="text-gray-300">3.</span> Comment se déroule la formation ?
             </h2>
             <div className="relative flex flex-col md:flex-row justify-between items-start gap-8 md:gap-4">
@@ -196,7 +196,7 @@ export function TajwidStandardView() {
 
           {/* SECTION 4: Ce qui est inclus */}
           <section>
-            <h2 className="text-2xl font-black text-ishes-dark mb-8 flex items-center gap-4">
+            <h2 className="text-2xl font-black text-ishes-blue mb-8 flex items-center gap-4">
               <span className="text-gray-300">4.</span> Ce qui est inclus
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
@@ -241,7 +241,7 @@ export function TajwidStandardView() {
 
           {/* SECTION 5: À qui s'adresse cette formation */}
           <section>
-            <h2 className="text-2xl font-black text-ishes-dark mb-8 flex items-center gap-4">
+            <h2 className="text-2xl font-black text-ishes-blue mb-8 flex items-center gap-4">
               <span className="text-gray-300">5.</span> À qui s'adresse cette formation ?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

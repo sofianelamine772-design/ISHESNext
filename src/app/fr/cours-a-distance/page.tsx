@@ -53,7 +53,7 @@ export default function CoursDistancePage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
                 Apprenez la science <br />
                 <span className="text-ishes-blue ">d'où vous voulez.</span>
               </h1>
@@ -122,7 +122,7 @@ export default function CoursDistancePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">La Technologie au Service du Savoir</span>
-            <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight">
               Une expérience <span className="text-ishes-blue ">immersive.</span>
             </h2>
           </div>
@@ -136,7 +136,7 @@ export default function CoursDistancePage() {
                     <img src="/images/Zoom-Logo.png" alt="Zoom" className="w-10 h-10 object-contain" />
                  </div>
                  <div>
-                   <h3 className="text-2xl font-black text-ishes-dark mb-2">Des cours 100% en direct sur Zoom</h3>
+                   <h3 className="text-2xl font-black text-ishes-blue mb-2">Des cours 100% en direct sur Zoom</h3>
                    <p className="text-gray-500 font-medium leading-relaxed">
                      L'apprentissage nécessite une interaction. Nos enseignants dispensent leurs cours en direct via Zoom, avec caméra, partage d'écran et tableau blanc virtuel. Vous pouvez lever la main, poser vos questions oralement ou par le chat.
                    </p>
@@ -148,7 +148,7 @@ export default function CoursDistancePage() {
                     <Monitor className="w-8 h-8 text-ishes-blue" />
                  </div>
                  <div>
-                   <h3 className="text-2xl font-black text-ishes-dark mb-2">Cours disponibles en replay</h3>
+                   <h3 className="text-2xl font-black text-ishes-blue mb-2">Cours disponibles en replay</h3>
                    <p className="text-gray-500 font-medium leading-relaxed">
                      Vous avez manqué un cours ou vous souhaitez réviser ? Pas de panique. Chaque séance est enregistrée et disponible en replay pour vous permettre de progresser à votre rythme.
                    </p>
@@ -160,7 +160,7 @@ export default function CoursDistancePage() {
                     <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="w-8 h-8 object-contain rounded-full" />
                  </div>
                  <div>
-                   <h3 className="text-2xl font-black text-ishes-dark mb-2">Accompagnement continu</h3>
+                   <h3 className="text-2xl font-black text-ishes-blue mb-2">Accompagnement continu</h3>
                    <p className="text-gray-500 font-medium leading-relaxed">
                      L'isolement est le plus grand risque de l'apprentissage à distance. C'est pourquoi chaque classe dispose de son groupe WhatsApp exclusif pour échanger avec le professeur et les camarades de classe toute la semaine.
                    </p>
@@ -211,7 +211,7 @@ export default function CoursDistancePage() {
       <section id="formations" className="py-24 px-6 bg-[#f7f5f0] border-y border-[#eeebe2]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-ishes-dark leading-none tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight">
               Nos programmes <span className="text-ishes-gold ">phares</span>
             </h2>
             <p className="text-gray-500 mt-6 max-w-2xl mx-auto font-medium text-lg">
@@ -226,7 +226,7 @@ export default function CoursDistancePage() {
               <div className="w-14 h-14 bg-ishes-gold/10 text-ishes-gold rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform">
                  <BookOpen className="w-7 h-7" />
               </div>
-              <h3 className="text-2xl font-black text-ishes-dark mb-3">Langue Arabe</h3>
+              <h3 className="text-2xl font-black text-ishes-blue mb-3">Langue Arabe</h3>
               <p className="text-gray-500 font-medium text-sm leading-relaxed mb-6 flex-1">
                  Apprenez à lire, écrire et comprendre l'arabe avec des méthodes reconnues (Méthode de Médine, Al-Arabiya Bayna Yadayk). De l'alphabétisation à la maîtrise, nous avons le niveau qu'il vous faut.
               </p>
@@ -245,7 +245,7 @@ export default function CoursDistancePage() {
               <div className="w-14 h-14 bg-ishes-blue/10 text-ishes-blue rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform relative z-10">
                  <Globe className="w-7 h-7" />
               </div>
-              <h3 className="text-2xl font-black text-ishes-dark mb-3 relative z-10">Sciences Islamiques</h3>
+              <h3 className="text-2xl font-black text-ishes-blue mb-3 relative z-10">Sciences Islamiques</h3>
               <p className="text-gray-500 font-medium text-sm leading-relaxed mb-6 flex-1 relative z-10">
                  Étudiez la croyance (Aqida), la jurisprudence (Fiqh) et l'éducation spirituelle (Tarbiyya) avec des enseignants certifiés. Un apprentissage structuré basé sur les sources authentiques.
               </p>
@@ -263,7 +263,7 @@ export default function CoursDistancePage() {
               <div className="w-14 h-14 bg-[#4a7c59]/10 text-[#4a7c59] rounded-2xl flex items-center justify-center mb-6 shrink-0 group-hover:scale-110 transition-transform">
                  <Award className="w-7 h-7" />
               </div>
-              <h3 className="text-2xl font-black text-ishes-dark mb-3">Coran & Tajwid</h3>
+              <h3 className="text-2xl font-black text-ishes-blue mb-3">Coran & Tajwid</h3>
               <p className="text-gray-500 font-medium text-sm leading-relaxed mb-6 flex-1">
                  Améliorez votre récitation, apprenez les règles de Tajwid ou entamez un programme de mémorisation (Hifz) avec un suivi personnalisé et une correction précise.
               </p>
@@ -302,7 +302,7 @@ export default function CoursDistancePage() {
              </div>
 
              <div className="space-y-8">
-               <h2 className="text-4xl font-black text-ishes-dark leading-tight">
+               <h2 className="text-4xl font-black text-ishes-blue leading-tight">
                  Le distanciel sans <span className="text-ishes-blue ">les inconvénients.</span>
                </h2>
                <p className="text-gray-500 font-medium text-lg leading-relaxed">
@@ -315,7 +315,7 @@ export default function CoursDistancePage() {
                        <Users className="w-5 h-5 text-ishes-blue" />
                     </div>
                     <div>
-                       <h4 className="font-bold text-ishes-dark text-lg">Groupes à taille humaine</h4>
+                       <h4 className="font-bold text-ishes-blue text-lg">Groupes à taille humaine</h4>
                        <p className="text-gray-500 text-sm">Pas d'amphithéâtres virtuels de 200 personnes. Nos classes sont restreintes pour garantir la participation de chacun.</p>
                     </div>
                  </div>
@@ -324,7 +324,7 @@ export default function CoursDistancePage() {
                        <Calendar className="w-5 h-5 text-ishes-blue" />
                     </div>
                     <div>
-                       <h4 className="font-bold text-ishes-dark text-lg">Assiduité et suivi</h4>
+                       <h4 className="font-bold text-ishes-blue text-lg">Assiduité et suivi</h4>
                        <p className="text-gray-500 text-sm">Un appel est fait à chaque début de cours. Le suivi de présence est rigoureux pour encourager la constance.</p>
                     </div>
                  </div>
@@ -333,7 +333,7 @@ export default function CoursDistancePage() {
                        <MessageCircle className="w-5 h-5 text-ishes-blue" />
                     </div>
                     <div>
-                       <h4 className="font-bold text-ishes-dark text-lg">Disponibilité du professeur</h4>
+                       <h4 className="font-bold text-ishes-blue text-lg">Disponibilité du professeur</h4>
                        <p className="text-gray-500 text-sm">Votre enseignant reste accessible via la communauté WhatsApp pour répondre à vos doutes tout au long de la semaine.</p>
                     </div>
                  </div>

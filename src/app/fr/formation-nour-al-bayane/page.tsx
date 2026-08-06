@@ -44,7 +44,7 @@ export default function NourAlBayanePage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
                 La Clé de la <br />
                 <span className="text-ishes-blue ">Récitation.</span>
               </h1>
@@ -80,7 +80,7 @@ export default function NourAlBayanePage() {
                   <div className="absolute top-0 left-0 w-full h-2 bg-ishes-blue" />
                   <BookOpen className="w-32 h-32 text-ishes-blue/20 group-hover:scale-110 transition-transform duration-500" />
                   <div className="text-center space-y-4 px-6">
-                    <h3 className="text-2xl font-black text-ishes-dark ">"Nour Al Bayane : illuminer le chemin de la lecture coranique"</h3>
+                    <h3 className="text-2xl font-black text-ishes-blue ">"Nour Al Bayane : illuminer le chemin de la lecture coranique"</h3>
                     <p className="text-gray-500 font-medium text-sm">Une méthode adoptée par des millions de personnes dans le monde.</p>
                   </div>
                </div>
@@ -133,7 +133,7 @@ export default function NourAlBayanePage() {
           <div className="grid lg:grid-cols-12 gap-16">
             <div className="lg:col-span-7 space-y-12">
               <div className="space-y-6">
-                <h2 className="text-3xl font-black text-ishes-dark uppercase tracking-tight">Le concept Nour Al Bayane</h2>
+                <h2 className="text-3xl font-black text-ishes-blue uppercase tracking-tight">Le concept Nour Al Bayane</h2>
                 <p className="text-gray-600 font-medium leading-relaxed">
                   Cette méthode repose sur une décomposition phonétique rigoureuse des mots coraniques. Elle permet à l'apprenant de construire sa lecture brique par brique, garantissant ainsi qu'aucune règle de Tajwid ne soit ignorée.
                 </p>

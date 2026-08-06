@@ -49,7 +49,7 @@ export default function CoursFiqhMalikitePage() {
             <h2 className="text-ishes-gold font-black text-sm tracking-[0.2em] uppercase">
               Droit Musulman
             </h2>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
               Fiqh Mâlikite
             </h1>
             <p className="text-gray-600 font-medium max-w-md text-lg leading-relaxed">
@@ -128,7 +128,7 @@ export default function CoursFiqhMalikitePage() {
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Est-ce que ce cours est fait pour toi ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Est-ce que ce cours est fait pour toi ?</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
@@ -141,7 +141,7 @@ export default function CoursFiqhMalikitePage() {
               <div className="w-20 h-20 bg-ishes-dark rounded-full flex items-center justify-center shadow-lg">
                 <item.icon className="w-10 h-10 text-ishes-gold" />
               </div>
-              <h3 className="text-xl font-black text-ishes-dark whitespace-pre-line">{item.title}</h3>
+              <h3 className="text-xl font-black text-ishes-blue whitespace-pre-line">{item.title}</h3>
               <p className="text-gray-600 font-medium text-sm">{item.desc}</p>
             </div>
           ))}
@@ -182,7 +182,7 @@ export default function CoursFiqhMalikitePage() {
 
       {/* ─── CE QUI EST INCLUS ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black text-ishes-dark mb-16">Ce qui est inclus</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-16">Ce qui est inclus</h2>
         <div className="flex flex-wrap justify-center gap-6 mb-12">
           {[
             { image: "/images/fiqh_book.png", icon: Book, title: "Support\npédagogique" },
@@ -198,7 +198,7 @@ export default function CoursFiqhMalikitePage() {
                    <item.icon className="w-5 h-5" />
                  </div>
               </div>
-              <h3 className="font-bold text-ishes-dark text-sm whitespace-pre-line text-center px-4">{item.title}</h3>
+              <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line text-center px-4">{item.title}</h3>
             </div>
           ))}
         </div>
@@ -213,7 +213,7 @@ export default function CoursFiqhMalikitePage() {
       {/* ─── DEROULEMENT ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Comment se déroule la formation ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Comment se déroule la formation ?</h2>
         </div>
         
         <div className="relative">
@@ -233,7 +233,7 @@ export default function CoursFiqhMalikitePage() {
                   {step.num}
                 </div>
                 <step.icon className="w-10 h-10 text-ishes-gold mb-4" />
-                <h3 className="font-black text-ishes-dark mb-2">{step.title}</h3>
+                <h3 className="font-black text-ishes-blue mb-2">{step.title}</h3>
                 <p className="text-sm text-gray-600 font-medium">{step.desc}</p>
               </div>
             ))}
@@ -243,7 +243,7 @@ export default function CoursFiqhMalikitePage() {
 
       {/* ─── A LA FIN ─── */}
       <section className="py-20 px-6 max-w-5xl mx-auto text-center">
-        <h2 className="text-2xl md:text-3xl font-black text-ishes-dark mb-12">À la fin de cette formation, tu sauras :</h2>
+        <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-12">À la fin de cette formation, tu sauras :</h2>
         <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
           {[
             { icon: BookOpen, text: "Comprendre les règles\ndu fiqh selon l'école malikite" },

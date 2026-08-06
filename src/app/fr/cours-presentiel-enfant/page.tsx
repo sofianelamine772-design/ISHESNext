@@ -29,7 +29,7 @@ export default function CoursPresentielEnfantPage() {
               PRÉSENTIEL À TOULOUSE
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-[64px] font-black text-[#0a192f] leading-[1.1] tracking-tight mb-2">
+            <h1 className="text-4xl md:text-5xl lg:text-[64px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-2">
               Cours Enfants
             </h1>
             <h2 className="text-3xl md:text-4xl lg:text-[42px] font-serif text-[#C69C6D] mb-8 leading-tight">
@@ -67,7 +67,7 @@ export default function CoursPresentielEnfantPage() {
 
       {/* Un programme complet */}
       <div className="max-w-6xl mx-auto px-6 py-16">
-        <h3 className="text-2xl md:text-3xl font-black text-center text-[#0a192f] mb-12">
+        <h3 className="text-2xl md:text-3xl font-black text-center text-ishes-blue mb-12">
           Un programme complet et équilibré
           <div className="w-12 h-1 bg-[#C69C6D] mx-auto mt-4 rounded-full"></div>
         </h3>
@@ -85,7 +85,7 @@ export default function CoursPresentielEnfantPage() {
               <div className="w-16 h-16 bg-[#0a192f] rounded-full flex items-center justify-center mb-6 shadow-lg shadow-[#0a192f]/20">
                 {item.icon}
               </div>
-              <h4 className="font-black text-[#0a192f] text-[17px] mb-4">{item.title}</h4>
+              <h4 className="font-black text-ishes-blue text-[17px] mb-4">{item.title}</h4>
               <p className="text-gray-600 font-medium text-[15px] leading-relaxed">{item.desc}</p>
             </div>
           ))}
@@ -94,7 +94,7 @@ export default function CoursPresentielEnfantPage() {
 
       {/* Organisation des cours */}
       <div className="max-w-6xl mx-auto px-6 py-16">
-        <h3 className="text-2xl md:text-3xl font-black text-center text-[#0a192f] mb-12">
+        <h3 className="text-2xl md:text-3xl font-black text-center text-ishes-blue mb-12">
           Organisation des cours
           <div className="w-12 h-1 bg-[#C69C6D] mx-auto mt-4 rounded-full"></div>
         </h3>
@@ -108,7 +108,7 @@ export default function CoursPresentielEnfantPage() {
             ].map((item, idx) => (
               <div key={idx} className="flex flex-col items-center text-center pt-8 sm:pt-0 lg:px-6 first:pt-0">
                 {item.icon}
-                <h4 className="font-black text-[#0a192f] text-[15px] mb-3 whitespace-pre-line leading-snug">{item.title}</h4>
+                <h4 className="font-black text-ishes-blue text-[15px] mb-3 whitespace-pre-line leading-snug">{item.title}</h4>
                 <p className="text-gray-500 font-medium text-[13px] leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -119,7 +119,7 @@ export default function CoursPresentielEnfantPage() {
       {/* Créneaux */}
       <div className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
-          <h3 className="text-2xl md:text-3xl font-black text-[#0a192f] mb-6">
+          <h3 className="text-2xl md:text-3xl font-black text-ishes-blue mb-6">
             Choisissez le créneau qui vous convient
             <div className="w-12 h-1 bg-[#C69C6D] mx-auto mt-6 rounded-full"></div>
           </h3>
@@ -139,7 +139,7 @@ export default function CoursPresentielEnfantPage() {
           ].map((item, idx) => (
             <div key={idx} className={`${item.bg} ${item.border} border rounded-[1.5rem] p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow cursor-default`}>
               <div className="mb-4">{item.icon}</div>
-              <h4 className="font-black text-[#0a192f] text-[15px] mb-3 whitespace-pre-line leading-tight">{item.title}</h4>
+              <h4 className="font-black text-ishes-blue text-[15px] mb-3 whitespace-pre-line leading-tight">{item.title}</h4>
               <span className="bg-white/60 px-4 py-1.5 rounded-full text-xs font-black text-[#0a192f] shadow-sm">{item.time}</span>
             </div>
           ))}
@@ -161,7 +161,7 @@ export default function CoursPresentielEnfantPage() {
         <div className="grid md:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-start">
           
           <div>
-            <h3 className="text-2xl font-black text-[#0a192f] mb-8">
+            <h3 className="text-2xl font-black text-ishes-blue mb-8">
               Les points forts de notre programme
             </h3>
             <div className="space-y-5">
@@ -225,7 +225,7 @@ export default function CoursPresentielEnfantPage() {
               <MessageCircle className="w-7 h-7 text-white fill-white" />
             </div>
             <div>
-              <h4 className="font-black text-[#0a192f] text-lg leading-tight mb-1">Une question ?</h4>
+              <h4 className="font-black text-ishes-blue text-lg leading-tight mb-1">Une question ?</h4>
               <p className="text-gray-500 font-medium text-[15px]">Contactez-nous sur WhatsApp</p>
             </div>
           </div>

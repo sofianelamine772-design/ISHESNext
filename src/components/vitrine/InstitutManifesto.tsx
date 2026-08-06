@@ -18,7 +18,7 @@ export function InstitutManifesto() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
              >
-                <h2 className="text-ishes-dark font-black text-4xl md:text-6xl leading-[1.1] tracking-tight">
+                <h2 className="text-ishes-blue font-black text-4xl md:text-6xl leading-[1.1] tracking-tight">
                   L’architecture au <br />
                   <span className="text-ishes-blue">service du sens.</span>
                 </h2>

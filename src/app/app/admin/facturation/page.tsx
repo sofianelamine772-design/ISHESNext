@@ -134,7 +134,7 @@ export default function FacturationPage() {
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" />
-            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Facturation & Paiements</h1>
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Facturation & Paiements</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
             <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]" } }} />
@@ -153,7 +153,7 @@ export default function FacturationPage() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Échoués</p>
-                  <h3 className="text-2xl ishes-heading text-ishes-dark">{totalRefused}</h3>
+                  <h3 className="text-2xl ishes-heading text-ishes-blue">{totalRefused}</h3>
                 </div>
               </div>
 
@@ -164,7 +164,7 @@ export default function FacturationPage() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Transactions</p>
-                  <h3 className="text-2xl ishes-heading text-ishes-dark">{payments.length}</h3>
+                  <h3 className="text-2xl ishes-heading text-ishes-blue">{payments.length}</h3>
                 </div>
               </div>
 
@@ -175,7 +175,7 @@ export default function FacturationPage() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Familiaux</p>
-                  <h3 className="text-2xl ishes-heading text-ishes-dark">{familyPayments}</h3>
+                  <h3 className="text-2xl ishes-heading text-ishes-blue">{familyPayments}</h3>
                 </div>
               </div>
 
@@ -186,7 +186,7 @@ export default function FacturationPage() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Encaissé</p>
-                  <h3 className="text-2xl ishes-heading text-ishes-dark">{totalAmount.toFixed(0)} €</h3>
+                  <h3 className="text-2xl ishes-heading text-ishes-blue">{totalAmount.toFixed(0)} €</h3>
                 </div>
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function FacturationPage() {
             {/* ── Table ───────────────────────────────────────────────── */}
             <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
               <div className="px-6 md:px-8 py-5 border-b border-gray-50">
-                <h2 className="text-xl ishes-heading text-ishes-dark">Historique des règlements</h2>
+                <h2 className="text-xl ishes-heading text-ishes-blue">Historique des règlements</h2>
                 <p className="text-[11px] text-gray-400 font-medium mt-0.5">
                   {filteredPayments.length} transaction{filteredPayments.length !== 1 ? 's' : ''} — 
                   les paiements familiaux couvrent tous les enfants inscrits
@@ -350,7 +350,7 @@ export default function FacturationPage() {
                             <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner">
                               <CheckCircle2 className="w-10 h-10 text-ishes-blue/30" />
                             </div>
-                            <h3 className="text-xl ishes-heading text-ishes-dark mb-2">Aucun incident détecté</h3>
+                            <h3 className="text-xl ishes-heading text-ishes-blue mb-2">Aucun incident détecté</h3>
                             <p className="ishes-label text-[10px] md:text-xs opacity-40">
                               {activeTab === 'refuse'
                                 ? "Félicitations ! Aucun paiement n'a été refusé récemment."
@@ -377,7 +377,7 @@ export default function FacturationPage() {
               {popupMsg.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
             </div>
             <div>
-              <h4 className="text-sm font-bold text-ishes-dark">{popupMsg.title}</h4>
+              <h4 className="text-sm font-bold text-ishes-blue">{popupMsg.title}</h4>
               <p className="text-[11px] font-medium text-gray-500 mt-0.5 leading-relaxed">{popupMsg.desc}</p>
             </div>
             <button onClick={() => setPopupMsg(null)} className="ml-auto text-gray-400 hover:text-gray-600">
@@ -422,7 +422,7 @@ export default function FacturationPage() {
                       </div>
                     </div>
                     <div>
-                      <h2 className="text-3xl ishes-heading text-ishes-dark mb-1">{selectedPayment.payerName}</h2>
+                      <h2 className="text-3xl ishes-heading text-ishes-blue mb-1">{selectedPayment.payerName}</h2>
                       <div className="flex flex-wrap items-center gap-2 mt-1">
                         <span className="text-[10px] font-black uppercase tracking-widest text-ishes-blue bg-ishes-blue/10 px-2 py-0.5 rounded">
                           #{selectedPayment.id}

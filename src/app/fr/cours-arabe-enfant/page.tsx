@@ -65,11 +65,15 @@ export default function CoursArabeEnfantPage() {
               >
                 Je m'inscris maintenant <ArrowRight className="w-5 h-5" />
               </Link>
-              <button 
-                className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
-              >
-                <PlayCircle className="w-5 h-5" /> Voir le teaser
-              </button>
+              {videoUrl && (
+                <Link 
+                  href={videoUrl}
+                  target="_blank"
+                  className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
+                >
+                  <PlayCircle className="w-5 h-5" /> Voir le teaser
+                </Link>
+              )}
             </div>
           </div>
           
@@ -137,7 +141,7 @@ export default function CoursArabeEnfantPage() {
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Ce cours est fait pour toi si...</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Ce cours est fait pour toi si...</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -152,7 +156,7 @@ export default function CoursArabeEnfantPage() {
                 <item.icon className="w-10 h-10 text-ishes-gold" />
               </div>
               <div>
-                <h3 className="text-[15px] font-bold text-ishes-dark whitespace-pre-line leading-relaxed">{item.title}</h3>
+                <h3 className="text-[15px] font-bold text-ishes-blue whitespace-pre-line leading-relaxed">{item.title}</h3>
               </div>
             </div>
           ))}
@@ -162,7 +166,7 @@ export default function CoursArabeEnfantPage() {
       {/* ─── POURQUOI DIFFERENT ─── */}
       <section className="py-16 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-dark">Pourquoi ce programme va tout changer ?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Pourquoi ce programme va tout changer ?</h2>
           <div className="w-16 h-1 bg-ishes-gold mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
@@ -201,7 +205,7 @@ export default function CoursArabeEnfantPage() {
               <div key={i} className="flex gap-4 items-start">
                 <CheckCircle2 className="w-7 h-7 text-ishes-gold shrink-0 mt-0.5" />
                 <div>
-                  <h3 className="text-[17px] font-black text-ishes-dark mb-1">{item.title}</h3>
+                  <h3 className="text-[17px] font-black text-ishes-blue mb-1">{item.title}</h3>
                   <p className="text-[15px] font-medium text-gray-600 leading-snug">{item.desc}</p>
                 </div>
               </div>
@@ -218,7 +222,7 @@ export default function CoursArabeEnfantPage() {
               <BookOpen className="w-8 h-8 text-ishes-gold" />
             </div>
             <div>
-              <h3 className="font-black text-ishes-dark text-lg mb-4 leading-tight uppercase tracking-wide">UNE PÉDAGOGIE DE QUALITÉ</h3>
+              <h3 className="font-black text-ishes-blue text-lg mb-4 leading-tight uppercase tracking-wide">UNE PÉDAGOGIE DE QUALITÉ</h3>
               <ul className="text-sm font-medium text-ishes-dark leading-relaxed space-y-2">
                 <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-ishes-gold shrink-0"></span> Manuel pédagogique complet</li>
                 <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-ishes-gold shrink-0"></span> Activités et exercices variés</li>
@@ -236,7 +240,7 @@ export default function CoursArabeEnfantPage() {
               <Users className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="font-black text-ishes-dark text-lg mb-4 leading-tight uppercase tracking-wide">FORMATION CLÉ EN MAIN</h3>
+              <h3 className="font-black text-ishes-blue text-lg mb-4 leading-tight uppercase tracking-wide">FORMATION CLÉ EN MAIN</h3>
               <p className="text-sm font-medium text-ishes-dark leading-relaxed">
                 Nous t'accompagnons à chaque étape pour offrir à ton enfant une expérience d'apprentissage complète, fluide et motivante.
               </p>

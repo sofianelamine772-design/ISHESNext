@@ -13,7 +13,7 @@ export default function AdministratifPage() {
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" />
-            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Administratif</h1>
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Administratif</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
             <Button variant="ishes-outline" size="sm" className="hidden sm:flex h-10">
@@ -38,7 +38,7 @@ export default function AdministratifPage() {
             <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden min-h-[500px] flex flex-col">
               <div className="p-8 border-b border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-6">
                  <div>
-                   <h2 className="text-xl ishes-heading text-ishes-dark">Gestion documentaire</h2>
+                   <h2 className="text-xl ishes-heading text-ishes-blue">Gestion documentaire</h2>
                    <p className="text-xs font-bold text-gray-300 mt-1 uppercase tracking-widest">Conventions, factures et certificats</p>
                  </div>
                  
@@ -61,7 +61,7 @@ export default function AdministratifPage() {
                 <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6 shadow-inner animate-pulse">
                   <FileText className="w-10 h-10 text-ishes-blue/20" />
                 </div>
-                <h3 className="text-xl ishes-heading text-ishes-dark mb-2">Bientôt disponible</h3>
+                <h3 className="text-xl ishes-heading text-ishes-blue mb-2">Bientôt disponible</h3>
               </div>
             </div>
           </div>

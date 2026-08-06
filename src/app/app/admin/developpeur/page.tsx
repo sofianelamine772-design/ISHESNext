@@ -104,7 +104,7 @@ export default function DeveloperPage() {
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-8 shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
             <div className="w-10 lg:hidden" />
-            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-dark truncate">Centre de Diagnostic</h1>
+            <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Centre de Diagnostic</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
             <Button variant="ishes-blue" size="sm" onClick={runAllTests} disabled={isTesting} className="h-10 px-4 rounded-xl border-none shadow-lg shadow-ishes-blue/20">
@@ -150,7 +150,7 @@ export default function DeveloperPage() {
                         {test.id === 'supabase_key_role' && <Database className="w-5 h-5" />}
                       </div>
                       <div>
-                        <h4 className="font-black text-ishes-dark text-sm uppercase tracking-tight">{test.name}</h4>
+                        <h4 className="font-black text-ishes-blue text-sm uppercase tracking-tight">{test.name}</h4>
                         <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">{test.id}</p>
                       </div>
                     </div>
@@ -179,7 +179,7 @@ export default function DeveloperPage() {
             <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h4 className="text-xl ishes-heading text-ishes-dark">🚨 Erreurs Système Récentes (Live APM)</h4>
+                  <h4 className="text-xl ishes-heading text-ishes-blue">🚨 Erreurs Système Récentes (Live APM)</h4>
                   <p className="text-xs text-gray-400 mt-1">Les 10 dernières erreurs interceptées par le système en temps réel</p>
                 </div>
                 <span className="text-xs font-mono text-ishes-blue bg-ishes-blue/5 border border-ishes-blue/10 px-3 py-1 rounded-full">
@@ -263,7 +263,7 @@ export default function DeveloperPage() {
 
             {/* Extra Info */}
             <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm">
-              <h4 className="text-xl ishes-heading text-ishes-dark mb-8">Ressources Externes</h4>
+              <h4 className="text-xl ishes-heading text-ishes-blue mb-8">Ressources Externes</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a href="https://dashboard.stripe.com/test/logs" target="_blank" className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl hover:bg-ishes-blue/5 transition-all group border border-transparent hover:border-ishes-blue/20">
                   <div className="flex items-center gap-4">

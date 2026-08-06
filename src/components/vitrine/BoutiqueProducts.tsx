@@ -68,7 +68,7 @@ export function BoutiqueProducts() {
                   src={product.image} 
                   alt={product.title}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="object-contain group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 30vw, 20vw"
                 />
               </div>

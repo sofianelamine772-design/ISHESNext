@@ -59,7 +59,7 @@ export default function ConseilSpiritualitePage() {
                className="space-y-10"
             >
               <div>
-                <h2 className="text-3xl font-black text-ishes-dark mb-6 tracking-tight">Questions relatives à la spiritualité</h2>
+                <h2 className="text-3xl font-black text-ishes-blue mb-6 tracking-tight">Questions relatives à la spiritualité</h2>
                 <p className="text-lg text-gray-600 leading-relaxed font-medium">
                    La spiritualité musulmane est un voyage personnel qui nécessite parfois un éclairage extérieur. À l'Institut ISHES, nous croyons que chaque question mérite une réponse empreinte de bienveillance et de savoir. 
                 </p>
@@ -126,14 +126,14 @@ export default function ConseilSpiritualitePage() {
       <section className="bg-white py-24 md:py-32 border-t border-gray-100">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <MessageCircle className="w-12 h-12 text-ishes-blue mx-auto mb-8 opacity-20" strokeWidth={1} />
-          <h2 className="text-3xl font-black text-ishes-dark mb-10 tracking-tight">Une écoute bienveillante</h2>
+          <h2 className="text-3xl font-black text-ishes-blue mb-10 tracking-tight">Une écoute bienveillante</h2>
           <div className="grid md:grid-cols-2 gap-12 text-left">
             <div>
-              <h4 className="font-bold text-ishes-dark mb-4">Pourquoi demander conseil ?</h4>
+              <h4 className="font-bold text-ishes-blue mb-4">Pourquoi demander conseil ?</h4>
               <p className="text-gray-500 font-medium leading-relaxed">Le cheminement spirituel est un processus continu. Avoir un interlocuteur formé permet de mettre des mots sur ses ressentis et d'ajuster sa pratique de manière équilibrée et authentique.</p>
             </div>
             <div>
-              <h4 className="font-bold text-ishes-dark mb-4">Confidentialité</h4>
+              <h4 className="font-bold text-ishes-blue mb-4">Confidentialité</h4>
               <p className="text-gray-500 font-medium leading-relaxed">Toutes vos interrogations sont traitées avec la plus grande discrétion. Nos enseignants respectent une charte éthique de confidentialité absolue pour chaque étudiant.</p>
             </div>
           </div>

@@ -75,7 +75,7 @@ export default function CoursParticuliersPage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-dark leading-[1.1] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
                 Cours de Coran <br />
                 <span className="text-ishes-blue ">Particuliers</span>.
               </h1>
@@ -110,7 +110,7 @@ export default function CoursParticuliersPage() {
                <div className="w-full h-full bg-white rounded-[3rem] shadow-2xl border border-gray-100 p-10 flex flex-col justify-center items-center gap-8 relative overflow-hidden group text-center">
                   <div className="absolute top-0 left-0 w-full h-2 bg-ishes-blue" />
                   <Sparkles className="w-24 h-24 text-ishes-blue/20 group-hover:scale-110 transition-transform duration-500" />
-                  <h3 className="text-2xl font-black text-ishes-dark">Excellence & Proximité</h3>
+                  <h3 className="text-2xl font-black text-ishes-blue">Excellence & Proximité</h3>
                   <p className="text-gray-500 font-medium leading-relaxed ">
                     "Une expérience d'apprentissage unique, centrée sur votre progression et votre épanouissement spirituel."
                   </p>
@@ -124,7 +124,7 @@ export default function CoursParticuliersPage() {
       <section className="py-24 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
            <div className="text-center space-y-4 mb-20">
-              <h2 className="text-4xl font-black text-ishes-dark tracking-tight uppercase">Pourquoi choisir le particulier ?</h2>
+              <h2 className="text-4xl font-black text-ishes-blue tracking-tight uppercase">Pourquoi choisir le particulier ?</h2>
               <p className="text-gray-500 font-medium max-w-2xl mx-auto">
                 L'apprentissage individuel permet de lever les blocages plus rapidement et de progresser à votre propre rythme.
               </p>
@@ -134,7 +134,7 @@ export default function CoursParticuliersPage() {
              {features.map((f, i) => (
                <div key={i} className="bg-gray-50 p-10 rounded-[3rem] border border-gray-100 hover:bg-white hover:shadow-2xl transition-all group relative overflow-hidden">
                   <div className="text-ishes-blue mb-6 group-hover:scale-110 transition-transform">{f.icon}</div>
-                  <h4 className="text-lg font-black text-ishes-dark mb-4 uppercase tracking-tight">{f.title}</h4>
+                  <h4 className="text-lg font-black text-ishes-blue mb-4 uppercase tracking-tight">{f.title}</h4>
                   <p className="text-gray-500 font-bold leading-relaxed text-sm">{f.desc}</p>
                </div>
              ))}
@@ -150,7 +150,7 @@ export default function CoursParticuliersPage() {
                  <div className="w-16 h-16 bg-ishes-blue/10 text-ishes-blue rounded-2xl flex items-center justify-center">
                     <Quote className="w-8 h-8 rotate-180" />
                  </div>
-                 <h2 className="text-4xl font-black text-ishes-dark leading-tight">Apprenez le Coran avec les meilleurs</h2>
+                 <h2 className="text-4xl font-black text-ishes-blue leading-tight">Apprenez le Coran avec les meilleurs</h2>
                  <p className="text-xl text-gray-500 font-medium leading-relaxed">
                    Vous cherchez à apprendre les règles du Tajwid pour vous permettre de lire le Noble Coran ? Nos cours sont destinés aux adultes et enfants de tous niveaux.
                  </p>

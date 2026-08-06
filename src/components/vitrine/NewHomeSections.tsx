@@ -31,7 +31,7 @@ export function NewHomeSections() {
                   </div>
                 </div>
                 <div className="p-4 sm:p-6 pt-8 sm:pt-10 flex-grow flex flex-col">
-                  <h3 className="font-black text-[#0a192f] text-sm sm:text-lg whitespace-pre-line leading-tight mb-2 sm:mb-3">{item.title}</h3>
+                  <h3 className="font-black text-ishes-blue text-sm sm:text-lg whitespace-pre-line leading-tight mb-2 sm:mb-3">{item.title}</h3>
                   <p className="text-gray-500 text-[10px] sm:text-sm font-medium leading-snug sm:leading-relaxed mb-4 sm:mb-6 flex-grow">{item.desc}</p>
                   <Link href={item.link} className="inline-flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-xs font-black text-[#0a192f] uppercase tracking-widest hover:text-[#C69C6D] transition-colors mt-auto group/link">
                     Découvrir <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover/link:translate-x-1 transition-transform" />
@@ -47,7 +47,7 @@ export function NewHomeSections() {
       <section className="py-24 bg-[#f9f5f0] relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-[#0a192f]">Pourquoi des milliers d'élèves choisissent ISHES ?</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Pourquoi des milliers d'élèves choisissent ISHES ?</h2>
             <div className="w-16 h-1 bg-[#C69C6D] mx-auto mt-4 rounded-full"></div>
           </div>
           
@@ -58,7 +58,7 @@ export function NewHomeSections() {
                 <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-8 h-8 text-[#C69C6D]" />
                 </div>
-                <h3 className="font-black text-[#0a192f] text-xl leading-tight">Une légitimité reconnue</h3>
+                <h3 className="font-black text-ishes-blue text-xl leading-tight">Une légitimité reconnue</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed mb-4">
                 Plus de 16 ans d'expérience au service de milliers d'élèves
@@ -74,7 +74,7 @@ export function NewHomeSections() {
                 <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
                   <Users className="w-8 h-8 text-[#C69C6D]" />
                 </div>
-                <h3 className="font-black text-[#0a192f] text-xl leading-tight">Un accompagnement qui dure</h3>
+                <h3 className="font-black text-ishes-blue text-xl leading-tight">Un accompagnement qui dure</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed">
                 Avec notre Pack Accompagnement, vous bénéficiez d'une communauté privée, de lives mensuels, d'un programme de spiritualité et d'un suivi qui vous aide à progresser durablement
@@ -87,7 +87,7 @@ export function NewHomeSections() {
                 <div className="w-16 h-16 rounded-full bg-[#0a192f] flex items-center justify-center shrink-0">
                   <Moon className="w-8 h-8 text-[#C69C6D]" />
                 </div>
-                <h3 className="font-black text-[#0a192f] text-xl leading-tight">Une spiritualité vivante</h3>
+                <h3 className="font-black text-ishes-blue text-xl leading-tight">Une spiritualité vivante</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed">
                 Notre objectif est de vous aider à renforcer votre lien avec ALLAH et Son Messager ﷺ, tout en cheminant vers une véritable purification du cœur (tazkiyat an-nafs)
@@ -101,7 +101,7 @@ export function NewHomeSections() {
       <section className="py-24 bg-[#fafafa] relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-[#0a192f]">Nos formations</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Nos formations</h2>
             <div className="w-16 h-1 bg-[#C69C6D] mx-auto mt-4 rounded-full"></div>
           </div>
           
@@ -151,43 +151,6 @@ export function NewHomeSections() {
         </div>
       </section>
 
-      {/* ─── NOUVEAU MUSULMAN ─── */}
-      <section className="py-24 bg-white relative z-10 border-t border-gray-100/60">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-black text-[#0a192f] mb-4">Nouveau musulman ? Commencez ici.</h2>
-            <p className="text-gray-500 font-medium text-base max-w-2xl mx-auto">
-              Découvrez des ressources gratuites pour mieux comprendre l'Islam et avancer sereinement dans votre nouveau chemin
-            </p>
-          </div>
-          
-          <div className="flex flex-wrap justify-center gap-5">
-            {[
-              { icon: BookOpen, title: "Guides pratiques", subtitle: "(5 piliers, invocations,\nablutions...)" },
-              { icon: Video, title: "Vidéos explicatives", subtitle: "pour comprendre\nl'essentiel" },
-              { icon: FileText, title: "Fiches à télécharger", subtitle: "pour apprendre\nà ton rythme" },
-              { icon: Heart, title: "Conseils spirituels", subtitle: "pour nourrir\nton cœur" }
-            ].map((item, idx) => (
-              <div key={idx} className="bg-[#fcfaf8] border border-gray-100/80 rounded-2xl p-6 flex flex-col items-center text-center flex-1 min-w-[170px] max-w-[210px] hover:-translate-y-1 transition-transform shadow-[0_4px_15px_rgb(0,0,0,0.02)]">
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-5 shadow-sm border border-gray-100/50">
-                  <item.icon className="w-7 h-7 text-[#C69C6D]" />
-                </div>
-                <h4 className="font-black text-[#0a192f] text-[15px] mb-2">{item.title}</h4>
-                <p className="text-[12px] font-medium text-gray-500 leading-tight whitespace-pre-line">{item.subtitle}</p>
-              </div>
-            ))}
-            
-            <a href="https://www.youtube.com/@institutishes" target="_blank" rel="noopener noreferrer" className="bg-[#0a192f] rounded-2xl p-6 flex flex-col items-center justify-center text-center flex-1 min-w-[170px] max-w-[220px] hover:bg-[#0f2547] transition-all shadow-xl group border-2 border-transparent hover:border-[#C69C6D]/20">
-              <Gift className="w-8 h-8 text-[#C69C6D] mb-5 group-hover:scale-110 transition-transform" />
-              <h4 className="font-black text-white text-[15px] mb-4">Accéder aux ressources gratuites</h4>
-              <span className="text-[11px] font-black text-[#C69C6D] flex items-center gap-1.5 uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full">
-                Maintenant <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </a>
-          </div>
-        </div>
-      </section>
-
       {/* ─── QUI SOMMES-NOUS ? ─── */}
       <section className="py-24 bg-[#0a192f] relative z-10 border-t border-[#0a192f]">
         <div className="max-w-6xl mx-auto px-6">
@@ -201,7 +164,7 @@ export function NewHomeSections() {
               </div>
             </div>
             <div className="p-6 pb-10 sm:p-10 md:p-16 flex-1 flex flex-col justify-center">
-              <h3 className="text-2xl md:text-3xl font-black text-[#0a192f] mb-1 sm:mb-2">Qui sommes-nous ?</h3>
+              <h3 className="text-2xl md:text-3xl font-black text-ishes-blue mb-1 sm:mb-2">Qui sommes-nous ?</h3>
               <h4 className="text-lg sm:text-xl font-bold text-[#C69C6D] mb-4 sm:mb-8 font-serif">Oustadh Riad et Oustadha Rachida</h4>
               <p className="text-[#0a192f]/80 font-medium text-sm sm:text-base leading-relaxed mb-4 sm:mb-6">
                 Depuis plus de 16 ans, nous formons des milliers d'élèves francophones à la langue arabe, au Coran et aux sciences islamiques, avec une approche profonde alliant savoir, spiritualité et accompagnement
