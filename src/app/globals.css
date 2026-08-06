@@ -17,7 +17,7 @@
     text-wrap: balance;
   }
   .ishes-heading {
-    @apply font-black uppercase tracking-tighter;
+    @apply font-black tracking-tight;
   }
   .ishes-label {
     @apply font-bold uppercase tracking-widest text-ishes-blue text-xs;
