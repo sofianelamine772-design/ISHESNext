@@ -45,12 +45,12 @@ export function HeroSection() {
             </div>
 
             {/* Badge */}
-            <div className="flex items-center gap-4 bg-[#0a192f] p-5 rounded-2xl mt-12 max-w-[600px] shadow-lg mx-auto w-full justify-center">
-              <Trophy className="text-[#C69C6D] w-8 h-8 shrink-0" strokeWidth={1.5} />
-              <p className="text-sm font-bold text-white leading-snug text-center">
+            <div className="flex items-center gap-5 bg-ishes-blue p-6 sm:p-8 rounded-2xl sm:rounded-3xl mt-12 max-w-[700px] shadow-xl mx-auto w-full justify-center border border-ishes-gold/20">
+              <Trophy className="text-ishes-gold w-10 h-10 shrink-0" strokeWidth={1.5} />
+              <p className="text-base sm:text-lg font-bold text-white leading-relaxed text-center">
                 Le seul institut spécialisé dans la formation des enseignants en Tarbiya Islamiyya et Tajwid en France
               </p>
-              <Award className="text-[#C69C6D] w-8 h-8 shrink-0" strokeWidth={1.5} />
+              <Award className="text-ishes-gold w-10 h-10 shrink-0" strokeWidth={1.5} />
             </div>
 
             {/* Buttons */}
