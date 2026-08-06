@@ -47,31 +47,31 @@ export function StatsSection() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-4xl mx-auto mb-8 md:mb-12 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-y-10 gap-x-8 items-center"
+      className="relative z-10 w-full max-w-4xl mx-auto mb-8 md:mb-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-y-10 gap-x-4"
     >
-      <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+      <div className="flex flex-col items-center text-center w-full sm:w-1/3">
         <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">
           <CountUp end={6000} prefix="+" />
         </span>
         <span className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase">Élèves formés</span>
       </div>
 
-      <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+      <div className="flex flex-col items-center text-center w-full sm:w-1/3">
         <span className="text-[44px] leading-tight font-black text-ishes-dark mb-1">
           <CountUp end={16} suffix=" ans" />
         </span>
         <span className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase">Expertise</span>
       </div>
 
-      <div className="flex flex-col items-center sm:items-end justify-center w-full">
-        <div className="flex -space-x-3">
+      <div className="flex flex-col items-center text-center w-full sm:w-1/3">
+        <div className="flex -space-x-3 justify-center">
           {avatars.map((url, i) => (
             <div key={i} className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden relative shadow-sm hover:scale-110 transition-transform cursor-pointer z-10 hover:z-20">
               <img src={url} alt="Avatar étudiant" className="w-full h-full object-cover" />
             </div>
           ))}
         </div>
-        <div className="flex flex-col items-center sm:items-end mt-2">
+        <div className="flex flex-col items-center mt-2">
           <div className="flex gap-1 text-[#f5b82e] text-sm">
             {[...Array(5)].map((_, i) => (
               <span key={i}>★</span>
