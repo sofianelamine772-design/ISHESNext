@@ -165,7 +165,7 @@ export function NewHomeSections() {
             </div>
             <div className="p-6 pb-10 sm:p-10 md:p-16 flex-1 flex flex-col justify-center">
               <h3 className="text-2xl md:text-3xl font-black text-ishes-blue mb-1 sm:mb-2">Qui sommes-nous ?</h3>
-              <h4 className="text-lg sm:text-xl font-bold text-[#C69C6D] mb-4 sm:mb-8 font-serif">Oustadh Riad et Oustadha Rachida</h4>
+              <h4 className="text-lg sm:text-xl font-bold text-[#C69C6D] mb-4 sm:mb-8 ">Oustadh Riad et Oustadha Rachida</h4>
               <p className="text-[#0a192f]/80 font-medium text-sm sm:text-base leading-relaxed mb-4 sm:mb-6">
                 Depuis plus de 16 ans, nous formons des milliers d'élèves francophones à la langue arabe, au Coran et aux sciences islamiques, avec une approche profonde alliant savoir, spiritualité et accompagnement
               </p>

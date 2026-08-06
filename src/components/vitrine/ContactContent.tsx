@@ -204,7 +204,7 @@ export function ContactContent() {
       >
         {/* Decorative Arabic Text in Background */}
         <div className="absolute inset-0 opacity-5 pointer-events-none select-none overflow-hidden">
-          <span className="absolute -top-20 -left-10 text-[400px] leading-none font-serif text-white">ﷻ</span>
+          <span className="absolute -top-20 -left-10 text-[400px] leading-none text-white">ﷻ</span>
         </div>
 
         {/* Info Column */}

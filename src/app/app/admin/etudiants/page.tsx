@@ -705,7 +705,7 @@ function EtudiantsContent() {
                               {familyMembers.map((m) => (
                                 <div key={m.id} className="text-xs font-bold text-ishes-dark flex items-center justify-between">
                                   <span>{m.name}</span>
-                                  <span className="text-[9px] font-normal text-gray-400 font-mono">({m.enrolledClass})</span>
+                                  <span className="text-[9px] font-normal text-gray-400 ">({m.enrolledClass})</span>
                                 </div>
                               ))}
                             </div>
@@ -730,7 +730,7 @@ function EtudiantsContent() {
                         <div className="flex items-center justify-between group">
                           <div className="flex flex-col min-w-0 flex-1">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Téléphone</span>
-                            <span className="ishes-heading text-base md:text-lg text-ishes-dark font-mono block">
+                            <span className="ishes-heading text-base md:text-lg text-ishes-dark block">
                               {selectedStudent.phone}
                             </span>
                           </div>
@@ -1012,7 +1012,7 @@ function EtudiantsContent() {
                               )}
 
                               {/* ID Stripe */}
-                              <div className="text-[9px] text-gray-300 font-mono truncate">
+                              <div className="text-[9px] text-gray-300 truncate">
                                 ID: {payment.stripe_session_id}
                               </div>
                             </div>

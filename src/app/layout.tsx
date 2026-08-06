@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
 
-const outfit = Outfit({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -44,9 +44,9 @@ export default function RootLayout({
     >
       <html
         lang="fr"
-        className={cn("antialiased", "h-full", outfit.variable, "font-sans")}
+        className={cn("antialiased", "h-full", inter.variable)}
       >
-        <body className="font-sans min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-blue selection:text-white">
+        <body className={cn(inter.className, "min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-blue selection:text-white")}>
           {children}
           <SpeedInsights />
         </body>

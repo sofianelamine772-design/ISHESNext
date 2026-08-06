@@ -1142,7 +1142,7 @@ export default function EleveDashboard() {
                       <span className="text-[10px] font-playfair font-bold text-gray-700 ">
                         Fait à Toulouse, le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </span>
-                      <span className="text-[8px] font-sans font-bold font-mono text-ishes-gold uppercase tracking-wider bg-[#FAF8F5] border border-ishes-gold/20 px-3 py-1 rounded-md">
+                      <span className="text-[8px] font-sans font-bold text-ishes-gold uppercase tracking-wider bg-[#FAF8F5] border border-ishes-gold/20 px-3 py-1 rounded-md">
                         N° CERT-ISHES-2026-{certData.inscriptionId?.slice(-8).toUpperCase()}
                       </span>
                     </div>

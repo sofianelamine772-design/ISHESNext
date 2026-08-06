@@ -34,7 +34,7 @@ export default function CoursPresentielFemmeDebutantePage() {
             <h1 className="text-4xl md:text-5xl lg:text-[60px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-4">
               Lecture du Coran<br />& Tajwid
             </h1>
-            <h2 className="text-4xl md:text-5xl lg:text-[60px] font-serif text-[#C69C6D] mb-8">
+            <h2 className="text-4xl md:text-5xl lg:text-[60px] text-[#C69C6D] mb-8">
               Femme Débutante
             </h2>
             <p className="text-xl font-bold text-[#0a192f] mb-6 leading-relaxed max-w-lg">

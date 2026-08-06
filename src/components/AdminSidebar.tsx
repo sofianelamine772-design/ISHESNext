@@ -47,7 +47,7 @@ export function AdminSidebar() {
             <span
               key={i}
               className={cn(
-                "absolute leading-none font-serif font-black text-ishes-dark",
+                "absolute leading-none font-black text-ishes-dark",
                 t.size, t.top, t.left, t.right, t.rotate, t.opacity
               )}
               style={{ fontFamily: "serif" }}

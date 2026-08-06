@@ -209,7 +209,7 @@ export default async function AdminOverview() {
                         <div key={p.id} className="flex items-center justify-between p-3.5 bg-gray-50/50 rounded-2xl border border-gray-100 hover:border-ishes-blue/20 transition-all">
                           <div className="min-w-0 flex-1 pr-2">
                             <div className="text-xs font-black text-ishes-dark truncate">{studentName}</div>
-                            <div className="text-[9px] text-gray-400 font-mono truncate">{studentEmail}</div>
+                            <div className="text-[9px] text-gray-400 truncate">{studentEmail}</div>
                             <div className="text-[9px] text-gray-450 mt-1 font-semibold">{paymentDate}</div>
                           </div>
                           <div className="text-right shrink-0 flex flex-col items-end gap-1.5">

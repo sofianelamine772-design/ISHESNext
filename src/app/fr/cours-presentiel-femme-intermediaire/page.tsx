@@ -35,7 +35,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
             <h1 className="text-4xl md:text-5xl lg:text-[60px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-4 flex items-center gap-4">
               <span>🧕 Arabe & Tajwid</span>
             </h1>
-            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-serif text-ishes-blue mb-8">
+            <h2 className="text-4xl md:text-5xl lg:text-[54px] text-ishes-blue mb-8">
               — Femme Intermédiaire
             </h2>
             <p className="text-xl font-bold text-gray-600 mb-10 leading-relaxed max-w-lg">

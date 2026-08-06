@@ -35,7 +35,7 @@ export function BoutiqueFaq() {
         <div className="text-center mb-16">
           <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Aide & Support</span>
           <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight uppercase">
-            Questions sur la <span className="text-ishes-gold font-serif">boutique.</span>
+            Questions sur la <span className="text-ishes-gold ">boutique.</span>
           </h2>
         </div>
 

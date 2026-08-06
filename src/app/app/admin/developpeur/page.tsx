@@ -182,7 +182,7 @@ export default function DeveloperPage() {
                   <h4 className="text-xl ishes-heading text-ishes-blue">🚨 Erreurs Système Récentes (Live APM)</h4>
                   <p className="text-xs text-gray-400 mt-1">Les 10 dernières erreurs interceptées par le système en temps réel</p>
                 </div>
-                <span className="text-xs font-mono text-ishes-blue bg-ishes-blue/5 border border-ishes-blue/10 px-3 py-1 rounded-full">
+                <span className="text-xs text-ishes-blue bg-ishes-blue/5 border border-ishes-blue/10 px-3 py-1 rounded-full">
                   Surveillance Active
                 </span>
               </div>
@@ -202,12 +202,12 @@ export default function DeveloperPage() {
                           <span className="text-[10px] font-black uppercase tracking-wider text-red-600 bg-red-100/50 px-2 py-0.5 rounded-md">
                             {err.module}
                           </span>
-                          <span className="text-xs text-gray-400 font-mono">
+                          <span className="text-xs text-gray-400 ">
                             {new Date(err.createdAt).toLocaleTimeString()}
                           </span>
                         </div>
                       </div>
-                      <p className="text-sm font-mono text-gray-800 bg-white/80 p-3 rounded-xl border border-red-50/50">
+                      <p className="text-sm text-gray-800 bg-white/80 p-3 rounded-xl border border-red-50/50">
                         {err.message}
                       </p>
                       {err.stack && (
@@ -215,7 +215,7 @@ export default function DeveloperPage() {
                           <summary className="text-[10px] font-bold text-red-500/80 uppercase tracking-widest cursor-pointer hover:underline select-none">
                             Voir la stack trace
                           </summary>
-                          <pre className="text-[10px] font-mono text-gray-500 bg-gray-900 p-4 rounded-xl mt-2 overflow-x-auto max-h-[150px] whitespace-pre-wrap select-all">
+                          <pre className="text-[10px] text-gray-500 bg-gray-900 p-4 rounded-xl mt-2 overflow-x-auto max-h-[150px] whitespace-pre-wrap select-all">
                             {err.stack}
                           </pre>
                         </details>
@@ -235,7 +235,7 @@ export default function DeveloperPage() {
                   <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                  <span className="text-xs font-mono text-gray-500 ml-2">console_erreurs.log</span>
+                  <span className="text-xs text-gray-500 ml-2">console_erreurs.log</span>
                 </div>
                 {logs && (
                   <Button
@@ -250,7 +250,7 @@ export default function DeveloperPage() {
                 )}
               </div>
 
-              <div className="font-mono text-xs text-gray-300 leading-relaxed overflow-x-auto min-h-[120px] max-h-[300px] custom-scrollbar whitespace-pre-wrap select-all">
+              <div className="text-xs text-gray-300 leading-relaxed overflow-x-auto min-h-[120px] max-h-[300px] custom-scrollbar whitespace-pre-wrap select-all">
                 {logs ? (
                   logs
                 ) : (

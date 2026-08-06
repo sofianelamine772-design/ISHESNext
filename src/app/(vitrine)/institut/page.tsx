@@ -174,7 +174,7 @@ export default function InstitutPage() {
           >
             <h1 className="text-5xl sm:text-7xl md:text-[100px] font-black text-white leading-[0.95] tracking-tight mb-8 uppercase">
               L'INSTITUT <br />
-              <span className="text-ishes-gold font-serif">présentiel.</span>
+              <span className="text-ishes-gold ">présentiel.</span>
             </h1>
             <p className="text-xl text-white/80 font-medium leading-relaxed max-w-2xl mx-auto mb-10">
               Un lieu d'apprentissage privilégié à Toulouse pour approfondir vos connaissances et cheminer ensemble.
@@ -200,7 +200,7 @@ export default function InstitutPage() {
             <span className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-4 block">Formations sur site</span>
             <h2 className="text-4xl md:text-6xl font-black text-ishes-blue leading-none tracking-tight mb-6 uppercase">
               L'excellence du savoir <br />
-              <span className="text-ishes-gold font-serif">en présentiel.</span>
+              <span className="text-ishes-gold ">en présentiel.</span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
               Pour ceux qui privilégient le contact direct avec l'enseignant, l'émulation collective et la rigueur d'un cadre académique moderne.

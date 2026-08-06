@@ -56,7 +56,7 @@ export function TestimonialsMarquee() {
             Approuvé par la communauté
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-ishes-blue leading-tight flex items-center justify-center gap-3 flex-wrap">
-            Ce que nos <span className="text-ishes-gold font-serif">étudiants</span> pensent.
+            Ce que nos <span className="text-ishes-gold ">étudiants</span> pensent.
           </h2>
         </motion.div>
       </div>

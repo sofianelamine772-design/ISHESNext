@@ -9,7 +9,6 @@
   --color-ishes-blue-hover: #14273c;
   --color-ishes-dark: #152233;
   --color-ishes-gold: #c8a96e;
-  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer utilities {

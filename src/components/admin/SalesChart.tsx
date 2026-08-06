@@ -112,7 +112,7 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
                     x={paddingLeft - 12}
                     y={y + 4}
                     textAnchor="end"
-                    className="text-[9px] font-black fill-gray-400 font-mono"
+                    className="text-[9px] font-black fill-gray-400 "
                   >
                     {formatRevenue(val)}
                   </text>

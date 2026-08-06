@@ -37,7 +37,7 @@ export function TajwidStandardView() {
             <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-[64px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-6">
               Lis le Coran <br />
               avec assurance, <br />
-              <span className="text-ishes-gold font-serif">même si tu pars de zéro.</span>
+              <span className="text-ishes-gold ">même si tu pars de zéro.</span>
             </h1>
             <p className="text-lg text-gray-600 font-medium max-w-md leading-relaxed mb-10">
               Un parcours complet et progressif pour apprendre à lire correctement le Coran et appliquer les règles du Tajwid avec confiance.
@@ -105,7 +105,7 @@ export function TajwidStandardView() {
                 <div className="w-full border-t border-[#e6d5b8]"></div>
               </div>
               <div className="relative bg-[#fafafa] px-6">
-                <span className="font-serif text-xl text-[#c8a063] font-bold">Cette formation a été créée pour toi.</span>
+                <span className="text-xl text-[#c8a063] font-bold">Cette formation a été créée pour toi.</span>
               </div>
             </div>
           </section>
@@ -410,7 +410,7 @@ export function TajwidStandardView() {
         <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium text-white mb-10 leading-tight">
             La prochaine fois que tu ouvriras le Coran... <br/>
-            <span className="font-serif text-[#c8a063] font-bold">lis-le avec confiance, précision et sérénité.</span>
+            <span className="text-[#c8a063] font-bold">lis-le avec confiance, précision et sérénité.</span>
           </h2>
           <Link
             href="/inscription?plan=tajwid_standard&audience=adulte"

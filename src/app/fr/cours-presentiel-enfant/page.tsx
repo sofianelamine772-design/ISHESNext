@@ -32,7 +32,7 @@ export default function CoursPresentielEnfantPage() {
             <h1 className="text-4xl md:text-5xl lg:text-[64px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-2">
               Cours Enfants
             </h1>
-            <h2 className="text-3xl md:text-4xl lg:text-[42px] font-serif text-[#C69C6D] mb-8 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-[42px] text-[#C69C6D] mb-8 leading-tight">
               Arabe, Coran &<br/>Éducation Islamique
             </h2>
             

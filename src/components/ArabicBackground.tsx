@@ -19,7 +19,7 @@ export const ArabicBackground = React.memo(function ArabicBackground() {
       {texts.map((t, i) => (
         <span
           key={i}
-          className={`absolute ${t.size} leading-none font-serif font-bold text-ishes-dark ${t.top} ${t.left} ${t.rotate} ${t.opacity} transition-none`}
+          className={`absolute ${t.size} leading-none font-bold text-ishes-dark ${t.top} ${t.left} ${t.rotate} ${t.opacity} transition-none`}
           style={{ fontFamily: "serif" }}
         >
           {t.text}

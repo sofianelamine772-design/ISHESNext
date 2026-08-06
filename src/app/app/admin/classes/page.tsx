@@ -555,7 +555,7 @@ export default function AdminDashboard() {
                         onChange={(e) => setWhatsappInput(e.target.value)}
                         onFocus={(e) => { if (!whatsappInput) setWhatsappInput(selectedClassWhatsapp || ""); }}
                         placeholder="https://chat.whatsapp.com/..."
-                        className="flex-1 px-3 py-2.5 bg-white border border-[#25D366]/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366]/30 focus:border-[#25D366] font-mono transition-all"
+                        className="flex-1 px-3 py-2.5 bg-white border border-[#25D366]/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366]/30 focus:border-[#25D366] transition-all"
                       />
                       <button
                         onClick={handleSaveWhatsapp}
@@ -614,7 +614,7 @@ export default function AdminDashboard() {
                             <div className="min-w-0">
                               <span className="ishes-label text-[8px] md:text-[9px] mb-0.5 block opacity-50">Étudiant</span>
                               <div className="text-sm md:text-lg ishes-heading text-ishes-dark leading-tight truncate">{student.name}</div>
-                              <div className="text-[10px] font-medium text-ishes-dark/40 tracking-wider font-mono truncate hidden sm:block">{student.email.toUpperCase()}</div>
+                              <div className="text-[10px] font-medium text-ishes-dark/40 tracking-wider truncate hidden sm:block">{student.email.toUpperCase()}</div>
                             </div>
                           </div>
 
@@ -728,7 +728,7 @@ export default function AdminDashboard() {
                         <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
                           <Phone className="w-3.5 h-3.5 text-gray-400" />
                         </div>
-                        <span className="text-sm font-bold text-gray-700 font-mono">{studentDetail.phone || 'Non renseigné'}</span>
+                        <span className="text-sm font-bold text-gray-700 ">{studentDetail.phone || 'Non renseigné'}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
@@ -863,7 +863,7 @@ export default function AdminDashboard() {
                       </div>
                       <div>
                         <div className="font-bold text-ishes-dark text-sm">{student.first_name} {student.last_name}</div>
-                        <div className="text-[10px] text-gray-400 font-mono uppercase">{student.email}</div>
+                        <div className="text-[10px] text-gray-400 uppercase">{student.email}</div>
                       </div>
                     </div>
                     <button
