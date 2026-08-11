@@ -386,7 +386,7 @@ export async function fetchClassesAction(academicYear?: string) {
       id: c.id,
       name: c.name,
       type: c.type,
-      capacity_limit: c.capacity_limit || 23,
+      capacity_limit: c.capacity_limit || 20,
       formationTitle: c.formations?.title,
       whatsappLink: c.whatsapp_link || null,
       students: c.inscriptions
