@@ -1,9 +1,24 @@
 import { POST } from '@/app/api/checkout/route';
 import { NextRequest } from 'next/server';
+import Stripe from 'stripe';
 
 jest.mock('@clerk/nextjs/server', () => ({
   auth: jest.fn().mockResolvedValue({ userId: 'test_user_id' })
 }));
+
+jest.mock('stripe', () => {
+  const mStripe = {
+    checkout: {
+      sessions: {
+        create: jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' })
+      }
+    },
+    prices: {
+      create: jest.fn().mockResolvedValue({ id: 'price_test_123' })
+    }
+  };
+  return jest.fn(() => mStripe);
+});
 
 jest.mock('@/lib/supabaseAdmin', () => ({
   supabaseAdmin: {
