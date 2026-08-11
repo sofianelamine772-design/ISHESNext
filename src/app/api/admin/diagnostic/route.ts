@@ -482,7 +482,30 @@ export async function GET() {
 
     // 15. Récupération des erreurs système récentes
     let systemErrors: any[] = [];
+    let emailsSentToday = 0;
     try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // --- NETTOYAGE: Supprimer les logs d'emails antérieurs à aujourd'hui ---
+      await supabaseAdmin
+        .from('messages')
+        .delete()
+        .eq('sender_id', 'system_logger')
+        .eq('title', 'email_sent')
+        .lt('created_at', today.toISOString());
+
+      // --- COMPTAGE: Emails envoyés aujourd'hui ---
+      const { count: emailCount } = await supabaseAdmin
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('sender_id', 'system_logger')
+        .eq('title', 'email_sent')
+        .gte('created_at', today.toISOString());
+
+      emailsSentToday = emailCount || 0;
+
+      // --- ERREURS SYSTÈMES ---
       const { data: errorLogs } = await supabaseAdmin
         .from('messages')
         .select('id, content, created_at')
@@ -518,7 +541,8 @@ export async function GET() {
 
     return NextResponse.json({
       ...diagnostics,
-      systemErrors
+      systemErrors,
+      emailsSentToday
     });
   } catch (error: any) {
     console.error('[DIAGNOSTIC_ERROR]', error);

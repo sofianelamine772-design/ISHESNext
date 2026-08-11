@@ -15,6 +15,7 @@ export default function DeveloperPage() {
   const [isTesting, setIsTesting] = useState(false);
   const [logs, setLogs] = useState<string>("");
   const [systemErrors, setSystemErrors] = useState<any[]>([]);
+  const [emailsSentToday, setEmailsSentToday] = useState<number>(0);
   const [tests, setTests] = useState([
     { id: 'env', name: 'Variables d\'environnement', status: 'idle', message: 'Attente du test...' },
     { id: 'clerk_alignment', name: 'Alignement Clés Clerk', status: 'idle', message: 'Attente du test...' },
@@ -46,6 +47,9 @@ export default function DeveloperPage() {
       
       if (data.systemErrors) {
         setSystemErrors(data.systemErrors);
+      }
+      if (data.emailsSentToday !== undefined) {
+        setEmailsSentToday(data.emailsSentToday);
       }
       
       let logsReport = `[${new Date().toLocaleTimeString()}] Diagnostic terminé avec succès. Analyse des résultats :\n\n`;
@@ -173,6 +177,20 @@ export default function DeveloperPage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Email Metrics */}
+            <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm flex items-center justify-between">
+              <div>
+                <h4 className="text-xl ishes-heading text-ishes-blue flex items-center gap-2">
+                  <Mail className="w-5 h-5" /> E-mails envoyés (Auto & Manuels)
+                </h4>
+                <p className="text-xs text-gray-400 mt-1">Total des e-mails envoyés avec succès aujourd'hui (inclut la messagerie)</p>
+              </div>
+              <div className="bg-ishes-blue/5 border border-ishes-blue/10 px-6 py-4 rounded-2xl flex flex-col items-center justify-center">
+                <span className="text-3xl font-black text-ishes-blue">{emailsSentToday}</span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">E-mails</span>
+              </div>
             </div>
 
             {/* Live APM Error Logger */}

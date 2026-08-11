@@ -28,8 +28,34 @@ export async function logSystemError(moduleName: string, error: any) {
         timestamp: new Date().toISOString()
       })
     });
+  } catch (logErr) {
+    console.error("Critical failure in APM Logger:", logErr);
+  }
+}
+
+export async function logSystemEvent(eventName: string, details: any) {
+  try {
+    // S'assurer que le profil 'system_logger' existe
+    await supabaseAdmin.from('etudiants').upsert({
+      id: 'system_logger',
+      email: 'system_logger@ishees.com',
+      first_name: 'Système',
+      last_name: 'Logs',
+      role: 'admin',
+      status: 'actif'
+    }, { onConflict: 'id' });
+
+    // Insérer l'événement dans la table messages
+    await supabaseAdmin.from('messages').insert({
+      sender_id: 'system_logger',
+      type: 'global',
+      title: eventName,
+      content: JSON.stringify({
+        ...details,
+        timestamp: new Date().toISOString()
+      })
+    });
   } catch (err) {
-    // En cas d'erreur de journalisation, on log dans la console
-    console.error('[CRITICAL_LOG_ERROR] Échec de l\'écriture du log d\'erreur en base:', err);
+    console.error("Failed to log system event:", err);
   }
 }

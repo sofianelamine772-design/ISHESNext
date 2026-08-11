@@ -63,6 +63,19 @@ export async function sendEmail({ to, subject, html, text, from, replyTo, attach
 
     const info = await transporter.sendMail(mailOptions);
     console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
+
+    // Optionnel : Enregistrer cet événement dans la table des messages pour le dashboard
+    try {
+      const { logSystemEvent } = await import('@/lib/error-logger');
+      await logSystemEvent('email_sent', {
+        to: Array.isArray(to) ? to.join(',') : to,
+        subject: subject,
+        messageId: info.messageId
+      });
+    } catch (e) {
+      console.error("Failed to log email event", e);
+    }
+
     return { success: true, data: info };
 
   } catch (error) {
