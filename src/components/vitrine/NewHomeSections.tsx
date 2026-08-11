@@ -15,11 +15,11 @@ export function NewHomeSections() {
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
             {[
-              { img: "/images/ai_arabe.png", icon: BookOpen, title: "Apprendre\nl'arabe", desc: "Comprendre, lire, écrire et s'exprimer avec confiance.", link: "/program" },
-              { img: "/images/quran-coffee.png", icon: Book, title: "Apprendre à lire\nle Coran", desc: "Maîtriser la lecture, le Tajwid et comprendre les sens profonds.", link: "/program" },
-              { img: "/images/ai_enfants.png", icon: Users, title: "Faire apprendre\nmon enfant", desc: "Un cadre bienveillant pour apprendre l'arabe, le Coran et l'éducation islamique.", link: "/program" },
-              { img: "/images/ai_pro.png", icon: GraduationCap, title: "Devenir\nenseignant", desc: "Se former pour transmettre avec science, pédagogie et spiritualité.", link: "/formation-enseignant" },
-              { img: "/images/ai_spirit.png", icon: Moon, title: "Progresser\nspirituellement", desc: "Des enseignements pour renforcer ta foi et te rapprocher d'ALLAH.", link: "/program" },
+              { img: "/images/formations/arabe-ditanvce-1.png", icon: BookOpen, title: "Apprendre\nl'arabe", desc: "Comprendre, lire, écrire et s'exprimer avec confiance.", link: "/program" },
+              { img: "/images/formations/arabe-enfant-distance-2.jpg", icon: Book, title: "Apprendre à lire\nle Coran", desc: "Maîtriser la lecture, le Tajwid et comprendre les sens profonds.", link: "/program" },
+              { img: "/images/formations/presentiel-enfants-dimanche.png", icon: Users, title: "Faire apprendre\nmon enfant", desc: "Un cadre bienveillant pour apprendre l'arabe, le Coran et l'éducation islamique.", link: "/program" },
+              { img: "/images/formations/enseignant-tarbya-islamya-1.jpg", icon: GraduationCap, title: "Devenir\nenseignant", desc: "Se former pour transmettre avec science, pédagogie et spiritualité.", link: "/formation-enseignant" },
+              { img: "/images/formations/enseignant-tajwid-2.png", icon: Moon, title: "Progresser\nspirituellement", desc: "Des enseignements pour renforcer ta foi et te rapprocher d'ALLAH.", link: "/program" },
             ].map((item, idx) => (
               <div key={idx} className="bg-white rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/60 group hover:-translate-y-1 transition-transform duration-300 flex flex-col">
                 <div className="relative">

@@ -188,7 +188,7 @@ export default function CoursPresentielEnfantPage() {
             <span className="text-gray-400 font-bold text-[15px]">Tarif</span>
             <div className="flex items-baseline gap-2 mb-4 mt-1">
               <h3 className="text-6xl font-black text-[#C69C6D]">480 €</h3>
-              <span className="font-bold text-white text-lg">/ session</span>
+              <span className="font-bold text-white text-lg">/ l'année</span>
             </div>
             
             <div className="flex items-center gap-3 mb-5 text-[15px] font-medium text-gray-300">

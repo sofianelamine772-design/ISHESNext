@@ -25,8 +25,8 @@ export default function PackAccompagnementPage() {
           />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="max-w-2xl relative">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-12">
+          <div className="max-w-2xl relative flex-1">
             <span className="text-ishes-gold font-black uppercase tracking-widest text-xs block mb-4">
               INCLUS AVEC CHAQUE FORMATION
             </span>
@@ -41,23 +41,34 @@ export default function PackAccompagnementPage() {
               <div className="w-1.5 h-1.5 rounded-full bg-ishes-gold"></div>
             </div>
 
-            <p className="text-lg text-[#3d4b60] font-medium leading-relaxed max-w-lg mb-10">
+            <p className="text-lg text-[#3d4b60] font-medium leading-relaxed max-w-lg mb-10 lg:mb-0">
               Chez ISHES, nous croyons qu'une heure de cours par semaine ne suffit pas à transformer une vie. C'est pourquoi chaque étudiant bénéficie d'un accompagnement pensé pour l'aider à progresser toute l'année, entouré, soutenu et guidé.
             </p>
+          </div>
 
+          <div className="w-full lg:w-[500px] xl:w-[600px] relative">
+            <div className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 bg-black">
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src="https://www.youtube.com/embed/GuP0DX_0mHg"
+                title="Présentation du Pack Accompagnement"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
 
-
-            {/* Floating Price Badge for Desktop */}
-            <div className="absolute top-10 -right-24 lg:-right-48 hidden md:flex flex-col items-center justify-center w-64 h-64 bg-ishes-dark rounded-full border border-white/10 shadow-2xl z-20 text-center p-6 hover:scale-105 transition-transform duration-500">
-              <div className="text-[10px] font-black uppercase tracking-widest text-ishes-gold mb-2">UNE VALEUR RÉELLE DE</div>
-              <div className="text-3xl font-black text-white mb-2 relative">
+            {/* Floating Price Badge */}
+            <div className="absolute -bottom-12 -left-12 hidden md:flex flex-col items-center justify-center w-48 h-48 bg-ishes-dark rounded-full border border-white/10 shadow-2xl z-20 text-center p-4 hover:scale-105 transition-transform duration-500">
+              <div className="text-[9px] font-black uppercase tracking-widest text-ishes-gold mb-1">UNE VALEUR RÉELLE DE</div>
+              <div className="text-2xl font-black text-white mb-1 relative">
                 <span className="line-through text-white/50">399 €</span>
               </div>
-              <div className="text-[10px] font-black uppercase tracking-widest text-white mb-1">POUR SEULEMENT</div>
-              <div className="text-5xl font-black text-ishes-gold mb-1">49 €</div>
-              <div className="text-[10px] font-black uppercase tracking-widest text-white/70 mb-4">POUR 1 AN</div>
-              <div className="w-10 h-10 rounded-full border border-ishes-gold/30 flex items-center justify-center text-ishes-gold mt-2">
-                <Gift className="w-5 h-5" />
+              <div className="text-[9px] font-black uppercase tracking-widest text-white mb-1">POUR SEULEMENT</div>
+              <div className="text-4xl font-black text-ishes-gold mb-1">49 €</div>
+              <div className="text-[9px] font-black uppercase tracking-widest text-white/70 mb-2">POUR 1 AN</div>
+              <div className="w-8 h-8 rounded-full border border-ishes-gold/30 flex items-center justify-center text-ishes-gold">
+                <Gift className="w-4 h-4" />
               </div>
             </div>
           </div>

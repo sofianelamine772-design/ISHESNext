@@ -73,7 +73,7 @@ export const PROGRAMS: Program[] = [
     durationText: "Mercredi 13h30-16h30",
     features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
-    priceSub: "/ SESSION",
+    priceSub: "/ L'ANNÉE",
     type: "presentiel",
     audience: "enfant",
     day: "Mercredi"
@@ -89,7 +89,7 @@ export const PROGRAMS: Program[] = [
     durationText: "Samedi 9h-12h ou 13h30-16h30",
     features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
-    priceSub: "/ SESSION",
+    priceSub: "/ L'ANNÉE",
     type: "presentiel",
     audience: "enfant",
     day: "Samedi"
@@ -105,10 +105,48 @@ export const PROGRAMS: Program[] = [
     durationText: "Dimanche 9h-12h ou 13h30-16h30",
     features: ["Enseignement Arabe", "Hifz Coran", "Enseignement Tajwid", "Activités ludiques"],
     price: "480 €",
-    priceSub: "/ SESSION",
+    priceSub: "/ L'ANNÉE",
     type: "presentiel",
     audience: "enfant",
     day: "Dimanche"
+  },
+  {
+    id: "pack_accompagnement",
+    imageUrl: "/images/formations/pack-acc-1.png",
+    title: "Pack Accompagnement",
+    subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
+    tagText: "INCLUS",
+    tagColor: "bg-ishes-gold/20 text-ishes-gold",
+    durationText: "8 mois",
+    features: [
+      "Vivre au quotidien",
+      "Groupe d'entraide",
+      "Cours de spiritualité",
+      "Accès Early Bird"
+    ],
+    price: "0 €",
+    priceSub: "INCLUS",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "correction_fatiha",
+    imageUrl: "/images/ai_quran.png",
+    title: "Correction al Fatiha",
+    subtitle: "Corrigez la lecture de la Fatiha et des 3 dernières sourates. Module offert.",
+    tagText: "OFFERT",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "Session",
+    features: [
+      "Fatiha & 3 sourates",
+      "Validité de la prière",
+      "Prononciation correcte",
+      "Totalement gratuit"
+    ],
+    price: "0 €",
+    priceSub: "GRATUIT",
+    type: "distanciel",
+    audience: "adulte"
   },
   {
     id: "tajwid_standard",
@@ -285,25 +323,6 @@ export const PROGRAMS: Program[] = [
     audience: "adulte"
   },
   {
-    id: "correction_fatiha",
-    imageUrl: "/images/ai_quran.png",
-    title: "Correction al Fatiha",
-    subtitle: "Corrigez la lecture de la Fatiha et des 3 dernières sourates. Module offert.",
-    tagText: "OFFERT",
-    tagColor: "bg-green-100 text-green-700",
-    durationText: "Session",
-    features: [
-      "Fatiha & 3 sourates",
-      "Validité de la prière",
-      "Prononciation correcte",
-      "Totalement gratuit"
-    ],
-    price: "0 €",
-    priceSub: "GRATUIT",
-    type: "distanciel",
-    audience: "adulte"
-  },
-  {
     id: "cours_particuliers",
     imageUrl: "/images/formations/cours-particulier-1.png",
     title: "Cours Particuliers",
@@ -439,26 +458,6 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "adulte"
   },
-  {
-    id: "pack_accompagnement",
-    imageUrl: "/images/formations/pack-acc-1.png",
-    title: "Pack Accompagnement",
-    subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
-    tagText: "SOUTIEN",
-    tagColor: "bg-blue-100 text-blue-700",
-    durationText: "8 mois",
-    features: [
-      "Vivre au quotidien",
-      "Groupe d'entraide",
-      "Cours de spiritualité",
-      "Accès Early Bird"
-    ],
-    price: "49 €",
-    originalPrice: "399 €",
-    priceSub: "/ AN",
-    type: "distanciel",
-    audience: "adulte"
-  }
 ];
 
 export function ProgramContent() {
@@ -690,7 +689,7 @@ export function ProgramContent() {
                     src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
                     alt={program.title} 
                     fill 
-                    className="object-cover"
+                    className={`object-cover ${program.id === 'al_aqida' ? 'scale-[1.15] origin-top' : ''}`}
                   />
                   {/* Gradient Overlay for tags */}
                   <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent z-0" />

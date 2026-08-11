@@ -12,6 +12,7 @@ const formations = [
   {
     id: "nour-al-bayan",
     link: "/fr/formation-enseignant-tajwid",
+    image: "/images/formations/arabe-enfant-distance-2.jpg",
     title: "Formation Enseignant de Tajwid",
     subtitle: "Méthode Les Clés du Coran",
     availableRemote: true,
@@ -116,11 +117,11 @@ export default function FormationEnseignantPage() {
     },
     {
       q: "Quels sont les prérequis pour s'inscrire ?",
-      a: "Pour la formation diplômante Tajwid (Nour Al Bayan), il est nécessaire de savoir lire le Coran de manière fluide. Pour la formation Tarbya Islamya, aucun prérequis technique n'est imposé, si ce n'est une forte motivation pour la transmission et la pédagogie positive."
+      a: "Aucun prérequis technique n'est imposé, que ce soit pour la formation diplômante Tajwid (Nour Al Bayan) ou pour la formation Tarbya Islamya, si ce n'est une forte motivation pour la transmission et la pédagogie positive."
     },
     {
       q: "Comment se déroulent l'évaluation et la remise de diplôme ?",
-      a: "La validation s'appuie sur un examen théorique écrit en fin de parcours ainsi que sur une mise en situation pratique (stage d'observation ou d'animation d'une classe virtuelle sur Zoom). Un diplôme officiel de l'Institut ISHES est remis aux élèves ayant validé l'évaluation."
+      a: "C'est la validation de chacun des modules qui valident la formation."
     },
     {
       q: "Proposez-vous des facilités de paiement ?",
@@ -128,7 +129,7 @@ export default function FormationEnseignantPage() {
     },
     {
       q: "Quel est le rythme de travail et la durée de la formation ?",
-      a: "La formation théorique s'étale sur environ 20 heures de cours en ligne, complétées par des sessions de stage pratique et de suivi personnalisé. Le rythme est conçu pour être parfaitement compatible avec une activité professionnelle ou des études à plein temps."
+      a: "Environ 4 mois à hauteur de 2 cours par semaine."
     }
   ];
 
@@ -178,8 +179,17 @@ export default function FormationEnseignantPage() {
             >
               {formations.map((f, idx) => (
                 <div key={f.id} className="bg-ishes-dark rounded-[2.5rem] p-10 border border-ishes-gold/20 shadow-xl hover:shadow-2xl hover:border-ishes-gold/40 hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden items-center text-center">
+                  {f.image && (
+                    <>
+                      <div className="absolute inset-0 z-0">
+                        <img src={f.image} alt={f.title} className="w-full h-full object-cover opacity-30 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" />
+                      </div>
+                      <div className="absolute inset-0 bg-ishes-dark/60 z-0" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-ishes-dark via-transparent to-transparent z-0" />
+                    </>
+                  )}
                   {/* Decorative background element */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] transition-transform group-hover:scale-110 z-0"></div>
 
                   <div className="relative z-10 flex flex-col h-full w-full justify-between gap-12">
                     <h3 className="text-2xl md:text-3xl font-black text-white leading-tight mt-4 group-hover:text-ishes-gold transition-colors uppercase">

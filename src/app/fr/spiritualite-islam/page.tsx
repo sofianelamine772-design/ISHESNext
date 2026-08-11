@@ -93,14 +93,6 @@ export default function SpiritualiteIslamPage() {
                 >
                   JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
                 </Link>
-                <a 
-                  href="/images/spiritualite-musulmane-flyer.jpeg" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-transparent border border-ishes-gold text-ishes-gold hover:bg-ishes-gold/10 px-8 py-4 rounded-md text-[15px] font-black transition-all hover:-translate-y-1"
-                >
-                  <Eye className="w-5 h-5" /> Voir le Flyer
-                </a>
               </div>
               
               <div className="flex flex-wrap items-center gap-6 pt-8 border-t border-gray-200 mt-8">
