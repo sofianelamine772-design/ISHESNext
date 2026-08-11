@@ -52,10 +52,19 @@ export async function POST(req: Request) {
       } else if (formationId === 'pack_accompagnement') {
         formationData = {
           title: "Pack Accompagnement",
-          price: 0
+          price: 49
         };
       } else {
         return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
+      }
+    } else {
+      // Même si on la trouve dans la base de données, on s'assure que le prix est correct pour les cas spécifiques
+      if (formationId === 'pack_accompagnement') {
+         formationData.price = 49;
+      } else if (formationId.includes('enfant-') && formationId.includes('presentiel')) {
+         formationData.price = 480;
+      } else if (formationId === 'femme-debutante-presentiel' || formationId === 'femme-intermediaire-presentiel') {
+         formationData.price = 649;
       }
     }
 
@@ -73,13 +82,13 @@ export async function POST(req: Request) {
     const installments = body.installments ? parseInt(String(body.installments), 10) : 1;
 
     let baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    
+
     // En local, on s'adapte dynamiquement au port (ex: 3005) pour éviter les erreurs de redirection
     const origin = req.headers.get('origin');
     if (origin && origin.includes('localhost')) {
       baseUrl = origin;
     }
-    
+
     const isLocal = baseUrl.includes('localhost');
 
     let sessionParams: Stripe.Checkout.SessionCreateParams;
@@ -104,12 +113,12 @@ export async function POST(req: Request) {
       metadata.parent_first_name = body.parentPrenom || '';
       metadata.parent_last_name = body.parentNom || '';
       metadata.childrenCount = String(body.childrenList.length);
-      
+
       body.childrenList.forEach((child: any, idx: number) => {
         metadata[`child_${idx}_first`] = child.prenom || '';
         metadata[`child_${idx}_last`] = child.nom || '';
-        metadata[`child_${idx}_classId`] = child.classId 
-          ? CLASS_ID_TO_UUID[parseInt(child.classId)] || child.classId 
+        metadata[`child_${idx}_classId`] = child.classId
+          ? CLASS_ID_TO_UUID[parseInt(child.classId)] || child.classId
           : '';
         metadata[`child_${idx}_niveau`] = child.niveau || '';
       });
@@ -145,7 +154,7 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'subscription',
-        success_url: isLocal 
+        success_url: isLocal
           ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
           : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
         cancel_url: `${baseUrl}/inscription?canceled=true`,
@@ -177,7 +186,7 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'payment',
-        success_url: isLocal 
+        success_url: isLocal
           ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
           : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
         cancel_url: `${baseUrl}/inscription?canceled=true`,

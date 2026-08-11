@@ -371,6 +371,8 @@ export async function fetchClassesAction(academicYear?: string) {
         )
       `);
 
+    query = query.eq('is_active', true);
+
     if (academicYear) {
       query = query.eq('academic_year', academicYear);
     }

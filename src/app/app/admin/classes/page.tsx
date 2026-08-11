@@ -457,10 +457,15 @@ export default function AdminDashboard() {
                       <button
                         key={c.id}
                         onClick={() => setSelectedClassId(c.id)}
-                        className={`w-full text-left p-3 rounded-xl transition-all border ${selectedClassId === c.id
-                          ? "bg-ishes-blue/10 border-ishes-blue/20 shadow-sm"
-                          : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50"
-                          }`}
+                        className={`w-full text-left p-3 rounded-xl transition-all border ${
+                          selectedClassId === c.id
+                            ? c.name.toLowerCase().includes('femme')
+                              ? "bg-pink-100 border-pink-200 shadow-sm"
+                              : "bg-ishes-blue/10 border-ishes-blue/20 shadow-sm"
+                            : c.name.toLowerCase().includes('femme')
+                              ? "bg-pink-50/50 border-pink-100 hover:border-pink-200 hover:bg-pink-50"
+                              : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50"
+                        }`}
                       >
                         <div className="font-semibold text-gray-800 mb-1 text-sm">{c.name}</div>
                         <div className="flex items-center justify-between text-[10px] text-gray-500 gap-1.5">

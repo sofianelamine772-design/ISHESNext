@@ -124,8 +124,9 @@ export const PROGRAMS: Program[] = [
       "Cours de spiritualité",
       "Accès Early Bird"
     ],
-    price: "0 €",
-    priceSub: "INCLUS",
+    price: "49 €",
+    originalPrice: "399 €",
+    priceSub: "/ AN",
     type: "distanciel",
     audience: "adulte"
   },
@@ -904,7 +905,7 @@ export function ProgramContent() {
                           </Link>
                         ) : isPresentiel ? (
                           <Link
-                            href={`/inscription?plan=presentiel-global&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
+                            href={`/inscription?plan=${program.id}&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
                             onClick={(e) => e.stopPropagation()}
                             className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
                               }`}

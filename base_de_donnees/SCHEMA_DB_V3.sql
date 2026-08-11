@@ -165,19 +165,29 @@ ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.push_subscriptions ENABLE ROW LEVEL SECURITY;
 
 -- Politiques Formations
+DROP POLICY IF EXISTS "Les formations sont visibles par tous" ON public.formations;
 CREATE POLICY "Les formations sont visibles par tous" ON public.formations FOR SELECT USING (true);
 
+-- Politiques Classes
+DROP POLICY IF EXISTS "Les classes sont visibles par tous" ON public.classes;
+CREATE POLICY "Les classes sont visibles par tous" ON public.classes FOR SELECT USING (true);
+
 -- Politiques Étudiants
+DROP POLICY IF EXISTS "Élèves : Voir son propre profil" ON public.etudiants;
 CREATE POLICY "Élèves : Voir son propre profil" ON public.etudiants FOR SELECT USING (auth.uid()::text = id);
+DROP POLICY IF EXISTS "Élèves : Gérer son propre profil" ON public.etudiants;
 CREATE POLICY "Élèves : Gérer son propre profil" ON public.etudiants FOR ALL USING (auth.uid()::text = id) WITH CHECK (auth.uid()::text = id);
 
 -- Politiques Inscriptions
+DROP POLICY IF EXISTS "Élèves : Voir ses inscriptions" ON public.inscriptions;
 CREATE POLICY "Élèves : Voir ses inscriptions" ON public.inscriptions FOR SELECT USING (auth.uid()::text = etudiant_id);
 
 -- Politiques Paiements
+DROP POLICY IF EXISTS "Élèves : Voir ses paiements" ON public.paiements;
 CREATE POLICY "Élèves : Voir ses paiements" ON public.paiements FOR SELECT USING (auth.uid()::text = etudiant_id);
 
 -- Politiques Messages (Annonces et Chats privés)
+DROP POLICY IF EXISTS "Voir ses messages et annonces" ON public.messages;
 CREATE POLICY "Voir ses messages et annonces" ON public.messages 
 FOR SELECT USING (
     auth.uid()::text = sender_id 
@@ -187,9 +197,11 @@ FOR SELECT USING (
         SELECT class_id FROM inscriptions WHERE etudiant_id = auth.uid()::text
     ))
 );
+DROP POLICY IF EXISTS "Envoi de messages" ON public.messages;
 CREATE POLICY "Envoi de messages" ON public.messages FOR INSERT WITH CHECK (auth.uid()::text = sender_id);
 
 -- Politiques Push Subscriptions
+DROP POLICY IF EXISTS "Les élèves peuvent gérer leurs abonnements" ON public.push_subscriptions;
 CREATE POLICY "Les élèves peuvent gérer leurs abonnements" ON public.push_subscriptions 
 FOR ALL USING (auth.uid()::text = etudiant_id) WITH CHECK (auth.uid()::text = etudiant_id);
 
@@ -234,6 +246,7 @@ INSERT INTO public.formations (title, slug, description, price, duration, type) 
 ('Spiritualité Musulmane', 'spiritualite_islam', 'Éducation de l''âme et préceptes profonds de l''Islam.', 399, '4 mois', 'distanciel'),
 ('Sîrah An-Nabawiyya', 'as_sirah', 'La vie de la meilleure des créatures.', 250, 'Annuel', 'distanciel'),
 ('Al-Aqîda', 'al_aqida', 'Étude de la foi sunnite à travers la Tahawiya.', 399, '4 mois', 'distanciel'),
+('Pack Accompagnement', 'pack_accompagnement', 'Pack d''accompagnement inclus.', 49, 'Annuel', 'distanciel'),
 ('Mémorisation du Coran', 'memoriser_coran', 'Accompagnement personnalisé pour le Hifz.', 399, 'Annuel', 'distanciel'),
 ('Sciences du Hadith', 'sciences_hadith', 'Étude de l''authenticité et de la transmission prophétique.', 349, '10 mois', 'distanciel'),
 ('Tarbiya Islamiya', 'tarbiya_islamiya', 'Éducation spirituelle pour les enfants (6-15 ans).', 399, 'Annuel', 'distanciel'),
@@ -244,9 +257,16 @@ INSERT INTO public.formations (title, slug, description, price, duration, type) 
 ('Sciences Islamiques', 'sciences_islamiques', 'Socle de connaissances solide (Fiqh, Sîrah, Coran).', 349, '8 mois', 'distanciel'),
 ('Sciences du Coran', 'sciences_du_coran', 'Histoire, compilation et transmission du Livre Saint.', 399, '5 mois', 'distanciel'),
 ('Cours d''arabe enfant', 'arabe_coran_junior', 'Méthode immersive pour les 4-15 ans.', 480, 'Annuel', 'distanciel'),
+('Tajwid Enfant (Distanciel)', 'tajwid_enfant_distance', 'Apprentissage des règles de Tajwid pour enfants.', 349, 'Annuel', 'distanciel'),
+('Arabe Enfant (Distanciel)', 'arabe_enfant_distance', 'Apprentissage de l''arabe pour enfants à distance.', 349, 'Annuel', 'distanciel'),
 ('Scolarité Présentiel', 'presentiel-global', 'Accès global aux cursus de l''Institut en présentiel.', 480, 'Annuel', 'presentiel'),
 ('Présentiel Enfant', 'presentiel-enfant', 'Cursus présentiel pour enfants.', 480, 'Annuel', 'presentiel'),
-('Arabe Coran Junior (Présentiel)', 'arabe-coran-junior', 'Méthode immersive présentiel pour les 4-15 ans.', 480, 'Annuel', 'presentiel')
+('Arabe Coran Junior (Présentiel)', 'arabe-coran-junior', 'Méthode immersive présentiel pour les 4-15 ans.', 480, 'Annuel', 'presentiel'),
+('Arabe & Coran Enfant (Mercredi)', 'enfant-mercredi-presentiel', 'Cours présentiel du mercredi pour enfants.', 480, 'Annuel', 'presentiel'),
+('Arabe & Coran Enfant (Samedi)', 'enfant-samedi-presentiel', 'Cours présentiel du samedi pour enfants.', 480, 'Annuel', 'presentiel'),
+('Arabe & Coran Enfant (Dimanche)', 'enfant-dimanche-presentiel', 'Cours présentiel du dimanche pour enfants.', 480, 'Annuel', 'presentiel'),
+('Arabe & Tajwid Femme Débutante (Présentiel)', 'femme-debutante-presentiel', 'Cours présentiel pour femmes débutantes.', 649, 'Annuel', 'presentiel'),
+('Arabe & Tajwid Femme Intermédiaire (Présentiel)', 'femme-intermediaire-presentiel', 'Cours présentiel pour femmes intermédiaires.', 649, 'Annuel', 'presentiel')
 ON CONFLICT (slug) DO UPDATE SET
     title = EXCLUDED.title,
     description = EXCLUDED.description,
@@ -257,64 +277,65 @@ ON CONFLICT (slug) DO UPDATE SET
 -- ─────────────────────────────────────────────────────────────────────────────────────
 -- 7. SEEDING / RENSEIGNEMENT DES 31 CLASSES PRÉSENTIELLES AVEC LIENS WHATSAPP
 -- ─────────────────────────────────────────────────────────────────────────────────────
-WITH formation AS (
-    SELECT id FROM public.formations WHERE slug = 'presentiel-global'
-)
 INSERT INTO public.classes
     (formation_id, name, type, is_active,
      day_of_week, periode, niveau, age_condition, audience, classe_type,
      niveau_key, capacity_limit, external_id, whatsapp_link)
 VALUES
 -- BLOC 1 – PRÉPARATOIRE 1ère ANNÉE (4-6 ans)
-((SELECT id FROM formation), 'Prépa 1 – Mercredi',       'presentiel', true, 'Mercredi',  'après-midi', 'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 1,  'https://chat.whatsapp.com/GROUPE_CLASSE_01'),
-((SELECT id FROM formation), 'Prépa 1 – Samedi Matin',   'presentiel', true, 'Samedi',    'matin',       'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 2,  'https://chat.whatsapp.com/GROUPE_CLASSE_02'),
-((SELECT id FROM formation), 'Prépa 1 – Samedi A-M',     'presentiel', true, 'Samedi',    'après-midi',  'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 3,  'https://chat.whatsapp.com/GROUPE_CLASSE_03'),
-((SELECT id FROM formation), 'Prépa 1 – Dimanche Matin', 'presentiel', true, 'Dimanche',  'matin',       'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 4,  'https://chat.whatsapp.com/GROUPE_CLASSE_04'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Prépa 1 – Mercredi',       'presentiel', true, 'Mercredi',  'après-midi', 'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 1,  'https://chat.whatsapp.com/GROUPE_CLASSE_01'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Prépa 1 – Samedi Matin',   'presentiel', true, 'Samedi',    'matin',       'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 2,  'https://chat.whatsapp.com/GROUPE_CLASSE_02'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Prépa 1 – Samedi A-M',     'presentiel', true, 'Samedi',    'après-midi',  'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 3,  'https://chat.whatsapp.com/GROUPE_CLASSE_03'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Prépa 1 – Dimanche Matin', 'presentiel', true, 'Dimanche',  'matin',       'Préparatoire 1ère année', '4-6 ans',     'enfant', 'mixte', 'maternel_1',         23, 4,  'https://chat.whatsapp.com/GROUPE_CLASSE_04'),
 
 -- BLOC 2 – PRÉPARATOIRE 2ème ANNÉE (5-6 ans)
-((SELECT id FROM formation), 'Prépa 2 – Mercredi',       'presentiel', true, 'Mercredi',  'après-midi', 'Préparatoire 2ème année', '5-6 ans',     'enfant', 'mixte', 'maternel_2',         23, 5,  'https://chat.whatsapp.com/GROUPE_CLASSE_05'),
-((SELECT id FROM formation), 'Prépa 2 – Samedi Matin',   'presentiel', true, 'Samedi',    'matin',       'Préparatoire 2ème année', '5-6 ans',     'enfant', 'mixte', 'maternel_2',         23, 6,  'https://chat.whatsapp.com/GROUPE_CLASSE_06'),
-((SELECT id FROM formation), 'Prépa 2 – Dimanche Matin', 'presentiel', true, 'Dimanche',  'matin',       'Préparatoire 2ème année', '5-6 ans',     'enfant', 'mixte', 'maternel_2',         23, 7,  'https://chat.whatsapp.com/GROUPE_CLASSE_07'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Prépa 2 – Mercredi',       'presentiel', true, 'Mercredi',  'après-midi', 'Préparatoire 2ème année', '5-6 ans',     'enfant', 'mixte', 'maternel_2',         23, 5,  'https://chat.whatsapp.com/GROUPE_CLASSE_05'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Prépa 2 – Samedi Matin',   'presentiel', true, 'Samedi',    'matin',       'Préparatoire 2ème année', '5-6 ans',     'enfant', 'mixte', 'maternel_2',         23, 6,  'https://chat.whatsapp.com/GROUPE_CLASSE_06'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Prépa 2 – Dimanche Matin', 'presentiel', true, 'Dimanche',  'matin',       'Préparatoire 2ème année', '5-6 ans',     'enfant', 'mixte', 'maternel_2',         23, 7,  'https://chat.whatsapp.com/GROUPE_CLASSE_07'),
 
 -- BLOC 3 – ÉLÉMENTAIRE DÉBUTANT 1 (7-14 ans)
-((SELECT id FROM formation), 'Élémentaire Déb.1 – Mercredi',       'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 8,  'https://chat.whatsapp.com/GROUPE_CLASSE_08'),
-((SELECT id FROM formation), 'Élémentaire Déb.1 – Samedi Matin',   'presentiel', true, 'Samedi',   'matin',       'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 9,  'https://chat.whatsapp.com/GROUPE_CLASSE_09'),
-((SELECT id FROM formation), 'Élémentaire Déb.1 – Samedi A-M',     'presentiel', true, 'Samedi',   'après-midi',  'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 10, 'https://chat.whatsapp.com/GROUPE_CLASSE_10'),
-((SELECT id FROM formation), 'Élémentaire Déb.1 – Dimanche Matin', 'presentiel', true, 'Dimanche', 'matin',       'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 11, 'https://chat.whatsapp.com/GROUPE_CLASSE_11'),
-((SELECT id FROM formation), 'Élémentaire Déb.1 – Dimanche A-M',   'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 12, 'https://chat.whatsapp.com/GROUPE_CLASSE_12'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Élémentaire Déb.1 – Mercredi',       'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 8,  'https://chat.whatsapp.com/GROUPE_CLASSE_08'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Élémentaire Déb.1 – Samedi Matin',   'presentiel', true, 'Samedi',   'matin',       'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 9,  'https://chat.whatsapp.com/GROUPE_CLASSE_09'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Élémentaire Déb.1 – Samedi A-M',     'presentiel', true, 'Samedi',   'après-midi',  'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 10, 'https://chat.whatsapp.com/GROUPE_CLASSE_10'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire Déb.1 – Dimanche Matin', 'presentiel', true, 'Dimanche', 'matin',       'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 11, 'https://chat.whatsapp.com/GROUPE_CLASSE_11'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire Déb.1 – Dimanche A-M',   'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire Débutant 1', '7-14 ans', 'enfant', 'mixte', 'elementaire_1', 23, 12, 'https://chat.whatsapp.com/GROUPE_CLASSE_12'),
 
 -- BLOC 4 – ÉLÉMENTAIRE 1+ (NON débutant)
-((SELECT id FROM formation), 'Élémentaire 1+ – Mercredi',       'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 13, 'https://chat.whatsapp.com/GROUPE_CLASSE_13'),
-((SELECT id FROM formation), 'Élémentaire 1+ – Samedi Matin',   'presentiel', true, 'Samedi',   'matin',       'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 14, 'https://chat.whatsapp.com/GROUPE_CLASSE_14'),
-((SELECT id FROM formation), 'Élémentaire 1+ – Samedi A-M',     'presentiel', true, 'Samedi',   'après-midi',  'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 15, 'https://chat.whatsapp.com/GROUPE_CLASSE_15'),
-((SELECT id FROM formation), 'Élémentaire 1+ – Dimanche Matin', 'presentiel', true, 'Dimanche', 'matin',       'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 16, 'https://chat.whatsapp.com/GROUPE_CLASSE_16'),
-((SELECT id FROM formation), 'Élémentaire 1+ – Dimanche A-M',   'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 17, 'https://chat.whatsapp.com/GROUPE_CLASSE_17'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Élémentaire 1+ – Mercredi',       'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 13, 'https://chat.whatsapp.com/GROUPE_CLASSE_13'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Élémentaire 1+ – Samedi Matin',   'presentiel', true, 'Samedi',   'matin',       'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 14, 'https://chat.whatsapp.com/GROUPE_CLASSE_14'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Élémentaire 1+ – Samedi A-M',     'presentiel', true, 'Samedi',   'après-midi',  'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 15, 'https://chat.whatsapp.com/GROUPE_CLASSE_15'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 1+ – Dimanche Matin', 'presentiel', true, 'Dimanche', 'matin',       'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 16, 'https://chat.whatsapp.com/GROUPE_CLASSE_16'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 1+ – Dimanche A-M',   'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 17, 'https://chat.whatsapp.com/GROUPE_CLASSE_17'),
 
 -- BLOC 5 – ÉLÉMENTAIRE 2 et 2+ (7-14 ans)
-((SELECT id FROM formation), 'Élémentaire 2 et 2+ – Mercredi',    'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 2 et 2+', '7-14 ans', 'enfant', 'mixte', 'elementaire_2', 23, 18, 'https://chat.whatsapp.com/GROUPE_CLASSE_18'),
-((SELECT id FROM formation), 'Élémentaire 2 – Dimanche Matin',    'presentiel', true, 'Dimanche', 'matin',       'Élémentaire 2',       '7-14 ans', 'enfant', 'mixte', 'elementaire_2', 23, 19, 'https://chat.whatsapp.com/GROUPE_CLASSE_19'),
-((SELECT id FROM formation), 'Élémentaire 2 – Dimanche A-M',      'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire 2',       '7-14 ans', 'enfant', 'mixte', 'elementaire_2', 23, 20, 'https://chat.whatsapp.com/GROUPE_CLASSE_20'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Élémentaire 2 et 2+ – Mercredi',    'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 2 et 2+', '7-14 ans', 'enfant', 'mixte', 'elementaire_2', 23, 18, 'https://chat.whatsapp.com/GROUPE_CLASSE_18'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 2 – Dimanche Matin',    'presentiel', true, 'Dimanche', 'matin',       'Élémentaire 2',       '7-14 ans', 'enfant', 'mixte', 'elementaire_2', 23, 19, 'https://chat.whatsapp.com/GROUPE_CLASSE_19'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 2 – Dimanche A-M',      'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire 2',       '7-14 ans', 'enfant', 'mixte', 'elementaire_2', 23, 20, 'https://chat.whatsapp.com/GROUPE_CLASSE_20'),
 
 -- BLOC 6 – ÉLÉMENTAIRE 2+ (7-14 ans)
-((SELECT id FROM formation), 'Élémentaire 2+ – Dimanche A-M', 'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 2+', '7-14 ans', 'enfant', 'mixte', 'elementaire_2_plus', 23, 21, 'https://chat.whatsapp.com/GROUPE_CLASSE_21'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 2+ – Dimanche A-M', 'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 2+', '7-14 ans', 'enfant', 'mixte', 'elementaire_2_plus', 23, 21, 'https://chat.whatsapp.com/GROUPE_CLASSE_21'),
 
 -- BLOC 7 – ÉLÉMENTAIRE 3 (7-14 ans)
-((SELECT id FROM formation), 'Élémentaire 3 – Dimanche A-M',   'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 3',       '7-14 ans', 'enfant', 'mixte', 'elementaire_3', 23, 22, 'https://chat.whatsapp.com/GROUPE_CLASSE_22'),
-((SELECT id FROM formation), 'Élémentaire 3 et 3+ – Mercredi', 'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 3 et 3+', '7-12 ans', 'enfant', 'mixte', 'elementaire_3', 23, 23, 'https://chat.whatsapp.com/GROUPE_CLASSE_23'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 3 – Dimanche A-M',   'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 3',       '7-14 ans', 'enfant', 'mixte', 'elementaire_3', 23, 22, 'https://chat.whatsapp.com/GROUPE_CLASSE_22'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Élémentaire 3 et 3+ – Mercredi', 'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 3 et 3+', '7-12 ans', 'enfant', 'mixte', 'elementaire_3', 23, 23, 'https://chat.whatsapp.com/GROUPE_CLASSE_23'),
 
 -- BLOC 8 – ÉLÉMENTAIRE 4 & 5 (7-15 ans)
-((SELECT id FROM formation), 'Élémentaire 4 – Dimanche A-M', 'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 4', '7-14 ans', 'enfant', 'mixte', 'elementaire_4', 23, 24, 'https://chat.whatsapp.com/GROUPE_CLASSE_24'),
-((SELECT id FROM formation), 'Élémentaire 5 – Dimanche A-M', 'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 5', '7-15 ans', 'enfant', 'mixte', 'elementaire_5', 23, 25, 'https://chat.whatsapp.com/GROUPE_CLASSE_25'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 4 – Dimanche A-M', 'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 4', '7-14 ans', 'enfant', 'mixte', 'elementaire_4', 23, 24, 'https://chat.whatsapp.com/GROUPE_CLASSE_24'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire 5 – Dimanche A-M', 'presentiel', true, 'Dimanche', 'après-midi', 'Élémentaire 5', '7-15 ans', 'enfant', 'mixte', 'elementaire_5', 23, 25, 'https://chat.whatsapp.com/GROUPE_CLASSE_25'),
+
+-- CLASSES MANQUANTES DISTANCIEL
+((SELECT id FROM public.formations WHERE slug = 'pack_accompagnement'), 'Session Pack Accompagnement', 'distanciel', true, 'Variable', 'Variable', 'Tous niveaux', 'Tout public', 'adulte', 'mixte', 'tous', 100, 100, NULL),
+((SELECT id FROM public.formations WHERE slug = 'tajwid_enfant_distance'), 'Session Tajwid Enfant (Distance)', 'distanciel', true, 'Variable', 'Variable', 'Tous niveaux', 'Enfant', 'enfant', 'mixte', 'tous', 100, 101, NULL),
+((SELECT id FROM public.formations WHERE slug = 'arabe_enfant_distance'), 'Session Arabe Enfant (Distance)', 'distanciel', true, 'Variable', 'Variable', 'Tous niveaux', 'Enfant', 'enfant', 'mixte', 'tous', 100, 102, NULL),
 
 -- BLOC 9 – FEMMES
-((SELECT id FROM formation), 'Femme Débutante – Arabe + Tajwid',   'presentiel', true, 'Dimanche', 'matin',       'Femme débutante ARABE + TAJWID', 'Femme', 'adulte', 'femme', 'femme_debutante',     23, 26, 'https://chat.whatsapp.com/GROUPE_CLASSE_26'),
-((SELECT id FROM formation), 'Femme Débutante – Tajwid Seul',      'presentiel', true, 'Dimanche', 'matin',       'Femme débutante TAJWID SEUL',    'Femme', 'adulte', 'femme', 'femme_debutante',     23, 27, 'https://chat.whatsapp.com/GROUPE_CLASSE_27'),
-((SELECT id FROM formation), 'Femme Débutante – Arabe Seul',       'presentiel', true, 'Dimanche', 'matin',       'Femme débutante ARABE SEUL',     'Femme', 'adulte', 'femme', 'femme_debutante',     23, 28, 'https://chat.whatsapp.com/GROUPE_CLASSE_28'),
-((SELECT id FROM formation), 'Femme Intermédiaire – Arabe',        'presentiel', true, 'Samedi',   'matin',       'Femme intermédiaire ARABE',      'Femme', 'adulte', 'femme', 'femme_intermediaire', 23, 29, 'https://chat.whatsapp.com/GROUPE_CLASSE_29'),
-((SELECT id FROM formation), 'Femme Intermédiaire – Tajwid',       'presentiel', true, 'Samedi',   'matin',       'Femme intermédiaire TAJWID',     'Femme', 'adulte', 'femme', 'femme_intermediaire', 23, 30, 'https://chat.whatsapp.com/GROUPE_CLASSE_30'),
-((SELECT id FROM formation), 'Femme Intermédiaire – Arabe + Taj.', 'presentiel', true, 'Samedi',   'après-midi',  'Femme intermédiaire ARABE + TAJ','Femme', 'adulte', 'femme', 'femme_intermediaire', 23, 31, 'https://chat.whatsapp.com/GROUPE_CLASSE_31')
+((SELECT id FROM public.formations WHERE slug = 'femme-debutante-presentiel'), 'Femme Débutante – Arabe + Tajwid',   'presentiel', true, 'Dimanche', 'matin',       'Femme débutante ARABE + TAJWID', 'Femme', 'adulte', 'femme', 'femme_debutante',     23, 26, 'https://chat.whatsapp.com/GROUPE_CLASSE_26'),
+((SELECT id FROM public.formations WHERE slug = 'femme-intermediaire-presentiel'), 'Femme Intermédiaire – Arabe + Taj.', 'presentiel', true, 'Samedi',   'après-midi',  'Femme intermédiaire ARABE + TAJ','Femme', 'adulte', 'femme', 'femme_intermediaire', 23, 31, 'https://chat.whatsapp.com/GROUPE_CLASSE_31')
 ON CONFLICT (external_id) DO UPDATE SET
+    formation_id  = EXCLUDED.formation_id,
     name          = EXCLUDED.name,
+    type          = EXCLUDED.type,
+    is_active     = EXCLUDED.is_active,
     day_of_week   = EXCLUDED.day_of_week,
     periode       = EXCLUDED.periode,
     niveau        = EXCLUDED.niveau,
@@ -323,5 +344,7 @@ ON CONFLICT (external_id) DO UPDATE SET
     classe_type   = EXCLUDED.classe_type,
     niveau_key    = EXCLUDED.niveau_key,
     capacity_limit= EXCLUDED.capacity_limit,
-    whatsapp_link = EXCLUDED.whatsapp_link,
-    is_active     = EXCLUDED.is_active;
+    whatsapp_link = EXCLUDED.whatsapp_link;
+
+-- 8. DÉSACTIVER LES ANCIENNES CLASSES FEMMES (Pour éviter les doublons dans le panel admin)
+UPDATE public.classes SET is_active = false WHERE external_id IN (27, 28, 29, 30);
