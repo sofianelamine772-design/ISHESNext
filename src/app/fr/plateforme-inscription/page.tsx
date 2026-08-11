@@ -479,6 +479,53 @@ function InscriptionForm() {
   const levelLabel = selectedClass ? selectedClass.niveau : getLevelLabel(level);
   const planName = (levelLabel ? levelLabel : getPlanName(planId)) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
 
+  // --- LOGIQUE DE FERMETURE DES INSCRIPTIONS PRÉSENTIELLES ---
+  const today = new Date();
+  const currentMonth = today.getMonth(); // 0 = Janvier, 11 = Décembre
+  const currentDay = today.getDate();
+
+  let isPresentielBlocked = false;
+  // Fermé du 30 Novembre au 30 Avril
+  if (currentMonth === 11 || currentMonth === 0 || currentMonth === 1 || currentMonth === 2) {
+    isPresentielBlocked = true; // Dec, Jan, Feb, Mar
+  } else if (currentMonth === 10 && currentDay >= 30) {
+    isPresentielBlocked = true; // A partir du 30 Novembre
+  } else if (currentMonth === 3 && currentDay < 30) {
+    isPresentielBlocked = true; // Jusqu'au 29 Avril
+  }
+
+  const isPlanPresentiel = planId?.toLowerCase().includes('presentiel') || audienceParam?.toLowerCase().includes('presentiel');
+
+  if (isPlanPresentiel && isPresentielBlocked) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-center text-4xl font-black text-[#101828] mb-10 tracking-tight">
+          Rejoignez l'institut.
+        </h1>
+        <div className="relative z-10 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 md:p-16 text-center">
+          <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-black text-gray-900 mb-4">Les inscriptions en présentiel sont actuellement fermées.</h2>
+          <p className="text-gray-500 max-w-lg mx-auto leading-relaxed text-lg">
+            La prochaine campagne d'inscription débutera le <span className="font-bold text-ishes-blue">30 avril</span>. <br/><br/>
+            En attendant, nos formations en <span className="font-bold">distanciel</span> restent ouvertes toute l'année !
+          </p>
+          <div className="mt-8">
+            <button 
+              onClick={() => router.push('/program')}
+              className="bg-ishes-blue text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-ishes-blue/30 hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              Découvrir nos cours en distanciel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Title */}

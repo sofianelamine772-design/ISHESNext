@@ -23,6 +23,30 @@ export async function POST(req: Request) {
     const formationId = body.formationId || body.planId || '';
     const registrationType = body.registrationType || 'adult';
 
+    // --- SÉCURITÉ : BLOCAGE DES INSCRIPTIONS PRÉSENTIELLES (30 Nov - 30 Avril) ---
+    const isPlanPresentiel = formationId.toLowerCase().includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire';
+    if (isPlanPresentiel) {
+      const today = new Date();
+      const currentMonth = today.getMonth(); // 0 = Janvier, 11 = Décembre
+      const currentDay = today.getDate();
+
+      let isPresentielBlocked = false;
+      if (currentMonth === 11 || currentMonth === 0 || currentMonth === 1 || currentMonth === 2) {
+        isPresentielBlocked = true; // Dec, Jan, Feb, Mar
+      } else if (currentMonth === 10 && currentDay >= 30) {
+        isPresentielBlocked = true; // A partir du 30 Novembre
+      } else if (currentMonth === 3 && currentDay < 30) {
+        isPresentielBlocked = true; // Jusqu'au 29 Avril
+      }
+
+      if (isPresentielBlocked) {
+        return NextResponse.json(
+          { error: 'Les inscriptions en présentiel sont fermées jusqu\'au 30 avril.' },
+          { status: 400 }
+        );
+      }
+    }
+
     // 1. Charger la formation depuis la base de données (Source unique de vérité)
     const { data: formation } = await supabaseAdmin
       .from('formations')
