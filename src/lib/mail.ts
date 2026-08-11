@@ -1,8 +1,5 @@
-import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
 import { logSystemError } from './error-logger';
-
-const resend = new Resend(process.env.RESEND_API_KEY || "fallback_key_for_build");
 
 // Configuration SMTP facultative (Gmail, etc.)
 const smtpUser = process.env.SMTP_USER;
@@ -30,7 +27,7 @@ interface SendEmailParams {
   html: string;
   text?: string;
   from?: string;
-  provider?: 'smtp' | 'resend';
+  replyTo?: string;
   attachments?: Array<{
     filename: string;
     content: any;
@@ -38,53 +35,36 @@ interface SendEmailParams {
   }>;
 }
 
-export async function sendEmail({ to, subject, html, text, from, provider, attachments }: SendEmailParams) {
+export async function sendEmail({ to, subject, html, text, from, replyTo, attachments }: SendEmailParams) {
   try {
-    // Si SMTP est configuré et :
-    // - soit provider est 'smtp'
-    // - soit on est en mode développement (pour pouvoir tester sans restriction de domaine sandbox)
-    // - soit aucun provider n'est spécifié
-    const useSmtp = !!transporter && (
-      provider === 'smtp' ||
-      (process.env.NODE_ENV === 'development' && provider !== 'resend') ||
-      !provider
-    );
-
-    if (useSmtp) {
-      const mailOptions = {
-        from: from || `ISHES <${smtpUser}>`,
-        to: Array.isArray(to) ? to.join(', ') : to,
-        subject,
-        html,
-        text: text || '',
-        attachments: attachments,
-      };
-
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
-      return { success: true, data: info };
+    if (!transporter) {
+      console.warn("[SMTP] Transporter non initialisé. L'email n'a pas été envoyé.");
+      return { success: false, error: "SMTP non configuré" };
     }
 
-    // Sinon, on utilise Resend
-    const data = await resend.emails.send({
-      from: from || 'ISHES <onboarding@resend.dev>', // Remplacer par contact@ishes-toulouse.fr quand le domaine est vérifié
-      to,
+    // Génération automatique d'une version texte si elle n'est pas fournie (Anti-Spam)
+    // Les filtres anti-spam pénalisent fortement les e-mails 100% HTML sans version texte.
+    const textFallback = text || html.replace(/<[^>]+>/g, '\n').replace(/\n\s*\n/g, '\n\n').trim();
+
+    const mailOptions = {
+      from: from || `"ISHES" <${smtpUser}>`,
+      to: Array.isArray(to) ? to.join(', ') : to,
+      replyTo: replyTo || smtpUser,
       subject,
       html,
-      text: text || '',
-      attachments: attachments ? attachments.map(att => ({
-        filename: att.filename,
-        content: typeof att.content === 'string' ? Buffer.from(att.content, 'utf-8') : att.content
-      })) : undefined,
-    });
+      text: textFallback,
+      attachments: attachments,
+      headers: {
+        'X-Priority': '1 (Highest)',
+        'X-Mailer': 'Nodemailer',
+        'List-Unsubscribe': `<mailto:${smtpUser}?subject=unsubscribe>`,
+      }
+    };
 
-    if (data.error) {
-      console.error("Resend API Error:", data.error);
-      await logSystemError('Mailing Service (Resend)', data.error);
-      return { success: false, error: data.error };
-    }
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
+    return { success: true, data: info };
 
-    return { success: true, data };
   } catch (error) {
     console.error("Failed to send email:", error);
     await logSystemError('Mailing Service', error);
@@ -158,8 +138,7 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
   return sendEmail({
     to: email,
     subject: "✨ Bienvenue dans la famille ISHES ! Votre espace vous attend",
-    html,
-    provider: 'resend'
+    html
   });
 }
 
@@ -197,8 +176,7 @@ export async function sendPaymentReminderEmail(email: string, firstName: string,
   return sendEmail({
     to: email,
     subject: "ISHES - Action requise concernant votre paiement",
-    html,
-    provider: 'resend'
+    html
   });
 }
 
@@ -246,8 +224,7 @@ export async function sendNewMessageEmail({
   return sendEmail({
     to: email,
     subject: title ? `✉️ ISHES : ${title}` : "✉️ Nouveau message de l'administration ISHES",
-    html,
-    provider: 'smtp'
+    html
   });
 }
 
@@ -280,8 +257,7 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
   return sendEmail({
     to: email,
     subject: "✅ ISHES - Votre classe et groupe WhatsApp",
-    html,
-    provider: 'resend'
+    html
   });
 }
 
@@ -321,8 +297,7 @@ export async function sendAdminNewMessageEmail({
   return sendEmail({
     to: "sofianelamine772@gmail.com",
     subject: `✉️ Nouveau message de ${studentName} - ISHES`,
-    html,
-    provider: 'resend' // Utilise Resend par défaut pour garantir la délivrabilité
+    html
   });
 }
 
@@ -425,8 +400,6 @@ export async function sendBackupReportEmail(params: {
     to: "sofianelamine772@gmail.com",
     subject: `📦 Sauvegarde automatique BD - ${date} - ISHES`,
     html,
-    provider: 'resend',
     attachments: attachments.length > 0 ? attachments : undefined
   });
 }
-

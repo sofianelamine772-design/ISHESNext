@@ -3,8 +3,8 @@ import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { isAdminEmail } from '@/lib/auth-utils';
-import { Resend } from 'resend';
 import webPush from 'web-push';
+import nodemailer from 'nodemailer';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as any,
@@ -294,47 +294,36 @@ export async function GET() {
       };
     }
 
-    // 11. Test Resend Email
-    if (process.env.RESEND_API_KEY) {
+    // 11. Test Serveur E-mails (SMTP)
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    if (smtpUser && smtpPass) {
       try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const domains = await resend.domains.list();
-        if (domains.error) {
-          diagnostics['resend'] = {
-            success: false,
-            message: `Erreur Resend : ${domains.error.message}`
-          };
-        } else {
-          // Récupérer le nombre d'emails envoyés aujourd'hui (00h00 - 24h00)
-          const emails = await resend.emails.list();
-          let sentToday = 0;
-          if (!emails.error && emails.data && emails.data.data) {
-            const now = new Date();
-            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+        const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
+        
+        const transporter = nodemailer.createTransport({
+          host: smtpHost,
+          port: smtpPort,
+          secure: smtpPort === 465,
+          auth: { user: smtpUser, pass: smtpPass },
+        });
 
-            sentToday = emails.data.data.filter((e: any) => {
-              if (!e.created_at) return false;
-              const d = new Date(e.created_at);
-              return d >= startOfDay && d <= endOfDay;
-            }).length;
-          }
-
-          diagnostics['resend'] = {
-            success: true,
-            message: `Connexion établie. ${domains.data?.data?.length || 0} domaine(s) configuré(s). ${sentToday}/500 e-mail(s) envoyé(s) aujourd'hui.`
-          };
-        }
+        await transporter.verify();
+        diagnostics['smtp'] = {
+          success: true,
+          message: `Connexion SMTP établie avec succès sur ${smtpHost}:${smtpPort}.`
+        };
       } catch (err: any) {
-        diagnostics['resend'] = {
+        diagnostics['smtp'] = {
           success: false,
-          message: `Erreur de connexion Resend : ${err.message || err}`
+          message: `Erreur de connexion SMTP : ${err.message || err}`
         };
       }
     } else {
-      diagnostics['resend'] = {
+      diagnostics['smtp'] = {
         success: false,
-        message: 'Clé API Resend absente.'
+        message: 'Identifiants SMTP (SMTP_USER / SMTP_PASS) absents.'
       };
     }
 

@@ -71,6 +71,34 @@ export async function POST(req: Request) {
     const formationTitle = formationData.title || 'Formation ISHES';
     const basePrice = Number(formationData.price);
 
+    // --- SECURITY: Check if classes are full ---
+    const classIdsToCheck: number[] = [];
+    if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
+      body.childrenList.forEach((child: any) => {
+        if (child.classId) classIdsToCheck.push(parseInt(child.classId, 10));
+      });
+    } else {
+      if (body.classId) classIdsToCheck.push(parseInt(body.classId, 10));
+    }
+
+    if (classIdsToCheck.length > 0) {
+      const { data: statusData, error: statusError } = await supabaseAdmin
+        .from('vue_etat_creneaux')
+        .select('classe_numero, est_plein')
+        .in('classe_numero', classIdsToCheck);
+
+      if (!statusError && statusData) {
+        const fullClasses = statusData.filter((c: any) => c.est_plein === true);
+        if (fullClasses.length > 0) {
+          return NextResponse.json(
+            { error: "Désolé, l'une des classes sélectionnées vient de se remplir. Veuillez choisir un autre créneau." }, 
+            { status: 400 }
+          );
+        }
+      }
+    }
+    // ------------------------------------------
+
     // 2. Calculer le montant total (multiplié par le nombre d'enfants si inscription famille)
     let totalAmount = basePrice;
     if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {

@@ -21,6 +21,7 @@ type StudentDetail = {
   avatar: string;
   dateJoined: string;
   enrolledClass: string;
+  exactClassName?: string;
   classType: "distanciel" | "presentiel";
   status: "actif" | "inactif" | "en_attente" | "en_attente_daffectation" | "valide";
   parentName: string | null;
@@ -130,7 +131,11 @@ function EtudiantsContent() {
               ) ||
               (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) ||
               "Non affecté",
-            classType: "distanciel" as const,
+            exactClassName: (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) || undefined,
+            classType:
+              (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.type : latestInscription?.classes?.type) ||
+              (Array.isArray(latestInscription?.formations) ? latestInscription?.formations[0]?.type : latestInscription?.formations?.type) ||
+              "distanciel",
             status: s.status || "en_attente",
             parentName: null,
             address: s.address || "Adresse non renseignée",
@@ -588,9 +593,10 @@ function EtudiantsContent() {
                     <button
                       key={student.id}
                       onClick={() => setSelectedStudentId(student.id)}
-                      className={`w-full text-left p-4 rounded-3xl transition-all border block mb-2 ${selectedStudentId === student.id
-                        ? "bg-white text-ishes-dark shadow-lg shadow-black/5 border-gray-200 ring-1 ring-gray-900/5"
-                        : "bg-white border-gray-50 hover:border-gray-200 hover:shadow-md hover:shadow-black/5"
+                      className={`w-full text-left p-4 rounded-3xl transition-all border block mb-2 
+                        ${selectedStudentId === student.id
+                          ? (student.classType === 'presentiel' ? "bg-orange-50 text-ishes-dark shadow-lg shadow-orange-500/5 border-orange-200 ring-1 ring-orange-500/10" : "bg-blue-50 text-ishes-dark shadow-lg shadow-blue-500/5 border-blue-200 ring-1 ring-blue-500/10")
+                          : (student.classType === 'presentiel' ? "bg-orange-50/30 border-orange-100 hover:border-orange-200 hover:bg-orange-50/50 hover:shadow-md hover:shadow-orange-500/5" : "bg-blue-50/30 border-blue-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-md hover:shadow-blue-500/5")
                         }`}
                     >
                       <div className="flex items-center gap-4">
@@ -607,9 +613,16 @@ function EtudiantsContent() {
                           </div>
                           <p className="text-[10px] font-medium tracking-wider truncate mb-1 opacity-65 uppercase text-ishes-dark">{student.email}</p>
                           <div className="flex items-center gap-2">
-                            <span className={`ishes-label text-[8px] px-2 py-0.5 rounded-md truncate ${selectedStudentId === student.id ? 'bg-ishes-dark/10 text-ishes-dark' : 'bg-gray-50 text-gray-400'}`}>
-                              {student.enrolledClass || "Non assigné"}
-                            </span>
+                            <div className="flex flex-col gap-1 w-full overflow-hidden">
+                              <span className={`ishes-label text-[8px] px-2 py-0.5 rounded-md truncate ${selectedStudentId === student.id ? 'bg-ishes-dark/10 text-ishes-dark' : 'bg-gray-50 text-gray-400'}`}>
+                                {student.enrolledClass || "Non assigné"}
+                              </span>
+                              {student.exactClassName && student.exactClassName !== student.enrolledClass && (
+                                <span className={`text-[9px] font-bold truncate ${selectedStudentId === student.id ? 'text-ishes-blue' : 'text-gray-500'}`}>
+                                  ↳ {student.exactClassName}
+                                </span>
+                              )}
+                            </div>
                             {student.paymentStatus === 'en_retard' && (
                               <span className="ishes-label text-[8px] px-2 py-0.5 rounded-md bg-red-50 text-red-500 font-bold border border-red-100 shrink-0">
                                 IMPAYÉ
@@ -761,13 +774,20 @@ function EtudiantsContent() {
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Formation Actuelle</span>
                             {selectedStudent.classId ? (
-                              <Link
-                                href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
-                                className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
-                              >
-                                {selectedStudent.enrolledClass}
-                                <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
-                              </Link>
+                              <div className="flex flex-col">
+                                <Link
+                                  href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
+                                  className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
+                                >
+                                  {selectedStudent.enrolledClass}
+                                  <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
+                                </Link>
+                                {selectedStudent.exactClassName && selectedStudent.exactClassName !== selectedStudent.enrolledClass && (
+                                  <span className="text-sm font-semibold text-gray-500 mt-0.5">
+                                    Classe : {selectedStudent.exactClassName}
+                                  </span>
+                                )}
+                              </div>
                             ) : (
                               <span className="ishes-heading text-base md:text-lg text-gray-400">{selectedStudent.enrolledClass}</span>
                             )}

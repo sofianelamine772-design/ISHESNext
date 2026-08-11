@@ -727,11 +727,15 @@ function InscriptionForm() {
                                       c.audience === 'enfant' &&
                                       c.slotKey === slotVal.toLowerCase() &&
                                       c.niveauKey === child.niveau
-                                    ).map(c => (
-                                      <option key={c.id} value={c.id.toString()}>
-                                        {c.horaire}
-                                      </option>
-                                    ))}
+                                    ).map(c => {
+                                      const status = slotsStatus.find(s => s.classe_numero === c.id);
+                                      const isFull = status?.est_plein;
+                                      return (
+                                        <option key={c.id} value={c.id.toString()} disabled={isFull}>
+                                          {c.horaire} {isFull ? '(COMPLET)' : ''}
+                                        </option>
+                                      );
+                                    })}
                                   </select>
                                   {!child.niveau && (
                                     <div
@@ -842,10 +846,17 @@ function InscriptionForm() {
                                     c.audience === 'adulte' &&
                                     c.type === 'femme' &&
                                     c.slotKey === slotVal.toLowerCase()
-                                  ).forEach(c => {
+                                  ).map(c => {
+                                    const status = slotsStatus.find(s => s.classe_numero === c.id);
+                                    const isFull = status?.est_plein;
                                     if (!seenKeys.has(c.niveauKey)) {
                                       seenKeys.add(c.niveauKey);
                                       uniqueLevels.push(c);
+                                      return (
+                                        <option key={c.id} value={c.niveauKey} disabled={isFull}>
+                                          {c.niveauKey === 'femme_debutante' ? 'Femme Débutante' : 'Femme Intermédiaire'} {isFull ? '(COMPLET)' : ''}
+                                        </option>
+                                      );
                                     }
                                   });
                                   return uniqueLevels.map(c => (

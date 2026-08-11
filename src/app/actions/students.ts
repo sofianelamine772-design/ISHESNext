@@ -263,10 +263,11 @@ export async function fetchStudentsAction(academicYear?: string) {
           formation_id,
           class_id,
           academic_year,
-          formations (title),
+          formations (title, type),
           classes (
             name,
-            formations (title)
+            type,
+            formations (title, type)
           )
         )
       `)
@@ -667,18 +668,16 @@ export async function sendPaymentReminderAction(studentId: string) {
       }
     }
 
-    // Tenter l'email de relance standard (Resend)
+    // Tenter l'email de relance standard via SMTP
     const result = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
 
-    // On ignore totalement l'erreur de Resend (domaine non vérifié) pour le moment,
-    // car le plus important pour l'utilisateur est l'envoi de l'invitation Clerk.
     if (!result.success) {
-      console.warn("[RESEND_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", result.error);
+      console.warn("[SMTP_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", result.error);
       return {
         success: true,
         warning: clerkInvited
           ? "Invitation de création de compte Clerk envoyée avec succès !"
-          : "Aucune action possible (erreur d'envoi classique)."
+          : "Aucune action possible (erreur d'envoi SMTP)."
       };
     }
 
@@ -768,7 +767,41 @@ export async function updateStudentAction(id: string, data: any) {
     return { success: true };
   } catch (err) {
     console.error("Update Student Error:", err);
-    return { success: false, error: "Failed to update student profile" };
+    return { success: false, error: 'Failed to find duplicate student in webhook' };
+  }
+}
+
+// --- NOUVEAU: Récupération des capacités pour le site vitrine ---
+export async function getClassesCapacitiesAction() {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('classes')
+      .select(`
+        external_id,
+        capacity_limit,
+        inscriptions (id)
+      `)
+      .not('external_id', 'is', null);
+
+    if (error) throw error;
+
+    const capacities: Record<string, { capacity: number; enrolled: number }> = {};
+    if (data) {
+      data.forEach((c: any) => {
+        if (c.external_id) {
+          // Filtrer les inscriptions actives si besoin, mais en général on compte toutes les inscriptions
+          capacities[c.external_id.toString()] = {
+            capacity: c.capacity_limit || 20,
+            enrolled: c.inscriptions ? c.inscriptions.length : 0
+          };
+        }
+      });
+    }
+
+    return { success: true, data: capacities };
+  } catch (err) {
+    console.error("Fetch capacities error:", err);
+    return { success: false, error: "Failed to fetch capacities" };
   }
 }
 

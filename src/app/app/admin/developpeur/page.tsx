@@ -23,9 +23,9 @@ export default function DeveloperPage() {
     { id: 'api', name: 'Connexion API Stripe', status: 'idle', message: 'Attente du test...' },
     { id: 'webhooks', name: 'Endpoint Webhooks', status: 'idle', message: 'Attente du test...' },
     { id: 'products', name: 'Connexion Supabase', status: 'idle', message: 'Attente du test...' },
-    { id: 'database_schema', name: 'Tables de la base', status: 'idle', message: 'Attente du test...' },
+    { id: 'storage', name: 'Stockage Fichiers', status: 'idle', message: 'Attente du test...' },
     { id: 'clerk', name: 'Authentification Clerk', status: 'idle', message: 'Attente du test...' },
-    { id: 'resend', name: 'Serveur E-mails Resend', status: 'idle', message: 'Attente du test...' },
+    { id: 'smtp', name: 'Serveur E-mails (SMTP)', status: 'idle', message: 'Attente du test...' },
     { id: 'webpush', name: 'Web Push VAPID', status: 'idle', message: 'Attente du test...' },
   ]);
 
@@ -143,7 +143,7 @@ export default function DeveloperPage() {
                         {test.id === 'products' && <Database className="w-5 h-5" />}
                         {test.id === 'database_schema' && <ShieldCheck className="w-5 h-5" />}
                         {test.id === 'clerk' && <ShieldCheck className="w-5 h-5" />}
-                        {test.id === 'resend' && <Mail className="w-5 h-5" />}
+                        {test.id === 'smtp' && <Mail className="w-5 h-5" />}
                         {test.id === 'webpush' && <Bell className="w-5 h-5" />}
                         {test.id === 'clerk_alignment' && <ShieldCheck className="w-5 h-5" />}
                         {test.id === 'stripe_alignment' && <Zap className="w-5 h-5" />}

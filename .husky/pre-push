@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "✅ Lancement des tests unitaires (Jest)..."
-npm run test
+npm run test -- --colors
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car les tests unitaires ont échoué."
