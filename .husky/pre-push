@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "🔄 Lancement du test d'intégrité de la base de données..."
-npx ts-node scripts/test-db-mapping.ts
+npx tsx scripts/test-db-mapping.ts
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car des erreurs d'intégrité ont été trouvées dans la base de données."
