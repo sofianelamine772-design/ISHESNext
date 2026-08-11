@@ -57,7 +57,7 @@ export default function FormationEnseignantTarbyaPage() {
             
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link 
-                href="/inscription?plan=formation_enseignante_tarbya&audience=adulte" 
+                href="/fr/contact" 
                 className="inline-flex items-center justify-center gap-2 bg-ishes-dark hover:bg-ishes-dark/90 text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-dark/20 hover:-translate-y-1"
               >
                 JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
@@ -301,7 +301,7 @@ export default function FormationEnseignantTarbyaPage() {
 
           <div className="flex flex-col items-center md:items-end gap-2 shrink-0 pl-6 w-full md:w-auto mt-4 md:mt-0 border-t md:border-t-0 border-white/10 md:border-l pt-4 md:pt-0">
             <Link 
-              href="/inscription?plan=formation_enseignante_tarbya&audience=adulte" 
+              href="/fr/contact" 
               className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-3 rounded-md text-[14px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"
             >
               JE M'INSCRIS MAINTENANT <ArrowRight className="w-4 h-4" />

@@ -464,6 +464,16 @@ function InscriptionForm() {
       case "spiritualite_islam": return "Spiritualité Musulmane (Distanciel)";
       case "correction_fatiha": return "Correction al Fatiha (Distanciel)";
       case "cours_particuliers": return "Cours Particuliers (Distanciel)";
+      // Nouveaux plans
+      case "enfant-mercredi-presentiel": return "Arabe & Coran Enfant (Mercredi)";
+      case "enfant-samedi-presentiel": return "Arabe & Coran Enfant (Samedi)";
+      case "enfant-dimanche-presentiel": return "Arabe & Coran Enfant (Dimanche)";
+      case "femme-debutante-presentiel": return "Arabe & Tajwid Femme Débutante (Présentiel)";
+      case "femme-intermediaire-presentiel": return "Arabe & Tajwid Femme Intermédiaire (Présentiel)";
+      case "tajwid_enfant_distance": return "Tajwid Enfant (Distanciel)";
+      case "arabe_enfant_distance": return "Arabe Enfant (Distanciel)";
+      case "formation_enseignante_tajwid": return "Formation Enseignant Tajwid";
+      case "formation_enseignante_tarbya": return "Formation Enseignant Tarbya";
       default: return "";
     }
   };

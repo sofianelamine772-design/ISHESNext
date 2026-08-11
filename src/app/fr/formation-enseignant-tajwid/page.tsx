@@ -59,7 +59,7 @@ export default function FormationEnseignantTajwidPage() {
             
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link 
-                href="/inscription?plan=formation_enseignante_tajwid&audience=adulte" 
+                href="/fr/contact" 
                 className="inline-flex items-center justify-center gap-2 bg-ishes-dark hover:bg-ishes-dark/90 text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-dark/20 hover:-translate-y-1"
               >
                 Je m'inscris maintenant <ArrowRight className="w-5 h-5" />
@@ -277,7 +277,7 @@ export default function FormationEnseignantTajwidPage() {
 
             <div className="flex flex-col items-center md:items-end gap-2 w-full md:w-auto">
               <Link 
-                href="/inscription?plan=formation_enseignante_tajwid&audience=adulte" 
+                href="/fr/contact" 
                 className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-4 rounded-md text-[14px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"
               >
                 JE M'INSCRIS MAINTENANT <ArrowRight className="w-4 h-4" />

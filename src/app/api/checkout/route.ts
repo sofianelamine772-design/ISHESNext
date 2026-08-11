@@ -32,12 +32,27 @@ export async function POST(req: Request) {
 
     let formationData = formation;
 
-    // Fallback sécurisé pour les cours en présentiel non trouvés dans Supabase
+    // Fallback sécurisé pour les cours non trouvés dans Supabase
     if (!formationData) {
-      if (formationId.includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire') {
+      if (formationId.includes('enfant-') && formationId.includes('presentiel')) {
         formationData = {
-          title: "Cours en Présentiel",
+          title: "Cours en Présentiel (Enfant)",
+          price: 480
+        };
+      } else if (formationId.includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire') {
+        formationData = {
+          title: "Cours en Présentiel (Adulte)",
           price: 649
+        };
+      } else if (formationId === 'tajwid_enfant_distance' || formationId === 'arabe_enfant_distance') {
+        formationData = {
+          title: "Cours à distance (Enfant)",
+          price: 399
+        };
+      } else if (formationId === 'pack_accompagnement') {
+        formationData = {
+          title: "Pack Accompagnement",
+          price: 0
         };
       } else {
         return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
