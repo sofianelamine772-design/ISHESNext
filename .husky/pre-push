@@ -1,5 +1,13 @@
 #!/bin/sh
 
+echo "✅ Lancement des tests unitaires (Jest)..."
+npm run test
+
+if [ $? -ne 0 ]; then
+  echo "❌ Le push a été bloqué car les tests unitaires ont échoué."
+  exit 1
+fi
+
 echo "🔄 Lancement du test d'intégrité de la base de données..."
 npx tsx scripts/test-db-mapping.ts
 

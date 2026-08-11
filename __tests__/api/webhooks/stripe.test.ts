@@ -280,7 +280,7 @@ describe('Parcours Fiqh Malikite - Test Solide et Intégral', () => {
       expect.objectContaining({
         formation_id: FORMATION_UUID,
         class_id: CLASSE_UUID,
-        status: 'valide',
+        status: 'actif',
         paid_status: 'paye'
       })
     );
