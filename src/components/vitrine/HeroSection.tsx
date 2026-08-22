@@ -31,16 +31,16 @@ export function HeroSection() {
             className="w-full lg:col-span-12 flex flex-col"
           >
             <h1 className="text-[42px] sm:text-[52px] md:text-[60px] lg:text-[64px] font-black text-ishes-blue leading-[1.05] tracking-tight text-center w-full mb-4 lg:mb-6">
-              Apprenez votre religion<br className="hidden md:block"/> avec confiance
+              Comprends ta religion.<br className="hidden md:block"/> Rapproche-toi d’Allah.
             </h1>
 
             <h2 className="text-[42px] sm:text-[52px] md:text-[60px] lg:text-[64px] font-black text-ishes-gold leading-[1.05] tracking-tight text-center w-full mb-8 lg:mb-12">
-              Rapprochez-vous d'ALLAH avec une science<br className="hidden md:block"/> authentique
+              Chemine avec une communauté<br className="hidden md:block"/> qui te soutient.
             </h2>
 
             <div className="w-full lg:w-8/12 xl:w-7/12 text-left">
               <p className="max-w-[650px] text-base md:text-lg text-gray-600 leading-relaxed font-medium mt-8">
-                Depuis plus de 16 ans, l'Institut ISHES accompagne les francophones dans l'apprentissage de la langue arabe, du Coran et des sciences islamiques grâce à une pédagogie reconnue alliant science, spiritualité et accompagnement
+                Depuis plus de 16 ans, ISHES accompagne les adultes et les enfants avec un enseignement ancré dans l’islam traditionnel, une pédagogie adaptée à notre époque et un cheminement vécu ensemble.
               </p>
             </div>
 

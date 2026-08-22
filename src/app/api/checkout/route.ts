@@ -56,40 +56,10 @@ export async function POST(req: Request) {
 
     let formationData = formation;
 
-    // Fallback sécurisé pour les cours non trouvés dans Supabase
+    // Fallback minimal en cas d'erreur réseau pour des formations vitales non créées.
+    // L'idéal est que la base de données soit toujours à jour (règle 1 de l'architecture).
     if (!formationData) {
-      if (formationId.includes('enfant-') && formationId.includes('presentiel')) {
-        formationData = {
-          title: "Cours en Présentiel (Enfant)",
-          price: 480
-        };
-      } else if (formationId.includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire') {
-        formationData = {
-          title: "Cours en Présentiel (Adulte)",
-          price: 649
-        };
-      } else if (formationId === 'tajwid_enfant_distance' || formationId === 'arabe_enfant_distance') {
-        formationData = {
-          title: "Cours à distance (Enfant)",
-          price: 399
-        };
-      } else if (formationId === 'pack_accompagnement') {
-        formationData = {
-          title: "Pack Accompagnement",
-          price: 49
-        };
-      } else {
-        return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
-      }
-    } else {
-      // Même si on la trouve dans la base de données, on s'assure que le prix est correct pour les cas spécifiques
-      if (formationId === 'pack_accompagnement') {
-         formationData.price = 49;
-      } else if (formationId.includes('enfant-') && formationId.includes('presentiel')) {
-         formationData.price = 480;
-      } else if (formationId === 'femme-debutante-presentiel' || formationId === 'femme-intermediaire-presentiel') {
-         formationData.price = 649;
-      }
+      return NextResponse.json({ error: 'Formation introuvable en base de données' }, { status: 404 });
     }
 
     const formationTitle = formationData.title || 'Formation ISHES';
