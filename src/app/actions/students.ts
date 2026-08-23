@@ -424,6 +424,8 @@ export async function assignStudentToClassAction(studentId: string, classId: str
       .select('id')
       .eq('etudiant_id', studentId)
       .eq('formation_id', classe.formation_id)
+      .order('created_at', { ascending: false })
+      .limit(1)
       .maybeSingle();
 
     if (fetchError) throw fetchError;
@@ -613,25 +615,21 @@ export async function createStudentManualAction(data: {
       });
     }
 
-    // Envoi de l'email de bienvenue
-    try {
-      await sendWelcomeEmail(data.email, data.first_name || 'Élève');
-    } catch (mailErr) {
-      console.error("Failed to send welcome email:", mailErr);
-    }
+    // Exécution en parallèle de l'email et de l'invitation Clerk pour gagner du temps
+    const emailPromise = sendWelcomeEmail(data.email, data.first_name || 'Élève')
+      .catch(mailErr => console.error("Failed to send welcome email:", mailErr));
 
-    // Création de l'invitation Clerk
-    try {
-      const client = await clerkClient();
-      await client.invitations.createInvitation({
+    const clerkPromise = clerkClient().then(client => 
+      client.invitations.createInvitation({
         emailAddress: data.email,
         publicMetadata: { role: 'etudiant' },
-        ignoreExisting: true // Évite une erreur si l'utilisateur a déjà été invité
-      });
-      console.log(`Clerk invitation sent to ${data.email}`);
-    } catch (clerkErr) {
-      console.error("Failed to create Clerk invitation:", clerkErr);
-    }
+        ignoreExisting: true
+      })
+    ).then(() => console.log(`Clerk invitation sent to ${data.email}`))
+     .catch(clerkErr => console.error("Failed to create Clerk invitation:", clerkErr));
+
+    // On attend les deux tâches en même temps plutôt que l'une après l'autre
+    await Promise.all([emailPromise, clerkPromise]);
 
     return { success: true, data: newStudent };
   } catch (err) {
@@ -654,22 +652,25 @@ export async function sendPaymentReminderAction(studentId: string) {
 
     // Tenter TOUJOURS d'envoyer l'invitation Clerk si l'ID laisse penser qu'ils n'ont pas de compte
     // ou qu'on n'est pas sûr.
-    try {
-      const client = await clerkClient();
-      await client.invitations.createInvitation({
+    // Exécuter l'invitation Clerk et l'email SMTP en parallèle pour gagner du temps
+    const clerkPromise = clerkClient().then(client => 
+      client.invitations.createInvitation({
         emailAddress: student.email,
         ignoreExisting: true, // Si l'invitation ou le compte existe, ça l'ignore au lieu de planter
-      });
+      })
+    ).then(() => {
       clerkInvited = true;
       console.log(`[RELANCE] Invitation Clerk envoyée à ${student.email}`);
-    } catch (inviteErr: any) {
+    }).catch(inviteErr => {
       if (inviteErr?.errors?.[0]?.code !== 'form_identifier_exists') {
         console.error('[RELANCE_CLERK_INVITE_ERROR]', inviteErr);
       }
-    }
+    });
 
-    // Tenter l'email de relance standard via SMTP
-    const result = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
+    const emailPromise = sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
+
+    const [_, emailResult] = await Promise.all([clerkPromise, emailPromise]);
+    const result = emailResult as any;
 
     if (!result.success) {
       console.warn("[SMTP_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", result.error);

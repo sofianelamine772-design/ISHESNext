@@ -672,13 +672,12 @@ export function ProgramContent() {
                                                         `/program/${program.id}`;
 
             return (
-              <motion.div
-                key={program.id}
-                initial={{ scale: 1 }}
-                whileInView={{ scale: [1, 1.08, 1] }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
-                onClick={() => router.push(infoUrl)}
+              <Link href={infoUrl} key={program.id} className="block w-full">
+                <motion.div
+                  initial={{ scale: 1 }}
+                  whileInView={{ scale: [1, 1.08, 1] }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
                 className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 overflow-hidden ${program.isRecommended
                   ? "border-[3px] border-ishes-blue shadow-md"
                   : "border border-gray-100 shadow-sm"
@@ -937,6 +936,7 @@ export function ProgramContent() {
                   </div>
                 </div>
               </motion.div>
+              </Link>
             );
           })}
         </div>

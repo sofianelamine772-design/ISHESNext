@@ -27,10 +27,13 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
   });
 
   describe('Cohérence des prix des formations (Frontend vs DB)', () => {
-    // Dynamic extraction of test cases
-    const formationsTestCases = Object.entries(PROGRAMS_DATA).map(([slug, data]: [string, any]) => {
+    const formationsTestCases = Object.entries(PROGRAMS_DATA).map(([key, data]: [string, any]) => {
       const priceMatch = String(data.price).replace(/[^\d]/g, '');
       const expectedPrice = priceMatch ? parseInt(priceMatch, 10) : null;
+      // Le frontend utilise les tirets pour les femmes en présentiel dans le checkout
+      let slug = data.id || key;
+      if (slug === 'femme_debutante_presentiel') slug = 'femme-debutante-presentiel';
+      if (slug === 'femme_intermediaire_presentiel') slug = 'femme-intermediaire-presentiel';
       return { slug, expectedPrice };
     }).filter(f => f.expectedPrice !== null);
 

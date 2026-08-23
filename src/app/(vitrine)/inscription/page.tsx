@@ -14,8 +14,24 @@ import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
 function InscriptionForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const planId = searchParams?.get("plan");
-  const slot = searchParams?.get("slot");
+  const urlPlanId = searchParams?.get("plan");
+  const urlSlot = searchParams?.get("slot");
+  
+  let planId = urlPlanId;
+  let slot = urlSlot;
+  const originalPlanId = urlPlanId;
+
+  if (planId === 'enfant-mercredi-presentiel') {
+    planId = 'presentiel-global';
+    if (!slot) slot = 'mercredi';
+  } else if (planId === 'enfant-samedi-presentiel') {
+    planId = 'presentiel-global';
+    if (!slot) slot = 'samedi';
+  } else if (planId === 'enfant-dimanche-presentiel') {
+    planId = 'presentiel-global';
+    if (!slot) slot = 'dimanche';
+  }
+
   const level = searchParams?.get("level");
   const classIdParam = searchParams?.get("classId");
   const selectedClass = classIdParam ? PRESENTIEL_CLASSES.find(c => c.id === parseInt(classIdParam)) : null;
@@ -23,10 +39,10 @@ function InscriptionForm() {
 
   // Redirection if no plan selected
   useEffect(() => {
-    if (!planId) {
+    if (!originalPlanId) {
       router.replace("/program");
     }
-  }, [planId, router]);
+  }, [originalPlanId, router]);
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -326,9 +342,9 @@ function InscriptionForm() {
       let initHoraire = "";
       let initClassId = "";
 
-      if (planId === 'femme_intermediaire_presentiel') {
+      if (planId === 'femme_intermediaire_presentiel' || planId === 'femme-intermediaire-presentiel') {
         initClassId = "31";
-      } else if (planId === 'femme_debutante_presentiel') {
+      } else if (planId === 'femme_debutante_presentiel' || planId === 'femme-debutante-presentiel') {
         initClassId = "26";
       } else if (planId === 'presentiel-global' && initSlot && initNiveau) {
         const aud = registrationType === 'child' ? 'enfant' : 'adulte';
@@ -498,7 +514,7 @@ function InscriptionForm() {
   };
 
   const levelLabel = selectedClass ? selectedClass.niveau : getLevelLabel(level);
-  const planName = (levelLabel ? levelLabel : getPlanName(planId)) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
+  const planName = (levelLabel ? levelLabel : getPlanName(originalPlanId || planId)) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
 
   return (
     <div className="max-w-4xl mx-auto">

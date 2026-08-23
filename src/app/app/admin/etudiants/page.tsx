@@ -1369,8 +1369,8 @@ function EtudiantsContent() {
                 <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                   {classes
                     .filter(c =>
-                      c.name.toLowerCase().includes(classSearchQuery.toLowerCase()) ||
-                      c.formationTitle.toLowerCase().includes(classSearchQuery.toLowerCase())
+                      (c.name || '').toLowerCase().includes(classSearchQuery.toLowerCase()) ||
+                      (c.formationTitle || '').toLowerCase().includes(classSearchQuery.toLowerCase())
                     )
                     .map((c) => (
                       <button

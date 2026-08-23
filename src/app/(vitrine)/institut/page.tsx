@@ -210,14 +210,13 @@ export default function InstitutPage() {
           {/* Formations Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24 max-w-7xl mx-auto">
             {presentielPrograms.map((program, i) => (
+              <Link href={program.link} key={i} className="block w-full">
               <motion.div
-                key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                onClick={() => router.push(program.link)}
-                className="cursor-pointer group relative flex flex-col rounded-[2.5rem] bg-[#f9f5f0] border border-ishes-gold/10 shadow-sm hover:shadow-2xl hover:border-ishes-gold/30 transition-all duration-500 hover:-translate-y-1.5 overflow-hidden"
+                className="cursor-pointer group relative flex flex-col rounded-[2.5rem] bg-[#f9f5f0] border border-ishes-gold/10 shadow-sm hover:shadow-2xl hover:border-ishes-gold/30 transition-all duration-500 hover:-translate-y-1.5 overflow-hidden h-full"
               >
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-ishes-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
@@ -339,6 +338,7 @@ export default function InstitutPage() {
                   </div>
                 </div>
               </motion.div>
+              </Link>
             ))}
           </div>
 
