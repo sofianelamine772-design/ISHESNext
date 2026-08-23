@@ -34,42 +34,7 @@ describe('Checkout API', () => {
     jest.clearAllMocks();
   });
 
-  it('should use fallback price of 649 for presentiel if database fetch fails or returns null', async () => {
-    // Mock Supabase to return nothing (simulating an error or missing row)
-    const mockSelect = jest.fn().mockReturnValue({
-      eq: jest.fn().mockReturnValue({
-        maybeSingle: jest.fn().mockResolvedValue({ data: null }) // No data found
-      })
-    });
-    (supabaseAdmin.from as jest.Mock).mockReturnValue({ select: mockSelect });
-
-    const req = new NextRequest('http://localhost:3000/api/checkout', {
-      method: 'POST',
-      body: JSON.stringify({
-        formationId: 'presentiel_femme_debutante',
-        registrationType: 'adult',
-        email: 'test@example.com'
-      })
-    });
-
-    const res = await POST(req);
-    const json = await res.json();
-
-    // Verify it didn't return a 404 error but proceeded with Stripe
-    expect(res.status).toBe(200);
-    expect(json.url).toBe('https://checkout.stripe.com/test');
-
-    // Verify Stripe was called with the fallback amount (649 EUR = 64900 cents)
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
-    expect(mockCreate).toHaveBeenCalled();
-    const createArgs = mockCreate.mock.calls[0][0];
-    
-    expect(createArgs.line_items[0].price_data.unit_amount).toBe(64900);
-    expect(createArgs.line_items[0].price_data.product_data.name).toContain('Cours en Présentiel');
-  });
-
-  it('should return 404 for unknown formation IDs not in fallback list', async () => {
+  it('should return 404 for any formation if database fetch fails or returns null', async () => {
     // Mock Supabase to return nothing
     const mockSelect = jest.fn().mockReturnValue({
       eq: jest.fn().mockReturnValue({
@@ -81,7 +46,7 @@ describe('Checkout API', () => {
     const req = new NextRequest('http://localhost:3000/api/checkout', {
       method: 'POST',
       body: JSON.stringify({
-        formationId: 'unknown_course_xyz',
+        formationId: 'presentiel_femme_debutante',
         registrationType: 'adult',
         email: 'test@example.com'
       })

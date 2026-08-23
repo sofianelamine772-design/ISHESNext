@@ -19,30 +19,8 @@ function logError(err: unknown, context: { url?: string; route?: string } = {}) 
 }
 
 
-const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/',
-  '/program(.*)',
-  '/contact(.*)',
-  '/api/webhooks(.*)',
-  '/api/checkout(.*)',
-  '/api/classes(.*)',
-  '/mentions-legales(.*)',
-  '/cgv(.*)',
-  '/politique-de-confidentialite(.*)',
-  '/formation-enseignant(.*)',
-  '/campus(.*)',
-  '/conseil-spiritualite(.*)',
-  '/fr(.*)',
-  '/institut(.*)',
-  '/boutique(.*)',
-  '/inscription(.*)',
-  '/test-positionnement(.*)',
-  '/unauthorized(.*)',
-  '/notre-histoire(.*)',
-  '/__clerk(.*)',
-  '/manifest.json'
+const isProtectedRoute = createRouteMatcher([
+  '/app(.*)'
 ]);
 const isAdminRoute = createRouteMatcher(['/app/admin(.*)']);
 
@@ -61,8 +39,6 @@ export default clerkMiddleware(async (auth, request) => {
     console.log(`Clerk Publishable Key: ${maskedKey}`);
     console.log('-------------------------\n');
 
-    const publicMatch = isPublicRoute(request);
-    console.log('[PROXY] isPublicRoute:', publicMatch);
     // Redirection case-sensitive pour /CGV vers /cgv
     if (request.nextUrl.pathname === '/CGV') {
       return NextResponse.redirect(new URL('/cgv', request.url), 308);
@@ -70,19 +46,19 @@ export default clerkMiddleware(async (auth, request) => {
 
     const { userId } = await auth();
 
-    // Protection de base pour les routes privées
-    if (!userId && !publicMatch) {
-      // Si c'est un appel API, on renvoie une 401 au lieu d'une redirection
-      if (request.nextUrl.pathname.startsWith('/api')) {
-        console.warn('[PROXY] Unauthorized API request to', request.nextUrl.pathname);
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Si la route est protégée, on vérifie l'authentification
+    if (isProtectedRoute(request)) {
+      if (!userId) {
+        if (request.nextUrl.pathname.startsWith('/api')) {
+          console.warn('[PROXY] Unauthorized API request to', request.nextUrl.pathname);
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        console.warn('[PROXY] Unauthorized request, redirecting to sign-in:', request.nextUrl.pathname);
+        return (await auth()).redirectToSignIn();
       }
-      console.warn('[PROXY] Unauthorized request, redirecting to sign-in:', request.nextUrl.pathname);
-      return (await auth()).redirectToSignIn();
-    }
 
-    // Logique de rôle par email
-    if (userId && isAdminRoute(request)) {
+      // Logique de rôle par email pour l'admin
+      if (isAdminRoute(request)) {
       try {
         const client = await clerkClient();
         const user = await client.users.getUser(userId);
