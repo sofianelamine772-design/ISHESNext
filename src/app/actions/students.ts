@@ -423,7 +423,6 @@ export async function assignStudentToClassAction(studentId: string, classId: str
       .from('inscriptions')
       .select('id')
       .eq('etudiant_id', studentId)
-      .eq('formation_id', classe.formation_id)
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle();
