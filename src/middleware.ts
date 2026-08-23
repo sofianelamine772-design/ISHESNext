@@ -59,23 +59,24 @@ export default clerkMiddleware(async (auth, request) => {
 
       // Logique de rôle par email pour l'admin
       if (isAdminRoute(request)) {
-      try {
-        const client = await clerkClient();
-        const user = await client.users.getUser(userId);
-        const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress;
-        const isAdmin = isAdminEmail(userEmail);
-        if (!isAdmin) {
-          return NextResponse.redirect(new URL("/app/eleve", request.url));
+        try {
+          const client = await clerkClient();
+          const user = await client.users.getUser(userId);
+          const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress;
+          const isAdmin = isAdminEmail(userEmail);
+          if (!isAdmin) {
+            return NextResponse.redirect(new URL("/app/eleve", request.url));
+          }
+        } catch (error: any) {
+          if (error && (error.message === 'NEXT_REDIRECT' || String(error).includes('NEXT_REDIRECT'))) {
+            throw error;
+          }
+          const errInfo = logError(error, { url: request.nextUrl.href, route: '/admin' });
+          if (process.env.NODE_ENV !== 'production') {
+            return NextResponse.json({ error: errInfo }, { status: 500 });
+          }
+          return (await auth()).redirectToSignIn();
         }
-      } catch (error: any) {
-        if (error && (error.message === 'NEXT_REDIRECT' || String(error).includes('NEXT_REDIRECT'))) {
-          throw error;
-        }
-        const errInfo = logError(error, { url: request.nextUrl.href, route: '/admin' });
-        if (process.env.NODE_ENV !== 'production') {
-          return NextResponse.json({ error: errInfo }, { status: 500 });
-        }
-        return (await auth()).redirectToSignIn();
       }
     }
     return NextResponse.next();
