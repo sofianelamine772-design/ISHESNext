@@ -619,14 +619,14 @@ export async function createStudentManualAction(data: {
     const emailPromise = sendWelcomeEmail(data.email, data.first_name || 'Élève')
       .catch(mailErr => console.error("Failed to send welcome email:", mailErr));
 
-    const clerkPromise = clerkClient().then(client => 
+    const clerkPromise = clerkClient().then(client =>
       client.invitations.createInvitation({
         emailAddress: data.email,
         publicMetadata: { role: 'etudiant' },
         ignoreExisting: true
       })
     ).then(() => console.log(`Clerk invitation sent to ${data.email}`))
-     .catch(clerkErr => console.error("Failed to create Clerk invitation:", clerkErr));
+      .catch(clerkErr => console.error("Failed to create Clerk invitation:", clerkErr));
 
     // On attend les deux tâches en même temps plutôt que l'une après l'autre
     await Promise.all([emailPromise, clerkPromise]);
@@ -653,7 +653,7 @@ export async function sendPaymentReminderAction(studentId: string) {
     // Tenter TOUJOURS d'envoyer l'invitation Clerk si l'ID laisse penser qu'ils n'ont pas de compte
     // ou qu'on n'est pas sûr.
     // Exécuter l'invitation Clerk et l'email SMTP en parallèle pour gagner du temps
-    const clerkPromise = clerkClient().then(client => 
+    const clerkPromise = clerkClient().then(client =>
       client.invitations.createInvitation({
         emailAddress: student.email,
         ignoreExisting: true, // Si l'invitation ou le compte existe, ça l'ignore au lieu de planter
@@ -1447,9 +1447,9 @@ export async function linkTypoRegistrationAction(typoEmail: string) {
       .eq('email', cleanTypoEmail);
 
     if (fetchErr || !candidates || candidates.length === 0) {
-      return { 
-        success: false, 
-        error: "Aucune inscription trouvée avec cet e-mail. Veuillez vérifier l'orthographe exacte saisie lors du paiement." 
+      return {
+        success: false,
+        error: "Aucune inscription trouvée avec cet e-mail. Veuillez vérifier l'orthographe exacte saisie lors du paiement."
       };
     }
 
@@ -1474,7 +1474,7 @@ export async function linkTypoRegistrationAction(typoEmail: string) {
     try {
       const { logSystemError } = await import('@/lib/error-logger');
       await logSystemError('Link Typo Email Action', err);
-    } catch {}
+    } catch { }
     return { success: false, error: "Une erreur interne s'est produite lors de la liaison." };
   }
 }
@@ -1545,10 +1545,10 @@ export async function fetchStudentBillingDataAction(studentId: string) {
     let total_expected = 0;
     const enrichedInscriptions = (inscriptions || []).map((ins: any) => {
       const fallbackPrice = ins.formations?.price ? Number(ins.formations.price) : 0;
-      const expected = ins.expected_amount !== null && ins.expected_amount !== undefined 
-        ? Number(ins.expected_amount) 
+      const expected = ins.expected_amount !== null && ins.expected_amount !== undefined
+        ? Number(ins.expected_amount)
         : fallbackPrice;
-      
+
       total_expected += expected;
 
       return {
@@ -1570,18 +1570,18 @@ export async function fetchStudentBillingDataAction(studentId: string) {
     const total_paid = deduplicatedPayments
       .filter((p: any) => p.status === 'succeeded' || p.status === 'paid' || p.status === 'payé')
       .reduce((acc: number, p: any) => acc + Number(p.amount || 0), 0);
-      
+
     const reste_a_payer = Math.max(0, total_expected - total_paid);
 
-    return { 
-      success: true, 
-      data: { 
-        payments: deduplicatedPayments, 
+    return {
+      success: true,
+      data: {
+        payments: deduplicatedPayments,
         inscriptions: enrichedInscriptions,
         total_expected,
         total_paid,
         reste_a_payer
-      } 
+      }
     };
   } catch (err) {
     console.error('Fetch Student Billing Data Error:', err);
@@ -1664,7 +1664,7 @@ export async function syncStudentPaidStatus(studentId: string) {
     if (!inscriptions || inscriptions.length === 0) return;
 
     const familyIds = inscriptions.map((ins: any) => ins.studentId);
-    
+
     let targetStatus = 'impaye';
     if (reste_a_payer <= 0) {
       targetStatus = 'paye';
@@ -1678,7 +1678,7 @@ export async function syncStudentPaidStatus(studentId: string) {
       .update({ paid_status: targetStatus })
       .in('etudiant_id', familyIds)
       .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
-      
+
   } catch (err) {
     console.error("[syncStudentPaidStatus] Erreur:", err);
   }
