@@ -32,10 +32,10 @@ export default function MesCoursPage() {
         {cours.map((c, i) => (
           <div key={i} className="bg-white rounded-[2.5rem] border border-gray-100 p-10 hover:shadow-2xl hover:shadow-gray-200/40 transition-all group">
             <div className="flex justify-between items-start mb-8">
-              <div className="w-14 h-14 bg-[#086b51]/10 text-[#086b51] rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-ishes-blue/10 text-ishes-blue rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                 <BookOpen className="w-7 h-7" />
               </div>
-              <div className="bg-emerald-50 text-[#086b51] px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">
+              <div className="bg-emerald-50 text-ishes-blue px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">
                 En cours
               </div>
             </div>
@@ -46,11 +46,11 @@ export default function MesCoursPage() {
             <div className="space-y-4 mb-8">
                <div className="flex justify-between text-xs font-black uppercase tracking-widest">
                   <span className="text-gray-400">Progression</span>
-                  <span className="text-[#086b51]">{c.progress}%</span>
+                  <span className="text-ishes-blue">{c.progress}%</span>
                </div>
                <div className="w-full h-3 bg-gray-50 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-[#086b51] rounded-full transition-all duration-1000" 
+                    className="h-full bg-ishes-blue rounded-full transition-all duration-1000" 
                     style={{ width: `${c.progress}%` }}
                   />
                </div>
@@ -61,7 +61,7 @@ export default function MesCoursPage() {
                   <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                   Prochain cours : {c.nextCours}
                </div>
-               <button className="text-[#086b51] font-black text-[10px] uppercase tracking-widest hover:translate-x-1 transition-transform flex items-center gap-2">
+               <button className="text-ishes-blue font-black text-[10px] uppercase tracking-widest hover:translate-x-1 transition-transform flex items-center gap-2">
                   Accéder <ArrowRight className="w-4 h-4" />
                </button>
             </div>

@@ -35,7 +35,7 @@ export default function MailGeneralPage() {
   }
 
   if (loading) {
-    return <div className="h-[60vh] flex items-center justify-center"><Loader2 className="w-12 h-12 animate-spin text-[#086b51]" /></div>;
+    return <div className="h-[60vh] flex items-center justify-center"><Loader2 className="w-12 h-12 animate-spin text-ishes-blue" /></div>;
   }
 
   if (!announcement) {
@@ -53,7 +53,7 @@ export default function MailGeneralPage() {
 
       <div className="bg-white rounded-[3rem] border border-gray-100 overflow-hidden shadow-xl shadow-gray-200/40">
         {/* Header Image/Pattern */}
-        <div className="h-48 bg-[#086b51] relative overflow-hidden flex items-center justify-center">
+        <div className="h-48 bg-ishes-blue relative overflow-hidden flex items-center justify-center">
            <div className="absolute inset-0 opacity-10 pointer-events-none">
               <Megaphone className="w-64 h-64 -rotate-12 translate-x-20" strokeWidth={1} />
            </div>
@@ -63,7 +63,7 @@ export default function MailGeneralPage() {
         <div className="p-10 md:p-16 space-y-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <span className="bg-[#086b51]/10 text-[#086b51] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
+              <span className="bg-ishes-blue/10 text-ishes-blue px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
                 {announcement.type === 'global' ? 'Annonce Globale' : 'Annonce de Classe'}
               </span>
               <span className="text-gray-400 font-bold text-[10px] uppercase tracking-widest">
@@ -82,14 +82,14 @@ export default function MailGeneralPage() {
           {/* Attachments Placeholder */}
           <div className="bg-gray-50 rounded-3xl p-8 space-y-6 border border-gray-100">
              <h4 className="text-gray-800 font-black text-sm uppercase tracking-widest flex items-center gap-3">
-                <FileText className="w-5 h-5 text-[#086b51]" /> Pièces jointes
+                <FileText className="w-5 h-5 text-ishes-blue" /> Pièces jointes
              </h4>
              <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">Aucune pièce jointe pour cette annonce.</div>
           </div>
 
           <div className="pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#086b51]/10 flex items-center justify-center text-[#086b51]">
+                <div className="w-12 h-12 rounded-full bg-ishes-blue/10 flex items-center justify-center text-ishes-blue">
                    <Calendar className="w-6 h-6" />
                 </div>
                 <div>

@@ -37,13 +37,15 @@ export default function EleveLayout({
       {/* Sidebar - Etudiant (Desktop Only) */}
       <aside className="hidden md:flex w-72 bg-white border-r border-gray-200 flex-col fixed inset-y-0 z-50">
         <div className="h-24 flex items-center px-8 border-b border-gray-100">
-          <Link href="/app" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#086b51] rounded-xl flex items-center justify-center shadow-lg shadow-[#086b51]/20">
-              <GraduationCap className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-2xl font-black tracking-tight text-[#086b51]">
-              ISHEECOLE
-            </span>
+          <Link href="/app" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="ISHES Logo"
+              width={144}
+              height={48}
+              priority
+              className="object-contain max-h-12 max-w-full"
+            />
           </Link>
         </div>
 
@@ -56,7 +58,7 @@ export default function EleveLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
                   isActive 
-                    ? "bg-[#086b51] text-white shadow-lg shadow-[#086b51]/20 translate-x-1" 
+                    ? "bg-ishes-blue text-white shadow-lg shadow-ishes-blue/20 translate-x-1" 
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
                 }`}
               >
@@ -82,7 +84,7 @@ export default function EleveLayout({
                 <span className="text-xs font-black text-gray-800 truncate">
                   {user?.firstName} {user?.lastName?.[0]}.
                 </span>
-                <span className="text-[10px] font-bold text-[#086b51] uppercase tracking-wider">Paramètres</span>
+                <span className="text-[10px] font-bold text-ishes-blue uppercase tracking-wider">Paramètres</span>
               </div>
             </div>
           </div>
@@ -110,7 +112,7 @@ export default function EleveLayout({
             </p>
           </div>
           <div className="flex items-center gap-3 md:gap-4">
-             <div className="bg-[#086b51]/5 text-[#086b51] px-3 md:px-4 py-1.5 md:py-2 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-[#086b51]/10">
+             <div className="bg-ishes-blue/5 text-ishes-blue px-3 md:px-4 py-1.5 md:py-2 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-ishes-blue/10">
                 Année {academicYear}
              </div>
              <div className="md:hidden">
@@ -139,12 +141,12 @@ export default function EleveLayout({
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-                isActive ? "text-[#086b51]" : "text-gray-400 hover:text-gray-600"
+              className={`flex flex-col items-center gap-1 p-2 ${
+                isActive ? "text-ishes-blue" : "text-gray-400 hover:text-gray-600"
               }`}
             >
-              <item.icon className={`w-6 h-6 ${isActive ? "text-[#086b51] drop-shadow-md" : ""}`} />
-              <span className={`text-[9px] font-bold ${isActive ? "text-[#086b51]" : "text-gray-400"}`}>
+              <item.icon className={`w-6 h-6 ${isActive ? "text-ishes-blue drop-shadow-md" : ""}`} />
+              <span className={`text-[9px] font-bold ${isActive ? "text-ishes-blue" : "text-gray-400"}`}>
                 {item.label}
               </span>
             </Link>

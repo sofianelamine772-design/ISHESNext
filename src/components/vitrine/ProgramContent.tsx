@@ -684,7 +684,7 @@ export function ProgramContent() {
                   }`}
               >
                 {/* IMAGE COVER */}
-                <div className="w-full h-32 sm:h-48 relative bg-gray-100 shrink-0">
+                <div className="w-full h-32 sm:h-48 relative bg-gray-100 shrink-0 overflow-hidden">
                   <Image 
                     src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
                     alt={program.title} 

@@ -287,7 +287,7 @@ export default function EleveDashboard() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-            Assalamou alaykoum, <span className="text-[#086b51] ">{user?.firstName} {user?.lastName}</span>
+            Assalamou alaykoum, <span className="text-ishes-blue ">{user?.firstName} {user?.lastName}</span>
           </h2>
           <p className="text-gray-400 font-medium mt-4 text-lg">
             Heureux de vous retrouver pour votre apprentissage.
@@ -300,7 +300,7 @@ export default function EleveDashboard() {
         <button
           onClick={() => setActiveTab("dashboard")}
           className={`pb-4 text-sm font-black uppercase tracking-widest transition-all ${activeTab === "dashboard"
-              ? "text-[#086b51] border-b-2 border-[#086b51]"
+              ? "text-ishes-blue border-b-2 border-ishes-blue"
               : "text-gray-400 hover:text-gray-600"
             }`}
         >
@@ -309,7 +309,7 @@ export default function EleveDashboard() {
         <button
           onClick={() => setActiveTab("billing")}
           className={`pb-4 text-sm font-black uppercase tracking-widest transition-all ${activeTab === "billing"
-              ? "text-[#086b51] border-b-2 border-[#086b51]"
+              ? "text-ishes-blue border-b-2 border-ishes-blue"
               : "text-gray-400 hover:text-gray-600"
             }`}
         >
@@ -323,8 +323,8 @@ export default function EleveDashboard() {
           {childrenData.length > 0 && (
             <div className="bg-white p-8 md:p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-1 h-5 bg-[#086b51] rounded-full"></div>
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#086b51]">
+                <div className="w-1 h-5 bg-ishes-blue rounded-full"></div>
+                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ishes-blue">
                   {childrenData.length > 1 ? "Mes Enfants & Cursus Inscrits" : "Mon Cursus Actif"}
                 </h3>
               </div>
@@ -334,19 +334,19 @@ export default function EleveDashboard() {
                   <div
                     key={child.id}
                     className={`border rounded-[2rem] p-6 md:p-8 flex flex-col justify-between gap-6 hover:shadow-lg transition-all relative overflow-hidden ${activeChildId === child.id
-                      ? "border-[#086b51] bg-[#086b51]/5"
+                      ? "border-ishes-blue bg-ishes-blue/5"
                       : "border-gray-100 bg-white"
                       }`}
                   >
                     {activeChildId === child.id && (
-                      <div className="absolute top-0 right-0 bg-[#086b51] text-white text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-bl-2xl">
+                      <div className="absolute top-0 right-0 bg-ishes-blue text-white text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-bl-2xl">
                         Sélectionné
                       </div>
                     )}
 
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm ${activeChildId === child.id ? "bg-[#086b51] text-white" : "bg-gray-100 text-[#086b51]"
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm ${activeChildId === child.id ? "bg-ishes-blue text-white" : "bg-gray-100 text-ishes-blue"
                           }`}>
                           {child.firstName?.[0] || ""}
                         </div>
@@ -374,7 +374,7 @@ export default function EleveDashboard() {
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-gray-400 font-medium">Mode :</span>
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${child.classType === 'presentiel'
-                            ? 'bg-[#086b51]/10 text-[#086b51]'
+                            ? 'bg-ishes-blue/10 text-ishes-blue'
                             : 'bg-blue-50 text-blue-600'
                             }`}>
                             {child.classType === 'presentiel' ? 'Présentiel (Salle ISHES)' : 'Distanciel (Zoom)'}
@@ -399,7 +399,7 @@ export default function EleveDashboard() {
                       <button
                         onClick={() => setActiveChildId(child.id)}
                         className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all ${activeChildId === child.id
-                          ? "bg-[#086b51] text-white hover:bg-[#075943]"
+                          ? "bg-ishes-blue text-white hover:bg-ishes-blue/90"
                           : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                           }`}
                       >
@@ -444,7 +444,7 @@ export default function EleveDashboard() {
                   key={child.id}
                   onClick={() => setActiveChildId(child.id)}
                   className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 ${activeChildId === child.id
-                    ? "bg-[#086b51] text-white"
+                    ? "bg-ishes-blue text-white"
                     : "bg-white text-gray-500 hover:bg-gray-50 border border-gray-100"
                     }`}
                 >
@@ -491,7 +491,7 @@ export default function EleveDashboard() {
                   <h3 className="text-2xl font-black text-white tracking-tight">Votre Pack Accompagnement</h3>
                 </div>
                 <p className="text-white/90 text-sm font-medium mt-1 leading-relaxed max-w-lg">
-                  En cadeau avec votre formation ! Rejoignez la communauté <span className="text-[#086b51] font-black bg-white px-2 py-0.5 rounded shadow-sm ml-1">ISHES ENSEMBLE</span> sur WhatsApp pour échanger et être soutenu(e).
+                  En cadeau avec votre formation ! Rejoignez la communauté <span className="text-ishes-blue font-black bg-white px-2 py-0.5 rounded shadow-sm ml-1">ISHES ENSEMBLE</span> sur WhatsApp pour échanger et être soutenu(e).
                 </p>
               </div>
             </div>
@@ -510,7 +510,7 @@ export default function EleveDashboard() {
 
           {/* ─── WHATSAPP GROUP LINK (CLASS) ─── */}
           {certData?.whatsappLink ? (
-            <div className="bg-[#086b51]/5 border border-[#086b51]/10 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+            <div className="bg-ishes-blue/5 border border-ishes-blue/10 p-8 md:p-10 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
               <div className="flex items-center gap-6">
                 <div className="w-16 h-16 bg-[#25D366]/10 text-[#25D366] rounded-[2rem] flex items-center justify-center shrink-0">
                   <svg className="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
@@ -519,7 +519,7 @@ export default function EleveDashboard() {
                 </div>
                 <div>
                   <h3 className="text-xl font-black text-gray-900 tracking-tight">Rejoindre le WhatsApp de la classe</h3>
-                  <p className="text-gray-400 text-xs font-semibold mt-1">Accédez aux dernières annonces et restez en contact avec votre classe : <span className="text-[#086b51] font-bold">{certData.className}</span></p>
+                  <p className="text-gray-400 text-xs font-semibold mt-1">Accédez aux dernières annonces et restez en contact avec votre classe : <span className="text-ishes-blue font-bold">{certData.className}</span></p>
                 </div>
               </div>
               <a
@@ -557,8 +557,8 @@ export default function EleveDashboard() {
           {/* ─── DOCUMENTS SECTION ─── */}
           <div className="bg-white p-10 md:p-12 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
             <div className="flex items-center gap-3">
-              <div className="w-1 h-5 bg-[#086b51] rounded-full"></div>
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#086b51]">
+              <div className="w-1 h-5 bg-ishes-blue rounded-full"></div>
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ishes-blue">
                 Mes Documents Administratifs
               </h3>
             </div>
@@ -566,7 +566,7 @@ export default function EleveDashboard() {
             <div className="grid grid-cols-1 gap-6">
               <div className="border border-gray-100 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-lg hover:shadow-black/5 transition-all">
                 <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 bg-emerald-50 text-[#086b51] rounded-2xl flex items-center justify-center shrink-0">
+                  <div className="w-14 h-14 bg-emerald-50 text-ishes-blue rounded-2xl flex items-center justify-center shrink-0">
                     <FileText className="w-7 h-7" />
                   </div>
                   <div>
@@ -590,7 +590,7 @@ export default function EleveDashboard() {
                 ) : (
                   <button
                     onClick={() => setShowPreviewModal(true)}
-                    className="bg-[#086b51] hover:bg-[#075943] text-white rounded-2xl px-6 py-4 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#086b51]/10 shrink-0 h-12 flex items-center justify-center gap-2 cursor-pointer"
+                    className="bg-ishes-blue hover:bg-ishes-blue/90 text-white rounded-2xl px-6 py-4 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-ishes-blue/10 shrink-0 h-12 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" /> Générer / Imprimer
                   </button>
@@ -602,7 +602,7 @@ export default function EleveDashboard() {
           {/* ─── INSTALL APP SECTION ─── */}
           <div className="bg-white border border-gray-100 rounded-[3.5rem] overflow-hidden shadow-sm relative">
             {/* Background decorative icon */}
-            <div className="absolute top-0 right-0 p-12 opacity-[0.03] text-[#086b51] pointer-events-none">
+            <div className="absolute top-0 right-0 p-12 opacity-[0.03] text-ishes-blue pointer-events-none">
               <Smartphone className="w-64 h-64" strokeWidth={1} />
             </div>
 
@@ -624,7 +624,7 @@ export default function EleveDashboard() {
 
               {/* Install button or status */}
               {isInstalled ? (
-                <div className="inline-flex items-center gap-3 bg-ishes-blue/10 border border-ishes-blue/20 text-[#086b51] px-8 py-4 rounded-[1.5rem] font-bold text-sm">
+                <div className="inline-flex items-center gap-3 bg-ishes-blue/10 border border-ishes-blue/20 text-ishes-blue px-8 py-4 rounded-[1.5rem] font-bold text-sm">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                   Application déjà installée ✓
                 </div>
@@ -633,7 +633,7 @@ export default function EleveDashboard() {
                 <div className="space-y-4">
                   <button
                     onClick={handleInstallApp}
-                    className="inline-flex items-center gap-3 bg-ishes-blue hover:bg-[#075943] text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-ishes-blue/20 cursor-pointer"
+                    className="inline-flex items-center gap-3 bg-ishes-blue hover:bg-ishes-blue/90 text-white px-8 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-ishes-blue/20 cursor-pointer"
                   >
                     <MonitorDown className="w-5 h-5" />
                     Installer l'application
@@ -725,14 +725,14 @@ export default function EleveDashboard() {
             </div>
 
             {/* Card 2: Déjà réglé */}
-            <div className="bg-[#086b51]/5 p-8 rounded-[2.5rem] border border-[#086b51]/10 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#086b51]">Déjà Réglé</span>
+            <div className="bg-ishes-blue/5 p-8 rounded-[2.5rem] border border-ishes-blue/10 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+              <span className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">Déjà Réglé</span>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-3xl md:text-4xl font-black text-[#086b51] leading-none">
+                <span className="text-3xl md:text-4xl font-black text-ishes-blue leading-none">
                   {installmentDetails ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(installmentDetails.totalPaid) : "—"}
                 </span>
               </div>
-              <p className="text-xs text-[#086b51]/75 font-semibold mt-2 flex items-center gap-1">
+              <p className="text-xs text-ishes-blue/75 font-semibold mt-2 flex items-center gap-1">
                 <CheckCircle className="w-3.5 h-3.5" /> Paiements encaissés avec succès
               </p>
             </div>
@@ -758,8 +758,8 @@ export default function EleveDashboard() {
           {installmentDetails && installmentDetails.isInstallments && (
             <div className="bg-white p-8 md:p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
               <div className="flex items-center gap-3">
-                <div className="w-1 h-5 bg-[#086b51] rounded-full"></div>
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#086b51]">
+                <div className="w-1 h-5 bg-ishes-blue rounded-full"></div>
+                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ishes-blue">
                   Échéancier de paiement (Paiement en {installmentDetails.installmentsCount}x)
                 </h3>
               </div>
@@ -773,7 +773,7 @@ export default function EleveDashboard() {
                     <div
                       key={item.index}
                       className={`border rounded-2xl p-6 flex flex-col justify-between gap-4 transition-all ${item.status === 'paid'
-                          ? 'bg-[#086b51]/5 border-[#086b51]/10'
+                          ? 'bg-ishes-blue/5 border-ishes-blue/10'
                           : 'bg-white border-gray-100'
                         }`}
                     >
@@ -782,7 +782,7 @@ export default function EleveDashboard() {
                           Mensualité #{item.index}
                         </span>
                         {item.status === 'paid' ? (
-                          <span className="bg-[#086b51]/10 text-[#086b51] px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">
+                          <span className="bg-ishes-blue/10 text-ishes-blue px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">
                             Payé
                           </span>
                         ) : (
@@ -825,15 +825,15 @@ export default function EleveDashboard() {
           {/* Past Payments List */}
           <div className="bg-white p-8 md:p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
             <div className="flex items-center gap-3">
-              <div className="w-1 h-5 bg-[#086b51] rounded-full"></div>
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#086b51]">
+              <div className="w-1 h-5 bg-ishes-blue rounded-full"></div>
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ishes-blue">
                 Historique complet de vos règlements
               </h3>
             </div>
 
             {loadingPayments ? (
               <div className="flex items-center justify-center py-10">
-                <Loader2 className="w-6 h-6 text-[#086b51] animate-spin mr-2" />
+                <Loader2 className="w-6 h-6 text-ishes-blue animate-spin mr-2" />
                 <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Chargement de l'historique...</span>
               </div>
             ) : payments.length === 0 ? (
@@ -852,7 +852,7 @@ export default function EleveDashboard() {
                       className="border border-gray-100 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/30 hover:bg-white transition-all shadow-sm"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#086b51] flex items-center justify-center border border-emerald-100/50 shadow-inner">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-ishes-blue flex items-center justify-center border border-emerald-100/50 shadow-inner">
                           <CreditCard className="w-4 h-4" />
                         </div>
                         <div>
@@ -871,7 +871,7 @@ export default function EleveDashboard() {
                             {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: payment.currency || 'EUR' }).format(payment.amount)}
                           </span>
                         </div>
-                        <span className="bg-[#086b51]/10 text-[#086b51] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">
+                        <span className="bg-ishes-blue/10 text-ishes-blue px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">
                           Réussi
                         </span>
                       </div>
@@ -936,7 +936,7 @@ export default function EleveDashboard() {
             <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div>
                 <h3 className="text-lg font-black text-gray-900 tracking-tight flex items-center gap-2">
-                  <GraduationCap className="w-5 h-5 text-[#086b51]" /> Prévisualisation du Certificat Officiel
+                  <GraduationCap className="w-5 h-5 text-ishes-blue" /> Prévisualisation du Certificat Officiel
                 </h3>
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Format officiel A4 prêt pour impression ou export PDF</p>
               </div>
@@ -944,7 +944,7 @@ export default function EleveDashboard() {
                 <button
                   onClick={handleDownloadPDF}
                   disabled={isGeneratingPdf}
-                  className="bg-[#086b51] hover:bg-[#075943] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-md shadow-[#086b51]/10 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="bg-ishes-blue hover:bg-ishes-blue/90 text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-md shadow-ishes-blue/10 flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isGeneratingPdf ? (
                     <>
@@ -979,12 +979,12 @@ export default function EleveDashboard() {
                 {/* Translucent Background Watermark Logo & Arabic Text */}
                 <div className="absolute inset-0 flex flex-col items-center justify-between py-28 pointer-events-none select-none z-0">
                   {/* Top Arabic Text Watermark */}
-                  <div className="text-center font-amiri text-[42px] text-[#086b51] opacity-[0.02] rotate-[-10deg] tracking-wider font-bold select-none w-full whitespace-nowrap">
+                  <div className="text-center font-amiri text-[42px] text-ishes-blue opacity-[0.02] rotate-[-10deg] tracking-wider font-bold select-none w-full whitespace-nowrap">
                     مَعْهَدُ الْعُلُومِ الْإِنْسَانِيَّةِ وَالرُّوحِيَّةِ
                   </div>
                   {/* Center Medallion Watermark */}
                   <div className="flex items-center justify-center opacity-[0.025] my-auto">
-                    <svg className="w-[110mm] h-[110mm] text-[#086b51]" viewBox="0 0 100 100" fill="currentColor">
+                    <svg className="w-[110mm] h-[110mm] text-ishes-blue" viewBox="0 0 100 100" fill="currentColor">
                       <circle cx="50" cy="50" r="46" stroke="currentColor" strokeWidth="0.8" fill="none" />
                       <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="0.4" fill="none" strokeDasharray="1,1" />
                       {/* 8-pointed Islamic Star */}
@@ -995,14 +995,14 @@ export default function EleveDashboard() {
                     </svg>
                   </div>
                   {/* Bottom Arabic Text Watermark */}
-                  <div className="text-center font-amiri text-[56px] text-[#086b51] opacity-[0.02] rotate-[10deg] tracking-wider font-bold select-none w-full whitespace-nowrap">
+                  <div className="text-center font-amiri text-[56px] text-ishes-blue opacity-[0.02] rotate-[10deg] tracking-wider font-bold select-none w-full whitespace-nowrap">
                     وَقُلْ رَبِّ زِدْنِي عِلْمًا
                   </div>
                 </div>
 
                 {/* Double Border Frame */}
                 {/* Outer emerald border */}
-                <div className="absolute inset-4 border-[8px] border-[#086b51] pointer-events-none rounded-sm"></div>
+                <div className="absolute inset-4 border-[8px] border-ishes-blue pointer-events-none rounded-sm"></div>
                 {/* Inner gold border */}
                 <div className="absolute inset-6 border-[2px] border-ishes-gold pointer-events-none"></div>
 
@@ -1067,7 +1067,7 @@ export default function EleveDashboard() {
                     </div>
 
                     <div className="space-y-1">
-                      <h2 className="text-[30px] font-bold tracking-[0.18em] text-[#086b51] uppercase font-cinzel">
+                      <h2 className="text-[30px] font-bold tracking-[0.18em] text-ishes-blue uppercase font-cinzel">
                         Certificat de Scolarité
                       </h2>
                       <p className="text-[11px] font-playfair font-medium text-gray-500 tracking-wider">
@@ -1095,10 +1095,10 @@ export default function EleveDashboard() {
                     </p>
 
                     <div className="bg-[#FAF8F5]/80 backdrop-blur-sm border border-ishes-gold/30 rounded-2xl p-6 mx-auto max-w-xl shadow-sm space-y-2 relative">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#086b51] text-[#FAF8F5] text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-full whitespace-nowrap">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ishes-blue text-[#FAF8F5] text-[8px] font-sans font-bold tracking-widest uppercase px-3 py-1 rounded-full whitespace-nowrap">
                         Cursus Validé
                       </div>
-                      <h4 className="text-lg font-bold text-[#086b51] tracking-wide font-cinzel pt-1">
+                      <h4 className="text-lg font-bold text-ishes-blue tracking-wide font-cinzel pt-1">
                         {certData.formationTitle}
                       </h4>
                       <div className="flex items-center justify-center gap-4 text-[10px] font-sans font-black text-gray-500 uppercase tracking-widest pt-1">
@@ -1152,7 +1152,7 @@ export default function EleveDashboard() {
                       <span className="text-[9px] font-sans font-black text-gray-400 tracking-widest uppercase">Pour le Secrétariat Académique</span>
                       <div className="h-10 w-24 relative flex items-center justify-center">
                         {/* A beautiful calligraphic vector path representing the director signature */}
-                        <svg className="w-full h-full text-[#086b51] opacity-80" viewBox="0 0 100 40" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="w-full h-full text-ishes-blue opacity-80" viewBox="0 0 100 40" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M10,25 C25,25 35,5 45,25 C55,45 65,15 75,25 C80,30 90,30 95,20 M20,15 C35,15 45,15 50,30" />
                         </svg>
                       </div>
@@ -1174,7 +1174,7 @@ export default function EleveDashboard() {
               <button
                 onClick={handleDownloadPDF}
                 disabled={isGeneratingPdf}
-                className="bg-[#086b51] hover:bg-[#075943] text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#086b51]/10 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="bg-ishes-blue hover:bg-ishes-blue/90 text-white rounded-xl px-6 py-3 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-ishes-blue/10 flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {isGeneratingPdf ? (
                   <>

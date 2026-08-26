@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { PROGRAMS_DATA } from '@/lib/programs-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.ishes.fr';
@@ -39,7 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/cours-sciences-hadith',
     '/fr/cours-tajwid-enfant',
     '/fr/cours-tajwid-intensif',
-    '/fr/cours-tilawa',
     '/fr/formation-enseignant-tajwid',
     '/fr/formation-enseignant-tarbya',
     '/fr/formation-nour-al-bayane',
@@ -107,6 +107,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.5,
+    });
+  });
+
+  // Mapping des nouvelles pages programmes dynamiques
+  Object.keys(PROGRAMS_DATA).forEach((key) => {
+    sitemap.push({
+      url: `${baseUrl}/program/${key}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
     });
   });
 

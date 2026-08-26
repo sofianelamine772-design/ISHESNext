@@ -34,10 +34,10 @@ export default function AccueilEleve() {
           
           <div className="space-y-1">
              <h1 className="text-4xl md:text-[50px] font-black tracking-tight text-ishes-blue leading-tight">
-               Bonjour <span className="text-[#086b51]">Sofiane Elamine</span>,
+               Bonjour <span className="text-ishes-blue">Sofiane Elamine</span>,
              </h1>
              <p className="text-gray-400 text-lg font-medium ">
-               Voici votre interface élève ISHEECOLE.
+               Voici votre interface élève ISHES.
              </p>
           </div>
           
@@ -65,7 +65,7 @@ export default function AccueilEleve() {
           <Link href="/app/eleve" className="group">
              <div className="bg-white rounded-3xl p-6 md:p-8 flex items-center gap-6 shadow-xl shadow-gray-100/80 border border-gray-50 hover:scale-[1.02] transition-transform duration-300 h-[140px]">
                 <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-100 transition-colors">
-                   <PlayCircle className="w-8 h-8 text-[#086b51]" />
+                   <PlayCircle className="w-8 h-8 text-ishes-blue" />
                 </div>
                 <div>
                    <h2 className="text-ishes-blue text-xl font-black tracking-wide mb-1">MES REPLAYS</h2>
@@ -105,7 +105,7 @@ export default function AccueilEleve() {
       {/* Footer */}
       <footer className="py-8 text-center">
         <span className="text-[9px] font-bold tracking-[0.2em] text-gray-300 uppercase">
-          Propulsé par ISHEECOLE Management
+          Propulsé par ISHES Management
         </span>
       </footer>
     </div>

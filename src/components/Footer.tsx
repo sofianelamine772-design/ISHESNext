@@ -194,7 +194,7 @@ export function Footer() {
           </div>
 
           <p className="text-xs text-gray-400 font-medium">
-            © {new Date().getFullYear()} ISHES Institut. Tous droits réservés.
+            Institut ISHES © {new Date().getFullYear()} - Tous droits réservés
           </p>
         </div>
 

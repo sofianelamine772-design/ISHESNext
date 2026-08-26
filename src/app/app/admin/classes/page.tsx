@@ -502,97 +502,96 @@ export default function AdminDashboard() {
             {selectedClass ? (
               <div className="h-full flex flex-col overflow-hidden">
                 {/* Class Header */}
-                <div className="pb-6 md:pb-8 mb-4 border-b border-gray-100">
-                  <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-6 md:mb-8 gap-6">
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform shrink-0 ${selectedClass.type === 'distanciel' ? 'bg-ishes-dark text-white shadow-ishes-dark/20' : 'bg-ishes-blue text-white shadow-ishes-blue/20'}`}>
-                        {selectedClass.type === 'distanciel' ? <Monitor className="w-6 h-6 md:w-7 md:h-7" /> : <School className="w-6 h-6 md:w-7 md:h-7" />}
+                <div className="pb-4 mb-3 border-b border-gray-100">
+                  <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-4 gap-4">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center shadow-md transition-transform shrink-0 ${selectedClass.type === 'distanciel' ? 'bg-ishes-dark text-white shadow-ishes-dark/20' : 'bg-ishes-blue text-white shadow-ishes-blue/20'}`}>
+                        {selectedClass.type === 'distanciel' ? <Monitor className="w-5 h-5 md:w-6 md:h-6" /> : <School className="w-5 h-5 md:w-6 md:h-6" />}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <span className="ishes-label mb-1 block text-[10px]">Gestion de classe</span>
-                        <h2 className="text-xl md:text-2xl xl:text-3xl ishes-heading text-ishes-blue leading-snug break-words">{selectedClass.name}</h2>
-                        <div className="flex flex-wrap items-center gap-3 mt-2">
-                          <span className={`text-[8px] md:text-[10px] font-black uppercase px-2 py-0.5 rounded flex items-center gap-1.5 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
+                        <h2 className="text-lg md:text-xl xl:text-2xl ishes-heading text-ishes-blue leading-tight break-words">{selectedClass.name}</h2>
+                        <div className="flex flex-wrap items-center gap-2 mt-1">
+                          <span className={`text-[8px] md:text-[9px] font-black uppercase px-2 py-0.5 rounded flex items-center gap-1 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
                             Mode {selectedClass.type}
                           </span>
-                          <span className="text-[10px] font-black text-ishes-dark bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
+                          <span className="text-[9px] font-black text-ishes-dark bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
                             Capacité : {selectedClass.students.length} / {selectedClass.capacity_limit}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+                    <div className="flex items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap">
                       <Button
                         variant="outline"
                         size="sm"
-                        className="flex-1 md:flex-none h-10 text-[10px] md:text-xs border-amber-600 text-amber-600 hover:bg-amber-50 hover:text-amber-700 flex items-center gap-1.5"
+                        className="flex-1 md:flex-none h-8 text-[10px] border-amber-600 text-amber-600 hover:bg-amber-50 hover:text-amber-700 flex items-center gap-1.5 px-3"
                         onClick={() => {
                           setContactSuccess(false);
                           setShowContactModal(true);
                         }}
                       >
-                        <Mail className="w-4 h-4" /> <span>Contacter la classe</span>
+                        <Mail className="w-3.5 h-3.5" /> <span>Contacter</span>
                       </Button>
-                      <Button variant="ishes-blue" size="sm" className="flex-1 md:flex-none h-10 text-[10px] md:text-xs" onClick={() => setShowAddStudentManualModal(true)}>
-                        <Plus className="w-4 h-4 md:mr-1" /> <span className="hidden sm:inline">Créer Élève</span>
+                      <Button variant="ishes-blue" size="sm" className="flex-1 md:flex-none h-8 text-[10px] px-3" onClick={() => setShowAddStudentManualModal(true)}>
+                        <Plus className="w-3.5 h-3.5 md:mr-1" /> <span className="hidden sm:inline">Créer Élève</span>
                         <span className="sm:hidden text-[10px]">Créer</span>
                       </Button>
                     </div>
                   </div>
 
                   {/* WhatsApp Group Link Editor */}
-                  <div className="mb-6 p-4 bg-[#25D366]/5 border border-[#25D366]/20 rounded-2xl">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="mb-4 p-2.5 md:px-4 md:py-2 bg-[#25D366]/5 border border-[#25D366]/20 rounded-xl flex flex-col xl:flex-row xl:items-center gap-2 xl:gap-4">
+                    <div className="flex items-center gap-2 xl:w-1/4 shrink-0">
                       <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                      <span className="text-[10px] font-black text-[#25D366] uppercase tracking-widest">Groupe WhatsApp de la classe</span>
+                      <span className="text-[9px] md:text-[10px] font-black text-[#25D366] uppercase tracking-widest whitespace-nowrap">Groupe WhatsApp</span>
                       {selectedClass.whatsappLink && (
                         <a href={selectedClass.whatsappLink} target="_blank" rel="noopener noreferrer"
-                          className="ml-auto text-[10px] font-bold text-[#25D366] hover:underline flex items-center gap-1">
-                          Voir le groupe <ExternalLink className="w-3 h-3" />
+                          className="ml-auto xl:ml-2 text-[9px] font-bold text-[#25D366] hover:underline flex items-center gap-1">
+                          Voir <ExternalLink className="w-3 h-3" />
                         </a>
                       )}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-1">
                       <input
                         type="url"
                         value={whatsappInput !== "" ? whatsappInput : (selectedClassWhatsapp || "")}
                         onChange={(e) => setWhatsappInput(e.target.value)}
                         onFocus={(e) => { if (!whatsappInput) setWhatsappInput(selectedClassWhatsapp || ""); }}
                         placeholder="https://chat.whatsapp.com/..."
-                        className="flex-1 px-3 py-2.5 bg-white border border-[#25D366]/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366]/30 focus:border-[#25D366] transition-all"
+                        className="flex-1 px-3 py-1.5 bg-white border border-[#25D366]/30 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#25D366]/30 focus:border-[#25D366] transition-all"
                       />
                       <button
                         onClick={handleSaveWhatsapp}
                         disabled={savingWhatsapp}
                         className={cn(
-                          "px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all",
+                          "px-3 py-1.5 rounded-lg font-black text-[9px] md:text-[10px] uppercase tracking-widest flex items-center gap-1.5 transition-all shrink-0",
                           whatsappSaved
                             ? "bg-[#25D366] text-white"
                             : "bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white"
                         )}
                       >
-                        {savingWhatsapp ? <Loader2 className="w-4 h-4 animate-spin" /> : whatsappSaved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                        {savingWhatsapp ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : whatsappSaved ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
                         {whatsappSaved ? "Sauvegardé" : "Enregistrer"}
                       </button>
                     </div>
                   </div>
 
                   {/* Search within class */}
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <div className="relative flex-1">
-                      <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                       <input
                         type="text"
                         value={searchQuery || ""}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Rechercher un élève..."
-                        className="w-full bg-white border border-gray-100 rounded-full pl-12 pr-6 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 shadow-sm transition-all font-medium"
+                        className="w-full bg-gray-50/50 border border-gray-100 rounded-lg pl-10 pr-4 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-ishes-blue/10 focus:border-ishes-blue/20 shadow-sm transition-all font-medium"
                       />
                     </div>
                     <div className="ishes-label flex flex-col items-end shrink-0">
-                      <span className="text-[10px] text-gray-400">Total</span>
-                      <span className="text-ishes-dark text-base md:text-lg font-black leading-none">{filteredStudents?.length}</span>
+                      <span className="text-[9px] text-gray-400">Total</span>
+                      <span className="text-ishes-dark text-sm md:text-base font-black leading-none">{filteredStudents?.length}</span>
                     </div>
                   </div>
                 </div>

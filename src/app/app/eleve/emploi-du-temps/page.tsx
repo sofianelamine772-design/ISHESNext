@@ -43,13 +43,13 @@ export default function EmploiDuTempsPage() {
            <h3 className="text-xl font-black text-gray-800 uppercase tracking-tight">Mon Emploi du Temps</h3>
         </div>
         <div className="flex gap-3">
-           <span className="bg-[#086b51]/5 text-[#086b51] border border-[#086b51]/10 px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-full">Année En Cours</span>
+           <span className="bg-ishes-blue/5 text-ishes-blue border border-ishes-blue/10 px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-full">Année En Cours</span>
         </div>
       </div>
 
       {loading ? (
         <div className="bg-white rounded-3xl border border-gray-100 p-20 flex flex-col items-center justify-center shadow-sm">
-          <Loader2 className="w-10 h-10 text-[#086b51] animate-spin mb-4" />
+          <Loader2 className="w-10 h-10 text-ishes-blue animate-spin mb-4" />
           <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Chargement de votre planning...</p>
         </div>
       ) : events.length > 0 ? (
@@ -82,20 +82,20 @@ export default function EmploiDuTempsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-[3rem] border border-gray-100 p-12 md:p-20 text-center shadow-xl max-w-3xl mx-auto relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#086b51]/5 rounded-full blur-3xl pointer-events-none -mr-32 -mt-32" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-ishes-blue/5 rounded-full blur-3xl pointer-events-none -mr-32 -mt-32" />
           <div className="relative z-10 space-y-6 max-w-xl mx-auto">
             <div className="w-20 h-20 bg-amber-50 text-ishes-gold border border-amber-100 rounded-3xl flex items-center justify-center mx-auto shadow-md">
               <AlertCircle className="w-10 h-10" />
             </div>
             <h3 className="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight">Affectation en cours</h3>
             <p className="text-gray-500 font-medium text-base leading-relaxed">
-              Assalamou alaykoum, <span className="text-[#086b51] font-black">{user?.firstName}</span>. Votre place est bien réservée au sein de notre établissement ! 
+              Assalamou alaykoum, <span className="text-ishes-blue font-black">{user?.firstName}</span>. Votre place est bien réservée au sein de notre établissement ! 
             </p>
             <p className="text-gray-400 text-sm leading-relaxed">
               Notre équipe administrative est actuellement en train de valider vos informations de paiement et de vous affecter à votre classe en présentiel ou en distanciel. Dès que votre affectation sera validée, votre emploi du temps hebdomadaire complet s'affichera automatiquement sur cette page.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/app/eleve" className="px-8 py-4 bg-[#086b51] text-white text-xs font-black uppercase tracking-widest rounded-xl shadow-lg shadow-[#086b51]/20 hover:bg-[#075f48] transition-all">
+              <Link href="/app/eleve" className="px-8 py-4 bg-ishes-blue text-white text-xs font-black uppercase tracking-widest rounded-xl shadow-lg shadow-ishes-blue/20 hover:bg-ishes-blue/90 transition-all">
                 Aller au Tableau de bord
               </Link>
               <Link href="/app/eleve/messagerie" className="px-8 py-4 bg-gray-50 border border-gray-200 text-gray-600 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-gray-100 transition-all">

@@ -908,17 +908,21 @@ export async function fetchPaymentsAction() {
       const baseEmail = getBaseEmail(payer.email);
 
       // Chercher tous les étudiants ayant le même email de base
-      const { data: family } = await supabaseAdmin
-        .from('etudiants')
-        .select(`
-          id, first_name, last_name, email,
-          inscriptions (
-            id, status, paid_status,
+      let family: any[] = [];
+      if (baseEmail) {
+        const { data } = await supabaseAdmin
+          .from('etudiants')
+          .select(`
+            id, first_name, last_name, email,
+            inscriptions (
+              id, status, paid_status,
             formations ( title ),
             classes ( name, type )
           )
         `)
         .eq('email', baseEmail);
+        family = data || [];
+      }
 
       const familyMembers = (family || []).map((c: any) => ({
         id: c.id,
@@ -1176,7 +1180,7 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
     // Récupérer l'étudiant pour obtenir son email
     const { data: etudiant } = await supabaseAdmin
       .from('etudiants')
-      .select('id, email')
+      .select('id, email, first_name, last_name')
       .eq('id', studentId)
       .maybeSingle();
 
@@ -1192,10 +1196,16 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
     const baseEmail = getBaseEmail(etudiant.email);
 
     // Récupérer tous les membres de la famille (même email de base)
-    const { data: familyStudents } = await supabaseAdmin
-      .from('etudiants')
-      .select('id, first_name, last_name, inscriptions(id, status, paid_status, formations(title), classes(name))')
-      .eq('email', baseEmail);
+    let familyStudents: any[] = [];
+    if (baseEmail) {
+      const { data } = await supabaseAdmin
+        .from('etudiants')
+        .select('id, first_name, last_name, inscriptions(id, status, paid_status, formations(title), classes(name))')
+        .eq('email', baseEmail);
+      familyStudents = data || [];
+    } else {
+      familyStudents = [etudiant];
+    }
 
     const allMembers = (familyStudents || []).map((s: any) => ({
       id: s.id,
@@ -1482,7 +1492,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
   try {
     const { data: etudiant } = await supabaseAdmin
       .from('etudiants')
-      .select('id, email')
+      .select('id, email, first_name, last_name')
       .eq('id', studentId)
       .maybeSingle();
 
@@ -1499,12 +1509,20 @@ export async function fetchStudentBillingDataAction(studentId: string) {
 
     const baseEmail = getBaseEmail(etudiant.email);
 
-    const { data: familyStudents } = await supabaseAdmin
-      .from('etudiants')
-      .select('id, first_name, last_name')
-      .eq('email', baseEmail);
+    let familyIds: string[] = [studentId];
+    let familyStudents: any[] = [etudiant];
 
-    const familyIds = (familyStudents || []).map(m => m.id);
+    if (baseEmail) {
+      const { data } = await supabaseAdmin
+        .from('etudiants')
+        .select('id, first_name, last_name')
+        .eq('email', baseEmail);
+      
+      if (data && data.length > 0) {
+        familyStudents = data;
+        familyIds = Array.from(new Set([studentId, ...data.map(m => m.id)]));
+      }
+    }
 
     const { data: inscriptions } = await supabaseAdmin
       .from('inscriptions')
