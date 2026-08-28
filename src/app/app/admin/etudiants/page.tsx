@@ -149,7 +149,7 @@ function EtudiantsContent() {
         if (formatted.length > 0 && !selectedStudentId) {
           if (studentIdFromUrl) {
             setSelectedStudentId(studentIdFromUrl);
-          } else {
+          } else if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
             setSelectedStudentId(formatted[0].id);
           }
         }
@@ -664,6 +664,14 @@ function EtudiantsContent() {
           )}>
             {selectedStudent ? (
               <div className="h-full bg-white rounded-3xl shadow-sm border border-gray-200 overflow-y-auto flex flex-col relative custom-scrollbar">
+                
+                {/* Mobile Back Button */}
+                <button 
+                  onClick={() => setSelectedStudentId(null)}
+                  className="lg:hidden absolute top-4 left-4 z-20 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full shadow-sm flex items-center justify-center border border-gray-200/50 hover:bg-gray-50 text-ishes-blue"
+                >
+                  <ChevronRight className="w-5 h-5 rotate-180" />
+                </button>
 
                 {/* Profile Cover & Header */}
                 <div className="h-24 bg-white border-b border-gray-50 relative rounded-t-[2.5rem] overflow-hidden shrink-0">

@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AdminSidebar } from "@/components/AdminSidebar";
-import { MessageSquare, Send, User, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock } from "lucide-react";
+import { MessageSquare, Send, User, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock, ChevronRight, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { fetchClassesAction, fetchStudentsAction } from "@/app/actions/students";
+import { cn } from "@/lib/utils";
 
 export default function AdminCommunicationPage() {
   const [activeTab, setActiveTab] = useState<"inbox" | "send">("inbox");
@@ -102,6 +103,27 @@ export default function AdminCommunicationPage() {
       console.error("openChat catch error:", err);
     } finally {
       setChatLoading(false);
+    }
+  }
+
+  async function handleDeleteChatHistory() {
+    if (!selectedChat) return;
+    if (!confirm("Voulez-vous vraiment supprimer tout l'historique avec cet élève ? Cette action est irréversible.")) return;
+
+    try {
+      const res = await fetch(`/api/messages?studentId=${selectedChat.id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        setChatMessages([]);
+        fetchConversations();
+        setSelectedChat(null);
+      } else {
+        alert("Erreur lors de la suppression.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur système.");
     }
   }
 
@@ -208,7 +230,7 @@ export default function AdminCommunicationPage() {
           {activeTab === "inbox" ? (
             <div className="flex-1 flex overflow-hidden">
               {/* Liste conversations */}
-              <div className="w-80 border-r border-gray-100 bg-white flex flex-col shrink-0">
+              <div className={cn("w-full lg:w-80 border-r border-gray-100 bg-white flex flex-col shrink-0 transition-all duration-300", selectedChat && "hidden lg:flex")}>
                 <div className="p-5 border-b border-gray-100">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
@@ -255,22 +277,39 @@ export default function AdminCommunicationPage() {
               </div>
 
               {/* Zone de chat */}
-              <div className="flex-1 bg-gray-50/30 flex flex-col overflow-hidden">
+              <div className={cn("flex-1 bg-gray-50/30 flex flex-col overflow-hidden transition-all duration-300", !selectedChat && "hidden lg:flex")}>
                 {selectedChat ? (
                   <>
-                    <div className="p-5 bg-white border-b border-gray-100 flex items-center gap-4 shrink-0">
-                      <div className="w-10 h-10 bg-[#086b51] text-white rounded-xl flex items-center justify-center font-black text-sm">
-                        {(selectedChat.first_name?.[0] || selectedChat.email?.[0] || '?').toUpperCase()}
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-black text-ishes-blue uppercase tracking-tight">
-                          {[selectedChat.first_name, selectedChat.last_name].filter(Boolean).join(' ') || selectedChat.email || "Utilisateur sans nom"}
-                        </h3>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                          <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
-                          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Élève ISHES</span>
+                    <div className="p-4 md:p-5 bg-white border-b border-gray-100 flex items-center justify-between shrink-0">
+                      <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                        <button 
+                          onClick={() => setSelectedChat(null)}
+                          className="lg:hidden p-1.5 md:p-2 -ml-1 md:-ml-2 bg-white rounded-full shadow-sm flex items-center justify-center border border-gray-100 hover:bg-gray-50 text-ishes-blue shrink-0"
+                        >
+                          <ChevronRight className="w-4 h-4 md:w-5 md:h-5 rotate-180" />
+                        </button>
+                        <div className="w-8 h-8 md:w-10 md:h-10 bg-[#086b51] text-white rounded-lg md:rounded-xl flex items-center justify-center font-black text-xs md:text-sm shrink-0">
+                          {(selectedChat.first_name?.[0] || selectedChat.email?.[0] || '?').toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="text-xs md:text-sm font-black text-ishes-blue uppercase tracking-tight truncate">
+                            {[selectedChat.first_name, selectedChat.last_name].filter(Boolean).join(' ') || selectedChat.email || "Utilisateur sans nom"}
+                          </h3>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            <span className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest truncate">Élève ISHES</span>
+                          </div>
                         </div>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleDeleteChatHistory}
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50 p-2 h-auto rounded-full shrink-0"
+                        title="Supprimer l'historique"
+                      >
+                        <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
+                      </Button>
                     </div>
 
                     <div className="flex-1 p-6 overflow-y-auto space-y-4">

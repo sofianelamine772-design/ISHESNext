@@ -153,8 +153,12 @@ export default function AdminDashboard() {
       const result = await fetchClassesAction(selectedYear);
       if (result.success && result.data) {
         setClasses(result.data);
-        // Si un paramètre classId est présent dans l'URL, on l'utilise en priorité
-        const targetClassId = classIdParam || selectedClassId || (result.data.length > 0 ? result.data[0].id : null);
+        let targetClassId = classIdParam || selectedClassId;
+        if (!targetClassId && result.data.length > 0) {
+          if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+            targetClassId = result.data[0].id;
+          }
+        }
         if (targetClassId) {
           setSelectedClassId(targetClassId);
         }
@@ -501,6 +505,13 @@ export default function AdminDashboard() {
           )}>
             {selectedClass ? (
               <div className="h-full flex flex-col overflow-hidden">
+                {/* Mobile Back Button */}
+                <button 
+                  onClick={() => setSelectedClassId(null)}
+                  className="lg:hidden self-start mb-4 px-3 h-8 bg-white rounded-full shadow-sm flex items-center border border-gray-200/50 hover:bg-gray-50 text-ishes-blue text-xs font-bold shrink-0"
+                >
+                  <ChevronRight className="w-4 h-4 rotate-180 mr-1" /> Retour
+                </button>
                 {/* Class Header */}
                 <div className="pb-4 mb-3 border-b border-gray-100">
                   <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-4 gap-4">

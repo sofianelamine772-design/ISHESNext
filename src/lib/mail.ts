@@ -416,3 +416,55 @@ export async function sendBackupReportEmail(params: {
     attachments: attachments.length > 0 ? attachments : undefined
   });
 }
+
+export async function sendAdminNewStudentNotificationEmail(params: {
+  studentName: string;
+  studentEmail: string;
+  phone?: string;
+  formation: string;
+  className?: string;
+  amountStr: string;
+}) {
+  const { studentName, studentEmail, phone, formation, className, amountStr } = params;
+
+  const html = `
+    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      ${emailHeader}
+      <div style="padding: 40px 30px;">
+        <h2 style="color: #086b51; margin-top: 0; font-size: 20px;">🎉 Nouvelle Inscription ISHES !</h2>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Un nouvel élève vient de s'inscrire et a effectué son paiement avec succès.
+        </p>
+        
+        <div style="background-color: #f9f9f9; border-left: 4px solid #086b51; padding: 20px; margin: 25px 0; border-radius: 8px;">
+          <h3 style="margin-top: 0; color: #333; font-size: 16px;">👤 Informations de l'élève</h3>
+          <ul style="list-style: none; padding: 0; margin: 0; color: #555; font-size: 15px; line-height: 1.8;">
+            <li><strong>Nom & Prénom :</strong> ${studentName}</li>
+            <li><strong>Email :</strong> ${studentEmail}</li>
+            ${phone ? `<li><strong>Téléphone :</strong> ${phone}</li>` : ''}
+          </ul>
+        </div>
+
+        <div style="background-color: #f0f7ff; border-left: 4px solid #2563eb; padding: 20px; margin: 25px 0; border-radius: 8px;">
+          <h3 style="margin-top: 0; color: #333; font-size: 16px;">📚 Détails de la scolarité</h3>
+          <ul style="list-style: none; padding: 0; margin: 0; color: #555; font-size: 15px; line-height: 1.8;">
+            <li><strong>Formation :</strong> ${formation}</li>
+            ${className ? `<li><strong>Classe :</strong> ${className}</li>` : ''}
+            <li><strong>Montant payé :</strong> ${amountStr}</li>
+          </ul>
+        </div>
+
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr'}/app/admin/etudiants" style="${buttonStyle}">Voir dans le tableau de bord</a>
+        </div>
+      </div>
+      ${emailFooter}
+    </div>
+  `;
+
+  return sendEmail({
+    to: "sofianelamine772@gmail.com",
+    subject: `🎉 Nouvelle Inscription - ${studentName}`,
+    html
+  });
+}

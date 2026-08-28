@@ -419,3 +419,35 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const studentId = searchParams.get('studentId');
+
+    if (!studentId) {
+      return NextResponse.json({ error: 'studentId is required' }, { status: 400 });
+    }
+
+    // On supprime tous les messages entre l'admin et l'élève
+    const { error } = await supabaseAdmin
+      .from('messages')
+      .delete()
+      .or(`and(sender_id.eq.admin_system,receiver_id.eq.${studentId}),and(sender_id.eq.${studentId},receiver_id.eq.admin_system)`);
+
+    if (error) {
+      console.error('[MESSAGES_DELETE_ERROR]', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('[MESSAGES_DELETE_CATCH]', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}

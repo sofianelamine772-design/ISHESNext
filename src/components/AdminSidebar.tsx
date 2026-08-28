@@ -97,7 +97,7 @@ export function AdminSidebar() {
   return (
     <>
       {/* Mobile Menu Trigger */}
-      <div className="lg:hidden fixed top-5 left-6 z-[60]">
+      <div className={cn("lg:hidden fixed top-5 left-6 z-40 transition-opacity", isOpen ? "opacity-0 pointer-events-none" : "opacity-100")}>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger
             render={

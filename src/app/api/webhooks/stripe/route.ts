@@ -392,6 +392,35 @@ export async function POST(req: Request) {
       await syncStudentPaidStatus(studentIds[0]); // Puisque c'est par famille, synchroniser un seul ID synchronise tout
     }
 
+    // Notification admin (Nouvel élève)
+    if (!isRegularisation && !isRenewal) {
+      try {
+        const { sendAdminNewStudentNotificationEmail } = await import('@/lib/mail');
+        const studentName = session.metadata?.first_name 
+          ? `${session.metadata.first_name} ${session.metadata.last_name || ''}`
+          : (session.metadata?.child_0_first ? `${session.metadata.child_0_first} ${session.metadata.child_0_last || ''} (+ famille)` : 'Nouvel élève');
+          
+        const amountStr = `${((session.amount_total || 0) / 100).toFixed(2)} ${session.currency?.toUpperCase() || 'EUR'}`;
+        
+        let formationTitle = formationId;
+        if (formationUuid) {
+          const { data: form } = await supabaseAdmin.from('formations').select('title').eq('id', formationUuid).maybeSingle();
+          if (form?.title) formationTitle = form.title;
+        }
+        
+        await sendAdminNewStudentNotificationEmail({
+          studentName,
+          studentEmail: payerEmail,
+          phone: telephone,
+          formation: formationTitle,
+          amountStr
+        });
+        console.log('[WEBHOOK] Admin notification email sent for new student');
+      } catch (e) {
+        console.error('[WEBHOOK] Failed to send admin notification email', e);
+      }
+    }
+
     console.log(`[WEBHOOK] Done: ${studentIds.length} student(s) processed for ${payerEmail}`);
   }
 
