@@ -441,7 +441,7 @@ export async function sendBackupReportEmail(params: {
   }
 
   return sendEmail({
-    to: "sofianelamine772@gmail.com",
+    to: "sofianelamine772@gmail.com, ishes.contact@gmail.com",
     subject: `📦 Sauvegarde automatique BD - ${date} - ISHES`,
     html,
     attachments: attachments.length > 0 ? attachments : undefined
@@ -494,7 +494,7 @@ export async function sendAdminNewStudentNotificationEmail(params: {
   `;
 
   return sendEmail({
-    to: "sofianelamine772@gmail.com",
+    to: "sofianelamine772@gmail.com, ishes.contact@gmail.com",
     subject: `🎉 Nouvelle Inscription - ${studentName}`,
     html
   });
