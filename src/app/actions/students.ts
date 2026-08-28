@@ -1317,7 +1317,7 @@ export async function fetchStudentCertificateDataAction(profile: {
         const isManual = member.id && String(member.id).startsWith('manual_');
         const memberInscriptions = (inscriptions || []).filter((i: any) =>
           i.etudiant_id === member.id &&
-          (i.paid_status === 'paye' || i.paid_status === 'exonere' || isManual)
+          (i.paid_status === 'paye' || i.paid_status === 'partiel' || i.paid_status === 'exonere' || isManual)
         );
         const latestInscription = memberInscriptions[0];
         if (!latestInscription) return null;
