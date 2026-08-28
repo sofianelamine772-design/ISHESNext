@@ -214,14 +214,17 @@ export default function AdminCommunicationPage() {
       <AdminSidebar />
 
       <main className="flex-1 flex flex-col min-w-0 h-full">
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0 z-10 sticky top-0">
-          <h1 className="text-2xl ishes-heading text-ishes-blue font-black uppercase tracking-tight">Communication</h1>
-          <div className="flex p-1 bg-gray-100 rounded-2xl">
-            <button onClick={() => { setActiveTab("inbox"); fetchConversations(); }} className={`flex items-center gap-2 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "inbox" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
-              <Inbox className="w-4 h-4" /> Boîte de réception
+        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 shrink-0 z-10 sticky top-0 gap-2 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-2 md:gap-4 shrink-0">
+            <div className="w-10 lg:hidden shrink-0" /> {/* Spacer for menu button */}
+            <h1 className="text-lg md:text-2xl ishes-heading text-ishes-blue font-black uppercase tracking-tight truncate">Communication</h1>
+          </div>
+          <div className="flex p-1 bg-gray-100 rounded-2xl shrink-0">
+            <button onClick={() => { setActiveTab("inbox"); fetchConversations(); }} className={`flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "inbox" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
+              <Inbox className="w-4 h-4 hidden sm:block" /> Inbox
             </button>
-            <button onClick={() => setActiveTab("send")} className={`flex items-center gap-2 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "send" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
-              <Send className="w-4 h-4" /> Nouvel Envoi
+            <button onClick={() => setActiveTab("send")} className={`flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "send" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
+              <Send className="w-4 h-4 hidden sm:block" /> Envoi
             </button>
           </div>
         </header>

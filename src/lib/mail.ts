@@ -318,17 +318,23 @@ export async function sendBackupReportEmail(params: {
   date: string;
   signedUrl: string;
   signedUrlSql?: string;
+  signedUrlCsv?: string;
   stats: {
     etudiants: number;
     inscriptions: number;
     paiements: number;
     classes: number;
     messages: number;
+    newStudents24h?: number;
+    totalCollected?: number;
+    totalRemaining?: number;
+    abandonedCheckouts24h?: number;
   };
   backupJsonString?: string;
   backupSqlString?: string;
+  backupCsvString?: string;
 }) {
-  const { date, signedUrl, signedUrlSql, stats, backupJsonString, backupSqlString } = params;
+  const { date, signedUrl, signedUrlSql, signedUrlCsv, stats, backupJsonString, backupSqlString, backupCsvString } = params;
 
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -370,6 +376,18 @@ export async function sendBackupReportEmail(params: {
           </tr>
         </table>
 
+        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">📈 Activité des dernières 24h :</h3>
+        <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
+          <li><strong>Nouveaux inscrits :</strong> ${stats.newStudents24h ?? 0}</li>
+          <li><strong>Paiements abandonnés :</strong> ${stats.abandonedCheckouts24h ?? 0}</li>
+        </ul>
+
+        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">💰 Bilan Financier Global :</h3>
+        <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
+          <li><strong>Total encaissé :</strong> ${stats.totalCollected?.toFixed(2) ?? "0.00"} €</li>
+          <li><strong>Reste à encaisser :</strong> ${stats.totalRemaining?.toFixed(2) ?? "0.00"} €</li>
+        </ul>
+
         <div style="background-color: #f4faf8; border-left: 4px solid #0a192f; padding: 15px; margin: 25px 0; border-radius: 8px; color: #0a192f; font-size: 13px; font-weight: 600;">
           💡 Les fichiers de sauvegarde ont été téléversés de manière sécurisée dans votre bucket privé Supabase Storage (backups).
         </div>
@@ -381,6 +399,11 @@ export async function sendBackupReportEmail(params: {
           ${signedUrlSql ? `
           <div>
             <a href="${signedUrlSql}" style="${buttonStyle} background-color: #1d4ed8;">Télécharger le backup SQL</a>
+          </div>
+          ` : ''}
+          ${signedUrlCsv ? `
+          <div>
+            <a href="${signedUrlCsv}" style="${buttonStyle} background-color: #086b51;">Télécharger les Élèves (CSV)</a>
           </div>
           ` : ''}
           <p style="font-size: 11px; color: #888; margin-top: 15px;">Ces liens sont privés et seront valides pendant 7 jours.</p>
@@ -406,6 +429,14 @@ export async function sendBackupReportEmail(params: {
       filename: `ishes_db_backup_${safeDateStr}.sql`,
       content: backupSqlString,
       contentType: 'application/sql'
+    });
+  }
+
+  if (backupCsvString) {
+    attachments.push({
+      filename: `ishes_etudiants_${safeDateStr}.csv`,
+      content: backupCsvString,
+      contentType: 'text/csv'
     });
   }
 
