@@ -382,10 +382,23 @@ export async function fetchClassesAction(academicYear?: string) {
 
     if (cError) throw cError;
 
-    const formatted = classes.map((c: any) => ({
-      id: c.id,
-      name: c.name,
-      type: c.type,
+    const formatted = classes.map((c: any) => {
+      let scheduleStr = "";
+      if (c.day_of_week && c.periode) {
+        const day = c.day_of_week.toLowerCase();
+        const period = c.periode.toLowerCase();
+        if (day === 'mercredi') {
+          scheduleStr = "13h30 - 16h30";
+        } else if (day === 'samedi' || day === 'dimanche') {
+          if (period === 'matin') scheduleStr = "09h00 - 12h00";
+          else scheduleStr = "13h30 - 16h30";
+        }
+      }
+      return {
+        id: c.id,
+        name: c.name,
+        type: c.type,
+        schedule: scheduleStr,
       capacity_limit: c.capacity_limit || 20,
       formationTitle: c.formations?.title,
       whatsappLink: c.whatsapp_link || null,
@@ -398,7 +411,8 @@ export async function fetchClassesAction(academicYear?: string) {
           avatar: (i.etudiants?.first_name?.[0] || '') + (i.etudiants?.last_name?.[0] || ''),
           dateJoined: new Date(i.etudiants?.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
         }))
-    }));
+      };
+    });
 
     return { success: true, data: formatted };
   } catch (err) {
@@ -435,6 +449,7 @@ export async function assignStudentToClassAction(studentId: string, classId: str
         .from('inscriptions')
         .update({
           class_id: classId,
+          formation_id: classe.formation_id,
           status: 'actif'
         })
         .eq('id', existing.id);

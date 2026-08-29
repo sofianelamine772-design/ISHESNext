@@ -13,7 +13,7 @@ import { UserButton } from "@clerk/nextjs";
 
 // Types
 type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string };
-type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null };
+type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null; schedule?: string };
 
 export default function AdminDashboard() {
   const searchParams = useSearchParams();
@@ -472,6 +472,7 @@ export default function AdminDashboard() {
                         }`}
                       >
                         <div className="font-semibold text-gray-800 mb-1 text-sm">{c.name}</div>
+                        {c.schedule && <div className="text-[10px] font-bold text-ishes-gold mb-1.5">{c.schedule}</div>}
                         <div className="flex items-center justify-between text-[10px] text-gray-500 gap-1.5">
                           <div className="flex items-center gap-1">
                             <Users className="w-3.5 h-3.5" /> {c.students.length} inscrits
@@ -526,6 +527,11 @@ export default function AdminDashboard() {
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>
                             Mode {selectedClass.type}
                           </span>
+                          {selectedClass.schedule && (
+                            <span className="text-[9px] font-black text-ishes-gold bg-ishes-gold/10 border border-ishes-gold/20 px-2 py-0.5 rounded shadow-sm">
+                              {selectedClass.schedule}
+                            </span>
+                          )}
                           <span className="text-[9px] font-black text-ishes-dark bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
                             Capacité : {selectedClass.students.length} / {selectedClass.capacity_limit}
                           </span>

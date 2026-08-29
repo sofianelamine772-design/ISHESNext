@@ -379,15 +379,15 @@ export default function AdminCommunicationPage() {
             </div>
           ) : (
             /* Nouvel Envoi */
-            <div className="flex-1 p-8 overflow-y-auto">
-              <div className="max-w-3xl mx-auto bg-white rounded-[3rem] border border-gray-100 p-12 shadow-sm space-y-10">
+            <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+              <div className="max-w-3xl mx-auto bg-white rounded-3xl md:rounded-[3rem] border border-gray-100 p-6 md:p-12 shadow-sm space-y-8 md:space-y-10">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-[1px] bg-[#086b51]" />
                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#086b51]">Nouveau Message</h3>
                 </div>
 
                 {/* Type d'envoi */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                   {[
                     { value: 'global', label: 'Tout l\'Institut', icon: Globe, desc: 'Tous les élèves' },
                     { value: 'class', label: 'Par Classe', icon: Users, desc: 'Une classe précise' },

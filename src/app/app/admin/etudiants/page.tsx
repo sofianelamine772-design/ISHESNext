@@ -29,6 +29,7 @@ type StudentDetail = {
   lastPayment: string;
   paymentStatus: "a_jour" | "en_retard";
   classId?: string | null;
+  hasConnected?: boolean;
 };
 
 function EtudiantsContent() {
@@ -140,8 +141,9 @@ function EtudiantsContent() {
             parentName: null,
             address: s.address || "Adresse non renseignée",
             lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
-            paymentStatus: (latestInscription?.paid_status === 'paye' || s.id.startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
-            classId: latestInscription?.class_id || null
+            paymentStatus: (latestInscription?.paid_status === 'paye' || String(s.id).startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
+            classId: latestInscription?.class_id || null,
+            hasConnected: !!s.clerk_user_id
           };
         });
 
@@ -606,10 +608,19 @@ function EtudiantsContent() {
                           {student.avatar}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-0.5">
-                            <h3 className="ishes-heading text-sm truncate text-ishes-blue">{student.name}</h3>
-                            {(student.status === "en_attente") && <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/20" />}
-                            {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-blue shadow-lg shadow-ishes-blue/20" />}
+                          <div className="flex items-center justify-between mb-0.5 gap-2">
+                            <h3 className="ishes-heading text-sm truncate text-ishes-blue flex items-center gap-1.5">
+                              {student.name}
+                              {student.hasConnected ? (
+                                <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" title="Connecté à l'espace" />
+                              ) : (
+                                <div className="w-1.5 h-1.5 rounded-full bg-gray-300" title="Jamais connecté" />
+                              )}
+                            </h3>
+                            <div className="flex items-center gap-1 shrink-0">
+                              {(student.status === "en_attente") && <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/20" />}
+                              {(student.status === "actif" || student.status === "valide") && <div className="w-2 h-2 rounded-full bg-ishes-blue shadow-lg shadow-ishes-blue/20" />}
+                            </div>
                           </div>
                           <p className="text-[10px] font-medium tracking-wider truncate mb-1 opacity-65 uppercase text-ishes-dark">{student.email}</p>
                           <div className="flex items-center gap-2">
@@ -689,21 +700,28 @@ function EtudiantsContent() {
                       </div>
                       <div className="pb-1 md:pb-2 min-w-0 flex-1">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <h2 className="text-2xl md:text-4xl font-black text-ishes-blue tracking-tight leading-snug">{selectedStudent.name}</h2>
+                        <div className="flex items-center gap-3">
+                          <h2 className="text-2xl md:text-4xl font-black text-ishes-blue tracking-tight leading-snug truncate">{selectedStudent.name}</h2>
+                          {selectedStudent.hasConnected ? (
+                            <span className="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full border border-green-200 shrink-0">Connecté</span>
+                          ) : (
+                            <span className="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200 shrink-0">Jamais connecté</span>
+                          )}
+                        </div>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-blue mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
                       </div>
                     </div>
-                    <div className="flex gap-2 md:gap-3 pb-1 md:pb-2 shrink-0 flex-wrap justify-end">
-                      <Button variant="outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600 text-[10px] md:text-xs" onClick={handleDeleteStudent} disabled={isDeletingStudent}>
+                    <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-end gap-2 md:gap-3 pb-1 md:pb-2 shrink-0 w-full xl:w-auto mt-4 xl:mt-0">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto h-10 md:h-11 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600 text-[10px] md:text-xs" onClick={handleDeleteStudent} disabled={isDeletingStudent}>
                         {isDeletingStudent ? <Loader2 className="w-4 h-4 mr-1 md:mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-1 md:mr-2" />} Désinscrire
                       </Button>
-                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-[10px] md:text-xs" onClick={openEditModal}>
+                      <Button variant="ishes-outline" size="sm" className="w-full sm:w-auto h-10 md:h-11 text-[10px] md:text-xs" onClick={openEditModal}>
                         MODIFIER
                       </Button>
-                      <Button variant="outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 text-amber-600 border-amber-200 hover:bg-amber-50 hover:text-amber-700 text-[10px] md:text-xs" onClick={handleSendPaymentReminder} disabled={isSendingReminder}>
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto h-10 md:h-11 text-amber-600 border-amber-200 hover:bg-amber-50 hover:text-amber-700 text-[10px] md:text-xs" onClick={handleSendPaymentReminder} disabled={isSendingReminder}>
                         {isSendingReminder ? <Loader2 className="w-4 h-4 mr-1 md:mr-2 animate-spin" /> : <AlertCircle className="w-4 h-4 mr-1 md:mr-2" />} Relance
                       </Button>
-                      <Button variant="ishes-outline" size="sm" className="flex-1 md:flex-none h-10 md:h-11 shadow-black/5 text-[10px] md:text-xs" onClick={() => openChat(selectedStudent)}>
+                      <Button variant="ishes-outline" size="sm" className="w-full sm:w-auto h-10 md:h-11 shadow-black/5 text-[10px] md:text-xs" onClick={() => openChat(selectedStudent)}>
                         <Mail className="w-4 h-4 mr-1 md:mr-2" /> Message
                       </Button>
                     </div>
@@ -1389,6 +1407,7 @@ function EtudiantsContent() {
                         <div>
                           <div className={`text-xs font-black uppercase tracking-tight ${targetClassId === c.id ? 'text-ishes-blue' : 'text-ishes-dark'}`}>{c.name}</div>
                           <div className="text-[10px] text-gray-400 font-medium">{c.formationTitle}</div>
+                          {c.schedule && <div className="text-[10px] text-ishes-gold font-bold mt-0.5">{c.schedule}</div>}
                         </div>
                         {targetClassId === c.id && <CheckCircle2 className="w-4 h-4 text-ishes-blue" />}
                       </button>
