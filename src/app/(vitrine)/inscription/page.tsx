@@ -165,7 +165,7 @@ function InscriptionForm() {
     return basePrice;
   };
 
-  const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5>(1);
+  const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5 | 10>(1);
 
   useEffect(() => {
     if (getPrice() < 100) {
@@ -1223,6 +1223,27 @@ function InscriptionForm() {
                           </div>
                           <div className="text-right flex flex-col">
                             <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 5).toFixed(2)} €</span>
+                            <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
+                          </div>
+                        </button>
+                      )}
+
+                      {/* Option 10x (Seulement Présentiel) */}
+                      {getPrice() >= 100 && (planId === 'tajwid_standard' || planId === 'presentiel-global' || planId?.includes('presentiel')) && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedInstallments(10)}
+                          className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-center ${selectedInstallments === 10
+                              ? "border-ishes-blue bg-ishes-blue/5 text-[#101828]"
+                              : "border-gray-100 bg-white hover:border-gray-200 text-gray-600"
+                            }`}
+                        >
+                          <div>
+                            <span className="font-bold text-sm block">En 10 fois</span>
+                            <span className="text-[10px] text-gray-400 font-medium">10 mensualités (Spécial Présentiel)</span>
+                          </div>
+                          <div className="text-right flex flex-col">
+                            <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 10).toFixed(2)} €</span>
                             <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
                           </div>
                         </button>

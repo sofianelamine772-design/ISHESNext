@@ -384,15 +384,27 @@ export async function fetchClassesAction(academicYear?: string) {
 
     const formatted = classes.map((c: any) => {
       let scheduleStr = "";
-      if (c.day_of_week && c.periode) {
-        const day = c.day_of_week.toLowerCase();
-        const period = c.periode.toLowerCase();
-        if (day === 'mercredi') {
-          scheduleStr = "13h30 - 16h30";
-        } else if (day === 'samedi' || day === 'dimanche') {
-          if (period === 'matin') scheduleStr = "09h00 - 12h00";
-          else scheduleStr = "13h30 - 16h30";
-        }
+      
+      let day = (c.day_of_week || '').toLowerCase();
+      let period = (c.periode || '').toLowerCase();
+      
+      if (!day) {
+        const nameLower = (c.name || '').toLowerCase();
+        if (nameLower.includes('mercredi')) day = 'mercredi';
+        else if (nameLower.includes('samedi')) day = 'samedi';
+        else if (nameLower.includes('dimanche')) day = 'dimanche';
+      }
+      if (!period) {
+        const nameLower = (c.name || '').toLowerCase();
+        if (nameLower.includes('matin')) period = 'matin';
+        else if (nameLower.includes('a-m') || nameLower.includes('après-midi') || nameLower.includes('apres-midi')) period = 'après-midi';
+      }
+
+      if (day === 'mercredi') {
+        scheduleStr = "13h30 - 16h30";
+      } else if (day === 'samedi' || day === 'dimanche') {
+        if (period === 'matin') scheduleStr = "09h00 - 12h00";
+        else if (period === 'après-midi' || period === 'apres-midi') scheduleStr = "13h30 - 16h30";
       }
       return {
         id: c.id,
@@ -1713,6 +1725,28 @@ export async function syncStudentPaidStatus(studentId: string) {
 
   } catch (err) {
     console.error("[syncStudentPaidStatus] Erreur:", err);
+  }
+}
+
+export async function fetchUsersLoginsAction() {
+  try {
+    const { clerkClient } = await import("@clerk/nextjs/server");
+    const users = await clerkClient.users.getUserList({ limit: 500 });
+    
+    // Map email to boolean (has connected)
+    const loginMap: Record<string, boolean> = {};
+    for (const u of users.data) {
+      if (u.emailAddresses && u.emailAddresses.length > 0) {
+        const email = u.emailAddresses[0].emailAddress.toLowerCase();
+        // If lastSignInAt is not null, they have logged in at least once
+        loginMap[email] = u.lastSignInAt !== null;
+      }
+    }
+    
+    return { success: true, data: loginMap };
+  } catch (err) {
+    console.error("Fetch Users Logins Error:", err);
+    return { success: false, data: {} };
   }
 }
 

@@ -231,6 +231,8 @@ export default function EleveDashboard() {
         installmentsCount = 3;
       } else if (Math.abs(ratio - 5) < 0.3) {
         installmentsCount = 5;
+      } else if (Math.abs(ratio - 10) < 0.3) {
+        installmentsCount = 10;
       }
     }
 

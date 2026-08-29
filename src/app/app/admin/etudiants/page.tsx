@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2, ExternalLink } from "lucide-react";
-import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, deletePaymentAction } from "@/app/actions/students";
+import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, deletePaymentAction, fetchUsersLoginsAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -100,7 +100,12 @@ function EtudiantsContent() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const result = await fetchStudentsAction(selectedYear);
+      const [result, loginsResult] = await Promise.all([
+        fetchStudentsAction(selectedYear),
+        fetchUsersLoginsAction()
+      ]);
+      const loginMap = loginsResult.success ? (loginsResult.data as Record<string, boolean>) : {};
+
       if (result.success && result.data) {
         const formatted = result.data.map((s: any) => {
           const latestInscription = 
@@ -143,7 +148,7 @@ function EtudiantsContent() {
             lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
             paymentStatus: (latestInscription?.paid_status === 'paye' || String(s.id).startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
             classId: latestInscription?.class_id || null,
-            hasConnected: !!s.clerk_user_id
+            hasConnected: !!(s.email && loginMap[s.email.toLowerCase()])
           };
         });
 
@@ -700,12 +705,12 @@ function EtudiantsContent() {
                       </div>
                       <div className="pb-1 md:pb-2 min-w-0 flex-1">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <div className="flex items-center gap-3">
-                          <h2 className="text-2xl md:text-4xl font-black text-ishes-blue tracking-tight leading-snug truncate">{selectedStudent.name}</h2>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <h2 className="text-2xl md:text-4xl font-black text-ishes-blue tracking-tight leading-normal break-words">{selectedStudent.name}</h2>
                           {selectedStudent.hasConnected ? (
-                            <span className="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full border border-green-200 shrink-0">Connecté</span>
+                            <span className="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full border border-green-200 shrink-0 mt-1 md:mt-0">Connecté</span>
                           ) : (
-                            <span className="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200 shrink-0">Jamais connecté</span>
+                            <span className="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200 shrink-0 mt-1 md:mt-0">Jamais connecté</span>
                           )}
                         </div>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-blue mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>

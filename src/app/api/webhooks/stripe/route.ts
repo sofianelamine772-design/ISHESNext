@@ -485,7 +485,7 @@ export async function POST(req: Request) {
         const installmentsTotal = subscription.metadata?.installments_total;
         if (installmentsTotal) {
           const total = parseInt(installmentsTotal, 10);
-          const invoices = await stripe.invoices.list({ subscription: subscription.id, status: 'paid', limit: 10 });
+          const invoices = await stripe.invoices.list({ subscription: subscription.id, status: 'paid', limit: 100 });
           if (invoices.data.length >= total) {
             await stripe.subscriptions.update(subscription.id, { cancel_at_period_end: true });
             console.log(`[WEBHOOK] Abonnement ${subscription.id} terminé (${total} mensualités).`);
