@@ -1731,7 +1731,8 @@ export async function syncStudentPaidStatus(studentId: string) {
 export async function fetchUsersLoginsAction() {
   try {
     const { clerkClient } = await import("@clerk/nextjs/server");
-    const users = await clerkClient.users.getUserList({ limit: 500 });
+    const client = await clerkClient();
+    const users = await client.users.getUserList({ limit: 500 });
     
     // Map email to boolean (has connected)
     const loginMap: Record<string, boolean> = {};
