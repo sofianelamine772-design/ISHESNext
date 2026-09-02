@@ -30,6 +30,8 @@ export default clerkMiddleware(async (auth, request) => {
     const keyType = pubKey.startsWith('pk_live_') ? 'PRODUCTION' : (pubKey.startsWith('pk_test_') ? 'TEST' : 'UNKNOWN');
     const maskedKey = pubKey ? `${pubKey.substring(0, 10)}...` : 'MISSING';
     
+    // Remove heavy console logs on every request in local dev
+    /*
     console.log('\n--- [CLERK DEBUG LOG] ---');
     console.log(`URL: ${request.nextUrl.href}`);
     console.log(`Host: ${request.headers.get('host')}`);
@@ -38,16 +40,17 @@ export default clerkMiddleware(async (auth, request) => {
     console.log(`Clerk Key Type: ${keyType}`);
     console.log(`Clerk Publishable Key: ${maskedKey}`);
     console.log('-------------------------\n');
+    */
 
     // Redirection case-sensitive pour /CGV vers /cgv
     if (request.nextUrl.pathname === '/CGV') {
       return NextResponse.redirect(new URL('/cgv', request.url), 308);
     }
 
-    const { userId } = await auth();
-
     // Si la route est protégée, on vérifie l'authentification
     if (isProtectedRoute(request)) {
+      const { userId } = await auth();
+      
       if (!userId) {
         if (request.nextUrl.pathname.startsWith('/api')) {
           console.warn('[PROXY] Unauthorized API request to', request.nextUrl.pathname);

@@ -48,6 +48,9 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   async redirects() {
     const redirectsList = redirectPaths.map((path) => ({
       source: `/${path}`,

@@ -7,7 +7,7 @@ import {
   Calendar, X, Phone, Mail, History, 
   AlertCircle, CreditCard, Users, GraduationCap, UserCheck
 } from "lucide-react";
-import { fetchPaymentsAction, sendPaymentReminderWithLinkAction } from "@/app/actions/students";
+import { fetchPaymentsAction, sendPaymentReminderWithLinkAction, fetchManualBalancesAction, addManualPaymentAction } from "@/app/actions/students";
 import { Loader2 } from "lucide-react";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -47,48 +47,89 @@ type Payment = {
 
 export default function FacturationPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"refuse" | "tous">("refuse");
+  const [activeTab, setActiveTab] = useState<"refuse" | "tous" | "manuelle">("refuse");
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [manualBalances, setManualBalances] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingManual, setLoadingManual] = useState(true);
   const [isSendingReminder, setIsSendingReminder] = useState(false);
   const [popupMsg, setPopupMsg] = useState<{title: string, desc: string, type: "success"|"error"} | null>(null);
 
+  const [isAddingPayment, setIsAddingPayment] = useState(false);
+  const [selectedStudentForPayment, setSelectedStudentForPayment] = useState<any>(null);
+  const [newPaymentAmount, setNewPaymentAmount] = useState("");
+  const [newPaymentMethod, setNewPaymentMethod] = useState("liquide");
+
+  const loadData = async () => {
+    setLoading(true);
+    setLoadingManual(true);
+    const [paymentsResult, manualResult] = await Promise.all([
+      fetchPaymentsAction(),
+      fetchManualBalancesAction()
+    ]);
+
+    if (paymentsResult.success && paymentsResult.data) {
+      const formatted = paymentsResult.data.map((p: any) => {
+        const etudiant = Array.isArray(p.etudiants) ? p.etudiants[0] : p.etudiants;
+        const inscription = Array.isArray(p.inscriptions) ? p.inscriptions[0] : p.inscriptions;
+        const formation = inscription?.formations;
+
+        const familyMembers: FamilyMember[] = p.familyMembers || [];
+        const isFamilyPayment = familyMembers.length > 0;
+
+        return {
+          id: p.id.slice(0, 8),
+          rawId: p.id,
+          etudiantId: etudiant?.id || '',
+          payerName: `${etudiant?.first_name || ''} ${etudiant?.last_name || ''}`.trim() || 'Inconnu',
+          payerAvatar: ((etudiant?.first_name?.[0] || '') + (etudiant?.last_name?.[0] || '')) || '?',
+          email: etudiant?.email || '',
+          phone: etudiant?.phone || '',
+          course: formation?.title || 'Formation',
+          amount: p.amount + " €",
+          date: new Date(p.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
+          status: p.status === 'succeeded' ? 'paye' : p.status === 'failed' ? 'refuse' : 'en_attente',
+          reason: p.error_message || undefined,
+          familyMembers,
+          isFamilyPayment,
+        };
+      });
+      setPayments(formatted as Payment[]);
+    }
+    
+    if (manualResult.success && manualResult.data) {
+      setManualBalances(manualResult.data);
+    }
+    
+    setLoading(false);
+    setLoadingManual(false);
+  };
+
   useEffect(() => {
-    const loadPayments = async () => {
-      const result = await fetchPaymentsAction();
-      if (result.success && result.data) {
-        const formatted = result.data.map((p: any) => {
-          const etudiant = Array.isArray(p.etudiants) ? p.etudiants[0] : p.etudiants;
-          const inscription = Array.isArray(p.inscriptions) ? p.inscriptions[0] : p.inscriptions;
-          const formation = inscription?.formations;
-
-          const familyMembers: FamilyMember[] = p.familyMembers || [];
-          const isFamilyPayment = familyMembers.length > 0;
-
-          return {
-            id: p.id.slice(0, 8),
-            rawId: p.id,
-            etudiantId: etudiant?.id || '',
-            payerName: `${etudiant?.first_name || ''} ${etudiant?.last_name || ''}`.trim() || 'Inconnu',
-            payerAvatar: ((etudiant?.first_name?.[0] || '') + (etudiant?.last_name?.[0] || '')) || '?',
-            email: etudiant?.email || '',
-            phone: etudiant?.phone || '',
-            course: formation?.title || 'Formation',
-            amount: p.amount + " €",
-            date: new Date(p.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
-            status: p.status === 'succeeded' ? 'paye' : p.status === 'failed' ? 'refuse' : 'en_attente',
-            reason: p.error_message || undefined,
-            familyMembers,
-            isFamilyPayment,
-          };
-        });
-        setPayments(formatted as Payment[]);
-      }
-      setLoading(false);
-    };
-    loadPayments();
+    loadData();
   }, []);
+
+  const handleAddManualPayment = async () => {
+    if (!selectedStudentForPayment || !newPaymentAmount) return;
+    try {
+      setIsSendingReminder(true);
+      const res = await addManualPaymentAction(selectedStudentForPayment.id, parseFloat(newPaymentAmount), newPaymentMethod);
+      if (res.success) {
+        setPopupMsg({ title: "Paiement ajouté !", desc: "Le paiement manuel a bien été enregistré.", type: "success" });
+        setIsAddingPayment(false);
+        setNewPaymentAmount("");
+        await loadData();
+      } else {
+        setPopupMsg({ title: "Erreur", desc: res.error || "Impossible d'ajouter le paiement.", type: "error" });
+      }
+    } catch (err: any) {
+      setPopupMsg({ title: "Erreur", desc: "Erreur inattendue.", type: "error" });
+    } finally {
+      setIsSendingReminder(false);
+      setTimeout(() => setPopupMsg(null), 5000);
+    }
+  };
 
   const filteredPayments = payments.filter(p => {
     const searchLower = searchQuery.toLowerCase();
@@ -203,8 +244,8 @@ export default function FacturationPage() {
                   className="w-full sm:w-96 bg-white border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium shadow-sm"
                 />
               </div>
-              <div className="flex gap-2">
-                {(["refuse", "tous"] as const).map(tab => (
+              <div className="flex gap-2 flex-wrap">
+                {(["refuse", "tous", "manuelle"] as const).map(tab => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -215,21 +256,115 @@ export default function FacturationPage() {
                         : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-blue/20 hover:text-ishes-dark"
                     )}
                   >
-                    {tab === "refuse" ? "REFUSÉS" : "TOUS"}
+                    {tab === "refuse" ? "REFUSÉS" : tab === "manuelle" ? "SAISIE MANUELLE" : "TOUS"}
                   </button>
                 ))}
               </div>
             </div>
 
             {/* ── Table ───────────────────────────────────────────────── */}
-            <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
-              <div className="px-6 md:px-8 py-5 border-b border-gray-50">
-                <h2 className="text-xl ishes-heading text-ishes-blue">Historique des règlements</h2>
-                <p className="text-[11px] text-gray-400 font-medium mt-0.5">
-                  {filteredPayments.length} transaction{filteredPayments.length !== 1 ? 's' : ''} — 
-                  les paiements familiaux couvrent tous les enfants inscrits
-                </p>
+            {activeTab === "manuelle" ? (
+              <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                <div className="px-6 md:px-8 py-5 border-b border-gray-50 flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h2 className="text-xl ishes-heading text-ishes-blue">Paiements Manuels & Impayés</h2>
+                    <p className="text-[11px] text-gray-400 font-medium mt-0.5">
+                      {manualBalances.length} dossier{manualBalances.length !== 1 ? 's' : ''} suivi{manualBalances.length !== 1 ? 's' : ''} manuellement
+                    </p>
+                  </div>
+                </div>
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50/50 text-gray-400 text-[10px] uppercase font-black tracking-[0.2em]">
+                        <th className="px-6 py-4 border-b border-gray-100">Élève</th>
+                        <th className="px-6 py-4 border-b border-gray-100">Formations</th>
+                        <th className="px-6 py-4 border-b border-gray-100 text-center">Total Dû</th>
+                        <th className="px-6 py-4 border-b border-gray-100 text-center">Total Payé</th>
+                        <th className="px-6 py-4 border-b border-gray-100 text-center">Reste à payer</th>
+                        <th className="px-6 py-4 border-b border-gray-100 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {loadingManual ? (
+                        <tr>
+                          <td colSpan={6} className="px-8 py-20 text-center">
+                            <div className="flex flex-col items-center gap-4">
+                              <div className="w-10 h-10 border-4 border-ishes-blue border-t-transparent rounded-full animate-spin" />
+                              <p className="ishes-label text-ishes-blue">Chargement des données...</p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : manualBalances.length > 0 ? (
+                        manualBalances.map((student) => (
+                          <tr key={student.id} className="hover:bg-gray-50/30 transition-colors">
+                            <td className="px-6 py-5">
+                              <div className="font-bold text-ishes-dark text-sm whitespace-nowrap">{student.first_name} {student.last_name}</div>
+                              <div className="text-[10px] font-medium text-gray-400">{student.email}</div>
+                            </td>
+                            <td className="px-6 py-5">
+                              <div className="flex flex-col gap-1">
+                                {student.inscriptions.map((i: any, idx: number) => (
+                                  <span key={idx} className="text-xs font-bold text-gray-500 whitespace-nowrap">
+                                    {i.title} - {i.price}€
+                                  </span>
+                                ))}
+                              </div>
+                            </td>
+                            <td className="px-6 py-5 text-center">
+                              <span className="text-sm font-black text-ishes-dark">{student.totalDue} €</span>
+                            </td>
+                            <td className="px-6 py-5 text-center">
+                              <span className="text-sm font-black text-ishes-dark">{student.totalPaid} €</span>
+                            </td>
+                            <td className="px-6 py-5 text-center">
+                              {student.balance > 0 ? (
+                                <span className="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-black">{student.balance} €</span>
+                              ) : (
+                                <span className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-lg text-sm font-black">Soldé</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-5 text-right">
+                              {student.balance > 0 && (
+                                <Button 
+                                  size="sm" 
+                                  className="bg-ishes-blue hover:bg-ishes-blue-hover text-[10px] font-black uppercase"
+                                  onClick={() => {
+                                    setSelectedStudentForPayment(student);
+                                    setIsAddingPayment(true);
+                                  }}
+                                >
+                                  + Paiement
+                                </Button>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={6} className="px-8 py-24 text-center">
+                            <div className="flex flex-col items-center max-w-sm mx-auto">
+                              <h3 className="text-xl ishes-heading text-ishes-blue mb-2">Aucune saisie manuelle</h3>
+                              <p className="ishes-label text-[10px] md:text-xs opacity-40">
+                                Aucun dossier manuel n'a été trouvé.
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
+            ) : (
+              <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                <div className="px-6 md:px-8 py-5 border-b border-gray-50">
+                  <h2 className="text-xl ishes-heading text-ishes-blue">Historique des règlements</h2>
+                  <p className="text-[11px] text-gray-400 font-medium mt-0.5">
+                    {filteredPayments.length} transaction{filteredPayments.length !== 1 ? 's' : ''} — 
+                    les paiements familiaux couvrent tous les enfants inscrits
+                  </p>
+                </div>
 
               <div className="overflow-x-auto custom-scrollbar">
                 <table className="w-full text-left">
@@ -364,10 +499,61 @@ export default function FacturationPage() {
                 </table>
               </div>
             </div>
+            )}
 
           </div>
         </div>
       </main>
+
+      {/* ── Dialog Ajouter un paiement ────────────────────────────────────────────── */}
+      {isAddingPayment && selectedStudentForPayment && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-ishes-dark/60 backdrop-blur-sm" onClick={() => setIsAddingPayment(false)} />
+          <div className="bg-white rounded-[2rem] shadow-2xl p-8 max-w-md w-full relative z-10 border border-gray-100">
+            <button onClick={() => setIsAddingPayment(false)} className="absolute top-6 right-6 p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-xl font-black text-ishes-blue mb-1">Ajouter un versement</h3>
+            <p className="text-xs text-gray-500 font-medium mb-6">Pour {selectedStudentForPayment.first_name} {selectedStudentForPayment.last_name}</p>
+
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Montant reçu (€)</label>
+                <input
+                  type="number"
+                  placeholder="Ex: 50"
+                  value={newPaymentAmount}
+                  onChange={(e) => setNewPaymentAmount(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue text-sm font-bold"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Moyen de paiement</label>
+                <select
+                  value={newPaymentMethod}
+                  onChange={(e) => setNewPaymentMethod(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue text-sm font-bold"
+                >
+                  <option value="liquide">Espèces</option>
+                  <option value="virement">Virement bancaire</option>
+                  <option value="cheque">Chèque</option>
+                </select>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <Button variant="outline" className="flex-1 rounded-xl" onClick={() => setIsAddingPayment(false)}>Annuler</Button>
+                <Button 
+                  className="flex-1 bg-ishes-blue hover:bg-ishes-blue-hover text-white rounded-xl" 
+                  onClick={handleAddManualPayment}
+                  disabled={!newPaymentAmount || isSendingReminder}
+                >
+                  {isSendingReminder ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Enregistrer"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Popup / Toast ────────────────────────────────────────────── */}
       {popupMsg && (

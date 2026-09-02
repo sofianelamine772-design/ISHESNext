@@ -80,7 +80,7 @@ function EtudiantsContent() {
   const [isSendingReminder, setIsSendingReminder] = useState(false);
   const [isDeletingStudent, setIsDeletingStudent] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
+  const [isExporting, setIsExporting] = useState<string | null>(null);
   const [popupMsg, setPopupMsg] = useState<{ title: string, desc: string, type: 'success' | 'error' } | null>(null);
 
   // Pagination for DOM performance
@@ -449,14 +449,20 @@ function EtudiantsContent() {
 
   const visibleStudents = useMemo(() => filteredStudents.slice(0, visibleCount), [filteredStudents, visibleCount]);
 
-  const handleExportCSV = async () => {
-    setIsExporting(true);
+  const handleExportCSV = async (type: 'distanciel' | 'presentiel') => {
+    setIsExporting(type);
     try {
       const { exportAllStudentsDataAction } = await import("@/app/actions/students");
       const result = await exportAllStudentsDataAction();
       if (result.success && result.data) {
         const headers = ["ID", "Prénom", "Nom", "Email", "Téléphone", "Statut", "Rôle", "Formations", "Total Payé (€)", "ID Paiements Stripe", "Date d'inscription"];
-        const rows = result.data.map((s: any) => {
+        
+        const filteredData = result.data.filter((s: any) => {
+          if (!s.inscriptions || !Array.isArray(s.inscriptions)) return false;
+          return s.inscriptions.some((i: any) => i.formations?.type === type);
+        });
+
+        const rows = filteredData.map((s: any) => {
           const formations = Array.isArray(s.inscriptions) ? s.inscriptions.map((i: any) => i.formations?.title).filter(Boolean).join(" | ") : "";
           const totalPaid = Array.isArray(s.paiements) ? s.paiements.filter((p: any) => p.status === "paid" || p.status === "payé" || p.status === "succeeded").reduce((acc: number, p: any) => acc + (p.amount || 0), 0) : 0;
           const stripeIds = Array.isArray(s.paiements) ? s.paiements.map((p: any) => p.stripe_session_id).filter(Boolean).join(" | ") : "";
@@ -482,7 +488,7 @@ function EtudiantsContent() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `export_etudiants_ishes_${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `export_etudiants_${type}_${new Date().toISOString().split('T')[0]}.csv`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -493,7 +499,7 @@ function EtudiantsContent() {
       console.error(err);
       setPopupMsg({ title: "Erreur", desc: "Une erreur est survenue lors de l'export.", type: "error" });
     } finally {
-      setIsExporting(false);
+      setIsExporting(null);
     }
   };
 
@@ -537,14 +543,23 @@ function EtudiantsContent() {
             </span>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
-            <Button
-              onClick={handleExportCSV}
-              disabled={isExporting}
-              variant="outline"
-              className="h-9 text-xs flex items-center gap-2 border-gray-200 text-gray-700 hover:bg-gray-50"
+            <Button 
+              variant="outline" 
+              className="gap-2 text-xs h-9 bg-white shadow-sm border-gray-200"
+              onClick={() => handleExportCSV('distanciel')}
+              disabled={isExporting !== null}
             >
-              {isExporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
-              <span className="hidden md:inline">Exporter (CSV)</span>
+              {isExporting === 'distanciel' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+              <span className="hidden md:inline">Export Distanciel</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              className="gap-2 text-xs h-9 bg-white shadow-sm border-gray-200"
+              onClick={() => handleExportCSV('presentiel')}
+              disabled={isExporting !== null}
+            >
+              {isExporting === 'presentiel' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+              <span className="hidden md:inline">Export Présentiel</span>
             </Button>
             <UserButton
               appearance={{

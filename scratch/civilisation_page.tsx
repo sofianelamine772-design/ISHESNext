@@ -26,7 +26,7 @@ import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
   title: "Civilisation Arabo-Musulmane | Héritage & Savoir | ISHES",
-  description: "Explorez l&apos;âge d&apos;or des sciences, des arts et de la philosophie arabo-musulmane. Un voyage historique pour comprendre l'héritage universel de cette civilisation.",
+  description: "Explorez l'âge d'or des sciences, des arts et de la philosophie arabo-musulmane. Un voyage historique pour comprendre l'héritage universel de cette civilisation.",
   keywords: "civilisation arabo-musulmane, histoire islam, age d'or islam, sciences arabes, ishes"
 };
 
@@ -56,7 +56,7 @@ export default function CivilisationPage() {
                 href="/inscription?plan=civilisation_arabo_musulmane&audience=adulte" 
                 className="inline-flex items-center justify-center gap-2 bg-ishes-blue hover:bg-ishes-blue/90 text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1"
               >
-                JE M&apos;INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
+                JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
               </Link>
               {videoUrl && (
                 <Link 
@@ -111,17 +111,12 @@ export default function CivilisationPage() {
                   allowFullScreen
                 ></iframe>
               ) : (
-                <div className="w-full h-full relative group">
-                  <Image 
-                    src="/images/formations/civilisation-hero.jpg" 
-                    alt="Civilisation Arabo-Musulmane"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 w-full p-8 text-center">
-                    <h3 className="text-2xl font-black text-white">&quot;Celui qui ne connaît pas son passé ne peut construire son futur&quot;</h3>
+                <div className="w-full h-full bg-white rounded-2xl p-8 flex flex-col justify-center items-center gap-8 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-amber-600/5 rounded-[3rem] rotate-3 -z-10" />
+                  <div className="absolute top-0 left-0 w-full h-2 bg-amber-600" />
+                  <History className="w-32 h-32 text-amber-600/20 group-hover:scale-110 transition-transform duration-500" />
+                  <div className="text-center space-y-4 px-6 relative z-10">
+                    <h3 className="text-2xl font-black text-ishes-blue">"Celui qui ne connaît pas son passé ne peut construire son futur"</h3>
                   </div>
                 </div>
               )}
@@ -160,14 +155,8 @@ export default function CivilisationPage() {
       <section className="py-24 px-6 bg-white my-12">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 flex items-center justify-center bg-gray-50">
-             <Image 
-               src="/images/formations/civilisation-details.jpg" 
-               alt="Thématiques abordées"
-               fill
-               className="object-cover"
-               sizes="(max-width: 768px) 100vw, 50vw"
-             />
-             <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/40 to-transparent"></div>
+             <History className="w-48 h-48 text-amber-600/20" />
+             <div className="absolute inset-0 bg-gradient-to-tr from-amber-600/10 to-transparent"></div>
           </div>
           <div className="space-y-10">
             <h2 className="text-3xl md:text-4xl font-black text-ishes-blue">Thématiques abordées</h2>
@@ -265,7 +254,7 @@ export default function CivilisationPage() {
               href="/inscription?plan=civilisation_arabo_musulmane&audience=adulte" 
               className="inline-flex items-center justify-center gap-2 bg-ishes-gold hover:bg-ishes-gold/90 text-white px-8 py-5 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-gold/20 hover:-translate-y-1 w-full"
             >
-              JE M&apos;INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
+              JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
             </Link>
             <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
               <Lock className="w-4 h-4 text-ishes-gold" />

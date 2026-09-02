@@ -670,13 +670,15 @@ export async function createStudentManualAction(data: {
     const emailPromise = sendWelcomeEmail(data.email, data.first_name || 'Élève')
       .catch(mailErr => console.error("Failed to send welcome email:", mailErr));
 
-    const clerkPromise = clerkClient().then(client =>
-      client.invitations.createInvitation({
+    const clerkPromise = clerkClient().then(client => {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
+      return client.invitations.createInvitation({
         emailAddress: data.email,
         publicMetadata: { role: 'etudiant' },
-        ignoreExisting: true
-      })
-    ).then(() => console.log(`Clerk invitation sent to ${data.email}`))
+        ignoreExisting: true,
+        redirectUrl: `${appUrl}/app/eleve`
+      });
+    }).then(() => console.log(`Clerk invitation sent to ${data.email}`))
       .catch(clerkErr => console.error("Failed to create Clerk invitation:", clerkErr));
 
     // On attend les deux tâches en même temps plutôt que l'une après l'autre
@@ -704,12 +706,14 @@ export async function sendPaymentReminderAction(studentId: string) {
     // Tenter TOUJOURS d'envoyer l'invitation Clerk si l'ID laisse penser qu'ils n'ont pas de compte
     // ou qu'on n'est pas sûr.
     // Exécuter l'invitation Clerk et l'email SMTP en parallèle pour gagner du temps
-    const clerkPromise = clerkClient().then(client =>
-      client.invitations.createInvitation({
+    const clerkPromise = clerkClient().then(client => {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
+      return client.invitations.createInvitation({
         emailAddress: student.email,
-        ignoreExisting: true, // Si l'invitation ou le compte existe, ça l'ignore au lieu de planter
-      })
-    ).then(() => {
+        ignoreExisting: true,
+        redirectUrl: `${appUrl}/app/eleve`
+      });
+    }).then(() => {
       clerkInvited = true;
       console.log(`[RELANCE] Invitation Clerk envoyée à ${student.email}`);
     }).catch(inviteErr => {
@@ -1413,8 +1417,8 @@ export async function exportAllStudentsDataAction() {
         id, first_name, last_name, email, phone, created_at, status, role,
         inscriptions (
           id, status, paid_status,
-          formations (title),
-          classes (name)
+          formations (title, type),
+          classes (name, type)
         ),
         paiements (
           id, amount, status, created_at, stripe_session_id
@@ -1804,3 +1808,79 @@ export async function deletePaymentAction(paymentId: string, studentId: string) 
     return { success: false, error: "Erreur lors de la suppression." };
   }
 }
+
+export async function fetchManualBalancesAction() {
+  try {
+    const { data: students, error } = await supabaseAdmin
+      .from('etudiants')
+      .select(`
+        id, first_name, last_name, email, phone, status,
+        paiements (id, amount, stripe_session_id, status, created_at, error_message),
+        inscriptions (
+          formations (id, title, price, type),
+          classes (name)
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const manualBalances = students.map((s: any) => {
+      const isManualCreated = String(s.id).startsWith('manual_');
+      const hasManualPayments = s.paiements?.some((p: any) => p.stripe_session_id?.startsWith('manual_'));
+      
+      if (!isManualCreated && !hasManualPayments) return null;
+
+      const totalDue = s.inscriptions?.reduce((acc: number, ins: any) => acc + (ins.formations?.price || 0), 0) || 0;
+      const totalPaid = s.paiements
+        ?.filter((p: any) => p.status === 'succeeded' || p.status === 'paid' || p.status === 'payé')
+        ?.reduce((acc: number, p: any) => acc + (p.amount || 0), 0) || 0;
+
+      return {
+        id: s.id,
+        first_name: s.first_name,
+        last_name: s.last_name,
+        email: s.email,
+        phone: s.phone,
+        totalDue,
+        totalPaid,
+        balance: Math.max(0, totalDue - totalPaid),
+        inscriptions: s.inscriptions?.map((i: any) => ({
+          title: i.formations?.title,
+          price: i.formations?.price,
+          type: i.formations?.type,
+          class: i.classes?.name
+        })) || [],
+        paiements: s.paiements
+      };
+    }).filter(Boolean);
+
+    return { success: true, data: manualBalances };
+  } catch (err: any) {
+    console.error("fetchManualBalancesAction error:", err);
+    return { success: false, error: "Failed to fetch manual balances" };
+  }
+}
+
+export async function addManualPaymentAction(studentId: string, amount: number, method: string) {
+  try {
+    const { error } = await supabaseAdmin.from('paiements').insert({
+      etudiant_id: studentId,
+      amount: amount,
+      currency: 'EUR',
+      status: 'succeeded',
+      stripe_session_id: `manual_${method}_${Date.now()}`,
+      error_message: `Paiement Manuel (${method})`
+    });
+
+    if (error) throw error;
+
+    await syncStudentPaidStatus(studentId);
+
+    return { success: true };
+  } catch (err: any) {
+    console.error("addManualPaymentAction error:", err);
+    return { success: false, error: "Failed to add manual payment" };
+  }
+}
+
