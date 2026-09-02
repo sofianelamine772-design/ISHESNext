@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText, Loader2, X, Mail, Phone, Calendar, GraduationCap, AlertCircle, History, Trash2, CheckCircle2, Terminal, MessageSquare, ExternalLink, Save } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Search, MoreVertical, Plus, ChevronRight, CreditCard, FileText, Loader2, X, Mail, Phone, Calendar, GraduationCap, AlertCircle, History, Trash2, CheckCircle2, Terminal, MessageSquare, ExternalLink, Save, Download } from "lucide-react";
 import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction, createStudentManualAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
@@ -12,7 +12,7 @@ import { cn, getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 
 // Types
-type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string };
+type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string; phone?: string };
 type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null; schedule?: string };
 
 export default function AdminDashboard() {
@@ -24,6 +24,132 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [highlightStudentId, setHighlightStudentId] = useState<string | null>(null);
+
+  const handleDownloadAllClassesPDF = async () => {
+    try {
+      const [{ jsPDF }, { default: autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable')
+      ]);
+
+      const doc = new jsPDF('portrait');
+
+      // Helper to fetch logo and convert to base64
+      const getBase64Image = async (url: string) => {
+        try {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          return new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+          });
+        } catch (e) {
+          return null;
+        }
+      };
+
+      const logoBase64 = await getBase64Image('/logo.png');
+      let isFirstPage = true;
+
+      classes.forEach((c) => {
+        if (c.students && c.students.length > 0) {
+          if (!isFirstPage) {
+            doc.addPage('portrait');
+          }
+          isFirstPage = false;
+          
+          // Header Background
+          doc.setFillColor(43, 62, 80); // ishes-blue roughly
+          doc.rect(0, 0, 210, 30, 'F');
+          
+          // Logo
+          if (logoBase64) {
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(10, 5, 45, 20, 2, 2, 'F');
+            doc.addImage(logoBase64, 'PNG', 12, 6, 41, 18);
+          }
+
+          // Header Text
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(16);
+          doc.setFont("helvetica", "bold");
+          doc.text("FEUILLE DE PRÉSENCE", 196, 19, { align: 'right' });
+
+          // Class Details (below header)
+          doc.setTextColor(43, 62, 80);
+          
+          doc.setFontSize(12);
+          doc.setFont("helvetica", "bold");
+          doc.text(`Classe : ${c.name}`, 14, 42);
+          
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "normal");
+          doc.text(`Formation : ${c.formationTitle || "Non définie"}`, 14, 48);
+          
+          if (c.schedule) {
+            doc.text(`Créneaux : ${c.schedule}`, 110, 42);
+          }
+          doc.text(`Professeur : _________________`, 110, 48);
+
+          doc.text(`Année : ${selectedYear}`, 160, 42);
+          doc.text(`Effectif : ${c.students.length} élèves`, 160, 48);
+          
+          // Table Data
+          const tableData = c.students.map((s, index) => [
+            (index + 1).toString(),
+            s.name.toUpperCase(),
+            s.phone || "",
+            "", // Présent
+            "", // Absent
+            "", // Retard
+            ""  // Observations
+          ]);
+
+          autoTable(doc, {
+            startY: 55,
+            head: [['N°', 'NOM', 'TÉLÉPHONE', 'PRÉS.', 'ABS.', 'RET.', 'OBS.']],
+            body: tableData,
+            theme: 'grid',
+            headStyles: { 
+              fillColor: [184, 140, 77], // ishes-gold
+              textColor: [255, 255, 255],
+              fontStyle: 'bold',
+              halign: 'center',
+              fontSize: 8
+            },
+            columnStyles: {
+              0: { cellWidth: 8, halign: 'center' },
+              1: { cellWidth: 50 },
+              2: { cellWidth: 30, halign: 'center' },
+              3: { cellWidth: 15 },
+              4: { cellWidth: 15 },
+              5: { cellWidth: 15 },
+              6: { cellWidth: 'auto' }
+            },
+            styles: {
+              fontSize: 9,
+              cellPadding: 4,
+              valign: 'middle'
+            },
+            alternateRowStyles: {
+              fillColor: [249, 245, 240] // light background
+            }
+          });
+        }
+      });
+
+      if (isFirstPage) {
+        alert("Aucune classe avec des élèves n'a été trouvée.");
+        return;
+      }
+
+      doc.save(`Fiches_Presence_${selectedYear.replace('/', '-')}.pdf`);
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de la génération du PDF");
+    }
+  };
 
   useEffect(() => {
     if (classIdParam) {
@@ -346,6 +472,12 @@ export default function AdminDashboard() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Formations & Classes</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
+            <Button variant="outline" size="sm" className="h-10 px-4 md:px-6 hidden sm:flex items-center gap-2 border-ishes-blue text-ishes-blue hover:bg-ishes-blue/5" onClick={handleDownloadAllClassesPDF}>
+              <Download className="w-4 h-4" /> <span>Télécharger (PDF)</span>
+            </Button>
+            <Button variant="outline" size="icon" className="h-10 w-10 sm:hidden border-ishes-blue text-ishes-blue hover:bg-ishes-blue/5" onClick={handleDownloadAllClassesPDF}>
+              <Download className="w-4 h-4" />
+            </Button>
             <Button variant="ishes-blue" size="sm" className="h-10 px-4 md:px-6" onClick={openNewClassModal}>
               <Plus className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Nouvelle Classe</span>
               <span className="md:hidden">Nouv.</span>

@@ -368,7 +368,7 @@ export async function fetchClassesAction(academicYear?: string) {
         inscriptions (
           status,
           etudiant_id,
-          etudiants (first_name, last_name, email, created_at, status)
+          etudiants (first_name, last_name, email, phone, created_at, status)
         )
       `);
 
@@ -420,6 +420,7 @@ export async function fetchClassesAction(academicYear?: string) {
           id: i.etudiant_id,
           name: `${i.etudiants?.first_name || ''} ${i.etudiants?.last_name || ''}`.trim(),
           email: i.etudiants?.email,
+          phone: i.etudiants?.phone,
           avatar: (i.etudiants?.first_name?.[0] || '') + (i.etudiants?.last_name?.[0] || ''),
           dateJoined: new Date(i.etudiants?.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
         }))
@@ -438,7 +439,7 @@ export async function assignStudentToClassAction(studentId: string, classId: str
     // 1. On récupère la formation liée à cette classe
     const { data: classe, error: classError } = await supabaseAdmin
       .from('classes')
-      .select('formation_id')
+      .select('formation_id, name, whatsapp_link')
       .eq('id', classId)
       .single();
 
@@ -487,6 +488,30 @@ export async function assignStudentToClassAction(studentId: string, classId: str
       .from('etudiants')
       .update({ status: 'actif' })
       .eq('id', studentId);
+
+    // 4. Envoi de l'email d'affectation avec le lien WhatsApp (s'il existe)
+    if (classe.whatsapp_link) {
+      const { data: student } = await supabaseAdmin
+        .from('etudiants')
+        .select('email, first_name')
+        .eq('id', studentId)
+        .single();
+
+      if (student?.email) {
+        try {
+          const { sendClassAssignmentEmail } = await import('@/lib/mail');
+          await sendClassAssignmentEmail(
+            student.email,
+            student.first_name || 'Étudiant',
+            classe.name,
+            classe.whatsapp_link
+          );
+          console.log(`[AssignClass] WhatsApp email sent to ${student.email}`);
+        } catch (mailErr) {
+          console.error("[AssignClass] Failed to send class assignment email", mailErr);
+        }
+      }
+    }
 
     return { success: true };
   } catch (err) {

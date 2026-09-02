@@ -246,19 +246,30 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Bienvenue dans votre classe ! 🎉</h2>
+        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Bienvenue à l'institut ISHES ! 🎉</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Félicitations ${firstName},
+          Bonjour ${firstName},
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Votre inscription a été validée avec succès. Vous avez été affecté(e) à la classe <strong>${className}</strong>.
+          Toute l'équipe de l'institut vous souhaite la bienvenue. Votre inscription a été validée avec succès et vous avez été affecté(e) à la classe <strong>${className}</strong>.
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Pour ne rien manquer (annonces, échanges avec le professeur, suivi), merci de rejoindre dès maintenant le groupe WhatsApp de votre classe en cliquant sur le bouton ci-dessous :
+          Pour ne rien manquer (annonces, échanges avec le professeur, suivi), <strong>voici le groupe WhatsApp à rejoindre impérativement :</strong>
         </p>
-        <div style="text-align: center; margin: 35px 0;">
-          <a href="${whatsappLink}" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif;">💬 Rejoindre le groupe WhatsApp</a>
+        <div style="text-align: center; margin: 25px 0;">
+          <a href="${whatsappLink}" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif;">💬 Rejoindre mon groupe WhatsApp</a>
         </div>
+        
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+        
+        <h3 style="color: #333; font-size: 18px;">Votre Espace Élève</h3>
+        <p style="color: #555; line-height: 1.6; font-size: 16px;">
+          Vous pouvez dès à présent vous connecter à votre espace personnel pour retrouver vos informations, vos cours et vos paiements :
+        </p>
+        <div style="text-align: center; margin: 25px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app" target="_blank" style="${buttonStyle}">Accéder à mon espace</a>
+        </div>
+        
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Nous vous souhaitons une excellente réussite dans votre apprentissage !
         </p>

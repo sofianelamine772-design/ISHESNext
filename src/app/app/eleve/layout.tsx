@@ -27,6 +27,7 @@ export default function EleveLayout({
     { href: "/app/eleve", label: "Tableau de bord", icon: LayoutDashboard },
     { href: "/app/eleve/messagerie", label: "Messagerie", icon: MessageSquareText },
     { href: "/app/eleve/reinscription", label: "Réinscription", icon: UserPlus },
+    { href: "/program", label: "Ajouter une formation", icon: BookOpenText },
   ];
 
   const currentYear = new Date().getFullYear();

@@ -121,7 +121,7 @@ export default function CoursPresentielFemmeDebutantePage() {
             ].map((item, idx) => (
               <div key={idx} className="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
                 <div className="h-48 relative border-b border-gray-100">
-                  <Image src={item.img} alt={item.title} fill className="object-cover" />
+                  <Image src={item.img} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover" />
                   <div className="absolute -bottom-7 left-6 w-14 h-14 bg-[#0a192f] rounded-2xl rotate-3 flex items-center justify-center text-[#C69C6D] border-4 border-white shadow-lg">
                     <div className="-rotate-3">{item.icon}</div>
                   </div>

@@ -227,6 +227,26 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "adulte"
   },
+  {
+    id: "civilisation_arabo_musulmane",
+    imageUrl: "/images/formations/civ-mus-dist-1.png",
+    title: "Civilisation Arabo-Musulmane",
+    subtitle: "Explorez l'âge d'or des sciences, des arts et de la philosophie arabo-musulmane.",
+    tagText: "LANCEMENT",
+    tagColor: "bg-amber-100 text-amber-700",
+    durationText: "Mercredi 20h-21h",
+    features: [
+      "Session de 2 mois",
+      "Début : Octobre",
+      "Histoire & Sciences",
+      "Arts & Philosophie",
+    ],
+    price: "199 €",
+    originalPrice: "349 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
   /*
   {
     id: "sciences_hadith",
@@ -541,6 +561,7 @@ export function ProgramContent() {
             src="/images/quran-coffee.png"
             alt="Coran et apprentissage"
             fill
+            sizes="(max-width: 1024px) 100vw, 55vw"
             className="object-cover object-center lg:object-left opacity-20 lg:opacity-100"
             priority
           />
@@ -667,12 +688,13 @@ export function ProgramContent() {
                                               program.id === 'fiqh_malikite' ? '/fr/cours-fiqh-malikite' :
                                                 program.id === 'sciences_islamiques' ? '/fr/sciences-islamiques' :
                                                   program.id === 'pack_accompagnement' ? '/fr/pack-accompagnement' :
-                                                    program.id === 'formation_enseignante_tarbya' ? '/fr/formation-enseignant-tarbya' :
-                                                      program.id === 'formation_enseignante_tajwid' ? '/fr/formation-enseignant-tajwid' :
-                                                        `/program/${program.id}`;
+                                                    program.id === 'civilisation_arabo_musulmane' ? '/fr/civilisation-arabo-musulmane' :
+                                                      program.id === 'formation_enseignante_tarbya' ? '/fr/formation-enseignant-tarbya' :
+                                                        program.id === 'formation_enseignante_tajwid' ? '/fr/formation-enseignant-tajwid' :
+                                                          `/program/${program.id}`;
 
             return (
-              <Link href={infoUrl} key={program.id} className="block w-full">
+              <div key={program.id} onClick={() => router.push(infoUrl)} className="block w-full cursor-pointer">
                 <motion.div
                   initial={{ scale: 1 }}
                   whileInView={{ scale: [1, 1.08, 1] }}
@@ -689,6 +711,7 @@ export function ProgramContent() {
                     src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
                     alt={program.title} 
                     fill 
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className={`object-cover ${program.id === 'al_aqida' ? 'scale-[1.15] origin-top' : ''}`}
                   />
                   {/* Gradient Overlay for tags */}
@@ -896,11 +919,11 @@ export function ProgramContent() {
                       >
                         {program.id.startsWith('formation_enseignante_') ? (
                           <Link
-                            href="/fr/contact"
+                            href="/fr/rendez-vous"
                             onClick={(e) => e.stopPropagation()}
                             className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all`}
                           >
-                            S'inscrire
+                            Demander un devis
                           </Link>
                         ) : isPresentiel ? (
                           <Link
@@ -936,7 +959,7 @@ export function ProgramContent() {
                   </div>
                 </div>
               </motion.div>
-              </Link>
+              </div>
             );
           })}
         </div>

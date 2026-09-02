@@ -170,3 +170,61 @@
 .cl-footer {
   display: none !important;
 }
+/* Styles for react-phone-number-input to match Tailwind theme */
+.PhoneInput {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.PhoneInputCountry {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+.PhoneInputCountrySelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.PhoneInputCountryIcon {
+  width: 1.5rem;
+  height: 1rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  border-radius: 2px;
+}
+.PhoneInputCountryIcon--border {
+  border-color: rgba(0,0,0,0.1);
+}
+.PhoneInputCountryIconImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.PhoneInputCountrySelectArrow {
+  display: block;
+  content: '';
+  width: 0.3em;
+  height: 0.3em;
+  margin-left: 0.3em;
+  border-style: solid;
+  border-color: #6b7280;
+  border-width: 0 1px 1px 0;
+  transform: rotate(45deg);
+  opacity: 0.8;
+}
+.PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  outline: none;
+  background: transparent;
+  border: none;
+}

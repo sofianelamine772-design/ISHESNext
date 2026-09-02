@@ -1,6 +1,8 @@
 "use client";
 
 import { Suspense, useState, useEffect, useRef } from "react";
+import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import { useSearchParams, useRouter } from "next/navigation";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { motion, AnimatePresence } from "framer-motion";
@@ -126,6 +128,8 @@ function InscriptionForm() {
     const currentSlot = (formData?.slot || slot || "").toLowerCase();
     const isChildSlot = (childrenList?.[0]?.slot || "").toLowerCase();
 
+    if (normalized === 'femme_debutante_presentiel' || normalized === 'femme_intermediaire_presentiel') return 649;
+
     if (
       normalized === 'presentiel_global' || 
       normalized.includes('presentiel') || 
@@ -149,7 +153,7 @@ function InscriptionForm() {
     if (normalized === 'sciences_du_coran') return 399;
     if (normalized === 'spiritualite_islam') return 399;
     if (normalized === 'al_aqida') return 250;
-    if (normalized === 'as_sirah') return 250;
+    if (normalized === 'as_sirah') return 649;
     if (normalized === 'pack_accompagnement') return 49;
     if (normalized === 'correction_fatiha') return 0;
     if (normalized === 'cours_particuliers') return 0;
@@ -1019,14 +1023,19 @@ function InscriptionForm() {
                     <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">📞</span>
                     {registrationType === 'self' ? 'Téléphone *' : 'Téléphone du responsable *'}
                   </label>
-                  <input
-                    type="tel"
-                    name="telephone"
+                  <PhoneInput
+                    defaultCountry="FR"
+                    limitMaxLength={true}
+                    placeholder="06 XX XX XX XX"
                     value={formData.telephone}
-                    onChange={handleInputChange}
-                    placeholder="+33 6 XX XX XX XX"
-                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
-                    required
+                    onChange={(value) => {
+                      let val = value || "";
+                      if (val.startsWith("+33") && val.length > 12) {
+                        val = val.slice(0, 12);
+                      }
+                      setFormData(prev => ({ ...prev, telephone: val }));
+                    }}
+                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus-within:ring-2 focus-within:ring-[#008953]/20 focus-within:border-ishes-blue transition-all text-sm font-medium"
                   />
                 </div>
 
@@ -1052,7 +1061,8 @@ function InscriptionForm() {
                         (planId === 'presentiel-global' ? !formData.classId : false)
                       )
                     ) ||
-                    formData.telephone.length < 10 // 0612345678 (10 chars minimum)
+                    !formData.telephone ||
+                    !isPossiblePhoneNumber(formData.telephone)
                   }
                   className="w-full bg-ishes-blue hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >

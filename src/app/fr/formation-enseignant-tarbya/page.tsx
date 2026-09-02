@@ -300,16 +300,9 @@ export default function FormationEnseignantTarbyaPage() {
           </div>
 
           <div className="flex flex-col items-center md:items-end gap-2 shrink-0 pl-6 w-full md:w-auto mt-4 md:mt-0 border-t md:border-t-0 border-white/10 md:border-l pt-4 md:pt-0">
-            <Link 
-              href="/fr/contact" 
-              className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-3 rounded-md text-[14px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"
-            >
-              JE M'INSCRIS MAINTENANT <ArrowRight className="w-4 h-4" />
-            </Link>
-            <div className="flex items-center gap-1.5 text-gray-400 text-xs font-medium">
-              <Lock className="w-3 h-3 text-white" />
-              Paiement 100% sécurisé
-            </div>
+            <p className="text-[13px] font-bold text-center md:text-right text-[#b88c4d] max-w-[280px] leading-snug">
+              Veuillez nous contacter via WhatsApp en cliquant sur l'icône en bas à droite
+            </p>
           </div>
           
         </div>
