@@ -42,7 +42,7 @@ export default function CoursPresentielEnfantPage() {
             
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <Link 
-                href="/inscription?plan=enfant-mercredi-presentiel&audience=enfant" 
+                href="/inscription?plan=presentiel-global&audience=enfant" 
                 className="w-full sm:w-auto bg-[#C69C6D] text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-[#b0885c] transition-all shadow-xl shadow-[#C69C6D]/20 hover:-translate-y-1 text-[15px]"
               >
                 Inscrire mon enfant
@@ -204,7 +204,7 @@ export default function CoursPresentielEnfantPage() {
               <a href="#programme" className="w-full bg-white text-[#0a192f] px-6 py-4 rounded-xl font-black text-center hover:bg-gray-100 transition-colors text-[15px]">
                 En savoir plus
               </a>
-              <Link href="/inscription?plan=enfant-mercredi-presentiel&audience=enfant" className="w-full bg-[#C69C6D] text-white px-6 py-4 rounded-xl font-black text-center hover:bg-[#b0885c] transition-colors shadow-lg shadow-[#C69C6D]/20 text-[15px]">
+              <Link href="/inscription?plan=presentiel-global&audience=enfant" className="w-full bg-[#C69C6D] text-white px-6 py-4 rounded-xl font-black text-center hover:bg-[#b0885c] transition-colors shadow-lg shadow-[#C69C6D]/20 text-[15px]">
                 Inscrire mon enfant
               </Link>
             </div>
