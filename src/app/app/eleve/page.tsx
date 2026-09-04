@@ -386,7 +386,7 @@ export default function EleveDashboard() {
                               {certData.classType === 'presentiel' ? <Users className="w-3.5 h-3.5" /> : <MonitorDown className="w-3.5 h-3.5" />}
                               {certData.className}
                             </span>
-                            {certData.status === 'actif' ? (
+                            {certData.status === 'actif' || certData.status === 'valide' ? (
                               <span className="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-emerald-100">
                                 <CheckCircle className="w-3.5 h-3.5" /> Inscription Validée
                               </span>
