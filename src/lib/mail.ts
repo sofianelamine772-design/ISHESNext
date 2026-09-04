@@ -329,7 +329,8 @@ export async function sendBackupReportEmail(params: {
   date: string;
   signedUrl: string;
   signedUrlSql?: string;
-  signedUrlCsv?: string;
+  signedUrlCsvDistance?: string;
+  signedUrlCsvPresentiel?: string;
   stats: {
     etudiants: number;
     inscriptions: number;
@@ -343,9 +344,10 @@ export async function sendBackupReportEmail(params: {
   };
   backupJsonString?: string;
   backupSqlString?: string;
-  backupCsvString?: string;
+  backupCsvStringDistance?: string;
+  backupCsvStringPresentiel?: string;
 }) {
-  const { date, signedUrl, signedUrlSql, signedUrlCsv, stats, backupJsonString, backupSqlString, backupCsvString } = params;
+  const { date, signedUrl, signedUrlSql, signedUrlCsvDistance, signedUrlCsvPresentiel, stats, backupJsonString, backupSqlString, backupCsvStringDistance, backupCsvStringPresentiel } = params;
 
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -412,9 +414,14 @@ export async function sendBackupReportEmail(params: {
             <a href="${signedUrlSql}" style="${buttonStyle} background-color: #1d4ed8;">Télécharger le backup SQL</a>
           </div>
           ` : ''}
-          ${signedUrlCsv ? `
+          ${signedUrlCsvDistance ? `
           <div>
-            <a href="${signedUrlCsv}" style="${buttonStyle} background-color: #086b51;">Télécharger les Élèves (CSV)</a>
+            <a href="${signedUrlCsvDistance}" style="${buttonStyle} background-color: #086b51;">Télécharger les Élèves Distance (CSV)</a>
+          </div>
+          ` : ''}
+          ${signedUrlCsvPresentiel ? `
+          <div>
+            <a href="${signedUrlCsvPresentiel}" style="${buttonStyle} background-color: #d97706;">Télécharger les Élèves Présentiel (CSV)</a>
           </div>
           ` : ''}
           <p style="font-size: 11px; color: #888; margin-top: 15px;">Ces liens sont privés et seront valides pendant 7 jours.</p>
@@ -443,10 +450,18 @@ export async function sendBackupReportEmail(params: {
     });
   }
 
-  if (backupCsvString) {
+  if (backupCsvStringDistance) {
     attachments.push({
-      filename: `ishes_etudiants_${safeDateStr}.csv`,
-      content: backupCsvString,
+      filename: `ishes_etudiants_distance_${safeDateStr}.csv`,
+      content: backupCsvStringDistance,
+      contentType: 'text/csv'
+    });
+  }
+
+  if (backupCsvStringPresentiel) {
+    attachments.push({
+      filename: `ishes_etudiants_presentiel_${safeDateStr}.csv`,
+      content: backupCsvStringPresentiel,
       contentType: 'text/csv'
     });
   }

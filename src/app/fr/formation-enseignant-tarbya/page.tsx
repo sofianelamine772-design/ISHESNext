@@ -57,10 +57,10 @@ export default function FormationEnseignantTarbyaPage() {
             
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link 
-                href="/fr/contact" 
+                href="/fr/rendez-vous" 
                 className="inline-flex items-center justify-center gap-2 bg-ishes-dark hover:bg-ishes-dark/90 text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-ishes-dark/20 hover:-translate-y-1"
               >
-                JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
+                DEMANDER UN DEVIS <ArrowRight className="w-5 h-5" />
               </Link>
               {videoUrl && (
                 <Link 

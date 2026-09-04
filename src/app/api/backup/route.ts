@@ -157,13 +157,51 @@ export async function GET(request: Request) {
     // Generate JSON string with enriched data
     const jsonString = JSON.stringify(jsonBackupData, null, 2);
 
-    // Generate CSV for students only (easy import/recreation)
+    // Filter out tests and admins
+    const realEtudiants = enrichedEtudiants.filter(e => {
+      if (e.role === 'admin') return false;
+      const em = (e.email || '').toLowerCase();
+      const fn = (e.first_name || '').toLowerCase();
+      const ln = (e.last_name || '').toLowerCase();
+      if (em.includes('test') || fn.includes('test') || ln.includes('test') || em.includes('system_')) return false;
+      return true;
+    });
+
+    const distanceEtudiants: any[] = [];
+    const presentielEtudiants: any[] = [];
+
+    for (const e of realEtudiants) {
+      const etudiantInscriptions = backupData.inscriptions.filter((i: any) => i.etudiant_id === e.id);
+      const firstInscription = etudiantInscriptions.find((i: any) => i.status === 'valide' || i.status === 'en_attente') || etudiantInscriptions[0];
+      let isPresentiel = false;
+
+      if (firstInscription && firstInscription.formation_id) {
+        const formation = backupData.formations.find((f: any) => f.id === firstInscription.formation_id);
+        if (formation && (formation.title?.toLowerCase().includes('présentiel') || formation.title?.toLowerCase().includes('presentiel') || formation.type === 'presentiel')) {
+          isPresentiel = true;
+        }
+      }
+      
+      if (isPresentiel) {
+        presentielEtudiants.push(e);
+      } else {
+        distanceEtudiants.push(e);
+      }
+    }
+
     const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Role,Status,Montant Attendu,Total Encaissé,Reste à Payer\n";
-    const csvRows = enrichedEtudiants.map(e => 
+    
+    const distanceRows = distanceEtudiants.map(e => 
       `"${e.id}","${e.last_name || ''}","${e.first_name || ''}","${e.email || ''}","${e.phone || ''}","${e.role || ''}","${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
     );
-    const csvString = csvHeader + csvRows.join('\n');
-    const fileNameCsv = `db_backup_${fileDateStr}_etudiants.csv`;
+    const csvStringDistance = csvHeader + distanceRows.join('\n');
+    const fileNameCsvDistance = `db_backup_${fileDateStr}_etudiants_distance.csv`;
+
+    const presentielRows = presentielEtudiants.map(e => 
+      `"${e.id}","${e.last_name || ''}","${e.first_name || ''}","${e.email || ''}","${e.phone || ''}","${e.role || ''}","${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
+    );
+    const csvStringPresentiel = csvHeader + presentielRows.join('\n');
+    const fileNameCsvPresentiel = `db_backup_${fileDateStr}_etudiants_presentiel.csv`;
 
     // 2. Ensure bucket exists and upload files to Supabase Storage
     try {
@@ -198,16 +236,28 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: false, error: uploadErrorSql.message }, { status: 500 });
     }
 
-    // Upload CSV
-    const { error: uploadErrorCsv } = await supabaseAdmin.storage
+    // Upload CSV Distance
+    const { error: uploadErrorCsvDistance } = await supabaseAdmin.storage
       .from('backups')
-      .upload(fileNameCsv, csvString, {
+      .upload(fileNameCsvDistance, csvStringDistance, {
         contentType: 'text/csv',
         upsert: true
       });
 
-    if (uploadErrorCsv) {
-      console.error('[BACKUP] Supabase CSV upload failed:', uploadErrorCsv);
+    if (uploadErrorCsvDistance) {
+      console.error('[BACKUP] Supabase CSV Distance upload failed:', uploadErrorCsvDistance);
+    }
+
+    // Upload CSV Presentiel
+    const { error: uploadErrorCsvPresentiel } = await supabaseAdmin.storage
+      .from('backups')
+      .upload(fileNameCsvPresentiel, csvStringPresentiel, {
+        contentType: 'text/csv',
+        upsert: true
+      });
+
+    if (uploadErrorCsvPresentiel) {
+      console.error('[BACKUP] Supabase CSV Presentiel upload failed:', uploadErrorCsvPresentiel);
     }
 
     // 3. Generate signed URLs for downloads (valid for 7 days)
@@ -219,9 +269,13 @@ export async function GET(request: Request) {
       .from('backups')
       .createSignedUrl(fileNameSql, 60 * 60 * 24 * 7);
 
-    const { data: signedUrlDataCsv } = await supabaseAdmin.storage
+    const { data: signedUrlDataCsvDistance } = await supabaseAdmin.storage
       .from('backups')
-      .createSignedUrl(fileNameCsv, 60 * 60 * 24 * 7);
+      .createSignedUrl(fileNameCsvDistance, 60 * 60 * 24 * 7);
+
+    const { data: signedUrlDataCsvPresentiel } = await supabaseAdmin.storage
+      .from('backups')
+      .createSignedUrl(fileNameCsvPresentiel, 60 * 60 * 24 * 7);
 
     if (signErrorJson || !signedUrlDataJson || signErrorSql || !signedUrlDataSql) {
       console.error('[BACKUP] Failed to generate signed URLs:', { signErrorJson, signErrorSql });
@@ -230,20 +284,23 @@ export async function GET(request: Request) {
 
     // 4. Send report email with download links and attachments
     // Attach files directly if combined size is reasonable (< 10MB)
-    const totalSize = jsonString.length + sqlDump.length + csvString.length;
+    const totalSize = jsonString.length + sqlDump.length + csvStringDistance.length + csvStringPresentiel.length;
     const attachJson = totalSize < 10 * 1024 * 1024 ? jsonString : undefined;
     const attachSql = totalSize < 10 * 1024 * 1024 ? sqlDump : undefined;
-    const attachCsv = totalSize < 10 * 1024 * 1024 ? csvString : undefined;
+    const attachCsvDistance = totalSize < 10 * 1024 * 1024 ? csvStringDistance : undefined;
+    const attachCsvPresentiel = totalSize < 10 * 1024 * 1024 ? csvStringPresentiel : undefined;
 
     const emailRes = await sendBackupReportEmail({
       date: dateStr,
       signedUrl: signedUrlDataJson.signedUrl,
       signedUrlSql: signedUrlDataSql.signedUrl,
-      signedUrlCsv: signedUrlDataCsv?.signedUrl,
+      signedUrlCsvDistance: signedUrlDataCsvDistance?.signedUrl,
+      signedUrlCsvPresentiel: signedUrlDataCsvPresentiel?.signedUrl,
       stats,
       backupJsonString: attachJson,
       backupSqlString: attachSql,
-      backupCsvString: attachCsv
+      backupCsvStringDistance: attachCsvDistance,
+      backupCsvStringPresentiel: attachCsvPresentiel
     });
 
     console.log('[BACKUP] Database backup completed successfully (JSON + SQL). Email sent status:', emailRes.success);

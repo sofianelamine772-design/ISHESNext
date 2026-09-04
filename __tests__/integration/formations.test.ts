@@ -4,7 +4,7 @@ dotenv.config({ path: '.env.local' });
 import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
-import { CLASS_ID_TO_UUID } from '@/lib/presentiel-data';
+import { CLASS_ID_TO_UUID, PRESENTIEL_CLASSES } from '@/lib/presentiel-data';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -62,6 +62,25 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
           .from('classes')
           .select('id, name')
           .eq('id', uuid)
+          .maybeSingle();
+
+        expect(error).toBeNull();
+        expect(classRow).toBeDefined();
+        expect(classRow).not.toBeNull();
+      }
+    );
+  });
+
+  describe('Correspondance des ID frontend (external_id) dans la base', () => {
+    const externalIdCases = PRESENTIEL_CLASSES.map(c => ({ externalId: c.id, name: `${c.jour} - ${c.niveau}` }));
+
+    test.each(externalIdCases)(
+      'La classe $name (external_id: $externalId) doit exister dans la base',
+      async ({ externalId }) => {
+        const { data: classRow, error } = await supabase
+          .from('classes')
+          .select('id, external_id')
+          .eq('external_id', externalId)
           .maybeSingle();
 
         expect(error).toBeNull();

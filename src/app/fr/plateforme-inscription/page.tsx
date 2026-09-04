@@ -54,6 +54,7 @@ function InscriptionForm() {
   const [showAdultHoraireError, setShowAdultHoraireError] = useState(false);
   const [showChildNiveauError, setShowChildNiveauError] = useState<{ [key: number]: boolean }>({});
   const [showAdultNiveauError, setShowAdultNiveauError] = useState(false);
+  const [showDisabledSlotWarning, setShowDisabledSlotWarning] = useState(false);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -448,9 +449,9 @@ function InscriptionForm() {
       case "correction_fatiha": return "Correction al Fatiha (Distanciel)";
       case "cours_particuliers": return "Cours Particuliers (Distanciel)";
       // Nouveaux plans
-      case "enfant-mercredi-presentiel": return "Arabe & Coran Enfant (Mercredi)";
-      case "enfant-samedi-presentiel": return "Arabe & Coran Enfant (Samedi)";
-      case "enfant-dimanche-presentiel": return "Arabe & Coran Enfant (Dimanche)";
+      case "enfant-mercredi-presentiel":
+      case "enfant-samedi-presentiel":
+      case "enfant-dimanche-presentiel": return "Arabe & Coran Enfant";
       case "femme-debutante-presentiel": return "Arabe & Tajwid Femme Débutante (Présentiel)";
       case "femme-intermediaire-presentiel": return "Arabe & Tajwid Femme Intermédiaire (Présentiel)";
       case "tajwid_enfant_distance": return "Tajwid Enfant (Distanciel)";
@@ -638,6 +639,16 @@ function InscriptionForm() {
               <div className="space-y-6">
                 {registrationType === 'child' ? (
                   <div className="space-y-8">
+                    {/* Information Box for multiple courses */}
+                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-start gap-3 text-sm text-blue-900 shadow-sm">
+                      <span className="text-xl shrink-0 mt-0.5">ℹ️</span>
+                      <p className="leading-relaxed">
+                        <strong>Note :</strong> Vous inscrivez actuellement vos enfants à la formation <strong className="text-ishes-blue">{planName}</strong>. 
+                        Pour inscrire un enfant à une <strong>autre formation</strong>, finalisez cette inscription puis faites-en une nouvelle. 
+                        En utilisant le même e-mail parent, tous vos enfants seront regroupés sur votre compte.
+                      </p>
+                    </div>
+
                     {childrenList.map((child, index) => (
                       <div key={index} className="p-6 bg-gray-50 border border-gray-100 rounded-3xl space-y-6 relative">
                         {childrenList.length > 1 && (
@@ -693,7 +704,7 @@ function InscriptionForm() {
                           return (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
                               {/* Jour select */}
-                              <div className="space-y-2">
+                              <div className="space-y-2 relative" onClickCapture={() => { if (!!slot) setShowDisabledSlotWarning(true); }}>
                                 <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
                                   <span>📅</span> Jour souhaité *
                                 </label>
@@ -708,6 +719,11 @@ function InscriptionForm() {
                                   <option value="samedi">Samedi</option>
                                   <option value="dimanche">Dimanche</option>
                                 </select>
+                                {!!slot && showDisabledSlotWarning && (
+                                  <p className="text-red-500 text-[10px] mt-1 font-bold animate-pulse">
+                                    Veuillez revenir à la page précédente pour sélectionner un autre jour.
+                                  </p>
+                                )}
                               </div>
 
                               {/* Niveau select */}
@@ -855,7 +871,7 @@ function InscriptionForm() {
                       return (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
                           {/* Jour select */}
-                          <div className="space-y-2">
+                          <div className="space-y-2 relative" onClickCapture={() => { if (!!slot) setShowDisabledSlotWarning(true); }}>
                             <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
                               <span>📅</span> Jour souhaité *
                             </label>
@@ -870,6 +886,11 @@ function InscriptionForm() {
                               <option value="samedi">Samedi</option>
                               <option value="dimanche">Dimanche</option>
                             </select>
+                            {!!slot && showDisabledSlotWarning && (
+                              <p className="text-red-500 text-[10px] mt-1 font-bold animate-pulse">
+                                Veuillez revenir à la page précédente pour sélectionner un autre jour.
+                              </p>
+                            )}
                           </div>
 
                           {/* Niveau select */}

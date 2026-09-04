@@ -693,6 +693,10 @@ export async function createStudentManualAction(data: {
 
 export async function sendPaymentReminderAction(studentId: string) {
   try {
+    if (studentId.startsWith('manual_')) {
+      return { success: false, error: "Action non autorisée : cet élève a été ajouté en saisie manuelle (pas de lien de paiement Stripe possible)." };
+    }
+
     const { data: student, error } = await supabaseAdmin
       .from('etudiants')
       .select('email, first_name')
@@ -1441,6 +1445,10 @@ export async function sendPaymentReminderWithLinkAction(paymentId: string) {
 
     const student = Array.isArray(paiement.etudiants) ? paiement.etudiants[0] : paiement.etudiants;
     if (!student || !student.email) return { success: false, error: "Étudiant ou email introuvable" };
+
+    if (paiement.stripe_session_id?.startsWith('manual_') || student.id.startsWith('manual_')) {
+      return { success: false, error: "Relance automatique non autorisée : il s'agit d'une saisie manuelle (pas de Stripe)." };
+    }
 
     const amountInCents = Math.round(parseFloat(paiement.amount) * 100);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";

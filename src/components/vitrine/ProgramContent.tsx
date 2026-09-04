@@ -409,7 +409,7 @@ export const PROGRAMS: Program[] = [
     subtitle: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
     tagText: "PRO",
     tagColor: "bg-blue-100 text-blue-700",
-    durationText: "3 modules",
+    durationText: "",
     features: [
       "Méthode Les Clés du Coran",
       "Pédagogie & didactique",
@@ -729,12 +729,14 @@ export function ProgramContent() {
                     <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase shadow-sm ${program.tagColor ? program.tagColor.replace('bg-', 'bg-white/90 text-') : 'bg-white/90 text-ishes-blue'}`}>
                       {program.tagText || (isPresentiel ? "Présentiel" : "A distance")}
                     </span>
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border shadow-sm ${isPresentiel
-                      ? "bg-white/90 text-ishes-blue border-white"
-                      : "bg-white/90 text-blue-700 border-white"
-                      }`}>
-                      <span>📅</span> {program.durationText}
-                    </span>
+                    {program.durationText && (
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border shadow-sm ${isPresentiel
+                        ? "bg-white/90 text-ishes-blue border-white"
+                        : "bg-white/90 text-blue-700 border-white"
+                        }`}>
+                        <span>📅</span> {program.durationText}
+                      </span>
+                    )}
                   </div>
                 </div>
 
