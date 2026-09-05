@@ -76,12 +76,14 @@ export async function GET(request: Request) {
 
     const newStudents24h = (etudiants || []).filter(e => new Date(e.created_at).getTime() > oneDayAgo).length;
     
-    // Financials
-    const paiementsSucceeded = (paiements || []).filter(p => p.status === 'succeeded' || p.status === 'paye' || p.status === 'payé' || p.status === 'paid');
-    const totalCollected = paiementsSucceeded.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
-    const totalExpected = (inscriptions || []).reduce((sum, i) => sum + (Number(i.expected_amount) || 0), 0);
-    const totalRemaining = totalExpected > totalCollected ? totalExpected - totalCollected : 0;
-
+    let totalCollectedDistance = 0;
+    let totalExpectedDistance = 0;
+    let totalCollectedPresentiel = 0;
+    let totalExpectedPresentiel = 0;
+    
+    // We will compute the exact financials later after filtering students
+    let newStudents24h = 0;
+    
     let abandonedCheckouts24h = 0;
     try {
       if (process.env.STRIPE_SECRET_KEY) {
@@ -97,18 +99,6 @@ export async function GET(request: Request) {
     } catch (err) {
       console.error('[BACKUP] Error fetching Stripe sessions:', err);
     }
-
-    const stats = {
-      etudiants: backupData.etudiants.length,
-      inscriptions: backupData.inscriptions.length,
-      paiements: backupData.paiements.length,
-      classes: backupData.classes.length,
-      messages: backupData.messages.length,
-      newStudents24h,
-      totalCollected,
-      totalRemaining,
-      abandonedCheckouts24h,
-    };
 
     const dateStr = new Date().toLocaleDateString('fr-FR', {
       day: '2-digit', month: '2-digit', year: 'numeric',
@@ -157,15 +147,18 @@ export async function GET(request: Request) {
     // Generate JSON string with enriched data
     const jsonString = JSON.stringify(jsonBackupData, null, 2);
 
-    // Filter out tests and admins
+    // Filter out tests and admins and deleted
     const realEtudiants = enrichedEtudiants.filter(e => {
       if (e.role === 'admin') return false;
+      if (e.status === 'deleted') return false; // Ignorer les supprimés
       const em = (e.email || '').toLowerCase();
       const fn = (e.first_name || '').toLowerCase();
       const ln = (e.last_name || '').toLowerCase();
       if (em.includes('test') || fn.includes('test') || ln.includes('test') || em.includes('system_')) return false;
       return true;
     });
+
+    newStudents24h = realEtudiants.filter(e => new Date(e.created_at).getTime() > oneDayAgo).length;
 
     const distanceEtudiants: any[] = [];
     const presentielEtudiants: any[] = [];
@@ -174,31 +167,71 @@ export async function GET(request: Request) {
       const etudiantInscriptions = backupData.inscriptions.filter((i: any) => i.etudiant_id === e.id);
       const firstInscription = etudiantInscriptions.find((i: any) => i.status === 'valide' || i.status === 'en_attente') || etudiantInscriptions[0];
       let isPresentiel = false;
+      let formationName = "Aucune formation";
 
       if (firstInscription && firstInscription.formation_id) {
         const formation = backupData.formations.find((f: any) => f.id === firstInscription.formation_id);
-        if (formation && (formation.title?.toLowerCase().includes('présentiel') || formation.title?.toLowerCase().includes('presentiel') || formation.type === 'presentiel')) {
-          isPresentiel = true;
+        if (formation) {
+          formationName = formation.title || formationName;
+          if (formation.title?.toLowerCase().includes('présentiel') || formation.title?.toLowerCase().includes('presentiel') || formation.type === 'presentiel') {
+            isPresentiel = true;
+          }
+        }
+        
+        // Si assigné à une classe, prioriser le nom de la classe
+        if (firstInscription.classe_id) {
+            const classe = backupData.classes.find((c: any) => c.id === firstInscription.classe_id);
+            if (classe) {
+                formationName = classe.name || formationName;
+            }
         }
       }
       
+      e.formation_ou_classe = formationName;
+      
       if (isPresentiel) {
         presentielEtudiants.push(e);
+        totalCollectedPresentiel += (e.total_encaisse || 0);
+        totalExpectedPresentiel += (e.montant_attendu || 0);
       } else {
         distanceEtudiants.push(e);
+        totalCollectedDistance += (e.total_encaisse || 0);
+        totalExpectedDistance += (e.montant_attendu || 0);
       }
     }
 
-    const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Role,Status,Montant Attendu,Total Encaissé,Reste à Payer\n";
+    const totalRemainingDistance = totalExpectedDistance > totalCollectedDistance ? totalExpectedDistance - totalCollectedDistance : 0;
+    const totalRemainingPresentiel = totalExpectedPresentiel > totalCollectedPresentiel ? totalExpectedPresentiel - totalCollectedPresentiel : 0;
+
+    const stats = {
+      etudiants: realEtudiants.length, // Only count real students in stats
+      inscriptions: backupData.inscriptions.length,
+      paiements: backupData.paiements.length,
+      classes: backupData.classes.length,
+      messages: backupData.messages.length,
+      newStudents24h,
+      totalCollectedDistance,
+      totalRemainingDistance,
+      totalCollectedPresentiel,
+      totalRemainingPresentiel,
+      abandonedCheckouts24h,
+    };
+
+    const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Formation / Classe,Status,Montant Attendu,Total Encaissé,Reste à Payer\n";
     
+    const escapeCsv = (str: string) => {
+        if (!str) return '""';
+        return `"${str.replace(/"/g, '""')}"`;
+    };
+
     const distanceRows = distanceEtudiants.map(e => 
-      `"${e.id}","${e.last_name || ''}","${e.first_name || ''}","${e.email || ''}","${e.phone || ''}","${e.role || ''}","${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
+      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
     );
     const csvStringDistance = csvHeader + distanceRows.join('\n');
     const fileNameCsvDistance = `db_backup_${fileDateStr}_etudiants_distance.csv`;
 
     const presentielRows = presentielEtudiants.map(e => 
-      `"${e.id}","${e.last_name || ''}","${e.first_name || ''}","${e.email || ''}","${e.phone || ''}","${e.role || ''}","${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
+      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
     );
     const csvStringPresentiel = csvHeader + presentielRows.join('\n');
     const fileNameCsvPresentiel = `db_backup_${fileDateStr}_etudiants_presentiel.csv`;

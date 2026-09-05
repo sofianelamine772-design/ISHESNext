@@ -338,8 +338,10 @@ export async function sendBackupReportEmail(params: {
     classes: number;
     messages: number;
     newStudents24h?: number;
-    totalCollected?: number;
-    totalRemaining?: number;
+    totalCollectedDistance?: number;
+    totalRemainingDistance?: number;
+    totalCollectedPresentiel?: number;
+    totalRemainingPresentiel?: number;
     abandonedCheckouts24h?: number;
   };
   backupJsonString?: string;
@@ -395,10 +397,16 @@ export async function sendBackupReportEmail(params: {
           <li><strong>Paiements abandonnés :</strong> ${stats.abandonedCheckouts24h ?? 0}</li>
         </ul>
 
-        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">💰 Bilan Financier Global :</h3>
+        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">💰 Bilan Financier (Distanciel) :</h3>
         <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
-          <li><strong>Total encaissé :</strong> ${stats.totalCollected?.toFixed(2) ?? "0.00"} €</li>
-          <li><strong>Reste à encaisser :</strong> ${stats.totalRemaining?.toFixed(2) ?? "0.00"} €</li>
+          <li><strong>Total encaissé :</strong> ${stats.totalCollectedDistance?.toFixed(2) ?? "0.00"} €</li>
+          <li><strong>Reste à encaisser :</strong> ${stats.totalRemainingDistance?.toFixed(2) ?? "0.00"} €</li>
+        </ul>
+
+        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">🏫 Bilan Financier (Présentiel) :</h3>
+        <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
+          <li><strong>Total encaissé :</strong> ${stats.totalCollectedPresentiel?.toFixed(2) ?? "0.00"} €</li>
+          <li><strong>Reste à encaisser :</strong> ${stats.totalRemainingPresentiel?.toFixed(2) ?? "0.00"} €</li>
         </ul>
 
         <div style="background-color: #f4faf8; border-left: 4px solid #0a192f; padding: 15px; margin: 25px 0; border-radius: 8px; color: #0a192f; font-size: 13px; font-weight: 600;">

@@ -219,7 +219,7 @@ export default function EleveDashboard() {
     if (paidPayments.length === 0 || familyInscriptions.length === 0) return null;
 
     const totalExpectedRaw = familyInscriptions.reduce((sum, ins) => {
-      return sum + getCoursePrice(ins.formationTitle);
+      return sum + (typeof ins.expectedAmount === 'number' ? ins.expectedAmount : getCoursePrice(ins.formationTitle));
     }, 0);
 
     const totalPaid = paidPayments.reduce((sum, p) => sum + (p.amount || 0), 0);

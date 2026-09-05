@@ -27,6 +27,7 @@ type Program = {
   formationId?: string;
   slotId?: string;
   imageUrl?: string;
+  keywords?: string[];
 };
 
 export const PROGRAMS: Program[] = [
@@ -284,7 +285,8 @@ export const PROGRAMS: Program[] = [
     price: "399 €",
     priceSub: "/ SESSION",
     type: "distanciel",
-    audience: "adulte"
+    audience: "adulte",
+    keywords: ["tilawa", "récitation", "lecture"]
   },
   {
     id: "al_aqida",
@@ -523,7 +525,8 @@ export function ProgramContent() {
       const matchTitle = p.title.toLowerCase().includes(query);
       const matchSubtitle = p.subtitle.toLowerCase().includes(query);
       const matchFeatures = p.features.some(f => f.toLowerCase().includes(query));
-      return matchTitle || matchSubtitle || matchFeatures;
+      const matchKeywords = p.keywords?.some(k => k.toLowerCase().includes(query)) || false;
+      return matchTitle || matchSubtitle || matchFeatures || matchKeywords;
     }
 
     return true;

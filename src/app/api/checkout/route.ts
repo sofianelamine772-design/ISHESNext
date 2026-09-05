@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
 import { CLASS_ID_TO_UUID } from '@/lib/presentiel-data';
+import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -85,7 +86,7 @@ export async function POST(req: Request) {
         const fullClasses = statusData.filter((c: any) => c.est_plein === true);
         if (fullClasses.length > 0) {
           return NextResponse.json(
-            { error: "Désolé, l'une des classes sélectionnées vient de se remplir. Veuillez choisir un autre créneau." }, 
+            { error: "Désolé, l'une des classes sélectionnées vient de se remplir. Veuillez choisir un autre créneau." },
             { status: 400 }
           );
         }
@@ -140,7 +141,7 @@ export async function POST(req: Request) {
         metadata[`child_${idx}_first`] = child.prenom || '';
         metadata[`child_${idx}_last`] = child.nom || '';
         metadata[`child_${idx}_classId`] = child.classId
-          ? CLASS_ID_TO_UUID[parseInt(child.classId)] || child.classId
+          ? CLASS_ID_TO_UUID[parseInt(child.classId)] || DISTANCE_CLASS_ID_TO_UUID[parseInt(child.classId)] || child.classId
           : '';
         metadata[`child_${idx}_niveau`] = child.niveau || '';
       });
@@ -148,7 +149,7 @@ export async function POST(req: Request) {
       // Adult
       metadata.first_name = body.prenom || '';
       metadata.last_name = body.nom || '';
-      metadata.classId = body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '';
+      metadata.classId = body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || DISTANCE_CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '';
       metadata.niveau = body.niveau || '';
     }
 

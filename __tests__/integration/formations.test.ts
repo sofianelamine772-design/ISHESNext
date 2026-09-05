@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
 import { CLASS_ID_TO_UUID, PRESENTIEL_CLASSES } from '@/lib/presentiel-data';
+import { DISTANCE_CLASS_ID_TO_UUID, DISTANCE_CLASSES } from '@/lib/distance-data';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -49,8 +50,11 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
     );
   });
 
-  describe('Cohérence des UUID de classes présentiel (Frontend vs DB)', () => {
-    const classCases = Object.entries(CLASS_ID_TO_UUID).map(([classId, uuid]) => ({
+  describe('Cohérence des UUID de classes présentiel et distanciel (Frontend vs DB)', () => {
+    const classCases = [
+      ...Object.entries(CLASS_ID_TO_UUID),
+      ...Object.entries(DISTANCE_CLASS_ID_TO_UUID)
+    ].map(([classId, uuid]) => ({
       classId,
       uuid
     }));
@@ -71,7 +75,7 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
     );
   });
 
-  describe('Correspondance des ID frontend (external_id) dans la base', () => {
+  describe('Correspondance des ID frontend (external_id / UUID) dans la base', () => {
     const externalIdCases = PRESENTIEL_CLASSES.map(c => ({ externalId: c.id, name: `${c.jour} - ${c.niveau}` }));
 
     test.each(externalIdCases)(

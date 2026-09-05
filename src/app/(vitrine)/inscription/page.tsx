@@ -11,6 +11,7 @@ import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
+import { DISTANCE_CLASSES } from "@/lib/distance-data";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -787,6 +788,47 @@ function InscriptionForm() {
                                 {showChildHoraireError[index] && !child.niveau && (
                                   <p className="text-red-500 text-[10px] mt-1 animate-pulse font-medium">Veuillez d'abord sélectionner le niveau de l'élève.</p>
                                 )}
+                              </div>
+                            </div>
+                          );
+                        })()}
+
+                        {(planId === 'arabe_enfant_distance' || planId === 'tajwid_enfant_distance' || planId === 'tarbiya_islamiya') && (() => {
+                          const distancePlanId = planId;
+                          return (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
+                              {/* Niveau select */}
+                              <div className="space-y-2 relative">
+                                <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
+                                  <span className="w-3 h-3 border border-gray-400 rounded-sm flex items-center justify-center text-[7px]">📖</span>
+                                  Niveau de l'élève *
+                                </label>
+                                <div className="relative">
+                                  <select
+                                    value={child.classId}
+                                    onChange={(e) => {
+                                      const classId = e.target.value;
+                                      const selected = DISTANCE_CLASSES.find(c => c.id.toString() === classId);
+                                      if (selected) {
+                                        handleChildInputChange(index, 'classId', classId);
+                                        handleChildInputChange(index, 'niveau', selected.niveauKey);
+                                        handleChildInputChange(index, 'slot', selected.slotKey);
+                                        handleChildInputChange(index, 'horaire', selected.horaire);
+                                      } else {
+                                        handleChildInputChange(index, 'classId', '');
+                                        handleChildInputChange(index, 'niveau', '');
+                                      }
+                                    }}
+                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
+                                  >
+                                    <option value="">— Choisir un niveau —</option>
+                                    {DISTANCE_CLASSES.filter(c => c.planId === distancePlanId).map(c => (
+                                      <option key={c.id} value={c.id.toString()}>
+                                        {c.niveau} ({c.horaire})
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
                               </div>
                             </div>
                           );
