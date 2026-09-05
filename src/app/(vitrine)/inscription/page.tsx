@@ -180,10 +180,11 @@ function InscriptionForm() {
 
   const handleCheckout = async () => {
     // === VALIDATION AVANT PAIEMENT (Correction du bug à la source) ===
-    if (registrationType === 'child' && (planId === 'presentiel-global' || (planId === 'tajwid_standard' && audienceParam === 'enfant'))) {
-      const missingClass = childrenList.find(c => !c.classId);
+    const isDistanceChildPlan = planId === 'arabe_enfant_distance' || planId === 'tajwid_enfant_distance' || planId === 'tarbiya_islamiya';
+    if (registrationType === 'child' && (planId === 'presentiel-global' || (planId === 'tajwid_standard' && audienceParam === 'enfant') || isDistanceChildPlan)) {
+      const missingClass = childrenList.find(c => !c.classId || !c.niveau);
       if (missingClass) {
-        alert("Veuillez sélectionner le niveau et l'horaire pour chaque enfant avant de procéder au paiement.");
+        alert("Veuillez sélectionner le niveau pour chaque enfant avant de procéder au paiement.");
         return;
       }
     }
@@ -1091,11 +1092,12 @@ function InscriptionForm() {
                       ? (
                         !formData.parentPrenom ||
                         !formData.parentNom ||
-                        childrenList.some(c =>
-                          !c.prenom ||
-                          !c.nom ||
-                          (planId === 'presentiel-global' ? !c.classId : false)
-                        )
+                        childrenList.some(c => {
+                          const isDistanceChildPlan = planId === 'arabe_enfant_distance' || planId === 'tajwid_enfant_distance' || planId === 'tarbiya_islamiya';
+                          return !c.prenom || 
+                                 !c.nom || 
+                                 (planId === 'presentiel-global' || isDistanceChildPlan ? !c.classId : false);
+                        })
                       )
                       : (
                         !formData.prenom ||
