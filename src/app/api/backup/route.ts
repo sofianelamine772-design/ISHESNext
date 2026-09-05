@@ -73,8 +73,6 @@ export async function GET(request: Request) {
     const now = Date.now();
     const oneDayAgo = now - 24 * 60 * 60 * 1000;
     const oneDayAgoUnix = Math.floor(oneDayAgo / 1000);
-
-    const newStudents24h = (etudiants || []).filter(e => new Date(e.created_at).getTime() > oneDayAgo).length;
     
     let totalCollectedDistance = 0;
     let totalExpectedDistance = 0;
