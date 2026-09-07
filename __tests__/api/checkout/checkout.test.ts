@@ -29,6 +29,22 @@ jest.mock('stripe', () => {
   return jest.fn(() => mStripe);
 });
 
+function mockFormation(price = 480, title = 'Cours enfants') {
+  const mockSelect = jest.fn().mockReturnValue({
+    eq: jest.fn().mockReturnValue({
+      maybeSingle: jest.fn().mockResolvedValue({ data: { price, title } })
+    })
+  });
+  (supabaseAdmin.from as jest.Mock).mockReturnValue({ select: mockSelect });
+}
+
+async function postCheckout(body: Record<string, unknown>) {
+  return POST(new NextRequest('http://localhost:3000/api/checkout', {
+    method: 'POST',
+    body: JSON.stringify(body)
+  }));
+}
+
 describe('Checkout API', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -62,5 +78,165 @@ describe('Checkout API', () => {
     expect(res.status).toBe(404);
     expect(json.error).toBe('Formation introuvable en base de données');
     expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it('ne réduit pas un seul enfant', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [{ prenom: 'Amina', nom: 'Benali' }]
+    });
+
+    expect(res.status).toBe(200);
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(48000);
+    expect(session.metadata.sibling_discount).toBe('0');
+  });
+
+  it('applique 50 € de réduction pour 2 enfants inscrits en même temps (960 → 910)', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [
+        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: 'Youssef', nom: 'Benali' }
+      ]
+    });
+
+    expect(res.status).toBe(200);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(91000);
+    expect(session.metadata.sibling_discount).toBe('50');
+    expect(session.metadata.childrenCount).toBe('2');
+    expect(session.line_items[0].price_data.product_data.description).toContain('50');
+  });
+
+  it('en plusieurs fois, applique −50 € sur le total (910 €) puis le découpe — pas −50 € par mois', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockSessionCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockPriceCreate = stripeInstance.prices.create as jest.Mock;
+
+    await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      installments: 10,
+      email: 'parent@example.com',
+      childrenList: [
+        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: 'Youssef', nom: 'Benali' }
+      ]
+    });
+
+    expect(mockPriceCreate).toHaveBeenCalledWith(expect.objectContaining({
+      unit_amount: 9100, // 910 € / 10 = 91 €/mois — pas 41 € (91 − 50)
+    }));
+    expect(mockSessionCreate.mock.calls[0][0].metadata.sibling_discount).toBe('50');
+
+    mockPriceCreate.mockClear();
+    mockSessionCreate.mockClear();
+
+    await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      installments: 3,
+      email: 'parent@example.com',
+      childrenList: [
+        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: 'Youssef', nom: 'Benali' }
+      ]
+    });
+
+    expect(mockPriceCreate).toHaveBeenCalledWith(expect.objectContaining({
+      unit_amount: Math.round(91000 / 3), // 303,33 €/mois — pas 270 € (320 − 50)
+    }));
+  });
+
+  it('applique 100 € de réduction pour 3 enfants inscrits en même temps', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [
+        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: 'Youssef', nom: 'Benali' },
+        { prenom: 'Sara', nom: 'Benali' }
+      ]
+    });
+
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(134000);
+    expect(session.metadata.sibling_discount).toBe('100');
+  });
+
+  it('ne réduit pas une inscription adulte', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'adult',
+      email: 'adulte@example.com',
+      prenom: 'Fatima',
+      nom: 'Benali'
+    });
+
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(48000);
+    expect(session.metadata.sibling_discount).toBe('0');
+  });
+
+  it('refuse une inscription enfant sans enfant nommé (évite un paiement à 0 €)', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [{ prenom: '', nom: '' }]
+    });
+
+    expect(res.status).toBe(400);
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it('ignore un enfant vide et ne réduit pas si un seul enfant est vraiment nommé', async () => {
+    mockFormation(480);
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [
+        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: '', nom: '' }
+      ]
+    });
+
+    expect(res.status).toBe(200);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(48000);
+    expect(session.metadata.sibling_discount).toBe('0');
+    expect(session.metadata.childrenCount).toBe('1');
   });
 });

@@ -4,6 +4,7 @@ import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { clerkClient } from '@clerk/nextjs/server';
 import { getCurrentAcademicYear } from '@/lib/utils';
+import { getExpectedAmountForChild } from '@/lib/pricing';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as any,
@@ -319,7 +320,13 @@ export async function POST(req: Request) {
             }
           }
 
-          const expectedAmount = parseFloat(session.metadata?.expected_amount || '0') || undefined;
+          const baseExpected = parseFloat(session.metadata?.expected_amount || '0') || undefined;
+          const siblingDiscount = parseFloat(session.metadata?.sibling_discount || '0') || 0;
+          const expectedAmount = baseExpected !== undefined
+            ? (siblingDiscount > 0
+              ? getExpectedAmountForChild(baseExpected, i, childrenCount)
+              : baseExpected)
+            : undefined;
           const insId = await upsertInscription({ studentId, formationUuid, classId: classId || null, academicYear, expectedAmount });
           if (insId) studentIds.push(studentId);
         }

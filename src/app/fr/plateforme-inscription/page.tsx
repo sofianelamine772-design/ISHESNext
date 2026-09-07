@@ -11,6 +11,7 @@ import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -133,13 +134,25 @@ function InscriptionForm() {
     return 349; // Tarif par défaut
   };
 
+  const namedChildren = registrationType === 'child' ? getNamedChildren(childrenList) : [];
+
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
     if (registrationType === 'child') {
-      return basePrice * childrenList.length;
+      return getFamilyCheckoutTotal(basePrice, namedChildren.length);
     }
     return basePrice;
   };
+
+  const getSubtotal = () => {
+    const basePrice = getBasePriceOfPlan(planId);
+    if (registrationType === 'child') {
+      return basePrice * namedChildren.length;
+    }
+    return basePrice;
+  };
+
+  const siblingDiscount = getSiblingDiscount(namedChildren.length);
 
   const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5 | 10>(1);
 
@@ -170,8 +183,20 @@ function InscriptionForm() {
           classId: formData.classId || "",
           classIds: registrationType === 'child' ? childrenList.map(c => c.classId) : [formData.classId],
           email: formData.email,
+          telephone: formData.telephone,
           registrationType: registrationType,
           installments: selectedInstallments,
+          prenom: formData.prenom,
+          nom: formData.nom,
+          niveau: formData.niveau,
+          parentPrenom: formData.parentPrenom,
+          parentNom: formData.parentNom,
+          childrenList: registrationType === 'child' ? namedChildren.map(c => ({
+            prenom: c.prenom,
+            nom: c.nom,
+            classId: c.classId,
+            niveau: c.niveau
+          })) : []
         }),
       });
 
@@ -826,7 +851,7 @@ function InscriptionForm() {
                       onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }])}
                       className="w-full py-4 px-6 border-2 border-dashed border-gray-200 rounded-2xl text-xs font-black text-ishes-blue hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-sm"
                     >
-                      <span>➕</span> Inscrire un autre enfant
+                      <span>➕</span> Inscrire un autre enfant (−50 €)
                     </button>
                   </div>
                 ) : (
@@ -1218,6 +1243,11 @@ function InscriptionForm() {
                     <p className="text-xs font-bold text-gray-400">
                       Nombre d'élèves inscrits : <span className="text-[#101828] font-black">{childrenList.length} enfant(s)</span>
                     </p>
+                    {siblingDiscount > 0 && (
+                      <p className="text-xs font-bold text-ishes-blue mt-2">
+                        Réduction fratrie : −{siblingDiscount} €
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -1254,6 +1284,18 @@ function InscriptionForm() {
               </div>
 
               <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 mb-10 max-w-md mx-auto">
+                {siblingDiscount > 0 && (
+                  <div className="space-y-2 mb-4 text-sm font-bold text-gray-500">
+                    <div className="flex justify-between items-center">
+                      <span className="uppercase tracking-widest text-[11px]">Sous-total ({childrenList.length} × {getBasePriceOfPlan(planId)} €)</span>
+                      <span className="text-gray-400 line-through">{getSubtotal()},00 €</span>
+                    </div>
+                    <div className="flex justify-between items-center text-ishes-blue">
+                      <span className="uppercase tracking-widest text-[11px]">Réduction fratrie</span>
+                      <span>−{siblingDiscount},00 €</span>
+                    </div>
+                  </div>
+                )}
                 <div className="flex justify-between items-center mb-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
                   <span>Total à régler</span>
                   <span className="text-ishes-dark">
@@ -1359,9 +1401,10 @@ function InscriptionForm() {
                     <span className="text-ishes-blue">Multi-inscription ({childrenList.length} enfants) :</span>
                     <ul className="mt-2 space-y-1 text-gray-600 font-medium list-disc list-inside">
                       {childrenList.map((c, i) => (
-                        <li key={i}>{c.prenom} {c.nom}</li>
+                        <li key={i}>{c.prenom} {c.nom}{i > 0 ? ' (−50 €)' : ''}</li>
                       ))}
                     </ul>
+                    <p className="mt-3 text-ishes-blue font-black">Économie : {siblingDiscount} €</p>
                   </div>
                 )}
                 <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6 text-left">

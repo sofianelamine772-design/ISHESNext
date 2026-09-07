@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server';
 import { CLASS_ID_TO_UUID } from '@/lib/presentiel-data';
 import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-04-22.dahlia',
@@ -66,14 +67,34 @@ export async function POST(req: Request) {
     const formationTitle = formationData.title || 'Formation ISHES';
     const basePrice = Number(formationData.price);
 
+    // 2. Calculer le montant total (multiplié par le nombre d'enfants si inscription famille)
+    // Réduction fratrie : −50 € par enfant supplémentaire, uniquement pour ce même paiement.
+    // On ne compte que les enfants nominativement remplis — un créneau vide ne doit ni réduire ni créer un paiement à 0 €.
+    let childrenCount = 1;
+    let siblingDiscount = 0;
+    let totalAmount = basePrice;
+    if (registrationType === 'child') {
+      const namedChildren = getNamedChildren(body.childrenList);
+      if (namedChildren.length === 0) {
+        return NextResponse.json(
+          { error: 'Veuillez renseigner le prénom et le nom de chaque enfant.' },
+          { status: 400 }
+        );
+      }
+      body.childrenList = namedChildren;
+      childrenCount = namedChildren.length;
+      siblingDiscount = getSiblingDiscount(childrenCount);
+      totalAmount = getFamilyCheckoutTotal(basePrice, childrenCount);
+    }
+
     // --- SECURITY: Check if classes are full ---
     const classIdsToCheck: number[] = [];
-    if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
+    if (registrationType === 'child' && Array.isArray(body.childrenList)) {
       body.childrenList.forEach((child: any) => {
         if (child.classId) classIdsToCheck.push(parseInt(child.classId, 10));
       });
-    } else {
-      if (body.classId) classIdsToCheck.push(parseInt(body.classId, 10));
+    } else if (body.classId) {
+      classIdsToCheck.push(parseInt(body.classId, 10));
     }
 
     if (classIdsToCheck.length > 0) {
@@ -93,12 +114,6 @@ export async function POST(req: Request) {
       }
     }
     // ------------------------------------------
-
-    // 2. Calculer le montant total (multiplié par le nombre d'enfants si inscription famille)
-    let totalAmount = basePrice;
-    if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
-      totalAmount = basePrice * body.childrenList.length;
-    }
 
     const unitAmount = Math.round(totalAmount * 100);
 
@@ -129,7 +144,8 @@ export async function POST(req: Request) {
       renewalYear: body.year || '',
       nextLevelTitle: body.nextLevelTitle || '',
       registrationType,
-      expected_amount: String(basePrice), // Le prix de base par inscription
+      expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
+      sibling_discount: String(siblingDiscount),
     };
 
     if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
@@ -152,6 +168,10 @@ export async function POST(req: Request) {
       metadata.classId = body.classId ? CLASS_ID_TO_UUID[parseInt(body.classId)] || DISTANCE_CLASS_ID_TO_UUID[parseInt(body.classId)] || body.classId : '';
       metadata.niveau = body.niveau || '';
     }
+
+    const stripeDescription = siblingDiscount > 0
+      ? `Inscription de ${childrenCount} enfants — réduction fratrie ${siblingDiscount} €`
+      : 'Inscription — Institut ISHES';
 
     if (installments > 1) {
       const installmentAmount = Math.round(unitAmount / installments);
@@ -201,7 +221,7 @@ export async function POST(req: Request) {
               currency: 'eur',
               product_data: {
                 name: `Inscription : ${formationTitle}`,
-                description: 'Inscription — Institut ISHES',
+                description: stripeDescription,
               },
               unit_amount: unitAmount,
             },

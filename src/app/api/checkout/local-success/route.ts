@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getCurrentAcademicYear } from '@/lib/utils';
+import { getExpectedAmountForChild } from '@/lib/pricing';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as any,
@@ -95,8 +96,9 @@ async function upsertInscription(params: {
   formationUuid: string;
   classId: string | null;
   academicYear: string;
+  expectedAmount?: number;
 }): Promise<string | null> {
-  const { studentId, formationUuid, academicYear } = params;
+  const { studentId, formationUuid, academicYear, expectedAmount } = params;
   let resolvedClassId = params.classId;
 
   // Si aucun classId n'est fourni, on cherche si c'est un cours distanciel ou s'il y a une classe active pour cette formation
@@ -155,23 +157,32 @@ async function upsertInscription(params: {
     .maybeSingle();
 
   if (existing) {
+    const updatePayload: Record<string, unknown> = {
+      class_id: resolvedClassId || undefined,
+      status: targetStatus,
+      paid_status: 'paye',
+    };
+    if (expectedAmount !== undefined) updatePayload.expected_amount = expectedAmount;
     await supabaseAdmin
       .from('inscriptions')
-      .update({ class_id: resolvedClassId || undefined, status: targetStatus, paid_status: 'paye' })
+      .update(updatePayload)
       .eq('id', existing.id);
     return existing.id;
   }
 
+  const insertPayload: Record<string, unknown> = {
+    etudiant_id: studentId,
+    formation_id: formationUuid,
+    class_id: resolvedClassId,
+    status: targetStatus,
+    paid_status: 'paye',
+    academic_year: academicYear,
+  };
+  if (expectedAmount !== undefined) insertPayload.expected_amount = expectedAmount;
+
   const { data: newIns, error } = await supabaseAdmin
     .from('inscriptions')
-    .insert({
-      etudiant_id: studentId,
-      formation_id: formationUuid,
-      class_id: resolvedClassId,
-      status: targetStatus,
-      paid_status: 'paye',
-      academic_year: academicYear,
-    })
+    .insert(insertPayload)
     .select('id')
     .single();
 
@@ -277,8 +288,16 @@ export async function GET(req: Request) {
           const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
           if (!studentId || !formationUuid) continue;
 
+          const baseExpected = parseFloat(session.metadata?.expected_amount || '0') || undefined;
+          const siblingDiscount = parseFloat(session.metadata?.sibling_discount || '0') || 0;
+          const expectedAmount = baseExpected !== undefined
+            ? (siblingDiscount > 0
+              ? getExpectedAmountForChild(baseExpected, i, childrenCount)
+              : baseExpected)
+            : undefined;
+
           const finalClassId = classId || null;
-          const insId = await upsertInscription({ studentId, formationUuid, classId: finalClassId, academicYear });
+          const insId = await upsertInscription({ studentId, formationUuid, classId: finalClassId, academicYear, expectedAmount });
           if (insId) studentIds.push(studentId);
         }
       } else {

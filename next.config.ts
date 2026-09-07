@@ -50,6 +50,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react'],
+    // Le cache disque Turbopack avait gonflé à ~1,5 Go et rallongeait chaque `next dev` (~87s).
+    turbopackFileSystemCacheForDev: false,
   },
   async redirects() {
     const redirectsList = redirectPaths.map((path) => ({

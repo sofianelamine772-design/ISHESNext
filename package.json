@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ps -ef | awk '$8 ~ /node/ && /next/ && /3005/ {print $2}' | xargs kill -9 2>/dev/null || true && next dev --turbo -p 3005",
-    "dev:turbo": "next dev --turbo",
-    "clean": "rm -rf .next && npm run dev",
+    "dev": "next dev -p 3005",
+    "dev:restart": "lsof -tiTCP:3005 -sTCP:LISTEN | xargs kill 2>/dev/null || true; next dev -p 3005",
+    "clean:cache": "rm -rf .next",
+    "clean": "rm -rf .next && next dev -p 3005",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
