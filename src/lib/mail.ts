@@ -13,12 +13,21 @@ if (smtpUser && smtpPass) {
     host: smtpHost,
     port: smtpPort,
     secure: smtpPort === 465,
+    // Gmail coupe les envois massifs en parallèle (erreur 421-4.3.0).
+    pool: true,
+    maxConnections: 1,
+    maxMessages: 20,
     auth: {
       user: smtpUser,
       pass: smtpPass,
     },
   });
   console.log(`[SMTP] Transporter initialisé pour l'utilisateur : ${smtpUser}`);
+}
+
+function isTransientSmtpError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error || '');
+  return /421|4\.3\.0|Temporary System Problem|try again later/i.test(message);
 }
 
 interface SendEmailParams {
@@ -61,7 +70,14 @@ export async function sendEmail({ to, subject, html, text, from, replyTo, attach
       }
     };
 
-    const info = await transporter.sendMail(mailOptions);
+    let info;
+    try {
+      info = await transporter.sendMail(mailOptions);
+    } catch (firstError) {
+      if (!isTransientSmtpError(firstError)) throw firstError;
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      info = await transporter.sendMail(mailOptions);
+    }
     console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
 
     // Optionnel : Enregistrer cet événement dans la table des messages pour le dashboard

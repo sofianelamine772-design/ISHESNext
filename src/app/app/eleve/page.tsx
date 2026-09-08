@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle, BookOpen, Users, Calendar, MonitorDown, CreditCard, CheckCircle, Clock } from "lucide-react";
+import { GraduationCap, ArrowRight, Smartphone, Share, PlusSquare, FileText, Download, Loader2, X, AlertCircle, BookOpen, Users, Calendar, MonitorDown, CreditCard, CheckCircle, Clock, Sparkles } from "lucide-react";
+import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -363,8 +364,33 @@ export default function EleveDashboard() {
             {activeTab === "dashboard" && certData && (
               <motion.div 
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+                className="space-y-8"
               >
+                <Link
+                  href="/program"
+                  className="block bg-gradient-to-r from-ishes-gold via-[#d4a017] to-[#b8860b] rounded-[2rem] p-6 md:p-8 text-white shadow-xl shadow-ishes-gold/25 relative overflow-hidden group"
+                >
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform" />
+                  <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                        <Sparkles className="w-7 h-7" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/80 mb-1">Nouvelle inscription</p>
+                        <h3 className="text-2xl md:text-3xl font-black tracking-tight">Choisir une autre formation</h3>
+                        <p className="text-white/85 text-sm font-medium mt-2 max-w-xl">
+                          Vous êtes déjà inscrit(e). Ajoutez un nouveau cursus pour vous ou un autre enfant — le catalogue est à un clic.
+                        </p>
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center justify-center gap-2 bg-white text-yellow-800 hover:bg-yellow-50 font-black py-4 px-7 rounded-2xl text-sm uppercase tracking-wider transition-all shrink-0 shadow-lg">
+                      Voir les formations <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </Link>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Course Card */}
                 <div className="lg:col-span-2">
                   <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-100 shadow-sm relative overflow-hidden group">
@@ -453,24 +479,26 @@ export default function EleveDashboard() {
                     </div>
                   </div>
 
-                  {/* Shortcut Card */}
-                  <div className="bg-gradient-to-br from-ishes-gold to-yellow-600 rounded-[2.5rem] p-8 text-white shadow-md relative overflow-hidden group cursor-pointer hover:shadow-lg transition-all" onClick={() => router.push('/formations')}>
+                  <Link
+                    href="/program"
+                    className="block bg-[#0F172A] rounded-[2.5rem] p-8 text-white shadow-md relative overflow-hidden group hover:shadow-lg transition-all"
+                  >
                     <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
                       <GraduationCap className="w-32 h-32" />
                     </div>
                     <div className="relative z-10">
-                      <h3 className="font-black text-xl mb-2">Envie d'aller plus loin ?</h3>
-                      <p className="text-white/80 text-sm font-medium mb-6">
-                        Découvrez nos autres formations et enrichissez votre parcours.
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-gold mb-2">Catalogue ISHES</p>
+                      <h3 className="font-black text-xl mb-2">Choisir une autre formation</h3>
+                      <p className="text-white/70 text-sm font-medium mb-6">
+                        Présentiel, distanciel, adulte ou enfant : inscrivez-vous à un nouveau cursus.
                       </p>
-                      <button 
-                        className="bg-white text-yellow-700 hover:bg-yellow-50 font-bold py-2.5 px-6 rounded-full text-sm transition-all"
-                      >
-                        Voir le catalogue
-                      </button>
+                      <span className="inline-flex items-center gap-2 bg-ishes-gold text-[#0F172A] hover:brightness-110 font-black py-2.5 px-6 rounded-full text-sm transition-all">
+                        Choisir maintenant <ArrowRight className="w-4 h-4" />
+                      </span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
+              </div>
               </motion.div>
             )}
 

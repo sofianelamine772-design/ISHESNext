@@ -195,14 +195,17 @@ export default function AdminCommunicationPage() {
         body: JSON.stringify(body),
       });
 
+      const payload = await res.json().catch(() => ({}));
       if (res.ok) {
         setSuccess(true);
         setContent(""); setTitle(""); setSelectedStudent(""); setSelectedClasses([]); setFormatFilter("all");
         setTimeout(() => setSuccess(false), 3000);
         fetchConversations();
+        if (payload.emailWarning) {
+          alert(payload.emailWarning);
+        }
       } else {
-        const err = await res.json().catch(() => ({}));
-        alert(`Erreur : ${err.error || 'Impossible d\'envoyer'}`);
+        alert(`Erreur : ${payload.error || 'Impossible d\'envoyer'}`);
       }
     } finally {
       setLoading(false);

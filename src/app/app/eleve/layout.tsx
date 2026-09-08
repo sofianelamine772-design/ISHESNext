@@ -27,7 +27,7 @@ export default function EleveLayout({
     { href: "/app/eleve", label: "Tableau de bord", icon: LayoutDashboard },
     { href: "/app/eleve/messagerie", label: "Messagerie", icon: MessageSquareText },
     { href: "/app/eleve/reinscription", label: "Réinscription", icon: UserPlus },
-    { href: "/program", label: "Ajouter une formation", icon: BookOpenText },
+    { href: "/program", label: "Autre formation", icon: BookOpenText, highlight: true },
   ];
 
   const currentYear = new Date().getFullYear();
@@ -53,18 +53,28 @@ export default function EleveLayout({
         <nav className="flex-1 py-8 px-4 space-y-2">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
+            const isHighlight = "highlight" in item && item.highlight;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
-                  isActive 
-                    ? "bg-ishes-blue text-white shadow-lg shadow-ishes-blue/20 translate-x-1" 
+                  isHighlight
+                    ? "bg-gradient-to-r from-ishes-gold to-[#d4a017] text-white shadow-lg shadow-ishes-gold/30 hover:brightness-110"
+                    : isActive
+                    ? "bg-ishes-blue text-white shadow-lg shadow-ishes-blue/20 translate-x-1"
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
                 }`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-400"}`} />
-                {item.label}
+                <item.icon className={`w-5 h-5 ${isHighlight || isActive ? "text-white" : "text-gray-400"}`} />
+                <span className="flex flex-col leading-tight">
+                  {item.label}
+                  {isHighlight && (
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-white/80 mt-0.5">
+                      Choisir un nouveau cursus
+                    </span>
+                  )}
+                </span>
               </Link>
             );
           })}
@@ -138,16 +148,27 @@ export default function EleveLayout({
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center justify-around px-2 py-3 z-50 pb-[env(safe-area-inset-bottom)]">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
+          const isHighlight = "highlight" in item && item.highlight;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-1 p-2 ${
-                isActive ? "text-ishes-blue" : "text-gray-400 hover:text-gray-600"
+              className={`flex flex-col items-center gap-1 p-2 min-w-0 ${
+                isHighlight
+                  ? "text-ishes-gold"
+                  : isActive
+                  ? "text-ishes-blue"
+                  : "text-gray-400 hover:text-gray-600"
               }`}
             >
-              <item.icon className={`w-6 h-6 ${isActive ? "text-ishes-blue drop-shadow-md" : ""}`} />
-              <span className={`text-[9px] font-bold ${isActive ? "text-ishes-blue" : "text-gray-400"}`}>
+              <span className={`flex items-center justify-center w-10 h-10 rounded-2xl ${
+                isHighlight ? "bg-gradient-to-br from-ishes-gold to-[#d4a017] text-white shadow-md shadow-ishes-gold/30" : ""
+              }`}>
+                <item.icon className={`w-6 h-6 ${isHighlight ? "text-white" : isActive ? "text-ishes-blue drop-shadow-md" : ""}`} />
+              </span>
+              <span className={`text-[9px] font-black text-center leading-tight ${
+                isHighlight ? "text-ishes-gold" : isActive ? "text-ishes-blue" : "text-gray-400"
+              }`}>
                 {item.label}
               </span>
             </Link>

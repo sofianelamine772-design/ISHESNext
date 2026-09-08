@@ -198,40 +198,51 @@ export async function POST(req: Request) {
           }));
         }
 
-        // 2. Envoyer les E-mails (de manière synchrone pour vérifier le succès)
+        // 2. Envoyer les e-mails par petits lots — Gmail refuse un envoi massif en parallèle (421-4.3.0).
         if (emailsToSend.length > 0) {
           console.log(`[MESSAGES_POST] Envoi de ${emailsToSend.length} e-mails de notification...`);
-          const results = await Promise.all(
-            emailsToSend.map(async (item) => {
-              try {
-                const res = await sendNewMessageEmail({
-                  email: item.email,
-                  firstName: item.first_name,
-                  messageContent: content,
-                  title: item.subject
-                });
-                return { email: item.email, success: res.success, error: res.error };
-              } catch (mailErr: any) {
-                console.error(`[MESSAGES_MAIL_ERROR] Échec de l'envoi d'e-mail à ${item.email}:`, mailErr);
-                return { email: item.email, success: false, error: mailErr?.message || mailErr };
-              }
-            })
+          const uniqueEmails = Array.from(
+            new Map(emailsToSend.filter((item) => item.email).map((item) => [item.email.toLowerCase(), item])).values()
           );
-          
-          const failed = results.filter(r => !r.success);
-          if (failed.length > 0) {
-            console.error(`[MESSAGES_POST] Échec de l'envoi pour ${failed.length} e-mails.`);
-            const firstError = failed[0].error;
-            let errorMessage = "Échec de l'envoi des e-mails.";
-            if (firstError && typeof firstError === 'object') {
-              errorMessage = (firstError as any).message || JSON.stringify(firstError);
-            } else if (typeof firstError === 'string') {
-              errorMessage = firstError;
+          const results: { email: string; success: boolean; error?: unknown }[] = [];
+          const BATCH_SIZE = 5;
+          const BATCH_DELAY_MS = 1500;
+
+          for (let i = 0; i < uniqueEmails.length; i += BATCH_SIZE) {
+            const batch = uniqueEmails.slice(i, i + BATCH_SIZE);
+            const batchResults = await Promise.all(
+              batch.map(async (item) => {
+                try {
+                  const res = await sendNewMessageEmail({
+                    email: item.email,
+                    firstName: item.first_name,
+                    messageContent: content,
+                    title: item.subject
+                  });
+                  return { email: item.email, success: res.success, error: res.error };
+                } catch (mailErr: any) {
+                  console.error(`[MESSAGES_MAIL_ERROR] Échec de l'envoi d'e-mail à ${item.email}:`, mailErr);
+                  return { email: item.email, success: false, error: mailErr?.message || mailErr };
+                }
+              })
+            );
+            results.push(...batchResults);
+            if (i + BATCH_SIZE < uniqueEmails.length) {
+              await new Promise((resolve) => setTimeout(resolve, BATCH_DELAY_MS));
             }
-            return NextResponse.json({ 
-              error: `Erreur d'envoi d'e-mail : ${errorMessage}`,
-              details: failed
-            }, { status: 400 });
+          }
+
+          const failed = results.filter(r => !r.success);
+          const sentCount = results.length - failed.length;
+          if (failed.length > 0) {
+            console.error(`[MESSAGES_POST] ${failed.length}/${results.length} e-mails en échec (annonce déjà enregistrée).`);
+            return NextResponse.json({
+              success: true,
+              data,
+              emailsSent: sentCount,
+              emailsFailed: failed.length,
+              emailWarning: `${sentCount} e-mail(s) envoyé(s), ${failed.length} en attente (Gmail saturé temporairement). L'annonce est bien enregistrée dans l'application.`,
+            });
           }
           console.log(`[MESSAGES_POST] Tous les e-mails ont été traités avec succès.`);
         }
