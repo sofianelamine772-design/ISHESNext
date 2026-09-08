@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { auth } from '@clerk/nextjs/server';
 import { sendNewMessageEmail } from '@/lib/mail';
+import { EMAIL_ARCHIVE_ID, SYSTEM_LOGGER_ID } from '@/lib/email-log';
+import { htmlToPlainText, looksLikeHtml, sanitizeEmailHtml } from '@/lib/email-html';
 
 import webPush from 'web-push';
 
@@ -23,7 +25,11 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { sender_id, receiver_id, content, type, title, target_class_id, target_class_ids, format } = body;
+    const { sender_id, receiver_id, type, title, target_class_id, target_class_ids, format } = body;
+    let content = body.content;
+    if (typeof content === 'string' && sender_id === 'admin_system' && looksLikeHtml(content)) {
+      content = sanitizeEmailHtml(content);
+    }
 
     const classesToTarget: string[] = [];
     if (target_class_ids && target_class_ids.length > 0) classesToTarget.push(...target_class_ids);
@@ -67,7 +73,7 @@ export async function POST(req: Request) {
     if (sender_id === 'admin_system') {
       try {
         let pushSubs: any[] = [];
-        let emailsToSend: { email: string; first_name: string; subject?: string }[] = [];
+        let emailsToSend: { email: string; first_name: string; subject?: string; studentId?: string }[] = [];
 
         if (type === 'private' && receiver_id && receiver_id !== 'admin_system') {
           // Message privé : un seul élève
@@ -86,7 +92,8 @@ export async function POST(req: Request) {
             emailsToSend.push({
               email: student.email,
               first_name: student.first_name || 'Élève',
-              subject: title || undefined
+              subject: title || undefined,
+              studentId: receiver_id,
             });
           }
         }
@@ -122,7 +129,8 @@ export async function POST(req: Request) {
                 emailsToSend.push({
                   email: s.email,
                   first_name: s.first_name || 'Élève',
-                  subject: title || undefined
+                  subject: title || undefined,
+                  studentId: s.id,
                 });
               }
             });
@@ -150,7 +158,7 @@ export async function POST(req: Request) {
               // Élèves de la classe
               const { data: students } = await supabaseAdmin
                 .from('etudiants')
-                .select('email, first_name')
+                .select('id, email, first_name')
                 .in('id', studentIds);
               
               if (students && students.length > 0) {
@@ -164,7 +172,8 @@ export async function POST(req: Request) {
                     emailsToSend.push({
                       email: s.email,
                       first_name: s.first_name || 'Élève',
-                      subject: displayTitle || undefined
+                      subject: displayTitle || undefined,
+                      studentId: s.id,
                     });
                   }
                 });
@@ -177,7 +186,10 @@ export async function POST(req: Request) {
         if (pushSubs && pushSubs.length > 0) {
           const payload = JSON.stringify({
             title: title || 'ISHES',
-            body: content.length > 50 ? content.substring(0, 50) + '...' : content,
+            body: (() => {
+              const plain = htmlToPlainText(content);
+              return plain.length > 50 ? plain.substring(0, 50) + '...' : plain;
+            })(),
             url: type === 'private' ? '/app/eleve/messagerie' : '/app/eleve'
           });
 
@@ -207,6 +219,7 @@ export async function POST(req: Request) {
           const results: { email: string; success: boolean; error?: unknown }[] = [];
           const BATCH_SIZE = 5;
           const BATCH_DELAY_MS = 1500;
+          const campaignId = crypto.randomUUID();
 
           for (let i = 0; i < uniqueEmails.length; i += BATCH_SIZE) {
             const batch = uniqueEmails.slice(i, i + BATCH_SIZE);
@@ -217,7 +230,9 @@ export async function POST(req: Request) {
                     email: item.email,
                     firstName: item.first_name,
                     messageContent: content,
-                    title: item.subject
+                    title: item.subject,
+                    campaignId,
+                    studentId: item.studentId,
                   });
                   return { email: item.email, success: res.success, error: res.error };
                 } catch (mailErr: any) {
@@ -316,7 +331,7 @@ export async function GET(req: Request) {
 
       messages?.forEach(m => {
         const studentId = m.sender_id === 'admin_system' ? m.receiver_id : m.sender_id;
-        if (!studentId || studentId === 'admin_system') return;
+        if (!studentId || studentId === 'admin_system' || studentId === EMAIL_ARCHIVE_ID || studentId === SYSTEM_LOGGER_ID) return;
 
         const isUnreadToAdmin = m.sender_id === studentId && m.receiver_id === 'admin_system' && !m.is_read;
 
@@ -385,7 +400,12 @@ export async function GET(req: Request) {
       }
 
       const filtered = (anns || []).filter(
-        (m: any) => m.type === 'global' || (m.type === 'class' && m.target_class_id === classId)
+        (m: any) =>
+          m.sender_id !== EMAIL_ARCHIVE_ID &&
+          m.sender_id !== SYSTEM_LOGGER_ID &&
+          m.title !== 'system_error' &&
+          m.title !== 'email_sent' &&
+          (m.type === 'global' || (m.type === 'class' && m.target_class_id === classId))
       );
 
       return NextResponse.json(filtered);

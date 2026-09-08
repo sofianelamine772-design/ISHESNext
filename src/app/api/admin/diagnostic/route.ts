@@ -487,23 +487,30 @@ export async function GET() {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // --- NETTOYAGE: Supprimer les logs d'emails antérieurs à aujourd'hui ---
-      await supabaseAdmin
-        .from('messages')
-        .delete()
-        .eq('sender_id', 'system_logger')
-        .eq('title', 'email_sent')
-        .lt('created_at', today.toISOString());
-
-      // --- COMPTAGE: Emails envoyés aujourd'hui ---
-      const { count: emailCount } = await supabaseAdmin
-        .from('messages')
+      const { count: tableCount, error: tableCountError } = await supabaseAdmin
+        .from('email_logs')
         .select('*', { count: 'exact', head: true })
-        .eq('sender_id', 'system_logger')
-        .eq('title', 'email_sent')
         .gte('created_at', today.toISOString());
 
-      emailsSentToday = emailCount || 0;
+      if (!tableCountError) {
+        emailsSentToday = tableCount || 0;
+      } else {
+        const { count: archiveCount } = await supabaseAdmin
+          .from('messages')
+          .select('*', { count: 'exact', head: true })
+          .eq('sender_id', 'email_archive')
+          .eq('receiver_id', 'email_archive')
+          .gte('created_at', today.toISOString());
+
+        const { count: legacyCount } = await supabaseAdmin
+          .from('messages')
+          .select('*', { count: 'exact', head: true })
+          .eq('sender_id', 'system_logger')
+          .eq('title', 'email_sent')
+          .gte('created_at', today.toISOString());
+
+        emailsSentToday = (archiveCount || 0) + (legacyCount || 0);
+      }
 
       // --- ERREURS SYSTÈMES ---
       const { data: errorLogs } = await supabaseAdmin

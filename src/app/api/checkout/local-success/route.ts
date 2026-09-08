@@ -335,6 +335,27 @@ export async function GET(req: Request) {
       }
     }
 
+    if (payerEmail) {
+      try {
+        const { maybeSendPresentielRentreeEmail } = await import('@/lib/mail');
+        let formationType: string | null = null;
+        if (formationUuid) {
+          const { data: form } = await supabaseAdmin
+            .from('formations')
+            .select('type')
+            .eq('id', formationUuid)
+            .maybeSingle();
+          formationType = form?.type || null;
+        }
+        const rentreeResult = await maybeSendPresentielRentreeEmail(payerEmail, formationId, formationType);
+        if (!rentreeResult.skipped && rentreeResult.success) {
+          console.log(`[LOCAL_SUCCESS] Présentiel rentrée email sent to ${payerEmail}`);
+        }
+      } catch (e) {
+        console.error('[LOCAL_SUCCESS] Failed to send présentiel rentrée email', e);
+      }
+    }
+
     console.log(`[LOCAL_SUCCESS] Done. Created/updated ${studentIds.length} student(s) for ${payerEmail}`);
 
     return NextResponse.redirect(

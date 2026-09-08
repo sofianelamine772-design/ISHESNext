@@ -122,6 +122,24 @@ CREATE TABLE IF NOT EXISTS public.messages (
     CONSTRAINT messages_target_class_id_fkey FOREIGN KEY (target_class_id) REFERENCES public.classes(id) ON DELETE CASCADE
 );
 
+-- Table : email_logs (preuve d'envoi)
+CREATE TABLE IF NOT EXISTS public.email_logs (
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    created_at timestamp with time zone DEFAULT now(),
+    campaign_id uuid,
+    recipient_email text NOT NULL,
+    recipient_name text,
+    student_id text,
+    subject text NOT NULL,
+    content_html text,
+    content_text text,
+    type text DEFAULT 'system'::text,
+    status text NOT NULL DEFAULT 'sent'::text CHECK (status = ANY (ARRAY['sent'::text, 'failed'::text])),
+    smtp_message_id text,
+    error text,
+    CONSTRAINT email_logs_pkey PRIMARY KEY (id)
+);
+
 -- Table : push_subscriptions
 CREATE TABLE IF NOT EXISTS public.push_subscriptions (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -149,6 +167,9 @@ CREATE INDEX IF NOT EXISTS idx_messages_sender ON public.messages(sender_id);
 CREATE INDEX IF NOT EXISTS idx_messages_receiver ON public.messages(receiver_id);
 CREATE INDEX IF NOT EXISTS idx_messages_type ON public.messages(type);
 CREATE INDEX IF NOT EXISTS idx_messages_class ON public.messages(target_class_id);
+CREATE INDEX IF NOT EXISTS idx_email_logs_recipient ON public.email_logs(recipient_email);
+CREATE INDEX IF NOT EXISTS idx_email_logs_created ON public.email_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_email_logs_campaign ON public.email_logs(campaign_id);
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_inscription_formation ON public.inscriptions (etudiant_id, formation_id) WHERE class_id IS NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_inscription_class ON public.inscriptions (etudiant_id, class_id) WHERE class_id IS NOT NULL;

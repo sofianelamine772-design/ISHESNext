@@ -8,6 +8,7 @@ import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Se
 import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction, createStudentManualAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
+import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
 import { cn, getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 
@@ -1272,12 +1273,11 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Titre de l'e-mail / Objet</label>
-                  <input
-                    type="text"
-                    placeholder="Ex: Rappel de cours / Changement de salle"
+                  <EmailSubjectAutocomplete
                     value={contactSubject}
-                    onChange={(e) => setContactSubject(e.target.value)}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm"
+                    onChange={setContactSubject}
+                    placeholder="Ex: Rappel de cours / Changement de salle"
+                    inputClassName="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm"
                   />
                 </div>
 

@@ -25,6 +25,19 @@ if (smtpUser && smtpPass) {
   console.log(`[SMTP] Transporter initialisé pour l'utilisateur : ${smtpUser}`);
 }
 
+const DEFAULT_ADMIN_INBOX = [
+  'sofianelamine772@gmail.com',
+  'ishes.contact@gmail.com',
+];
+
+export function getAdminNotificationEmails(): string[] {
+  const fromEnv = (process.env.ADMIN_EMAIL || '')
+    .split(',')
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+  return Array.from(new Set([...DEFAULT_ADMIN_INBOX.map((email) => email.toLowerCase()), ...fromEnv]));
+}
+
 function isTransientSmtpError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error || '');
   return /421|4\.3\.0|Temporary System Problem|try again later/i.test(message);
@@ -42,18 +55,61 @@ interface SendEmailParams {
     content: any;
     contentType?: string;
   }>;
+  meta?: {
+    type?: string;
+    campaignId?: string;
+    studentId?: string;
+    recipientName?: string;
+  };
 }
 
-export async function sendEmail({ to, subject, html, text, from, replyTo, attachments }: SendEmailParams) {
+async function archiveOutgoingEmail(params: {
+  to: string | string[];
+  subject: string;
+  html: string;
+  text: string;
+  status: 'sent' | 'failed';
+  smtpMessageId?: string | null;
+  error?: unknown;
+  meta?: SendEmailParams['meta'];
+}) {
+  try {
+    const { recordEmailLog } = await import('./email-log');
+    const recipients = (Array.isArray(params.to) ? params.to : String(params.to).split(','))
+      .map((item) => item.trim())
+      .filter(Boolean);
+    for (const recipient of recipients) {
+      if (!recipient) continue;
+      await recordEmailLog({
+        campaign_id: params.meta?.campaignId || null,
+        recipient_email: recipient,
+        recipient_name: params.meta?.recipientName || null,
+        student_id: params.meta?.studentId || null,
+        subject: params.subject,
+        content_html: params.html,
+        content_text: params.text,
+        type: params.meta?.type || 'system',
+        status: params.status,
+        smtp_message_id: params.smtpMessageId || null,
+        error: params.error ? String(params.error instanceof Error ? params.error.message : params.error) : null,
+      });
+    }
+  } catch (e) {
+    console.error('[EMAIL_LOG] Failed to archive outgoing email', e);
+  }
+}
+
+export async function sendEmail({ to, subject, html, text, from, replyTo, attachments, meta }: SendEmailParams) {
+  const textFallback = text || html.replace(/<[^>]+>/g, '\n').replace(/\n\s*\n/g, '\n\n').trim();
+
   try {
     if (!transporter) {
       console.warn("[SMTP] Transporter non initialisé. L'email n'a pas été envoyé.");
+      await archiveOutgoingEmail({
+        to, subject, html, text: textFallback, status: 'failed', error: 'SMTP non configuré', meta,
+      });
       return { success: false, error: "SMTP non configuré" };
     }
-
-    // Génération automatique d'une version texte si elle n'est pas fournie (Anti-Spam)
-    // Les filtres anti-spam pénalisent fortement les e-mails 100% HTML sans version texte.
-    const textFallback = text || html.replace(/<[^>]+>/g, '\n').replace(/\n\s*\n/g, '\n\n').trim();
 
     const mailOptions = {
       from: from || `"ISHES" <${smtpUser}>`,
@@ -80,22 +136,17 @@ export async function sendEmail({ to, subject, html, text, from, replyTo, attach
     }
     console.log(`[SMTP] E-mail envoyé avec succès (Nodemailer) :`, info.messageId);
 
-    // Optionnel : Enregistrer cet événement dans la table des messages pour le dashboard
-    try {
-      const { logSystemEvent } = await import('@/lib/error-logger');
-      await logSystemEvent('email_sent', {
-        to: Array.isArray(to) ? to.join(',') : to,
-        subject: subject,
-        messageId: info.messageId
-      });
-    } catch (e) {
-      console.error("Failed to log email event", e);
-    }
+    await archiveOutgoingEmail({
+      to, subject, html, text: textFallback, status: 'sent', smtpMessageId: info.messageId, meta,
+    });
 
     return { success: true, data: info };
 
   } catch (error) {
     console.error("Failed to send email:", error);
+    await archiveOutgoingEmail({
+      to, subject, html, text: textFallback, status: 'failed', error, meta,
+    });
     await logSystemError('Mailing Service', error);
     return { success: false, error };
   }
@@ -167,7 +218,8 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
   return sendEmail({
     to: email,
     subject: "✨ Bienvenue dans la famille ISHES ! Votre espace vous attend",
-    html
+    html,
+    meta: { type: 'welcome', recipientName: firstName },
   });
 }
 
@@ -205,7 +257,8 @@ export async function sendPaymentReminderEmail(email: string, firstName: string,
   return sendEmail({
     to: email,
     subject: "ISHES - Action requise concernant votre paiement",
-    html
+    html,
+    meta: { type: 'reminder', recipientName: firstName },
   });
 }
 
@@ -214,32 +267,36 @@ export async function sendNewMessageEmail({
   firstName,
   messageContent,
   title,
+  campaignId,
+  studentId,
 }: {
   email: string;
   firstName: string;
   messageContent: string;
   title?: string;
+  campaignId?: string;
+  studentId?: string;
 }) {
-  const processedContent = messageContent
-    .replace(/\n/g, '<br />')
-    .replace(
-      /(https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9_-]+)/g,
-      '<div style="text-align: center; margin: 20px 0;"><a href="$1" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-family: sans-serif; font-weight: bold; font-style: normal; text-align: center;">💬 Rejoindre le groupe WhatsApp</a></div>'
-    );
+  const { toEmailBodyHtml, htmlToPlainText, escapeHtml } = await import('./email-html');
+  const processedContent = toEmailBodyHtml(messageContent).replace(
+    /(?<!href=["'])(https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9_-]+)/g,
+    '<div style="text-align: center; margin: 20px 0;"><a href="$1" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-family: sans-serif; font-weight: bold; font-style: normal; text-align: center;">💬 Rejoindre le groupe WhatsApp</a></div>'
+  );
 
+  const safeTitle = title ? escapeHtml(title) : '';
+  const safeName = escapeHtml(firstName || 'Élève');
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Nouveau message de l'administration ✉️</h2>
+        <h2 style="color: #0a192f; margin-top: 0; font-size: 20px;">${safeTitle || "Nouveau message de l'administration"}</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Bonjour ${firstName},
+          Assalam alaykoum ${safeName},
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Vous avez reçu un nouveau message de la part de l'administration de l'institut <strong>ISHES</strong>.
         </p>
-        ${title ? `<p style="color: #333; font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 5px;">Sujet : ${title}</p>` : ''}
-        <div style="background-color: #f9f9f9; border-left: 4px solid #0a192f; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
+        <div style="background-color: #fdfaf5; border-left: 4px solid #C69C6D; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.7; font-family: Helvetica, Arial, sans-serif;">
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
@@ -253,7 +310,14 @@ export async function sendNewMessageEmail({
   return sendEmail({
     to: email,
     subject: title ? `✉️ ISHES : ${title}` : "✉️ Nouveau message de l'administration ISHES",
-    html
+    html,
+    text: htmlToPlainText(processedContent),
+    meta: {
+      type: 'annonce',
+      campaignId,
+      studentId,
+      recipientName: firstName,
+    },
   });
 }
 
@@ -297,7 +361,135 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
   return sendEmail({
     to: email,
     subject: "✅ ISHES - Votre classe et groupe WhatsApp",
-    html
+    html,
+    meta: { type: 'class_whatsapp', recipientName: firstName },
+  });
+}
+
+export function isPresentielFormationSlug(formationId: string): boolean {
+  const id = (formationId || '').toLowerCase();
+  const normalized = id.replace(/_/g, '-');
+  return id.includes('presentiel')
+    || normalized === 'femme-debutante'
+    || normalized === 'femme-intermediaire';
+}
+
+export async function maybeSendPresentielRentreeEmail(
+  email: string,
+  formationId: string,
+  formationType?: string | null,
+): Promise<{ success: boolean; skipped: boolean; error?: unknown }> {
+  if (!email) return { success: false, skipped: true };
+  if (!isPresentielFormationSlug(formationId) && formationType !== 'presentiel') {
+    return { success: true, skipped: true };
+  }
+  const result = await sendPresentielRentreeEmail(email);
+  return { success: result.success, skipped: false, error: result.error };
+}
+
+export async function sendPresentielRentreeEmail(email: string) {
+  const html = `
+    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; overflow: hidden;">
+      ${emailHeader}
+      <div style="background-color: #0a192f; padding: 22px 30px; text-align: center;">
+        <p style="margin: 0 0 6px 0; color: #C69C6D; font-size: 11px; font-weight: bold; letter-spacing: 0.22em; text-transform: uppercase;">Présentiel à Toulouse</p>
+        <h1 style="margin: 0; color: #ffffff; font-size: 22px; line-height: 1.3;">Rentrée 2026 / 2027</h1>
+        <p style="margin: 8px 0 0 0; color: #d4c4a8; font-size: 14px;">Cours d'arabe et de Tajwid — première semaine d'octobre</p>
+      </div>
+      <div style="padding: 36px 30px 28px 30px;">
+        <p style="color: #0a192f; font-size: 17px; font-weight: bold; margin: 0 0 14px 0;">
+          Assalam alaykoum chers parents, chères étudiantes,
+        </p>
+        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 12px 0;">
+          En espérant que vous vous portez tous pour le mieux,
+        </p>
+        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 28px 0;">
+          Nous vous informons que la rentrée <strong>2026/2027</strong> pour les cours d'<strong>arabe</strong> et de <strong>Tajwid</strong> en présentiel aura lieu la <strong>première semaine d'octobre</strong>.
+        </p>
+
+        <p style="margin: 0 0 14px 0; color: #C69C6D; font-size: 11px; font-weight: bold; letter-spacing: 0.16em; text-transform: uppercase;">
+          Dates de rentrée par créneau — adultes et enfants
+        </p>
+
+        <div style="border: 1px solid #f0e6d4; border-radius: 12px; padding: 16px 18px; margin: 0 0 10px 0; background-color: #fdfaf5;">
+          <p style="margin: 0 0 6px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Samedi — 3 octobre 2026</p>
+          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
+            Pour les élèves inscrits le samedi (matin ou après-midi) :<br />
+            <strong>9h00 – 12h00</strong> &nbsp;ou&nbsp; <strong>13h30 – 16h30</strong>
+          </p>
+        </div>
+
+        <div style="border: 1px solid #f0e6d4; border-radius: 12px; padding: 16px 18px; margin: 0 0 10px 0; background-color: #fdfaf5;">
+          <p style="margin: 0 0 6px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Dimanche — 4 octobre 2026</p>
+          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
+            Pour les élèves inscrits le dimanche (matin ou après-midi) :<br />
+            <strong>9h00 – 12h00</strong> &nbsp;ou&nbsp; <strong>13h30 – 16h30</strong>
+          </p>
+        </div>
+
+        <div style="border: 1px solid #f0e6d4; border-radius: 12px; padding: 16px 18px; margin: 0 0 24px 0; background-color: #fdfaf5;">
+          <p style="margin: 0 0 6px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Mercredi — 7 octobre 2026</p>
+          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
+            Pour les élèves inscrits le mercredi :<br />
+            <strong>13h30 – 16h30</strong>
+          </p>
+        </div>
+
+        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 20px 0;">
+          La liste des fournitures scolaires vous sera envoyée dans un prochain e-mail. Elle sera transmise uniquement aux élèves dont l'inscription est finalisée.
+        </p>
+
+        <div style="background-color: #fff8e8; border-left: 4px solid #C69C6D; padding: 16px 18px; margin: 0 0 24px 0; border-radius: 0 10px 10px 0;">
+          <p style="margin: 0 0 8px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Important</p>
+          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.65;">
+            Seuls les élèves ayant finalisé leur inscription et activé le paiement de la scolarité seront admis en cours. Si ce n'est pas encore votre cas, nous vous invitons à effectuer les démarches nécessaires dans les meilleurs délais.
+          </p>
+        </div>
+
+        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 8px 0;">
+          Au plaisir de vous retrouver pour cette nouvelle année, inchaALLAH.
+        </p>
+        <p style="color: #0a192f; font-size: 15px; font-weight: bold; margin: 0;">
+          Institut ISHES
+        </p>
+      </div>
+      ${emailFooter}
+    </div>
+  `;
+
+  const text = `Assalam alaykoum chers parents, chères étudiantes,
+
+En espérant que vous vous portez tous pour le mieux,
+
+Nous vous informons que la rentrée 2026/2027 pour les cours d'ARABE et de TAJWID en présentiel aura lieu la première semaine d'octobre.
+
+Dates de rentrée par créneau (Adultes et Enfants) :
+
+Pour les élèves inscrits le samedi (matin ou après-midi) :
+• le 3 octobre de 9h00 à 12h00 / ou 13h30 à 16h30
+
+Pour les élèves inscrits le dimanche (matin ou après-midi) :
+• le 4 octobre de 9h00 à 12h00 / ou 13h30 à 16h30
+
+Pour les élèves inscrits le mercredi :
+• le 7 octobre de 13h30 à 16h30
+
+La liste des fournitures scolaires vous sera envoyée dans un prochain e-mail.
+Elle sera transmise uniquement aux élèves dont l'inscription est finalisée.
+
+Important : seuls les élèves ayant finalisé leur inscription et activé le paiement de la scolarité seront admis en cours.
+Si ce n'est pas encore votre cas, nous vous invitons à effectuer les démarches nécessaires dans les meilleurs délais.
+
+Au plaisir de vous retrouver pour cette nouvelle année, inchaALLAH.
+
+Institut ISHES`;
+
+  return sendEmail({
+    to: email,
+    subject: "ISHES — Rentrée présentiel 2026/2027 : dates par créneau",
+    html,
+    text,
+    meta: { type: 'rentree' },
   });
 }
 
@@ -335,9 +527,10 @@ export async function sendAdminNewMessageEmail({
   `;
 
   return sendEmail({
-    to: "sofianelamine772@gmail.com",
+    to: getAdminNotificationEmails(),
     subject: `✉️ Nouveau message de ${studentName} - ISHES`,
-    html
+    html,
+    meta: { type: 'admin_internal', recipientName: 'Administration' },
   });
 }
 
@@ -491,10 +684,11 @@ export async function sendBackupReportEmail(params: {
   }
 
   return sendEmail({
-    to: "sofianelamine772@gmail.com, ishes.contact@gmail.com",
+    to: getAdminNotificationEmails(),
     subject: `📦 Sauvegarde automatique BD - ${date} - ISHES`,
     html,
-    attachments: attachments.length > 0 ? attachments : undefined
+    attachments: attachments.length > 0 ? attachments : undefined,
+    meta: { type: 'admin_internal' },
   });
 }
 
@@ -544,8 +738,9 @@ export async function sendAdminNewStudentNotificationEmail(params: {
   `;
 
   return sendEmail({
-    to: "sofianelamine772@gmail.com, ishes.contact@gmail.com",
+    to: getAdminNotificationEmails(),
     subject: `🎉 Nouvelle Inscription - ${studentName}`,
-    html
+    html,
+    meta: { type: 'admin_internal', recipientName: studentName },
   });
 }

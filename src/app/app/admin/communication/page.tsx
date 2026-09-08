@@ -2,14 +2,18 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AdminSidebar } from "@/components/AdminSidebar";
-import { MessageSquare, Send, User, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock, ChevronRight, Trash2 } from "lucide-react";
+import { MessageSquare, Send, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock, ChevronRight, Trash2, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { fetchClassesAction, fetchStudentsAction } from "@/app/actions/students";
 import { cn } from "@/lib/utils";
+import { EmailComposer } from "@/components/admin/EmailComposer";
+import { EmailHistory } from "@/components/admin/EmailHistory";
+import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
+import { htmlToPlainText, looksLikeHtml } from "@/lib/email-html";
 
 export default function AdminCommunicationPage() {
-  const [activeTab, setActiveTab] = useState<"inbox" | "send">("inbox");
+  const [activeTab, setActiveTab] = useState<"inbox" | "send" | "history">("inbox");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -161,7 +165,7 @@ export default function AdminCommunicationPage() {
   }
 
   async function handleSendBroadcast() {
-    if (!content.trim()) return;
+    if (!htmlToPlainText(content).trim()) return;
     setLoading(true);
     try {
       const body: any = {
@@ -180,7 +184,7 @@ export default function AdminCommunicationPage() {
         return;
       }
 
-      if (broadcastType !== 'private' && title) body.title = title;
+      if (title) body.title = title;
       if (broadcastType === 'private') body.receiver_id = selectedStudent;
       if (broadcastType === 'class') {
         body.target_class_ids = selectedClasses;
@@ -228,6 +232,9 @@ export default function AdminCommunicationPage() {
             </button>
             <button onClick={() => setActiveTab("send")} className={`flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "send" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
               <Send className="w-4 h-4 hidden sm:block" /> Envoi
+            </button>
+            <button onClick={() => setActiveTab("history")} className={`flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "history" ? 'bg-white text-ishes-dark shadow-sm' : 'text-gray-400'}`}>
+              <History className="w-4 h-4 hidden sm:block" /> Historique
             </button>
           </div>
         </header>
@@ -338,7 +345,9 @@ export default function AdminCommunicationPage() {
                               </div>
                               <div className="max-w-sm">
                                 <div className={`px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed ${isAdmin ? 'bg-ishes-dark text-white rounded-br-md shadow-lg shadow-ishes-dark/10' : 'bg-white text-gray-700 border border-gray-100 rounded-bl-md shadow-sm'}`}>
-                                  {msg.content}
+                                  {looksLikeHtml(msg.content) ? (
+                                    <div className="[&_a]:underline" dangerouslySetInnerHTML={{ __html: msg.content }} />
+                                  ) : msg.content}
                                 </div>
                                 <span className={`text-[9px] font-bold text-gray-300 uppercase tracking-widest mt-1 block px-1 ${isAdmin ? 'text-right' : 'text-left'}`}>
                                   {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -380,6 +389,8 @@ export default function AdminCommunicationPage() {
                 )}
               </div>
             </div>
+          ) : activeTab === "history" ? (
+            <EmailHistory />
           ) : (
             /* Nouvel Envoi */
             <div className="flex-1 p-4 md:p-8 overflow-y-auto">
@@ -504,28 +515,30 @@ export default function AdminCommunicationPage() {
                   </div>
                 )}
 
-                {broadcastType !== 'private' && (
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Titre de l'annonce</label>
-                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex: Rappel Vacances Scolaires" className="w-full bg-gray-50 border-gray-100 rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-[#086b51]/20 transition-all" />
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Titre du message</label>
+                  <EmailSubjectAutocomplete
+                    value={title}
+                    onChange={setTitle}
+                    inputClassName="w-full bg-gray-50 border-gray-100 rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-[#086b51]/20 transition-all"
+                  />
+                </div>
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Contenu du message</label>
-                  <textarea rows={6} value={content} onChange={(e) => setContent(e.target.value)} placeholder="Écrivez votre message ici..." className="w-full bg-gray-50 border-gray-100 rounded-2xl py-5 px-6 text-sm font-medium resize-none focus:ring-2 focus:ring-[#086b51]/20 transition-all" />
+                  <EmailComposer value={content} onChange={setContent} placeholder="Écrivez votre message. Utilisez gras, italique, titre et couleurs." />
                 </div>
 
                 <div className="flex justify-between items-center pt-4 border-t border-gray-50">
                   {success && (
                     <div className="text-emerald-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4" /> Message envoyé avec succès !
+                      <CheckCircle2 className="w-4 h-4" /> Message envoyé et archivé !
                     </div>
                   )}
                   <div className="flex-1" />
                   <Button
                     onClick={handleSendBroadcast}
-                    disabled={loading || !content.trim()}
+                    disabled={loading || !htmlToPlainText(content).trim()}
                     className="bg-[#086b51] hover:bg-[#075c45] text-white px-12 py-7 rounded-2xl font-black uppercase tracking-widest text-[11px] shadow-xl shadow-[#086b51]/20"
                   >
                     {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Envoyer le message"}

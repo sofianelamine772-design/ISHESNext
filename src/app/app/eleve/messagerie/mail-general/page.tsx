@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowLeft, Megaphone, Calendar, FileText, Download, Loader2 } from "lucide-react";
+import { ArrowLeft, Megaphone, Calendar, FileText, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { looksLikeHtml } from "@/lib/email-html";
 
 export default function MailGeneralPage() {
   const searchParams = useSearchParams();
@@ -75,8 +76,10 @@ export default function MailGeneralPage() {
             </h1>
           </div>
 
-          <div className="space-y-6 text-gray-600 font-medium leading-relaxed text-lg whitespace-pre-wrap">
-             {announcement.content}
+          <div className={`space-y-6 text-gray-600 font-medium leading-relaxed text-lg ${looksLikeHtml(announcement.content) ? '' : 'whitespace-pre-wrap'}`}>
+             {looksLikeHtml(announcement.content) ? (
+               <div className="[&_h2]:text-2xl [&_h2]:font-black [&_h2]:text-gray-900 [&_a]:text-ishes-blue [&_a]:underline" dangerouslySetInnerHTML={{ __html: announcement.content }} />
+             ) : announcement.content}
           </div>
 
           {/* Attachments Placeholder */}

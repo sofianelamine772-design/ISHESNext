@@ -399,6 +399,28 @@ export async function POST(req: Request) {
       await syncStudentPaidStatus(studentIds[0]); // Puisque c'est par famille, synchroniser un seul ID synchronise tout
     }
 
+    // Email de rentrée présentiel (une fois par paiement, nouvelles inscriptions et réinscriptions)
+    if (payerEmail) {
+      try {
+        const { maybeSendPresentielRentreeEmail } = await import('@/lib/mail');
+        let formationType: string | null = null;
+        if (formationUuid) {
+          const { data: form } = await supabaseAdmin
+            .from('formations')
+            .select('type')
+            .eq('id', formationUuid)
+            .maybeSingle();
+          formationType = form?.type || null;
+        }
+        const rentreeResult = await maybeSendPresentielRentreeEmail(payerEmail, formationId, formationType);
+        if (!rentreeResult.skipped && rentreeResult.success) {
+          console.log(`[WEBHOOK] Présentiel rentrée email sent to ${payerEmail}`);
+        }
+      } catch (e) {
+        console.error('[WEBHOOK] Failed to send présentiel rentrée email', e);
+      }
+    }
+
     // Notification admin (Nouvel élève)
     if (!isRegularisation && !isRenewal) {
       try {

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Search, Send, User, Loader2, Megaphone, CheckCheck } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { htmlToPlainText, looksLikeHtml } from "@/lib/email-html";
 
 export default function MessageriePage() {
   const { user } = useUser();
@@ -199,7 +200,11 @@ export default function MessageriePage() {
                     {/* Bulle */}
                     <div className={`max-w-[85%] md:max-w-xs lg:max-w-md xl:max-w-lg group`}>
                       <div className={`px-4 py-3 md:px-5 md:py-3.5 rounded-[1.25rem] md:rounded-2xl ${isMe ? 'bg-ishes-blue text-white rounded-br-sm' : 'bg-white text-gray-700 border border-gray-100 shadow-sm rounded-bl-sm'}`}>
-                        <p className="text-[13px] md:text-sm leading-relaxed font-medium break-words">{msg.content}</p>
+                        <p className="text-[13px] md:text-sm leading-relaxed font-medium break-words">
+                          {looksLikeHtml(msg.content) ? (
+                            <span dangerouslySetInnerHTML={{ __html: msg.content }} />
+                          ) : msg.content}
+                        </p>
                       </div>
                       <div className={`flex items-center gap-1 mt-1.5 px-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
                         <span className="text-[9px] font-bold text-gray-300 uppercase tracking-widest">
@@ -269,7 +274,7 @@ export default function MessageriePage() {
                     </span>
                   </div>
                   <h3 className="text-base md:text-lg font-black text-gray-800 uppercase tracking-tight group-hover:text-ishes-blue transition-colors mb-2 leading-snug">{ann.title || "Sans titre"}</h3>
-                  <p className="text-[13px] md:text-sm text-gray-500 line-clamp-2 font-medium leading-relaxed">{ann.content}</p>
+                  <p className="text-[13px] md:text-sm text-gray-500 line-clamp-2 font-medium leading-relaxed">{htmlToPlainText(ann.content || '')}</p>
                   <div className="flex items-center gap-1.5 mt-4 md:mt-5">
                     <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest group-hover:gap-2 transition-all">Lire l'annonce →</span>
                   </div>
