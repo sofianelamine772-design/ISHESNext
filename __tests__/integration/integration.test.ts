@@ -197,13 +197,22 @@ jest.mock('@clerk/nextjs/server', () => ({
 }));
 
 const mockSendAdminNewMessageEmail = jest.fn();
+const mockMaybeSendPresentielRentreeEmail = jest.fn().mockImplementation(
+  async (_email: string, formationId: string, formationType?: string | null) => {
+    const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
+    if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
+      return { success: true, skipped: true };
+    }
+    return { success: true, skipped: false };
+  }
+);
 jest.mock('@/lib/mail', () => ({
   sendAdminNewMessageEmail: (params: any) => mockSendAdminNewMessageEmail(params),
   sendWelcomeEmail: jest.fn(),
   sendPaymentReminderEmail: jest.fn().mockResolvedValue({ success: true }),
   sendClassAssignmentEmail: jest.fn(),
   sendPresentielRentreeEmail: jest.fn(),
-  maybeSendPresentielRentreeEmail: jest.fn().mockResolvedValue({ success: true, skipped: true }),
+  maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
   sendEmail: jest.fn(),
 }));
 
@@ -227,6 +236,15 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
     jest.clearAllMocks();
     mockAuth.mockReset();
     mockSendAdminNewMessageEmail.mockReset();
+    mockMaybeSendPresentielRentreeEmail.mockImplementation(
+      async (_email: string, formationId: string, formationType?: string | null) => {
+        const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
+        if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
+          return { success: true, skipped: true };
+        }
+        return { success: true, skipped: false };
+      }
+    );
 
     // Reset Db
     mockDb.etudiants = [];
@@ -311,7 +329,7 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
           object: {
             id: 'cs_test_session_123',
             payment_status: 'paid',
-            amount_total: 64900,
+            amount_total: 79900,
             currency: 'eur',
             mode: 'payment',
             metadata: {
@@ -342,6 +360,11 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
       expect(createdInscription).toBeDefined();
       expect(createdInscription.formation_id).toBe('uuid-tajwid-intensif');
       expect(createdInscription.class_id).toBe('class-tajwid-intensif-default');
+
+      if (mockMaybeSendPresentielRentreeEmail.mock.calls.length > 0) {
+        const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
+        expect(rentree.skipped).toBe(true);
+      }
     });
   });
 
@@ -355,7 +378,7 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         last_name: 'Lamine'
       });
 
-      // 2. Ajouter les inscriptions actives (Tajwid Intensif à 649 €)
+      // 2. Ajouter les inscriptions actives (Tajwid Intensif à 799 €)
       mockDb.inscriptions.push({
         id: 'ins_456',
         etudiant_id: 'student_456',

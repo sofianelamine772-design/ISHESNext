@@ -267,7 +267,7 @@ export default function CoursPresentielFemmeDebutantePage() {
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Paiement facilité</span>
-                <span className="text-sm lg:text-base font-bold text-white">5 x 79,80 € sans frais</span>
+                <span className="text-sm lg:text-base font-bold text-white">1x, 3x, 5x ou 10x sans frais</span>
               </div>
             </div>
           </div>

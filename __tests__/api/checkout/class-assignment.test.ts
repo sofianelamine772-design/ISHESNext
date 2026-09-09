@@ -9,18 +9,26 @@ describe('Vérification de l\'assignation des classes (Toutes Formations)', () =
     expect(expectedInternalPlanId).toBe('presentiel-global');
   });
 
-  it('Les classes pour Femmes Présentiel (26 et 31) ont un UUID dans CLASS_ID_TO_UUID', () => {
-    // femme-debutante-presentiel -> classId 26
-    expect(CLASS_ID_TO_UUID[26]).toBeDefined();
-    
-    // femme-intermediaire-presentiel -> classId 31
-    expect(CLASS_ID_TO_UUID[31]).toBeDefined();
+  it('Les classes pour Femmes Présentiel (24 et 25) ont un UUID dans CLASS_ID_TO_UUID', () => {
+    // femme-debutante-presentiel -> classId 24
+    expect(CLASS_ID_TO_UUID[24]).toBeDefined();
+
+    // femme-intermediaire-presentiel -> classId 25
+    expect(CLASS_ID_TO_UUID[25]).toBeDefined();
   });
 
-  it('TOUTES les classes de CLASS_ID_TO_UUID ont un UUID valide et unique', () => {
+  it('ne remappe pas les plans femme vers presentiel-global (prix 649 € vs 480 €)', () => {
+    expect('femme-debutante-presentiel').not.toBe('presentiel-global');
+    expect('femme-intermediaire-presentiel').not.toBe('presentiel-global');
+    expect(PROGRAMS_DATA.femme_debutante_presentiel.price).toBe('649 €');
+    expect(PROGRAMS_DATA.tajwid_intensif.price).toBe('799 €');
+  });
+
+  it('le catalogue 1–25 est inscriptible (chaque classe a un UUID checkout)', () => {
     const uuids = Object.values(CLASS_ID_TO_UUID);
     const uniqueUuids = new Set(uuids);
-    expect(uuids.length).toBe(uniqueUuids.size); // Pas de doublon
+    expect(uuids).toHaveLength(25);
+    expect(uuids.length).toBe(uniqueUuids.size);
     
     for (const uuid of uuids) {
       expect(uuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);

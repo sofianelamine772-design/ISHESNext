@@ -10,7 +10,7 @@ const expectedPrices = {
   "pack_accompagnement": 49,
   "correction_fatiha": 0,
   "tajwid_standard": 649,
-  "tajwid_intensif": 649,
+  "tajwid_intensif": 799,
   "fiqh_malikite": 399,
   "sciences_du_coran": 399,
   "sciences_hadith": 349,

@@ -88,4 +88,33 @@ describe('Checkout API - Présentiel Date Blocking Logic', () => {
       expect(json.error).not.toContain("Les inscriptions en présentiel sont fermées");
     }
   });
+
+  it('devrait bloquer femme-debutante-presentiel en février (présentiel, pas 480 € global)', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-02-15T12:00:00Z'));
+
+    const req = new NextRequest('http://localhost:3000/api/checkout', {
+      method: 'POST',
+      body: JSON.stringify({ formationId: 'femme-debutante-presentiel' })
+    });
+
+    const res = await POST(req);
+    const json = await res.json();
+    expect(res.status).toBe(400);
+    expect(json.error).toContain("Les inscriptions en présentiel sont fermées");
+  });
+
+  it('devrait autoriser le Tajwid Intensif (distanciel 799 €) en février', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-02-15T12:00:00Z'));
+
+    const req = new NextRequest('http://localhost:3000/api/checkout', {
+      method: 'POST',
+      body: JSON.stringify({ formationId: 'tajwid_intensif' })
+    });
+
+    const res = await POST(req);
+    const json = await res.json();
+    if (res.status === 400) {
+      expect(json.error).not.toContain("Les inscriptions en présentiel sont fermées");
+    }
+  });
 });

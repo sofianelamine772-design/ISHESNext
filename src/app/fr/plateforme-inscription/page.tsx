@@ -9,7 +9,7 @@ import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, Gr
 import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
-import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
+import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug } from "@/lib/presentiel-data";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
 
@@ -102,6 +102,8 @@ function InscriptionForm() {
     const isChildSlot = (childrenList?.[0]?.slot || "").toLowerCase();
     
     if (normalized === 'femme_debutante_presentiel' || normalized === 'femme_intermediaire_presentiel') return 649;
+    const selectedClassId = parseInt(String(formData?.classId || classIdParam || ''), 10);
+    if (selectedClassId === FEMME_DEBUTANTE_CLASS_ID || selectedClassId === FEMME_INTERMEDIAIRE_CLASS_ID) return 649;
 
     if (
       normalized === 'presentiel_global' || 
@@ -122,7 +124,7 @@ function InscriptionForm() {
 
     // Fallbacks
     if (normalized === 'tarbiya_islamiya') return 249;
-    if (normalized === 'tajwid_intensif') return 649;
+    if (normalized === 'tajwid_intensif') return 799;
     if (normalized === 'sciences_du_coran') return 399;
     if (normalized === 'spiritualite_islam') return 399;
     if (normalized === 'al_aqida') return 250;
@@ -175,7 +177,13 @@ function InscriptionForm() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          planId: planId || "formation_generale",
+          planId: resolvePresentielCheckoutSlug(
+            planId || "formation_generale",
+            (registrationType === 'child'
+              ? namedChildren.map((c) => parseInt(String(c.classId), 10))
+              : [parseInt(String(formData.classId || ''), 10)]
+            ).filter((id) => !Number.isNaN(id)),
+          ),
           title: planName || "Formation ISHES",
           price: totalPrice + " €",
           mode: (planId === 'tajwid_standard' || planId === 'presentiel-global') ? "presentiel" : "distanciel",
@@ -317,7 +325,17 @@ function InscriptionForm() {
       let initHoraire = "";
       let initClassId = "";
 
-      if (planId === 'presentiel-global' && initSlot && initNiveau) {
+      if (planId === 'femme_intermediaire_presentiel' || planId === 'femme-intermediaire-presentiel') {
+        initClassId = String(FEMME_INTERMEDIAIRE_CLASS_ID);
+        initSlot = initSlot || "samedi";
+        initNiveau = initNiveau || "femme_intermediaire";
+        initHoraire = PRESENTIEL_CLASSES.find(c => c.id === FEMME_INTERMEDIAIRE_CLASS_ID)?.horaire || "";
+      } else if (planId === 'femme_debutante_presentiel' || planId === 'femme-debutante-presentiel') {
+        initClassId = String(FEMME_DEBUTANTE_CLASS_ID);
+        initSlot = initSlot || "dimanche";
+        initNiveau = initNiveau || "femme_debutante";
+        initHoraire = PRESENTIEL_CLASSES.find(c => c.id === FEMME_DEBUTANTE_CLASS_ID)?.horaire || "";
+      } else if (planId === 'presentiel-global' && initSlot && initNiveau) {
         const aud = registrationType === 'child' ? 'enfant' : 'adulte';
         const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
           c.planId === 'presentiel-global' &&
@@ -496,10 +514,8 @@ function InscriptionForm() {
       case "elementaire_1_plus": return "Élémentaire 1+";
       case "elementaire_2": return "Élémentaire 2";
       case "elementaire_2_plus": return "Élémentaire 2+";
-      case "elementaire_3": return "Élémentaire 3";
-      case "elementaire_3_plus": return "Élémentaire 3+";
+      case "elementaire_3": return "Élémentaire 3 et 3+";
       case "elementaire_4": return "Élémentaire 4";
-      case "elementaire_5": return "Élémentaire 5";
       case "femme_debutante": return "🧕 Femme Débutante";
       case "femme_intermediaire": return "🧕 Femme Intermédiaire";
       default: return lvl;

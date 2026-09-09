@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CheckCircle2, ArrowRight, Play, Star, ShieldCheck, Zap, Heart, Users, Calendar, BookOpen, Eye, X, CalendarDays, Search, Building2, MapPin } from "lucide-react";
 import { PRESENTIEL_CLASSES, PresentielClass } from "@/lib/presentiel-data";
+import { getClassSlotStatus } from "@/lib/class-availability";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 
@@ -51,9 +52,8 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
       fetchStatus();
    }, []);
 
-   const getSlotStatus = (day?: string) => {
-      if (!day) return null;
-      return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
+   const getClassStatus = (classId: number) => {
+      return getClassSlotStatus(slotsStatus, classId);
    };
 
    const getPresentielClassesForCourse = (): PresentielClass[] => {
@@ -539,7 +539,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   {/* Results Grid */}
                   <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                      {filteredClasses.map((c) => {
-                        const status = getSlotStatus(c.slotKey);
+                        const status = getClassStatus(c.id);
                         const isFull = status?.est_plein;
                         const regUrl = `/inscription?plan=${c.planId}&slot=${c.slotKey}&classId=${c.id}&audience=${c.audience}`;
 

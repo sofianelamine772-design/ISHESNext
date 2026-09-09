@@ -7,6 +7,7 @@ import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
+import { isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -267,6 +268,12 @@ export async function fetchStudentsAction(academicYear?: string) {
           classes (
             name,
             type,
+            external_id,
+            niveau,
+            age_condition,
+            day_of_week,
+            periode,
+            audience,
             formations (title, type)
           )
         )
@@ -309,6 +316,14 @@ export async function fetchStudentsAction(academicYear?: string) {
           !(student.id && String(student.id).startsWith('manual_'));
         return !isParentWithoutInscriptions;
       });
+
+      for (const student of data) {
+        for (const ins of student.inscriptions || []) {
+          if (ins.classes) {
+            ins.classes.name = resolvePresentielClassName(ins.classes);
+          }
+        }
+      }
     }
 
     return { success: true, data };
@@ -328,13 +343,20 @@ export async function fetchStudentByIdAction(id: string) {
           status,
           academic_year,
           formations (title),
-          classes (name)
+          classes (name, type, external_id, niveau, age_condition, day_of_week, periode, audience)
         )
       `)
       .eq('id', id)
       .single();
 
     if (error) throw error;
+    if (data?.inscriptions) {
+      for (const ins of data.inscriptions) {
+        if (ins.classes) {
+          ins.classes.name = resolvePresentielClassName(ins.classes);
+        }
+      }
+    }
     return { success: true, data };
   } catch (err) {
     console.error("Fetch Student Detail Error:", err);
@@ -382,33 +404,25 @@ export async function fetchClassesAction(academicYear?: string) {
 
     if (cError) throw cError;
 
-    const formatted = classes.map((c: any) => {
-      let scheduleStr = "";
-      
-      let day = (c.day_of_week || '').toLowerCase();
-      let period = (c.periode || '').toLowerCase();
-      
-      if (!day) {
-        const nameLower = (c.name || '').toLowerCase();
-        if (nameLower.includes('mercredi')) day = 'mercredi';
-        else if (nameLower.includes('samedi')) day = 'samedi';
-        else if (nameLower.includes('dimanche')) day = 'dimanche';
-      }
-      if (!period) {
-        const nameLower = (c.name || '').toLowerCase();
-        if (nameLower.includes('matin')) period = 'matin';
-        else if (nameLower.includes('a-m') || nameLower.includes('après-midi') || nameLower.includes('apres-midi')) period = 'après-midi';
-      }
-
-      if (day === 'mercredi') {
-        scheduleStr = "13h30 - 16h30";
-      } else if (day === 'samedi' || day === 'dimanche') {
-        if (period === 'matin') scheduleStr = "09h00 - 12h00";
-        else if (period === 'après-midi' || period === 'apres-midi') scheduleStr = "13h30 - 16h30";
-      }
+    const formatted = (classes || [])
+      .filter((c: any) => c.type !== 'presentiel' || isOfficialPresentielClass(c.external_id))
+      .map((c: any) => {
+      let scheduleStr = presentielHoursLabel(c.day_of_week || '', c.periode);
       return {
         id: c.id,
-        name: c.name,
+        externalId: c.external_id ?? null,
+        name: c.type === 'presentiel'
+          ? resolvePresentielClassName({
+              external_id: c.external_id,
+              name: c.name,
+              type: c.type,
+              niveau: c.niveau,
+              age_condition: c.age_condition,
+              day_of_week: c.day_of_week,
+              periode: c.periode,
+              audience: c.audience,
+            })
+          : c.name,
         type: c.type,
         schedule: scheduleStr,
       capacity_limit: c.capacity_limit || 20,
@@ -425,6 +439,11 @@ export async function fetchClassesAction(academicYear?: string) {
           dateJoined: new Date(i.etudiants?.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
         }))
       };
+    })
+    .sort((a: any, b: any) => {
+      if (a.type !== b.type) return a.type === 'presentiel' ? -1 : 1;
+      if (a.type === 'presentiel') return (a.externalId || 0) - (b.externalId || 0);
+      return (a.name || '').localeCompare(b.name || '', 'fr');
     });
 
     return { success: true, data: formatted };
@@ -1057,19 +1076,13 @@ export async function fetchStudentTimetableAction(clerkUserId: string, email?: s
         };
         const dayOfWeek = c.day_of_week?.toLowerCase() || "";
         const mappedDay = dayMap[dayOfWeek] || "Lun";
-        const isMatin = c.periode === "matin";
-
-        let timeSlot = "18:30 - 20:00";
-        if (dayOfWeek === "mercredi") timeSlot = "14:00 - 17:00";
-        else if (dayOfWeek === "samedi") timeSlot = isMatin ? "09:00 - 12:00" : "13:30 - 16:30";
-        else if (dayOfWeek === "dimanche") timeSlot = isMatin ? "11:30 - 14:30" : "13:30 - 16:30";
-        else if (dayOfWeek === "lundi" || dayOfWeek === "mardi") timeSlot = "19:00 - 20:30";
+        const timeSlot = presentielHoursLabel(dayOfWeek, c.periode).replace(/h/g, ':') || "18:30 - 20:00";
 
         return {
           day: mappedDay,
           time: timeSlot,
-          title: ins.formations?.title || c.name,
-          className: c.name,
+          title: ins.formations?.title || resolvePresentielClassName(c),
+          className: resolvePresentielClassName(c),
           niveau: c.niveau,
           ageCondition: c.age_condition,
           dayOfWeek: c.day_of_week,
@@ -1116,20 +1129,14 @@ export async function fetchStudentClassInfoAction(clerkUserId: string, email?: s
 
     const c = inscription.classes as any;
     const dayOfWeek = c?.day_of_week?.toLowerCase() || "";
-    const isMatin = c?.periode === "matin";
-
-    let timeSlot = "18:30 - 20:00";
-    if (dayOfWeek === "mercredi") timeSlot = "14:00 - 17:00";
-    else if (dayOfWeek === "samedi") timeSlot = isMatin ? "09:00 - 12:00" : "13:30 - 16:30";
-    else if (dayOfWeek === "dimanche") timeSlot = isMatin ? "11:30 - 14:30" : "13:30 - 16:30";
-    else if (dayOfWeek === "lundi" || dayOfWeek === "mardi") timeSlot = "19:00 - 20:30";
+    const timeSlot = presentielHoursLabel(dayOfWeek, c?.periode).replace(/h/g, ':') || "18:30 - 20:00";
 
     return {
       success: true,
       data: {
         status: inscription.status,
         formationTitle: (inscription.formations as any)?.title || null,
-        className: c?.name || null,
+        className: c ? resolvePresentielClassName(c) : null,
         niveau: c?.niveau || null,
         ageCondition: c?.age_condition || null,
         dayOfWeek: c?.day_of_week || null,

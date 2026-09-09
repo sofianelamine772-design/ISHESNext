@@ -399,8 +399,8 @@ export async function POST(req: Request) {
       await syncStudentPaidStatus(studentIds[0]); // Puisque c'est par famille, synchroniser un seul ID synchronise tout
     }
 
-    // Email de rentrée présentiel (une fois par paiement, nouvelles inscriptions et réinscriptions)
-    if (payerEmail) {
+    // Mail rentrée : uniquement après une inscription présentiel réellement créée.
+    if (payerEmail && studentIds.length > 0) {
       try {
         const { maybeSendPresentielRentreeEmail } = await import('@/lib/mail');
         let formationType: string | null = null;

@@ -62,6 +62,23 @@ function parseArchiveMessage(row: any): EmailLogEntry | null {
   }
 }
 
+export async function hasSentEmail(params: {
+  recipientEmail: string;
+  type: string;
+  status?: EmailLogStatus;
+}): Promise<boolean> {
+  const { data, error } = await supabaseAdmin
+    .from('email_logs')
+    .select('id')
+    .eq('recipient_email', normalizeEmail(params.recipientEmail))
+    .eq('type', params.type)
+    .eq('status', params.status || 'sent')
+    .limit(1)
+    .maybeSingle();
+
+  return !error && !!data;
+}
+
 export async function recordEmailLog(entry: EmailLogEntry) {
   const payload: EmailLogEntry = {
     ...entry,

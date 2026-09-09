@@ -1,5 +1,12 @@
 import nodemailer from 'nodemailer';
 import { logSystemError } from './error-logger';
+import { hasSentEmail } from './email-log';
+import {
+  PRESENTIEL_RENTREE_EMAIL_TYPE,
+  buildPresentielRentreeEmail,
+  shouldSendPresentielRentreeEmail,
+} from './presentiel-rentree-email';
+export { isPresentielFormationSlug, shouldSendPresentielRentreeEmail } from './presentiel-rentree-email';
 
 // Configuration SMTP facultative (Gmail, etc.)
 const smtpUser = process.env.SMTP_USER;
@@ -366,130 +373,38 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
   });
 }
 
-export function isPresentielFormationSlug(formationId: string): boolean {
-  const id = (formationId || '').toLowerCase();
-  const normalized = id.replace(/_/g, '-');
-  return id.includes('presentiel')
-    || normalized === 'femme-debutante'
-    || normalized === 'femme-intermediaire';
-}
-
 export async function maybeSendPresentielRentreeEmail(
   email: string,
   formationId: string,
   formationType?: string | null,
 ): Promise<{ success: boolean; skipped: boolean; error?: unknown }> {
   if (!email) return { success: false, skipped: true };
-  if (!isPresentielFormationSlug(formationId) && formationType !== 'presentiel') {
+  if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
     return { success: true, skipped: true };
   }
+
+  try {
+    if (await hasSentEmail({ recipientEmail: email, type: PRESENTIEL_RENTREE_EMAIL_TYPE })) {
+      return { success: true, skipped: true };
+    }
+  } catch (e) {
+    console.warn('[RENTREE] Impossible de vérifier un envoi précédent, on envoie quand même.', e);
+  }
+
   const result = await sendPresentielRentreeEmail(email);
   return { success: result.success, skipped: false, error: result.error };
 }
 
 export async function sendPresentielRentreeEmail(email: string) {
-  const html = `
-    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; overflow: hidden;">
-      ${emailHeader}
-      <div style="background-color: #0a192f; padding: 22px 30px; text-align: center;">
-        <p style="margin: 0 0 6px 0; color: #C69C6D; font-size: 11px; font-weight: bold; letter-spacing: 0.22em; text-transform: uppercase;">Présentiel à Toulouse</p>
-        <h1 style="margin: 0; color: #ffffff; font-size: 22px; line-height: 1.3;">Rentrée 2026 / 2027</h1>
-        <p style="margin: 8px 0 0 0; color: #d4c4a8; font-size: 14px;">Cours d'arabe et de Tajwid — première semaine d'octobre</p>
-      </div>
-      <div style="padding: 36px 30px 28px 30px;">
-        <p style="color: #0a192f; font-size: 17px; font-weight: bold; margin: 0 0 14px 0;">
-          Assalam alaykoum chers parents, chères étudiantes,
-        </p>
-        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 12px 0;">
-          En espérant que vous vous portez tous pour le mieux,
-        </p>
-        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 28px 0;">
-          Nous vous informons que la rentrée <strong>2026/2027</strong> pour les cours d'<strong>arabe</strong> et de <strong>Tajwid</strong> en présentiel aura lieu la <strong>première semaine d'octobre</strong>.
-        </p>
-
-        <p style="margin: 0 0 14px 0; color: #C69C6D; font-size: 11px; font-weight: bold; letter-spacing: 0.16em; text-transform: uppercase;">
-          Dates de rentrée par créneau — adultes et enfants
-        </p>
-
-        <div style="border: 1px solid #f0e6d4; border-radius: 12px; padding: 16px 18px; margin: 0 0 10px 0; background-color: #fdfaf5;">
-          <p style="margin: 0 0 6px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Samedi — 3 octobre 2026</p>
-          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
-            Pour les élèves inscrits le samedi (matin ou après-midi) :<br />
-            <strong>9h00 – 12h00</strong> &nbsp;ou&nbsp; <strong>13h30 – 16h30</strong>
-          </p>
-        </div>
-
-        <div style="border: 1px solid #f0e6d4; border-radius: 12px; padding: 16px 18px; margin: 0 0 10px 0; background-color: #fdfaf5;">
-          <p style="margin: 0 0 6px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Dimanche — 4 octobre 2026</p>
-          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
-            Pour les élèves inscrits le dimanche (matin ou après-midi) :<br />
-            <strong>9h00 – 12h00</strong> &nbsp;ou&nbsp; <strong>13h30 – 16h30</strong>
-          </p>
-        </div>
-
-        <div style="border: 1px solid #f0e6d4; border-radius: 12px; padding: 16px 18px; margin: 0 0 24px 0; background-color: #fdfaf5;">
-          <p style="margin: 0 0 6px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Mercredi — 7 octobre 2026</p>
-          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
-            Pour les élèves inscrits le mercredi :<br />
-            <strong>13h30 – 16h30</strong>
-          </p>
-        </div>
-
-        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 20px 0;">
-          La liste des fournitures scolaires vous sera envoyée dans un prochain e-mail. Elle sera transmise uniquement aux élèves dont l'inscription est finalisée.
-        </p>
-
-        <div style="background-color: #fff8e8; border-left: 4px solid #C69C6D; padding: 16px 18px; margin: 0 0 24px 0; border-radius: 0 10px 10px 0;">
-          <p style="margin: 0 0 8px 0; color: #0a192f; font-size: 14px; font-weight: bold;">Important</p>
-          <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.65;">
-            Seuls les élèves ayant finalisé leur inscription et activé le paiement de la scolarité seront admis en cours. Si ce n'est pas encore votre cas, nous vous invitons à effectuer les démarches nécessaires dans les meilleurs délais.
-          </p>
-        </div>
-
-        <p style="color: #555; line-height: 1.7; font-size: 15px; margin: 0 0 8px 0;">
-          Au plaisir de vous retrouver pour cette nouvelle année, inchaALLAH.
-        </p>
-        <p style="color: #0a192f; font-size: 15px; font-weight: bold; margin: 0;">
-          Institut ISHES
-        </p>
-      </div>
-      ${emailFooter}
-    </div>
-  `;
-
-  const text = `Assalam alaykoum chers parents, chères étudiantes,
-
-En espérant que vous vous portez tous pour le mieux,
-
-Nous vous informons que la rentrée 2026/2027 pour les cours d'ARABE et de TAJWID en présentiel aura lieu la première semaine d'octobre.
-
-Dates de rentrée par créneau (Adultes et Enfants) :
-
-Pour les élèves inscrits le samedi (matin ou après-midi) :
-• le 3 octobre de 9h00 à 12h00 / ou 13h30 à 16h30
-
-Pour les élèves inscrits le dimanche (matin ou après-midi) :
-• le 4 octobre de 9h00 à 12h00 / ou 13h30 à 16h30
-
-Pour les élèves inscrits le mercredi :
-• le 7 octobre de 13h30 à 16h30
-
-La liste des fournitures scolaires vous sera envoyée dans un prochain e-mail.
-Elle sera transmise uniquement aux élèves dont l'inscription est finalisée.
-
-Important : seuls les élèves ayant finalisé leur inscription et activé le paiement de la scolarité seront admis en cours.
-Si ce n'est pas encore votre cas, nous vous invitons à effectuer les démarches nécessaires dans les meilleurs délais.
-
-Au plaisir de vous retrouver pour cette nouvelle année, inchaALLAH.
-
-Institut ISHES`;
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const { subject, html, text } = buildPresentielRentreeEmail(`${appUrl}/logo.png`);
 
   return sendEmail({
     to: email,
-    subject: "ISHES — Rentrée présentiel 2026/2027 : dates par créneau",
+    subject,
     html,
     text,
-    meta: { type: 'rentree' },
+    meta: { type: PRESENTIEL_RENTREE_EMAIL_TYPE },
   });
 }
 

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
-import { CLASS_ID_TO_UUID } from '@/lib/presentiel-data';
-import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
+import { CLASS_ID_TO_UUID, resolvePresentielCheckoutSlug } from '@/lib/presentiel-data';
+import { DISTANCE_CLASS_ID_TO_UUID, isOfficialDistanceClassId } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 
@@ -22,8 +22,24 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const formationId = body.formationId || body.planId || '';
     const registrationType = body.registrationType || 'adult';
+    const classIdsToCheck: number[] = [];
+    const collectClassId = (raw: unknown) => {
+      const id = parseInt(String(raw ?? ''), 10);
+      if (Number.isInteger(id) && id > 0) classIdsToCheck.push(id);
+    };
+    if (registrationType === 'child' && Array.isArray(body.childrenList)) {
+      body.childrenList.forEach((child: any) => {
+        if (child.classId) collectClassId(child.classId);
+      });
+    } else if (body.classId) {
+      collectClassId(body.classId);
+    }
+
+    const formationId = resolvePresentielCheckoutSlug(
+      body.formationId || body.planId || '',
+      classIdsToCheck,
+    );
 
     // --- SÉCURITÉ : BLOCAGE DES INSCRIPTIONS PRÉSENTIELLES (30 Nov - 30 Avril) ---
     const isPlanPresentiel = formationId.toLowerCase().includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire';
@@ -87,21 +103,47 @@ export async function POST(req: Request) {
       totalAmount = getFamilyCheckoutTotal(basePrice, childrenCount);
     }
 
-    // --- SECURITY: Check if classes are full ---
-    const classIdsToCheck: number[] = [];
-    if (registrationType === 'child' && Array.isArray(body.childrenList)) {
-      body.childrenList.forEach((child: any) => {
-        if (child.classId) classIdsToCheck.push(parseInt(child.classId, 10));
-      });
-    } else if (body.classId) {
-      classIdsToCheck.push(parseInt(body.classId, 10));
+    // --- SECURITY: Check if présentiel classes are full / inactive ---
+    // Les IDs distanciel (101–108, dont Tarbiya 107/108) ne sont pas des créneaux présentiel.
+    const presentielIdsToCheck = classIdsToCheck.filter((id) => CLASS_ID_TO_UUID[id]);
+    const unknownClassIds = classIdsToCheck.filter(
+      (id) => !CLASS_ID_TO_UUID[id] && !isOfficialDistanceClassId(id),
+    );
+    if (unknownClassIds.length > 0) {
+      return NextResponse.json(
+        { error: "Cette classe n'est plus ouverte à l'inscription. Veuillez choisir un autre créneau." },
+        { status: 400 }
+      );
     }
 
-    if (classIdsToCheck.length > 0) {
+    if (presentielIdsToCheck.length > 0) {
+      const { data: selectedClasses, error: classLookupError } = await supabaseAdmin
+        .from('classes')
+        .select('external_id, is_active')
+        .eq('type', 'presentiel')
+        .in('external_id', presentielIdsToCheck);
+
+      if (classLookupError) {
+        return NextResponse.json({ error: 'Impossible de vérifier les classes.' }, { status: 500 });
+      }
+
+      const activeIds = new Set(
+        (selectedClasses || [])
+          .filter((c: { is_active: boolean }) => c.is_active)
+          .map((c: { external_id: number }) => c.external_id)
+      );
+      const missingOrInactive = presentielIdsToCheck.filter((id) => !activeIds.has(id));
+      if (missingOrInactive.length > 0) {
+        return NextResponse.json(
+          { error: "Cette classe n'est plus ouverte à l'inscription. Veuillez choisir un autre créneau." },
+          { status: 400 }
+        );
+      }
+
       const { data: statusData, error: statusError } = await supabaseAdmin
         .from('vue_etat_creneaux')
         .select('classe_numero, est_plein')
-        .in('classe_numero', classIdsToCheck);
+        .in('classe_numero', presentielIdsToCheck);
 
       if (!statusError && statusData) {
         const fullClasses = statusData.filter((c: any) => c.est_plein === true);

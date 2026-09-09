@@ -1,6 +1,7 @@
 import { POST } from '@/app/api/checkout/route';
 import { NextRequest } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
 import Stripe from 'stripe';
 
 // Mock dependencies
@@ -238,5 +239,81 @@ describe('Checkout API', () => {
     expect(session.line_items[0].price_data.unit_amount).toBe(48000);
     expect(session.metadata.sibling_discount).toBe('0');
     expect(session.metadata.childrenCount).toBe('1');
+  });
+
+  it('facture le Tajwid Intensif à 799 € depuis la base, pas 649 €', async () => {
+    mockFormation(799, 'Tajwid Intensif');
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'tajwid_intensif',
+      registrationType: 'adult',
+      email: 'eleve@example.com',
+      prenom: 'Amina',
+      nom: 'Benali',
+    });
+
+    expect(res.status).toBe(200);
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(79900);
+    expect(session.metadata.formationId).toBe('tajwid_intensif');
+  });
+
+  it('facture la femme débutante présentiel à 649 € sans la remapper vers presentiel-global (480 €)', async () => {
+    mockFormation(649, 'Arabe & Tajwid Femme Débutante (Présentiel)');
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'femme-debutante-presentiel',
+      registrationType: 'adult',
+      email: 'eleve@example.com',
+      prenom: 'Fatima',
+      nom: 'Benali',
+    });
+
+    expect(res.status).toBe(200);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(64900);
+    expect(session.metadata.formationId).toBe('femme-debutante-presentiel');
+  });
+
+  it('autorise Tarbiya distanciel (classe 107) sans la traiter comme un créneau présentiel', async () => {
+    mockFormation(399, 'Tarbiya Islamiya');
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'tarbiya_islamiya',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [{ prenom: 'Amina', nom: 'Benali', classId: '107', niveau: 'tarbiya_1' }],
+    });
+
+    expect(res.status).toBe(200);
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(39900);
+    expect(session.metadata.formationId).toBe('tarbiya_islamiya');
+    expect(session.metadata.child_0_classId).toBe('e0a12345-0007-4000-8000-777777777777');
+  });
+
+  it('autorise toutes les classes distanciel enfant (101–108)', async () => {
+    mockFormation(399, 'Cours enfant distanciel');
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    for (const classId of Object.keys(DISTANCE_CLASS_ID_TO_UUID).map(Number)) {
+      mockCreate.mockClear();
+      const res = await postCheckout({
+        formationId: 'tarbiya_islamiya',
+        registrationType: 'child',
+        email: 'parent@example.com',
+        childrenList: [{ prenom: 'Amina', nom: 'Benali', classId: String(classId), niveau: 'n1' }],
+      });
+      expect(res.status).toBe(200);
+      expect(mockCreate).toHaveBeenCalledTimes(1);
+    }
   });
 });

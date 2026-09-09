@@ -335,7 +335,7 @@ export async function GET(req: Request) {
       }
     }
 
-    if (payerEmail) {
+    if (payerEmail && studentIds.length > 0) {
       try {
         const { maybeSendPresentielRentreeEmail } = await import('@/lib/mail');
         let formationType: string | null = null;

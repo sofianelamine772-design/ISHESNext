@@ -16,12 +16,9 @@ function getNextLevel(className: string): string | null {
   if (upper.includes("PRÉPARATOIRE 2") || upper.includes("PREPARATOIRE 2")) return "Élémentaire Débutant 1";
   if (upper.includes("DÉBUTANT 1") || upper.includes("DEBUTANT 1")) return "Élémentaire 1+";
   if (upper.includes("ÉLÉMENTAIRE 1+") || upper.includes("ELEMENTAIRE 1+")) return "Élémentaire 2";
-  if (upper.includes("ÉLÉMENTAIRE 2") || upper.includes("ELEMENTAIRE 2")) return "Élémentaire 3";
+  if (upper.includes("ÉLÉMENTAIRE 2") || upper.includes("ELEMENTAIRE 2")) return "Élémentaire 3 et 3+";
   if (upper.includes("ÉLÉMENTAIRE 3") || upper.includes("ELEMENTAIRE 3")) return "Élémentaire 4";
-  if (upper.includes("ÉLÉMENTAIRE 4") || upper.includes("ELEMENTAIRE 4")) return "Élémentaire 5";
-  if (upper.includes("ÉLÉMENTAIRE 5") || upper.includes("ELEMENTAIRE 5")) return "Élémentaire 6";
-  if (upper.includes("ÉLÉMENTAIRE 6") || upper.includes("ELEMENTAIRE 6")) return "Élémentaire 7";
-  if (upper.includes("ÉLÉMENTAIRE 7") || upper.includes("ELEMENTAIRE 7")) return null; // Fin de cursus
+  if (upper.includes("ÉLÉMENTAIRE 4") || upper.includes("ELEMENTAIRE 4")) return null; // Fin de cursus
 
   if (upper.includes("FEMME DÉBUTANTE") || upper.includes("FEMME DEBUTANTE")) return "Femme intermédiaire";
   if (upper.includes("FEMME INTERMÉDIAIRE") || upper.includes("FEMME INTERMEDIAIRE")) return null; 

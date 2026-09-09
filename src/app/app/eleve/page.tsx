@@ -203,12 +203,13 @@ export default function EleveDashboard() {
 
   const getCoursePrice = (title: string): number => {
     const t = (title || "").toLowerCase();
-    if (t.includes("intensif") || t.includes("présentiel") || t.includes("presentiel") || t.includes("femme")) return 649;
+    if (t.includes("intensif")) return 799;
+    if (t.includes("présentiel") || t.includes("presentiel") || t.includes("femme")) return 649;
     if (t.includes("junior")) return 480;
     if (t.includes("spiritualité") || t.includes("spiritualite") || t.includes("sciences du coran") || t.includes("hadith")) return 399;
     if (t.includes("arabe") && t.includes("tajwid") && (t.includes("débutant") || t.includes("intermédiaire"))) return 480;
     if (t.includes("tarbiya")) return 249;
-    if (t.includes("sirah")) return 250;
+    if (t.includes("sirah")) return 649;
     if (t.includes("aqida")) return 250;
     if (t.includes("civilisation")) return 199;
     if (t.includes("accompagnement")) return 49;

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { isPresentielCardFull } from "@/lib/class-availability";
+import { FEMME_PRESENTIEL_CLASS_BY_PLAN } from "@/lib/presentiel-data";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -35,27 +37,27 @@ interface PresentielProgram {
 const presentielPrograms: PresentielProgram[] = [
   {
     id: "femme-debutante-presentiel",
-    formationId: "presentiel-global",
+    formationId: "femme-debutante-presentiel",
     title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
     durationText: "Dimanche matin 9h-12h",
     day: "Dimanche",
     audience: "adulte",
     features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Dimanche matin (9h-12h)", "Suivi personnalisé"],
-    price: "480 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-en-presentiel"
   },
   {
     id: "femme-intermediaire-presentiel",
-    formationId: "presentiel-global",
+    formationId: "femme-intermediaire-presentiel",
     title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
     durationText: "Samedi matin 9h-12h",
     day: "Samedi",
     audience: "adulte",
     features: ["Arabe & Tajwid combinés", "Réservé aux Femmes", "Samedi matin (9h-12h)", "Suivi personnalisé"],
-    price: "480 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     link: "/fr/cours-en-presentiel"
   },
@@ -117,7 +119,7 @@ export default function InstitutPage() {
     },
     {
       q: "Comment fonctionne le paiement de la scolarité ?",
-      a: "Le tarif annuel est de 480 €. Pour valider votre place, un acompte initial de 150 € est demandé lors de l'inscription en ligne. Le solde restant peut être réglé en une seule fois, ou étalé en 3 ou 5 mensualités automatiques sans aucun frais."
+      a: "Le tarif annuel est de 480 € pour la scolarité enfants, et de 649 € pour les formations femmes (Arabe & Tajwid). Pour valider votre place, un acompte initial de 150 € est demandé lors de l'inscription en ligne. Le solde restant peut être réglé en une seule fois, ou étalé en 3, 5 ou 10 mensualités automatiques sans aucun frais."
     },
     {
       q: "Les manuels et supports pédagogiques sont-ils compris ?",
@@ -142,9 +144,12 @@ export default function InstitutPage() {
     fetchStatus();
   }, []);
 
-  const getSlotStatus = (day?: string) => {
-    if (!day) return null;
-    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
+  const getSlotStatus = (program: { id: string; day?: string }) => {
+    const classId = FEMME_PRESENTIEL_CLASS_BY_PLAN[program.id];
+    if (!program.day && classId == null) return null;
+    return {
+      est_plein: isPresentielCardFull(slotsStatus, { day: program.day, classId }),
+    };
   };
 
   return (
@@ -294,14 +299,14 @@ export default function InstitutPage() {
                       </div>
                       {program.price !== "0 €" && program.price !== "Sur Devis" && (
                          <div className="text-[10px] font-bold text-ishes-gold uppercase tracking-wide mt-1.5 flex items-center gap-1">
-                            <span>💳</span> Paiement en 1x, 3x ou 5x
+                            <span>💳</span> Paiement en 1x, 3x, 5x ou 10x
                          </div>
                       )}
                     </div>
                     
                     {program.day && (
                       <div className="mb-2">
-                        {getSlotStatus(program.day)?.est_plein ? (
+                        {getSlotStatus(program)?.est_plein ? (
                           <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
                             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                             Session Complète
@@ -324,15 +329,15 @@ export default function InstitutPage() {
                         Infos
                       </Link>
                       <Link 
-                        href={`/inscription?plan=${program.formationId}&slot=${program.day?.toLowerCase() || ''}&audience=${program.audience}`}
+                        href={`/inscription?plan=${program.id}&slot=${program.day?.toLowerCase() || ''}&audience=${program.audience}`}
                         onClick={(e) => e.stopPropagation()}
                         className={`flex items-center justify-center py-3.5 rounded-2xl shadow-lg transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
-                          getSlotStatus(program.day)?.est_plein
+                          getSlotStatus(program)?.est_plein
                             ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 
                             : "bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/20"
                         }`}
                       >
-                        {getSlotStatus(program.day)?.est_plein ? "COMPLET" : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")}
+                        {getSlotStatus(program)?.est_plein ? "COMPLET" : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")}
                       </Link>
                     </div>
                   </div>

@@ -10,7 +10,8 @@ import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, Gr
 import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
-import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
+import { getClassSlotStatus } from "@/lib/class-availability";
+import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug } from "@/lib/presentiel-data";
 import { DISTANCE_CLASSES } from "@/lib/distance-data";
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
 
@@ -34,12 +35,43 @@ function InscriptionForm() {
   } else if (planId === 'enfant-dimanche-presentiel') {
     planId = 'presentiel-global';
     if (!slot) slot = 'dimanche';
+  } else if (planId === 'femme-debutante-presentiel' || planId === 'femme_debutante_presentiel') {
+    slot = 'dimanche';
+  } else if (planId === 'femme-intermediaire-presentiel' || planId === 'femme_intermediaire_presentiel') {
+    slot = 'samedi';
   }
 
   const level = searchParams?.get("level");
   const classIdParam = searchParams?.get("classId");
   const selectedClass = classIdParam ? PRESENTIEL_CLASSES.find(c => c.id === parseInt(classIdParam)) : null;
   const audienceParam = searchParams?.get("audience");
+
+  // Un créneau d'URL qui ne correspond à aucune classe (ex: mardi-vendredi, samedi-sirah)
+  // verrouillait les menus Jour/Niveau/Horaire sur une liste vide.
+  if (planId === 'presentiel-global' && slot) {
+    const slotNorm = slot.toLowerCase();
+    const audienceFilter: "enfant" | "adulte" | null =
+      audienceParam === "enfant" || slotNorm === "mercredi"
+        ? "enfant"
+        : audienceParam === "adulte"
+          ? "adulte"
+          : null;
+    const hasMatchingClass = PRESENTIEL_CLASSES.some((c) =>
+      c.planId === "presentiel-global" &&
+      c.slotKey === slotNorm &&
+      (audienceFilter ? c.audience === audienceFilter : true)
+    );
+    if (!hasMatchingClass) {
+      slot = null;
+    }
+  }
+
+  const isFemmePresentielPlan =
+    planId === 'femme-debutante-presentiel' ||
+    planId === 'femme-intermediaire-presentiel' ||
+    planId === 'femme_debutante_presentiel' ||
+    planId === 'femme_intermediaire_presentiel';
+  const showsAdultPresentielPicker = planId === 'presentiel-global' || isFemmePresentielPlan;
 
   // Redirection if no plan selected
   useEffect(() => {
@@ -98,10 +130,7 @@ function InscriptionForm() {
     fetchStatus();
   }, []);
 
-  const getSlotStatus = (day?: string) => {
-    if (!day) return null;
-    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
-  };
+  const getClassStatus = (classId: number) => getClassSlotStatus(slotsStatus, classId);
 
   const isLevelAvailableOnDay = (niveauKey: string, audience: "enfant" | "adulte", type?: "femme") => {
     if (planId !== 'presentiel-global' || !slot) return true;
@@ -130,6 +159,9 @@ function InscriptionForm() {
     const currentSlot = (formData?.slot || slot || "").toLowerCase();
     const isChildSlot = (childrenList?.[0]?.slot || "").toLowerCase();
 
+    const selectedClassId = parseInt(String(formData?.classId || classIdParam || ''), 10);
+    if (selectedClassId === FEMME_DEBUTANTE_CLASS_ID || selectedClassId === FEMME_INTERMEDIAIRE_CLASS_ID) return 649;
+
     if (normalized === 'femme_debutante_presentiel' || normalized === 'femme_intermediaire_presentiel') return 649;
 
     if (
@@ -151,7 +183,7 @@ function InscriptionForm() {
     }
 
     if (normalized === 'tarbiya_islamiya') return 249;
-    if (normalized === 'tajwid_intensif') return 649;
+    if (normalized === 'tajwid_intensif') return 799;
     if (normalized === 'sciences_du_coran') return 399;
     if (normalized === 'spiritualite_islam') return 399;
     if (normalized === 'al_aqida') return 250;
@@ -211,7 +243,14 @@ function InscriptionForm() {
       // CORRECTION DÉFINITIVE: Si c'est un enfant inscrit en Tajwid Standard, on le bascule de force sur "presentiel-global"
       // car les horaires affichés et choisis sont ceux du présentiel !
       const isChildTajwidError = registrationType === 'child' && planId === 'tajwid_standard' && audienceParam === 'enfant';
-      const finalPlanIdToSend = isChildTajwidError ? 'presentiel-global' : (planId || "formation_generale");
+      const classIdsForCheckout = (registrationType === 'child'
+        ? namedChildren.map((c) => parseInt(String(c.classId), 10))
+        : [parseInt(String(formData.classId || ''), 10)]
+      ).filter((id) => !Number.isNaN(id));
+      const finalPlanIdToSend = resolvePresentielCheckoutSlug(
+        isChildTajwidError ? 'presentiel-global' : (planId || "formation_generale"),
+        classIdsForCheckout,
+      );
 
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -362,9 +401,15 @@ function InscriptionForm() {
       let initClassId = "";
 
       if (planId === 'femme_intermediaire_presentiel' || planId === 'femme-intermediaire-presentiel') {
-        initClassId = "31";
+        initClassId = "25";
+        initSlot = initSlot || "samedi";
+        initNiveau = initNiveau || "femme_intermediaire";
+        initHoraire = PRESENTIEL_CLASSES.find(c => c.id === 25)?.horaire || "";
       } else if (planId === 'femme_debutante_presentiel' || planId === 'femme-debutante-presentiel') {
-        initClassId = "26";
+        initClassId = "24";
+        initSlot = initSlot || "dimanche";
+        initNiveau = initNiveau || "femme_debutante";
+        initHoraire = PRESENTIEL_CLASSES.find(c => c.id === 24)?.horaire || "";
       } else if (planId === 'presentiel-global' && initSlot && initNiveau) {
         const aud = registrationType === 'child' ? 'enfant' : 'adulte';
         const matchingClasses = PRESENTIEL_CLASSES.filter(c =>
@@ -421,7 +466,7 @@ function InscriptionForm() {
     setFormData(prev => {
       const updated = { ...prev, [name]: finalValue };
 
-      if (planId === 'presentiel-global') {
+      if (showsAdultPresentielPicker) {
         const slotVal = updated.slot || (slot ? slot.toLowerCase() : "");
         if (name === 'slot') {
           updated.niveau = "";
@@ -522,10 +567,8 @@ function InscriptionForm() {
       case "elementaire_1_plus": return "Élémentaire 1+";
       case "elementaire_2": return "Élémentaire 2";
       case "elementaire_2_plus": return "Élémentaire 2+";
-      case "elementaire_3": return "Élémentaire 3";
-      case "elementaire_3_plus": return "Élémentaire 3+";
+      case "elementaire_3": return "Élémentaire 3 et 3+";
       case "elementaire_4": return "Élémentaire 4";
-      case "elementaire_5": return "Élémentaire 5";
       case "femme_debutante": return "🧕 Femme Débutante";
       case "femme_intermediaire": return "🧕 Femme Intermédiaire";
       default: return lvl;
@@ -786,11 +829,14 @@ function InscriptionForm() {
                                       c.audience === 'enfant' &&
                                       c.slotKey === slotVal.toLowerCase() &&
                                       c.niveauKey === child.niveau
-                                    ).map(c => (
-                                      <option key={c.id} value={c.id.toString()}>
-                                        {c.horaire}
+                                    ).map(c => {
+                                      const isFull = getClassStatus(c.id)?.est_plein;
+                                      return (
+                                      <option key={c.id} value={c.id.toString()} disabled={!!isFull}>
+                                        {c.horaire}{isFull ? ' (COMPLET)' : ''}
                                       </option>
-                                    ))}
+                                      );
+                                    })}
                                   </select>
                                   {!child.niveau && (
                                     <div
@@ -895,7 +941,7 @@ function InscriptionForm() {
                     </div>
 
                     {/* Niveau / Créneau */}
-                    {planId === 'presentiel-global' && (() => {
+                    {showsAdultPresentielPicker && (() => {
                       const slotVal = formData.slot || (slot ? slot.toLowerCase() : "");
                       return (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
@@ -907,7 +953,7 @@ function InscriptionForm() {
                             <select
                               name="slot"
                               value={slotVal}
-                              disabled={!!slot}
+                              disabled={!!slot || isFemmePresentielPlan}
                               onChange={handleInputChange}
                               className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                             >
@@ -989,11 +1035,14 @@ function InscriptionForm() {
                                   c.type === 'femme' &&
                                   c.slotKey === slotVal.toLowerCase() &&
                                   c.niveauKey === formData.niveau
-                                ).map(c => (
-                                  <option key={c.id} value={c.id.toString()}>
-                                    {c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} ({c.horaire})
+                                ).map(c => {
+                                  const isFull = getClassStatus(c.id)?.est_plein;
+                                  return (
+                                  <option key={c.id} value={c.id.toString()} disabled={!!isFull}>
+                                    {c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} ({c.horaire}){isFull ? ' (COMPLET)' : ''}
                                   </option>
-                                ))}
+                                  );
+                                })}
                               </select>
                               {!formData.niveau && (
                                 <div
@@ -1115,7 +1164,7 @@ function InscriptionForm() {
                       : (
                         !formData.prenom ||
                         !formData.nom ||
-                        (planId === 'presentiel-global' ? !formData.classId : false)
+                        (showsAdultPresentielPicker ? !formData.classId : false)
                       )
                     ) ||
                     !formData.telephone ||
@@ -1150,7 +1199,7 @@ function InscriptionForm() {
                       : (planName || "Votre Formation")}
                     </h3>
                     <p className="text-xs font-bold text-ishes-blue uppercase tracking-widest mt-1">
-                      Durée : {PROGRAMS_DATA[planId || ""]?.duration || "Selon programme"}
+                      Durée : {PROGRAMS_DATA[planId || ""]?.duration || PROGRAMS_DATA[(planId || "").replace(/-/g, "_")]?.duration || "Selon programme"}
                     </p>
                   </div>
                 </div>

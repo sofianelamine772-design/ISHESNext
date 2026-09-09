@@ -8,8 +8,10 @@ describe('Verification de l affectation de classe pour TOUTES les formations', (
     
     // Les plans qui ont une affectation statique hardcodée dans page.tsx (initClassId)
     const staticAssignments: Record<string, number> = {
-      'femme_intermediaire_presentiel': 31,
-      'femme_debutante_presentiel': 26,
+      'femme_intermediaire_presentiel': 25,
+      'femme_debutante_presentiel': 24,
+      'femme-intermediaire-presentiel': 25,
+      'femme-debutante-presentiel': 24,
     };
 
     const allPlans = Object.entries(PROGRAMS_DATA);

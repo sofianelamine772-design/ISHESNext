@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
@@ -5,7 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
 import { CLASS_ID_TO_UUID, PRESENTIEL_CLASSES } from '@/lib/presentiel-data';
-import { DISTANCE_CLASS_ID_TO_UUID, DISTANCE_CLASSES } from '@/lib/distance-data';
+import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -48,6 +49,12 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
         }
       }
     );
+
+    it('Tajwid Intensif est à 799 € en base (source de vérité checkout)', () => {
+      const row = dbFormations.find((f: any) => f.slug === 'tajwid_intensif');
+      expect(row).toBeDefined();
+      expect(row.price).toBe(799);
+    });
   });
 
   describe('Cohérence des UUID de classes présentiel et distanciel (Frontend vs DB)', () => {
@@ -96,6 +103,52 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
 
   afterAll(async () => {
     // Nettoyer la connexion WebSocket Supabase pour éviter que Jest ne pende (hang)
+    await supabase.removeAllChannels();
+  });
+});
+
+describe('Catalogue présentiel live (déploiement)', () => {
+  let presentielClasses: any[] = [];
+
+  beforeAll(async () => {
+    const { data, error } = await supabase
+      .from('classes')
+      .select('id, external_id, is_active, type, name')
+      .eq('type', 'presentiel');
+    if (error) {
+      throw new Error("Impossible de récupérer les classes présentiel : " + error.message);
+    }
+    presentielClasses = data || [];
+  });
+
+  it('a exactement 25 classes officielles actives (1–25), sans doublon', () => {
+    const official = presentielClasses.filter(
+      (c) => typeof c.external_id === 'number' && c.external_id >= 1 && c.external_id <= 25
+    );
+    const active = official.filter((c) => c.is_active);
+    expect(active).toHaveLength(25);
+    expect(new Set(active.map((c) => c.external_id)).size).toBe(25);
+  });
+
+  it('les classes hors catalogue (1024+, session fantôme) sont inactives', () => {
+    const leftovers = presentielClasses.filter(
+      (c) => !(typeof c.external_id === 'number' && c.external_id >= 1 && c.external_id <= 25)
+    );
+    expect(leftovers.length).toBeGreaterThan(0);
+    expect(leftovers.every((c) => c.is_active === false)).toBe(true);
+  });
+
+  it('les UUID checkout du site correspondent à des classes actives en base', () => {
+    for (const c of PRESENTIEL_CLASSES) {
+      const uuid = CLASS_ID_TO_UUID[c.id];
+      const row = presentielClasses.find((x) => x.id === uuid);
+      expect(row).toBeDefined();
+      expect(row?.external_id).toBe(c.id);
+      expect(row?.is_active).toBe(true);
+    }
+  });
+
+  afterAll(async () => {
     await supabase.removeAllChannels();
   });
 });

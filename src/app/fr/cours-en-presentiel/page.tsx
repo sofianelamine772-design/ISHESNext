@@ -146,7 +146,8 @@ export default function CoursPresentielPage() {
       icon: <BookOpenCheck className="w-6 h-6 text-ishes-blue" />,
       colorClass: "border-ishes-blue/20 hover:border-ishes-blue",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
-      slot: "samedi",
+      slot: "dimanche",
+      inscriptionUrl: "/inscription?plan=femme-debutante-presentiel&audience=adulte",
       infoUrl: "/fr/cours-presentiel-femme-debutante",
       hook: "Le grand problème des écoles traditionnelles est la séparation de la langue arabe et des règles de Tajwid, obligeant à faire deux fois plus d'efforts. Pour résoudre cela, notre cursus unique combine les deux en présentiel. En apprenant à lire et écrire l'arabe avec la méthode Habib Haffes, vous appliquez immédiatement ces notions pour comprendre et prononcer les règles de récitation du Tajwid s'appuyant sur notre support 'Les Clés du Coran' (Nour Al Bayane).",
       outcomes: [
@@ -157,12 +158,12 @@ export default function CoursPresentielPage() {
       ],
       methodology: "Pédagogie progressive fusionnant la méthode Habib Haffes (pour l'Arabe) et notre support exclusif 'Les Clés du Coran' adapté de Nour Al Bayan (pour le Tajwid).",
       practical: [
-        "Tous les samedis (9h-12h) en présentiel",
+        "Tous les dimanches (9h-12h) en présentiel",
         "Replays accessibles à vie",
         "Suivi pédagogique personnalisé",
         "Supports d'apprentissage inclus"
       ],
-      priceText: "480 € / session",
+      priceText: "649 € / session",
       cta: "S'inscrire au niveau Débutante",
       target: "Femmes débutantes ne sachant pas encore lire l'arabe ou souhaitant reprendre les bases de la lecture et de la prononciation à zéro."
     },
@@ -176,6 +177,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-amber-200 hover:border-ishes-gold",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "mardi-vendredi",
+      inscriptionUrl: "/inscription?plan=tajwid_intensif&audience=adulte",
       infoUrl: "/fr/cours-tajwid-intensif",
       hook: "Beaucoup ont commencé à apprendre le Tajwid plusieurs fois... puis ont arrêté par manque de régularité ou de suivi. Conçu pour éviter ce piège, ce programme accéléré permet de maîtriser et appliquer les règles essentielles jusqu'à 3 fois plus vite qu'un cursus classique.",
       outcomes: [
@@ -191,7 +193,7 @@ export default function CoursPresentielPage() {
         "Replays disponibles et suivi rigoureux",
         "Support de formation inclus"
       ],
-      priceText: "480 € / session",
+      priceText: "799 € / session",
       cta: "S'inscrire au Tajwid Accéléré",
       target: "Élèves motivés sachant déjà lire l'arabe, ou débutants très investis prêts à s'engager sérieusement."
     },
@@ -205,6 +207,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-ishes-blue/20 hover:border-ishes-blue",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "mercredi-dimanche",
+      inscriptionUrl: "/inscription?plan=tajwid_standard&audience=adulte",
       infoUrl: "/fr/cours-lecture-tajwid",
       hook: "Tu connais les règles de Tajwid en théorie... mais au moment de réciter, tu hésites, tu t'arrêtes souvent et des erreurs subsistent ? Le cours de Tilawa est conçu pour automatiser tes acquis et corriger tes imperfections de manière personnalisée.",
       outcomes: [
@@ -220,7 +223,7 @@ export default function CoursPresentielPage() {
         "Heure précise convenue selon vos disponibilités",
         "Replays et suivi pédagogique sur-mesure"
       ],
-      priceText: "480 € / module",
+      priceText: "649 € / module",
       cta: "S'inscrire au cours de Tilawa",
       target: "Élèves connaissant déjà les règles de Tajwid (indispensable) et souhaitant parfaire leur récitation.",
       badgeCaution: "Nécessite de connaître le Tajwid"
@@ -235,6 +238,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-amber-200 hover:border-ishes-gold",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
       slot: "mercredi-dimanche-hifdh",
+      inscriptionUrl: "/inscription?plan=memoriser_coran&audience=adulte",
       infoUrl: "/fr/cours-memoriser-coran",
       hook: "Mémoriser seul est un défi où la démotivation et l'oubli prennent souvent le dessus. Le programme de Hifdh offre le cadre idéal pour bâtir une routine d'apprentissage stable, préserver les sourates mémorisées et cheminer spirituellement.",
       outcomes: [
@@ -250,7 +254,7 @@ export default function CoursPresentielPage() {
         "Rythme et objectifs adaptés à vos capacités",
         "Suivi et révisions régulières"
       ],
-      priceText: "480 € / parcours",
+      priceText: "399 € / parcours",
       cta: "Rejoindre le programme Hifdh",
       target: "Élèves connaissant les règles de Tajwid et souhaitant mémoriser le Coran dans un cadre structuré et sérieux.",
       badgeCaution: "Nécessite de connaître le Tajwid"
@@ -265,6 +269,7 @@ export default function CoursPresentielPage() {
       colorClass: "border-ishes-blue/20 hover:border-ishes-blue",
       bgBadge: "bg-green-50 text-green-700 border-green-100",
       slot: "samedi-sirah",
+      inscriptionUrl: "/inscription?plan=as_sirah&audience=adulte",
       infoUrl: "/fr/cours-as-sirah",
       hook: "La Sîrah est trop souvent étudiée comme une simple suite de dates ou de batailles. Ce cours propose une approche vivante et spirituelle pour rapprocher le Prophète ﷺ de votre cœur et comprendre comment son modèle illumine votre vie moderne.",
       outcomes: [
@@ -280,7 +285,7 @@ export default function CoursPresentielPage() {
         "Supports pédagogiques complets fournis",
         "Enseignement interactif et accessible à tous"
       ],
-      priceText: "480 € / cursus",
+      priceText: "649 € / cursus",
       cta: "S'inscrire au cours de Sîrah",
       target: "Hommes et femmes, débutants comme initiés, souhaitant découvrir sa vie et s'en inspirer."
     },
@@ -292,7 +297,8 @@ export default function CoursPresentielPage() {
       icon: <BookOpen className="w-6 h-6 text-ishes-gold" />,
       colorClass: "border-amber-200 hover:border-ishes-gold",
       bgBadge: "bg-amber-50 text-amber-700 border-amber-100",
-      slot: "dimanche",
+      slot: "samedi",
+      inscriptionUrl: "/inscription?plan=femme-intermediaire-presentiel&audience=adulte",
       infoUrl: "/fr/cours-presentiel-femme-intermediaire",
       tagline: "Perfectionner son arabe littéraire et approfondir sa récitation du Coran.",
       hook: "Beaucoup d'élèves savent lire le Coran mais ne comprennent pas ce qu'ils lisent, ou apprennent la grammaire de façon trop abstraite. Notre cursus résout ce problème en liant le perfectionnement en arabe (grammaire Nahw) à la pratique directe du Tajwid. Vous gagnez en fluidité et en récitation tout en apprenant à traduire et à saisir le sens des versets récités au quotidien.",
@@ -304,12 +310,12 @@ export default function CoursPresentielPage() {
       ],
       methodology: "Méthode immersive alliant théorie grammaticale (Nahw), vocabulaire et analyse pratique des versets du Coran en direct.",
       practical: [
-        "Tous les dimanches (9h-12h) en présentiel",
+        "Tous les samedis (9h-12h) en présentiel",
         "Replays interactifs accessibles à vie",
         "Support pédagogique complet inclus",
         "Suivi personnalisé par l'enseignante"
       ],
-      priceText: "480 € / session",
+      priceText: "649 € / session",
       cta: "S'inscrire au niveau Intermédiaire",
       target: "Femmes sachant déjà lire l'arabe et ayant des notions de base, souhaitant acquérir autonomie de traduction et fluidité de lecture."
     }
@@ -569,7 +575,7 @@ export default function CoursPresentielPage() {
                         </Link>
                       )}
                       <Link 
-                        href={`/inscription?plan=presentiel-global&slot=${course.slot}&audience=adulte`}
+                        href={course.inscriptionUrl || `/inscription?plan=presentiel-global&audience=adulte`}
                         className="inline-flex items-center gap-2 bg-ishes-blue hover:bg-[#007044] text-white px-5 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-ishes-blue/10 hover:shadow-lg active:scale-95"
                       >
                         <span>S'inscrire</span>

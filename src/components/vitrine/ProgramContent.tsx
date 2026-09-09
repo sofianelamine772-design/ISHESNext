@@ -6,7 +6,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays, Play, Hourglass, Gift } from "lucide-react";
-import { PRESENTIEL_CLASSES } from "@/lib/presentiel-data";
+import { PRESENTIEL_CLASSES, FEMME_PRESENTIEL_CLASS_BY_PLAN } from "@/lib/presentiel-data";
+import { isPresentielCardFull } from "@/lib/class-availability";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 type Program = {
@@ -33,7 +34,7 @@ type Program = {
 export const PROGRAMS: Program[] = [
   {
     id: "femme-debutante-presentiel",
-    formationId: "presentiel-global",
+    formationId: "femme-debutante-presentiel",
     imageUrl: "/images/formations/femme-presentiel-1.jpg",
     title: "🧕 FEMME DEBUTANTE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant l'apprentissage de la langue arabe et les règles de Tajwid (pas d'option séparée).",
@@ -49,7 +50,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "femme-intermediaire-presentiel",
-    formationId: "presentiel-global",
+    formationId: "femme-intermediaire-presentiel",
     imageUrl: "/images/formations/presentiel-femme-interlediare-1.png",
     title: "🧕 FEMME INTERMEDIAIRE : Arabe + Tajwid",
     subtitle: "Formation en présentiel combinant le perfectionnement en arabe et la récitation du Tajwid (pas d'option séparée).",
@@ -183,7 +184,7 @@ export const PROGRAMS: Program[] = [
       "Coach en direct + audio 24/24h",
       "Diplôme final"
     ],
-    price: "649 €",
+    price: "799 €",
     priceSub: "/ SESSION",
     isRecommended: true,
     type: "distanciel",
@@ -505,9 +506,12 @@ export function ProgramContent() {
     fetchStatus();
   }, []);
 
-  const getSlotStatus = (day?: string) => {
-    if (!day) return null;
-    return slotsStatus.find(s => s.day_of_week?.toLowerCase() === day.toLowerCase());
+  const getSlotStatus = (program: { id: string; day?: string }) => {
+    const classId = FEMME_PRESENTIEL_CLASS_BY_PLAN[program.id];
+    if (!program.day && classId == null) return null;
+    return {
+      est_plein: isPresentielCardFull(slotsStatus, { day: program.day, classId }),
+    };
   };
 
   useEffect(() => {
@@ -889,12 +893,12 @@ export function ProgramContent() {
                         </div>
                         {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "Devis" && program.price !== "GRATUIT" && (
                           <div className="text-[10px] font-bold text-ishes-blue uppercase tracking-wide mt-1.5 flex items-center gap-1">
-                            <span>💳</span> Paiement en 1x, 3x ou 5x
+                            <span>💳</span> {isPresentiel ? "Paiement en 1x, 3x, 5x ou 10x" : "Paiement en 1x, 3x ou 5x"}
                           </div>
                         )}
                         {isPresentiel && (
                           <div className="mb-2 mt-2">
-                            {getSlotStatus(program.day)?.est_plein ? (
+                            {getSlotStatus(program)?.est_plein ? (
                               <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl border border-red-100">
                                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                                 Session Complète
@@ -934,10 +938,10 @@ export function ProgramContent() {
                           <Link
                             href={`/inscription?plan=${program.id}&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
                             onClick={(e) => e.stopPropagation()}
-                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program.day)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
                               }`}
                           >
-                            {getSlotStatus(program.day)?.est_plein
+                            {getSlotStatus(program)?.est_plein
                               ? "COMPLET"
                               : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")
                             }

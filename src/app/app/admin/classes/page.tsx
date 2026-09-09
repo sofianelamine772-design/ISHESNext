@@ -14,7 +14,7 @@ import { UserButton } from "@clerk/nextjs";
 
 // Types
 type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string; phone?: string };
-type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null; schedule?: string };
+type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null; schedule?: string; externalId?: number | null };
 
 export default function AdminDashboard() {
   const searchParams = useSearchParams();
@@ -596,15 +596,18 @@ export default function AdminDashboard() {
                         onClick={() => setSelectedClassId(c.id)}
                         className={`w-full text-left p-3 rounded-xl transition-all border ${
                           selectedClassId === c.id
-                            ? c.name.toLowerCase().includes('femme')
+                            ? (c.name.toLowerCase().includes('femme') || (c.externalId ?? 0) >= 24)
                               ? "bg-pink-100 border-pink-200 shadow-sm"
                               : "bg-ishes-blue/10 border-ishes-blue/20 shadow-sm"
-                            : c.name.toLowerCase().includes('femme')
+                            : (c.name.toLowerCase().includes('femme') || (c.externalId ?? 0) >= 24)
                               ? "bg-pink-50/50 border-pink-100 hover:border-pink-200 hover:bg-pink-50"
                               : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50"
                         }`}
                       >
-                        <div className="font-semibold text-gray-800 mb-1 text-sm">{c.name}</div>
+                        <div className="font-semibold text-gray-800 mb-1 text-sm leading-snug">
+                          {c.externalId ? <span className="text-ishes-gold mr-1">n°{c.externalId}</span> : null}
+                          {c.name}
+                        </div>
                         {c.schedule && <div className="text-[10px] font-bold text-ishes-gold mb-1.5">{c.schedule}</div>}
                         <div className="flex items-center justify-between text-[10px] text-gray-500 gap-1.5">
                           <div className="flex items-center gap-1">
@@ -654,7 +657,9 @@ export default function AdminDashboard() {
                         {selectedClass.type === 'distanciel' ? <Monitor className="w-5 h-5 md:w-6 md:h-6" /> : <School className="w-5 h-5 md:w-6 md:h-6" />}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h2 className="text-lg md:text-xl xl:text-2xl ishes-heading text-ishes-blue leading-tight break-words">{selectedClass.name}</h2>
+                        <h2 className="text-lg md:text-xl xl:text-2xl ishes-heading text-ishes-blue leading-tight break-words">
+                          {selectedClass.externalId ? `n°${selectedClass.externalId} · ` : ''}{selectedClass.name}
+                        </h2>
                         <div className="flex flex-wrap items-center gap-2 mt-1">
                           <span className={`text-[8px] md:text-[9px] font-black uppercase px-2 py-0.5 rounded flex items-center gap-1 ${selectedClass.type === 'distanciel' ? 'bg-gray-100 text-gray-600' : 'bg-ishes-blue-hover text-white'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${selectedClass.type === 'distanciel' ? 'bg-gray-400' : 'bg-white'}`}></span>

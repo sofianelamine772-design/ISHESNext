@@ -193,7 +193,7 @@ export default function CoursPresentielEnfantPage() {
             
             <div className="flex items-center gap-3 mb-5 text-[15px] font-medium text-gray-300">
               <CreditCard className="w-5 h-5 text-[#C69C6D]" />
-              Paiement possible en 1x, 3x ou 5x
+              Paiement possible en 1x, 3x, 5x ou 10x
             </div>
             
             <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-lg text-[13px] font-bold mb-10 border border-emerald-500/20">

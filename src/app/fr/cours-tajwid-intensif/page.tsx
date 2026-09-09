@@ -304,7 +304,7 @@ export default function CoursTajwidIntensifPage() {
             <BookOpen className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
               <p className="text-xs font-bold text-gray-300">Tarif Unique</p>
-              <h3 className="text-sm font-black text-white mt-0.5 text-xl text-ishes-gold">649 €</h3>
+              <h3 className="text-sm font-black text-white mt-0.5 text-xl text-ishes-gold">{course.price}</h3>
             </div>
           </div>
 

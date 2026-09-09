@@ -39,6 +39,24 @@ jest.mock('next/headers', () => ({
   })
 }));
 
+const mockMaybeSendPresentielRentreeEmail = jest.fn().mockImplementation(
+  async (_email: string, formationId: string, formationType?: string | null) => {
+    const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
+    if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
+      return { success: true, skipped: true };
+    }
+    return { success: true, skipped: false };
+  }
+);
+
+jest.mock('@/lib/mail', () => ({
+  maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
+  sendAdminNewStudentNotificationEmail: jest.fn().mockResolvedValue({ success: true }),
+  sendWelcomeEmail: jest.fn(),
+  sendClassAssignmentEmail: jest.fn(),
+  sendPresentielRentreeEmail: jest.fn(),
+}));
+
 const DISTANCIEL_FORMATIONS = [
   'tajwid_intensif',
   'sciences_islamiques',
@@ -57,6 +75,15 @@ const DISTANCIEL_FORMATIONS = [
 describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockMaybeSendPresentielRentreeEmail.mockImplementation(
+      async (_email: string, formationId: string, formationType?: string | null) => {
+        const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
+        if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
+          return { success: true, skipped: true };
+        }
+        return { success: true, skipped: false };
+      }
+    );
     const { supabaseAdmin } = require('@/lib/supabaseAdmin');
     supabaseAdmin.maybeSingle.mockResolvedValue({ data: null });
   });
@@ -122,13 +149,17 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
 
     await POST(mockRequest);
     
-    // VERIFICATION: on vérifie que le système a bien appelé "insert" sur "inscriptions" avec le class_id correct
     expect(supabaseAdmin.insert).toHaveBeenCalledWith(
       expect.objectContaining({
         formation_id: mockFormationUuid,
         class_id: mockDefaultClassUuid,
       })
     );
+
+    if (formationSlug === 'tajwid_intensif' && mockMaybeSendPresentielRentreeEmail.mock.calls.length > 0) {
+      const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
+      expect(rentree.skipped).toBe(true);
+    }
   });
 
   it('devrait assigner l\'élève à la classe SPÉCIFIQUE qu\'il a choisie (Présentiel)', async () => {
@@ -182,7 +213,15 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
     supabaseAdmin.ilike.mockReturnThis();
 
     await POST(mockRequest);
-    
+
+    expect(mockMaybeSendPresentielRentreeEmail).toHaveBeenCalledWith(
+      'test_presentiel@example.com',
+      'presentiel-global',
+      null,
+    );
+    const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
+    expect(rentree).toEqual({ success: true, skipped: false });
+
     // VERIFICATION: on vérifie que le système a ignoré la classe par défaut et a bien utilisé la classe SPÉCIFIQUE !
     expect(supabaseAdmin.insert).toHaveBeenCalledWith(
       expect.objectContaining({
