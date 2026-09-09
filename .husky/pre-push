@@ -1,7 +1,8 @@
 #!/bin/sh
 
 echo "✅ Lancement des tests unitaires (Jest)..."
-npm run test -- --colors
+echo "⏳ Premier lancement : Next compile les tests, ça peut prendre 1 à 2 min."
+CI=true npm test -- --colors
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car les tests unitaires ont échoué."
@@ -9,7 +10,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "🔄 Lancement du test d'intégrité de la base de données..."
-npx tsx scripts/test-db-mapping.ts
+node scripts/test-db-mapping.mjs
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car des erreurs d'intégrité ont été trouvées dans la base de données."

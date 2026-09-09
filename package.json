@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest --forceExit --watchAll=false"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

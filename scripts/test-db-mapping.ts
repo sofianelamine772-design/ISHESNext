@@ -14,7 +14,9 @@ if (!supabaseUrl || !supabaseKey) {
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  realtime: { transport: ws },
+});
 
 async function runTest() {
   console.log('🔄 Test d\'intégrité de la base de données en cours...');
