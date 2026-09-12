@@ -218,14 +218,19 @@ export default function AdminCommunicationPage() {
       if (res.ok) {
         setSuccess(true);
         setContent(""); setTitle(""); setAttachments([]); setSelectedStudent(""); setSelectedClasses([]); setFormatFilter("all");
-        setTimeout(() => setSuccess(false), 3000);
+        setTimeout(() => setSuccess(false), 4000);
         fetchConversations();
         if (payload.emailWarning) {
           alert(payload.emailWarning);
+        } else if (typeof payload.emailsQueued === 'number') {
+          alert(`Message enregistré. ${payload.emailsQueued} e-mail(s) en cours d'envoi aux familles.`);
         }
       } else {
         alert(`Erreur : ${payload.error || 'Impossible d\'envoyer'}`);
       }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur réseau pendant l'envoi. Vérifie l'historique avant de renvoyer, le message a peut-être déjà été pris en compte.");
     } finally {
       setLoading(false);
     }
@@ -558,7 +563,9 @@ export default function AdminCommunicationPage() {
                       
                       {selectedClasses.length > 0 && (
                          <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                           <span className="text-[10px] font-bold text-[#086b51] uppercase tracking-widest">{selectedClasses.length} classe{selectedClasses.length > 1 ? 's' : ''} sélectionnée{selectedClasses.length > 1 ? 's' : ''}</span>
+                           <span className="text-[10px] font-bold text-[#086b51] uppercase tracking-widest">
+                             {selectedClasses.length} classe{selectedClasses.length > 1 ? 's' : ''} · {classes.filter((c) => selectedClasses.includes(c.id)).reduce((n, c) => n + (c.students?.length || 0), 0)} élève{(classes.filter((c) => selectedClasses.includes(c.id)).reduce((n, c) => n + (c.students?.length || 0), 0)) > 1 ? 's' : ''}
+                           </span>
                            <button onClick={() => setSelectedClasses([])} className="text-[10px] font-bold text-gray-400 hover:text-red-500 uppercase tracking-widest transition-colors">Tout désélectionner</button>
                          </div>
                       )}

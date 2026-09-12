@@ -1,11 +1,12 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { auth } from '@clerk/nextjs/server';
 import { sendNewMessageEmail } from '@/lib/mail';
 import { EMAIL_ARCHIVE_ID, SYSTEM_LOGGER_ID } from '@/lib/email-log';
 import { htmlToPlainText, looksLikeHtml, sanitizeEmailHtml } from '@/lib/email-html';
+import { logSystemError } from '@/lib/error-logger';
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 import webPush from 'web-push';
 
@@ -35,6 +36,199 @@ if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
     process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
     process.env.VAPID_PRIVATE_KEY
   );
+}
+
+type BroadcastRecipient = { email: string; first_name: string; subject?: string; studentId?: string };
+
+async function collectBroadcastRecipients(params: {
+  type?: string;
+  receiver_id?: string;
+  classesToTarget: string[];
+  format?: string;
+  title?: string;
+}): Promise<BroadcastRecipient[]> {
+  const { type, receiver_id, classesToTarget, format, title } = params;
+  const emailsToSend: BroadcastRecipient[] = [];
+
+  if (type === 'private' && receiver_id && receiver_id !== 'admin_system') {
+    const { data: student } = await supabaseAdmin
+      .from('etudiants')
+      .select('email, first_name')
+      .eq('id', receiver_id)
+      .maybeSingle();
+    if (student?.email) {
+      emailsToSend.push({
+        email: student.email,
+        first_name: student.first_name || 'Élève',
+        subject: title || undefined,
+        studentId: receiver_id,
+      });
+    }
+    return emailsToSend;
+  }
+
+  if (type === 'global') {
+    const { data: students } = await supabaseAdmin
+      .from('etudiants')
+      .select('id, email, first_name')
+      .eq('status', 'actif');
+
+    let studentIdsToSend = students?.map((s) => s.id) || [];
+
+    if (format && format !== 'all') {
+      const { data: inscriptions } = await supabaseAdmin
+        .from('inscriptions')
+        .select('etudiant_id, status, classes!inner(type)')
+        .eq('classes.type', format);
+
+      const formatStudentIds = (inscriptions || [])
+        .filter((i: any) => i.status !== 'annule' && i.status !== 'termine')
+        .map((i) => i.etudiant_id);
+      studentIdsToSend = studentIdsToSend.filter((id) => formatStudentIds.includes(id));
+    }
+
+    students?.forEach((s) => {
+      if (s.email && studentIdsToSend.includes(s.id)) {
+        emailsToSend.push({
+          email: s.email,
+          first_name: s.first_name || 'Élève',
+          subject: title || undefined,
+          studentId: s.id,
+        });
+      }
+    });
+    return emailsToSend;
+  }
+
+  if (type === 'class' && classesToTarget.length > 0) {
+    const { data: inscriptions } = await supabaseAdmin
+      .from('inscriptions')
+      .select('etudiant_id, status')
+      .in('class_id', classesToTarget);
+
+    const studentIds = Array.from(new Set(
+      (inscriptions || [])
+        .filter((i: any) => i.status !== 'annule' && i.status !== 'termine')
+        .map((i: any) => i.etudiant_id)
+        .filter(Boolean)
+    ));
+    if (studentIds.length === 0) return emailsToSend;
+
+    const { data: students } = await supabaseAdmin
+      .from('etudiants')
+      .select('id, email, first_name')
+      .in('id', studentIds);
+
+    const displayTitle = title || "Annonce de l'Institut";
+    students?.forEach((s) => {
+      if (s.email) {
+        emailsToSend.push({
+          email: s.email,
+          first_name: s.first_name || 'Élève',
+          subject: displayTitle,
+          studentId: s.id,
+        });
+      }
+    });
+  }
+
+  return emailsToSend;
+}
+
+async function countBroadcastRecipients(params: {
+  type?: string;
+  receiver_id?: string;
+  classesToTarget: string[];
+  format?: string;
+}) {
+  const recipients = await collectBroadcastRecipients(params);
+  return new Set(recipients.map((item) => item.email.toLowerCase())).size;
+}
+
+async function deliverAdminBroadcast(params: {
+  type?: string;
+  title?: string;
+  content: string;
+  receiver_id?: string;
+  classesToTarget: string[];
+  format?: string;
+  emailAttachments?: ReturnType<typeof normalizeEmailAttachments>;
+}) {
+  const emailsToSend = await collectBroadcastRecipients(params);
+  const uniqueEmails = Array.from(
+    new Map(emailsToSend.filter((item) => item.email).map((item) => [item.email.toLowerCase(), item])).values()
+  );
+
+  const studentIds = uniqueEmails.map((item) => item.studentId).filter(Boolean) as string[];
+  if (studentIds.length > 0) {
+    const { data: pushData } = await supabaseAdmin
+      .from('push_subscriptions')
+      .select('*')
+      .in('etudiant_id', studentIds);
+    if (pushData?.length) {
+      const payload = JSON.stringify({
+        title: params.title || 'ISHES',
+        body: (() => {
+          const plain = htmlToPlainText(params.content);
+          return plain.length > 50 ? plain.substring(0, 50) + '...' : plain;
+        })(),
+        url: params.type === 'private' ? '/app/eleve/messagerie' : '/app/eleve',
+      });
+      await Promise.all(pushData.map(async (sub) => {
+        try {
+          await webPush.sendNotification({
+            endpoint: sub.endpoint,
+            keys: { p256dh: sub.p256dh, auth: sub.auth },
+          }, payload);
+        } catch (e: any) {
+          if (e.statusCode === 410 || e.statusCode === 404) {
+            await supabaseAdmin.from('push_subscriptions').delete().eq('id', sub.id);
+          } else {
+            console.error('[PUSH_SEND_ERROR]', e);
+          }
+        }
+      }));
+    }
+  }
+
+  if (uniqueEmails.length === 0) return;
+
+  console.log(`[MESSAGES_POST] Envoi de ${uniqueEmails.length} e-mails de notification...`);
+  const campaignId = crypto.randomUUID();
+  let sentCount = 0;
+  let failedCount = 0;
+
+  for (let i = 0; i < uniqueEmails.length; i += 1) {
+    const item = uniqueEmails[i];
+    try {
+      const res = await sendNewMessageEmail({
+        email: item.email,
+        firstName: item.first_name,
+        messageContent: params.content,
+        title: item.subject,
+        campaignId,
+        studentId: item.studentId,
+        attachments: params.emailAttachments,
+      });
+      if (res.success) sentCount += 1;
+      else failedCount += 1;
+    } catch (mailErr: any) {
+      failedCount += 1;
+      console.error(`[MESSAGES_MAIL_ERROR] Échec de l'envoi d'e-mail à ${item.email}:`, mailErr);
+    }
+    if (i + 1 < uniqueEmails.length) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+  }
+
+  if (failedCount > 0) {
+    console.error(`[MESSAGES_POST] ${failedCount}/${uniqueEmails.length} e-mails en échec (annonce déjà enregistrée).`);
+    await logSystemError('messages-broadcast', {
+      message: `${failedCount} e-mail(s) en échec sur ${uniqueEmails.length}`,
+    });
+  } else {
+    console.log(`[MESSAGES_POST] ${sentCount} e-mails envoyés.`);
+  }
 }
 
 export async function POST(req: Request) {
@@ -90,203 +284,39 @@ export async function POST(req: Request) {
 
     console.log('[MESSAGES_POST_OK]', JSON.stringify(data));
 
-    // Envoi de Notification (Push & E-mail)
     if (sender_id === 'admin_system') {
+      let emailsQueued = 0;
       try {
-        let pushSubs: any[] = [];
-        let emailsToSend: { email: string; first_name: string; subject?: string; studentId?: string }[] = [];
-
-        if (type === 'private' && receiver_id && receiver_id !== 'admin_system') {
-          // Message privé : un seul élève
-          const { data: pushData } = await supabaseAdmin
-            .from('push_subscriptions')
-            .select('*')
-            .eq('etudiant_id', receiver_id);
-          if (pushData) pushSubs = pushData;
-
-          const { data: student } = await supabaseAdmin
-            .from('etudiants')
-            .select('email, first_name')
-            .eq('id', receiver_id)
-            .maybeSingle();
-          if (student && student.email) {
-            emailsToSend.push({
-              email: student.email,
-              first_name: student.first_name || 'Élève',
-              subject: title || undefined,
-              studentId: receiver_id,
-            });
-          }
-        }
-        else if (type === 'global') {
-          // Message global : tout le monde
-          const { data: students } = await supabaseAdmin
-            .from('etudiants')
-            .select('id, email, first_name')
-            .eq('status', 'actif');
-            
-          let studentIdsToSend = students?.map(s => s.id) || [];
-
-          if (format && format !== 'all') {
-             // Filtrer par format (presentiel ou distanciel)
-             const { data: inscriptions } = await supabaseAdmin
-               .from('inscriptions')
-               .select('etudiant_id, classes!inner(type)')
-               .eq('classes.type', format);
-             
-             const formatStudentIds = inscriptions?.map(i => i.etudiant_id) || [];
-             studentIdsToSend = studentIdsToSend.filter(id => formatStudentIds.includes(id));
-          }
-
-          if (studentIdsToSend.length > 0) {
-            const { data: pushData } = await supabaseAdmin
-              .from('push_subscriptions')
-              .select('*')
-              .in('etudiant_id', studentIdsToSend);
-            if (pushData) pushSubs = pushData;
-
-            students?.forEach((s) => {
-              if (s.email && studentIdsToSend.includes(s.id)) {
-                emailsToSend.push({
-                  email: s.email,
-                  first_name: s.first_name || 'Élève',
-                  subject: title || undefined,
-                  studentId: s.id,
-                });
-              }
-            });
-          }
-        }
-        else if (type === 'class' && classesToTarget.length > 0) {
-          // Message par classe : plusieurs classes possibles
-          const { data: inscriptions } = await supabaseAdmin
-            .from('inscriptions')
-            .select('etudiant_id')
-            .in('class_id', classesToTarget);
-
-          if (inscriptions && inscriptions.length > 0) {
-            // deduplicate
-            const studentIds = Array.from(new Set(inscriptions.map((i: any) => i.etudiant_id).filter(Boolean)));
-            
-            if (studentIds.length > 0) {
-              // Push subscriptions
-              const { data: pushData } = await supabaseAdmin
-                .from('push_subscriptions')
-                .select('*')
-                .in('etudiant_id', studentIds);
-              if (pushData) pushSubs = pushData;
-
-              // Élèves de la classe
-              const { data: students } = await supabaseAdmin
-                .from('etudiants')
-                .select('id, email, first_name')
-                .in('id', studentIds);
-              
-              if (students && students.length > 0) {
-                let displayTitle = title;
-                if (!displayTitle) {
-                   displayTitle = `Annonce de l'Institut`;
-                }
-
-                students.forEach((s) => {
-                  if (s.email) {
-                    emailsToSend.push({
-                      email: s.email,
-                      first_name: s.first_name || 'Élève',
-                      subject: displayTitle || undefined,
-                      studentId: s.id,
-                    });
-                  }
-                });
-              }
-            }
-          }
-        }
-
-        // 1. Envoyer les Notifications Push
-        if (pushSubs && pushSubs.length > 0) {
-          const payload = JSON.stringify({
-            title: title || 'ISHES',
-            body: (() => {
-              const plain = htmlToPlainText(content);
-              return plain.length > 50 ? plain.substring(0, 50) + '...' : plain;
-            })(),
-            url: type === 'private' ? '/app/eleve/messagerie' : '/app/eleve'
-          });
-
-          await Promise.all(pushSubs.map(async (sub) => {
-            const pushSubscription = {
-              endpoint: sub.endpoint,
-              keys: { p256dh: sub.p256dh, auth: sub.auth }
-            };
-            try {
-              await webPush.sendNotification(pushSubscription, payload);
-            } catch (e: any) {
-              if (e.statusCode === 410 || e.statusCode === 404) {
-                await supabaseAdmin.from('push_subscriptions').delete().eq('id', sub.id);
-              } else {
-                console.error('[PUSH_SEND_ERROR]', e);
-              }
-            }
-          }));
-        }
-
-        // 2. Envoyer les e-mails par petits lots — Gmail refuse un envoi massif en parallèle (421-4.3.0).
-        if (emailsToSend.length > 0) {
-          console.log(`[MESSAGES_POST] Envoi de ${emailsToSend.length} e-mails de notification...`);
-          const uniqueEmails = Array.from(
-            new Map(emailsToSend.filter((item) => item.email).map((item) => [item.email.toLowerCase(), item])).values()
-          );
-          const results: { email: string; success: boolean; error?: unknown }[] = [];
-          const BATCH_SIZE = 5;
-          const BATCH_DELAY_MS = 1500;
-          const campaignId = crypto.randomUUID();
-
-          for (let i = 0; i < uniqueEmails.length; i += BATCH_SIZE) {
-            const batch = uniqueEmails.slice(i, i + BATCH_SIZE);
-            const batchResults = await Promise.all(
-              batch.map(async (item) => {
-                try {
-                  const res = await sendNewMessageEmail({
-                    email: item.email,
-                    firstName: item.first_name,
-                    messageContent: content,
-                    title: item.subject,
-                    campaignId,
-                    studentId: item.studentId,
-                    attachments: emailAttachments,
-                  });
-                  return { email: item.email, success: res.success, error: res.error };
-                } catch (mailErr: any) {
-                  console.error(`[MESSAGES_MAIL_ERROR] Échec de l'envoi d'e-mail à ${item.email}:`, mailErr);
-                  return { email: item.email, success: false, error: mailErr?.message || mailErr };
-                }
-              })
-            );
-            results.push(...batchResults);
-            if (i + BATCH_SIZE < uniqueEmails.length) {
-              await new Promise((resolve) => setTimeout(resolve, BATCH_DELAY_MS));
-            }
-          }
-
-          const failed = results.filter(r => !r.success);
-          const sentCount = results.length - failed.length;
-          if (failed.length > 0) {
-            console.error(`[MESSAGES_POST] ${failed.length}/${results.length} e-mails en échec (annonce déjà enregistrée).`);
-            return NextResponse.json({
-              success: true,
-              data,
-              emailsSent: sentCount,
-              emailsFailed: failed.length,
-              emailWarning: `${sentCount} e-mail(s) envoyé(s), ${failed.length} en attente (Gmail saturé temporairement). L'annonce est bien enregistrée dans l'application.`,
-            });
-          }
-          console.log(`[MESSAGES_POST] Tous les e-mails ont été traités avec succès.`);
-        }
-
-      } catch (notifyError) {
-        console.error('[NOTIFICATION_ERROR]', notifyError);
+        emailsQueued = await countBroadcastRecipients({
+          type,
+          receiver_id,
+          classesToTarget,
+          format,
+        });
+      } catch (countErr) {
+        console.error('[MESSAGES_POST] count recipients', countErr);
       }
+      after(async () => {
+        try {
+          await deliverAdminBroadcast({
+            type,
+            title,
+            content,
+            receiver_id,
+            classesToTarget,
+            format,
+            emailAttachments,
+          });
+        } catch (notifyError) {
+          console.error('[NOTIFICATION_ERROR]', notifyError);
+          await logSystemError('messages-broadcast', notifyError);
+        }
+      });
+      return NextResponse.json({
+        success: true,
+        data,
+        emailsQueued,
+      });
     }
 
     // Envoi de Notification à l'admin si l'élève écrit
