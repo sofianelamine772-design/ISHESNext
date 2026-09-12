@@ -276,6 +276,7 @@ export async function sendNewMessageEmail({
   title,
   campaignId,
   studentId,
+  attachments,
 }: {
   email: string;
   firstName: string;
@@ -283,6 +284,11 @@ export async function sendNewMessageEmail({
   title?: string;
   campaignId?: string;
   studentId?: string;
+  attachments?: Array<{
+    filename: string;
+    content: any;
+    contentType?: string;
+  }>;
 }) {
   const { toEmailBodyHtml, htmlToPlainText, escapeHtml } = await import('./email-html');
   const processedContent = toEmailBodyHtml(messageContent).replace(
@@ -296,7 +302,7 @@ export async function sendNewMessageEmail({
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #0a192f; margin-top: 0; font-size: 20px;">${safeTitle || "Nouveau message de l'administration"}</h2>
+        <h2 style="color: #0a192f; margin: 0 0 24px; font-size: 22px; text-align: center; line-height: 1.35;">${safeTitle || "Nouveau message de l'administration"}</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Assalam alaykoum ${safeName},
         </p>
@@ -319,6 +325,7 @@ export async function sendNewMessageEmail({
     subject: title ? `✉️ ISHES : ${title}` : "✉️ Nouveau message de l'administration ISHES",
     html,
     text: htmlToPlainText(processedContent),
+    attachments,
     meta: {
       type: 'annonce',
       campaignId,

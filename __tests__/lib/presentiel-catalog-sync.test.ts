@@ -11,6 +11,7 @@ import {
   FEMME_INTERMEDIAIRE_CLASS_ID,
 } from '@/lib/presentiel-data';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
+import { DISTANCE_CLASSES, DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
 import { filterVisiblePresentielSlots, isDayFullyBooked, getClassSlotStatus, isPresentielCardFull } from '@/lib/class-availability';
 
 function loadOfficialCsvClasses() {
@@ -30,6 +31,17 @@ function loadOfficialCsvClasses() {
 
 describe('Catalogue présentiel (site = admin = CSV)', () => {
   const csvClasses = loadOfficialCsvClasses();
+
+  test.each(PRESENTIEL_CLASSES)(
+    'classe présentiel $id — $niveau / $horaire a un UUID checkout',
+    (classe) => {
+      const uuid = CLASS_ID_TO_UUID[classe.id];
+      expect(uuid).toBeDefined();
+      expect(uuid).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+      );
+    },
+  );
 
   it('expose exactement les 25 classes du CSV, numérotées 1 à 25', () => {
     expect(csvClasses).toHaveLength(25);
@@ -129,5 +141,24 @@ describe('Checkout slug femme', () => {
       .toBe('femme-debutante-presentiel');
     expect(resolvePresentielCheckoutSlug('tajwid_intensif', [FEMME_DEBUTANTE_CLASS_ID]))
       .toBe('tajwid_intensif');
+  });
+});
+
+describe('Catalogue distanciel enfant (101–108)', () => {
+  test.each(DISTANCE_CLASSES)(
+    'classe distanciel $id — $planId / $niveau a un UUID checkout',
+    (classe) => {
+      const uuid = DISTANCE_CLASS_ID_TO_UUID[classe.id];
+      expect(uuid).toBeDefined();
+      expect(uuid).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+      );
+    },
+  );
+
+  it('couvre Arabe, Tajwid enfant et Tarbiya (8 classes)', () => {
+    expect(DISTANCE_CLASSES).toHaveLength(8);
+    expect(DISTANCE_CLASSES.map((c) => c.id)).toEqual([101, 102, 103, 104, 105, 106, 107, 108]);
+    expect(DISTANCE_CLASSES.filter((c) => c.planId === 'tarbiya_islamiya').map((c) => c.id)).toEqual([107, 108]);
   });
 });

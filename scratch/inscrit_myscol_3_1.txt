@@ -1,0 +1,259 @@
+                                       Prénom de
+                 Nom de l’élève                                           Niveau 2026/2027                           Téléphone                             E-mail GoCardless         Date d’activation               Fiabilité
+                                         l’élève
+
+               Abderrahmane         Tesnim          Préparatoire 2ème année (5-6 ans) MERCREDI                                                dounia.bensouici69@gmail.com     2026-06-06 09:20:16       a ver er
+               Abdessamad           Nassim          Élémentaire 3 (7-12 ans) DIMANCHE A-M                                                     saloua.abdessamad@gmail.com      2026-06-27 10:23:33       payer
+               Abdessamad           Reda            Élémentaire 1+ (7-12 ans) DIMANCHE A-M                                                    saloua.abdessamad@gmail.com      2026-06-27 10:23:33       payer
+               Abenna               Dounia          Élémentaire Débutant 1 (7-12 ans) SAMEDI MATIN      +33 6 52 13 07 37                     melhemasmaa@hotmail.fr           2026-05-09 21:09:28       a ver er
+               Abenna               Lina            Élémentaire Débutant 1 (7-12 ans) SAMEDI MATIN      +33 6 52 13 07 37                     melhemasmaa@hotmail.fr           2026-05-09 21:09:28       a ver er
+               Aklouche             Zoubida         Femme intermediare ARABE+TAJ samedi matin                                                 aklouche.z@gmail.com             2026-07-25 16:02:05       a ver er
+               Alhoz                Amel            Femme debutante Arabe + Tajwid dimanche matin                                             amelalhoz@outlook.fr             2026-08-01 18:15:34       a ver er
+               Benkara              Mohamed         Préparatoire 1ère année (4-6 ans) SAMEDI A-M                                              inesa340@gmail.com               2026-09-04 08:45:10       a ver er
+               Labehri              Hadjar          Élémentaire 1+ (7-12 ans) DIMANCHE MATIN            +33 6 02 41 14 76                     jennahlabehri@gmail.com          2026-05-24 06:49:22       a ver er
+               Labehri              Jennah          Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 02 41 14 76                     jennahlabehri@gmail.com          2026-05-24 06:49:22       a ver er
+               Labehri              Shaina          Élémentaire 1+ (7-12 ans) DIMANCHE MATIN            +33 6 02 41 14 76                     jennahlabehri@gmail.com          2026-05-24 06:49:22       a ver er
+               Atmani               Louïsa          Élémentaire Débutant 1 (7-12 ans) SAMEDI A-M                                              myriammazari12@gmail.com         2026-06-28 17:45:37       a ver er
+               Bargoug              Liam            Préparatoire 1ère année (4-6 ans) SAMEDI A-M        +33 7 57 87 87 47                     sabrinaraniamazouz@hotmail.fr    2026-05-09 08:47:58       a ver er
+               Belmadani            Habib           Élémentaire 1+ (7-12 ans) DIMANCHE MATIN                                                  amirabelmadani@gmail.com         2026-05-23 10:03:53       a ver er
+               Belmadani            Marwa           Élémentaire 1+ (7-12 ans) DIMANCHE MATIN                                                  amirabelmadani@gmail.com         2026-05-23 10:03:53       a ver er
+               Rebiai               Ilyanna         Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 73 33 31 75                     fatima.benali31100@gmail.com     2026-08-02 09:24:42       a ver er
+               Berkani              Omayma          Femme debutante Arabe + Tajwid samedi matin                                               omaymab2002@gmail.com            2026-05-15 19:22:42       a ver er
+               Bettahar             Lina            Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN                                          ladjel.bettahar31@gmail.com      2026-07-20 10:21:45       a ver er
+               Bey                  Dina            Élémentaire 4 (7-12 ans) MERCREDI                                                         nahix3@hotmail.fr                2026-05-05 20:48:35       a ver er
+               Bey                  Hicham          Élémentaire 4 (7-12 ans) MERCREDI                                                         nahix3@hotmail.fr                2026-05-05 20:48:35       a ver er
+               Bou-Oudi             Basma           Préparatoire 1ère année (4-6 ans) SAMEDI MATIN                                            karimakermad194@gmail.com        2026-05-25 21:48:34       a ver er
+               Bouare               Aminata         Femme debutante Arabe + Tajwid dimanche matin                                             aminatabouare70@gmail.com        2026-07-29 13:46:39       a ver er
+               Bouazizi             Eya             Préparatoire 1ère année (4-6 ans) SAMEDI MATIN                                            fouad21000@gmail.com             2026-05-24 20:04:00       a ver er
+               Bouazizi             Maïssa          Élémentaire Débutant 1 (7-12 ans) SAMEDI MATIN                                            fouad21000@gmail.com             2026-05-24 20:04:00       a ver er
+               Boudane              Nihal           FEMME arabe intermédiaire presentiel samedi matin   +33 6 10 03 10 92                     boudane@gmail.com                2026-07-28 06:12:38       a ver er
+               Boudane              Sarah Kjhadij   FEMME arabe intermédiaire presentiel samedi matin   +33 6 10 03 10 92                     boudane@gmail.com                2026-07-28 06:12:38       a ver er
+               Massiala             Lyam            Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 58 56 21 55                     manel.bghts@gmail.com            2026-07-25 21:58:58       a ver er
+               Rbaibi               Imrane          Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 51 89 20 39                     mbouhi@hotmail.fr                2026-09-02 13:41:21       a ver er
+               Boukandoura          Leila           Femme Tajwid intermédiaire Samedi matin                                                   bougueroualeila@gmail.com        2026-06-06 14:36:48       a ver er
+               Boukechiche          Ilyana          Élémentaire 1+ (7-12 ans) MERCREDI                  +33 7 66 94 66 57                     hayet.hebri@live.fr              2026-05-19 12:35:06       a ver er
+               Bounif               Cherine         Femme debutante Arabe + Tajwid dimanche matin                                             cherinebounif@gmail.com          2026-07-29 14:13:05       a ver er
+               Chebbi               Haroun          Élémentaire 1+ (7-12 ans) DIMANCHE MATIN                                                  chebbiyousra7@gmail.com          2026-09-02 15:51:25       a ver er
+               Chebbi               Sahar           Femme debutante TAJWID Dimanche matin                                                     chebbiyousra7@gmail.com          2026-09-02 15:51:25       a ver er
+               Chebbi               Yassine         Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN                                          chebbiyousra7@gmail.com          2026-09-02 15:51:25       a ver er
+               Chenaine             Safya           Élémentaire 4 (7-12 ans) MERCREDI                                                         djams311@gmail.com               2026-06-17 12:56:00       payer
+               Chtioui              Adam            Élémentaire Débutant 1 (7-12 ans) DIMANCHE MATIN                                          aymen.chtioui31@gmail.com        2026-06-02 18:23:24       a ver er
+               Derkaoui             Ilyès           Élémentaire 1+ (7-12 ans) SAMEDI A-M                +33 6 69 49 30 95                     cevia.food@gmail.com             2026-06-20 08:48:33       a ver er
+               Diffalah             Assia           Élémentaire Débutant 1 (7-12 ans) DIMANCHE MATIN    +33 6 98 94 28 13 / +33 7 85 07 76 97 nassima.belaib@hotmail.fr        2026-05-22 20:56:15       a ver er
+               Diffalah             Myriam          Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 98 94 28 13 / +33 7 85 07 76 97 nassima.belaib@hotmail.fr        2026-05-22 20:56:15       a ver er
+               El Bechari           Nayla           Élémentaire 1+ (7-12 ans) MERCREDI                                                        samira.elbechari@gmail.com       2026-06-10 17:14:26       payer
+               El Boutaybi          Aymen           Préparatoire 1ère année (4-6 ans) SAMEDI MATIN      +33 6 61 68 01 20 / +33 6 29 28 56 95 dunyaeb@hotmail.com              2026-05-18 12:55:42       a ver er
+               El Boutaybi          Layan           Préparatoire 2ème année (5-6 ans) SAMEDI MATIN      +33 6 61 68 01 20 / +33 6 29 28 56 95 dunyaeb@hotmail.com              2026-05-18 12:55:42       a ver er
+               El Boutaybi          Mariam          Préparatoire 2ème année (5-6 ans) SAMEDI MATIN      +33 6 61 68 01 20 / +33 6 29 28 56 95 dunyaeb@hotmail.com              2026-05-18 12:55:42       a ver er
+               Lakhloufi            Safwan          Préparatoire 2ème année (5-6 ans) SAMEDI MATIN      +33 6 29 95 77 54                     sehameb@hotmail.com              2026-05-11 07:55:45       a ver er
+               Lakhloufi El Boutaybib
+                                   Insaf            Préparatoire 1ère année (4-6 ans) SAMEDI MATIN      +33 6 29 95 77 54                     sehameb@hotmail.com              2026-05-11 07:55:45       a ver er
+               Faty                 Fatima          Femme intermediare ARABE+TAJ samedi matin           +33 6 16 97 08 25                     fatimafaty@live.fr               2026-08-11 12:54:33       a ver er
+               Faty                 Isaaq           Préparatoire 1ère année (4-6 ans) SAMEDI MATIN      +33 6 16 97 08 25                     fatimafaty@live.fr               2026-08-11 12:54:33       a ver er
+               Saint Félix          Asnaath         Préparatoire 2ème année (5-6 ans) SAMEDI MATIN      +33 6 16 97 08 25                     fatimafaty@live.fr               2026-08-11 12:54:33       a ver er
+               Mouzoun              Younes          Élémentaire Débutant 1 (7-12 ans) DIMANCHE MATIN    +33 6 49 44 60 75                     hamid.mouzoun@gmail.com          2026-09-05 10:53:13       a ver er
+               Hamioui              Adnane          Élémentaire 1+ (7-12 ans) DIMANCHE A-M                                                    asmaehb31@gmail.com              2026-05-09 12:54:17       a ver er
+               Hamioui              Alaa            Élémentaire Débutant 1 (7-12 ans) DIMANCHE A-M                                            asmaehb31@gmail.com              2026-05-09 12:54:17       a ver er
+               Hernandez            Hind            Préparatoire 1ère année (4-6 ans) SAMEDI MATIN                                            shm.hernandez4@gmail.com         2026-06-01 10:54:26       a ver er
+               Hernandez            Soundouce       Élémentaire 1+ (7-12 ans) SAMEDI MATIN                                                    shm.hernandez4@gmail.com         2026-06-01 10:54:26       a ver er
+               Houssine             Manar           Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN                                          manar.houssine@gmail.com         2026-09-03 13:05:35       a ver er
+               Hripane              Aliya           Élémentaire 4 (7-12 ans) DIMANCHE A-M               +33 7 81 50 40 16                     melhemi@hotmail.fr               2026-05-15 14:51:52       a ver er
+               Hripane              Tesnyme         Élémentaire 1+ (7-12 ans) DIMANCHE A-M              +33 7 81 50 40 16                     melhemi@hotmail.fr               2026-05-15 14:51:52       a ver er
+               Hripane              Walid           Élémentaire 2+ (7-12 ans) DIMANCHE A-M              +33 7 81 50 40 16                     melhemi@hotmail.fr               2026-05-15 14:51:52       a ver er
+               Iguider              Sarah           Élémentaire 1+ (7-12 ans) SAMEDI MATIN              +33 6 22 15 30 73                     hicho08@hotmail.com              2026-07-25 17:33:36       a ver er
+               Iguider              Soulayman       Préparatoire 2ème année (5-6 ans) SAMEDI MATIN      +33 6 22 15 30 73                     hicho08@hotmail.com              2026-07-25 17:33:36       a ver er
+               Lahyani              Kenza           Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 64 32 27 41                     nawskitchen311@outlook.fr        2026-06-28 12:44:59       a ver er
+               Lahyani              Mayssa          Élémentaire 2+ (7-12 ans) MERCREDI                  +33 6 64 32 27 41                     nawskitchen311@outlook.fr        2026-06-28 12:44:59       a ver er
+               Lahyani              Mohamed         Élémentaire 2+ (7-12 ans) MERCREDI                  +33 6 64 32 27 41                     nawskitchen311@outlook.fr        2026-06-28 12:44:59       a ver er
+               Ousset Lakbaidi      Zayane          Préparatoire 1ère année (4-6 ans) MERCREDI          +33 7 69 59 56 10                     lakbaidi.aya@hotmail.com         2026-05-06 08:14:16       a ver er
+               Lechkar              Jennah          Préparatoire 1ère année (4-6 ans) MERCREDI                                                salechkar@gmail.com              2026-08-06 15:01:39       a ver er
+               Lechkar              Leyna           Élémentaire 1+ (7-12 ans) MERCREDI                                                        salechkar@gmail.com              2026-08-06 15:01:39       a ver er
+               Mansour              Sajed           Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 58 24 50 53                     mansoursami17@gmail.com          2026-06-27 16:17:23       a ver er
+               Mansour              Younes          Élémentaire 1+ (7-12 ans) MERCREDI                  +33 6 58 24 50 53                     mansoursami17@gmail.com          2026-06-27 16:17:23       a ver er
+               Maqboul              Chehrazade      Élémentaire Débutant 1 (7-12 ans) DIMANCHE A-M                                            r.changat@hotmail.fr             2026-05-11 07:55:51       a ver er
+               Maqboul              Mohamed-Adam Élémentaire Débutant 1 (7-12 ans) DIMANCHE A-M                                               r.changat@hotmail.fr             2026-05-11 07:55:51       a ver er
+               Maqboul              Yanis           Élémentaire Débutant 1 (7-12 ans) DIMANCHE A-M                                            r.changat@hotmail.fr             2026-05-11 07:55:51       a ver er
+               Metugui              Lilia           Élémentaire 1+ (7-12 ans) SAMEDI MATIN                                                    iman.metugui@gmail.com           2026-06-20 09:03:02       a ver er
+               Metugui              Yassine         Élémentaire 1+ (7-12 ans) SAMEDI MATIN                                                    iman.metugui@gmail.com           2026-06-20 09:03:02       a ver er
+               Habib Araita         Balqis          Préparatoire 1ère année (4-6 ans) SAMEDI A-M        +33 6 50 79 32 99                     nasra.oubah.med@gmail.com        2026-08-23 08:18:59       a ver er
+               Isse Alwan           Djibril         Élémentaire 1+ (7-12 ans) SAMEDI A-M                +33 6 50 79 32 99                     nasra.oubah.med@gmail.com        2026-08-23 08:18:59       a ver er
+               Bakhti               Jannah          Préparatoire 1ère année (4-6 ans) SAMEDI MATIN      +33 6 15 36 15 25                     moueddenhanane@gmail.com         2026-05-09 08:37:26       a ver er
+               Delnoeufcourt        Ayna            Préparatoire 1ère année (4-6 ans) SAMEDI MATIN      +33 6 31 26 83 26                     amel.mouhib@hotmail.fr           2026-08-07 20:57:15       a ver er
+               Taharast             Imrane          Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 50 78 52 86                     siham.moundili@gmail.com         2026-05-23 07:56:27       a ver er
+               Taharast             Sarah           Élémentaire 1+ (7-12 ans) MERCREDI                  +33 6 50 78 52 86                     siham.moundili@gmail.com         2026-05-23 07:56:27       a ver er
+               Nair Benrokia        Jemma           Élémentaire 1+ (7-12 ans) MERCREDI                                                        laetitia.nair@gmail.com          2026-05-30 14:06:38       payer
+               Nair Benrokia        Yanis           Élémentaire 2 (7-12 ans) MERCREDI                                                         laetitia.nair@gmail.com          2026-05-30 14:06:38       payer
+               Faci                 Jasmyne         Élémentaire Débutant 1 (7-12 ans) SAMEDI A-M                                              pourciel35@gmail.com             2026-05-23 11:26:29       a ver er
+               Faci                 Riyad           Préparatoire 1ère année (4-6 ans) SAMEDI A-M                                              pourciel35@gmail.com             2026-05-23 11:26:29       a ver er
+               Rabhi                Mohammed        Préparatoire 1ère année (4-6 ans) SAMEDI MATIN                                            mohamed.rabhi32@hotmail.com      2026-05-06 13:07:13       a ver er
+               Anansi               Patrick         Élémentaire Débutant 1 (7-12 ans) DIMANCHE MATIN    +33 7 66 63 82 82                     richardson-carolle@live.fr       2026-08-08 11:02:55       a ver er
+               Papayo               Ikhaïly         Élémentaire Débutant 1 (7-12 ans) DIMANCHE A-M      +33 7 66 63 82 82                     richardson-carolle@live.fr       2026-08-08 11:02:55       a ver er
+               Chebbi               Haroun          Élémentaire 1+ (7-12 ans) DIMANCHE MATIN            +33 6 19 44 25 55                     zitoun.sahar@gmail.com           2026-05-09 12:12:53       a ver er
+               Chebbi               Sahar           Femme debutante TAJWID Dimanche matin               +33 6 19 44 25 55                     zitoun.sahar@gmail.com           2026-05-09 12:12:53       a ver er
+               Chebbi               Yassine         Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 19 44 25 55                     zitoun.sahar@gmail.com           2026-05-09 12:12:53       a ver er
+               Sahsah               Sarah           Préparatoire 2ème année (5-6 ans) MERCREDI          +33 7 69 84 13 16                     sahsahradouane@gmail.com         2026-05-30 08:02:54       a ver er
+               Saidi                Neil            Élémentaire Débutant 1 (7-12 ans) MERCREDI          +33 6 74 49 90 77 / +33 7 69 66 65 48 safaa.m.saidi@gmail.com          2026-05-09 12:47:22       a ver er
+               Si Ahmed             Adam            Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 66 88 50 89                     aicha31.toulouse@hotmail.fr      2026-06-22 18:38:45       a ver er
+               Botbot               Eyden           Préparatoire 2ème année (5-6 ans) DIMANCHE MATIN                                          alyahsoum7@gmail.com             2026-05-18 10:12:06       a ver er
+               Taibi                Nassim          Élémentaire niveaut 1+ (7-12 ans) DIMANCHE A-M                                            sanaa.t@outlook.fr               2026-05-06 14:05:32       a ver er
+               Taibi                Sara            Élémentaire niveau 1+ (7-12 ans) DIMANCHE A-M                                             sanaa.t@outlook.fr               2026-05-06 14:05:32       a ver er
+               Viorney              Hanna           Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 43 43 46 74                     gherzi.samia31@orange.fr         2026-06-20 15:57:04       a ver er
+               Viorney              Sofya           Élémentaire 2 (7-12 ans) MERCREDI                   +33 6 43 43 46 74                     gherzi.samia31@orange.fr         2026-06-20 15:57:04       a ver er
+               Yahia Cherif         Yamina          Femme debutante Arabe + Tajwid samedi matin         +33 7 83 28 02 54                     yaminayahiac@gmail.com           2026-08-25 12:10:05       a ver er
+               Zawak                Hamza           Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 22 09 23 30                     hajar.hariri104@gmail.com        2026-06-06 22:12:01       a ver er
+               Zawak                Razane          Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 6 22 09 23 30                     hajar.hariri104@gmail.com        2026-06-06 22:12:01       a ver er
+               belaib               isaac           Préparatoire 2ère année (4-6 ans) DIMANCHE MATIN    07 86 88 92 39                        c.amal1251@gmail.com                                       payer
+               belferroum           adem            Élémentaire niveau 4 (7-12 ans) DIMANCHE A-M        06 26 06 60 32                        m.belferroum@yahoo.fr                                      payer
+               boudamouz            ikrame          Élémentaire niveau 1+ (7-12 ans)MERCREDI            07 70 62 67 82                        bdz_brahim@yahoo.fr                                        payer
+               boudamouz            imran           Élémentaire niveau 2 (7-12 ans)MERCREDI             07 70 62 67 82                        bdz_brahim@yahoo.fr                                        payer
+               boudamouz            syrine          Préparatoire 2ème année (5-6 ans) MERCREDI          07 70 62 67 82                        bdz_brahim@yahoo.fr                                        payer
+               chahr                nour            Préparatoire 2ème année (5-6 ans) MERCREDI          06 09 99 88 85                        chahrhicham@hotmail.fr                                     payer
+               chahr                soumaya         Préparatoire 1ème année (5-6 ans) MERCREDI          06 09 99 88 85                        chahrhicham@hotmail.fr                                     payer
+               sendi                taim            Préparatoire 1ème année (5-6 ans) MERCREDI          06 51 28 60 36                        cherifarij@gmail.com                                       payer
+               fredj                ilyana          Élémentaire 1+ (7-12 ans) samedi MATIN              06 24 01 41 04                        m.fredj@hotmail.com                                        payer
+                                                    Préparatoire 1ère année (4-6 ans) SAMEDI MATIN
+               Makrini              adam                                                                +33 6 76 94 19 71                     khammar.emane@gmail.com                                    payer
+               Makrini              anas            Élémentaire 1+ (7-12 ans) SAMEDI MATIN              +33 6 76 94 19 71                     khammar.emane@gmail.com                                    payer
+               Mansour El Rouby Salma               Préparatoire 1ère année (4-6 ans) MERCREDI          +33 7 76 14 66 07                     mostafa.mansour17@gmail.com                                payer
+               Marques              Sakina-Maryam Élémentaire 1+ (7-12 ans) MERCREDI                    +33 6 99 03 24 41                     djilyna@gmail.com                                          payer
+               oiciny               nahil           Préparatoire 1ère année (4-6 ans) DIMANCHE MATIN    +33 7 62 47 95 90                     mannelle11@hotmail.fr                                      payer
+               amzal                amina           Préparatoire 1ème année (5-6 ans) MERCREDI          +33 6 64 64 71 52                     segard.gwendoline@gmail.com                                payer
+               amzal                nour            Préparatoire 2ème année (5-6 ans) MERCREDI          +33 6 64 64 71 52                     segard.gwendoline@gmail.com                                payer
+               magnac               alya            Préparatoire 2ème année (5-6 ans) samedi matin                                604535321 Sara.coradidi@gmail.com                                      a ver er
+               magnac               jude            Préparatoire 1ème année (5-6 ans) samedi matin                                604535321 Sara.coradidi@gmail.com                                      a veri er
+               mechineau            cindya          Femme debutante Arabe + Tajwid dimanche matin       06 25 62 24 74                        mechineaucindya@gmai.com                                   a veri er
+               master youssouf      inayah          Préparatoire 2ème année (5-6 ans) samedi matin      06 51 33 88 45                        nilame.master@gmail.com                                    a veri er
+               master youssouf      assia           Élémentaire 1+ (7-12 ans) SAMEDI MATIN              06 51 33 88 45                        nilame.master@gmail.com                                    a veri er
+               moussaoui            selsabil        Élémentaire niveau 2+ (7-12 ans)MERCREDI            06 33 44 45 13                        hm5s@yahoo.fr                                              a veri er
+               moussaoui            louay           Élémentaire niveau 2+ (7-12 ans)MERCREDI            06 33 44 45 13                        hm5s@yahoo.fr                                              a veri er
+               moussaoui            ilyes           Élémentaire niveau 2 (7-12 ans)MERCREDI             06 33 44 45 13                        hm5s@yahoo.fr                                              a veri er
+               hani                 lena            Élémentaire 3 (7-12 ans) DIMANCHE A-M               06 95 54 17 18                        hani_kader@yahoo.fr                                        a veri er
+               haouzi               lehna           Préparatoire 2ème année (5-6 ans) samedi matin      06 63 91 18 26                        sadiqqi.naima@gmail.com                                    a veri er
+               bougueroua           wassim          Élémentaire 1+ (7-12 ans) DIMANCHE A-M              06 59 23 31 02                        bougueroua2@gmail.com                                      a veri er
+               bryek                mayssa          Préparatoire 2ème année (5-6 ans) MERCREDI          07 81 83 94 42                        souad.k@outlook.fr                                         a veri er
+               chaulliac riallant   kais            Élémentaire 1+ (7-12 ans) DIMANCHE matin            06 63 75 95 84                        siana0708@live.fr                                          a veri er
+               mahdjoubi            assil           Élémentaire 3 (7-12 ans) DIMANCHE A-M               07 84 75 52 86                        dj-salima@hotmail.com                                      a veri er
+               achouche             aylan           Élémentaire niveau 1+ (7-12 ans)MERCREDI            06 35 35 10 08                        kgreenman79@gmail.com                                      a veri er
+               el jari              so ane          Élémentaire 3 (7-12 ans) DIMANCHE A-M               06 76 56 30 59                        murieleljari@gmail.com                                     a veri er
+               naimi                hamza           Élémentaire 3 (7-12 ans) DIMANCHE A-M               06 28 07 17 85                        n_nouria@hotmail.fr                                        a veri er
+               jahouh               rayan           Élémentaire 2+ (7-12 ans) DIMANCHE A-M              06 58 16 75 20                        alanori@live.fr                                            payer
+fi
+
+
+
+
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+     fi
+
+
+
+
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+          fi
+

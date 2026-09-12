@@ -72,6 +72,14 @@ const DISTANCIEL_FORMATIONS = [
   'spiritualite_islam'
 ];
 
+beforeAll(() => {
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+});
+
+afterAll(() => {
+  jest.restoreAllMocks();
+});
+
 describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -133,6 +133,6 @@ export const DISTANCE_CLASS_ID_TO_UUID: Record<number, string> = {
   108: 'e0a12345-0008-4000-8000-888888888888',
 };
 
-export function isOfficialDistanceClassId(id: number): boolean {
-  return Number.isInteger(id) && DISTANCE_CLASS_ID_TO_UUID[id] != null;
+export function isOfficialDistanceClassId(id?: number | null): boolean {
+  return typeof id === 'number' && Number.isInteger(id) && DISTANCE_CLASS_ID_TO_UUID[id] != null;
 }

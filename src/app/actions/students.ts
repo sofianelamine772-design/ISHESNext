@@ -8,6 +8,7 @@ import { isAdminEmail } from "@/lib/auth-utils";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
 import { isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
+import { isOfficialDistanceClassId } from "@/lib/distance-data";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -443,7 +444,13 @@ export async function fetchClassesAction(academicYear?: string) {
     .sort((a: any, b: any) => {
       if (a.type !== b.type) return a.type === 'presentiel' ? -1 : 1;
       if (a.type === 'presentiel') return (a.externalId || 0) - (b.externalId || 0);
-      return (a.name || '').localeCompare(b.name || '', 'fr');
+      const aOfficial = isOfficialDistanceClassId(a.externalId);
+      const bOfficial = isOfficialDistanceClassId(b.externalId);
+      if (aOfficial && bOfficial) return (a.externalId || 0) - (b.externalId || 0);
+      if (aOfficial !== bOfficial) return aOfficial ? -1 : 1;
+      const aLabel = `${a.formationTitle || ''} ${a.name || ''}`;
+      const bLabel = `${b.formationTitle || ''} ${b.name || ''}`;
+      return aLabel.localeCompare(bLabel, 'fr');
     });
 
     return { success: true, data: formatted };

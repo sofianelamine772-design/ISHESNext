@@ -51,11 +51,16 @@ export function sanitizeEmailHtml(html: string): string {
 
     let safeAttrs = '';
     if (['span', 'p', 'div', 'h1', 'h2', 'h3'].includes(t)) {
+      const styles: string[] = [];
       const color = String(attrs).match(/style\s*=\s*["'][^"']*color\s*:\s*([^;"']+)/i);
       if (color) {
         const value = color[1].trim().replace(/[^#a-z0-9(),.% ]/gi, '');
-        if (value) safeAttrs = ` style="color: ${value};"`;
+        if (value) styles.push(`color: ${value}`);
       }
+      const align = String(attrs).match(/style\s*=\s*["'][^"']*text-align\s*:\s*(center|left|right|justify)/i)
+        || String(attrs).match(/align\s*=\s*["']?(center|left|right|justify)/i);
+      if (align?.[1]) styles.push(`text-align: ${align[1].toLowerCase()}`);
+      if (styles.length) safeAttrs = ` style="${styles.join('; ')};"`;
     }
     return `<${t}${safeAttrs}>`;
   });

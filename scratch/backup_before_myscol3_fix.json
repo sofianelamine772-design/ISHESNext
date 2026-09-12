@@ -1,0 +1,3021 @@
+{
+  "timestamp": "2026-09-11T17:40:59.089Z",
+  "etudiants": [
+    {
+      "id": "6348cc99-4c25-450a-a2ff-09a1b1e7c52e",
+      "first_name": "Naouale",
+      "last_name": "KIYIM",
+      "email": "sanaouale@hotmail.fr",
+      "phone": "+33650997673",
+      "status": "actif"
+    },
+    {
+      "id": "2cc22c12-d26d-4b94-99a5-cbf285e84d38",
+      "first_name": "M",
+      "last_name": "D",
+      "email": "mdiallo211@outlook.fr",
+      "phone": "+33 650387098",
+      "status": "actif"
+    },
+    {
+      "id": "fe3b4dbc-476a-4ee9-8098-721b7df3fe96",
+      "first_name": "Ayoub ",
+      "last_name": "El Morabit ",
+      "email": "jilbabouki@outlook.fr",
+      "phone": "+33 665290564",
+      "status": "actif"
+    },
+    {
+      "id": "99075a58-21f3-4f5b-b353-d10bbf58dee5",
+      "first_name": "Ismaël ",
+      "last_name": "El Morabit ",
+      "email": "jilbabouki@outlook.fr",
+      "phone": "+33 665290564",
+      "status": "actif"
+    },
+    {
+      "id": "1c6acc31-d96b-420d-b242-ef87a633037d",
+      "first_name": "Chayma",
+      "last_name": "El Morabit ",
+      "email": "jilbabouki@outlook.fr",
+      "phone": "+33 665290564",
+      "status": "actif"
+    },
+    {
+      "id": "2e3bc5c2-bc77-475e-9ea1-80df1c231b54",
+      "first_name": "Aswan",
+      "last_name": "DOUAH",
+      "email": "nahida31@hotmail.fr",
+      "phone": "+33 605621872",
+      "status": "actif"
+    },
+    {
+      "id": "676cc00f-18af-4063-ab69-bf2d999a4ad5",
+      "first_name": "Rayan ",
+      "last_name": "Khedim ",
+      "email": "benyahiakhedim@orange.fr",
+      "phone": "+33623057868",
+      "status": "actif"
+    },
+    {
+      "id": "5a34371f-325f-493a-b2e9-22dba1a30496",
+      "first_name": "Nadine,layla",
+      "last_name": "Lahyani",
+      "email": "rihabfejjaj1@gmail.com",
+      "phone": "+33 749250720",
+      "status": "actif"
+    },
+    {
+      "id": "user_3FipNjR8EJKYU7SirhrzhlRziOX",
+      "first_name": "anas",
+      "last_name": "benamine",
+      "email": "benilias757@gmail.com",
+      "phone": "+33 787878787",
+      "status": "actif"
+    },
+    {
+      "id": "email_archive",
+      "first_name": "Archive",
+      "last_name": "E-mails",
+      "email": "email_archive@ishes.local",
+      "phone": null,
+      "status": "suspendu"
+    },
+    {
+      "id": "72c5b4a3-050c-4dca-9f5c-1b8614910f9b",
+      "first_name": "Aya",
+      "last_name": "Khaliha ",
+      "email": "khalihaamine@gmail.com",
+      "phone": "+33 620740086",
+      "status": "actif"
+    },
+    {
+      "id": "31d083f0-1cfe-424b-aaae-75a5af67a197",
+      "first_name": "Nora",
+      "last_name": "Oojeeraully ",
+      "email": "voojeeraully@hotmail.com",
+      "phone": "+33698897968",
+      "status": "actif"
+    },
+    {
+      "id": "377ad04b-5c6b-4058-869c-89daa5bb6943",
+      "first_name": "Selma",
+      "last_name": "Kubiak ",
+      "email": "samira.kubiak@gmail.com",
+      "phone": "+33 651770083",
+      "status": "actif"
+    },
+    {
+      "id": "ca0ede40-fa3d-45ee-a1c4-32939b6efdd9",
+      "first_name": "Jessica",
+      "last_name": "Girault",
+      "email": "jessica.girault@yahoo.com",
+      "phone": "+33 627895433",
+      "status": "actif"
+    },
+    {
+      "id": "user_3FinqphxLeeiYbFrqwQzGyUBLqu",
+      "first_name": "lenny",
+      "last_name": "senata",
+      "email": "benilias757@gmail.com",
+      "phone": "+33 767676767",
+      "status": "actif"
+    },
+    {
+      "id": "cb4c6cd6-9321-49cc-bdd2-4ee2b9bf7718",
+      "first_name": "Sonia",
+      "last_name": "Kubiak ",
+      "email": "samira.kubiak@gmail.com",
+      "phone": "+33 651770083",
+      "status": "actif"
+    },
+    {
+      "id": "8baa903a-d8f4-42e0-b08b-4d9fe6d41476",
+      "first_name": "Adem",
+      "last_name": "Belkoniene",
+      "email": "nesrine.belkoniene@hotmail.com",
+      "phone": "+33 766785868",
+      "status": "actif"
+    },
+    {
+      "id": "20c3adc9-29fe-405f-9bcc-366e6358ea43",
+      "first_name": "",
+      "last_name": "",
+      "email": "miloudameidani@icloud.com",
+      "phone": "",
+      "status": "actif"
+    },
+    {
+      "id": "c639505d-9da7-4e02-a5cf-e2d20f9012ea",
+      "first_name": "Ayline",
+      "last_name": "Belkoniene",
+      "email": "nesrine.belkoniene@hotmail.com",
+      "phone": "+33 766785868",
+      "status": "actif"
+    },
+    {
+      "id": "67e6d985-c623-4bb9-9f82-bca5b3f8dbeb",
+      "first_name": "Ishes",
+      "last_name": "Ishes",
+      "email": "ishes.contact@gmail.com",
+      "phone": "",
+      "status": "actif"
+    },
+    {
+      "id": "6ad661c6-d991-479b-8a58-63a30cb1e840",
+      "first_name": "Ishes",
+      "last_name": "Ishes",
+      "email": "ishes.contact@gmail.com",
+      "phone": "",
+      "status": "actif"
+    },
+    {
+      "id": "ba7cd3d0-1d40-4d46-bab2-fab4b2188f35",
+      "first_name": "Rayan ",
+      "last_name": "Lammari ",
+      "email": "lammari.ryad@gmail.com",
+      "phone": "+33 766399492",
+      "status": "actif"
+    },
+    {
+      "id": "533d8507-fa55-41ae-867e-41bc2769b7fc",
+      "first_name": "Ismaël ",
+      "last_name": "Harrat",
+      "email": "berakech.c@hotmail.com",
+      "phone": "+33 766554863",
+      "status": "actif"
+    },
+    {
+      "id": "9e910fb2-9ee9-4913-b223-e69015bf9a37",
+      "first_name": "rayan",
+      "last_name": "chaouch",
+      "email": "rchaouch88@gmail.com",
+      "phone": "+33 767903145",
+      "status": "actif"
+    },
+    {
+      "id": "933ae4b6-4bbc-49cf-a79b-5a6a8e3f4158",
+      "first_name": "Leyna",
+      "last_name": "Harrat",
+      "email": "berakech.c@hotmail.com",
+      "phone": "+33 766554863",
+      "status": "actif"
+    },
+    {
+      "id": "3dd29078-b52e-4a64-899e-3bc63bc5e06e",
+      "first_name": "Nouh (Noé)",
+      "last_name": "GHANMI",
+      "email": "f.abdechafi@yahoo.fr",
+      "phone": "+33650504593",
+      "status": "actif"
+    },
+    {
+      "id": "2cb6c193-900b-45a8-90b5-060f2f924414",
+      "first_name": "Nada Nihed ",
+      "last_name": "Salaa Djezzar ",
+      "email": "nadanihed12@gmail.com",
+      "phone": "+33683595116",
+      "status": "actif"
+    },
+    {
+      "id": "d3a4306f-6c33-4a49-bd41-3fa633ca9da1",
+      "first_name": "Sami",
+      "last_name": "Vergnes",
+      "email": "karimavergnes05@gmail.com",
+      "phone": "+33605920343",
+      "status": "actif"
+    },
+    {
+      "id": "26442089-1580-408d-9b37-4fba48662bbc",
+      "first_name": "ADAM EZeddine",
+      "last_name": "BECHA",
+      "email": "meriam.belhadjali@gmail.com",
+      "phone": "+33649202505",
+      "status": "actif"
+    },
+    {
+      "id": "system_mail_sender",
+      "first_name": "Système",
+      "last_name": "E-mails",
+      "email": "system_mail_sender@ishees.com",
+      "phone": null,
+      "status": "actif"
+    },
+    {
+      "id": "a283880f-33a6-40c5-867a-3973e307a3b7",
+      "first_name": "Inès ",
+      "last_name": "Baudoin ",
+      "email": "nora4522@hotmail.fr",
+      "phone": "+33633452970",
+      "status": "actif"
+    },
+    {
+      "id": "896067f3-8036-4f08-a4bc-9cb12432a1e9",
+      "first_name": "hajarouna",
+      "last_name": "hajjijj",
+      "email": "leil71606@gmail.com",
+      "phone": "+33 767787110",
+      "status": "actif"
+    },
+    {
+      "id": "52c0d53d-3cc5-43af-b505-67af931e6c5f",
+      "first_name": "Yaniss ",
+      "last_name": "Baudoin ",
+      "email": "nora4522@hotmail.fr",
+      "phone": "+33633452970",
+      "status": "actif"
+    },
+    {
+      "id": "4144be1d-b381-403f-a6e9-490d936a452d",
+      "first_name": "Neïla ",
+      "last_name": "BOUSROUD ",
+      "email": "sarah.elmaaroufi@hotmail.fr",
+      "phone": "+33611384160",
+      "status": "actif"
+    },
+    {
+      "id": "287578f2-9a37-4c87-8c6f-9fafca7af6a0",
+      "first_name": "Sarah ",
+      "last_name": "El MAAROUFI ",
+      "email": "sarah.elmaaroufi@hotmail.fr",
+      "phone": "+33611384160",
+      "status": "actif"
+    },
+    {
+      "id": "5e7bf0bc-dedc-4f98-aed6-410abefcc68f",
+      "first_name": "AMIR ",
+      "last_name": "EL ALAMI EL IDRISSI",
+      "email": "elalamiahmed@live.fr",
+      "phone": "+33752145212",
+      "status": "actif"
+    },
+    {
+      "id": "32e0c45c-3cdb-4e58-a88e-e842b3f4e372",
+      "first_name": "Soulayman",
+      "last_name": "ANDOH",
+      "email": "med_nada@hotmail.fr",
+      "phone": "+33652846707",
+      "status": "actif"
+    },
+    {
+      "id": "9290239c-f4fa-4341-a51d-e3db6b4df9de",
+      "first_name": "Adam",
+      "last_name": "Ezzerrouqi",
+      "email": "zakariae1@hotmail.fr",
+      "phone": "+33682787679",
+      "status": "actif"
+    },
+    {
+      "id": "38167af1-7570-47ac-a688-866bb30067aa",
+      "first_name": "Raja",
+      "last_name": "Ouammou",
+      "email": "raja-ouammou@hotmail.fr",
+      "phone": "+33769699368",
+      "status": "actif"
+    },
+    {
+      "id": "a15c5730-f227-4779-b72e-fc143b1171a5",
+      "first_name": "Safa",
+      "last_name": "Benjeddi",
+      "email": "benjeddi.ali26@gmail.com",
+      "phone": "+33601487012",
+      "status": "actif"
+    },
+    {
+      "id": "4b3be558-9405-4116-be1f-14963130a90c",
+      "first_name": "Beya",
+      "last_name": "Ezzerrouqi",
+      "email": "zakariae1@hotmail.fr",
+      "phone": "+33682787679",
+      "status": "actif"
+    },
+    {
+      "id": "a470585a-5f7f-4612-ad4b-6f0a2a9bda0e",
+      "first_name": "Neil",
+      "last_name": "Saidi",
+      "email": "safaa.m.saidi@gmail.com",
+      "phone": "+33769666654",
+      "status": "actif"
+    },
+    {
+      "id": "e7bdb59e-7b11-4080-aa60-693b5028b005",
+      "first_name": "dezd",
+      "last_name": "ezdezadaz",
+      "email": "lennysenayadeeee434@outlook.fr",
+      "phone": "+33676667677",
+      "status": "actif"
+    },
+    {
+      "id": "158b4f5a-b430-4753-94e7-56593f216851",
+      "first_name": "Iyed ",
+      "last_name": "Amouchi ",
+      "email": "selma.amouchi@laposte.net",
+      "phone": "+33766254963",
+      "status": "actif"
+    },
+    {
+      "id": "e9b107e0-6448-444e-beab-2c5961091b7b",
+      "first_name": "Nour",
+      "last_name": "Mazenc",
+      "email": "wahiba.bidah@gmail.com",
+      "phone": "+33664695839",
+      "status": "actif"
+    },
+    {
+      "id": "04980580-af6a-40d6-affd-a77cd3889bf2",
+      "first_name": "Ilyana",
+      "last_name": "Bouktib",
+      "email": "ilhem.laouani31@gmail.com",
+      "phone": "+33664965342",
+      "status": "actif"
+    },
+    {
+      "id": "158a22ec-98a8-48ab-8a82-cc8e53b80029",
+      "first_name": "Louisa",
+      "last_name": "MEDAN",
+      "email": "lkeddouri@yahoo.fr",
+      "phone": "+33666974009",
+      "status": "actif"
+    },
+    {
+      "id": "3b004b79-79e1-4323-aa65-4ecf7e530355",
+      "first_name": "Amel",
+      "last_name": "mouhib",
+      "email": "amel.mouhib@hotmail.fr",
+      "phone": "+33631268326",
+      "status": "actif"
+    },
+    {
+      "id": "ec2b9e35-df15-46b5-84b6-96a1c673020c",
+      "first_name": "Kayen ",
+      "last_name": "Djemal ben ayed ",
+      "email": "soukaina.benayed@yahoo.com",
+      "phone": "+33777327869",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070773842_490b7b99",
+      "first_name": "Tesnim",
+      "last_name": "Abderrahmane",
+      "email": "dounia.bensouici69@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070774193_226f6273",
+      "first_name": "Reda",
+      "last_name": "Abdessamad",
+      "email": "saloua.abdessamad@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070774462_7bd236a4",
+      "first_name": "Lina",
+      "last_name": "Abenna",
+      "email": "melhemasmaa@hotmail.fr",
+      "phone": "+33 6 52 13 07 37",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070774828_2221033f",
+      "first_name": "Amel",
+      "last_name": "Alhoz",
+      "email": "amelalhoz@outlook.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070775062_96928093",
+      "first_name": "Nour",
+      "last_name": "Amzal",
+      "email": "segard.gwendoline@gmail.com",
+      "phone": "+33 6 64 64 71 52",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070775266_a25d1f1a",
+      "first_name": "Louïsa",
+      "last_name": "Atmani",
+      "email": "myriammazari12@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070775494_54efcbbb",
+      "first_name": "Liam",
+      "last_name": "Bargoug",
+      "email": "sabrinaraniamazouz@hotmail.fr",
+      "phone": "+33 7 57 87 87 47",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070775704_4558a614",
+      "first_name": "Adem",
+      "last_name": "Belferroum",
+      "email": "m.belferroum@yahoo.fr",
+      "phone": "+33 6 26 06 60 32",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070775943_ddefdc6c",
+      "first_name": "Marwa",
+      "last_name": "Belmadani",
+      "email": "amirabelmadani@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776224_32e3010c",
+      "first_name": "Omayma",
+      "last_name": "Berkani",
+      "email": "omaymab2002@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776477_1f2e6019",
+      "first_name": "Dina",
+      "last_name": "Bey",
+      "email": "nahix3@hotmail.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776692_88186197",
+      "first_name": "Eyden",
+      "last_name": "Botbot",
+      "email": "alyahsoum7@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776987_d392d29b",
+      "first_name": "Aminata",
+      "last_name": "Bouare",
+      "email": "aminatabouare70@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070777578_670b4a0b",
+      "first_name": "Maïssa",
+      "last_name": "Bouazizi",
+      "email": "fouad21000@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070777815_327e04b5",
+      "first_name": "Imran",
+      "last_name": "Boudamouz",
+      "email": "bdz_brahim@yahoo.fr",
+      "phone": "+33 7 70 62 67 82",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070778033_42522497",
+      "first_name": "Nihal",
+      "last_name": "Boudane",
+      "email": "boudane@gmail.com",
+      "phone": "+33 6 10 03 10 92",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070778244_b8fe1af1",
+      "first_name": "Leila",
+      "last_name": "Boukandoura",
+      "email": "bougueroualeila@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070778481_e7989311",
+      "first_name": "Cherine",
+      "last_name": "Bounif",
+      "email": "cherinebounif@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070778703_f55a415e",
+      "first_name": "Soumaya",
+      "last_name": "Chahr",
+      "email": "chahrhicham@hotmail.fr",
+      "phone": "+33 6 09 99 88 85",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070778910_9bc68c52",
+      "first_name": "Sahar",
+      "last_name": "Chebbi",
+      "email": "zitoun.sahar@gmail.com",
+      "phone": "+33 6 19 44 25 55",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779132_46d1dc2f",
+      "first_name": "Safya",
+      "last_name": "Chenaine",
+      "email": "djams311@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779429_4da753af",
+      "first_name": "Ayna",
+      "last_name": "Delnoeufcourt",
+      "email": "amel.mouhib@hotmail.fr",
+      "phone": "+33 6 31 26 83 26",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779650_02687d42",
+      "first_name": "Assia",
+      "last_name": "Diffalah",
+      "email": "nassima.belaib@hotmail.fr",
+      "phone": "+33 6 98 94 28 13",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779870_874f9e99",
+      "first_name": "Nayla",
+      "last_name": "El Bechari",
+      "email": "samira.elbechari@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780087_8b3b7145",
+      "first_name": "Layan",
+      "last_name": "El Boutaybi",
+      "email": "dunyaeb@hotmail.com",
+      "phone": "+33 6 61 68 01 20",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780286_2d6c7b88",
+      "first_name": "Naïm",
+      "last_name": "El Ouady",
+      "email": "kaltoum-31@hotmail.fr",
+      "phone": "+33 7 81 95 96 56",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780491_ddc3b6b8",
+      "first_name": "Riyad",
+      "last_name": "Faci",
+      "email": "pourciel35@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780769_84677211",
+      "first_name": "Isaaq",
+      "last_name": "Faty",
+      "email": "fatimafaty@live.fr",
+      "phone": "+33 6 16 97 08 25",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781046_90521e29",
+      "first_name": "Balqis",
+      "last_name": "Habib Araita",
+      "email": "nasra.oubah.med@gmail.com",
+      "phone": "+33 6 50 79 32 99",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781270_12694307",
+      "first_name": "Alaa",
+      "last_name": "Hamioui",
+      "email": "asmaehb31@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781547_dd0d64b1",
+      "first_name": "Soundouce",
+      "last_name": "Hernandez",
+      "email": "shm.hernandez4@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781765_eb133d74",
+      "first_name": "Aliya",
+      "last_name": "Hripane",
+      "email": "melhemi@hotmail.fr",
+      "phone": "+33 7 81 50 40 16",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781985_5a2196f3",
+      "first_name": "Walid",
+      "last_name": "Hripane",
+      "email": "melhemi@hotmail.fr",
+      "phone": "+33 7 81 50 40 16",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782184_58b425df",
+      "first_name": "Soulayman",
+      "last_name": "Iguider",
+      "email": "hicho08@hotmail.com",
+      "phone": "+33 6 22 15 30 73",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782429_a1b3f63f",
+      "first_name": "Hadjar",
+      "last_name": "Labehri",
+      "email": "jennahlabehri@gmail.com",
+      "phone": "+33 6 02 41 14 76",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782667_df74b24d",
+      "first_name": "Shaina",
+      "last_name": "Labehri",
+      "email": "jennahlabehri@gmail.com",
+      "phone": "+33 6 02 41 14 76",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782942_58675d99",
+      "first_name": "Mayssa",
+      "last_name": "Lahyani",
+      "email": "nawskitchen311@outlook.fr",
+      "phone": "+33 6 64 32 27 41",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070783190_165c27fb",
+      "first_name": "Insaf",
+      "last_name": "Lakhloufi El Boutaybib",
+      "email": "sehameb@hotmail.com",
+      "phone": "+33 6 29 95 77 54",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070783418_1703e9d0",
+      "first_name": "Jennah",
+      "last_name": "Lechkar",
+      "email": "salechkar@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "fdacff0b-818e-46aa-9fbb-891317dac92e",
+      "first_name": "Hajar",
+      "last_name": "JAMOU",
+      "email": "hjrchennouf75@gmail.com",
+      "phone": "+33650985251",
+      "status": "actif"
+    },
+    {
+      "id": "7416a6f7-9b78-4175-859f-f94e1b9a5da5",
+      "first_name": "edaz",
+      "last_name": "dezadzeadzea",
+      "email": "dzaedazdez87@gmail.com",
+      "phone": "+33767667677",
+      "status": "actif"
+    },
+    {
+      "id": "98637f69-bb50-4e10-8345-435a6ee1c759",
+      "first_name": "Imran",
+      "last_name": "Bouktib",
+      "email": "ilhem.laouani31@gmail.com",
+      "phone": "+33664965342",
+      "status": "actif"
+    },
+    {
+      "id": "cbe9e676-1332-480e-9e2e-68afea009733",
+      "first_name": "Lilia",
+      "last_name": "KABOUBI ",
+      "email": "jihene.chaouachi@gmail.com",
+      "phone": "+33665346904",
+      "status": "actif"
+    },
+    {
+      "id": "c743cb08-469c-40c4-b46a-b3c7d5ac7c5e",
+      "first_name": "Assia",
+      "last_name": "Mazenc",
+      "email": "wahiba.bidah@gmail.com",
+      "phone": "+33664695839",
+      "status": "actif"
+    },
+    {
+      "id": "6025be9d-f1c0-499c-87ba-48d2690ce56c",
+      "first_name": "Aliya",
+      "last_name": "MEDAN",
+      "email": "lkeddouri@yahoo.fr",
+      "phone": "+33666974009",
+      "status": "actif"
+    },
+    {
+      "id": "99fdd38b-8010-47a0-a590-23482ba17847",
+      "first_name": "KHADIDJA",
+      "last_name": "DIAGNE",
+      "email": "miminiang76@gmail.com",
+      "phone": "+33609560501",
+      "status": "actif"
+    },
+    {
+      "id": "45068ffd-f1ac-4b8f-81c7-3e4798c803a5",
+      "first_name": "Loujain ",
+      "last_name": "Djemal ben ayed",
+      "email": "soukaina.benayed@yahoo.com",
+      "phone": "+33777327869",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070774040_c8003e00",
+      "first_name": "Nassim",
+      "last_name": "Abdessamad",
+      "email": "saloua.abdessamad@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070774363_ec975ed3",
+      "first_name": "Dounia",
+      "last_name": "Abenna",
+      "email": "melhemasmaa@hotmail.fr",
+      "phone": "+33 6 52 13 07 37",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070774669_924f26ff",
+      "first_name": "Zoubida",
+      "last_name": "Aklouche",
+      "email": "aklouche.z@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070774961_0f8d58bf",
+      "first_name": "Amina",
+      "last_name": "Amzal",
+      "email": "segard.gwendoline@gmail.com",
+      "phone": "+33 6 64 64 71 52",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070775164_42b16124",
+      "first_name": "Patrick",
+      "last_name": "Anansi",
+      "email": "richardson-carolle@live.fr",
+      "phone": "+33 7 66 63 82 82",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070775395_e08f7702",
+      "first_name": "Jannah",
+      "last_name": "Bakhti",
+      "email": "moueddenhanane@gmail.com",
+      "phone": "+33 6 15 36 15 25",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070775600_095f7f8b",
+      "first_name": "Isaac",
+      "last_name": "Belaib",
+      "email": "c.arnal1251@gmail.com",
+      "phone": "+33 7 86 88 92 39",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070775824_220a3a7d",
+      "first_name": "Habib",
+      "last_name": "Belmadani",
+      "email": "amirabelmadani@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776068_11c57ffd",
+      "first_name": "Mohamed",
+      "last_name": "Benkara",
+      "email": "inesa340@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776343_702fd685",
+      "first_name": "Lina",
+      "last_name": "Bettahar",
+      "email": "ladjel.bettahar31@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776584_f53f8497",
+      "first_name": "Hicham",
+      "last_name": "Bey",
+      "email": "nahix3@hotmail.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070776801_01bdb873",
+      "first_name": "Basma",
+      "last_name": "Bou-Oudi",
+      "email": "karimakermad194@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070777101_7ab7f3c7",
+      "first_name": "Eya",
+      "last_name": "Bouazizi",
+      "email": "fouad21000@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070777687_84e23d38",
+      "first_name": "Ikrame",
+      "last_name": "Boudamouz",
+      "email": "bdz_brahim@yahoo.fr",
+      "phone": "+33 7 70 62 67 82",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070777920_6bd733ce",
+      "first_name": "Syrine",
+      "last_name": "Boudamouz",
+      "email": "bdz_brahim@yahoo.fr",
+      "phone": "+33 7 70 62 67 82",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070778147_d29ab628",
+      "first_name": "Sarah Kjhadij",
+      "last_name": "Boudane",
+      "email": "boudane@gmail.com",
+      "phone": "+33 6 10 03 10 92",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070778358_7d33618c",
+      "first_name": "Ilyana",
+      "last_name": "Boukechiche",
+      "email": "hayet.hebri@live.fr",
+      "phone": "+33 7 66 94 66 57",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070778583_445eeab7",
+      "first_name": "Nour",
+      "last_name": "Chahr",
+      "email": "chahrhicham@hotmail.fr",
+      "phone": "+33 6 09 99 88 85",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070778801_6f8579fe",
+      "first_name": "Haroun",
+      "last_name": "Chebbi",
+      "email": "zitoun.sahar@gmail.com",
+      "phone": "+33 6 19 44 25 55",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779027_7052f622",
+      "first_name": "Yassine",
+      "last_name": "Chebbi",
+      "email": "zitoun.sahar@gmail.com",
+      "phone": "+33 6 19 44 25 55",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779266_b04f9d98",
+      "first_name": "Adam",
+      "last_name": "Chtioui",
+      "email": "aymen.chtioui31@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779548_45b581a3",
+      "first_name": "Ilyès",
+      "last_name": "Derkaoui",
+      "email": "cevia.food@gmail.com",
+      "phone": "+33 6 69 49 30 95",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779750_bb2ce660",
+      "first_name": "Myriam",
+      "last_name": "Diffalah",
+      "email": "nassima.belaib@hotmail.fr",
+      "phone": "+33 6 98 94 28 13",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070779982_fda07c32",
+      "first_name": "Aymen",
+      "last_name": "El Boutaybi",
+      "email": "dunyaeb@hotmail.com",
+      "phone": "+33 6 61 68 01 20",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780185_8188a9a6",
+      "first_name": "Mariam",
+      "last_name": "El Boutaybi",
+      "email": "dunyaeb@hotmail.com",
+      "phone": "+33 6 61 68 01 20",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780390_668b3702",
+      "first_name": "Jasmyne",
+      "last_name": "Faci",
+      "email": "pourciel35@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780628_773c75b4",
+      "first_name": "Fatima",
+      "last_name": "Faty",
+      "email": "fatimafaty@live.fr",
+      "phone": "+33 6 16 97 08 25",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070780910_e4eaec13",
+      "first_name": "Ilyana",
+      "last_name": "Fredj",
+      "email": "m.fredj@hotmail.com",
+      "phone": "+33 6 24 01 41 04",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070781148_03d5407a",
+      "first_name": "Adnane",
+      "last_name": "Hamioui",
+      "email": "asmaehb31@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781422_f09b2932",
+      "first_name": "Hind",
+      "last_name": "Hernandez",
+      "email": "shm.hernandez4@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781661_e93c5390",
+      "first_name": "Manar",
+      "last_name": "Houssine",
+      "email": "manar.houssine@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070781868_26fdd4db",
+      "first_name": "Tesnyme",
+      "last_name": "Hripane",
+      "email": "melhemi@hotmail.fr",
+      "phone": "+33 7 81 50 40 16",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782080_f56e42a1",
+      "first_name": "Sarah",
+      "last_name": "Iguider",
+      "email": "hicho08@hotmail.com",
+      "phone": "+33 6 22 15 30 73",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782297_e07ef615",
+      "first_name": "Djibril",
+      "last_name": "Isse Alwan",
+      "email": "nasra.oubah.med@gmail.com",
+      "phone": "+33 6 50 79 32 99",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782543_11bdfb18",
+      "first_name": "Jennah",
+      "last_name": "Labehri",
+      "email": "jennahlabehri@gmail.com",
+      "phone": "+33 6 02 41 14 76",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070782795_70572456",
+      "first_name": "Kenza",
+      "last_name": "Lahyani",
+      "email": "nawskitchen311@outlook.fr",
+      "phone": "+33 6 64 32 27 41",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070783070_4affd34c",
+      "first_name": "Mohamed",
+      "last_name": "Lahyani",
+      "email": "nawskitchen311@outlook.fr",
+      "phone": "+33 6 64 32 27 41",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070783294_95f6dc80",
+      "first_name": "Safwan",
+      "last_name": "Lakhloufi",
+      "email": "sehameb@hotmail.com",
+      "phone": "+33 6 29 95 77 54",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070783529_f457321e",
+      "first_name": "Leyna",
+      "last_name": "Lechkar",
+      "email": "salechkar@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070783782_5feb1892",
+      "first_name": "Anas",
+      "last_name": "Makrini",
+      "email": "khammar.emane@gmail.com",
+      "phone": "+33 6 76 94 19 71",
+      "status": "actif"
+    },
+    {
+      "id": "ff01eba2-0880-4398-b58f-e9ad7f71fad5",
+      "first_name": "Leila",
+      "last_name": "Benjeddi",
+      "email": "benjeddi.ali26@gmail.com",
+      "phone": "+33601487012",
+      "status": "actif"
+    },
+    {
+      "id": "system_logger",
+      "first_name": "Système",
+      "last_name": "Logs",
+      "email": "system_logger@ishees.com",
+      "phone": null,
+      "status": "actif"
+    },
+    {
+      "id": "42efd9bd-0724-4978-9cc9-82fcfd05f558",
+      "first_name": "Myriam ",
+      "last_name": "Chouchane ",
+      "email": "oumaima.chouchene93@gmail.com",
+      "phone": "+33764749811",
+      "status": "actif"
+    },
+    {
+      "id": "a685f44f-82b8-4984-a472-9f2409ab01b9",
+      "first_name": "Nassima ",
+      "last_name": "El Morabit ",
+      "email": "jilbabouki@outlook.fr",
+      "phone": "+33665290564",
+      "status": "actif"
+    },
+    {
+      "id": "8571d4aa-0d20-44bb-833b-f7151e4d5dcf",
+      "first_name": "Nelya",
+      "last_name": "Allal",
+      "email": "krmallal@hotmail.fr",
+      "phone": "+33633014403",
+      "status": "actif"
+    },
+    {
+      "id": "d7616ea0-6033-4d1d-b1b4-c5fbba387bcb",
+      "first_name": "HAMZA",
+      "last_name": "DIAGNE",
+      "email": "miminiang76@gmail.com",
+      "phone": "+33609560501",
+      "status": "actif"
+    },
+    {
+      "id": "eefb247b-e251-43ef-b2c0-e76b07bfaa4b",
+      "first_name": "Mohamed ilyas",
+      "last_name": "Saci",
+      "email": "diyenimane@gmail.com",
+      "phone": "+33650053588",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070783669_47dc8802",
+      "first_name": "Adam",
+      "last_name": "Makrini",
+      "email": "khammar.emane@gmail.com",
+      "phone": "+33 6 76 94 19 71",
+      "status": "actif"
+    },
+    {
+      "id": "d09141db-1e80-4957-98dc-d9a7555be168",
+      "first_name": "Esma",
+      "last_name": " Charif",
+      "email": "housna.bamoudou@gmail.com",
+      "phone": "+33766530158",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070783902_41985b0c",
+      "first_name": "Salma",
+      "last_name": "Mansour El Rouby",
+      "email": "mostafa.mansour17@gmail.com",
+      "phone": "+33 7 76 14 66 07",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784028_0b28e4d0",
+      "first_name": "Sajed",
+      "last_name": "Mansour",
+      "email": "mansoursami17@gmail.com",
+      "phone": "+33 6 58 24 50 53",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784148_3dad91e4",
+      "first_name": "Younes",
+      "last_name": "Mansour",
+      "email": "mansoursami17@gmail.com",
+      "phone": "+33 6 58 24 50 53",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784293_1f7099b9",
+      "first_name": "Chehrazade",
+      "last_name": "Maqboul",
+      "email": "r.changat@hotmail.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784418_4443e1e2",
+      "first_name": "Mohamed-Adam",
+      "last_name": "Maqboul",
+      "email": "r.changat@hotmail.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784551_b9a74c42",
+      "first_name": "Yanis",
+      "last_name": "Maqboul",
+      "email": "r.changat@hotmail.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784645_09a0ef85",
+      "first_name": "Sakina-Maryam",
+      "last_name": "Marques",
+      "email": "djilyna@gmail.com",
+      "phone": "+33 6 99 03 24 41",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784753_49087145",
+      "first_name": "Lyam",
+      "last_name": "Massiala",
+      "email": "manel.bghts@gmail.com",
+      "phone": "+33 6 58 56 21 55",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070784908_808fcb77",
+      "first_name": "Lilia",
+      "last_name": "Metugui",
+      "email": "iman.metugui@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785001_79bec77f",
+      "first_name": "Yassine",
+      "last_name": "Metugui",
+      "email": "iman.metugui@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785118_6b3c987f",
+      "first_name": "Younes",
+      "last_name": "Mouzoun",
+      "email": "hamid.mouzoun@gmail.com",
+      "phone": "+33 6 49 44 60 75",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785262_8b7199fe",
+      "first_name": "Jemma",
+      "last_name": "Nair Benrokia",
+      "email": "laetitia.nair@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785406_4cc82d75",
+      "first_name": "Yanis",
+      "last_name": "Nair Benrokia",
+      "email": "laetitia.nair@gmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785541_6ceebfe3",
+      "first_name": "Nahil",
+      "last_name": "Oiciny",
+      "email": "mannelle11@hotmail.fr",
+      "phone": "+33 7 62 47 95 90",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070785641_3f96ecdc",
+      "first_name": "Zayane",
+      "last_name": "Ousset Lakbaidi",
+      "email": "lakbaidi.aya@hotmail.com",
+      "phone": "+33 7 69 59 56 10",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785785_e3c3dd9c",
+      "first_name": "Ikhaïly",
+      "last_name": "Papayo",
+      "email": "richardson-carolle@live.fr",
+      "phone": "+33 7 66 63 82 82",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070785909_f8aa7093",
+      "first_name": "Mohammed",
+      "last_name": "Rabhi",
+      "email": "mohamed.rabhi32@hotmail.com",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786007_ee1d2e41",
+      "first_name": "Imrane",
+      "last_name": "Rbaibi",
+      "email": "mbouhi@hotmail.fr",
+      "phone": "+33 6 51 89 20 39",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786148_aa5e77a8",
+      "first_name": "Ilyanna",
+      "last_name": "Rebiai",
+      "email": "fatima.benali31100@gmail.com",
+      "phone": "+33 6 73 33 31 75",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786301_0826dbc5",
+      "first_name": "Sarah",
+      "last_name": "Sahsah",
+      "email": "sahsahradouane@gmail.com",
+      "phone": "+33 7 69 84 13 16",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786424_3f770092",
+      "first_name": "Asnaath",
+      "last_name": "Saint Félix",
+      "email": "fatimafaty@live.fr",
+      "phone": "+33 6 16 97 08 25",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786542_ef90982b",
+      "first_name": "Taïm",
+      "last_name": "Sendi",
+      "email": "cherifarij@gmail.com",
+      "phone": "+33 6 51 28 60 36",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070786668_0606110d",
+      "first_name": "Adam",
+      "last_name": "Si Ahmed",
+      "email": "aicha31.toulouse@hotmail.fr",
+      "phone": "+33 6 66 88 50 89",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786785_a96dbf00",
+      "first_name": "Imrane",
+      "last_name": "Taharast",
+      "email": "siham.moundili@gmail.com",
+      "phone": "+33 6 50 78 52 86",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070786908_a9b64801",
+      "first_name": "Sarah",
+      "last_name": "Taharast",
+      "email": "siham.moundili@gmail.com",
+      "phone": "+33 6 50 78 52 86",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070787115_f270ceff",
+      "first_name": "Nassim",
+      "last_name": "Taibi",
+      "email": "sanaa.t@outlook.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "b3972114-e7d7-4f14-b728-1c322d845824",
+      "first_name": "Sahadiya",
+      "last_name": "Boubacar Issa Tankari",
+      "email": "sahadiyatankari@gmail.com",
+      "phone": "+17788713065",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070787218_187ea23b",
+      "first_name": "Sara",
+      "last_name": "Taibi",
+      "email": "sanaa.t@outlook.fr",
+      "phone": "",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070787319_c9814ba9",
+      "first_name": "Hanna",
+      "last_name": "Viorney",
+      "email": "gherzi.samia31@orange.fr",
+      "phone": "+33 6 43 43 46 74",
+      "status": "en_attente"
+    },
+    {
+      "id": "user_3Fifll9MRP1Hyj3LmC8rVNipg6W",
+      "first_name": "sofiuan",
+      "last_name": "saadi",
+      "email": "sofianelamine772@gmail.com",
+      "phone": null,
+      "status": "actif"
+    },
+    {
+      "id": "e6d4ebb0-f846-4535-9d5a-6fcc33b0c361",
+      "first_name": "Layina",
+      "last_name": "MEDAN",
+      "email": "lkeddouri@yahoo.fr",
+      "phone": "+33666974009",
+      "status": "actif"
+    },
+    {
+      "id": "manual_1789070787430_2aefd9f4",
+      "first_name": "Sofya",
+      "last_name": "Viorney",
+      "email": "gherzi.samia31@orange.fr",
+      "phone": "+33 6 43 43 46 74",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070787668_9ac60a3c",
+      "first_name": "Hamza",
+      "last_name": "Zawak",
+      "email": "hajar.hariri104@gmail.com",
+      "phone": "+33 6 22 09 23 30",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070787547_5213fe40",
+      "first_name": "Yamina",
+      "last_name": "Yahia Cherif",
+      "email": "yaminayahiac@gmail.com",
+      "phone": "+33 7 83 28 02 54",
+      "status": "en_attente"
+    },
+    {
+      "id": "manual_1789070787785_ab7145cb",
+      "first_name": "Razane",
+      "last_name": "Zawak",
+      "email": "hajar.hariri104@gmail.com",
+      "phone": "+33 6 22 09 23 30",
+      "status": "en_attente"
+    },
+    {
+      "id": "cff76873-39c1-4408-a54a-4277cb93e922",
+      "first_name": "anas",
+      "last_name": "ennaoui",
+      "email": "nadia.elgaddari@yahoo.fr",
+      "phone": "+33658834823",
+      "status": "actif"
+    }
+  ],
+  "inscriptions": [
+    {
+      "id": "68b9ac7a-b608-42ae-9ab4-50b59334f16c",
+      "etudiant_id": "72c5b4a3-050c-4dca-9f5c-1b8614910f9b",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "c98fc667-93af-4e85-95e0-256d64d13903",
+      "etudiant_id": "5a34371f-325f-493a-b2e9-22dba1a30496",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "5a18c2e8-e53e-40dc-ae57-cb3e355c8651",
+      "etudiant_id": "ca0ede40-fa3d-45ee-a1c4-32939b6efdd9",
+      "class_id": "80930cd2-02ec-4b8c-b824-e761fd724c23",
+      "formation_id": "f8cdd93c-6dd3-498b-b057-50e5526804e2",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "9f9f1a27-a897-44db-8739-13385aac1b2c",
+      "etudiant_id": "6348cc99-4c25-450a-a2ff-09a1b1e7c52e",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "d65fc3e3-bfd2-4e1e-9468-f7ba6cc23e00",
+      "etudiant_id": "2cc22c12-d26d-4b94-99a5-cbf285e84d38",
+      "class_id": "fd086a2b-29eb-4680-84c4-96a22a00b9da",
+      "formation_id": "c5fb2061-d469-489c-99ba-dc8633102295",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "1f37a1f1-2090-47c6-a355-03aa7696a108",
+      "etudiant_id": "2e3bc5c2-bc77-475e-9ea1-80df1c231b54",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "f92b681f-9526-4674-8426-d6017de8907d",
+      "etudiant_id": "8baa903a-d8f4-42e0-b08b-4d9fe6d41476",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "d57fdbb3-8b03-46af-a7d1-18b05d5696ee",
+      "etudiant_id": "c639505d-9da7-4e02-a5cf-e2d20f9012ea",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "c2ddb933-6b10-42cd-9c4b-b44d40f1f165",
+      "etudiant_id": "377ad04b-5c6b-4058-869c-89daa5bb6943",
+      "class_id": "8925d6e5-b82a-401d-a35b-6408641d7740",
+      "formation_id": "19eca27e-af2a-477d-b105-3fc7dd62a1b1",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "d026d06f-a5ac-4bc0-9300-c2116bc0d7b6",
+      "etudiant_id": "cb4c6cd6-9321-49cc-bdd2-4ee2b9bf7718",
+      "class_id": "8925d6e5-b82a-401d-a35b-6408641d7740",
+      "formation_id": "19eca27e-af2a-477d-b105-3fc7dd62a1b1",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "5fdcbeb2-f673-498c-90e3-55ca9e5b75d7",
+      "etudiant_id": "9e910fb2-9ee9-4913-b223-e69015bf9a37",
+      "class_id": "fd086a2b-29eb-4680-84c4-96a22a00b9da",
+      "formation_id": "c5fb2061-d469-489c-99ba-dc8633102295",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "15646187-bb05-40ba-aad9-3babc568ece9",
+      "etudiant_id": "ba7cd3d0-1d40-4d46-bab2-fab4b2188f35",
+      "class_id": "e2e7bf78-4756-4bea-8642-0157a5e918c4",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "57c46d1b-e143-46ab-afc3-4d17ce7a8560",
+      "etudiant_id": "3dd29078-b52e-4a64-899e-3bc63bc5e06e",
+      "class_id": "c144f609-eb53-4260-aaaf-cbb44008dc3d",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "7ce1f89c-b474-49e8-ae63-b7d3de38e257",
+      "etudiant_id": "533d8507-fa55-41ae-867e-41bc2769b7fc",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "c603c74a-c495-4e8a-91fa-f126eb40a51a",
+      "etudiant_id": "933ae4b6-4bbc-49cf-a79b-5a6a8e3f4158",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "9b07c03a-8f0f-45d2-9ecf-0e28a1f8a50d",
+      "etudiant_id": "2cb6c193-900b-45a8-90b5-060f2f924414",
+      "class_id": "fd086a2b-29eb-4680-84c4-96a22a00b9da",
+      "formation_id": "c5fb2061-d469-489c-99ba-dc8633102295",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "9b5978f1-9d27-4de7-a2e6-2736c7ac1273",
+      "etudiant_id": "896067f3-8036-4f08-a4bc-9cb12432a1e9",
+      "class_id": "4c1b3968-21ff-414c-b709-249ec1e4c087",
+      "formation_id": "0206642b-27d6-4e01-a9f1-862b85759451",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "1df635b2-44b7-45dd-9df7-4a4942cca7f1",
+      "etudiant_id": "26442089-1580-408d-9b37-4fba48662bbc",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "138f5206-660b-42c0-ae6e-9385a62b5c39",
+      "etudiant_id": "c743cb08-469c-40c4-b46a-b3c7d5ac7c5e",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "c82d64f4-4c33-4a8a-a337-08b4962a6620",
+      "etudiant_id": "d3a4306f-6c33-4a49-bd41-3fa633ca9da1",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "f3cd9746-692b-49fc-8ac5-66b7c0b22099",
+      "etudiant_id": "a283880f-33a6-40c5-867a-3973e307a3b7",
+      "class_id": "d118ce75-5aa6-4ce7-bbf8-00a3f4b00bd8",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "7727d9ee-b88b-43c0-b5df-94baec8c5d9f",
+      "etudiant_id": "52c0d53d-3cc5-43af-b505-67af931e6c5f",
+      "class_id": "d118ce75-5aa6-4ce7-bbf8-00a3f4b00bd8",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "29ad19a7-805e-4968-8d9f-8b4eef131779",
+      "etudiant_id": "5e7bf0bc-dedc-4f98-aed6-410abefcc68f",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "fae1769e-0109-44af-9644-1061ce039ad9",
+      "etudiant_id": "287578f2-9a37-4c87-8c6f-9fafca7af6a0",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "7600f7a8-ad77-4fe0-93a4-88acf58bba3c",
+      "etudiant_id": "4144be1d-b381-403f-a6e9-490d936a452d",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "7d7d7108-33c4-42f9-bf2d-8155f43c6225",
+      "etudiant_id": "32e0c45c-3cdb-4e58-a88e-e842b3f4e372",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "16e3761e-c96b-4631-977d-1ea59c0c3581",
+      "etudiant_id": "4b3be558-9405-4116-be1f-14963130a90c",
+      "class_id": "d118ce75-5aa6-4ce7-bbf8-00a3f4b00bd8",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "b36d2226-67e4-4051-b746-dd28e1cdce42",
+      "etudiant_id": "9290239c-f4fa-4341-a51d-e3db6b4df9de",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "eac77a39-24f1-4a0a-9e84-1977e97e7f0a",
+      "etudiant_id": "a470585a-5f7f-4612-ad4b-6f0a2a9bda0e",
+      "class_id": "6e2e4c21-b48d-4e38-b4f5-18ebba3d4f46",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "d11e0b6f-02fd-4435-9e72-58097577f0f3",
+      "etudiant_id": "38167af1-7570-47ac-a688-866bb30067aa",
+      "class_id": "fd086a2b-29eb-4680-84c4-96a22a00b9da",
+      "formation_id": "c5fb2061-d469-489c-99ba-dc8633102295",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "597e0302-081f-4894-b9e3-135fb5a374f5",
+      "etudiant_id": "fdacff0b-818e-46aa-9fbb-891317dac92e",
+      "class_id": "f9f9cd2d-c42d-42c9-b6a8-c12e32cc2355",
+      "formation_id": "6d27ddd6-396d-4fa0-8790-3ad9c11f8541",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "dd973e1e-1647-4073-aa62-f5d297a7c9a8",
+      "etudiant_id": "ff01eba2-0880-4398-b58f-e9ad7f71fad5",
+      "class_id": "e0a12345-0008-4000-8000-888888888888",
+      "formation_id": "79752c22-0ae2-4e10-8226-0d3101d0f37f",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "24e0aa86-d163-4a43-86eb-260c6fdd8a4e",
+      "etudiant_id": "a15c5730-f227-4779-b72e-fc143b1171a5",
+      "class_id": "e0a12345-0007-4000-8000-777777777777",
+      "formation_id": "79752c22-0ae2-4e10-8226-0d3101d0f37f",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "07196c68-e5bc-4ff7-b463-dd1c55224f98",
+      "etudiant_id": "42efd9bd-0724-4978-9cc9-82fcfd05f558",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "53cc131c-6570-44c2-beca-e367dd318e49",
+      "etudiant_id": "1c6acc31-d96b-420d-b242-ef87a633037d",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "e47859bf-7f29-4426-b1e9-3384d25399e6",
+      "etudiant_id": "99075a58-21f3-4f5b-b353-d10bbf58dee5",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "cc249fd0-8789-4d3f-a08d-6421a2b457b4",
+      "etudiant_id": "a685f44f-82b8-4984-a472-9f2409ab01b9",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "b7ee4e05-9bbf-4ec2-ac8a-bc991869ca94",
+      "etudiant_id": "158b4f5a-b430-4753-94e7-56593f216851",
+      "class_id": "01ecb91a-0d82-4e09-b1b3-50dce11801cd",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "b0e96c4b-acbb-4aa1-ad71-ff7de2a50c43",
+      "etudiant_id": "cbe9e676-1332-480e-9e2e-68afea009733",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "c8eb1ea7-1dcc-4dc0-a778-70c8e7e92bf4",
+      "etudiant_id": "d09141db-1e80-4957-98dc-d9a7555be168",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "b6445a0f-8780-4e02-a9f0-ca6604048188",
+      "etudiant_id": "e9b107e0-6448-444e-beab-2c5961091b7b",
+      "class_id": "6e2e4c21-b48d-4e38-b4f5-18ebba3d4f46",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "70096bd8-9d69-4853-9745-8145da8d1bfa",
+      "etudiant_id": "fe3b4dbc-476a-4ee9-8098-721b7df3fe96",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "9d952972-60da-4265-9e57-e89a4e884074",
+      "etudiant_id": "b3972114-e7d7-4f14-b728-1c322d845824",
+      "class_id": "1d47beaa-4278-4d7c-8d4b-6b25397732a0",
+      "formation_id": "fd9a3a1c-6c18-4f62-a919-b4f5311ca096",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "06360582-90aa-4d3f-bc62-87cbf64a6411",
+      "etudiant_id": "e7bdb59e-7b11-4080-aa60-693b5028b005",
+      "class_id": "e0a12345-0008-4000-8000-888888888888",
+      "formation_id": "79752c22-0ae2-4e10-8226-0d3101d0f37f",
+      "academic_year": "2026-2027",
+      "status": "valide",
+      "paid_status": "paye"
+    },
+    {
+      "id": "3cfbc9a3-6492-4612-a0df-25b75ea277c3",
+      "etudiant_id": "158a22ec-98a8-48ab-8a82-cc8e53b80029",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "0400e538-fa30-4d85-8f8c-05f2dd9a05b8",
+      "etudiant_id": "6025be9d-f1c0-499c-87ba-48d2690ce56c",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "124082d6-196c-4025-9e8f-20a1ebfbbb36",
+      "etudiant_id": "e6d4ebb0-f846-4535-9d5a-6fcc33b0c361",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "e5582d90-78c7-40b9-bf14-a5657e2f014f",
+      "etudiant_id": "7416a6f7-9b78-4175-859f-f94e1b9a5da5",
+      "class_id": "e0a12345-0007-4000-8000-777777777777",
+      "formation_id": "79752c22-0ae2-4e10-8226-0d3101d0f37f",
+      "academic_year": "2026-2027",
+      "status": "valide",
+      "paid_status": "paye"
+    },
+    {
+      "id": "9e0fd7a3-af10-4e5b-ba87-dc48adaaf56e",
+      "etudiant_id": "676cc00f-18af-4063-ab69-bf2d999a4ad5",
+      "class_id": "6e2e4c21-b48d-4e38-b4f5-18ebba3d4f46",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "77484a21-afe3-4610-8f94-9843e0e7bddc",
+      "etudiant_id": "31d083f0-1cfe-424b-aaae-75a5af67a197",
+      "class_id": "4d94f8c8-2e76-4984-9547-a7bca14692a1",
+      "formation_id": "79752c22-0ae2-4e10-8226-0d3101d0f37f",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "de87f2f2-0da3-45f4-8bb0-a739ecb8410d",
+      "etudiant_id": "98637f69-bb50-4e10-8345-435a6ee1c759",
+      "class_id": "0339dcff-a372-4479-991f-5b33c0742c01",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "1ac3035d-429f-462b-b32a-16a3a258403f",
+      "etudiant_id": "04980580-af6a-40d6-affd-a77cd3889bf2",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "1337bf35-4cf3-4b9c-a678-1190a805eabf",
+      "etudiant_id": "8571d4aa-0d20-44bb-833b-f7151e4d5dcf",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "f12264d7-63e4-4a40-8181-60afb157c9e6",
+      "etudiant_id": "3b004b79-79e1-4323-aa65-4ecf7e530355",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "bdd2822a-bf64-42d6-af44-3aa53ca5c1d3",
+      "etudiant_id": "99fdd38b-8010-47a0-a590-23482ba17847",
+      "class_id": "033d3fee-a88d-477c-8155-b183134b29b5",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "a4e5fdf4-ed76-4415-b74b-60514918f055",
+      "etudiant_id": "d7616ea0-6033-4d1d-b1b4-c5fbba387bcb",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "6d8417d7-3f68-40ba-a600-4918b95ec3fc",
+      "etudiant_id": "45068ffd-f1ac-4b8f-81c7-3e4798c803a5",
+      "class_id": "b48dbc97-15c6-4b4c-b8ef-ee7b6800ef20",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "de053b19-f011-4aa8-8056-1feb2033c7a3",
+      "etudiant_id": "ec2b9e35-df15-46b5-84b6-96a1c673020c",
+      "class_id": "b48dbc97-15c6-4b4c-b8ef-ee7b6800ef20",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "18b07acd-8308-4af3-91c7-66ced60fcc5d",
+      "etudiant_id": "eefb247b-e251-43ef-b2c0-e76b07bfaa4b",
+      "class_id": "e0a12345-0003-4000-8000-333333333333",
+      "formation_id": "19eca27e-af2a-477d-b105-3fc7dd62a1b1",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "9afb7ee5-ea40-4383-9760-affeb3c91a1c",
+      "etudiant_id": "eefb247b-e251-43ef-b2c0-e76b07bfaa4b",
+      "class_id": "e0a12345-0006-4000-8000-666666666666",
+      "formation_id": "0282f61c-2876-45cd-8876-625f13010b1a",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "b9954db9-903d-4fa3-89dc-61ea489f4435",
+      "etudiant_id": "manual_1789070773842_490b7b99",
+      "class_id": "c144f609-eb53-4260-aaaf-cbb44008dc3d",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "c5bec2be-a3e9-4b61-94f1-c1ddffa50157",
+      "etudiant_id": "manual_1789070774040_c8003e00",
+      "class_id": "fc020c9d-c1f7-40b2-8e9e-9011c9be6a98",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "0ab2c9c7-43d5-46e4-80a2-aaf257b1b2e0",
+      "etudiant_id": "manual_1789070774193_226f6273",
+      "class_id": "033d3fee-a88d-477c-8155-b183134b29b5",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "eaa9e443-3d68-4b16-b04b-edaa110d470c",
+      "etudiant_id": "manual_1789070774363_ec975ed3",
+      "class_id": "6e2e4c21-b48d-4e38-b4f5-18ebba3d4f46",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "840574be-753c-4b99-a37f-5d4fa641e7b4",
+      "etudiant_id": "manual_1789070774462_7bd236a4",
+      "class_id": "6e2e4c21-b48d-4e38-b4f5-18ebba3d4f46",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d645fdc0-3b40-453b-ac0b-7497c1f4ade0",
+      "etudiant_id": "manual_1789070774669_924f26ff",
+      "class_id": "4c1b3968-21ff-414c-b709-249ec1e4c087",
+      "formation_id": "0206642b-27d6-4e01-a9f1-862b85759451",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "545b912c-4ec0-4410-8b7c-c48bfe60a222",
+      "etudiant_id": "manual_1789070774828_2221033f",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "f417704b-b6a3-4994-bdad-5c438899dc63",
+      "etudiant_id": "manual_1789070774961_0f8d58bf",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "7a7116e3-f380-4dda-b0df-23202b013811",
+      "etudiant_id": "manual_1789070775062_96928093",
+      "class_id": "c144f609-eb53-4260-aaaf-cbb44008dc3d",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "497cf39c-de3f-4d79-bbb6-7abb628c3830",
+      "etudiant_id": "manual_1789070775164_42b16124",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "434cc7fb-408d-482e-a436-88aebc6a5c13",
+      "etudiant_id": "manual_1789070775266_a25d1f1a",
+      "class_id": "d118ce75-5aa6-4ce7-bbf8-00a3f4b00bd8",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "5bfdc45f-bfde-4050-892c-eac8402f963b",
+      "etudiant_id": "manual_1789070775395_e08f7702",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "90c56361-499b-4d9a-9eac-69a764eae431",
+      "etudiant_id": "manual_1789070775494_54efcbbb",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "af22a07e-814b-4222-bc75-81ed2a899055",
+      "etudiant_id": "manual_1789070775600_095f7f8b",
+      "class_id": "b48dbc97-15c6-4b4c-b8ef-ee7b6800ef20",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "e9e1dd69-a027-442f-ae3c-c9c8d4acf38c",
+      "etudiant_id": "manual_1789070775704_4558a614",
+      "class_id": "10804885-481b-4544-8c62-c6c0f1828c43",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "703f1639-52f9-40f0-ab53-3a60c41d6f65",
+      "etudiant_id": "manual_1789070775824_220a3a7d",
+      "class_id": "e2e7bf78-4756-4bea-8642-0157a5e918c4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "254a17ef-7974-4207-8405-142d61f0ac3b",
+      "etudiant_id": "manual_1789070775943_ddefdc6c",
+      "class_id": "e2e7bf78-4756-4bea-8642-0157a5e918c4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "b41518e2-936e-4bbd-9af3-96675444a3a7",
+      "etudiant_id": "manual_1789070776068_11c57ffd",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "1db096dc-2e08-458c-8ad5-62ed8b429e12",
+      "etudiant_id": "manual_1789070776224_32e3010c",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "ed0c3967-03c4-477d-a9a3-89a6b2058185",
+      "etudiant_id": "manual_1789070776343_702fd685",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "a56e30d3-1fff-48a1-9191-5ba29723e038",
+      "etudiant_id": "manual_1789070776477_1f2e6019",
+      "class_id": "fc020c9d-c1f7-40b2-8e9e-9011c9be6a98",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d66a03b2-3b55-4a02-9097-f3aa1f602df1",
+      "etudiant_id": "manual_1789070776584_f53f8497",
+      "class_id": "fc020c9d-c1f7-40b2-8e9e-9011c9be6a98",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "4b74289e-b77b-41e0-a5c7-04061ff49d27",
+      "etudiant_id": "manual_1789070776692_88186197",
+      "class_id": "b48dbc97-15c6-4b4c-b8ef-ee7b6800ef20",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "5eece6c9-93d5-4423-a5e8-52002b8498c4",
+      "etudiant_id": "manual_1789070776801_01bdb873",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "6814d21d-6604-4172-be72-272fea7b5537",
+      "etudiant_id": "manual_1789070776987_d392d29b",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "45a359f5-5bc9-4204-805a-e6beb0aaccfe",
+      "etudiant_id": "manual_1789070777101_7ab7f3c7",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "4f4003dc-1f6b-44eb-b1ea-5dcc31d2d09c",
+      "etudiant_id": "manual_1789070777578_670b4a0b",
+      "class_id": "6e2e4c21-b48d-4e38-b4f5-18ebba3d4f46",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "edd19972-ec86-4d02-a10e-75781c232b72",
+      "etudiant_id": "manual_1789070777687_84e23d38",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "f38b317d-cbc2-4eda-a60b-bb8b518c6d44",
+      "etudiant_id": "manual_1789070777815_327e04b5",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "6b3100ce-5f2d-4e01-8ef8-f7ec95277894",
+      "etudiant_id": "manual_1789070777920_6bd733ce",
+      "class_id": "c144f609-eb53-4260-aaaf-cbb44008dc3d",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "06fde431-ae38-44ac-94db-c2283c6e6f47",
+      "etudiant_id": "manual_1789070778033_42522497",
+      "class_id": "4c1b3968-21ff-414c-b709-249ec1e4c087",
+      "formation_id": "0206642b-27d6-4e01-a9f1-862b85759451",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "bc8e59e8-63a1-429c-b052-e3d19cfcc5c3",
+      "etudiant_id": "manual_1789070778147_d29ab628",
+      "class_id": "4c1b3968-21ff-414c-b709-249ec1e4c087",
+      "formation_id": "0206642b-27d6-4e01-a9f1-862b85759451",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d629f8e6-e73c-4259-96d1-f5bce0d3779c",
+      "etudiant_id": "manual_1789070778244_b8fe1af1",
+      "class_id": "4c1b3968-21ff-414c-b709-249ec1e4c087",
+      "formation_id": "0206642b-27d6-4e01-a9f1-862b85759451",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "fb3143ed-28bb-44a1-9522-69eef6a960ea",
+      "etudiant_id": "manual_1789070778481_e7989311",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "206ca8b6-450d-4df9-9b41-819fdf0095cc",
+      "etudiant_id": "manual_1789070778703_f55a415e",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "178cc99f-f341-4914-9b0b-efee374e93d8",
+      "etudiant_id": "manual_1789070778910_9bc68c52",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d96d212f-cc89-430a-b0eb-07efa45712a0",
+      "etudiant_id": "manual_1789070779132_46d1dc2f",
+      "class_id": "fc020c9d-c1f7-40b2-8e9e-9011c9be6a98",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "8de18db1-da9c-422a-9f34-f90b7a713b54",
+      "etudiant_id": "manual_1789070779429_4da753af",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "333f8220-5158-4906-bc98-6a6cda629412",
+      "etudiant_id": "manual_1789070779650_02687d42",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "c24ab270-9e71-469a-811c-f7ee4c22c289",
+      "etudiant_id": "manual_1789070779870_874f9e99",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "0761f3fb-0c7c-42c8-8ab6-4de981c16f4b",
+      "etudiant_id": "manual_1789070780087_8b3b7145",
+      "class_id": "01ecb91a-0d82-4e09-b1b3-50dce11801cd",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "de37e497-9bc8-4361-a817-7153cc1312f4",
+      "etudiant_id": "manual_1789070780286_2d6c7b88",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "4aadbeca-971b-4650-bb1d-49faeb763a68",
+      "etudiant_id": "manual_1789070780491_ddc3b6b8",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "7de96b0b-c3f4-4a10-965e-7ab3bfabe0ee",
+      "etudiant_id": "manual_1789070780769_84677211",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "2c1602cf-c3fc-4e8d-8e05-72c7f6458bcc",
+      "etudiant_id": "manual_1789070781046_90521e29",
+      "class_id": "6bdd0cf4-efc8-48ca-a99b-af869d7d4be2",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "5b358f1c-2c34-4169-9713-594f65575e86",
+      "etudiant_id": "manual_1789070781270_12694307",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "829eafe9-12ce-4f10-bf28-5e11270a01e2",
+      "etudiant_id": "manual_1789070781547_dd0d64b1",
+      "class_id": "ff5a3df2-4c08-4b3f-9ab9-81458f9ff68e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "1e3a3f82-60ab-4d87-89ed-700a772ad412",
+      "etudiant_id": "manual_1789070781765_eb133d74",
+      "class_id": "10804885-481b-4544-8c62-c6c0f1828c43",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "a695903b-0507-4f04-96ca-0038bc0ae60d",
+      "etudiant_id": "manual_1789070781985_5a2196f3",
+      "class_id": "475e3799-4393-4a6f-9a76-305a59039bce",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "57abf858-a4d3-4f23-a82d-756658590fdd",
+      "etudiant_id": "manual_1789070782184_58b425df",
+      "class_id": "01ecb91a-0d82-4e09-b1b3-50dce11801cd",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "cf34bc29-6e38-4d75-b9c4-0ca325d971ec",
+      "etudiant_id": "manual_1789070782429_a1b3f63f",
+      "class_id": "e2e7bf78-4756-4bea-8642-0157a5e918c4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d6cce3c3-97bd-4168-a528-5865b9de79c0",
+      "etudiant_id": "manual_1789070782667_df74b24d",
+      "class_id": "e2e7bf78-4756-4bea-8642-0157a5e918c4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "83dd794c-054f-48b8-9913-4b9290aa9390",
+      "etudiant_id": "manual_1789070782942_58675d99",
+      "class_id": "049c6f2d-b1f5-4d00-9e59-3ccf952082a1",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "4ca7b221-764f-4d0a-880a-a37178ed8b5f",
+      "etudiant_id": "manual_1789070783190_165c27fb",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "a232bf0c-a61b-42e2-80d4-06d8c403fb13",
+      "etudiant_id": "manual_1789070783418_1703e9d0",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "dc94f458-911d-4050-8aa3-4f6f3309c8d6",
+      "etudiant_id": "manual_1789070783669_47dc8802",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "79ab9ec9-4fa6-4d14-ba66-89c1770736bd",
+      "etudiant_id": "manual_1789070783902_41985b0c",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "eeaa9687-aa2d-4c71-80bd-0e57af31b883",
+      "etudiant_id": "manual_1789070784148_3dad91e4",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "0dad0472-97db-4705-84b4-cb1fa00c61d0",
+      "etudiant_id": "manual_1789070784418_4443e1e2",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d47f2f14-04ac-4e19-8453-e16e291668ca",
+      "etudiant_id": "manual_1789070784645_09a0ef85",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "8e4d94c4-a843-4296-9360-7143f833cafd",
+      "etudiant_id": "manual_1789070784908_808fcb77",
+      "class_id": "ff5a3df2-4c08-4b3f-9ab9-81458f9ff68e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "93cc59bc-f11a-41d1-94ce-a59d154ea918",
+      "etudiant_id": "manual_1789070785118_6b3c987f",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "1432eeb2-f933-4bf8-9d52-6cd81452d9d3",
+      "etudiant_id": "manual_1789070785406_4cc82d75",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "b56113ca-92f5-4093-b64e-2fd354b147b8",
+      "etudiant_id": "manual_1789070785641_3f96ecdc",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "4cecae4c-b4b2-41f3-8173-271a3922f7c3",
+      "etudiant_id": "manual_1789070785909_f8aa7093",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "0a4c2835-7ed0-4562-b748-1edf60a3d15e",
+      "etudiant_id": "manual_1789070786148_aa5e77a8",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "66f3818c-b786-426e-9a95-b8cb9c9f59a0",
+      "etudiant_id": "manual_1789070786424_3f770092",
+      "class_id": "01ecb91a-0d82-4e09-b1b3-50dce11801cd",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "1f217880-de06-44d3-adf9-742ec064b1d4",
+      "etudiant_id": "manual_1789070786668_0606110d",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "5dbd93c4-720d-4024-ac26-06548baa7468",
+      "etudiant_id": "manual_1789070786908_a9b64801",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "381631d7-61ec-419f-9a2e-b8f5c7c1d61f",
+      "etudiant_id": "manual_1789070787218_187ea23b",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "975f32ce-d819-49df-81aa-5323f8dad129",
+      "etudiant_id": "manual_1789070787430_2aefd9f4",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d86db95e-78ce-40bf-9857-e271b8e94e35",
+      "etudiant_id": "manual_1789070787668_9ac60a3c",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "9a951c72-884e-4925-98c8-7201ee50cd13",
+      "etudiant_id": "manual_1789070778358_7d33618c",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "12d448c7-2f27-4cf5-aa18-a4289a5b73e7",
+      "etudiant_id": "manual_1789070778583_445eeab7",
+      "class_id": "c144f609-eb53-4260-aaaf-cbb44008dc3d",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "ffac17b1-ca91-4214-8cb8-0906328eab9d",
+      "etudiant_id": "manual_1789070778801_6f8579fe",
+      "class_id": "e2e7bf78-4756-4bea-8642-0157a5e918c4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "0c602353-a909-4ee8-bf6c-579fd7a1ca95",
+      "etudiant_id": "manual_1789070779027_7052f622",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "90b792a7-6d19-4ab1-bf72-a049e5b24083",
+      "etudiant_id": "manual_1789070779266_b04f9d98",
+      "class_id": "d7871208-488b-48c2-bf7a-d38077d7e7e9",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "341009b9-7a54-4151-b9a0-3cbacab6949c",
+      "etudiant_id": "manual_1789070779548_45b581a3",
+      "class_id": "c8c0285b-d660-45db-80c9-24cc7884d9e6",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "e3069f96-264b-450a-8d59-58ab3d5e044a",
+      "etudiant_id": "manual_1789070779750_bb2ce660",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "ae27b198-d9e4-485e-9046-8b1165888d31",
+      "etudiant_id": "manual_1789070779982_fda07c32",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "bfeedc19-8263-46e7-b028-120d7b3858c5",
+      "etudiant_id": "manual_1789070780185_8188a9a6",
+      "class_id": "01ecb91a-0d82-4e09-b1b3-50dce11801cd",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "6237ad57-c164-4c4f-a52b-e9c1fd71dcb9",
+      "etudiant_id": "manual_1789070780390_668b3702",
+      "class_id": "d118ce75-5aa6-4ce7-bbf8-00a3f4b00bd8",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "99d93e2c-c45b-4912-84bf-5a4537e7815e",
+      "etudiant_id": "manual_1789070780628_773c75b4",
+      "class_id": "4c1b3968-21ff-414c-b709-249ec1e4c087",
+      "formation_id": "0206642b-27d6-4e01-a9f1-862b85759451",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "6afd5ce4-cd36-4a6c-b88b-01279885070c",
+      "etudiant_id": "manual_1789070780910_e4eaec13",
+      "class_id": "c8c0285b-d660-45db-80c9-24cc7884d9e6",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "f964b6bb-6bef-4117-8d5c-bc7b3b6ab528",
+      "etudiant_id": "manual_1789070781148_03d5407a",
+      "class_id": "033d3fee-a88d-477c-8155-b183134b29b5",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "3f1e2b55-5822-410b-a2ba-d391e765fe68",
+      "etudiant_id": "manual_1789070781422_f09b2932",
+      "class_id": "f2b240c6-6c34-4222-8437-7f838ace875e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "79b4c212-b1f5-4efd-9177-9276c75bd01a",
+      "etudiant_id": "manual_1789070781661_e93c5390",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "dbe3307f-9ebb-4955-a9e5-645a70f8c4bc",
+      "etudiant_id": "manual_1789070781868_26fdd4db",
+      "class_id": "033d3fee-a88d-477c-8155-b183134b29b5",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "dd29c073-798c-4c9c-ba8f-8e7c1fffa48e",
+      "etudiant_id": "manual_1789070782080_f56e42a1",
+      "class_id": "ff5a3df2-4c08-4b3f-9ab9-81458f9ff68e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "4c118962-41c8-4c51-817c-82eea79966fd",
+      "etudiant_id": "manual_1789070782297_e07ef615",
+      "class_id": "c8c0285b-d660-45db-80c9-24cc7884d9e6",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "76cacb9b-1898-4d82-b47c-5b9985811938",
+      "etudiant_id": "manual_1789070782543_11bdfb18",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "d072eb7e-c00e-42c6-8112-1ff91000b229",
+      "etudiant_id": "manual_1789070782795_70572456",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "34214851-5b16-4782-8f99-8b3b4baa42c5",
+      "etudiant_id": "manual_1789070783070_4affd34c",
+      "class_id": "049c6f2d-b1f5-4d00-9e59-3ccf952082a1",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "848e0173-0581-44c2-8c13-4e3686544879",
+      "etudiant_id": "manual_1789070783294_95f6dc80",
+      "class_id": "01ecb91a-0d82-4e09-b1b3-50dce11801cd",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "bf4202c7-839b-43f8-a646-aa2e8ca64822",
+      "etudiant_id": "manual_1789070783529_f457321e",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "aadd19ff-a7e9-4594-bbc1-41cf0f51ee79",
+      "etudiant_id": "manual_1789070783782_5feb1892",
+      "class_id": "ff5a3df2-4c08-4b3f-9ab9-81458f9ff68e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "523ab6dd-f037-46c5-ba25-d2859df19a74",
+      "etudiant_id": "manual_1789070784028_0b28e4d0",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "c1694ccd-42ab-4adb-8150-fc0c1cd141b4",
+      "etudiant_id": "manual_1789070784293_1f7099b9",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "a7b51d83-07ee-4287-8414-ffa54d25589d",
+      "etudiant_id": "manual_1789070784551_b9a74c42",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "eacd0e4c-0c7d-4c5c-a5a2-a459dd53c433",
+      "etudiant_id": "manual_1789070784753_49087145",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "82b7cdec-33f7-4d3b-bd9d-d5bea70b0086",
+      "etudiant_id": "manual_1789070785001_79bec77f",
+      "class_id": "ff5a3df2-4c08-4b3f-9ab9-81458f9ff68e",
+      "formation_id": "c6f39f18-0fe1-4f27-8d50-00fd87dd709e",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "2db27259-593d-41c9-979c-6893fe995a5c",
+      "etudiant_id": "manual_1789070785262_8b7199fe",
+      "class_id": "65c44bde-7ee0-49c0-ada9-4ac86ab6e770",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "3a750bb0-6d3c-4f98-8949-bcc8af17aa9e",
+      "etudiant_id": "manual_1789070785541_6ceebfe3",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "99606b75-c498-4bd8-ac6e-c97645650bd3",
+      "etudiant_id": "manual_1789070785785_e3c3dd9c",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "c9b5a014-e4e7-4a9e-acad-c05bf41ee936",
+      "etudiant_id": "manual_1789070786007_ee1d2e41",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "faea39f5-6f1f-43b7-8b33-e81cfcfd9904",
+      "etudiant_id": "manual_1789070786301_0826dbc5",
+      "class_id": "c144f609-eb53-4260-aaaf-cbb44008dc3d",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "bc1ae570-e42c-4d22-9b70-0ae4b44f6a56",
+      "etudiant_id": "manual_1789070786542_ef90982b",
+      "class_id": "a7712363-8f5a-475e-848e-d27acff577f7",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "paye"
+    },
+    {
+      "id": "f5fce002-6cc2-4d3a-aede-dde5dcbeb7ec",
+      "etudiant_id": "manual_1789070786785_a96dbf00",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "8990fba0-88ca-47c6-88aa-17e92320107c",
+      "etudiant_id": "manual_1789070787115_f270ceff",
+      "class_id": "097b750f-c2df-4b4e-93b2-5d0db1c1d001",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "a7e09966-3b17-4efa-96cb-900e6eb7944d",
+      "etudiant_id": "manual_1789070787319_c9814ba9",
+      "class_id": "c6abb5d1-352b-46af-9d5d-4505520d6dac",
+      "formation_id": "1a3a4571-858a-40c3-a9f0-9c5defcec666",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "0b1353e4-2fb8-4268-9aaf-bcac4be51b4e",
+      "etudiant_id": "manual_1789070787547_5213fe40",
+      "class_id": "c68f1ae9-e7b0-4876-a99c-283152aaf382",
+      "formation_id": "9eb14571-9c5e-4b1a-8ab7-07cd8c0a3a2c",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "58de5b2d-bd83-40f7-aebb-37a22a72c890",
+      "etudiant_id": "manual_1789070787785_ab7145cb",
+      "class_id": "8b09c982-d20d-4ef6-94ff-d56162c190a4",
+      "formation_id": "b84c19bb-ce7f-49be-9e57-77236b083acc",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "impaye"
+    },
+    {
+      "id": "1bf7f182-5d40-4d1d-915f-e10522342c77",
+      "etudiant_id": "31d083f0-1cfe-424b-aaae-75a5af67a197",
+      "class_id": "e0a12345-0008-4000-8000-888888888888",
+      "formation_id": "79752c22-0ae2-4e10-8226-0d3101d0f37f",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    },
+    {
+      "id": "817b6721-d22b-4359-9037-2c939607b49c",
+      "etudiant_id": "cff76873-39c1-4408-a54a-4277cb93e922",
+      "class_id": "b48dbc97-15c6-4b4c-b8ef-ee7b6800ef20",
+      "formation_id": "00000000-0000-0000-0000-000000000001",
+      "academic_year": "2026-2027",
+      "status": "actif",
+      "paid_status": "partiel"
+    }
+  ]
+}

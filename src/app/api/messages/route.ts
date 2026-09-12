@@ -5,7 +5,27 @@ import { sendNewMessageEmail } from '@/lib/mail';
 import { EMAIL_ARCHIVE_ID, SYSTEM_LOGGER_ID } from '@/lib/email-log';
 import { htmlToPlainText, looksLikeHtml, sanitizeEmailHtml } from '@/lib/email-html';
 
+export const maxDuration = 60;
+
 import webPush from 'web-push';
+
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+const MAX_ATTACHMENTS = 3;
+
+function normalizeEmailAttachments(raw: unknown) {
+  if (!Array.isArray(raw)) return undefined;
+  const attachments = raw.slice(0, MAX_ATTACHMENTS).flatMap((item) => {
+    if (!item || typeof item !== 'object') return [];
+    const filename = String((item as any).filename || '').replace(/[/\\]/g, '').trim();
+    const content = String((item as any).content || '').replace(/\s/g, '');
+    const contentType = String((item as any).contentType || 'application/octet-stream');
+    if (!filename || !content || !/^[A-Za-z0-9+/=]+$/.test(content)) return [];
+    const buffer = Buffer.from(content, 'base64');
+    if (!buffer.length || buffer.length > MAX_ATTACHMENT_BYTES) return [];
+    return [{ filename, content: buffer, contentType }];
+  });
+  return attachments.length ? attachments : undefined;
+}
 
 
 // Configuration web-push
@@ -26,6 +46,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
     const { sender_id, receiver_id, type, title, target_class_id, target_class_ids, format } = body;
+    const emailAttachments = normalizeEmailAttachments(body.attachments);
     let content = body.content;
     if (typeof content === 'string' && sender_id === 'admin_system' && looksLikeHtml(content)) {
       content = sanitizeEmailHtml(content);
@@ -233,6 +254,7 @@ export async function POST(req: Request) {
                     title: item.subject,
                     campaignId,
                     studentId: item.studentId,
+                    attachments: emailAttachments,
                   });
                   return { email: item.email, success: res.success, error: res.error };
                 } catch (mailErr: any) {

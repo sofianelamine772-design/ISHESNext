@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AdminSidebar } from "@/components/AdminSidebar";
-import { MessageSquare, Send, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock, ChevronRight, Trash2, History } from "lucide-react";
+import { MessageSquare, Send, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock, ChevronRight, Trash2, History, Paperclip, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { fetchClassesAction, fetchStudentsAction } from "@/app/actions/students";
 import { cn } from "@/lib/utils";
-import { EmailComposer } from "@/components/admin/EmailComposer";
+import { EmailComposer, filesToEmailAttachments } from "@/components/admin/EmailComposer";
 import { EmailHistory } from "@/components/admin/EmailHistory";
 import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
 import { htmlToPlainText, looksLikeHtml } from "@/lib/email-html";
@@ -25,7 +25,9 @@ export default function AdminCommunicationPage() {
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
   const [replyContent, setReplyContent] = useState("");
+  const [replyAttachments, setReplyAttachments] = useState<File[]>([]);
   const [replySending, setReplySending] = useState(false);
+  const replyFileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Send state
@@ -37,6 +39,7 @@ export default function AdminCommunicationPage() {
   const [classFilterFormat, setClassFilterFormat] = useState<"all" | "presentiel" | "distanciel">("all");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
 
   useEffect(() => {
     fetchStudentsAndClasses();
@@ -89,6 +92,7 @@ export default function AdminCommunicationPage() {
     setSelectedChat(student);
     setChatLoading(true);
     setChatMessages([]);
+    setReplyAttachments([]);
 
     // Mettre à jour l'UI localement pour enlever le badge non lu
     setConversations(prev => prev.map(c =>
@@ -132,9 +136,12 @@ export default function AdminCommunicationPage() {
   }
 
   async function handleReply() {
-    if (!replyContent.trim() || !selectedChat || replySending) return;
-    const content = replyContent.trim();
+    if ((!replyContent.trim() && replyAttachments.length === 0) || !selectedChat || replySending) return;
+    const files = replyAttachments;
+    const names = files.map((f) => f.name).join(', ');
+    const content = replyContent.trim() || (names ? `Pièce jointe : ${names}` : '');
     setReplyContent("");
+    setReplyAttachments([]);
     setReplySending(true);
 
     // Optimiste
@@ -142,15 +149,19 @@ export default function AdminCommunicationPage() {
     setChatMessages(prev => [...prev, optimistic]);
 
     try {
+      const body: Record<string, unknown> = {
+        sender_id: 'admin_system',
+        receiver_id: selectedChat.id,
+        content,
+        type: 'private',
+      };
+      if (files.length > 0) {
+        body.attachments = await filesToEmailAttachments(files);
+      }
       const res = await fetch('/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sender_id: 'admin_system',
-          receiver_id: selectedChat.id,
-          content,
-          type: 'private',
-        }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         openChat(selectedChat); // rafraîchir
@@ -192,6 +203,9 @@ export default function AdminCommunicationPage() {
       if (broadcastType === 'global') {
         body.format = formatFilter;
       }
+      if (attachments.length > 0) {
+        body.attachments = await filesToEmailAttachments(attachments);
+      }
 
       const res = await fetch('/api/messages', {
         method: 'POST',
@@ -202,7 +216,7 @@ export default function AdminCommunicationPage() {
       const payload = await res.json().catch(() => ({}));
       if (res.ok) {
         setSuccess(true);
-        setContent(""); setTitle(""); setSelectedStudent(""); setSelectedClasses([]); setFormatFilter("all");
+        setContent(""); setTitle(""); setAttachments([]); setSelectedStudent(""); setSelectedClasses([]); setFormatFilter("all");
         setTimeout(() => setSuccess(false), 3000);
         fetchConversations();
         if (payload.emailWarning) {
@@ -360,8 +374,51 @@ export default function AdminCommunicationPage() {
                       <div ref={chatEndRef} />
                     </div>
 
-                    <div className="p-4 bg-white border-t border-gray-100 shrink-0">
+                    <div className="p-4 bg-white border-t border-gray-100 shrink-0 space-y-2">
+                      {replyAttachments.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {replyAttachments.map((file, index) => (
+                            <span key={`${file.name}-${index}`} className="inline-flex items-center gap-1.5 max-w-full px-2.5 py-1 rounded-full bg-gray-50 border border-gray-100 text-[10px] font-bold text-gray-600">
+                              <Paperclip className="w-3 h-3 shrink-0 text-[#086b51]" />
+                              <span className="truncate">{file.name}</span>
+                              <button type="button" title="Retirer" onClick={() => setReplyAttachments(replyAttachments.filter((_, i) => i !== index))} className="p-0.5 rounded-full hover:bg-gray-200 text-gray-400">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <div className="bg-gray-50 rounded-2xl px-4 py-2 flex items-center gap-3 border border-gray-100 focus-within:border-[#086b51]/30 focus-within:ring-2 focus-within:ring-[#086b51]/10 transition-all">
+                        <input
+                          ref={replyFileInputRef}
+                          type="file"
+                          multiple
+                          accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx,.xls,.xlsx,.csv"
+                          className="hidden"
+                          onChange={(e) => {
+                            const list = e.target.files;
+                            if (!list) return;
+                            const next = [...replyAttachments];
+                            for (const file of Array.from(list)) {
+                              if (next.length >= 3) break;
+                              if (file.size > 5 * 1024 * 1024) {
+                                alert(`« ${file.name} » dépasse 5 Mo.`);
+                                continue;
+                              }
+                              next.push(file);
+                            }
+                            setReplyAttachments(next);
+                            e.target.value = "";
+                          }}
+                        />
+                        <button
+                          type="button"
+                          title="Joindre un fichier"
+                          onClick={() => replyFileInputRef.current?.click()}
+                          className="w-9 h-9 rounded-xl text-[#086b51] bg-white border border-gray-100 flex items-center justify-center hover:bg-emerald-50 shrink-0"
+                        >
+                          <Paperclip className="w-4 h-4" />
+                        </button>
                         <input
                           type="text"
                           value={replyContent}
@@ -373,7 +430,7 @@ export default function AdminCommunicationPage() {
                         />
                         <button
                           onClick={handleReply}
-                          disabled={replySending || !replyContent.trim()}
+                          disabled={replySending || (!replyContent.trim() && replyAttachments.length === 0)}
                           className="w-9 h-9 bg-[#086b51] text-white rounded-xl flex items-center justify-center shadow-md shadow-[#086b51]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shrink-0"
                         >
                           {replySending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
@@ -526,7 +583,13 @@ export default function AdminCommunicationPage() {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Contenu du message</label>
-                  <EmailComposer value={content} onChange={setContent} placeholder="Écrivez votre message. Utilisez gras, italique, titre et couleurs." />
+                  <EmailComposer
+                    value={content}
+                    onChange={setContent}
+                    attachments={attachments}
+                    onAttachmentsChange={setAttachments}
+                    placeholder="Écrivez votre message. Utilisez gras, italique, titre centré, couleurs et le bouton Joindre pour une pièce jointe."
+                  />
                 </div>
 
                 <div className="flex justify-between items-center pt-4 border-t border-gray-50">

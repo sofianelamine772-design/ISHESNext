@@ -8,7 +8,9 @@ import { LogOut, LayoutDashboard, Users, BookOpen, Settings, Monitor, School, Se
 import { fetchClassesAction, fetchStudentByIdAction, createClassAction, fetchFormationsAction, fetchStudentsWaitingAssignmentAction, assignStudentToClassAction, updateClassWhatsappAction, createStudentManualAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
+import { EmailComposer, filesToEmailAttachments } from "@/components/admin/EmailComposer";
 import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
+import { htmlToPlainText } from "@/lib/email-html";
 import { cn, getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 
@@ -201,11 +203,12 @@ export default function AdminDashboard() {
   const [showContactModal, setShowContactModal] = useState(false);
   const [contactSubject, setContactSubject] = useState("");
   const [contactMessage, setContactMessage] = useState("");
+  const [contactAttachments, setContactAttachments] = useState<File[]>([]);
   const [contactSending, setContactSending] = useState(false);
   const [contactSuccess, setContactSuccess] = useState(false);
 
   const handleSendClassEmail = async () => {
-    if (!selectedClassId || !contactMessage.trim()) return;
+    if (!selectedClassId || !htmlToPlainText(contactMessage).trim()) return;
     setContactSending(true);
     setContactSuccess(false);
     try {
@@ -218,6 +221,9 @@ export default function AdminDashboard() {
           type: "class",
           title: contactSubject.trim() || undefined,
           target_class_id: selectedClassId,
+          attachments: contactAttachments.length > 0
+            ? await filesToEmailAttachments(contactAttachments)
+            : undefined,
         }),
       });
 
@@ -225,6 +231,7 @@ export default function AdminDashboard() {
         setContactSuccess(true);
         setContactMessage("");
         setContactSubject("");
+        setContactAttachments([]);
         setTimeout(() => setShowContactModal(false), 2000);
       } else {
         const err = await res.json().catch(() => ({}));
@@ -554,8 +561,11 @@ export default function AdminDashboard() {
                   </div>
                   <div className="space-y-2">
                     {filteredDistancielClasses.map((c) => {
-                      const n = (c.formationTitle || c.name).toLowerCase();
+                      const n = `${c.formationTitle || ''} ${c.name}`.toLowerCase();
                       const isAdult = !(n.includes('enfant') || n.includes('junior') || n.includes('tarbiya') || n.includes('prépa') || n.includes('élémentaire'));
+                      const titleDiffers = Boolean(c.name && c.formationTitle && c.name !== c.formationTitle);
+                      const title = titleDiffers ? c.name : (c.formationTitle || c.name);
+                      const subtitle = titleDiffers ? c.formationTitle : null;
 
                       return (
                         <button
@@ -566,7 +576,13 @@ export default function AdminDashboard() {
                             : (isAdult ? "bg-ishes-blue/5 border-ishes-blue/10 hover:bg-ishes-blue/10 hover:border-ishes-blue/20" : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50")
                             }`}
                         >
-                          <div className="font-semibold text-gray-800 mb-1 text-sm">{c.formationTitle || c.name}</div>
+                          <div className="font-semibold text-gray-800 mb-1 text-sm leading-snug">
+                            {c.externalId ? <span className="text-ishes-gold mr-1">n°{c.externalId}</span> : null}
+                            {title}
+                          </div>
+                          {subtitle ? (
+                            <div className="text-[10px] text-gray-400 font-medium mb-1">{subtitle}</div>
+                          ) : null}
                           <div className="flex items-center text-[10px] text-gray-500 gap-1.5">
                             <Users className="w-3.5 h-3.5" /> {c.students.length} élèves inscrits
                           </div>
@@ -683,6 +699,7 @@ export default function AdminDashboard() {
                         className="flex-1 md:flex-none h-8 text-[10px] border-amber-600 text-amber-600 hover:bg-amber-50 hover:text-amber-700 flex items-center gap-1.5 px-3"
                         onClick={() => {
                           setContactSuccess(false);
+                          setContactAttachments([]);
                           setShowContactModal(true);
                         }}
                       >
@@ -1246,7 +1263,7 @@ export default function AdminDashboard() {
       {/* CONTACT CLASS MODAL */}
       {showContactModal && (
         <div className="fixed inset-0 bg-ishes-dark/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100 transform transition-all scale-100">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-gray-100 transform transition-all scale-100">
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
@@ -1288,12 +1305,12 @@ export default function AdminDashboard() {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Contenu du message</label>
-                  <textarea
-                    rows={6}
-                    placeholder="Saisissez votre message ici..."
+                  <EmailComposer
                     value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium text-sm resize-none"
+                    onChange={setContactMessage}
+                    attachments={contactAttachments}
+                    onAttachmentsChange={setContactAttachments}
+                    placeholder="Écrivez votre message. Titre, centrage, couleurs et pièce jointe."
                   />
                 </div>
               </div>
@@ -1312,7 +1329,7 @@ export default function AdminDashboard() {
                   <Button
                     variant="ishes"
                     className="h-12 rounded-2xl px-8 bg-amber-600 hover:bg-amber-700 text-white"
-                    disabled={contactSending || !contactMessage.trim()}
+                    disabled={contactSending || !htmlToPlainText(contactMessage).trim()}
                     onClick={handleSendClassEmail}
                   >
                     {contactSending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Envoyer"}

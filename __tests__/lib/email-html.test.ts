@@ -13,6 +13,12 @@ describe('email-html', () => {
     expect(html).toContain('<i>italique</i>');
   });
 
+  test('conserve le centrage du titre', () => {
+    const html = sanitizeEmailHtml('<h2 style="text-align: center; color: #0a192f">Rentrée</h2>');
+    expect(html).toContain('text-align: center');
+    expect(html).toContain('color: #0a192f');
+  });
+
   test('conserve les couleurs Chrome via <font color>', () => {
     const html = sanitizeEmailHtml('<font color="#C69C6D">texte or</font>');
     expect(html).toContain('style="color: #C69C6D;"');

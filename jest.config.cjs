@@ -28,7 +28,6 @@ module.exports = {
     '/scratch/',
     '/\\.next/',
     '/node_modules/',
-    '/__tests__/integration/',
   ],
   modulePathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   moduleNameMapper: {

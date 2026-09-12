@@ -288,7 +288,9 @@ INSERT INTO public.formations (title, slug, description, price, duration, type) 
 ('Arabe & Coran Enfant (Samedi)', 'enfant-samedi-presentiel', 'Cours présentiel du samedi pour enfants.', 480, 'Annuel', 'presentiel'),
 ('Arabe & Coran Enfant (Dimanche)', 'enfant-dimanche-presentiel', 'Cours présentiel du dimanche pour enfants.', 480, 'Annuel', 'presentiel'),
 ('Arabe & Tajwid Femme Débutante (Présentiel)', 'femme-debutante-presentiel', 'Cours présentiel pour femmes débutantes.', 649, 'Annuel', 'presentiel'),
-('Arabe & Tajwid Femme Intermédiaire (Présentiel)', 'femme-intermediaire-presentiel', 'Cours présentiel pour femmes intermédiaires.', 649, 'Annuel', 'presentiel')
+('Arabe & Tajwid Femme Intermédiaire (Présentiel)', 'femme-intermediaire-presentiel', 'Cours présentiel pour femmes intermédiaires.', 649, 'Annuel', 'presentiel'),
+('Formation Enseignant de Tajwid', 'formation_enseignante_tajwid', 'Apprendre à enseigner le Tajwid avec une méthode éprouvée.', 0, 'À la carte', 'distanciel'),
+('Formation Enseignant Tarbya Islamiya', 'formation_enseignante_tarbya', 'Transmettre les valeurs de l''Islam avec pédagogie.', 0, '4 à 5 mois', 'distanciel')
 ON CONFLICT (slug) DO UPDATE SET
     title = EXCLUDED.title,
     description = EXCLUDED.description,

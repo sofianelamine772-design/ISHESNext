@@ -101,6 +101,28 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
     );
   });
 
+  describe('Correspondance des classes distanciel enfant (101–108)', () => {
+    const distanceCases = Object.entries(DISTANCE_CLASS_ID_TO_UUID).map(([classId, uuid]) => ({
+      classId,
+      uuid,
+    }));
+
+    test.each(distanceCases)(
+      'La classe distanciel $classId doit exister en base (UUID $uuid)',
+      async ({ uuid }) => {
+        const { data: classRow, error } = await supabase
+          .from('classes')
+          .select('id, external_id, is_active')
+          .eq('id', uuid)
+          .maybeSingle();
+
+        expect(error).toBeNull();
+        expect(classRow).not.toBeNull();
+        expect(classRow?.is_active).toBe(true);
+      }
+    );
+  });
+
   afterAll(async () => {
     // Nettoyer la connexion WebSocket Supabase pour éviter que Jest ne pende (hang)
     await supabase.removeAllChannels();
