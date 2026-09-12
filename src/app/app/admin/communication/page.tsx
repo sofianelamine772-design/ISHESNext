@@ -8,6 +8,7 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { fetchClassesAction, fetchStudentsAction } from "@/app/actions/students";
 import { cn } from "@/lib/utils";
 import { EmailComposer, filesToEmailAttachments } from "@/components/admin/EmailComposer";
+import { ClerkInviteRelaunch } from "@/components/admin/ClerkInviteRelaunch";
 import { EmailHistory } from "@/components/admin/EmailHistory";
 import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
 import { htmlToPlainText, looksLikeHtml } from "@/lib/email-html";
@@ -451,6 +452,9 @@ export default function AdminCommunicationPage() {
           ) : (
             /* Nouvel Envoi */
             <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+              <div className="max-w-3xl mx-auto mb-6">
+                <ClerkInviteRelaunch />
+              </div>
               <div className="max-w-3xl mx-auto bg-white rounded-3xl md:rounded-[3rem] border border-gray-100 p-6 md:p-12 shadow-sm space-y-8 md:space-y-10">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-[1px] bg-[#086b51]" />

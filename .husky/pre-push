@@ -2,7 +2,7 @@
 
 echo "✅ Lancement des tests unitaires (Jest)..."
 echo "⏳ Premier lancement : Next compile les tests, ça peut prendre 1 à 2 min."
-CI=true npm test -- --colors
+CI=true npm test -- --colors --maxWorkers=2
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car les tests unitaires ont échoué."
