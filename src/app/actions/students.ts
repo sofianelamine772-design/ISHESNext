@@ -9,7 +9,7 @@ import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
 import { isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
-import { isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
+import { clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -703,7 +703,8 @@ export async function createStudentManualAction(data: {
         emailAddress: data.email,
         publicMetadata: { role: 'etudiant' },
         ignoreExisting: true,
-        redirectUrl: `${appUrl}/app/eleve`
+        notify: true,
+        redirectUrl: clerkInviteRedirectUrl(appUrl)
       });
     }).then(() => console.log(`Clerk invitation sent to ${data.email}`))
       .catch(clerkErr => console.error("Failed to create Clerk invitation:", clerkErr));
@@ -737,7 +738,7 @@ async function sendClerkAccountInvite(email: string, firstName?: string | null) 
       },
       ignoreExisting: true,
       notify: true,
-      redirectUrl: `${appUrl}/app/eleve`,
+      redirectUrl: clerkInviteRedirectUrl(appUrl),
     });
     return { ok: true as const, already: false };
   } catch (inviteErr: any) {

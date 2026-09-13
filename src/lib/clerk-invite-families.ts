@@ -79,3 +79,8 @@ export function resolveProductionAppUrl(rawUrl: string | undefined) {
   }
   return { ok: true as const, url: url || PRODUCTION_APP_URL };
 }
+
+/** Page Clerk de création de compte (pas /app/eleve, sinon le middleware envoie vers la connexion). */
+export function clerkInviteRedirectUrl(appUrl: string) {
+  return `${String(appUrl || PRODUCTION_APP_URL).replace(/\/$/, "")}/sign-up`;
+}

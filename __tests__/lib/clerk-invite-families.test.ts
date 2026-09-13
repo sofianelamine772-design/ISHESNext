@@ -1,4 +1,4 @@
-import { groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
+import { clerkInviteRedirectUrl, groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
 
 describe('groupStudentsByInviteEmail', () => {
   it('envoie un seul mail par parent et garde tous les enfants de cette famille', () => {
@@ -52,5 +52,12 @@ describe('resolveProductionAppUrl', () => {
     const fallback = resolveProductionAppUrl('');
     expect(fallback.ok).toBe(true);
     if (fallback.ok) expect(fallback.url).toBe('https://ishees.vercel.app');
+  });
+});
+
+describe('clerkInviteRedirectUrl', () => {
+  it('envoie vers la page de création de compte, pas vers l’espace déjà protégé', () => {
+    expect(clerkInviteRedirectUrl('https://ishees.vercel.app')).toBe('https://ishees.vercel.app/sign-up');
+    expect(clerkInviteRedirectUrl('https://ishees.vercel.app/')).toBe('https://ishees.vercel.app/sign-up');
   });
 });

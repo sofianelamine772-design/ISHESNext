@@ -50,8 +50,8 @@ export default async function SignUpPage({
 
         <ClerkLoaded>
           <SignUp
-            forceRedirectUrl="/app"
-            fallbackRedirectUrl="/app"
+            forceRedirectUrl="/app/eleve"
+            fallbackRedirectUrl="/app/eleve"
             initialValues={email ? { emailAddress: email } : undefined}
             appearance={{
               elements: {

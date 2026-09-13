@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { ADMIN_EMAILS, isAdminEmail } from '@/lib/auth-utils';
-import { groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
+import { clerkInviteRedirectUrl, groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
 import { logSystemError } from '@/lib/error-logger';
 
 export const maxDuration = 120;
@@ -60,7 +60,7 @@ export async function GET() {
     return NextResponse.json({
       productionReady: guard.ok,
       productionError: guard.ok ? null : guard.error,
-      redirectUrl: guard.ok ? `${guard.appUrl}/app/eleve` : null,
+      redirectUrl: guard.ok ? clerkInviteRedirectUrl(guard.appUrl) : null,
       emailCount: families.length,
       studentCount: families.reduce((n, f) => n + f.children.length, 0),
       families: families.map((f) => ({
@@ -85,7 +85,7 @@ export async function POST() {
 
     const { families } = await buildPlan();
     const client = await clerkClient();
-    const redirectUrl = `${guard.appUrl}/app/eleve`;
+    const redirectUrl = clerkInviteRedirectUrl(guard.appUrl);
 
     const sent: string[] = [];
     const already: string[] = [];
