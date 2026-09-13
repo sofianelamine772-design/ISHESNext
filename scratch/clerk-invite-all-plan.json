@@ -1,0 +1,2482 @@
+{
+  "timestamp": "2026-09-12T10:51:54.510Z",
+  "apply": false,
+  "redirectUrl": "https://ishees.vercel.app/app/eleve",
+  "note": [
+    "Clerk = 1 compte par adresse e-mail.",
+    "Une fratrie qui partage le même e-mail parent reçoit UNE invitation.",
+    "Après connexion, l’espace élève affiche TOUS les enfants de cet e-mail (liaison automatique).",
+    "On n’envoie PAS un mail par enfant si l’e-mail est identique : ça mélangerait ou échouerait chez Clerk."
+  ],
+  "counts": {
+    "eleves": 192,
+    "emailsUniques": 129,
+    "aInviter": 5,
+    "dejaCompteClerk": 40,
+    "invitationDejaEnAttente": 84,
+    "sansEmail": 0,
+    "emailInvalide": 0
+  },
+  "invites": [
+    {
+      "email": "benyahiakhedim@orange.fr",
+      "baseEmail": "benyahiakhedim@orange.fr",
+      "children": [
+        {
+          "id": "676cc00f-18af-4063-ab69-bf2d999a4ad5",
+          "name": "Rayan  Khedim",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "dzaedazdez87@gmail.com",
+      "baseEmail": "dzaedazdez87@gmail.com",
+      "children": [
+        {
+          "id": "7416a6f7-9b78-4175-859f-f94e1b9a5da5",
+          "name": "edaz dezadzeadzea",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "karimavergnes05@gmail.com",
+      "baseEmail": "karimavergnes05@gmail.com",
+      "children": [
+        {
+          "id": "d3a4306f-6c33-4a49-bd41-3fa633ca9da1",
+          "name": "Sami Vergnes",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "lennysenayadeeee434@outlook.fr",
+      "baseEmail": "lennysenayadeeee434@outlook.fr",
+      "children": [
+        {
+          "id": "e7bdb59e-7b11-4080-aa60-693b5028b005",
+          "name": "dezd ezdezadaz",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "raja-ouammou@hotmail.fr",
+      "baseEmail": "raja-ouammou@hotmail.fr",
+      "children": [
+        {
+          "id": "38167af1-7570-47ac-a688-866bb30067aa",
+          "name": "Raja Ouammou",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    }
+  ],
+  "alreadyAccount": [
+    {
+      "email": "amel.mouhib@hotmail.fr",
+      "baseEmail": "amel.mouhib@hotmail.fr",
+      "children": [
+        {
+          "id": "3b004b79-79e1-4323-aa65-4ecf7e530355",
+          "name": "Amel mouhib",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J67N6HPtuVlRySln6C6T8bWRF7"
+        },
+        {
+          "id": "manual_1789070779429_4da753af",
+          "name": "Ayna Delnoeufcourt",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3J67N6HPtuVlRySln6C6T8bWRF7",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "benilias757@gmail.com",
+      "baseEmail": "benilias757@gmail.com",
+      "children": [
+        {
+          "id": "user_3FipNjR8EJKYU7SirhrzhlRziOX",
+          "name": "anas benamine",
+          "status": "actif",
+          "has2026": false,
+          "clerk_user_id": "user_3Fix0JAWAFK9o7q5NxDsUeanAIP"
+        },
+        {
+          "id": "user_3FinqphxLeeiYbFrqwQzGyUBLqu",
+          "name": "lenny senata",
+          "status": "actif",
+          "has2026": false,
+          "clerk_user_id": "user_3Fix0JAWAFK9o7q5NxDsUeanAIP"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 0,
+      "clerkUserId": "user_3Fix0JAWAFK9o7q5NxDsUeanAIP"
+    },
+    {
+      "email": "benjeddi.ali26@gmail.com",
+      "baseEmail": "benjeddi.ali26@gmail.com",
+      "children": [
+        {
+          "id": "a15c5730-f227-4779-b72e-fc143b1171a5",
+          "name": "Safa Benjeddi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IxoBS4fkiilRwSku8Cjv4nnPVb"
+        },
+        {
+          "id": "ff01eba2-0880-4398-b58f-e9ad7f71fad5",
+          "name": "Leila Benjeddi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IxoBS4fkiilRwSku8Cjv4nnPVb"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3IxoBS4fkiilRwSku8Cjv4nnPVb",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "berakech.c@hotmail.com",
+      "baseEmail": "berakech.c@hotmail.com",
+      "children": [
+        {
+          "id": "533d8507-fa55-41ae-867e-41bc2769b7fc",
+          "name": "Ismaël  Harrat",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IjHbBKNjrwfo96xHZzgMUZZA1Y"
+        },
+        {
+          "id": "933ae4b6-4bbc-49cf-a79b-5a6a8e3f4158",
+          "name": "Leyna Harrat",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IjHbBKNjrwfo96xHZzgMUZZA1Y"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3IjHbBKNjrwfo96xHZzgMUZZA1Y",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "diyenimane@gmail.com",
+      "baseEmail": "diyenimane@gmail.com",
+      "children": [
+        {
+          "id": "eefb247b-e251-43ef-b2c0-e76b07bfaa4b",
+          "name": "Mohamed ilyas Saci",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J8WRpHL1h1a4zvGMC3srT1dgtL"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3J8WRpHL1h1a4zvGMC3srT1dgtL",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "elalamiahmed@live.fr",
+      "baseEmail": "elalamiahmed@live.fr",
+      "children": [
+        {
+          "id": "5e7bf0bc-dedc-4f98-aed6-410abefcc68f",
+          "name": "AMIR  EL ALAMI EL IDRISSI",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IuJ2FwiaOPcRZUPWIwkwSdPmxo"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IuJ2FwiaOPcRZUPWIwkwSdPmxo",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "f.abdechafi@yahoo.fr",
+      "baseEmail": "f.abdechafi@yahoo.fr",
+      "children": [
+        {
+          "id": "3dd29078-b52e-4a64-899e-3bc63bc5e06e",
+          "name": "Nouh (Noé) GHANMI",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IrTzuWxS9ImBT5Arp9SwcJOzmL"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IrTzuWxS9ImBT5Arp9SwcJOzmL",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "hjrchennouf75@gmail.com",
+      "baseEmail": "hjrchennouf75@gmail.com",
+      "children": [
+        {
+          "id": "fdacff0b-818e-46aa-9fbb-891317dac92e",
+          "name": "Hajar JAMOU",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IwwLVtOxTXuwh8bcCKkncHW7T9"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IwwLVtOxTXuwh8bcCKkncHW7T9",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "housna.bamoudou@gmail.com",
+      "baseEmail": "housna.bamoudou@gmail.com",
+      "children": [
+        {
+          "id": "d09141db-1e80-4957-98dc-d9a7555be168",
+          "name": "Esma  Charif",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J2ICqReRWJq3lS3s7mJmX8TW2T"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3J2ICqReRWJq3lS3s7mJmX8TW2T",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "ilhem.laouani31@gmail.com",
+      "baseEmail": "ilhem.laouani31@gmail.com",
+      "children": [
+        {
+          "id": "04980580-af6a-40d6-affd-a77cd3889bf2",
+          "name": "Ilyana Bouktib",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J5nJIjt1pjUf0nXtNwtCideIV8"
+        },
+        {
+          "id": "98637f69-bb50-4e10-8345-435a6ee1c759",
+          "name": "Imran Bouktib",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J5nJIjt1pjUf0nXtNwtCideIV8"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3J5nJIjt1pjUf0nXtNwtCideIV8",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "jessica.girault@yahoo.com",
+      "baseEmail": "jessica.girault@yahoo.com",
+      "children": [
+        {
+          "id": "ca0ede40-fa3d-45ee-a1c4-32939b6efdd9",
+          "name": "Jessica Girault",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYh0v9yHDH04Y4kD4PSNPRCSIB"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IYh0v9yHDH04Y4kD4PSNPRCSIB",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "jihene.chaouachi@gmail.com",
+      "baseEmail": "jihene.chaouachi@gmail.com",
+      "children": [
+        {
+          "id": "cbe9e676-1332-480e-9e2e-68afea009733",
+          "name": "Lilia KABOUBI",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J0BNPiheS3MB4w1g9RoiaGr1Kg"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3J0BNPiheS3MB4w1g9RoiaGr1Kg",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "jilbabouki@outlook.fr",
+      "baseEmail": "jilbabouki@outlook.fr",
+      "children": [
+        {
+          "id": "fe3b4dbc-476a-4ee9-8098-721b7df3fe96",
+          "name": "Ayoub  El Morabit",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYzVfxLUZkxPzdvy4klGhLx3JO"
+        },
+        {
+          "id": "99075a58-21f3-4f5b-b353-d10bbf58dee5",
+          "name": "Ismaël  El Morabit",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYzVfxLUZkxPzdvy4klGhLx3JO"
+        },
+        {
+          "id": "1c6acc31-d96b-420d-b242-ef87a633037d",
+          "name": "Chayma El Morabit",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYzVfxLUZkxPzdvy4klGhLx3JO"
+        },
+        {
+          "id": "a685f44f-82b8-4984-a472-9f2409ab01b9",
+          "name": "Nassima  El Morabit",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYzVfxLUZkxPzdvy4klGhLx3JO"
+        }
+      ],
+      "childCount": 4,
+      "has2026Count": 4,
+      "clerkUserId": "user_3IYzVfxLUZkxPzdvy4klGhLx3JO",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "khalihaamine@gmail.com",
+      "baseEmail": "khalihaamine@gmail.com",
+      "children": [
+        {
+          "id": "72c5b4a3-050c-4dca-9f5c-1b8614910f9b",
+          "name": "Aya Khaliha",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYVNVegEyDO767fGWo7e8gAP7Y"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IYVNVegEyDO767fGWo7e8gAP7Y",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "krmallal@hotmail.fr",
+      "baseEmail": "krmallal@hotmail.fr",
+      "children": [
+        {
+          "id": "8571d4aa-0d20-44bb-833b-f7151e4d5dcf",
+          "name": "Nelya Allal",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J5ok3u3F5bx3JQYb515CX4djFC"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3J5ok3u3F5bx3JQYb515CX4djFC",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "lammari.ryad@gmail.com",
+      "baseEmail": "lammari.ryad@gmail.com",
+      "children": [
+        {
+          "id": "ba7cd3d0-1d40-4d46-bab2-fab4b2188f35",
+          "name": "Rayan  Lammari",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3ImLSvO3KD6Q3yj2CJfwoqC0g26"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3ImLSvO3KD6Q3yj2CJfwoqC0g26",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "leil71606@gmail.com",
+      "baseEmail": "leil71606@gmail.com",
+      "children": [
+        {
+          "id": "896067f3-8036-4f08-a4bc-9cb12432a1e9",
+          "name": "hajarouna hajjijj",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IJpVZ4kVNIsOYWnbRpSzHQwd3T"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IJpVZ4kVNIsOYWnbRpSzHQwd3T"
+    },
+    {
+      "email": "lkeddouri@yahoo.fr",
+      "baseEmail": "lkeddouri@yahoo.fr",
+      "children": [
+        {
+          "id": "158a22ec-98a8-48ab-8a82-cc8e53b80029",
+          "name": "Louisa MEDAN",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J57Be0EzPtdYd4aixJMglvbekN"
+        },
+        {
+          "id": "6025be9d-f1c0-499c-87ba-48d2690ce56c",
+          "name": "Aliya MEDAN",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J57Be0EzPtdYd4aixJMglvbekN"
+        },
+        {
+          "id": "e6d4ebb0-f846-4535-9d5a-6fcc33b0c361",
+          "name": "Layina MEDAN",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J57Be0EzPtdYd4aixJMglvbekN"
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3,
+      "clerkUserId": "user_3J57Be0EzPtdYd4aixJMglvbekN",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "mdiallo211@outlook.fr",
+      "baseEmail": "mdiallo211@outlook.fr",
+      "children": [
+        {
+          "id": "2cc22c12-d26d-4b94-99a5-cbf285e84d38",
+          "name": "M D",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IbuMnXRoJyx47ADh2S1niVlcj5"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IbuMnXRoJyx47ADh2S1niVlcj5",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "med_nada@hotmail.fr",
+      "baseEmail": "med_nada@hotmail.fr",
+      "children": [
+        {
+          "id": "32e0c45c-3cdb-4e58-a88e-e842b3f4e372",
+          "name": "Soulayman ANDOH",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IuU1VWMUUJOaEYKPeTmSwwQvr7"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IuU1VWMUUJOaEYKPeTmSwwQvr7",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "meriam.belhadjali@gmail.com",
+      "baseEmail": "meriam.belhadjali@gmail.com",
+      "children": [
+        {
+          "id": "26442089-1580-408d-9b37-4fba48662bbc",
+          "name": "ADAM EZeddine BECHA",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IoPYPRu3R4dZPbIvYgizUWL9kS"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IoPYPRu3R4dZPbIvYgizUWL9kS",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "miminiang76@gmail.com",
+      "baseEmail": "miminiang76@gmail.com",
+      "children": [
+        {
+          "id": "99fdd38b-8010-47a0-a590-23482ba17847",
+          "name": "KHADIDJA DIAGNE",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J8Lw4L3zwitxXJ0bijYJS0kDMp"
+        },
+        {
+          "id": "d7616ea0-6033-4d1d-b1b4-c5fbba387bcb",
+          "name": "HAMZA DIAGNE",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J8Lw4L3zwitxXJ0bijYJS0kDMp"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3J8Lw4L3zwitxXJ0bijYJS0kDMp",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "nadanihed12@gmail.com",
+      "baseEmail": "nadanihed12@gmail.com",
+      "children": [
+        {
+          "id": "2cb6c193-900b-45a8-90b5-060f2f924414",
+          "name": "Nada Nihed  Salaa Djezzar",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IoOOq10qcbtTHpZ0dOb9lj1mOy"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IoOOq10qcbtTHpZ0dOb9lj1mOy",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "nadia.elgaddari@yahoo.fr",
+      "baseEmail": "nadia.elgaddari@yahoo.fr",
+      "children": [
+        {
+          "id": "cff76873-39c1-4408-a54a-4277cb93e922",
+          "name": "anas ennaoui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3JApzsJFwBZqPUGzxllppT82Yrm"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3JApzsJFwBZqPUGzxllppT82Yrm",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "nahida31@hotmail.fr",
+      "baseEmail": "nahida31@hotmail.fr",
+      "children": [
+        {
+          "id": "2e3bc5c2-bc77-475e-9ea1-80df1c231b54",
+          "name": "Aswan DOUAH",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IcfaN5b0NRHjgdfwTyHqJyQuj5"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IcfaN5b0NRHjgdfwTyHqJyQuj5",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "nesrine.belkoniene@hotmail.com",
+      "baseEmail": "nesrine.belkoniene@hotmail.com",
+      "children": [
+        {
+          "id": "8baa903a-d8f4-42e0-b08b-4d9fe6d41476",
+          "name": "Adem Belkoniene",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IeY6CHc6TZl0ZqMlGVq7xUls65"
+        },
+        {
+          "id": "c639505d-9da7-4e02-a5cf-e2d20f9012ea",
+          "name": "Ayline Belkoniene",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IeY6CHc6TZl0ZqMlGVq7xUls65"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3IeY6CHc6TZl0ZqMlGVq7xUls65",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "nora4522@hotmail.fr",
+      "baseEmail": "nora4522@hotmail.fr",
+      "children": [
+        {
+          "id": "a283880f-33a6-40c5-867a-3973e307a3b7",
+          "name": "Inès  Baudoin",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3ItzKclagEu20weG5HGU0ETGhTN"
+        },
+        {
+          "id": "52c0d53d-3cc5-43af-b505-67af931e6c5f",
+          "name": "Yaniss  Baudoin",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3ItzKclagEu20weG5HGU0ETGhTN"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3ItzKclagEu20weG5HGU0ETGhTN",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "oumaima.chouchene93@gmail.com",
+      "baseEmail": "oumaima.chouchene93@gmail.com",
+      "children": [
+        {
+          "id": "42efd9bd-0724-4978-9cc9-82fcfd05f558",
+          "name": "Myriam  Chouchane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3Iy8dzOsiXDGDxcc4ngUarZTDtQ"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3Iy8dzOsiXDGDxcc4ngUarZTDtQ",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "rchaouch88@gmail.com",
+      "baseEmail": "rchaouch88@gmail.com",
+      "children": [
+        {
+          "id": "9e910fb2-9ee9-4913-b223-e69015bf9a37",
+          "name": "rayan chaouch",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3Im0M6E8o0CXguc6Nah6qpLZ3CH"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3Im0M6E8o0CXguc6Nah6qpLZ3CH",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "rihabfejjaj1@gmail.com",
+      "baseEmail": "rihabfejjaj1@gmail.com",
+      "children": [
+        {
+          "id": "5a34371f-325f-493a-b2e9-22dba1a30496",
+          "name": "Nadine,layla Lahyani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IYXTu8qKDpJPhSMVHGKt66XNfX"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IYXTu8qKDpJPhSMVHGKt66XNfX",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "safaa.m.saidi@gmail.com",
+      "baseEmail": "safaa.m.saidi@gmail.com",
+      "children": [
+        {
+          "id": "a470585a-5f7f-4612-ad4b-6f0a2a9bda0e",
+          "name": "Neil Saidi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IwquXdNXwyyKkH0r3tkOaLOQ2J"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IwquXdNXwyyKkH0r3tkOaLOQ2J",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "sahadiyatankari@gmail.com",
+      "baseEmail": "sahadiyatankari@gmail.com",
+      "children": [
+        {
+          "id": "b3972114-e7d7-4f14-b728-1c322d845824",
+          "name": "Sahadiya Boubacar Issa Tankari",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J3yFs1Wj0BFoVZuqDpxHvN97Wg"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3J3yFs1Wj0BFoVZuqDpxHvN97Wg",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "samira.kubiak@gmail.com",
+      "baseEmail": "samira.kubiak@gmail.com",
+      "children": [
+        {
+          "id": "377ad04b-5c6b-4058-869c-89daa5bb6943",
+          "name": "Selma Kubiak",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IjH1UWidrzfCwDUcQc9aXNtyz9"
+        },
+        {
+          "id": "cb4c6cd6-9321-49cc-bdd2-4ee2b9bf7718",
+          "name": "Sonia Kubiak",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IjH1UWidrzfCwDUcQc9aXNtyz9"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3IjH1UWidrzfCwDUcQc9aXNtyz9",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "sanaouale@hotmail.fr",
+      "baseEmail": "sanaouale@hotmail.fr",
+      "children": [
+        {
+          "id": "6348cc99-4c25-450a-a2ff-09a1b1e7c52e",
+          "name": "Naouale KIYIM",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IzRhRhyjfKWbtvlEyj2P3q9YH7"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3IzRhRhyjfKWbtvlEyj2P3q9YH7",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "sarah.elmaaroufi@hotmail.fr",
+      "baseEmail": "sarah.elmaaroufi@hotmail.fr",
+      "children": [
+        {
+          "id": "4144be1d-b381-403f-a6e9-490d936a452d",
+          "name": "Neïla  BOUSROUD",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IuBRjHDMjpzXVJl2PDwS3SEUBQ"
+        },
+        {
+          "id": "287578f2-9a37-4c87-8c6f-9fafca7af6a0",
+          "name": "Sarah  El MAAROUFI",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IuBRjHDMjpzXVJl2PDwS3SEUBQ"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3IuBRjHDMjpzXVJl2PDwS3SEUBQ",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "selma.amouchi@laposte.net",
+      "baseEmail": "selma.amouchi@laposte.net",
+      "children": [
+        {
+          "id": "158b4f5a-b430-4753-94e7-56593f216851",
+          "name": "Iyed  Amouchi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J08qeDfM8IkNUVcPa4AAlu7tnZ"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3J08qeDfM8IkNUVcPa4AAlu7tnZ",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "soukaina.benayed@yahoo.com",
+      "baseEmail": "soukaina.benayed@yahoo.com",
+      "children": [
+        {
+          "id": "ec2b9e35-df15-46b5-84b6-96a1c673020c",
+          "name": "Kayen  Djemal ben ayed",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J8UqBfSwBxA75FX7DNWl2SEONK"
+        },
+        {
+          "id": "45068ffd-f1ac-4b8f-81c7-3e4798c803a5",
+          "name": "Loujain  Djemal ben ayed",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J8UqBfSwBxA75FX7DNWl2SEONK"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3J8UqBfSwBxA75FX7DNWl2SEONK",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "voojeeraully@hotmail.com",
+      "baseEmail": "voojeeraully@hotmail.com",
+      "children": [
+        {
+          "id": "31d083f0-1cfe-424b-aaae-75a5af67a197",
+          "name": "Nora Oojeeraully",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3Ij2L4vkCgFohDXBQcofliFfOaU"
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1,
+      "clerkUserId": "user_3Ij2L4vkCgFohDXBQcofliFfOaU",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "wahiba.bidah@gmail.com",
+      "baseEmail": "wahiba.bidah@gmail.com",
+      "children": [
+        {
+          "id": "e9b107e0-6448-444e-beab-2c5961091b7b",
+          "name": "Nour Mazenc",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J32WFAlTSrFkaOJTzGHgJbuOZU"
+        },
+        {
+          "id": "c743cb08-469c-40c4-b46a-b3c7d5ac7c5e",
+          "name": "Assia Mazenc",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3J32WFAlTSrFkaOJTzGHgJbuOZU"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3J32WFAlTSrFkaOJTzGHgJbuOZU",
+      "linkedInDbOnly": true
+    },
+    {
+      "email": "zakariae1@hotmail.fr",
+      "baseEmail": "zakariae1@hotmail.fr",
+      "children": [
+        {
+          "id": "9290239c-f4fa-4341-a51d-e3db6b4df9de",
+          "name": "Adam Ezzerrouqi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IuemfZ9F0TsaNK46qcUZCMbLZ9"
+        },
+        {
+          "id": "4b3be558-9405-4116-be1f-14963130a90c",
+          "name": "Beya Ezzerrouqi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": "user_3IuemfZ9F0TsaNK46qcUZCMbLZ9"
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2,
+      "clerkUserId": "user_3IuemfZ9F0TsaNK46qcUZCMbLZ9",
+      "linkedInDbOnly": true
+    }
+  ],
+  "alreadyPending": [
+    {
+      "email": "aicha31.toulouse@hotmail.fr",
+      "baseEmail": "aicha31.toulouse@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070786668_0606110d",
+          "name": "Adam Si Ahmed",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "aklouche.z@gmail.com",
+      "baseEmail": "aklouche.z@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070774669_924f26ff",
+          "name": "Zoubida Aklouche",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "alanori@live.fr",
+      "baseEmail": "alanori@live.fr",
+      "children": [
+        {
+          "id": "manual_1789148462277_f4ef7e8c",
+          "name": "Rayan Jahouh",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "alyahsoum7@gmail.com",
+      "baseEmail": "alyahsoum7@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070776692_88186197",
+          "name": "Eyden Botbot",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "amelalhoz@outlook.fr",
+      "baseEmail": "amelalhoz@outlook.fr",
+      "children": [
+        {
+          "id": "manual_1789070774828_2221033f",
+          "name": "Amel Alhoz",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "aminatabouare70@gmail.com",
+      "baseEmail": "aminatabouare70@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070776987_d392d29b",
+          "name": "Aminata Bouare",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "amirabelmadani@gmail.com",
+      "baseEmail": "amirabelmadani@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070775943_ddefdc6c",
+          "name": "Marwa Belmadani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070775824_220a3a7d",
+          "name": "Habib Belmadani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "asmaehb31@gmail.com",
+      "baseEmail": "asmaehb31@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070781270_12694307",
+          "name": "Alaa Hamioui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070781148_03d5407a",
+          "name": "Adnane Hamioui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "aymen.chtioui31@gmail.com",
+      "baseEmail": "aymen.chtioui31@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070779266_b04f9d98",
+          "name": "Adam Chtioui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "bdz_brahim@yahoo.fr",
+      "baseEmail": "bdz_brahim@yahoo.fr",
+      "children": [
+        {
+          "id": "manual_1789070777815_327e04b5",
+          "name": "Imran Boudamouz",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070777687_84e23d38",
+          "name": "Ikrame Boudamouz",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070777920_6bd733ce",
+          "name": "Syrine Boudamouz",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "boudane@gmail.com",
+      "baseEmail": "boudane@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070778033_42522497",
+          "name": "Nihal Boudane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070778147_d29ab628",
+          "name": "Sarah Kjhadij Boudane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "bougueroua2@gmail.com",
+      "baseEmail": "bougueroua2@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789148461306_24536158",
+          "name": "Wassim Bougueroua",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "bougueroualeila@gmail.com",
+      "baseEmail": "bougueroualeila@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070778244_b8fe1af1",
+          "name": "Leila Boukandoura",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "c.arnal1251@gmail.com",
+      "baseEmail": "c.arnal1251@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070775600_095f7f8b",
+          "name": "Isaac Belaib",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "cevia.food@gmail.com",
+      "baseEmail": "cevia.food@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070779548_45b581a3",
+          "name": "Ilyès Derkaoui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "chahrhicham@hotmail.fr",
+      "baseEmail": "chahrhicham@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070778703_f55a415e",
+          "name": "Soumaya Chahr",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070778583_445eeab7",
+          "name": "Nour Chahr",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "cherifarij@gmail.com",
+      "baseEmail": "cherifarij@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070786542_ef90982b",
+          "name": "Taïm Sendi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "cherinebounif@gmail.com",
+      "baseEmail": "cherinebounif@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070778481_e7989311",
+          "name": "Cherine Bounif",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "dj-salima@hotmail.com",
+      "baseEmail": "dj-salima@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789148461803_73981c51",
+          "name": "Assil Mahdjoubi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "djams311@gmail.com",
+      "baseEmail": "djams311@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070779132_46d1dc2f",
+          "name": "Safya Chenaine",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "djilyna@gmail.com",
+      "baseEmail": "djilyna@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070784645_09a0ef85",
+          "name": "Sakina-Maryam Marques",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "dounia.bensouici69@gmail.com",
+      "baseEmail": "dounia.bensouici69@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070773842_490b7b99",
+          "name": "Tesnim Abderrahmane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "dunyaeb@hotmail.com",
+      "baseEmail": "dunyaeb@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789070780087_8b3b7145",
+          "name": "Layan El Boutaybi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070779982_fda07c32",
+          "name": "Aymen El Boutaybi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070780185_8188a9a6",
+          "name": "Mariam El Boutaybi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "fatima.benali31100@gmail.com",
+      "baseEmail": "fatima.benali31100@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070786148_aa5e77a8",
+          "name": "Ilyanna Rebiai",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "fatimafaty@live.fr",
+      "baseEmail": "fatimafaty@live.fr",
+      "children": [
+        {
+          "id": "manual_1789070780769_84677211",
+          "name": "Isaaq Faty",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070780628_773c75b4",
+          "name": "Fatima Faty",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070786424_3f770092",
+          "name": "Asnaath Saint Félix",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "fouad21000@gmail.com",
+      "baseEmail": "fouad21000@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070777578_670b4a0b",
+          "name": "Maïssa Bouazizi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070777101_7ab7f3c7",
+          "name": "Eya Bouazizi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "gherzi.samia31@orange.fr",
+      "baseEmail": "gherzi.samia31@orange.fr",
+      "children": [
+        {
+          "id": "manual_1789070787430_2aefd9f4",
+          "name": "Sofya Viorney",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070787319_c9814ba9",
+          "name": "Hanna Viorney",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "hajar.hariri104@gmail.com",
+      "baseEmail": "hajar.hariri104@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070787668_9ac60a3c",
+          "name": "Hamza Zawak",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070787785_ab7145cb",
+          "name": "Razane Zawak",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "hamid.mouzoun@gmail.com",
+      "baseEmail": "hamid.mouzoun@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070785118_6b3c987f",
+          "name": "Younes Mouzoun",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "hani_kader@yahoo.fr",
+      "baseEmail": "hani_kader@yahoo.fr",
+      "children": [
+        {
+          "id": "manual_1789148460956_edf8a68d",
+          "name": "Lena Hani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "hayet.hebri@live.fr",
+      "baseEmail": "hayet.hebri@live.fr",
+      "children": [
+        {
+          "id": "manual_1789070778358_7d33618c",
+          "name": "Ilyana Boukechiche",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "hicho08@hotmail.com",
+      "baseEmail": "hicho08@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789070782184_58b425df",
+          "name": "Soulayman Iguider",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070782080_f56e42a1",
+          "name": "Sarah Iguider",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "hm5s@yahoo.fr",
+      "baseEmail": "hm5s@yahoo.fr",
+      "children": [
+        {
+          "id": "manual_1789148460503_16eeae38",
+          "name": "Selsabil Moussaoui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789148460623_373f014e",
+          "name": "Louay Moussaoui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789148460794_ae04782e",
+          "name": "Ilyes Moussaoui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "iman.metugui@gmail.com",
+      "baseEmail": "iman.metugui@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070784908_808fcb77",
+          "name": "Lilia Metugui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070785001_79bec77f",
+          "name": "Yassine Metugui",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "inesa340@gmail.com",
+      "baseEmail": "inesa340@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070776068_11c57ffd",
+          "name": "Mohamed Benkara",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "jennahlabehri@gmail.com",
+      "baseEmail": "jennahlabehri@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070782429_a1b3f63f",
+          "name": "Hadjar Labehri",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070782667_df74b24d",
+          "name": "Shaina Labehri",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070782543_11bdfb18",
+          "name": "Jennah Labehri",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "kaltoum-31@hotmail.fr",
+      "baseEmail": "kaltoum-31@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070780286_2d6c7b88",
+          "name": "Naïm El Ouady",
+          "status": "en_attente",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "karimakermad194@gmail.com",
+      "baseEmail": "karimakermad194@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070776801_01bdb873",
+          "name": "Basma Bou-Oudi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "kgreenman79@gmail.com",
+      "baseEmail": "kgreenman79@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789148461919_5ca39e0c",
+          "name": "Aylan Achouche",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "khammar.emane@gmail.com",
+      "baseEmail": "khammar.emane@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070783782_5feb1892",
+          "name": "Anas Makrini",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070783669_47dc8802",
+          "name": "Adam Makrini",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "ladjel.bettahar31@gmail.com",
+      "baseEmail": "ladjel.bettahar31@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070776343_702fd685",
+          "name": "Lina Bettahar",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "laetitia.nair@gmail.com",
+      "baseEmail": "laetitia.nair@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070785262_8b7199fe",
+          "name": "Jemma Nair Benrokia",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070785406_4cc82d75",
+          "name": "Yanis Nair Benrokia",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "lakbaidi.aya@hotmail.com",
+      "baseEmail": "lakbaidi.aya@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789070785641_3f96ecdc",
+          "name": "Zayane Ousset Lakbaidi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "m.belferroum@yahoo.fr",
+      "baseEmail": "m.belferroum@yahoo.fr",
+      "children": [
+        {
+          "id": "manual_1789070775704_4558a614",
+          "name": "Adem Belferroum",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "m.fredj@hotmail.com",
+      "baseEmail": "m.fredj@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789070780910_e4eaec13",
+          "name": "Ilyana Fredj",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "manar.houssine@gmail.com",
+      "baseEmail": "manar.houssine@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070781661_e93c5390",
+          "name": "Manar Houssine",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "manel.bghts@gmail.com",
+      "baseEmail": "manel.bghts@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070784753_49087145",
+          "name": "Lyam Massiala",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "mannelle11@hotmail.fr",
+      "baseEmail": "mannelle11@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070785541_6ceebfe3",
+          "name": "Nahil Oiciny",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "mansoursami17@gmail.com",
+      "baseEmail": "mansoursami17@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070784028_0b28e4d0",
+          "name": "Sajed Mansour",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070784148_3dad91e4",
+          "name": "Younes Mansour",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "mbouhi@hotmail.fr",
+      "baseEmail": "mbouhi@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070786007_ee1d2e41",
+          "name": "Imrane Rbaibi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "mechineaucindya@gmai.com",
+      "baseEmail": "mechineaucindya@gmai.com",
+      "children": [
+        {
+          "id": "manual_1789148460063_df7e09b4",
+          "name": "Cindya Mechineau",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "melhemasmaa@hotmail.fr",
+      "baseEmail": "melhemasmaa@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070774462_7bd236a4",
+          "name": "Lina Abenna",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070774363_ec975ed3",
+          "name": "Dounia Abenna",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "melhemi@hotmail.fr",
+      "baseEmail": "melhemi@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070781765_eb133d74",
+          "name": "Aliya Hripane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070781985_5a2196f3",
+          "name": "Walid Hripane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070781868_26fdd4db",
+          "name": "Tesnyme Hripane",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "mohamed.rabhi32@hotmail.com",
+      "baseEmail": "mohamed.rabhi32@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789070785909_f8aa7093",
+          "name": "Mohammed Rabhi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "mostafa.mansour17@gmail.com",
+      "baseEmail": "mostafa.mansour17@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070783902_41985b0c",
+          "name": "Salma Mansour El Rouby",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "moueddenhanane@gmail.com",
+      "baseEmail": "moueddenhanane@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070775395_e08f7702",
+          "name": "Jannah Bakhti",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "murieleljari@gmail.com",
+      "baseEmail": "murieleljari@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789148462035_94e70a89",
+          "name": "Sofiane El Jari",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "myriammazari12@gmail.com",
+      "baseEmail": "myriammazari12@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070775266_a25d1f1a",
+          "name": "Louïsa Atmani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "n_nouria@hotmail.fr",
+      "baseEmail": "n_nouria@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789148462157_55a0eb86",
+          "name": "Hamza Naimi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "nahix3@hotmail.fr",
+      "baseEmail": "nahix3@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070776477_1f2e6019",
+          "name": "Dina Bey",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070776584_f53f8497",
+          "name": "Hicham Bey",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "nasra.oubah.med@gmail.com",
+      "baseEmail": "nasra.oubah.med@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070781046_90521e29",
+          "name": "Balqis Habib Araita",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070782297_e07ef615",
+          "name": "Djibril Isse Alwan",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "nassima.belaib@hotmail.fr",
+      "baseEmail": "nassima.belaib@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070779650_02687d42",
+          "name": "Assia Diffalah",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070779750_bb2ce660",
+          "name": "Myriam Diffalah",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "nawskitchen311@outlook.fr",
+      "baseEmail": "nawskitchen311@outlook.fr",
+      "children": [
+        {
+          "id": "manual_1789070782942_58675d99",
+          "name": "Mayssa Lahyani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070782795_70572456",
+          "name": "Kenza Lahyani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070783070_4affd34c",
+          "name": "Mohamed Lahyani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "nilame.master@gmail.com",
+      "baseEmail": "nilame.master@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789148460196_68367b27",
+          "name": "Inayah Master Youssouf",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789148460319_21ba831d",
+          "name": "Assia Master Youssouf",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "omaymab2002@gmail.com",
+      "baseEmail": "omaymab2002@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070776224_32e3010c",
+          "name": "Omayma Berkani",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "pourciel35@gmail.com",
+      "baseEmail": "pourciel35@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070780491_ddc3b6b8",
+          "name": "Riyad Faci",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070780390_668b3702",
+          "name": "Jasmyne Faci",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "r.changat@hotmail.fr",
+      "baseEmail": "r.changat@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070784293_1f7099b9",
+          "name": "Chehrazade Maqboul",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070784418_4443e1e2",
+          "name": "Mohamed-Adam Maqboul",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070784551_b9a74c42",
+          "name": "Yanis Maqboul",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    },
+    {
+      "email": "richardson-carolle@live.fr",
+      "baseEmail": "richardson-carolle@live.fr",
+      "children": [
+        {
+          "id": "manual_1789070775164_42b16124",
+          "name": "Patrick Anansi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070785785_e3c3dd9c",
+          "name": "Ikhaïly Papayo",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "sabrinaraniamazouz@hotmail.fr",
+      "baseEmail": "sabrinaraniamazouz@hotmail.fr",
+      "children": [
+        {
+          "id": "manual_1789070775494_54efcbbb",
+          "name": "Liam Bargoug",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "sadiqqi.naima@gmail.com",
+      "baseEmail": "sadiqqi.naima@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789148461186_fd44a797",
+          "name": "Lehna Haouzi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "sahsahradouane@gmail.com",
+      "baseEmail": "sahsahradouane@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070786301_0826dbc5",
+          "name": "Sarah Sahsah",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "salechkar@gmail.com",
+      "baseEmail": "salechkar@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070783418_1703e9d0",
+          "name": "Jennah Lechkar",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070783529_f457321e",
+          "name": "Leyna Lechkar",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "saloua.abdessamad@gmail.com",
+      "baseEmail": "saloua.abdessamad@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070774193_226f6273",
+          "name": "Reda Abdessamad",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070774040_c8003e00",
+          "name": "Nassim Abdessamad",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "samira.elbechari@gmail.com",
+      "baseEmail": "samira.elbechari@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070779870_874f9e99",
+          "name": "Nayla El Bechari",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "sanaa.t@outlook.fr",
+      "baseEmail": "sanaa.t@outlook.fr",
+      "children": [
+        {
+          "id": "manual_1789070787115_f270ceff",
+          "name": "Nassim Taibi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070787218_187ea23b",
+          "name": "Sara Taibi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "sara.coradidi@gmail.com",
+      "baseEmail": "sara.coradidi@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789148459728_77a2526a",
+          "name": "Alya Magnac",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789148459886_cb3d26b3",
+          "name": "Jude Magnac",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "segard.gwendoline@gmail.com",
+      "baseEmail": "segard.gwendoline@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070775062_96928093",
+          "name": "Nour Amzal",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070774961_0f8d58bf",
+          "name": "Amina Amzal",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "sehameb@hotmail.com",
+      "baseEmail": "sehameb@hotmail.com",
+      "children": [
+        {
+          "id": "manual_1789070783190_165c27fb",
+          "name": "Insaf Lakhloufi El Boutaybib",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070783294_95f6dc80",
+          "name": "Safwan Lakhloufi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "shm.hernandez4@gmail.com",
+      "baseEmail": "shm.hernandez4@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070781547_dd0d64b1",
+          "name": "Soundouce Hernandez",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070781422_f09b2932",
+          "name": "Hind Hernandez",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "siana0708@live.fr",
+      "baseEmail": "siana0708@live.fr",
+      "children": [
+        {
+          "id": "manual_1789148461677_04bdea42",
+          "name": "Kais Chaulliac Riallant",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "siham.moundili@gmail.com",
+      "baseEmail": "siham.moundili@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070786785_a96dbf00",
+          "name": "Imrane Taharast",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070786908_a9b64801",
+          "name": "Sarah Taharast",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 2,
+      "has2026Count": 2
+    },
+    {
+      "email": "souad.k@outlook.fr",
+      "baseEmail": "souad.k@outlook.fr",
+      "children": [
+        {
+          "id": "manual_1789148461430_4a6a5d80",
+          "name": "Mayssa Bryek",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "yaminayahiac@gmail.com",
+      "baseEmail": "yaminayahiac@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070787547_5213fe40",
+          "name": "Yamina Yahia Cherif",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 1,
+      "has2026Count": 1
+    },
+    {
+      "email": "zitoun.sahar@gmail.com",
+      "baseEmail": "zitoun.sahar@gmail.com",
+      "children": [
+        {
+          "id": "manual_1789070778910_9bc68c52",
+          "name": "Sahar Chebbi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070778801_6f8579fe",
+          "name": "Haroun Chebbi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        },
+        {
+          "id": "manual_1789070779027_7052f622",
+          "name": "Yassine Chebbi",
+          "status": "actif",
+          "has2026": true,
+          "clerk_user_id": null
+        }
+      ],
+      "childCount": 3,
+      "has2026Count": 3
+    }
+  ],
+  "noEmail": [],
+  "badEmail": []
+}
