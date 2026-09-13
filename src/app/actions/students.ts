@@ -718,7 +718,7 @@ export async function createStudentManualAction(data: {
   }
 }
 
-async function sendClerkAccountInvite(email: string) {
+async function sendClerkAccountInvite(email: string, firstName?: string | null) {
   const emailAddress = normalizeInviteEmail(email);
   if (!isInvitableEmail(emailAddress)) {
     return { ok: false as const, already: false, error: "Cet élève n'a pas d'e-mail valide pour l'invitation Clerk." };
@@ -731,7 +731,10 @@ async function sendClerkAccountInvite(email: string) {
     const client = await clerkClient();
     await client.invitations.createInvitation({
       emailAddress,
-      publicMetadata: { role: 'etudiant' },
+      publicMetadata: {
+        role: 'etudiant',
+        recipient_name: String(firstName || '').trim(),
+      },
       ignoreExisting: true,
       notify: true,
       redirectUrl: `${appUrl}/app/eleve`,
@@ -758,7 +761,7 @@ export async function sendPaymentReminderAction(studentId: string) {
 
     if (error || !student) throw new Error("Student not found");
 
-    const clerk = await sendClerkAccountInvite(student.email);
+    const clerk = await sendClerkAccountInvite(student.email, student.first_name);
     if (!clerk.ok) {
       return { success: false, error: clerk.error };
     }

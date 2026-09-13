@@ -95,7 +95,10 @@ export async function POST() {
       try {
         await client.invitations.createInvitation({
           emailAddress: family.email,
-          publicMetadata: { role: 'etudiant' },
+          publicMetadata: {
+            role: 'etudiant',
+            recipient_name: family.children.map((c) => c.name).filter(Boolean).join(', '),
+          },
           ignoreExisting: true,
           notify: true,
           redirectUrl,
