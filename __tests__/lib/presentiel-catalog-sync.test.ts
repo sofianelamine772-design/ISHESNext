@@ -6,6 +6,7 @@ import {
   CLASS_ID_TO_UUID,
   formatPresentielClassDisplayName,
   isOfficialPresentielClass,
+  getPresentielCapacityLimit,
   resolvePresentielCheckoutSlug,
   FEMME_DEBUTANTE_CLASS_ID,
   FEMME_INTERMEDIAIRE_CLASS_ID,
@@ -85,6 +86,16 @@ describe('Catalogue présentiel (site = admin = CSV)', () => {
       PRESENTIEL_CLASSES.map((c) => c.id),
     );
     expect(visible.map((r) => r.classe_numero)).toEqual([1, 25]);
+  });
+
+  it('applique les plafonds prépa 15, élémentaire 18, femmes 20', () => {
+    expect(getPresentielCapacityLimit(1)).toBe(15);
+    expect(getPresentielCapacityLimit(7)).toBe(15);
+    expect(getPresentielCapacityLimit(8)).toBe(18);
+    expect(getPresentielCapacityLimit(23)).toBe(18);
+    expect(getPresentielCapacityLimit(24)).toBe(20);
+    expect(getPresentielCapacityLimit(25)).toBe(20);
+    expect(getPresentielCapacityLimit(1024)).toBeNull();
   });
 
   it('ne considère un jour complet que si toutes ses classes le sont', () => {

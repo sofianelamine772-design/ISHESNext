@@ -7,7 +7,7 @@ import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
-import { isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
+import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 
@@ -427,7 +427,7 @@ export async function fetchClassesAction(academicYear?: string) {
           : c.name,
         type: c.type,
         schedule: scheduleStr,
-      capacity_limit: c.capacity_limit || 20,
+      capacity_limit: c.capacity_limit || getPresentielCapacityLimit(c.external_id) || 20,
       formationTitle: c.formations?.title,
       whatsappLink: c.whatsapp_link || null,
       students: c.inscriptions
@@ -882,7 +882,7 @@ export async function getClassesCapacitiesAction() {
         if (c.external_id) {
           // Filtrer les inscriptions actives si besoin, mais en général on compte toutes les inscriptions
           capacities[c.external_id.toString()] = {
-            capacity: c.capacity_limit || 20,
+            capacity: c.capacity_limit || getPresentielCapacityLimit(c.external_id) || 20,
             enrolled: c.inscriptions ? c.inscriptions.length : 0
           };
         }

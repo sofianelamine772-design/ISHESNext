@@ -266,7 +266,9 @@ export default function InstitutPage() {
                       <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center group-hover/icon:bg-ishes-gold/10 transition-colors">
                         <Users className="w-4 h-4 text-ishes-gold" />
                       </div>
-                      <span className="text-[10px] font-bold text-gray-500">Max 20</span>
+                      <span className="text-[10px] font-bold text-gray-500">
+                        {program.audience === "adulte" ? "Max 20" : "Prépa 15 · Élém. 18"}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 group/icon">
                       <div className="w-9 h-9 rounded-xl bg-ishes-dark flex items-center justify-center">

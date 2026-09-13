@@ -434,6 +434,14 @@ export function isOfficialPresentielClass(externalId?: number | null): boolean {
   return typeof externalId === "number" && externalId >= 1 && externalId <= 25;
 }
 
+/** Plafonds officiels : prépa 1–2 = 15, élémentaire = 18, femmes = 20. */
+export function getPresentielCapacityLimit(externalId?: number | null): number | null {
+  if (!isOfficialPresentielClass(externalId)) return null;
+  if (externalId! <= 7) return 15;
+  if (externalId! <= 23) return 18;
+  return 20;
+}
+
 export const FEMME_DEBUTANTE_CLASS_ID = 24;
 export const FEMME_INTERMEDIAIRE_CLASS_ID = 25;
 
