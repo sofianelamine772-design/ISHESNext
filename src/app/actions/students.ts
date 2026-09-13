@@ -9,6 +9,7 @@ import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
 import { isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
+import { isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -717,12 +718,37 @@ export async function createStudentManualAction(data: {
   }
 }
 
+async function sendClerkAccountInvite(email: string) {
+  const emailAddress = normalizeInviteEmail(email);
+  if (!isInvitableEmail(emailAddress)) {
+    return { ok: false as const, already: false, error: "Cet élève n'a pas d'e-mail valide pour l'invitation Clerk." };
+  }
+
+  const app = resolveProductionAppUrl(process.env.NEXT_PUBLIC_APP_URL);
+  const appUrl = app.ok ? app.url : "https://ishees.vercel.app";
+
+  try {
+    const client = await clerkClient();
+    await client.invitations.createInvitation({
+      emailAddress,
+      publicMetadata: { role: 'etudiant' },
+      ignoreExisting: true,
+      redirectUrl: `${appUrl}/app/eleve`,
+    });
+    return { ok: true as const, already: false };
+  } catch (inviteErr: any) {
+    const code = String(inviteErr?.errors?.[0]?.code || '');
+    const message = String(inviteErr?.errors?.[0]?.message || inviteErr?.message || '');
+    if (/already exists|identifier_exists|already been invited|already_exists/i.test(`${code} ${message}`)) {
+      return { ok: true as const, already: true };
+    }
+    console.error('[RELANCE_CLERK_INVITE_ERROR]', inviteErr);
+    return { ok: false as const, already: false, error: message || "Impossible d'envoyer l'invitation Clerk." };
+  }
+}
+
 export async function sendPaymentReminderAction(studentId: string) {
   try {
-    if (studentId.startsWith('manual_')) {
-      return { success: false, error: "Action non autorisée : cet élève a été ajouté en saisie manuelle (pas de lien de paiement Stripe possible)." };
-    }
-
     const { data: student, error } = await supabaseAdmin
       .from('etudiants')
       .select('email, first_name')
@@ -731,37 +757,29 @@ export async function sendPaymentReminderAction(studentId: string) {
 
     if (error || !student) throw new Error("Student not found");
 
-    let clerkInvited = false;
+    const clerk = await sendClerkAccountInvite(student.email);
+    const isManual = String(studentId).startsWith('manual_');
 
-    // Tenter TOUJOURS d'envoyer l'invitation Clerk si l'ID laisse penser qu'ils n'ont pas de compte
-    // ou qu'on n'est pas sûr.
-    // Exécuter l'invitation Clerk et l'email SMTP en parallèle pour gagner du temps
-    const clerkPromise = clerkClient().then(client => {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
-      return client.invitations.createInvitation({
-        emailAddress: student.email,
-        ignoreExisting: true,
-        redirectUrl: `${appUrl}/app/eleve`
-      });
-    }).then(() => {
-      clerkInvited = true;
-      console.log(`[RELANCE] Invitation Clerk envoyée à ${student.email}`);
-    }).catch(inviteErr => {
-      if (inviteErr?.errors?.[0]?.code !== 'form_identifier_exists') {
-        console.error('[RELANCE_CLERK_INVITE_ERROR]', inviteErr);
+    // Élève saisi à la main : pas de lien Stripe, uniquement le lien Clerk lié à SON e-mail.
+    if (isManual) {
+      if (!clerk.ok) {
+        return { success: false, error: clerk.error };
       }
-    });
-
-    const emailPromise = sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
-
-    const [_, emailResult] = await Promise.all([clerkPromise, emailPromise]);
-    const result = emailResult as any;
-
-    if (!result.success) {
-      console.warn("[SMTP_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", result.error);
       return {
         success: true,
-        warning: clerkInvited
+        warning: clerk.already
+          ? `Ce parent a déjà un compte Clerk sur ${student.email}. Il se connecte avec cet e-mail pour voir ses enfants.`
+          : `Lien de création de compte Clerk envoyé à ${student.email}. En se connectant, il ne verra que les profils liés à cet e-mail.`,
+      };
+    }
+
+    const emailResult = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
+
+    if (!emailResult.success) {
+      console.warn("[SMTP_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", emailResult.error);
+      return {
+        success: true,
+        warning: clerk.ok
           ? "Invitation de création de compte Clerk envoyée avec succès !"
           : "Aucune action possible (erreur d'envoi SMTP)."
       };

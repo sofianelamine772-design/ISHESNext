@@ -284,7 +284,7 @@ function EtudiantsContent() {
         if (result.warning) {
           setPopupMsg({ title: "Invitation Envoyée !", desc: result.warning, type: "success" });
         } else {
-          setPopupMsg({ title: "Succès !", desc: "L'email de relance (et l'invitation de connexion Clerk si besoin) a été envoyé avec succès à l'étudiant.", type: "success" });
+          setPopupMsg({ title: "Succès !", desc: "Lien de création de compte Clerk envoyé à l'e-mail du profil. En se connectant, le parent ne verra que ses enfants.", type: "success" });
         }
       } else {
         setPopupMsg({ title: "Erreur d'envoi", desc: result.error || "Avez-vous vérifié votre domaine sur Resend ?", type: "error" });
@@ -739,7 +739,7 @@ function EtudiantsContent() {
                         MODIFIER
                       </Button>
                       <Button variant="outline" size="sm" className="w-full sm:w-auto h-10 md:h-11 text-amber-600 border-amber-200 hover:bg-amber-50 hover:text-amber-700 text-[10px] md:text-xs" onClick={handleSendPaymentReminder} disabled={isSendingReminder}>
-                        {isSendingReminder ? <Loader2 className="w-4 h-4 mr-1 md:mr-2 animate-spin" /> : <AlertCircle className="w-4 h-4 mr-1 md:mr-2" />} Relance
+                        {isSendingReminder ? <Loader2 className="w-4 h-4 mr-1 md:mr-2 animate-spin" /> : <AlertCircle className="w-4 h-4 mr-1 md:mr-2" />} Relance accès
                       </Button>
                       <Button variant="ishes-outline" size="sm" className="w-full sm:w-auto h-10 md:h-11 shadow-black/5 text-[10px] md:text-xs" onClick={() => openChat(selectedStudent)}>
                         <Mail className="w-4 h-4 mr-1 md:mr-2" /> Message
