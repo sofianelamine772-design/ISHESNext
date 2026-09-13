@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { ADMIN_EMAILS, isAdminEmail } from '@/lib/auth-utils';
-import { clerkInviteRedirectUrl, groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
+import { clerkInviteErrorMessage, clerkInviteRedirectUrl, groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
 import { logSystemError } from '@/lib/error-logger';
 
 export const maxDuration = 120;
@@ -107,10 +107,14 @@ export async function POST() {
       } catch (err: any) {
         const code = String(err?.errors?.[0]?.code || '');
         const message = String(err?.errors?.[0]?.message || err?.message || err);
-        if (/already exists|identifier_exists|already been invited|already_exists/i.test(`${code} ${message}`)) {
+        const parsed = clerkInviteErrorMessage(code, message);
+        if (parsed.kind === 'already') {
           already.push(family.email);
+        } else if (parsed.kind === 'rate_limit') {
+          failed.push({ email: family.email, error: parsed.error });
+          break;
         } else {
-          failed.push({ email: family.email, error: message.slice(0, 220) });
+          failed.push({ email: family.email, error: parsed.error.slice(0, 220) });
         }
       }
       await new Promise((resolve) => setTimeout(resolve, 80));

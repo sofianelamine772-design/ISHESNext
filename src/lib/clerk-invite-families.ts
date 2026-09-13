@@ -84,3 +84,18 @@ export function resolveProductionAppUrl(rawUrl: string | undefined) {
 export function clerkInviteRedirectUrl(appUrl: string) {
   return `${String(appUrl || PRODUCTION_APP_URL).replace(/\/$/, "")}/sign-up`;
 }
+
+export function clerkInviteErrorMessage(code: string, message: string) {
+  const text = `${code} ${message}`;
+  if (/already exists|identifier_exists|already been invited|already_exists/i.test(text)) {
+    return { kind: "already" as const };
+  }
+  if (/too many requests|rate.?limit|try again in a bit/i.test(text)) {
+    return {
+      kind: "rate_limit" as const,
+      error:
+        "Clerk a trop d’invitations pour l’instant (limite horaire). Attends 30 à 60 minutes avant de renvoyer. Les mails déjà partis restent valides : les parents doivent utiliser le dernier.",
+    };
+  }
+  return { kind: "error" as const, error: message || "Impossible d'envoyer l'invitation Clerk." };
+}

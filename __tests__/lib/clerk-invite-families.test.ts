@@ -1,4 +1,4 @@
-import { clerkInviteRedirectUrl, groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
+import { clerkInviteErrorMessage, clerkInviteRedirectUrl, groupStudentsByInviteEmail, resolveProductionAppUrl } from '@/lib/clerk-invite-families';
 
 describe('groupStudentsByInviteEmail', () => {
   it('envoie un seul mail par parent et garde tous les enfants de cette famille', () => {
@@ -59,5 +59,15 @@ describe('clerkInviteRedirectUrl', () => {
   it('envoie vers la page de création de compte, pas vers l’espace déjà protégé', () => {
     expect(clerkInviteRedirectUrl('https://ishees.vercel.app')).toBe('https://ishees.vercel.app/sign-up');
     expect(clerkInviteRedirectUrl('https://ishees.vercel.app/')).toBe('https://ishees.vercel.app/sign-up');
+  });
+});
+
+describe('clerkInviteErrorMessage', () => {
+  it('explique la limite Clerk en français', () => {
+    const parsed = clerkInviteErrorMessage('', 'Too many requests. Please try again in a bit.');
+    expect(parsed.kind).toBe('rate_limit');
+    if (parsed.kind === 'rate_limit') {
+      expect(parsed.error).toMatch(/30 à 60 minutes/);
+    }
   });
 });

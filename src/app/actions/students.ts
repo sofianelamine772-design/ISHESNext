@@ -9,7 +9,7 @@ import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
 import { isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
-import { clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
+import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -744,11 +744,12 @@ async function sendClerkAccountInvite(email: string, firstName?: string | null) 
   } catch (inviteErr: any) {
     const code = String(inviteErr?.errors?.[0]?.code || '');
     const message = String(inviteErr?.errors?.[0]?.message || inviteErr?.message || '');
-    if (/already exists|identifier_exists|already been invited|already_exists/i.test(`${code} ${message}`)) {
+    const parsed = clerkInviteErrorMessage(code, message);
+    if (parsed.kind === "already") {
       return { ok: true as const, already: true };
     }
     console.error('[RELANCE_CLERK_INVITE_ERROR]', inviteErr);
-    return { ok: false as const, already: false, error: message || "Impossible d'envoyer l'invitation Clerk." };
+    return { ok: false as const, already: false, error: parsed.error };
   }
 }
 
