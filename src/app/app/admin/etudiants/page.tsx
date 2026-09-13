@@ -284,7 +284,7 @@ function EtudiantsContent() {
         if (result.warning) {
           setPopupMsg({ title: "Invitation Envoyée !", desc: result.warning, type: "success" });
         } else {
-          setPopupMsg({ title: "Succès !", desc: "Lien de création de compte Clerk envoyé à l'e-mail du profil. En se connectant, le parent ne verra que ses enfants.", type: "success" });
+          setPopupMsg({ title: "Succès !", desc: "Invitation Clerk envoyée (mail officiel de création de compte).", type: "success" });
         }
       } else {
         setPopupMsg({ title: "Erreur d'envoi", desc: result.error || "Avez-vous vérifié votre domaine sur Resend ?", type: "error" });

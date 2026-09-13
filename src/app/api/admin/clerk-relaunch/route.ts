@@ -97,6 +97,7 @@ export async function POST() {
           emailAddress: family.email,
           publicMetadata: { role: 'etudiant' },
           ignoreExisting: true,
+          notify: true,
           redirectUrl,
         });
         sent.push(family.email);

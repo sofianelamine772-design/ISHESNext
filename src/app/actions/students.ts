@@ -733,6 +733,7 @@ async function sendClerkAccountInvite(email: string) {
       emailAddress,
       publicMetadata: { role: 'etudiant' },
       ignoreExisting: true,
+      notify: true,
       redirectUrl: `${appUrl}/app/eleve`,
     });
     return { ok: true as const, already: false };
@@ -758,34 +759,15 @@ export async function sendPaymentReminderAction(studentId: string) {
     if (error || !student) throw new Error("Student not found");
 
     const clerk = await sendClerkAccountInvite(student.email);
-    const isManual = String(studentId).startsWith('manual_');
-
-    // Élève saisi à la main : pas de lien Stripe, uniquement le lien Clerk lié à SON e-mail.
-    if (isManual) {
-      if (!clerk.ok) {
-        return { success: false, error: clerk.error };
-      }
-      return {
-        success: true,
-        warning: clerk.already
-          ? `Ce parent a déjà un compte Clerk sur ${student.email}. Il se connecte avec cet e-mail pour voir ses enfants.`
-          : `Lien de création de compte Clerk envoyé à ${student.email}. En se connectant, il ne verra que les profils liés à cet e-mail.`,
-      };
+    if (!clerk.ok) {
+      return { success: false, error: clerk.error };
     }
-
-    const emailResult = await sendPaymentReminderEmail(student.email, student.first_name || 'Élève');
-
-    if (!emailResult.success) {
-      console.warn("[SMTP_WARNING] Relance email échouée, mais Clerk a géré l'invitation:", emailResult.error);
-      return {
-        success: true,
-        warning: clerk.ok
-          ? "Invitation de création de compte Clerk envoyée avec succès !"
-          : "Aucune action possible (erreur d'envoi SMTP)."
-      };
-    }
-
-    return { success: true };
+    return {
+      success: true,
+      warning: clerk.already
+        ? `Ce parent a déjà un compte Clerk sur ${student.email}. Il se connecte avec cet e-mail pour voir ses enfants.`
+        : `Invitation Clerk de création de compte envoyée à ${student.email}. Aucun e-mail SMTP : c'est le mail officiel Clerk.`,
+    };
   } catch (err: any) {
     console.error("Payment Reminder Error:", err);
     return { success: false, error: err.message || "Failed to send payment reminder" };
