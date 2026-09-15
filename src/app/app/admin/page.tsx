@@ -94,7 +94,10 @@ export default async function AdminOverview() {
       if (date.getFullYear() === currentYear) {
         const monthIndex = date.getMonth();
         if (monthIndex >= 0 && monthIndex < 12) {
-          const inscriptions = p.etudiants?.inscriptions || [];
+          const pAny = p as any;
+          const inscriptions = Array.isArray(pAny.etudiants) 
+            ? pAny.etudiants[0]?.inscriptions || []
+            : pAny.etudiants?.inscriptions || [];
           const hasPresentiel = inscriptions.some((ins: any) => ins.classes?.type === 'presentiel');
           const hasDistanciel = inscriptions.some((ins: any) => ins.classes?.type === 'distanciel');
           
