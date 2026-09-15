@@ -7,7 +7,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-04-22.dahlia',
+  apiVersion: '2026-08-26.dahlia',
 });
 
 export async function POST(req: Request) {

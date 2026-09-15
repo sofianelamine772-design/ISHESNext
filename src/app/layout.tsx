@@ -33,8 +33,8 @@ export default function RootLayout({
     <ClerkProvider 
       localization={frFR}
       appearance={{
-        layout: {
-          logoImageUrl: "/logo.png",
+        variables: {
+          // Utiliser variables plutôt que layout (Clerk v5)
         },
         elements: {
           logoImage: "h-20 sm:h-24 w-auto object-contain",
