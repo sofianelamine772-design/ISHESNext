@@ -71,12 +71,20 @@ function typeLabel(type: string) {
   return labels[type] || type;
 }
 
+// Types considérés comme envois manuels (admin)
+const MANUAL_TYPES = ["annonce", "private", "class", "global"];
+
+function isManual(type: string) {
+  return MANUAL_TYPES.includes(type?.toLowerCase());
+}
+
 export function EmailHistory() {
   const [query, setQuery] = useState("");
   const [logs, setLogs] = useState<EmailLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [openKey, setOpenKey] = useState<string | null>(null);
   const [copied, setCopied] = useState("");
+  const [filterMode, setFilterMode] = useState<"all" | "auto" | "manual">("all");
 
   async function load(search = query) {
     setLoading(true);
@@ -95,7 +103,12 @@ export function EmailHistory() {
     load("");
   }, []);
 
-  const campaigns = useMemo(() => groupCampaigns(logs), [logs]);
+  const campaigns = useMemo(() => {
+    const all = groupCampaigns(logs);
+    if (filterMode === "all") return all;
+    if (filterMode === "manual") return all.filter(c => isManual(c.type));
+    return all.filter(c => !isManual(c.type));
+  }, [logs, filterMode]);
 
   function copyProof(log: EmailLog) {
     const text = [
@@ -138,12 +151,39 @@ export function EmailHistory() {
               className="w-full bg-gray-50 border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium focus:ring-2 focus:ring-[#086b51]/15"
             />
           </div>
-          <button
-            onClick={() => load()}
-            className="text-[10px] font-black uppercase tracking-widest text-[#086b51]"
-          >
-            Rechercher
-          </button>
+
+          {/* Filtres Automatique / Manuel */}
+          <div className="flex items-center justify-between">
+            <div className="flex bg-gray-100 p-1 rounded-2xl gap-1">
+              {([
+                { value: "all",    label: "Tous" },
+                { value: "auto",   label: "⚙️ Automatique" },
+                { value: "manual", label: "✏️ Manuel" },
+              ] as const).map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterMode(opt.value)}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    filterMode === opt.value
+                      ? opt.value === "manual"
+                        ? "bg-white text-ishes-blue shadow-sm"
+                        : opt.value === "auto"
+                          ? "bg-white text-[#086b51] shadow-sm"
+                          : "bg-white text-ishes-dark shadow-sm"
+                      : "text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => load()}
+              className="text-[10px] font-black uppercase tracking-widest text-[#086b51] hover:underline"
+            >
+              Actualiser
+            </button>
+          </div>
         </div>
 
         {loading ? (

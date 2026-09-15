@@ -12,7 +12,17 @@ export const dynamic = 'force-dynamic';
 export default async function AdminOverview() {
   // Fetch stats using the same logic as the student list (filters out parents and abandoned carts)
   const studentsResult = await fetchStudentsAction();
-  const totalStudents = studentsResult.success ? (studentsResult.data?.length || 0) : 0;
+  const allStudents = studentsResult.success ? (studentsResult.data || []) : [];
+  const totalStudents = allStudents.length;
+
+  // Séparer présentiel / distanciel selon le type de leur dernière classe inscrite
+  const presentielStudents = allStudents.filter((s: any) =>
+    s.inscriptions?.some((ins: any) => ins.classes?.type === 'presentiel')
+  ).length;
+  const distancielStudents = allStudents.filter((s: any) =>
+    s.inscriptions?.some((ins: any) => ins.classes?.type === 'distanciel') &&
+    !s.inscriptions?.some((ins: any) => ins.classes?.type === 'presentiel')
+  ).length;
 
   // Stripe Revenue Data
   let monthlyRevenue = 0;
@@ -124,21 +134,39 @@ export default async function AdminOverview() {
           <div className="max-w-7xl mx-auto space-y-8">
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
 
-              {/* Card 1 */}
-              <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+              {/* Card : Élèves Présentiel */}
+              <div className="group relative bg-white p-6 rounded-3xl border border-[#086b51]/20 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Élèves inscrits</p>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#086b51]"></span>
+                    <p className="ishes-label text-[#086b51] text-[10px] md:text-xs">Présentiel</p>
+                  </div>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{totalStudents || 0}</h3>
-                    <span className="text-[10px] font-black text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+12%</span>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-[#086b51]">{presentielStudents}</h3>
+                    <span className="text-[9px] font-black text-[#086b51] bg-[#086b51]/10 px-2 py-0.5 rounded mb-1">élèves</span>
+                  </div>
+                  <div className="mt-4 h-1 w-12 bg-[#086b51] rounded-full group-hover:w-full transition-all duration-500"></div>
+                </div>
+              </div>
+
+              {/* Card : Élèves Distanciel */}
+              <div className="group relative bg-white p-6 rounded-3xl border border-ishes-blue/20 shadow-sm">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="inline-block w-2 h-2 rounded-full bg-ishes-blue"></span>
+                    <p className="ishes-label text-ishes-blue text-[10px] md:text-xs">Distanciel</p>
+                  </div>
+                  <div className="flex items-end gap-3">
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{distancielStudents}</h3>
+                    <span className="text-[9px] font-black text-ishes-blue bg-ishes-blue/10 px-2 py-0.5 rounded mb-1">élèves</span>
                   </div>
                   <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
               </div>
 
-              {/* Card 2 */}
+              {/* Card : Revenus ce mois */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
@@ -150,7 +178,7 @@ export default async function AdminOverview() {
                 </div>
               </div>
 
-              {/* Card 3 */}
+              {/* Card : Revenus année */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Année)</p>
@@ -161,7 +189,7 @@ export default async function AdminOverview() {
                 </div>
               </div>
 
-              {/* Card 4 */}
+              {/* Card : Dossiers finalisés */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
                   <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Dossiers finalisés</p>
