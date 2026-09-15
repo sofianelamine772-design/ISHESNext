@@ -1,8 +1,7 @@
 #!/bin/sh
 
 echo "✅ Lancement des tests unitaires (Jest)..."
-echo "⏳ Premier lancement : ça peut prendre 1 à 2 min. S'ils dépassent 3 min, le push est refusé."
-node scripts/run-with-timeout.mjs npm test -- --colors --maxWorkers=2
+PREPUSH_TIMEOUT_MS=60000 node scripts/run-with-timeout.mjs npm run test:prepush
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car les tests unitaires ont échoué."

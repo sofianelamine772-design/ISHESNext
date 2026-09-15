@@ -337,7 +337,8 @@ export async function GET(req: Request) {
 
     if (payerEmail && studentIds.length > 0) {
       try {
-        const { maybeSendPresentielRentreeEmail } = await import('@/lib/mail');
+        const { maybeSendPresentielRentreeEmail, maybeSendPresentielFournituresEmail } = await import('@/lib/mail');
+        const { collectCheckoutClassRefs } = await import('@/lib/presentiel-fournitures-email');
         let formationType: string | null = null;
         if (formationUuid) {
           const { data: form } = await supabaseAdmin
@@ -351,8 +352,13 @@ export async function GET(req: Request) {
         if (!rentreeResult.skipped && rentreeResult.success) {
           console.log(`[LOCAL_SUCCESS] Présentiel rentrée email sent to ${payerEmail}`);
         }
+        const classRefs = collectCheckoutClassRefs(session.metadata);
+        const fournituresResult = await maybeSendPresentielFournituresEmail(payerEmail, { classRefs });
+        if (!fournituresResult.skipped && fournituresResult.success) {
+          console.log(`[LOCAL_SUCCESS] Présentiel fournitures email sent to ${payerEmail}`);
+        }
       } catch (e) {
-        console.error('[LOCAL_SUCCESS] Failed to send présentiel rentrée email', e);
+        console.error('[LOCAL_SUCCESS] Failed to send présentiel rentrée/fournitures email', e);
       }
     }
 

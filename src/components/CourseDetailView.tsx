@@ -546,20 +546,24 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         return (
                            <div
                               key={c.id}
-                              className={`group relative flex flex-col justify-between p-6 bg-white border rounded-[2rem] transition-all hover:shadow-xl hover:-translate-y-1 duration-300 ${isFull
-                                    ? "border-gray-100 opacity-80"
-                                    : "border-gray-100/80 hover:border-ishes-gold/40 shadow-sm"
+                              className={`group relative flex flex-col justify-between p-6 bg-white border rounded-[2rem] transition-all duration-300 ${isFull
+                                    ? "border-2 border-red-500 bg-red-50/40"
+                                    : "border-gray-100/80 hover:border-ishes-gold/40 shadow-sm hover:shadow-xl hover:-translate-y-1"
                                  }`}
                            >
+                              {isFull && (
+                                 <div className="absolute top-0 inset-x-0 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest text-center py-2 rounded-t-[2rem]">
+                                    Formation complète — plus de places
+                                 </div>
+                              )}
                               {/* Badge index */}
-                              <div className="flex items-center justify-between mb-4">
+                              <div className={`flex items-center justify-between mb-4 ${isFull ? "mt-8" : ""}`}>
                                  <span className="text-[10px] font-black text-gray-300 tracking-wider">
                                     {c.id === 0 ? "CLASSE GÉNÉRALE" : `CLASSE N°${c.id < 10 ? `0${c.id}` : c.id}`}
                                  </span>
                                  {isFull ? (
-                                    <div className="flex items-center gap-1.5 text-red-600 font-black uppercase text-[8px] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100">
-                                       <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                       Formation complète
+                                    <div className="flex items-center gap-1.5 text-white font-black uppercase text-[9px] bg-red-600 px-2.5 py-1 rounded-lg">
+                                       Complet
                                     </div>
                                  ) : (
                                     <div className="flex items-center gap-1.5 text-green-600 font-black uppercase text-[8px] bg-green-50 px-2.5 py-1 rounded-lg border border-green-100">
@@ -585,15 +589,18 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                               </div>
 
                               {/* Registration button */}
-                              <Link
-                                 href={regUrl}
-                                 className={`w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-center shadow-md transition-all ${isFull
-                                       ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
-                                       : "bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/10"
-                                    }`}
-                              >
-                                 {isFull ? "Formation complète" : (c.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")}
-                              </Link>
+                              {isFull ? (
+                                 <span className="w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-center bg-red-600 text-white cursor-not-allowed">
+                                    Complet — plus de places
+                                 </span>
+                              ) : (
+                                 <Link
+                                    href={regUrl}
+                                    className="w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-center shadow-md transition-all bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/10"
+                                 >
+                                    {c.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire"}
+                                 </Link>
+                              )}
                            </div>
                         );
                      })}

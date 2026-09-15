@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef, type ChangeEvent, type MouseEvent } from "react";
 import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { useSearchParams, useRouter } from "next/navigation";
@@ -10,10 +10,12 @@ import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, Gr
 import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
-import { getClassSlotStatus } from "@/lib/class-availability";
-import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug } from "@/lib/presentiel-data";
+import { areClassesAllFull, isClassFull, type SlotStatusRow } from "@/lib/class-availability";
+import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug, type PresentielClass } from "@/lib/presentiel-data";
 import { DISTANCE_CLASSES } from "@/lib/distance-data";
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
+import { PresentielChoicePicker, PresentielHorairePicker } from "@/components/vitrine/PresentielHorairePicker";
+import { cn } from "@/lib/utils";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -98,7 +100,7 @@ function InscriptionForm() {
   const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }]);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
+  const [slotsStatus, setSlotsStatus] = useState<SlotStatusRow[]>([]);
 
   const [showChildHoraireError, setShowChildHoraireError] = useState<{ [key: number]: boolean }>({});
   const [showAdultHoraireError, setShowAdultHoraireError] = useState(false);
@@ -122,7 +124,7 @@ function InscriptionForm() {
       try {
         const res = await fetch('/api/classes/status');
         const data = await res.json();
-        if (!data.error) setSlotsStatus(data);
+        if (Array.isArray(data)) setSlotsStatus(data);
       } catch (err) {
         console.error("Failed to fetch slots status", err);
       }
@@ -130,7 +132,23 @@ function InscriptionForm() {
     fetchStatus();
   }, []);
 
-  const getClassStatus = (classId: number) => getClassSlotStatus(slotsStatus, classId);
+  useEffect(() => {
+    if (!slotsStatus.length) return;
+    setChildrenList((prev) => prev.map((child) => {
+      const id = parseInt(child.classId, 10);
+      if (id && isClassFull(slotsStatus, id)) {
+        return { ...child, classId: "", horaire: "" };
+      }
+      return child;
+    }));
+    setFormData((prev) => {
+      const id = parseInt(prev.classId, 10);
+      if (id && isClassFull(slotsStatus, id)) {
+        return { ...prev, classId: "", horaire: "" };
+      }
+      return prev;
+    });
+  }, [slotsStatus]);
 
   const isLevelAvailableOnDay = (niveauKey: string, audience: "enfant" | "adulte", type?: "femme") => {
     if (planId !== 'presentiel-global' || !slot) return true;
@@ -326,11 +344,11 @@ function InscriptionForm() {
               c.slotKey === slotVal.toLowerCase() &&
               c.niveauKey === child.niveau
             );
-            if (matchingClasses.length === 1) {
-              child.classId = matchingClasses[0].id.toString();
-              child.horaire = matchingClasses[0].horaire;
+            const openClasses = matchingClasses.filter((c) => !isClassFull(slotsStatus, c.id));
+            if (openClasses.length === 1) {
+              child.classId = openClasses[0].id.toString();
+              child.horaire = openClasses[0].horaire;
             } else {
-              // Si 0 ou plusieurs classes correspondent, on s'assure que rien n'est pré-sélectionné
               child.classId = "";
               child.horaire = "";
             }
@@ -484,11 +502,11 @@ function InscriptionForm() {
               c.slotKey === slotVal.toLowerCase() &&
               c.niveauKey === updated.niveau
             );
-            if (matchingClasses.length === 1) {
-              updated.classId = matchingClasses[0].id.toString();
-              updated.horaire = matchingClasses[0].horaire;
+            const openClasses = matchingClasses.filter((c) => !isClassFull(slotsStatus, c.id));
+            if (openClasses.length === 1) {
+              updated.classId = openClasses[0].id.toString();
+              updated.horaire = openClasses[0].horaire;
             } else {
-              // Reset si on ne trouve pas de match exact
               updated.classId = "";
               updated.horaire = "";
             }
@@ -741,24 +759,68 @@ function InscriptionForm() {
                         {/* Niveau / Créneau */}
                         {planId === 'presentiel-global' && (() => {
                           const slotVal = child.slot || (slot ? slot.toLowerCase() : "");
+                          const childHoraires = PRESENTIEL_CLASSES.filter((c) =>
+                            c.planId === 'presentiel-global' &&
+                            c.audience === 'enfant' &&
+                            c.slotKey === slotVal.toLowerCase() &&
+                            c.niveauKey === child.niveau
+                          );
+                          const idsForChildDay = (day: string) => PRESENTIEL_CLASSES
+                            .filter((c) =>
+                              c.planId === 'presentiel-global' &&
+                              c.audience === 'enfant' &&
+                              c.slotKey === day
+                            )
+                            .map((c) => c.id);
+                          const childDayFull = Boolean(slotVal) && areClassesAllFull(slotsStatus, idsForChildDay(slotVal.toLowerCase()));
+                          const uniqueChildLevels: PresentielClass[] = [];
+                          const seenChildLevels = new Set<string>();
+                          if (slotVal) {
+                            PRESENTIEL_CLASSES.filter((c) =>
+                              c.planId === 'presentiel-global' &&
+                              c.audience === 'enfant' &&
+                              c.slotKey === slotVal.toLowerCase()
+                            ).forEach((c) => {
+                              if (!seenChildLevels.has(c.niveauKey)) {
+                                seenChildLevels.add(c.niveauKey);
+                                uniqueChildLevels.push(c);
+                              }
+                            });
+                          }
                           return (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
+                            <div className="flex flex-col gap-6 md:col-span-2">
                               {/* Jour select */}
                               <div className="space-y-2">
                                 <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
                                   <span>📅</span> Jour souhaité *
                                 </label>
-                                <select
-                                  value={slotVal}
-                                  disabled={!!slot}
-                                  onChange={(e) => handleChildInputChange(index, 'slot', e.target.value)}
-                                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-                                >
-                                  <option value="">— Choisir un jour —</option>
-                                  <option value="mercredi">Mercredi</option>
-                                  <option value="samedi">Samedi</option>
-                                  <option value="dimanche">Dimanche</option>
-                                </select>
+                                {slot ? (
+                                  <div className={cn(
+                                    "w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold",
+                                    childDayFull
+                                      ? "bg-red-50 border-2 border-red-500 text-red-950"
+                                      : "bg-gray-50 border border-gray-200 text-gray-500",
+                                  )}>
+                                    <span className="capitalize">{slotVal || slot}</span>
+                                    {childDayFull && (
+                                      <span className="shrink-0 rounded-md bg-red-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                                        Complet
+                                      </span>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <PresentielChoicePicker
+                                    layout="inline"
+                                    options={[
+                                      { value: "mercredi", label: "Mercredi", full: areClassesAllFull(slotsStatus, idsForChildDay("mercredi")) },
+                                      { value: "samedi", label: "Samedi", full: areClassesAllFull(slotsStatus, idsForChildDay("samedi")) },
+                                      { value: "dimanche", label: "Dimanche", full: areClassesAllFull(slotsStatus, idsForChildDay("dimanche")) },
+                                    ]}
+                                    value={slotVal}
+                                    onChange={(day) => handleChildInputChange(index, "slot", day)}
+                                    lockedPlaceholder="— Choisir un jour —"
+                                  />
+                                )}
                               </div>
 
                               {/* Niveau select */}
@@ -768,35 +830,28 @@ function InscriptionForm() {
                                   Niveau de l'élève *
                                 </label>
                                 <div className="relative">
-                                  <select
+                                  <PresentielChoicePicker
+                                    options={uniqueChildLevels.map((c) => {
+                                      const ids = PRESENTIEL_CLASSES
+                                        .filter((x) =>
+                                          x.planId === 'presentiel-global' &&
+                                          x.audience === 'enfant' &&
+                                          x.slotKey === slotVal.toLowerCase() &&
+                                          x.niveauKey === c.niveauKey
+                                        )
+                                        .map((x) => x.id);
+                                      return {
+                                        value: c.niveauKey,
+                                        label: `${c.niveau} (${c.ageCondition})`,
+                                        full: areClassesAllFull(slotsStatus, ids),
+                                      };
+                                    })}
                                     value={child.niveau}
+                                    onChange={(niveau) => handleChildInputChange(index, "niveau", niveau)}
                                     disabled={!slotVal}
-                                    onChange={(e) => handleChildInputChange(index, 'niveau', e.target.value)}
-                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                                  >
-                                    <option value="">
-                                      {!slotVal ? "— Choisir d'abord le jour —" : "— Choisir un niveau —"}
-                                    </option>
-                                    {slotVal && (() => {
-                                      const uniqueLevels: any[] = [];
-                                      const seenKeys = new Set();
-                                      PRESENTIEL_CLASSES.filter(c =>
-                                        c.planId === 'presentiel-global' &&
-                                        c.audience === 'enfant' &&
-                                        c.slotKey === slotVal.toLowerCase()
-                                      ).forEach(c => {
-                                        if (!seenKeys.has(c.niveauKey)) {
-                                          seenKeys.add(c.niveauKey);
-                                          uniqueLevels.push(c);
-                                        }
-                                      });
-                                      return uniqueLevels.map(c => (
-                                        <option key={c.id} value={c.niveauKey}>
-                                          {c.niveau} ({c.ageCondition})
-                                        </option>
-                                      ));
-                                    })()}
-                                  </select>
+                                    lockedPlaceholder="— Choisir d'abord le jour —"
+                                    emptyPlaceholder="— Choisir un niveau —"
+                                  />
                                   {!slotVal && (
                                     <div
                                       className="absolute inset-0 z-10 cursor-not-allowed"
@@ -815,29 +870,14 @@ function InscriptionForm() {
                                   <span>⏰</span> Horaire disponible *
                                 </label>
                                 <div className="relative">
-                                  <select
+                                  <PresentielHorairePicker
+                                    options={childHoraires.map((c) => ({ id: c.id, label: c.horaire }))}
+                                    slotsStatus={slotsStatus}
                                     value={child.classId}
+                                    onChange={(classId) => handleChildInputChange(index, 'classId', classId)}
                                     disabled={!child.niveau}
-                                    onChange={(e) => handleChildInputChange(index, 'classId', e.target.value)}
-                                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                                  >
-                                    <option value="">
-                                      {!child.niveau ? "— Choisir d'abord le niveau —" : "— Choisir un horaire —"}
-                                    </option>
-                                    {slotVal && child.niveau && PRESENTIEL_CLASSES.filter(c =>
-                                      c.planId === 'presentiel-global' &&
-                                      c.audience === 'enfant' &&
-                                      c.slotKey === slotVal.toLowerCase() &&
-                                      c.niveauKey === child.niveau
-                                    ).map(c => {
-                                      const isFull = getClassStatus(c.id)?.est_plein;
-                                      return (
-                                      <option key={c.id} value={c.id.toString()} disabled={!!isFull}>
-                                        {c.horaire}{isFull ? ' (formation complète)' : ''}
-                                      </option>
-                                      );
-                                    })}
-                                  </select>
+                                    lockedPlaceholder="— Choisir d'abord le niveau —"
+                                  />
                                   {!child.niveau && (
                                     <div
                                       className="absolute inset-0 z-10 cursor-not-allowed"
@@ -943,24 +983,73 @@ function InscriptionForm() {
                     {/* Niveau / Créneau */}
                     {showsAdultPresentielPicker && (() => {
                       const slotVal = formData.slot || (slot ? slot.toLowerCase() : "");
+                      const adultHoraires = PRESENTIEL_CLASSES.filter((c) =>
+                        c.planId === 'presentiel-global' &&
+                        c.audience === 'adulte' &&
+                        c.type === 'femme' &&
+                        c.slotKey === slotVal.toLowerCase() &&
+                        c.niveauKey === formData.niveau
+                      );
+                      const idsForAdultDay = (day: string) => PRESENTIEL_CLASSES
+                        .filter((c) =>
+                          c.planId === 'presentiel-global' &&
+                          c.audience === 'adulte' &&
+                          c.type === 'femme' &&
+                          c.slotKey === day
+                        )
+                        .map((c) => c.id);
+                      const adultDayFull = Boolean(slotVal) && areClassesAllFull(slotsStatus, idsForAdultDay(slotVal.toLowerCase()));
+                      const uniqueAdultLevels: PresentielClass[] = [];
+                      const seenAdultLevels = new Set<string>();
+                      if (slotVal) {
+                        PRESENTIEL_CLASSES.filter((c) =>
+                          c.planId === 'presentiel-global' &&
+                          c.audience === 'adulte' &&
+                          c.type === 'femme' &&
+                          c.slotKey === slotVal.toLowerCase()
+                        ).forEach((c) => {
+                          if (!seenAdultLevels.has(c.niveauKey)) {
+                            seenAdultLevels.add(c.niveauKey);
+                            uniqueAdultLevels.push(c);
+                          }
+                        });
+                      }
+                      const dayLocked = Boolean(slot) || isFemmePresentielPlan;
                       return (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
+                        <div className="flex flex-col gap-6 md:col-span-2">
                           {/* Jour select */}
                           <div className="space-y-2">
                             <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
                               <span>📅</span> Jour souhaité *
                             </label>
-                            <select
-                              name="slot"
-                              value={slotVal}
-                              disabled={!!slot || isFemmePresentielPlan}
-                              onChange={handleInputChange}
-                              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center] disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-                            >
-                              <option value="">— Choisir un jour —</option>
-                              <option value="samedi">Samedi</option>
-                              <option value="dimanche">Dimanche</option>
-                            </select>
+                            {dayLocked ? (
+                              <div className={cn(
+                                "w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold",
+                                adultDayFull
+                                  ? "bg-red-50 border-2 border-red-500 text-red-950"
+                                  : "bg-gray-50 border border-gray-200 text-gray-500",
+                              )}>
+                                <span className="capitalize">{slotVal || slot}</span>
+                                {adultDayFull && (
+                                  <span className="shrink-0 rounded-md bg-red-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                                    Complet
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <PresentielChoicePicker
+                                layout="inline"
+                                options={[
+                                  { value: "samedi", label: "Samedi", full: areClassesAllFull(slotsStatus, idsForAdultDay("samedi")) },
+                                  { value: "dimanche", label: "Dimanche", full: areClassesAllFull(slotsStatus, idsForAdultDay("dimanche")) },
+                                ]}
+                                value={slotVal}
+                                onChange={(day) => handleInputChange({
+                                  target: { name: "slot", value: day },
+                                } as ChangeEvent<HTMLSelectElement>)}
+                                lockedPlaceholder="— Choisir un jour —"
+                              />
+                            )}
                           </div>
 
                           {/* Niveau select */}
@@ -970,37 +1059,20 @@ function InscriptionForm() {
                               Niveau Actuel *
                             </label>
                             <div className="relative">
-                              <select
-                                name="niveau"
+                              <PresentielChoicePicker
+                                options={uniqueAdultLevels.map((c) => ({
+                                  value: c.niveauKey,
+                                  label: c.niveauKey === "femme_debutante" ? "Femme Débutante" : "Femme Intermédiaire",
+                                  full: isClassFull(slotsStatus, c.id),
+                                }))}
                                 value={formData.niveau}
+                                onChange={(niveau) => handleInputChange({
+                                  target: { name: "niveau", value: niveau },
+                                } as ChangeEvent<HTMLSelectElement>)}
                                 disabled={!slotVal}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                              >
-                                <option value="">
-                                  {!slotVal ? "— Choisir d'abord le jour —" : "— Choisir un niveau —"}
-                                </option>
-                                {slotVal && (() => {
-                                  const uniqueLevels: any[] = [];
-                                  const seenKeys = new Set();
-                                  PRESENTIEL_CLASSES.filter(c =>
-                                    c.planId === 'presentiel-global' &&
-                                    c.audience === 'adulte' &&
-                                    c.type === 'femme' &&
-                                    c.slotKey === slotVal.toLowerCase()
-                                  ).forEach(c => {
-                                    if (!seenKeys.has(c.niveauKey)) {
-                                      seenKeys.add(c.niveauKey);
-                                      uniqueLevels.push(c);
-                                    }
-                                  });
-                                  return uniqueLevels.map(c => (
-                                    <option key={c.id} value={c.niveauKey}>
-                                      {c.niveauKey === 'femme_debutante' ? 'Femme Débutante' : 'Femme Intermédiaire'}
-                                    </option>
-                                  ));
-                                })()}
-                              </select>
+                                lockedPlaceholder="— Choisir d'abord le jour —"
+                                emptyPlaceholder="— Choisir un niveau —"
+                              />
                               {!slotVal && (
                                 <div
                                   className="absolute inset-0 z-10 cursor-not-allowed"
@@ -1019,31 +1091,19 @@ function InscriptionForm() {
                               <span>⏰</span> Horaire disponible *
                             </label>
                             <div className="relative">
-                              <select
-                                name="classId"
+                              <PresentielHorairePicker
+                                options={adultHoraires.map((c) => ({
+                                  id: c.id,
+                                  label: `${c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} (${c.horaire})`,
+                                }))}
+                                slotsStatus={slotsStatus}
                                 value={formData.classId}
+                                onChange={(classId) => handleInputChange({
+                                  target: { name: 'classId', value: classId },
+                                } as ChangeEvent<HTMLSelectElement>)}
                                 disabled={!formData.niveau}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium text-gray-700 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_1rem_center]"
-                              >
-                                <option value="">
-                                  {!formData.niveau ? "— Choisir d'abord le niveau —" : "— Choisir un horaire —"}
-                                </option>
-                                {slotVal && formData.niveau && PRESENTIEL_CLASSES.filter(c =>
-                                  c.planId === 'presentiel-global' &&
-                                  c.audience === 'adulte' &&
-                                  c.type === 'femme' &&
-                                  c.slotKey === slotVal.toLowerCase() &&
-                                  c.niveauKey === formData.niveau
-                                ).map(c => {
-                                  const isFull = getClassStatus(c.id)?.est_plein;
-                                  return (
-                                  <option key={c.id} value={c.id.toString()} disabled={!!isFull}>
-                                    {c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} ({c.horaire}){isFull ? ' (formation complète)' : ''}
-                                  </option>
-                                  );
-                                })}
-                              </select>
+                                lockedPlaceholder="— Choisir d'abord le niveau —"
+                              />
                               {!formData.niveau && (
                                 <div
                                   className="absolute inset-0 z-10 cursor-not-allowed"
@@ -1133,7 +1193,7 @@ function InscriptionForm() {
                     limitMaxLength={true}
                     placeholder="06 XX XX XX XX"
                     value={formData.telephone}
-                    onChange={(value) => {
+                    onChange={(value?: string) => {
                       let val = value || "";
                       if (val.startsWith("+33") && val.length > 12) {
                         val = val.slice(0, 12);
@@ -1411,7 +1471,7 @@ function InscriptionForm() {
                     {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
-                    J'accepte les <Link href="/cgv" className="text-ishes-blue underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
+                    J'accepte les <Link href="/cgv" className="text-ishes-blue underline" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
                   </p>
                 </div>
 

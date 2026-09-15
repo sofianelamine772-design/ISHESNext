@@ -268,7 +268,7 @@ export async function POST(req: Request) {
             .eq('email', baseEmail);
 
           if (familyMembers && familyMembers.length > 0) {
-            const familyIds = familyMembers.map(m => m.id);
+            const familyIds = familyMembers.map((m: { id: string }) => m.id);
             await supabaseAdmin
               .from('inscriptions')
               .update({ paid_status: 'paye' })
@@ -399,10 +399,11 @@ export async function POST(req: Request) {
       await syncStudentPaidStatus(studentIds[0]); // Puisque c'est par famille, synchroniser un seul ID synchronise tout
     }
 
-    // Mail rentrée : uniquement après une inscription présentiel réellement créée.
+    // Mail rentrée + fournitures : uniquement après une inscription présentiel réellement créée.
     if (payerEmail && studentIds.length > 0) {
       try {
-        const { maybeSendPresentielRentreeEmail } = await import('@/lib/mail');
+        const { maybeSendPresentielRentreeEmail, maybeSendPresentielFournituresEmail } = await import('@/lib/mail');
+        const { collectCheckoutClassRefs } = await import('@/lib/presentiel-fournitures-email');
         let formationType: string | null = null;
         if (formationUuid) {
           const { data: form } = await supabaseAdmin
@@ -416,8 +417,13 @@ export async function POST(req: Request) {
         if (!rentreeResult.skipped && rentreeResult.success) {
           console.log(`[WEBHOOK] Présentiel rentrée email sent to ${payerEmail}`);
         }
+        const classRefs = collectCheckoutClassRefs(session.metadata);
+        const fournituresResult = await maybeSendPresentielFournituresEmail(payerEmail, { classRefs });
+        if (!fournituresResult.skipped && fournituresResult.success) {
+          console.log(`[WEBHOOK] Présentiel fournitures email sent to ${payerEmail}`);
+        }
       } catch (e) {
-        console.error('[WEBHOOK] Failed to send présentiel rentrée email', e);
+        console.error('[WEBHOOK] Failed to send présentiel rentrée/fournitures email', e);
       }
     }
 

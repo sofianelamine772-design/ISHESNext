@@ -8,6 +8,15 @@ export function getClassSlotStatus(slots: SlotStatusRow[], classId: number): Slo
   return slots.find((s) => s.classe_numero === classId) ?? null;
 }
 
+export function isClassFull(slots: SlotStatusRow[], classId: number): boolean {
+  return getClassSlotStatus(slots, classId)?.est_plein === true;
+}
+
+export function areClassesAllFull(slots: SlotStatusRow[], classIds: number[]): boolean {
+  if (classIds.length === 0) return false;
+  return classIds.every((id) => isClassFull(slots, id));
+}
+
 /** A whole weekday is full only if every class that day is full. */
 export function isDayFullyBooked(slots: SlotStatusRow[], day: string): boolean {
   const daySlots = slots.filter(

@@ -213,6 +213,7 @@ jest.mock('@/lib/mail', () => ({
   sendClassAssignmentEmail: jest.fn(),
   sendPresentielRentreeEmail: jest.fn(),
   maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
+  maybeSendPresentielFournituresEmail: jest.fn().mockResolvedValue({ success: true, skipped: true }),
   sendEmail: jest.fn(),
 }));
 

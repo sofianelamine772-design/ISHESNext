@@ -1,11 +1,20 @@
 import nodemailer from 'nodemailer';
 import { logSystemError } from './error-logger';
 import { hasSentEmail } from './email-log';
+import fs from 'node:fs';
 import {
   PRESENTIEL_RENTREE_EMAIL_TYPE,
   buildPresentielRentreeEmail,
   shouldSendPresentielRentreeEmail,
 } from './presentiel-rentree-email';
+import {
+  FOURNITURES_PDF,
+  buildPresentielFournituresEmail,
+  fournituresEmailType,
+  getFournituresKindsToSend,
+  resolveFournituresPdfPath,
+  type FournituresKind,
+} from './presentiel-fournitures-email';
 export { isPresentielFormationSlug, shouldSendPresentielRentreeEmail } from './presentiel-rentree-email';
 
 // Configuration SMTP facultative (Gmail, etc.)
@@ -412,6 +421,88 @@ export async function sendPresentielRentreeEmail(email: string) {
     html,
     text,
     meta: { type: PRESENTIEL_RENTREE_EMAIL_TYPE },
+  });
+}
+
+export async function maybeSendPresentielFournituresEmail(
+  email: string,
+  params: {
+    classRefs?: string[];
+    recipientName?: string | null;
+  } = {},
+): Promise<{ success: boolean; skipped: boolean; error?: unknown }> {
+  if (!email) return { success: false, skipped: true };
+  const kinds = getFournituresKindsToSend(params.classRefs || []);
+  if (kinds.length === 0) return { success: true, skipped: true };
+
+  let sentAny = false;
+  for (const kind of kinds) {
+    try {
+      if (await hasSentEmail({ recipientEmail: email, type: fournituresEmailType(kind) })) {
+        continue;
+      }
+    } catch (e) {
+      console.warn('[FOURNITURES] Impossible de vérifier un envoi précédent, on envoie quand même.', e);
+    }
+
+    const result = await sendPresentielFournituresEmail(email, kind, params.recipientName);
+    if (!result.success) {
+      return { success: false, skipped: false, error: result.error };
+    }
+    sentAny = true;
+  }
+
+  return { success: true, skipped: !sentAny };
+}
+
+async function loadFournituresPdf(kind: FournituresKind): Promise<Buffer | null> {
+  const pdfPath = resolveFournituresPdfPath(kind);
+  if (pdfPath) return fs.readFileSync(pdfPath);
+
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  try {
+    const res = await fetch(`${appUrl}/fournitures/${FOURNITURES_PDF[kind].filename}`);
+    if (!res.ok) return null;
+    return Buffer.from(await res.arrayBuffer());
+  } catch (e) {
+    console.error(`[FOURNITURES] Impossible de charger le PDF ${kind}`, e);
+    return null;
+  }
+}
+
+export async function sendPresentielFournituresEmail(
+  email: string,
+  kind: FournituresKind,
+  recipientName?: string | null,
+) {
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const pdfContent = await loadFournituresPdf(kind);
+  if (!pdfContent) {
+    const missing = `PDF fournitures introuvable (${kind})`;
+    console.error(`[FOURNITURES] ${missing}`);
+    return { success: false, error: missing };
+  }
+
+  const { subject, html, text } = buildPresentielFournituresEmail({
+    kind,
+    recipientName,
+    logoUrl: `${appUrl}/logo.png`,
+  });
+
+  return sendEmail({
+    to: email,
+    subject,
+    html,
+    text,
+    attachments: [{
+      filename: FOURNITURES_PDF[kind].filename,
+      content: pdfContent,
+      contentType: 'application/pdf',
+    }],
+    meta: {
+      type: fournituresEmailType(kind),
+      recipientName: recipientName || undefined,
+    },
   });
 }
 

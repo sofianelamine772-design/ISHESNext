@@ -44,8 +44,8 @@ Pour les élèves inscrits le dimanche (matin ou après-midi):
 Pour les élèves inscrits le mercredi:
 • le 7 octobre de 13h30 à 16h30
 
-La liste des fournitures scolaires vous sera envoyée dans un prochain e-mail.
-Elle sera transmise uniquement aux élèves dont l’inscription est finalisée.
+La liste des fournitures scolaires est envoyée dans un e-mail séparé aux familles du présentiel enfants.
+Elle est transmise uniquement aux élèves dont l’inscription est finalisée.
 
 ⚠ Important : seuls les élèves ayant finalisé leur inscription et activé le paiement de la scolarité seront admis en cours.
 Si ce n’est pas encore votre cas, nous vous invitons à effectuer les démarches nécessaires dans les meilleurs délais.
@@ -125,8 +125,8 @@ Institut ISHES`;
           <tr>
             <td style="padding:0 32px 24px 32px;font-family:Helvetica,Arial,sans-serif;">
               <p style="margin:0;font-size:15px;line-height:1.75;color:#4b5563;">
-                La liste des fournitures scolaires vous sera envoyée dans un prochain e-mail.<br />
-                Elle sera transmise uniquement aux élèves dont l'inscription est finalisée.
+                La liste des fournitures scolaires est envoyée dans un e-mail séparé aux familles du présentiel enfants.<br />
+                Elle est transmise uniquement aux élèves dont l'inscription est finalisée.
               </p>
             </td>
           </tr>

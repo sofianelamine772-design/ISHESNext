@@ -13,7 +13,7 @@ import {
 } from '@/lib/presentiel-data';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
 import { DISTANCE_CLASSES, DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
-import { filterVisiblePresentielSlots, isDayFullyBooked, getClassSlotStatus, isPresentielCardFull } from '@/lib/class-availability';
+import { filterVisiblePresentielSlots, isDayFullyBooked, getClassSlotStatus, isPresentielCardFull, isClassFull, areClassesAllFull } from '@/lib/class-availability';
 
 function loadOfficialCsvClasses() {
   const csv = fs.readFileSync(
@@ -96,6 +96,20 @@ describe('Catalogue présentiel (site = admin = CSV)', () => {
     expect(getPresentielCapacityLimit(24)).toBe(20);
     expect(getPresentielCapacityLimit(25)).toBe(20);
     expect(getPresentielCapacityLimit(1024)).toBeNull();
+  });
+
+  it('identifie clairement une classe ou un niveau plein', () => {
+    const slots = [
+      { classe_numero: 4, est_plein: true },
+      { classe_numero: 2, est_plein: false },
+      { classe_numero: 3, est_plein: true },
+    ];
+    expect(isClassFull(slots, 4)).toBe(true);
+    expect(isClassFull(slots, 2)).toBe(false);
+    expect(areClassesAllFull(slots, [4])).toBe(true);
+    expect(areClassesAllFull(slots, [2, 3])).toBe(false);
+    expect(areClassesAllFull(slots, [3, 4])).toBe(true);
+    expect(areClassesAllFull(slots, [])).toBe(false);
   });
 
   it('ne considère un jour complet que si toutes ses classes le sont', () => {

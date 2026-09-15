@@ -4,25 +4,12 @@ module.exports = {
   forceExit: true,
   testTimeout: 20000,
   watchman: false,
+  prettierPath: null,
   roots: ['<rootDir>/__tests__'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   setupFiles: ['<rootDir>/jest.setup.cjs'],
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: {
-          esModuleInterop: true,
-          isolatedModules: true,
-          jsx: 'react-jsx',
-          module: 'commonjs',
-          moduleResolution: 'node',
-          skipLibCheck: true,
-          strict: false,
-          paths: { '@/*': ['./src/*'] },
-        },
-      },
-    ],
+    '^.+\\.tsx?$': '<rootDir>/scripts/jest-ts-transformer.cjs',
   },
   testPathIgnorePatterns: [
     '/scratch/',

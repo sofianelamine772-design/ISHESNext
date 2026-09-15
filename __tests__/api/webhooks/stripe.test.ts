@@ -48,9 +48,11 @@ const mockMaybeSendPresentielRentreeEmail = jest.fn().mockImplementation(
     return { success: true, skipped: false };
   }
 );
+const mockMaybeSendPresentielFournituresEmail = jest.fn().mockResolvedValue({ success: true, skipped: true });
 
 jest.mock('@/lib/mail', () => ({
   maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
+  maybeSendPresentielFournituresEmail: (...args: unknown[]) => mockMaybeSendPresentielFournituresEmail(...args),
   sendAdminNewStudentNotificationEmail: jest.fn().mockResolvedValue({ success: true }),
   sendWelcomeEmail: jest.fn(),
   sendClassAssignmentEmail: jest.fn(),
@@ -229,6 +231,10 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
     );
     const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
     expect(rentree).toEqual({ success: true, skipped: false });
+    expect(mockMaybeSendPresentielFournituresEmail).toHaveBeenCalledWith(
+      'test_presentiel@example.com',
+      { classRefs: ['uuid-classe-specifique-choisie'] },
+    );
 
     // VERIFICATION: on vérifie que le système a ignoré la classe par défaut et a bien utilisé la classe SPÉCIFIQUE !
     expect(supabaseAdmin.insert).toHaveBeenCalledWith(

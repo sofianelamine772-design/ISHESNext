@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest --forceExit --watchAll=false",
-    "test:prepush": "jest --config jest.prepush.cjs --forceExit --watchAll=false --maxWorkers=2"
+    "test:prepush": "jest --config jest.prepush.cjs --forceExit --watchAll=false --runInBand"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
