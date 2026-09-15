@@ -214,14 +214,18 @@ export default function InstitutPage() {
 
           {/* Formations Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24 max-w-7xl mx-auto">
-            {presentielPrograms.map((program, i) => (
+            {presentielPrograms.map((program, i) => {
+              const isFull = Boolean(getSlotStatus(program)?.est_plein);
+              return (
               <Link href={program.link} key={i} className="block w-full">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="cursor-pointer group relative flex flex-col rounded-[2.5rem] bg-[#f9f5f0] border border-ishes-gold/10 shadow-sm hover:shadow-2xl hover:border-ishes-gold/30 transition-all duration-500 hover:-translate-y-1.5 overflow-hidden h-full"
+                className={`cursor-pointer group relative flex flex-col rounded-[2.5rem] bg-[#f9f5f0] border shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 overflow-hidden h-full ${
+                  isFull ? "border-red-200" : "border-ishes-gold/10 hover:border-ishes-gold/30"
+                }`}
               >
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-ishes-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
@@ -231,9 +235,15 @@ export default function InstitutPage() {
                      <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase bg-ishes-gold/10 text-ishes-gold">
                         PRÉSENTIEL
                      </span>
-                     <span className="px-3 py-1 bg-ishes-gold/10 text-ishes-gold rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border border-ishes-gold/20">
-                        <span>📅</span> {program.durationText}
-                     </span>
+                     {isFull ? (
+                       <span className="px-3 py-1 bg-red-600 text-white rounded-full text-[10px] font-black tracking-wider uppercase">
+                         Formation complète
+                       </span>
+                     ) : (
+                       <span className="px-3 py-1 bg-ishes-gold/10 text-ishes-gold rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1 border border-ishes-gold/20">
+                         <span>📅</span> {program.durationText}
+                       </span>
+                     )}
                   </div>
 
                   {/* TITLE & DESC */}
@@ -308,15 +318,15 @@ export default function InstitutPage() {
                     
                     {program.day && (
                       <div className="mb-2">
-                        {getSlotStatus(program)?.est_plein ? (
-                          <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
+                        {isFull ? (
+                          <div className="flex items-center gap-2 text-red-600 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl">
                             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                            Session Complète
+                            Formation complète — plus de places
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl">
                             <div className="w-2 h-2 rounded-full bg-green-500" />
-                            Places Disponibles
+                            Places disponibles
                           </div>
                         )}
                       </div>
@@ -334,19 +344,20 @@ export default function InstitutPage() {
                         href={`/inscription?plan=${program.id}&slot=${program.day?.toLowerCase() || ''}&audience=${program.audience}`}
                         onClick={(e) => e.stopPropagation()}
                         className={`flex items-center justify-center py-3.5 rounded-2xl shadow-lg transition-all font-black text-[10px] uppercase tracking-widest hover:-translate-y-1 active:scale-95 ${
-                          getSlotStatus(program)?.est_plein
+                          isFull
                             ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 
                             : "bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/20"
                         }`}
                       >
-                        {getSlotStatus(program)?.est_plein ? "COMPLET" : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")}
+                        {isFull ? "Formation complète" : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")}
                       </Link>
                     </div>
                   </div>
                 </div>
               </motion.div>
               </Link>
-            ))}
+            );
+            })}
           </div>
 
           {/* TEST DE POSITIONNEMENT CTA */}

@@ -629,8 +629,15 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-1">
                             <Users className="w-3.5 h-3.5" /> {c.students.length} inscrits
                           </div>
-                          <div className="font-black text-ishes-blue">
-                            {c.students.length}/{c.capacity_limit}
+                          <div className="flex items-center gap-1.5">
+                            <div className="font-black text-ishes-blue">
+                              {c.students.length}/{c.capacity_limit}
+                            </div>
+                            {c.students.length >= c.capacity_limit && (
+                              <span className="text-[9px] font-black uppercase tracking-wide text-red-600 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded">
+                                Complet
+                              </span>
+                            )}
                           </div>
                         </div>
                         {/* Capacity Bar */}
@@ -689,6 +696,11 @@ export default function AdminDashboard() {
                           <span className="text-[9px] font-black text-ishes-dark bg-white border border-gray-100 px-2 py-0.5 rounded shadow-sm">
                             Capacité : {selectedClass.students.length} / {selectedClass.capacity_limit}
                           </span>
+                          {selectedClass.students.length >= selectedClass.capacity_limit && (
+                            <span className="text-[9px] font-black uppercase tracking-wide text-red-600 bg-red-50 border border-red-100 px-2 py-0.5 rounded">
+                              Complet
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

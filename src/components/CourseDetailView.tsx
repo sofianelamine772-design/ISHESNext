@@ -557,14 +557,14 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                     {c.id === 0 ? "CLASSE GÉNÉRALE" : `CLASSE N°${c.id < 10 ? `0${c.id}` : c.id}`}
                                  </span>
                                  {isFull ? (
-                                    <div className="flex items-center gap-1.5 text-red-500 font-black uppercase text-[8px] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100">
+                                    <div className="flex items-center gap-1.5 text-red-600 font-black uppercase text-[8px] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100">
                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                       Complet
+                                       Formation complète
                                     </div>
                                  ) : (
                                     <div className="flex items-center gap-1.5 text-green-600 font-black uppercase text-[8px] bg-green-50 px-2.5 py-1 rounded-lg border border-green-100">
                                        <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                                       Disponible
+                                       Places disponibles
                                     </div>
                                  )}
                               </div>
@@ -592,7 +592,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                                        : "bg-ishes-gold text-white hover:bg-[#b0935b] shadow-ishes-gold/10"
                                     }`}
                               >
-                                 {isFull ? "Session Complète" : (c.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")}
+                                 {isFull ? "Formation complète" : (c.audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire")}
                               </Link>
                            </div>
                         );

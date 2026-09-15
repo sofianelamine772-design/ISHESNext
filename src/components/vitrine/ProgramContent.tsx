@@ -671,6 +671,7 @@ export function ProgramContent() {
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {filteredPrograms.map((program, index) => {
             const isPresentiel = program.type === "presentiel";
+            const isFull = isPresentiel && Boolean(getSlotStatus(program)?.est_plein);
             const accentColor = isPresentiel ? "text-ishes-gold" : "text-ishes-blue";
             const btnColor = isPresentiel ? "bg-ishes-gold hover:bg-[#b0935b]" : "bg-ishes-blue hover:bg-[#007044]";
 
@@ -707,7 +708,9 @@ export function ProgramContent() {
                   whileInView={{ scale: [1, 1.08, 1] }}
                   viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 2.5, delay: (index % 3) * 0.3 }}
-                className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 overflow-hidden ${program.isRecommended
+                className={`cursor-pointer flex flex-col relative rounded-[2rem] bg-white transition-all hover:shadow-2xl hover:-translate-y-1.5 duration-300 overflow-hidden ${isFull
+                  ? "border-2 border-red-200 shadow-sm"
+                  : program.isRecommended
                   ? "border-[3px] border-ishes-blue shadow-md"
                   : "border border-gray-100 shadow-sm"
                   }`}
@@ -725,11 +728,15 @@ export function ProgramContent() {
                   <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent z-0" />
                   
                   {/* RECOMMENDED BADGE - MOVED OVER THE IMAGE */}
-                  {program.isRecommended && (
+                  {isFull ? (
+                    <div className="absolute top-0 inset-x-0 bg-red-600 text-white text-[10px] sm:text-xs font-black uppercase tracking-widest text-center py-2 flex items-center justify-center gap-2 shadow-sm z-20">
+                      Formation complète — plus de places
+                    </div>
+                  ) : program.isRecommended ? (
                     <div className="absolute top-0 inset-x-0 bg-ishes-blue text-white text-xs font-bold uppercase tracking-widest text-center py-2 flex items-center justify-center gap-2 shadow-sm z-10">
                       <Star className="w-3.5 h-3.5 fill-white" /> Recommandé
                     </div>
-                  )}
+                  ) : null}
 
                   {/* TAGS ROW - MOVED OVER THE IMAGE */}
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10">
@@ -898,15 +905,15 @@ export function ProgramContent() {
                         )}
                         {isPresentiel && (
                           <div className="mb-2 mt-2">
-                            {getSlotStatus(program)?.est_plein ? (
-                              <div className="flex items-center gap-2 text-red-500 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl border border-red-100">
+                            {isFull ? (
+                              <div className="flex items-center gap-2 text-red-600 font-black uppercase text-[10px] bg-red-50 px-3 py-2 rounded-xl border border-red-100">
                                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                Session Complète
+                                Formation complète
                               </div>
                             ) : (
                               <div className="flex items-center gap-2 text-green-600 font-black uppercase text-[10px] bg-green-50 px-3 py-2 rounded-xl border border-green-100">
                                 <div className="w-2 h-2 rounded-full bg-green-500" />
-                                Places Disponibles
+                                Places disponibles
                               </div>
                             )}
                           </div>
@@ -938,11 +945,11 @@ export function ProgramContent() {
                           <Link
                             href={`/inscription?plan=${program.id}&slot=${program.day?.toLowerCase()}&audience=${program.audience}`}
                             onClick={(e) => e.stopPropagation()}
-                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all ${getSlotStatus(program)?.est_plein ? "opacity-50 pointer-events-none grayscale" : ""
+                            className={`w-full flex items-center justify-center ${btnColor} text-white py-2.5 sm:py-3.5 rounded-xl shadow-md transition-all ${isFull ? "opacity-50 pointer-events-none grayscale" : ""
                               }`}
                           >
-                            {getSlotStatus(program)?.est_plein
-                              ? "COMPLET"
+                            {isFull
+                              ? "Formation complète"
                               : (program.audience === 'enfant' ? "Inscrire" : "S'inscrire")
                             }
                           </Link>

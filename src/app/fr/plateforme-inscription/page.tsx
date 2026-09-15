@@ -1,8 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
+import { Suspense, useState, useEffect, type MouseEvent } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText } from "lucide-react";
@@ -12,6 +10,11 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug } from "@/lib/presentiel-data";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
+
+function isPossiblePhoneNumber(value: string): boolean {
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 10 && digits.length <= 15;
+}
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -840,7 +843,7 @@ function InscriptionForm() {
                                       const isFull = status?.est_plein;
                                       return (
                                         <option key={c.id} value={c.id.toString()} disabled={isFull}>
-                                          {c.horaire} {isFull ? '(COMPLET)' : ''}
+                                          {c.horaire} {isFull ? '(formation complète)' : ''}
                                         </option>
                                       );
                                     })}
@@ -967,7 +970,7 @@ function InscriptionForm() {
                                       uniqueLevels.push(c);
                                       return (
                                         <option key={c.id} value={c.niveauKey} disabled={isFull}>
-                                          {c.niveauKey === 'femme_debutante' ? 'Femme Débutante' : 'Femme Intermédiaire'} {isFull ? '(COMPLET)' : ''}
+                                          {c.niveauKey === 'femme_debutante' ? 'Femme Débutante' : 'Femme Intermédiaire'} {isFull ? '(formation complète)' : ''}
                                         </option>
                                       );
                                     }
@@ -1097,19 +1100,20 @@ function InscriptionForm() {
                     <span className="w-3 h-3 border border-gray-400 rounded-full flex items-center justify-center text-[7px]">📞</span>
                     {registrationType === 'self' ? 'Téléphone *' : 'Téléphone du responsable *'}
                   </label>
-                  <PhoneInput
-                    defaultCountry="FR"
-                    limitMaxLength={true}
+                  <input
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
                     placeholder="06 XX XX XX XX"
                     value={formData.telephone}
-                    onChange={(value) => {
-                      let val = value || "";
+                    onChange={(event) => {
+                      let val = event.target.value;
                       if (val.startsWith("+33") && val.length > 12) {
                         val = val.slice(0, 12);
                       }
                       setFormData(prev => ({ ...prev, telephone: val }));
                     }}
-                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus-within:ring-2 focus-within:ring-[#008953]/20 focus-within:border-ishes-blue transition-all text-sm font-medium"
+                    className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-medium"
                   />
                 </div>
 
@@ -1437,7 +1441,7 @@ function InscriptionForm() {
                     {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <p className="text-[10px] text-gray-500 font-bold leading-relaxed">
-                    J'accepte les <Link href="/cgv" className="text-ishes-blue underline" onClick={(e) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
+                    J'accepte les <Link href="/cgv" className="text-ishes-blue underline" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>Conditions Générales de Vente</Link> et je reconnais mon droit de rétractation et de remboursement de 14 jours conformément à la loi.
                   </p>
                 </div>
 

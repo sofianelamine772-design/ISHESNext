@@ -833,7 +833,7 @@ function InscriptionForm() {
                                       const isFull = getClassStatus(c.id)?.est_plein;
                                       return (
                                       <option key={c.id} value={c.id.toString()} disabled={!!isFull}>
-                                        {c.horaire}{isFull ? ' (COMPLET)' : ''}
+                                        {c.horaire}{isFull ? ' (formation complète)' : ''}
                                       </option>
                                       );
                                     })}
@@ -1039,7 +1039,7 @@ function InscriptionForm() {
                                   const isFull = getClassStatus(c.id)?.est_plein;
                                   return (
                                   <option key={c.id} value={c.id.toString()} disabled={!!isFull}>
-                                    {c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} ({c.horaire}){isFull ? ' (COMPLET)' : ''}
+                                    {c.niveau.replace("Femme débutante ", "").replace("Femme intermédiaire ", "")} ({c.horaire}){isFull ? ' (formation complète)' : ''}
                                   </option>
                                   );
                                 })}
