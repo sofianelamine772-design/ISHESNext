@@ -427,9 +427,10 @@ export async function fetchClassesAction(academicYear?: string) {
           : c.name,
         type: c.type,
         schedule: scheduleStr,
-      capacity_limit: c.capacity_limit || getPresentielCapacityLimit(c.external_id) || 20,
-      formationTitle: c.formations?.title,
-      whatsappLink: c.whatsapp_link || null,
+        capacity_limit: c.capacity_limit || getPresentielCapacityLimit(c.external_id) || 20,
+        formationTitle: c.formations?.title,
+        whatsappLink: c.whatsapp_link || null,
+        teacherName: c.teacher_name || null,
       students: c.inscriptions
         .filter((i: any) => i.status !== 'en_attente' && i.etudiants?.status !== 'en_attente')
         .map((i: any) => ({
@@ -1911,3 +1912,19 @@ export async function addManualPaymentAction(studentId: string, amount: number, 
   }
 }
 
+
+// Met à jour le nom du professeur pour une classe
+export async function updateClassTeacherAction(externalId: number, teacherName: string) {
+  try {
+    const { error } = await supabaseAdmin
+      .from('classes')
+      .update({ teacher_name: teacherName })
+      .eq('external_id', externalId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err: any) {
+    console.error("Update Teacher Name Error:", err);
+    return { success: false, error: err.message || "Failed to update teacher name" };
+  }
+}

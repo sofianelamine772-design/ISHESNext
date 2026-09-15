@@ -60,7 +60,7 @@ export default async function AdminOverview() {
   // Fetch successful payments from Supabase directly
   const { data: dbPayments } = await supabaseAdmin
     .from('paiements')
-    .select('amount, created_at, status')
+    .select('amount, created_at, status, etudiants (inscriptions (classes (type)))')
     .eq('status', 'succeeded');
 
   // Fetch recent payments with student info (real-time stream)
@@ -73,18 +73,18 @@ export default async function AdminOverview() {
   const recentPayments = recentPaymentsRaw || [];
 
   const monthlyData = [
-    { month: 'Jan', value: 0 },
-    { month: 'Fev', value: 0 },
-    { month: 'Mar', value: 0 },
-    { month: 'Avr', value: 0 },
-    { month: 'Mai', value: 0 },
-    { month: 'Jun', value: 0 },
-    { month: 'Jul', value: 0 },
-    { month: 'Aou', value: 0 },
-    { month: 'Sep', value: 0 },
-    { month: 'Oct', value: 0 },
-    { month: 'Nov', value: 0 },
-    { month: 'Dec', value: 0 },
+    { month: 'Jan', presentiel: 0, distanciel: 0 },
+    { month: 'Fev', presentiel: 0, distanciel: 0 },
+    { month: 'Mar', presentiel: 0, distanciel: 0 },
+    { month: 'Avr', presentiel: 0, distanciel: 0 },
+    { month: 'Mai', presentiel: 0, distanciel: 0 },
+    { month: 'Jun', presentiel: 0, distanciel: 0 },
+    { month: 'Jul', presentiel: 0, distanciel: 0 },
+    { month: 'Aou', presentiel: 0, distanciel: 0 },
+    { month: 'Sep', presentiel: 0, distanciel: 0 },
+    { month: 'Oct', presentiel: 0, distanciel: 0 },
+    { month: 'Nov', presentiel: 0, distanciel: 0 },
+    { month: 'Dec', presentiel: 0, distanciel: 0 },
   ];
 
   if (dbPayments) {
@@ -94,13 +94,26 @@ export default async function AdminOverview() {
       if (date.getFullYear() === currentYear) {
         const monthIndex = date.getMonth();
         if (monthIndex >= 0 && monthIndex < 12) {
-          monthlyData[monthIndex].value += Number(p.amount || 0);
+          const inscriptions = p.etudiants?.inscriptions || [];
+          const hasPresentiel = inscriptions.some((ins: any) => ins.classes?.type === 'presentiel');
+          const hasDistanciel = inscriptions.some((ins: any) => ins.classes?.type === 'distanciel');
+          
+          if (hasPresentiel && !hasDistanciel) {
+            monthlyData[monthIndex].presentiel += Number(p.amount || 0);
+          } else if (hasDistanciel && !hasPresentiel) {
+            monthlyData[monthIndex].distanciel += Number(p.amount || 0);
+          } else if (hasPresentiel && hasDistanciel) {
+            // Split 50/50
+            monthlyData[monthIndex].presentiel += Number(p.amount || 0) / 2;
+            monthlyData[monthIndex].distanciel += Number(p.amount || 0) / 2;
+          } else {
+            // par défaut
+            monthlyData[monthIndex].presentiel += Number(p.amount || 0);
+          }
         }
       }
     });
   }
-
-  const maxRevenueValue = Math.max(...monthlyData.map(d => d.value), 1);
 
   const formatRevenue = (val: number) => {
     if (val >= 1000) return (val / 1000).toFixed(1) + "K€";

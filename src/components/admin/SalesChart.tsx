@@ -3,13 +3,13 @@
 import { useState } from "react";
 
 interface SalesChartProps {
-  monthlyData: { month: string; value: number }[];
+  monthlyData: { month: string; presentiel: number; distanciel: number }[];
 }
 
 export function SalesChart({ monthlyData }: SalesChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const maxVal = Math.max(...monthlyData.map(d => d.value), 1);
+  const maxVal = Math.max(...monthlyData.flatMap(d => [d.presentiel, d.distanciel]), 1) * 1.1;
   const paddingLeft = 50;
   const paddingRight = 30;
   const paddingTop = 25;
@@ -20,10 +20,16 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
   const chartW = svgWidth - paddingLeft - paddingRight;
   const chartH = svgHeight - paddingTop - paddingBottom;
 
-  const points = monthlyData.map((item, index) => {
+  const presentielPoints = monthlyData.map((item, index) => {
     const x = paddingLeft + (index / 11) * chartW;
-    const y = paddingTop + chartH - (item.value / maxVal) * chartH;
-    return { x, y, month: item.month, value: item.value };
+    const y = paddingTop + chartH - (item.presentiel / maxVal) * chartH;
+    return { x, y, month: item.month, value: item.presentiel };
+  });
+
+  const distancielPoints = monthlyData.map((item, index) => {
+    const x = paddingLeft + (index / 11) * chartW;
+    const y = paddingTop + chartH - (item.distanciel / maxVal) * chartH;
+    return { x, y, month: item.month, value: item.distanciel };
   });
 
   // Generate smooth spline curve
@@ -42,9 +48,15 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
     return d;
   };
 
-  const linePath = getSymmetricBezierPath(points);
-  const areaPath = linePath
-    ? `${linePath} L ${points[points.length - 1].x} ${paddingTop + chartH} L ${points[0].x} ${paddingTop + chartH} Z`
+  const presentielPath = getSymmetricBezierPath(presentielPoints);
+  const distancielPath = getSymmetricBezierPath(distancielPoints);
+  
+  const presentielAreaPath = presentielPath
+    ? `${presentielPath} L ${presentielPoints[presentielPoints.length - 1].x} ${paddingTop + chartH} L ${presentielPoints[0].x} ${paddingTop + chartH} Z`
+    : "";
+
+  const distancielAreaPath = distancielPath
+    ? `${distancielPath} L ${distancielPoints[distancielPoints.length - 1].x} ${paddingTop + chartH} L ${distancielPoints[0].x} ${paddingTop + chartH} Z`
     : "";
 
   const formatRevenue = (val: number) => {
@@ -62,16 +74,39 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
             Visualisation interactive de vos revenus annuels. Survolez la courbe pour plus de détails.
           </p>
         </div>
-        <div className={`bg-ishes-blue/5 border border-ishes-blue/20 rounded-2xl px-5 py-2.5 flex items-center gap-3 transition-opacity duration-200 self-start sm:self-center ${hoveredIndex !== null ? 'opacity-100' : 'opacity-0'}`}>
-          <span className="text-[10px] font-black uppercase text-ishes-blue tracking-widest">
-            {hoveredIndex !== null ? monthlyData[hoveredIndex].month : "JAN"}
-          </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-ishes-blue"></span>
-          <span className="text-lg font-black text-ishes-dark whitespace-nowrap">
-            {hoveredIndex !== null ? monthlyData[hoveredIndex].value.toLocaleString('fr-FR') : "0"} €
-          </span>
+        
+        {/* Clean Legend - Replaces old hover box */}
+        <div className="flex items-center gap-6 self-start sm:self-center bg-white/50 px-4 py-2 rounded-xl">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#008953]"></span>
+            <span className="text-[11px] font-black uppercase text-ishes-dark tracking-widest">Présentiel</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
+            <span className="text-[11px] font-black uppercase text-ishes-dark tracking-widest">Distanciel</span>
+          </div>
         </div>
       </div>
+
+      {/* Interactive Tooltip on Hover */}
+      {hoveredIndex !== null && (
+        <div className="absolute z-10 top-0 left-1/2 -translate-x-1/2 bg-white shadow-xl rounded-2xl p-3 border border-gray-100 flex gap-4 pointer-events-none transition-all">
+          <div className="flex flex-col items-center">
+            <span className="text-[9px] font-black uppercase text-gray-400 tracking-wider mb-1">{monthlyData[hoveredIndex].month}</span>
+            <div className="flex gap-4">
+              <div className="flex flex-col">
+                <span className="text-[9px] text-[#008953] font-bold">Présentiel</span>
+                <span className="text-sm font-black">{monthlyData[hoveredIndex].presentiel.toLocaleString('fr-FR')} €</span>
+              </div>
+              <div className="w-px bg-gray-100"></div>
+              <div className="flex flex-col">
+                <span className="text-[9px] text-[#1B365D] font-bold">Distanciel</span>
+                <span className="text-sm font-black">{monthlyData[hoveredIndex].distanciel.toLocaleString('fr-FR')} €</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SVG Graphic wrapper */}
       <div className="relative w-full overflow-x-auto custom-scrollbar pb-2">
@@ -81,15 +116,23 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
             className="w-full h-auto overflow-visible select-none"
           >
             <defs>
-              {/* Gradient for area fill */}
-              <linearGradient id="chartAreaGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#008953" stopOpacity="0.25" />
+              {/* Gradients for area fills */}
+              <linearGradient id="chartAreaGradientPresentiel" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#008953" stopOpacity="0.2" />
                 <stop offset="100%" stopColor="#008953" stopOpacity="0.00" />
               </linearGradient>
 
-              {/* Drop shadow for active dot */}
-              <filter id="dotGlow" x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#008953" floodOpacity="0.3" />
+              <linearGradient id="chartAreaGradientDistanciel" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#1B365D" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#1B365D" stopOpacity="0.00" />
+              </linearGradient>
+
+              {/* Drop shadows for active dots */}
+              <filter id="dotGlowPresentiel" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#008953" floodOpacity="0.4" />
+              </filter>
+              <filter id="dotGlowDistanciel" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#1B365D" floodOpacity="0.4" />
               </filter>
             </defs>
 
@@ -112,7 +155,7 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
                     x={paddingLeft - 12}
                     y={y + 4}
                     textAnchor="end"
-                    className="text-[9px] font-black fill-gray-400 "
+                    className="text-[9px] font-black fill-gray-400"
                   >
                     {formatRevenue(val)}
                   </text>
@@ -120,15 +163,24 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
               );
             })}
 
-            {/* Gradient Area Fill */}
-            {areaPath && (
-              <path d={areaPath} fill="url(#chartAreaGradient)" />
-            )}
+            {/* Area Fills */}
+            {presentielAreaPath && <path d={presentielAreaPath} fill="url(#chartAreaGradientPresentiel)" />}
+            {distancielAreaPath && <path d={distancielAreaPath} fill="url(#chartAreaGradientDistanciel)" />}
 
-            {/* Glowing Spline Line */}
-            {linePath && (
+            {/* Spline Lines */}
+            {distancielPath && (
               <path
-                d={linePath}
+                d={distancielPath}
+                fill="none"
+                stroke="#1B365D"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            )}
+            {presentielPath && (
+              <path
+                d={presentielPath}
                 fill="none"
                 stroke="#008953"
                 strokeWidth="3.5"
@@ -137,9 +189,11 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
               />
             )}
 
-            {/* Interactive Vertical Hover Guide & Highlighted Point */}
-            {points.map((pt, idx) => {
+            {/* Interactive Vertical Hover Guide & Highlighted Points */}
+            {presentielPoints.map((pt, idx) => {
               const isActive = hoveredIndex === idx;
+              const distPt = distancielPoints[idx];
+
               return (
                 <g key={idx}>
                   {/* Vertical hover line */}
@@ -149,14 +203,26 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
                       y1={paddingTop}
                       x2={pt.x}
                       y2={paddingTop + chartH}
-                      stroke="#008953"
+                      stroke="#9CA3AF"
                       strokeWidth="1.5"
                       strokeDasharray="3 3"
-                      className="opacity-60"
+                      className="opacity-50"
                     />
                   )}
 
-                  {/* Standard dot */}
+                  {/* Distanciel Dot */}
+                  <circle
+                    cx={distPt.x}
+                    cy={distPt.y}
+                    r={isActive ? 6 : 4}
+                    className="transition-all duration-200"
+                    fill={isActive ? "#1B365D" : "#FFFFFF"}
+                    stroke="#1B365D"
+                    strokeWidth={isActive ? 3 : 2.5}
+                    filter={isActive ? "url(#dotGlowDistanciel)" : undefined}
+                  />
+
+                  {/* Presentiel Dot */}
                   <circle
                     cx={pt.x}
                     cy={pt.y}
@@ -165,7 +231,7 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
                     fill={isActive ? "#008953" : "#FFFFFF"}
                     stroke="#008953"
                     strokeWidth={isActive ? 3 : 2.5}
-                    filter={isActive ? "url(#dotGlow)" : undefined}
+                    filter={isActive ? "url(#dotGlowPresentiel)" : undefined}
                   />
 
                   {/* X-Axis labels */}
