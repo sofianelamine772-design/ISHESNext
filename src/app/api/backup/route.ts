@@ -129,11 +129,16 @@ export async function GET(request: Request) {
       const montant_attendu = etudiantInscriptions.reduce((sum, i) => sum + (Number(i.expected_amount) || 0), 0);
       const reste_a_payer = montant_attendu > total_encaisse ? montant_attendu - total_encaisse : 0;
       
+      const allPaiements = backupData.paiements.filter((p: any) => p.etudiant_id === etudiant.id);
+      const stripeSessions = allPaiements.map((p: any) => p.stripe_session_id).filter(Boolean);
+      const stripe_session_id = stripeSessions.length > 0 ? stripeSessions[0] : '';
+      
       return {
         ...etudiant,
         total_encaisse,
         reste_a_payer,
-        montant_attendu
+        montant_attendu,
+        stripe_session_id
       };
     });
 
@@ -215,7 +220,7 @@ export async function GET(request: Request) {
       abandonedCheckouts24h,
     };
 
-    const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Formation / Classe,Status,Montant Attendu,Total Encaissé,Reste à Payer\n";
+    const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Formation / Classe,Status,Montant Attendu,Total Encaissé,Reste à Payer,Stripe Session ID\n";
     
     const escapeCsv = (str: string) => {
         if (!str) return '""';
@@ -223,13 +228,13 @@ export async function GET(request: Request) {
     };
 
     const distanceRows = distanceEtudiants.map(e => 
-      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
+      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0},${escapeCsv(e.stripe_session_id)}`
     );
     const csvStringDistance = csvHeader + distanceRows.join('\n');
     const fileNameCsvDistance = `db_backup_${fileDateStr}_etudiants_distance.csv`;
 
     const presentielRows = presentielEtudiants.map(e => 
-      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0}`
+      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0},${escapeCsv(e.stripe_session_id)}`
     );
     const csvStringPresentiel = csvHeader + presentielRows.join('\n');
     const fileNameCsvPresentiel = `db_backup_${fileDateStr}_etudiants_presentiel.csv`;

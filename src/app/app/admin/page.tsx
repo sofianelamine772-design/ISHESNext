@@ -71,6 +71,9 @@ export default async function AdminOverview() {
     .limit(10);
 
   const recentPayments = recentPaymentsRaw || [];
+  
+  let monthlyRevenuePresentiel = 0;
+  let monthlyRevenueDistanciel = 0;
 
   const monthlyData = [
     { month: 'Jan', presentiel: 0, distanciel: 0 },
@@ -89,6 +92,8 @@ export default async function AdminOverview() {
 
   if (dbPayments) {
     const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    
     dbPayments.forEach(p => {
       const date = new Date(p.created_at);
       if (date.getFullYear() === currentYear) {
@@ -101,17 +106,26 @@ export default async function AdminOverview() {
           const hasPresentiel = inscriptions.some((ins: any) => ins.classes?.type === 'presentiel');
           const hasDistanciel = inscriptions.some((ins: any) => ins.classes?.type === 'distanciel');
           
+          let presAmount = 0;
+          let distAmount = 0;
+
           if (hasPresentiel && !hasDistanciel) {
-            monthlyData[monthIndex].presentiel += Number(p.amount || 0);
+            presAmount = Number(p.amount || 0);
           } else if (hasDistanciel && !hasPresentiel) {
-            monthlyData[monthIndex].distanciel += Number(p.amount || 0);
+            distAmount = Number(p.amount || 0);
           } else if (hasPresentiel && hasDistanciel) {
-            // Split 50/50
-            monthlyData[monthIndex].presentiel += Number(p.amount || 0) / 2;
-            monthlyData[monthIndex].distanciel += Number(p.amount || 0) / 2;
+            presAmount = Number(p.amount || 0) / 2;
+            distAmount = Number(p.amount || 0) / 2;
           } else {
-            // par défaut
-            monthlyData[monthIndex].presentiel += Number(p.amount || 0);
+            presAmount = Number(p.amount || 0);
+          }
+
+          monthlyData[monthIndex].presentiel += presAmount;
+          monthlyData[monthIndex].distanciel += distAmount;
+          
+          if (monthIndex === currentMonth) {
+            monthlyRevenuePresentiel += presAmount;
+            monthlyRevenueDistanciel += distAmount;
           }
         }
       }
@@ -156,8 +170,7 @@ export default async function AdminOverview() {
               <div className="group relative bg-white p-6 rounded-3xl border border-[#086b51]/20 shadow-sm">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#086b51]"></span>
-                    <p className="ishes-label text-[#086b51] text-[10px] md:text-xs">Présentiel</p>
+                    <p className="ishes-label text-[#086b51] text-[10px] md:text-xs uppercase">Présentiel</p>
                   </div>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-[#086b51]">{presentielStudents}</h3>
@@ -171,8 +184,7 @@ export default async function AdminOverview() {
               <div className="group relative bg-white p-6 rounded-3xl border border-ishes-blue/20 shadow-sm">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <span className="inline-block w-2 h-2 rounded-full bg-ishes-blue"></span>
-                    <p className="ishes-label text-ishes-blue text-[10px] md:text-xs">Distanciel</p>
+                    <p className="ishes-label text-ishes-blue text-[10px] md:text-xs uppercase">Distanciel</p>
                   </div>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{distancielStudents}</h3>
@@ -182,22 +194,32 @@ export default async function AdminOverview() {
                 </div>
               </div>
 
-              {/* Card : Revenus ce mois */}
+              {/* Card : Revenus mois Présentiel */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Ce mois)</p>
+                  <p className="ishes-label text-[#086b51] mb-1 text-[10px] md:text-xs uppercase">Revenus Mois (Prés.)</p>
                   <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{formatRevenue(monthlyRevenue)}</h3>
-                    <span className="text-[10px] font-black text-ishes-blue bg-ishes-blue/5 px-2 py-0.5 rounded mb-1">+5.2%</span>
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-[#086b51]">{formatRevenue(monthlyRevenuePresentiel)}</h3>
                   </div>
-                  <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div className="mt-4 h-1 w-12 bg-[#086b51] rounded-full group-hover:w-full transition-all duration-500"></div>
+                </div>
+              </div>
+
+              {/* Card : Revenus mois Distanciel */}
+              <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex flex-col">
+                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs uppercase">Revenus Mois (Dist.)</p>
+                  <div className="flex items-end gap-3">
+                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{formatRevenue(monthlyRevenueDistanciel)}</h3>
+                  </div>
+                  <div className="mt-4 h-1 w-12 bg-ishes-blue rounded-full group-hover:w-full transition-all duration-500"></div>
                 </div>
               </div>
 
               {/* Card : Revenus année */}
               <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Revenus (Année)</p>
+                  <p className="ishes-label text-ishes-dark mb-1 text-[10px] md:text-xs uppercase">Revenus (Année)</p>
                   <div className="flex items-end gap-3">
                     <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">{formatRevenue(yearlyRevenue)}</h3>
                   </div>

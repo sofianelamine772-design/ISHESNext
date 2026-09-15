@@ -94,12 +94,12 @@ export default function AdminDashboard() {
           
           if (classDayPart || c.schedule) {
             const creneauText = classDayPart ? `${classDayPart} ${c.schedule ? `(${c.schedule})` : ''}` : c.schedule;
-            doc.text(`Créneau : ${creneauText}`, 105, 42);
+            doc.text(`Créneau : ${creneauText}`, 95, 42);
           }
-          doc.text(`Professeur : ${c.teacherName || "_________________"}`, 105, 48);
+          doc.text(`Professeur : ${c.teacherName || "_________________"}`, 95, 48);
 
-          doc.text(`Année : ${selectedYear}`, 160, 42);
-          doc.text(`Effectif : ${c.students.length} élèves`, 160, 48);
+          doc.text(`Année : ${selectedYear}`, 196, 42, { align: 'right' });
+          doc.text(`Effectif : ${c.students.length} élèves`, 196, 48, { align: 'right' });
           
           // Table Data
           const tableData = c.students.map((s, index) => [

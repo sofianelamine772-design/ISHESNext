@@ -64,6 +64,9 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
     return val.toFixed(0) + "€";
   };
 
+  const totalPresentiel = monthlyData.reduce((acc, curr) => acc + curr.presentiel, 0);
+  const totalDistanciel = monthlyData.reduce((acc, curr) => acc + curr.distanciel, 0);
+
   return (
     <div className="relative w-full flex flex-col">
       {/* Header Info */}
@@ -78,11 +81,15 @@ export function SalesChart({ monthlyData }: SalesChartProps) {
         {/* Clean Legend - Replaces old hover box */}
         <div className="flex items-center gap-6 self-start sm:self-center bg-white/50 px-4 py-2 rounded-xl">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#008953]"></span>
+            <div className="bg-[#008953]/10 border border-[#008953]/20 px-2 py-1 rounded-lg text-[#008953] font-black text-[11px]">
+              {formatRevenue(totalPresentiel)}
+            </div>
             <span className="text-[11px] font-black uppercase text-ishes-dark tracking-widest">Présentiel</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
+            <div className="bg-[#1B365D]/10 border border-[#1B365D]/20 px-2 py-1 rounded-lg text-[#1B365D] font-black text-[11px]">
+              {formatRevenue(totalDistanciel)}
+            </div>
             <span className="text-[11px] font-black uppercase text-ishes-dark tracking-widest">Distanciel</span>
           </div>
         </div>
