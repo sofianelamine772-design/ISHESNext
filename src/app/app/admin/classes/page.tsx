@@ -16,7 +16,7 @@ import { UserButton } from "@clerk/nextjs";
 
 // Types
 type Student = { id: string; name: string; email: string; avatar: string; dateJoined: string; phone?: string };
-type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null; schedule?: string; externalId?: number | null };
+type ClassDetails = { id: string; name: string; type: "distanciel" | "presentiel"; students: Student[]; formationTitle?: string; capacity_limit: number; whatsappLink?: string | null; schedule?: string; externalId?: number | null; teacherName?: string | null };
 
 export default function AdminDashboard() {
   const searchParams = useSearchParams();
@@ -84,16 +84,19 @@ export default function AdminDashboard() {
           
           doc.setFontSize(12);
           doc.setFont("helvetica", "bold");
-          doc.text(`Classe : ${c.name}`, 14, 42);
+          const classNamePart = (c.name || '').split(' — ')[0];
+          const classDayPart = (c.name || '').split(' — ')[1] || '';
+          doc.text(`Classe : ${classNamePart}`, 14, 42);
           
           doc.setFontSize(10);
           doc.setFont("helvetica", "normal");
           doc.text(`Formation : ${c.formationTitle || "Non définie"}`, 14, 48);
           
-          if (c.schedule) {
-            doc.text(`Créneaux : ${c.schedule}`, 110, 42);
+          if (classDayPart || c.schedule) {
+            const creneauText = classDayPart ? `${classDayPart} ${c.schedule ? `(${c.schedule})` : ''}` : c.schedule;
+            doc.text(`Créneau : ${creneauText}`, 105, 42);
           }
-          doc.text(`Professeur : _________________`, 110, 48);
+          doc.text(`Professeur : ${c.teacherName || "_________________"}`, 105, 48);
 
           doc.text(`Année : ${selectedYear}`, 160, 42);
           doc.text(`Effectif : ${c.students.length} élèves`, 160, 48);

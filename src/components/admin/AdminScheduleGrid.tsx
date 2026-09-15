@@ -51,6 +51,8 @@ export function AdminScheduleGrid({ classes }: { classes: any[] }) {
   const [isSaving, setIsSaving] = useState(false);
   const [teacherMapping, setTeacherMapping] = useState<Record<number, string>>(DEFAULT_TEACHER_MAPPING);
 
+  const [generatingPdf, setGeneratingPdf] = useState(false);
+
   // Initialize teacher mapping from DB when component loads or props change
   useEffect(() => {
     const newMapping = { ...DEFAULT_TEACHER_MAPPING };
@@ -85,6 +87,40 @@ export function AdminScheduleGrid({ classes }: { classes: any[] }) {
     }
   };
 
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById("print-area");
+    if (!element) return;
+    
+    setGeneratingPdf(true);
+    try {
+      const { toPng } = await import('html-to-image');
+      const { jsPDF } = await import('jspdf');
+
+      const dataUrl = await toPng(element, {
+        quality: 1,
+        backgroundColor: '#ffffff',
+        filter: (node: any) => {
+          if (node.classList && node.classList.contains('no-print')) return false;
+          return true;
+        }
+      });
+      
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [element.scrollWidth + 40, element.scrollHeight + 40]
+      });
+      
+      pdf.addImage(dataUrl, 'PNG', 20, 20, element.scrollWidth, element.scrollHeight);
+      pdf.save(`Effectifs_ISHES_${currentYear.replace('/', '-')}.pdf`);
+    } catch (err) {
+      console.error("Erreur PDF:", err);
+      alert("Erreur lors de la génération du PDF.");
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   return (
     <div className="w-full overflow-x-auto custom-scrollbar pb-6">
       <style dangerouslySetInnerHTML={{ __html: `
@@ -97,17 +133,22 @@ export function AdminScheduleGrid({ classes }: { classes: any[] }) {
         }
       `}} />
       
-      <div id="print-area" className="min-w-[1000px] bg-white">
+      <div id="print-area" className="min-w-[1000px] bg-white p-4">
         <div className="flex items-center justify-between mb-6">
           <div className="text-left">
             <h2 className="text-2xl md:text-3xl font-black text-ishes-blue uppercase tracking-tight">Année {currentYear}</h2>
             <p className="text-gray-500 font-bold uppercase tracking-widest text-sm mt-1">Schéma des effectifs par classe</p>
           </div>
           <button 
-            onClick={() => window.print()}
-            className="no-print bg-[#086b51] hover:bg-[#075c45] text-white px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-[11px] shadow-sm transition-all"
+            onClick={handleDownloadPDF}
+            disabled={generatingPdf}
+            className="no-print flex items-center gap-2 bg-[#086b51] hover:bg-[#075c45] text-white px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-[11px] shadow-sm transition-all disabled:opacity-50"
           >
-            Télécharger en PDF
+            {generatingPdf ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Génération...</>
+            ) : (
+              "Télécharger en PDF"
+            )}
           </button>
         </div>
 
