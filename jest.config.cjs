@@ -4,7 +4,7 @@ module.exports = {
   forceExit: true,
   testTimeout: 20000,
   watchman: false,
-  roots: ['<rootDir>/__tests__', '<rootDir>/src'],
+  roots: ['<rootDir>/__tests__'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   setupFiles: ['<rootDir>/jest.setup.cjs'],
   transform: {
@@ -29,7 +29,15 @@ module.exports = {
     '/\\.next/',
     '/node_modules/',
   ],
-  modulePathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '\\.(pdf|numbers|png|jpe?g|gif|webp|mp4|zip|DS_Store)$',
+  ],
+  watchPathIgnorePatterns: [
+    '<rootDir>/\\.next/',
+    '\\.(pdf|numbers|png|jpe?g|gif|webp|mp4|zip)$',
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
