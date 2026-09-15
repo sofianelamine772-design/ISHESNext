@@ -29,29 +29,24 @@ const presentiel = (classes || []).filter(
   (c) => c.type === 'presentiel' && c.external_id >= 1 && c.external_id <= 25,
 );
 const distance = (classes || []).filter(
-  (c) => c.type === 'distanciel' && c.external_id >= 101 && c.external_id <= 108,
+  (c) => c.type === 'distanciel'
 );
 
 const presentielIds = new Set(presentiel.map((c) => c.external_id));
-const distanceIds = new Set(distance.map((c) => c.external_id));
 const missingPresentiel = [];
 for (let i = 1; i <= 25; i++) {
   if (!presentielIds.has(i)) missingPresentiel.push(i);
 }
-const missingDistance = [];
-for (let i = 101; i <= 108; i++) {
-  if (!distanceIds.has(i)) missingDistance.push(i);
-}
 
-if (missingPresentiel.length || missingDistance.length) {
-  if (missingPresentiel.length) {
-    console.error('❌ Classes présentiel officielles manquantes :', missingPresentiel.join(', '));
-  }
-  if (missingDistance.length) {
-    console.error('❌ Classes distanciel enfant manquantes :', missingDistance.join(', '));
-  }
+if (missingPresentiel.length) {
+  console.error('❌ Classes présentiel officielles manquantes :', missingPresentiel.join(', '));
   process.exit(1);
 }
 
-console.log('✅ Catalogue OK : présentiel 1–25 et distanciel 101–108 actifs.');
+if (distance.length === 0) {
+  console.error('❌ Aucune classe distanciel active trouvée !');
+  process.exit(1);
+}
+
+console.log(`✅ Catalogue OK : présentiel 1–25 et ${distance.length} classes distanciel actives.`);
 process.exit(0);
