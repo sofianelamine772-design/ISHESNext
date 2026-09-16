@@ -338,7 +338,7 @@ export async function GET(req: Request) {
     if (payerEmail && studentIds.length > 0) {
       try {
         const { maybeSendPresentielRentreeEmail, maybeSendPresentielFournituresEmail } = await import('@/lib/mail');
-        const { collectCheckoutClassRefs } = await import('@/lib/presentiel-fournitures-email');
+        const { collectCheckoutClassRefs, getFournituresKindsToSend } = await import('@/lib/presentiel-fournitures-email');
         let formationType: string | null = null;
         if (formationUuid) {
           const { data: form } = await supabaseAdmin
