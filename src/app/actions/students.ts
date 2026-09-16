@@ -784,12 +784,15 @@ export async function updateStudentAction(id: string, data: any) {
   try {
     const { data: currentStudent } = await supabaseAdmin
       .from('etudiants')
-      .select('email')
+      .select('email, clerk_user_id')
       .eq('id', id)
       .single();
 
     let targetEmail = data.email;
-    if (currentStudent && data.email) {
+    // Protection anti-doublon : on conserve l'email d'origine si la base est identique
+    // SAUF pour les élèves saisis manuellement (sans clerk_user_id) où l'admin doit pouvoir corriger l'email
+    const isManualStudent = !currentStudent?.clerk_user_id;
+    if (!isManualStudent && currentStudent && data.email) {
       const getBaseEmail = (e: string) => {
         if (!e) return "";
         const parts = e.split('@');
