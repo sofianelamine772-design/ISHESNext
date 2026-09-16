@@ -10,8 +10,6 @@ export default function MessageriePage() {
   const { user } = useUser();
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState<any[]>([]);
-  const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState<"private" | "general">("private");
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -35,13 +33,6 @@ export default function MessageriePage() {
         setMessages(Array.isArray(data) ? data : []);
       } else {
         console.error("Erreur fetch messages:", await res.text());
-      }
-
-      // Annonces générales
-      const annRes = await fetch(`/api/messages?type=announcements&userId=${user?.id}`);
-      if (annRes.ok) {
-        const annData = await annRes.json();
-        setAnnouncements(Array.isArray(annData) ? annData : []);
       }
     } catch (err) {
       console.error("Error fetching messages:", err);
@@ -113,11 +104,10 @@ export default function MessageriePage() {
         <div className="flex flex-row md:flex-col overflow-x-auto md:overflow-y-auto">
           {/* Message Privé */}
           <button
-            onClick={() => setActiveTab("private")}
-            className={`flex-1 md:w-full p-3 md:p-5 flex flex-row items-center justify-center md:justify-start gap-3 md:gap-4 cursor-pointer transition-all hover:bg-gray-50/80 text-left ${activeTab === "private" ? 'bg-emerald-50/50 border-b-4 md:border-b-0 md:border-l-4 border-ishes-blue' : 'border-b-4 md:border-b-0 md:border-l-4 border-transparent'}`}
+            className="flex-1 md:w-full p-3 md:p-5 flex flex-row items-center justify-center md:justify-start gap-3 md:gap-4 cursor-pointer transition-all bg-emerald-50/50 border-b-4 md:border-b-0 md:border-l-4 border-ishes-blue text-left"
           >
-            <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 transition-all ${activeTab === "private" ? 'bg-ishes-blue shadow-lg shadow-ishes-blue/30' : 'bg-gray-100'}`}>
-              <User className={`w-4 h-4 md:w-5 md:h-5 ${activeTab === "private" ? 'text-white' : 'text-gray-400'}`} />
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 transition-all bg-ishes-blue shadow-lg shadow-ishes-blue/30">
+              <User className="w-4 h-4 md:w-5 md:h-5 text-white" />
             </div>
             <div className="hidden md:block flex-1 min-w-0">
               <h4 className="text-sm font-black text-gray-800 truncate uppercase tracking-tight">Message Privé</h4>
@@ -132,33 +122,10 @@ export default function MessageriePage() {
               </span>
             )}
           </button>
-
-          {/* Mail Général */}
-          <button
-            onClick={() => setActiveTab("general")}
-            className={`flex-1 md:w-full p-3 md:p-5 flex flex-row items-center justify-center md:justify-start gap-3 md:gap-4 cursor-pointer transition-all hover:bg-gray-50/80 text-left ${activeTab === "general" ? 'bg-emerald-50/50 border-b-4 md:border-b-0 md:border-l-4 border-ishes-blue' : 'border-b-4 md:border-b-0 md:border-l-4 border-transparent'}`}
-          >
-            <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 transition-all ${activeTab === "general" ? 'bg-ishes-blue shadow-lg shadow-ishes-blue/30' : 'bg-gray-100'}`}>
-              <Megaphone className={`w-4 h-4 md:w-5 md:h-5 ${activeTab === "general" ? 'text-white' : 'text-gray-400'}`} />
-            </div>
-            <div className="hidden md:block flex-1 min-w-0">
-              <h4 className="text-sm font-black text-gray-800 truncate uppercase tracking-tight">Mail Général</h4>
-              <p className="text-xs text-gray-400 truncate font-medium mt-0.5">Annonces & Plannings</p>
-            </div>
-            <div className="md:hidden">
-              <h4 className="text-[11px] font-black text-gray-800 uppercase tracking-tight">Général</h4>
-            </div>
-            {announcements.length > 0 && (
-              <span className="w-5 h-5 bg-ishes-blue text-white text-[9px] font-black rounded-full flex items-center justify-center shrink-0 ml-auto md:ml-0">
-                {announcements.length > 9 ? '9+' : announcements.length}
-              </span>
-            )}
-          </button>
         </div>
       </div>
 
       {/* Zone principale */}
-      {activeTab === "private" ? (
         <div className="flex-1 flex flex-col bg-gray-50/30 overflow-hidden">
           {/* Header */}
           <div className="px-4 py-3 md:px-8 md:py-5 bg-white border-b border-gray-100 flex items-center gap-4 shrink-0">
@@ -244,46 +211,6 @@ export default function MessageriePage() {
             </p>
           </div>
         </div>
-      ) : (
-        /* Mail Général */
-        <div className="flex-1 bg-gray-50/30 overflow-y-auto">
-          <div className="max-w-3xl mx-auto p-4 md:p-8 space-y-4">
-            <h2 className="text-lg md:text-xl font-black text-gray-900 uppercase tracking-tight mb-4 md:mb-6">Annonces Générales</h2>
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 animate-spin text-ishes-blue" />
-              </div>
-            ) : announcements.length === 0 ? (
-              <div className="text-center py-16 md:py-24 bg-white rounded-3xl border border-dashed border-gray-200">
-                <Megaphone className="w-10 h-10 md:w-12 md:h-12 text-gray-200 mx-auto mb-4" />
-                <p className="text-gray-400 font-black uppercase tracking-widest text-[10px] md:text-xs">Aucune annonce disponible</p>
-              </div>
-            ) : (
-              announcements.map((ann, idx) => (
-                <Link 
-                  key={idx} 
-                  href={`/app/eleve/messagerie/mail-general?id=${ann.id}`}
-                  className="block bg-white p-5 md:p-7 rounded-[1.5rem] md:rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 md:mb-4">
-                    <span className="self-start sm:self-auto bg-ishes-blue/10 text-ishes-blue px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">
-                      {ann.type === 'global' ? '📢 Annonce Globale' : '🎓 Classe'}
-                    </span>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      {new Date(ann.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}
-                    </span>
-                  </div>
-                  <h3 className="text-base md:text-lg font-black text-gray-800 uppercase tracking-tight group-hover:text-ishes-blue transition-colors mb-2 leading-snug">{ann.title || "Sans titre"}</h3>
-                  <p className="text-[13px] md:text-sm text-gray-500 line-clamp-2 font-medium leading-relaxed">{htmlToPlainText(ann.content || '')}</p>
-                  <div className="flex items-center gap-1.5 mt-4 md:mt-5">
-                    <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest group-hover:gap-2 transition-all">Lire l'annonce →</span>
-                  </div>
-                </Link>
-              ))
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

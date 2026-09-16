@@ -352,10 +352,23 @@ export async function GET(req: Request) {
         if (!rentreeResult.skipped && rentreeResult.success) {
           console.log(`[LOCAL_SUCCESS] Présentiel rentrée email sent to ${payerEmail}`);
         }
-        const classRefs = collectCheckoutClassRefs(session.metadata);
-        const fournituresResult = await maybeSendPresentielFournituresEmail(payerEmail, { classRefs });
+        const metadata = session.metadata;
+        const classRefs = collectCheckoutClassRefs(metadata);
+        let kinds = getFournituresKindsToSend(classRefs);
+        const isPresentiel = formationId === 'presentiel-global' || formationType === 'presentiel';
+        
+        let forceKinds;
+        if (isPresentiel && kinds.length === 0) {
+          forceKinds = ['prepa', 'elem'] as const;
+        }
+        
+        const fournituresResult = await maybeSendPresentielFournituresEmail(payerEmail, { 
+          classRefs,
+          forceKinds: forceKinds as any
+        });
+        
         if (!fournituresResult.skipped && fournituresResult.success) {
-          console.log(`[LOCAL_SUCCESS] Présentiel fournitures email sent to ${payerEmail}`);
+          console.log(`[LOCAL SUCCESS] Présentiel fournitures email sent to ${payerEmail}`);
         }
       } catch (e) {
         console.error('[LOCAL_SUCCESS] Failed to send présentiel rentrée/fournitures email', e);

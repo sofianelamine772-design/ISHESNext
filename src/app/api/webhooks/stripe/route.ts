@@ -417,8 +417,22 @@ export async function POST(req: Request) {
         if (!rentreeResult.skipped && rentreeResult.success) {
           console.log(`[WEBHOOK] Présentiel rentrée email sent to ${payerEmail}`);
         }
-        const classRefs = collectCheckoutClassRefs(session.metadata);
-        const fournituresResult = await maybeSendPresentielFournituresEmail(payerEmail, { classRefs });
+        let classRefs = collectCheckoutClassRefs(session.metadata);
+        const { getFournituresKindsToSend } = await import('@/lib/presentiel-fournitures-email');
+        
+        let kinds = getFournituresKindsToSend(classRefs);
+        const isPresentiel = formationId === 'presentiel-global' || formationType === 'presentiel';
+        
+        let forceKinds;
+        if (isPresentiel && kinds.length === 0) {
+          forceKinds = ['prepa', 'elem'] as const;
+        }
+        
+        const fournituresResult = await maybeSendPresentielFournituresEmail(payerEmail, { 
+          classRefs,
+          forceKinds: forceKinds as any
+        });
+        
         if (!fournituresResult.skipped && fournituresResult.success) {
           console.log(`[WEBHOOK] Présentiel fournitures email sent to ${payerEmail}`);
         }

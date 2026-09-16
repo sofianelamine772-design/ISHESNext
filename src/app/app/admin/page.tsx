@@ -227,17 +227,6 @@ export default async function AdminOverview() {
                 </div>
               </div>
 
-              {/* Card : Dossiers finalisés */}
-              <div className="group relative bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                <div className="flex flex-col">
-                  <p className="ishes-label text-ishes-blue mb-1 text-[10px] md:text-xs">Dossiers finalisés</p>
-                  <div className="flex items-end gap-3">
-                    <h3 className="text-3xl md:text-4xl ishes-heading text-ishes-blue">89%</h3>
-                    <span className="text-[10px] font-black text-gray-400 bg-gray-50 px-2 py-0.5 rounded mb-1">-2%</span>
-                  </div>
-                  <div className="mt-4 h-1 w-12 bg-ishes-dark rounded-full group-hover:w-full transition-all duration-500"></div>
-                </div>
-              </div>
             </div>
 
             {/* Sales Overview & Recent Payments Grid */}

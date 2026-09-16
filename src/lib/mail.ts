@@ -428,11 +428,15 @@ export async function maybeSendPresentielFournituresEmail(
   email: string,
   params: {
     classRefs?: string[];
+    forceKinds?: FournituresKind[];
     recipientName?: string | null;
   } = {},
 ): Promise<{ success: boolean; skipped: boolean; error?: unknown }> {
   if (!email) return { success: false, skipped: true };
-  const kinds = getFournituresKindsToSend(params.classRefs || []);
+  let kinds = getFournituresKindsToSend(params.classRefs || []);
+  if (kinds.length === 0 && params.forceKinds) {
+    kinds = params.forceKinds;
+  }
   if (kinds.length === 0) return { success: true, skipped: true };
 
   let sentAny = false;
