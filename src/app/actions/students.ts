@@ -434,7 +434,7 @@ export async function fetchClassesAction(academicYear?: string) {
           : c.name,
         type: c.type,
         schedule: scheduleStr,
-        capacity_limit: c.capacity_limit || getPresentielCapacityLimit(c.external_id) || 20,
+        capacity_limit: getPresentielCapacityLimit(c.external_id) ?? c.capacity_limit ?? 20,
         formationTitle: c.formations?.title,
         whatsappLink: c.whatsapp_link || null,
         teacherName: c.teacher_name || null,
@@ -940,7 +940,7 @@ export async function getClassesCapacitiesAction() {
         if (c.external_id) {
           // Filtrer les inscriptions actives si besoin, mais en général on compte toutes les inscriptions
           capacities[c.external_id.toString()] = {
-            capacity: c.capacity_limit || getPresentielCapacityLimit(c.external_id) || 20,
+            capacity: getPresentielCapacityLimit(c.external_id) ?? c.capacity_limit ?? 20,
             enrolled: c.inscriptions ? c.inscriptions.length : 0
           };
         }

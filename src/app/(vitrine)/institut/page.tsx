@@ -277,7 +277,7 @@ export default function InstitutPage() {
                         <Users className="w-4 h-4 text-ishes-gold" />
                       </div>
                       <span className="text-[10px] font-bold text-gray-500">
-                        {program.audience === "adulte" ? "Max 20" : "Prépa 15 · Élém. 18"}
+                        {program.audience === "adulte" ? "Max 20" : "Prépa 13 · Élém. 18"}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 group/icon">

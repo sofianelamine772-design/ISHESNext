@@ -88,9 +88,9 @@ describe('Catalogue présentiel (site = admin = CSV)', () => {
     expect(visible.map((r) => r.classe_numero)).toEqual([1, 25]);
   });
 
-  it('applique les plafonds prépa 15, élémentaire 18, femmes 20', () => {
-    expect(getPresentielCapacityLimit(1)).toBe(15);
-    expect(getPresentielCapacityLimit(7)).toBe(15);
+  it('applique les plafonds prépa 13, élémentaire 18, femmes 20', () => {
+    expect(getPresentielCapacityLimit(1)).toBe(13);
+    expect(getPresentielCapacityLimit(7)).toBe(13);
     expect(getPresentielCapacityLimit(8)).toBe(18);
     expect(getPresentielCapacityLimit(23)).toBe(18);
     expect(getPresentielCapacityLimit(24)).toBe(20);

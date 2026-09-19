@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
-import { CLASS_ID_TO_UUID, resolvePresentielCheckoutSlug } from '@/lib/presentiel-data';
+import { CLASS_ID_TO_UUID, resolvePresentielCheckoutSlug, getPresentielCapacityLimit } from '@/lib/presentiel-data';
 import { DISTANCE_CLASS_ID_TO_UUID, isOfficialDistanceClassId } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
@@ -142,11 +142,16 @@ export async function POST(req: Request) {
 
       const { data: statusData, error: statusError } = await supabaseAdmin
         .from('vue_etat_creneaux')
-        .select('classe_numero, est_plein')
+        .select('classe_numero, est_plein, inscrits_count, capacity_limit')
         .in('classe_numero', presentielIdsToCheck);
 
       if (!statusError && statusData) {
-        const fullClasses = statusData.filter((c: any) => c.est_plein === true);
+        const fullClasses = statusData.filter((c: any) => {
+          const official = getPresentielCapacityLimit(c.classe_numero);
+          const inscrits = Number(c.inscrits_count) || 0;
+          if (official != null) return inscrits >= official;
+          return c.est_plein === true;
+        });
         if (fullClasses.length > 0) {
           return NextResponse.json(
             { error: "Désolé, l'une des classes sélectionnées vient de se remplir. Veuillez choisir un autre créneau." },

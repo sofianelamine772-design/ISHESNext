@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { NextResponse } from "next/server";
 import { filterVisiblePresentielSlots } from "@/lib/class-availability";
+import { getPresentielCapacityLimit } from "@/lib/presentiel-data";
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +22,17 @@ export async function GET() {
     const visible = filterVisiblePresentielSlots(
       data || [],
       (activeClasses || []).map((c) => c.external_id),
-    );
+    ).map((row: any) => {
+      const official = getPresentielCapacityLimit(row.classe_numero);
+      if (official == null) return row;
+      const inscrits = Number(row.inscrits_count) || 0;
+      return {
+        ...row,
+        capacity_limit: official,
+        places_restantes: Math.max(0, official - inscrits),
+        est_plein: inscrits >= official,
+      };
+    });
 
     return NextResponse.json(visible);
   } catch (error) {
