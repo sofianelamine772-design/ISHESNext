@@ -73,6 +73,27 @@ export function getFournituresKindsToSend(classRefs: string[] = []): Fournitures
   return getFournituresKindsFromExternalIds(resolvePresentielExternalIds(classRefs));
 }
 
+export type FournituresPublicDoc = {
+  kind: FournituresKind;
+  label: string;
+  href: string;
+};
+
+export function getFournituresPublicDocs(
+  classRefs: Array<string | number | null | undefined> = [],
+): FournituresPublicDoc[] {
+  const kinds = getFournituresKindsToSend(
+    classRefs
+      .filter((ref): ref is string | number => ref != null && String(ref).trim() !== "")
+      .map(String),
+  );
+  return kinds.map((kind) => ({
+    kind,
+    label: kind === "prepa" ? "Préparatoire 1re et 2e année" : "Élémentaire",
+    href: `/fournitures/${FOURNITURES_PDF[kind].filename}`,
+  }));
+}
+
 export function resolveFournituresPdfPath(kind: FournituresKind): string | null {
   const dirs = [
     path.join(process.cwd(), 'public', 'fournitures'),

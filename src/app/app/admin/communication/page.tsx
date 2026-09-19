@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { MessageSquare, Send, Loader2, CheckCircle2, Inbox, Search, Globe, Users, Lock, ChevronRight, Trash2, History, Paperclip, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,12 @@ import { EmailHistory } from "@/components/admin/EmailHistory";
 import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
 import { htmlToPlainText, looksLikeHtml } from "@/lib/email-html";
 
-export default function AdminCommunicationPage() {
+function AdminCommunicationContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const chatFromEmail = searchParams?.get("chat");
+  const deepLinkHandled = useRef<string | null>(null);
+
   const [activeTab, setActiveTab] = useState<"inbox" | "send" | "history">("inbox");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -29,6 +35,7 @@ export default function AdminCommunicationPage() {
   const [replyAttachments, setReplyAttachments] = useState<File[]>([]);
   const [replySending, setReplySending] = useState(false);
   const replyFileInputRef = useRef<HTMLInputElement>(null);
+  const replyInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Send state
@@ -59,6 +66,26 @@ export default function AdminCommunicationPage() {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
+
+  // Lien e-mail « Répondre dans ISHEECOLE » → ouvrir la conversation
+  useEffect(() => {
+    if (!chatFromEmail || conversations.length === 0) return;
+    if (deepLinkHandled.current === chatFromEmail) return;
+
+    const match = conversations.find((c) =>
+      c.id === chatFromEmail ||
+      c.clerk_user_id === chatFromEmail ||
+      c.etudiant_id === chatFromEmail
+    );
+    if (!match) return;
+
+    deepLinkHandled.current = chatFromEmail;
+    setActiveTab("inbox");
+    openChat(match).then(() => {
+      setTimeout(() => replyInputRef.current?.focus(), 300);
+      router.replace("/app/admin/communication", { scroll: false });
+    });
+  }, [chatFromEmail, conversations, router]);
 
   async function fetchStudentsAndClasses() {
     try {
@@ -426,6 +453,7 @@ export default function AdminCommunicationPage() {
                           <Paperclip className="w-4 h-4" />
                         </button>
                         <input
+                          ref={replyInputRef}
                           type="text"
                           value={replyContent}
                           onChange={(e) => setReplyContent(e.target.value)}
@@ -624,5 +652,17 @@ export default function AdminCommunicationPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function AdminCommunicationPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen w-full bg-white flex items-center justify-center">
+        <Loader2 className="w-10 h-10 text-ishes-blue animate-spin" />
+      </div>
+    }>
+      <AdminCommunicationContent />
+    </Suspense>
   );
 }

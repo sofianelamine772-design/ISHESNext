@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "@/components/LogoutButton";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const navItems = [
@@ -96,21 +96,25 @@ export function AdminSidebar() {
 
   return (
     <>
-      {/* Mobile Menu Trigger */}
-      <div className={cn("lg:hidden fixed top-5 left-6 z-40 transition-opacity", isOpen ? "opacity-0 pointer-events-none" : "opacity-100")}>
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger
-            render={
-              <button className="p-2.5 bg-white border border-gray-200 text-ishes-dark rounded-xl shadow-sm active:scale-95 transition-transform">
-                <Menu className="w-5 h-5" />
-              </button>
-            }
-          />
-          <SheetContent side="left" className="p-0 border-none w-72">
-            <SidebarContent />
-          </SheetContent>
-        </Sheet>
-      </div>
+      {/* Bouton menu tablette/mobile — hors du Sheet pour éviter les blocages tactile */}
+      <button
+        type="button"
+        aria-label="Ouvrir le menu"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen(true)}
+        className={cn(
+          "lg:hidden fixed top-4 left-4 z-[60] min-h-11 min-w-11 p-3 bg-white border border-gray-200 text-ishes-dark rounded-xl shadow-md active:scale-95 transition-all touch-manipulation",
+          isOpen && "invisible pointer-events-none opacity-0",
+        )}
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="left" className="p-0 border-none w-72 z-[70]">
+          <SidebarContent />
+        </SheetContent>
+      </Sheet>
 
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-64 bg-white border-r border-gray-100 text-ishes-dark flex-col flex-shrink-0 h-full">

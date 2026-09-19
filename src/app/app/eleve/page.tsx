@@ -452,6 +452,19 @@ export default function EleveDashboard() {
                               <FileText className="w-5 h-5" />
                               Voir le Certificat
                             </button>
+                            {(certData.fournituresDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                              <a
+                                key={doc.kind}
+                                href={doc.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="flex-1 bg-white border-2 border-ishes-gold/30 text-[#0F172A] hover:border-ishes-gold hover:bg-ishes-gold/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                              >
+                                <Download className="w-5 h-5 text-ishes-gold" />
+                                Fournitures {doc.label}
+                              </a>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -500,6 +513,41 @@ export default function EleveDashboard() {
                   </Link>
                 </div>
               </div>
+
+                {(certData.fournituresDocs || []).length > 0 && (
+                  <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-100 shadow-sm">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-2xl bg-ishes-gold/15 text-ishes-gold flex items-center justify-center shrink-0">
+                          <Download className="w-7 h-7" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 mb-1">Rentrée 2026/2027</p>
+                          <h3 className="text-2xl font-black text-gray-900 tracking-tight">Fournitures scolaires</h3>
+                          <p className="text-sm text-gray-500 font-medium mt-2 max-w-xl">
+                            Liste à prévoir pour {certData.firstName} — première semaine d&apos;octobre.
+                            {childrenData.length > 1 ? " Changez d'élève en haut de page pour voir l'autre liste si besoin." : ""}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+                        {(certData.fournituresDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                          <a
+                            key={doc.kind}
+                            href={doc.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            className="inline-flex items-center justify-center gap-2 bg-[#0F172A] text-white hover:bg-black font-black py-4 px-7 rounded-2xl text-sm uppercase tracking-wider transition-all shadow-lg"
+                          >
+                            <Download className="w-4 h-4" />
+                            {doc.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </motion.div>
             )}
 

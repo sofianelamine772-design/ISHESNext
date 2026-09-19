@@ -121,7 +121,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 xl:hidden"
               onClick={() => setMobileOpen(false)}
             />
 
@@ -131,7 +131,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="fixed top-20 left-0 right-0 z-50 lg:hidden mx-3"
+              className="fixed top-20 left-0 right-0 z-50 xl:hidden mx-3"
             >
               <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-100px)]">
                 <div className="overflow-y-auto flex-1">

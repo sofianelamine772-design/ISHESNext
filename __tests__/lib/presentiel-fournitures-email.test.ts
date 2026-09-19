@@ -3,6 +3,7 @@ import {
   buildPresentielFournituresEmail,
   collectCheckoutClassRefs,
   getFournituresKindsToSend,
+  getFournituresPublicDocs,
   resolveFournituresPdfPath,
   resolvePresentielExternalId,
 } from '@/lib/presentiel-fournitures-email';
@@ -36,6 +37,16 @@ describe('Mail automatique des fournitures présentiel enfants', () => {
     expect(getFournituresKindsToSend([CLASS_ID_TO_UUID[24]])).toEqual([]);
     expect(getFournituresKindsToSend([])).toEqual([]);
     expect(resolvePresentielExternalId('uuid-inconnu')).toBeNull();
+  });
+
+  it('expose le PDF public selon la classe (espace élève)', () => {
+    expect(getFournituresPublicDocs([5])).toEqual([
+      { kind: 'prepa', label: 'Préparatoire 1re et 2e année', href: '/fournitures/Fournitures_preparatoire_1re_et_2e_annee_2026-2027.pdf' },
+    ]);
+    expect(getFournituresPublicDocs([CLASS_ID_TO_UUID[12]])).toEqual([
+      { kind: 'elem', label: 'Élémentaire', href: '/fournitures/Fournitures_scolaires_elementaire_2026-2027.pdf' },
+    ]);
+    expect(getFournituresPublicDocs([24, 25, null])).toEqual([]);
   });
 
   it('contient le niveau et trouve les PDF sur disque', () => {

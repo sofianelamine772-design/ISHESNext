@@ -17,11 +17,18 @@ import {
 } from './presentiel-fournitures-email';
 export { isPresentielFormationSlug, shouldSendPresentielRentreeEmail } from './presentiel-rentree-email';
 
-// Configuration SMTP facultative (Gmail, etc.)
-const smtpUser = process.env.SMTP_USER;
+// Envoi SMTP via Gmail (compte dédié : ishesmaill@gmail.com).
+const SMTP_SENDER_EMAIL = 'ishesmaill@gmail.com';
+const smtpUser = process.env.SMTP_USER || SMTP_SENDER_EMAIL;
 const smtpPass = process.env.SMTP_PASS;
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
 const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
+/** From affiché — doit correspondre au compte SMTP Gmail (ishesmaill@gmail.com). */
+const smtpFrom =
+  process.env.SMTP_FROM ||
+  process.env.EMAIL_FROM ||
+  `"ISHES" <${smtpUser}>`;
+const smtpReplyTo = process.env.SMTP_REPLY_TO || smtpUser || SMTP_SENDER_EMAIL;
 
 let transporter: any = null;
 if (smtpUser && smtpPass) {
@@ -57,6 +64,22 @@ export function getAdminNotificationEmails(): string[] {
 function isTransientSmtpError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error || '');
   return /421|4\.3\.0|Temporary System Problem|try again later/i.test(message);
+}
+
+export function getAppBaseUrl() {
+  return (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+}
+
+/** Lien « Répondre » des e-mails de messagerie → conversation dans l’app. */
+export function getMessageReplyUrl(role: 'student' | 'admin', chatId?: string | null) {
+  const base = getAppBaseUrl();
+  if (role === 'admin') {
+    const id = chatId ? encodeURIComponent(chatId) : '';
+    return id
+      ? `${base}/app/admin/communication?chat=${id}`
+      : `${base}/app/admin/communication`;
+  }
+  return `${base}/app/eleve/messagerie?reply=1`;
 }
 
 interface SendEmailParams {
@@ -127,19 +150,20 @@ export async function sendEmail({ to, subject, html, text, from, replyTo, attach
       return { success: false, error: "SMTP non configuré" };
     }
 
+    const unsubscribeMailto = smtpReplyTo || smtpUser || SMTP_SENDER_EMAIL;
+    const unsubscribeUrl = `${getAppBaseUrl()}/contact?unsubscribe=1`;
     const mailOptions = {
-      from: from || `"ISHES" <${smtpUser}>`,
+      from: from || smtpFrom,
       to: Array.isArray(to) ? to.join(', ') : to,
-      replyTo: replyTo || smtpUser,
+      replyTo: replyTo || smtpReplyTo,
       subject,
       html,
       text: textFallback,
       attachments: attachments,
+      // Éviter X-Priority "Highest" / X-Mailer "Nodemailer" : signaux spam fréquents.
       headers: {
-        'X-Priority': '1 (Highest)',
-        'X-Mailer': 'Nodemailer',
-        'List-Unsubscribe': `<mailto:${smtpUser}?subject=unsubscribe>`,
-      }
+        'List-Unsubscribe': `<${unsubscribeUrl}>, <mailto:${unsubscribeMailto}?subject=unsubscribe>`,
+      },
     };
 
     let info;
@@ -170,7 +194,7 @@ export async function sendEmail({ to, subject, html, text, from, replyTo, attach
 
 const emailHeader = `
 <div style="background-color: #ffffff; padding: 30px; text-align: center; border-radius: 16px 16px 0 0; border-bottom: 3px solid #C69C6D;">
-  <img src="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishes-toulouse.fr'}/logo.png" alt="ISHES" style="height: 60px; object-fit: contain;" />
+  <img src="${getAppBaseUrl()}/logo.png" alt="ISHES" style="height: 60px; object-fit: contain;" />
 </div>
 `;
 
@@ -322,8 +346,11 @@ export async function sendNewMessageEmail({
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app" style="${buttonStyle}">Consulter mon espace</a>
+          <a href="${getMessageReplyUrl('student')}" style="${buttonStyle}">Répondre dans ISHEECOLE</a>
         </div>
+        <p style="color: #888; font-size: 13px; text-align: center; line-height: 1.5;">
+          Cliquez sur le bouton pour ouvrir la conversation et répondre directement à l'administration.
+        </p>
       </div>
       ${emailFooter}
     </div>
@@ -514,12 +541,15 @@ export async function sendAdminNewMessageEmail({
   studentName,
   studentEmail,
   messageContent,
+  chatId,
 }: {
   studentName: string;
   studentEmail: string;
   messageContent: string;
+  chatId?: string | null;
 }) {
   const processedContent = messageContent.replace(/\n/g, '<br />');
+  const replyUrl = getMessageReplyUrl('admin', chatId);
 
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -530,14 +560,17 @@ export async function sendAdminNewMessageEmail({
           Bonjour Administrateur,
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Vous avez reçu un nouveau message de la part de l'élève <strong>${studentName}</strong> (Email : ${studentEmail}).
+          Vous avez reçu un nouveau message de la part de <strong>${studentName}</strong>${studentEmail ? ` (${studentEmail})` : ''}.
         </p>
         <div style="background-color: #f9f9f9; border-left: 4px solid #0a192f; padding: 20px; margin: 20px 0; border-radius: 8px; color: #333; font-size: 15px; line-height: 1.6; font-family: Georgia, serif; font-style: ;">
           ${processedContent}
         </div>
         <div style="text-align: center; margin: 35px 0;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app/admin/etudiants" style="${buttonStyle}">Consulter le panneau admin</a>
+          <a href="${replyUrl}" style="${buttonStyle}">Répondre dans ISHEECOLE</a>
         </div>
+        <p style="color: #888; font-size: 13px; text-align: center; line-height: 1.5;">
+          Cliquez sur le bouton pour ouvrir la conversation avec ${studentName} et lui répondre.
+        </p>
       </div>
       ${emailFooter}
     </div>
@@ -551,6 +584,17 @@ export async function sendAdminNewMessageEmail({
   });
 }
 
+function formatBackupEuro(amount?: number) {
+  return `${(amount ?? 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+}
+
+function backupCollectionRate(collected?: number, expected?: number) {
+  const c = collected ?? 0;
+  const e = expected ?? 0;
+  if (e <= 0) return '—';
+  return `${Math.round((c / e) * 100)} %`;
+}
+
 export async function sendBackupReportEmail(params: {
   date: string;
   signedUrl: string;
@@ -559,6 +603,8 @@ export async function sendBackupReportEmail(params: {
   signedUrlCsvPresentiel?: string;
   stats: {
     etudiants: number;
+    etudiantsDistance?: number;
+    etudiantsPresentiel?: number;
     inscriptions: number;
     paiements: number;
     classes: number;
@@ -566,8 +612,10 @@ export async function sendBackupReportEmail(params: {
     newStudents24h?: number;
     totalCollectedDistance?: number;
     totalRemainingDistance?: number;
+    totalExpectedDistance?: number;
     totalCollectedPresentiel?: number;
     totalRemainingPresentiel?: number;
+    totalExpectedPresentiel?: number;
     abandonedCheckouts24h?: number;
   };
   backupJsonString?: string;
@@ -577,88 +625,123 @@ export async function sendBackupReportEmail(params: {
 }) {
   const { date, signedUrl, signedUrlSql, signedUrlCsvDistance, signedUrlCsvPresentiel, stats, backupJsonString, backupSqlString, backupCsvStringDistance, backupCsvStringPresentiel } = params;
 
+  const etudiantsDistance = stats.etudiantsDistance ?? 0;
+  const etudiantsPresentiel = stats.etudiantsPresentiel ?? 0;
+  const totalCollected = (stats.totalCollectedDistance ?? 0) + (stats.totalCollectedPresentiel ?? 0);
+  const totalRemaining = (stats.totalRemainingDistance ?? 0) + (stats.totalRemainingPresentiel ?? 0);
+  const totalExpected =
+    (stats.totalExpectedDistance ?? ((stats.totalCollectedDistance ?? 0) + (stats.totalRemainingDistance ?? 0))) +
+    (stats.totalExpectedPresentiel ?? ((stats.totalCollectedPresentiel ?? 0) + (stats.totalRemainingPresentiel ?? 0)));
+
   const html = `
-    <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="max-width: 640px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #0a192f; margin-top: 0; font-size: 20px;">📦 Sauvegarde de base de données réussie !</h2>
-        <p style="color: #555; line-height: 1.6; font-size: 15px;">
-          Bonjour Administrateur,
-        </p>
-        <p style="color: #555; line-height: 1.6; font-size: 15px;">
-          La sauvegarde automatique de la base de données ISHES a été effectuée avec succès le <strong>${date}</strong>.
+        <h2 style="color: #0a192f; margin-top: 0; font-size: 20px;">Sauvegarde ISHES — ${date}</h2>
+        <p style="color: #555; line-height: 1.6; font-size: 15px; margin: 0 0 8px;">
+          Sauvegarde automatique OK. Ci-dessous : vue utile séparée <strong>distanciel</strong> / <strong>présentiel</strong> (élèves réels uniquement, hors comptes test).
         </p>
 
-        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">📊 Statistiques des données sauvegardées :</h3>
-        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px;">
+        <h3 style="color: #0a192f; font-size: 15px; margin: 28px 0 10px; border-bottom: 2px solid #086b51; padding-bottom: 6px;">Distanciel</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 0 8px; font-size: 14px;">
+          <tr style="background-color: #f0faf6;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Élèves</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${etudiantsDistance}</td>
+          </tr>
+          <tr>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Montant attendu</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalExpectedDistance ?? ((stats.totalCollectedDistance ?? 0) + (stats.totalRemainingDistance ?? 0)))}</td>
+          </tr>
           <tr style="background-color: #f9f9f9;">
-            <th style="text-align: left; padding: 8px; border: 1px solid #eaeaea; color: #555;">Table</th>
-            <th style="text-align: right; padding: 8px; border: 1px solid #eaeaea; color: #555;">Nombre d'enregistrements</th>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${formatBackupEuro(stats.totalCollectedDistance)}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Élèves (etudiants)</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.etudiants}</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Reste à encaisser</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #b45309;">${formatBackupEuro(stats.totalRemainingDistance)}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Taux d'encaissement</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${backupCollectionRate(stats.totalCollectedDistance, stats.totalExpectedDistance ?? ((stats.totalCollectedDistance ?? 0) + (stats.totalRemainingDistance ?? 0)))}</td>
+          </tr>
+        </table>
+        <p style="margin: 0 0 18px; font-size: 12px; color: #777;">Fichier détail : CSV « élèves distance » (joint / lien ci-dessous).</p>
+
+        <h3 style="color: #0a192f; font-size: 15px; margin: 8px 0 10px; border-bottom: 2px solid #d97706; padding-bottom: 6px;">Présentiel</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 0 8px; font-size: 14px;">
+          <tr style="background-color: #fff8ef;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Élèves</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #d97706;">${etudiantsPresentiel}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Inscriptions</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.inscriptions}</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Montant attendu</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalExpectedPresentiel ?? ((stats.totalCollectedPresentiel ?? 0) + (stats.totalRemainingPresentiel ?? 0)))}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${formatBackupEuro(stats.totalCollectedPresentiel)}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Paiements</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.paiements}</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Reste à encaisser</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #b45309;">${formatBackupEuro(stats.totalRemainingPresentiel)}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Taux d'encaissement</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${backupCollectionRate(stats.totalCollectedPresentiel, stats.totalExpectedPresentiel ?? ((stats.totalCollectedPresentiel ?? 0) + (stats.totalRemainingPresentiel ?? 0)))}</td>
+          </tr>
+        </table>
+        <p style="margin: 0 0 18px; font-size: 12px; color: #777;">Fichier détail : CSV « élèves présentiel » (joint / lien ci-dessous).</p>
+
+        <h3 style="color: #333; font-size: 15px; margin: 8px 0 10px; border-bottom: 1px solid #eaeaea; padding-bottom: 6px;">Synthèse globale</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 14px;">
+          <tr style="background-color: #f4f6f8;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Élèves (total)</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.etudiants} <span style="font-weight: normal; color: #777; font-size: 12px;">(${etudiantsDistance} dist. + ${etudiantsPresentiel} prés.)</span></td>
           </tr>
           <tr>
-            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Classes</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.classes}</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Attendu / encaissé / reste</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f; font-size: 13px;">${formatBackupEuro(totalExpected)} · ${formatBackupEuro(totalCollected)} · <strong style="color:#b45309;">${formatBackupEuro(totalRemaining)}</strong></td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Taux global</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${backupCollectionRate(totalCollected, totalExpected)}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #333;">Messages (Messagerie)</td>
-            <td style="text-align: right; padding: 8px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.messages}</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Inscriptions · Paiements · Classes · Messages</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${stats.inscriptions} · ${stats.paiements} · ${stats.classes} · ${stats.messages}</td>
           </tr>
         </table>
 
-        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">📈 Activité des dernières 24h :</h3>
-        <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
-          <li><strong>Nouveaux inscrits :</strong> ${stats.newStudents24h ?? 0}</li>
-          <li><strong>Paiements abandonnés :</strong> ${stats.abandonedCheckouts24h ?? 0}</li>
+        <h3 style="color: #333; font-size: 15px; margin: 8px 0 10px; border-bottom: 1px solid #eaeaea; padding-bottom: 6px;">Dernières 24 h</h3>
+        <ul style="list-style: none; padding: 0; margin: 0 0 22px; color: #555; font-size: 14px; line-height: 1.8;">
+          <li><strong>Nouveaux élèves :</strong> ${stats.newStudents24h ?? 0}</li>
+          <li><strong>Paiements abandonnés (checkout) :</strong> ${stats.abandonedCheckouts24h ?? 0}</li>
         </ul>
 
-        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">💰 Bilan Financier (Distanciel) :</h3>
-        <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
-          <li><strong>Total encaissé :</strong> ${stats.totalCollectedDistance?.toFixed(2) ?? "0.00"} €</li>
-          <li><strong>Reste à encaisser :</strong> ${stats.totalRemainingDistance?.toFixed(2) ?? "0.00"} €</li>
-        </ul>
-
-        <h3 style="color: #333; font-size: 16px; margin-top: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;">🏫 Bilan Financier (Présentiel) :</h3>
-        <ul style="list-style: none; padding: 0; color: #555; font-size: 15px; line-height: 1.8;">
-          <li><strong>Total encaissé :</strong> ${stats.totalCollectedPresentiel?.toFixed(2) ?? "0.00"} €</li>
-          <li><strong>Reste à encaisser :</strong> ${stats.totalRemainingPresentiel?.toFixed(2) ?? "0.00"} €</li>
-        </ul>
-
-        <div style="background-color: #f4faf8; border-left: 4px solid #0a192f; padding: 15px; margin: 25px 0; border-radius: 8px; color: #0a192f; font-size: 13px; font-weight: 600;">
-          💡 Les fichiers de sauvegarde ont été téléversés de manière sécurisée dans votre bucket privé Supabase Storage (backups).
+        <div style="background-color: #f4faf8; border-left: 4px solid #0a192f; padding: 14px 16px; margin: 0 0 28px; border-radius: 8px; color: #334; font-size: 13px; line-height: 1.5;">
+          Fichiers inchangés côté contenu : JSON + SQL (base complète), CSV distanciel et CSV présentiel séparés. Stockés dans le bucket privé <strong>backups</strong> (Supabase).
         </div>
 
-        <div style="text-align: center; margin: 35px 0;">
-          <div style="margin-bottom: 15px;">
-            <a href="${signedUrl}" style="${buttonStyle}">Télécharger le backup JSON</a>
+        <div style="text-align: center; margin: 0 0 10px;">
+          <div style="margin-bottom: 12px;">
+            <a href="${signedUrl}" style="${buttonStyle}">Backup JSON (complet)</a>
           </div>
           ${signedUrlSql ? `
-          <div>
-            <a href="${signedUrlSql}" style="${buttonStyle} background-color: #1d4ed8;">Télécharger le backup SQL</a>
+          <div style="margin-bottom: 12px;">
+            <a href="${signedUrlSql}" style="${buttonStyle} background-color: #1d4ed8;">Backup SQL (complet)</a>
           </div>
           ` : ''}
           ${signedUrlCsvDistance ? `
-          <div>
-            <a href="${signedUrlCsvDistance}" style="${buttonStyle} background-color: #086b51;">Télécharger les Élèves Distance (CSV)</a>
+          <div style="margin-bottom: 12px;">
+            <a href="${signedUrlCsvDistance}" style="${buttonStyle} background-color: #086b51;">CSV — Élèves distanciel</a>
           </div>
           ` : ''}
           ${signedUrlCsvPresentiel ? `
-          <div>
-            <a href="${signedUrlCsvPresentiel}" style="${buttonStyle} background-color: #d97706;">Télécharger les Élèves Présentiel (CSV)</a>
+          <div style="margin-bottom: 12px;">
+            <a href="${signedUrlCsvPresentiel}" style="${buttonStyle} background-color: #d97706;">CSV — Élèves présentiel</a>
           </div>
           ` : ''}
-          <p style="font-size: 11px; color: #888; margin-top: 15px;">Ces liens sont privés et seront valides pendant 7 jours.</p>
+          <p style="font-size: 11px; color: #888; margin-top: 12px;">Liens privés valables 7 jours. Les mêmes fichiers sont aussi joints à ce mail si la taille le permet.</p>
         </div>
       </div>
       ${emailFooter}
@@ -702,7 +785,7 @@ export async function sendBackupReportEmail(params: {
 
   return sendEmail({
     to: getAdminNotificationEmails(),
-    subject: `📦 Sauvegarde automatique BD - ${date} - ISHES`,
+    subject: `Sauvegarde ISHES — ${date} · Dist. ${etudiantsDistance} · Prés. ${etudiantsPresentiel}`,
     html,
     attachments: attachments.length > 0 ? attachments : undefined,
     meta: { type: 'admin_internal' },

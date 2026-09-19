@@ -10,6 +10,8 @@ import { getCurrentAcademicYear } from "@/lib/utils";
 import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
+import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
+import { pickBillingInscriptions } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -216,12 +218,13 @@ export async function registerStudentAction(formData: {
         }
       }
 
-      // 4. Inscrit l'élève à la classe
+      // 4. Inscrit l'élève à la formation (pas seulement à une classe) pour éviter les doublons distanciel
       const { data: existingIns, error: insFetchError } = await supabaseAdmin
         .from('inscriptions')
         .select('id')
         .eq('etudiant_id', studentId)
-        .eq('class_id', finalClassId)
+        .eq('formation_id', formation!.id)
+        .eq('academic_year', getCurrentAcademicYear())
         .maybeSingle();
 
       if (insFetchError) console.error("Inscription Fetch Error:", insFetchError);
@@ -229,7 +232,10 @@ export async function registerStudentAction(formData: {
       if (existingIns) {
         const { error: insError } = await supabaseAdmin
           .from('inscriptions')
-          .update({ status: 'en_attente' })
+          .update({
+            status: 'en_attente',
+            class_id: finalClassId,
+          })
           .eq('id', existingIns.id);
         if (insError) throw insError;
       } else {
@@ -240,7 +246,8 @@ export async function registerStudentAction(formData: {
             formation_id: formation!.id,
             class_id: finalClassId,
             status: 'en_attente',
-            academic_year: getCurrentAcademicYear()
+            academic_year: getCurrentAcademicYear(),
+            expected_amount: Number(formation!.price) || null,
           });
         if (insError) throw insError;
       }
@@ -467,17 +474,23 @@ export async function assignStudentToClassAction(studentId: string, classId: str
     // 1. On récupère la formation liée à cette classe
     const { data: classe, error: classError } = await supabaseAdmin
       .from('classes')
-      .select('formation_id, name, whatsapp_link')
+      .select('formation_id, name, whatsapp_link, formations (price)')
       .eq('id', classId)
       .single();
 
     if (classError) throw classError;
 
-    // 2. On vérifie s'il y a déjà une inscription en cours
+    const formationPrice = Number((classe as any)?.formations?.price);
+    const expectedAmount = Number.isFinite(formationPrice) && formationPrice > 0 ? formationPrice : undefined;
+    const academicYear = getCurrentAcademicYear();
+
+    // 2. On vérifie s'il y a déjà une inscription pour cette formation / année
     const { data: existing, error: fetchError } = await supabaseAdmin
       .from('inscriptions')
-      .select('id')
+      .select('id, expected_amount')
       .eq('etudiant_id', studentId)
+      .eq('formation_id', classe.formation_id)
+      .eq('academic_year', academicYear)
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -485,14 +498,17 @@ export async function assignStudentToClassAction(studentId: string, classId: str
     if (fetchError) throw fetchError;
 
     if (existing) {
-      // Mise à jour de l'inscription existante
+      const updatePayload: Record<string, unknown> = {
+        class_id: classId,
+        formation_id: classe.formation_id,
+        status: 'actif',
+      };
+      if (existing.expected_amount == null && expectedAmount !== undefined) {
+        updatePayload.expected_amount = expectedAmount;
+      }
       const { error } = await supabaseAdmin
         .from('inscriptions')
-        .update({
-          class_id: classId,
-          formation_id: classe.formation_id,
-          status: 'actif'
-        })
+        .update(updatePayload)
         .eq('id', existing.id);
 
       if (error) throw error;
@@ -505,7 +521,8 @@ export async function assignStudentToClassAction(studentId: string, classId: str
           class_id: classId,
           formation_id: classe.formation_id,
           status: 'actif',
-          academic_year: getCurrentAcademicYear()
+          academic_year: academicYear,
+          ...(expectedAmount !== undefined ? { expected_amount: expectedAmount } : {}),
         });
 
       if (error) throw error;
@@ -664,28 +681,65 @@ export async function createStudentManualAction(data: {
 }) {
   try {
     const status = data.payment_status === 'a_jour' ? 'actif' : 'en_attente';
-    const studentId = `manual_${Date.now()}`;
-    const { data: newStudent, error } = await supabaseAdmin
-      .from('etudiants')
-      .insert({
-        id: studentId,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
-        phone: data.phone,
-        status: status
-      })
-      .select()
-      .single();
+    const firstName = String(data.first_name || '').trim();
+    const lastName = String(data.last_name || '').trim();
+    const email = String(data.email || '').trim().toLowerCase();
+    const baseEmail = (() => {
+      if (!email.includes('@')) return email;
+      const [local, domain] = email.split('@');
+      return `${local.split('+')[0]}@${domain}`;
+    })();
 
-    if (error) throw error;
+    // Évite les doubles saisies : même email + même prénom/nom
+    const { data: existingMatches } = await supabaseAdmin
+      .from('etudiants')
+      .select('id, first_name, last_name, email, phone, status')
+      .eq('email', baseEmail)
+      .limit(50);
+
+    const existing = (existingMatches || []).find((s: any) =>
+      String(s.first_name || '').trim().toLowerCase() === firstName.toLowerCase() &&
+      String(s.last_name || '').trim().toLowerCase() === lastName.toLowerCase()
+    );
+
+    let newStudent = existing || null;
+
+    if (existing) {
+      const { data: updated, error: updateError } = await supabaseAdmin
+        .from('etudiants')
+        .update({
+          phone: data.phone || existing.phone,
+          status: data.payment_status === 'a_jour' ? 'actif' : existing.status,
+        })
+        .eq('id', existing.id)
+        .select()
+        .single();
+      if (updateError) throw updateError;
+      newStudent = updated;
+    } else {
+      const studentId = `manual_${Date.now()}`;
+      const { data: created, error } = await supabaseAdmin
+        .from('etudiants')
+        .insert({
+          id: studentId,
+          first_name: firstName,
+          last_name: lastName,
+          email: baseEmail,
+          phone: data.phone,
+          status: status
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      newStudent = created;
+    }
 
     // Si paiement manuel effectué, on l'enregistre dans 'paiements'
-    if (data.payment_status === 'a_jour') {
+    if (data.payment_status === 'a_jour' && newStudent?.id) {
       const amount = parseFloat(data.amount_paid || '150') || 150;
       const methodLabel = data.payment_method === 'liquide' ? 'Liquide' : 'Virement';
       await supabaseAdmin.from('paiements').insert({
-        etudiant_id: studentId,
+        etudiant_id: newStudent.id,
         stripe_session_id: `manual_${data.payment_method || 'virement'}_${Date.now()}`,
         amount: amount,
         currency: 'EUR',
@@ -695,25 +749,25 @@ export async function createStudentManualAction(data: {
     }
 
     // Exécution en parallèle de l'email et de l'invitation Clerk pour gagner du temps
-    const emailPromise = sendWelcomeEmail(data.email, data.first_name || 'Élève')
+    const emailPromise = sendWelcomeEmail(baseEmail || data.email, firstName || 'Élève')
       .catch(mailErr => console.error("Failed to send welcome email:", mailErr));
 
     const clerkPromise = clerkClient().then(client => {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
       return client.invitations.createInvitation({
-        emailAddress: data.email,
+        emailAddress: baseEmail || data.email,
         publicMetadata: { role: 'etudiant' },
         ignoreExisting: true,
         notify: true,
         redirectUrl: clerkInviteRedirectUrl(appUrl)
       });
-    }).then(() => console.log(`Clerk invitation sent to ${data.email}`))
+    }).then(() => console.log(`Clerk invitation sent to ${baseEmail || data.email}`))
       .catch(clerkErr => console.error("Failed to create Clerk invitation:", clerkErr));
 
     // On attend les deux tâches en même temps plutôt que l'une après l'autre
     await Promise.all([emailPromise, clerkPromise]);
 
-    return { success: true, data: newStudent };
+    return { success: true, data: newStudent, reused: Boolean(existing) };
   } catch (err) {
     console.error("Manual Student Creation Error:", err);
     return { success: false, error: "Failed to create student profile" };
@@ -1388,7 +1442,7 @@ export async function fetchStudentCertificateDataAction(profile: {
         paid_status,
         created_at,
         formations (title),
-        classes (name, type, whatsapp_link)
+        classes (id, name, type, whatsapp_link, external_id)
       `)
       .in('etudiant_id', familyIds)
       .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation'])
@@ -1405,11 +1459,16 @@ export async function fetchStudentCertificateDataAction(profile: {
         const latestInscription = memberInscriptions[0];
         if (!latestInscription) return null;
 
+        const classRow = latestInscription.classes as any;
         const className = latestInscription.status === 'en_attente_daffectation'
           ? "En attente d'affectation"
           : latestInscription.status === 'en_attente'
             ? 'En attente de validation'
-            : ((latestInscription.classes as any)?.name || 'Session Standard');
+            : (classRow?.name || 'Session Standard');
+        const classRefs = memberInscriptions.flatMap((inscription: any) => {
+          const row = inscription.classes as { external_id?: number | string | null; id?: string | null } | null;
+          return [row?.external_id, row?.id];
+        });
 
         return {
           id: member.id,
@@ -1421,9 +1480,10 @@ export async function fetchStudentCertificateDataAction(profile: {
           inscriptionDate: latestInscription.created_at,
           formationTitle: (latestInscription.formations as any)?.title || 'FORMATION ISHES',
           className,
-          classType: (latestInscription.classes as any)?.type || 'distanciel',
-          whatsappLink: (latestInscription.classes as any)?.whatsapp_link || null,
+          classType: classRow?.type || 'distanciel',
+          whatsappLink: classRow?.whatsapp_link || null,
           status: latestInscription.status,
+          fournituresDocs: getFournituresPublicDocs(classRefs),
         };
       })
       .filter(Boolean);
@@ -1616,6 +1676,8 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       .select(`
         id,
         etudiant_id,
+        formation_id,
+        academic_year,
         status,
         paid_status,
         created_at,
@@ -1624,7 +1686,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         classes (name, type)
       `)
       .in('etudiant_id', familyIds)
-      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation', 'termine']);
+      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
 
     const { data: payments } = await supabaseAdmin
       .from('paiements')
@@ -1646,8 +1708,13 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       return true;
     });
 
+    const billingInscriptions = pickBillingInscriptions(inscriptions || [], (etudiantId) => {
+      const student = (familyStudents || []).find((f: any) => f.id === etudiantId);
+      return { firstName: student?.first_name, lastName: student?.last_name };
+    });
+
     let total_expected = 0;
-    const enrichedInscriptions = (inscriptions || []).map((ins: any) => {
+    const enrichedInscriptions = billingInscriptions.map((ins: any) => {
       const fallbackPrice = ins.formations?.price ? Number(ins.formations.price) : 0;
       const expected = ins.expected_amount !== null && ins.expected_amount !== undefined
         ? Number(ins.expected_amount)
@@ -1665,7 +1732,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         className: ins.classes?.name || '',
         classType: ins.classes?.type || 'distanciel',
         studentName: (() => {
-          const student = (familyStudents || []).find(f => f.id === ins.etudiant_id);
+          const student = (familyStudents || []).find((f: any) => f.id === ins.etudiant_id);
           return student ? `${student.first_name || ''} ${student.last_name || ''}`.trim() : 'Élève';
         })()
       };
@@ -1848,6 +1915,7 @@ export async function fetchManualBalancesAction() {
         id, first_name, last_name, email, phone, status,
         paiements (id, amount, stripe_session_id, status, created_at, error_message),
         inscriptions (
+          id, status, paid_status, expected_amount, academic_year, created_at, formation_id,
           formations (id, title, price, type),
           classes (name)
         )
@@ -1862,7 +1930,24 @@ export async function fetchManualBalancesAction() {
       
       if (!isManualCreated && !hasManualPayments) return null;
 
-      const totalDue = s.inscriptions?.reduce((acc: number, ins: any) => acc + (ins.formations?.price || 0), 0) || 0;
+      const billingInscriptions = pickBillingInscriptions(
+        (s.inscriptions || []).map((ins: any) => ({
+          ...ins,
+          etudiant_id: s.id,
+          formation_id: ins.formations?.id || ins.formation_id || null,
+          academic_year: ins.academic_year || null,
+          created_at: ins.created_at || null,
+          status: ins.status || 'actif',
+        })),
+        () => ({ firstName: s.first_name, lastName: s.last_name }),
+      );
+
+      const totalDue = billingInscriptions.reduce((acc: number, ins: any) => {
+        const expected = ins.expected_amount != null
+          ? Number(ins.expected_amount)
+          : Number(ins.formations?.price || 0);
+        return acc + (Number.isFinite(expected) ? expected : 0);
+      }, 0);
       const totalPaid = s.paiements
         ?.filter((p: any) => p.status === 'succeeded' || p.status === 'paid' || p.status === 'payé')
         ?.reduce((acc: number, p: any) => acc + (p.amount || 0), 0) || 0;
@@ -1876,9 +1961,9 @@ export async function fetchManualBalancesAction() {
         totalDue,
         totalPaid,
         balance: Math.max(0, totalDue - totalPaid),
-        inscriptions: s.inscriptions?.map((i: any) => ({
+        inscriptions: billingInscriptions.map((i: any) => ({
           title: i.formations?.title,
-          price: i.formations?.price,
+          price: i.expected_amount != null ? Number(i.expected_amount) : i.formations?.price,
           type: i.formations?.type,
           class: i.classes?.name
         })) || [],

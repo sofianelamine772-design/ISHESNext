@@ -208,6 +208,8 @@ export async function GET(request: Request) {
 
     const stats = {
       etudiants: realEtudiants.length, // Only count real students in stats
+      etudiantsDistance: distanceEtudiants.length,
+      etudiantsPresentiel: presentielEtudiants.length,
       inscriptions: backupData.inscriptions.length,
       paiements: backupData.paiements.length,
       classes: backupData.classes.length,
@@ -215,8 +217,10 @@ export async function GET(request: Request) {
       newStudents24h,
       totalCollectedDistance,
       totalRemainingDistance,
+      totalExpectedDistance,
       totalCollectedPresentiel,
       totalRemainingPresentiel,
+      totalExpectedPresentiel,
       abandonedCheckouts24h,
     };
 

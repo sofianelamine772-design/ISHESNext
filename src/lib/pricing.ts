@@ -30,3 +30,65 @@ export function getExpectedAmountForChild(
   if (childrenCount < 2 || childIndex === 0) return basePrice;
   return Math.max(0, basePrice - SIBLING_DISCOUNT_EUR);
 }
+
+const ACTIVE_BILLING_STATUSES = new Set([
+  'valide',
+  'actif',
+  'en_attente',
+  'en_attente_daffectation',
+]);
+
+export function normalizeBillingPersonKey(
+  firstName?: string | null,
+  lastName?: string | null,
+): string {
+  const norm = (value: string) =>
+    value
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  return `${norm(firstName || '')}|${norm(lastName || '')}`;
+}
+
+/**
+ * Évite de compter deux fois le même élève/formation (doublons de saisie admin).
+ * Garde l'inscription la plus récente pour chaque couple personne + formation + année.
+ */
+export function pickBillingInscriptions<
+  T extends {
+    id: string;
+    etudiant_id: string;
+    formation_id?: string | null;
+    academic_year?: string | null;
+    created_at?: string | null;
+    status?: string | null;
+  },
+>(
+  inscriptions: T[],
+  getStudentName: (etudiantId: string) => { firstName?: string | null; lastName?: string | null },
+): T[] {
+  const filtered = (inscriptions || []).filter((ins) =>
+    ACTIVE_BILLING_STATUSES.has(String(ins.status || '')),
+  );
+  const sorted = [...filtered].sort(
+    (a, b) =>
+      new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime(),
+  );
+
+  const seen = new Set<string>();
+  const result: T[] = [];
+  for (const ins of sorted) {
+    const names = getStudentName(ins.etudiant_id);
+    const personKey = normalizeBillingPersonKey(names.firstName, names.lastName);
+    const formationKey = String(ins.formation_id || '');
+    const yearKey = String(ins.academic_year || '');
+    const byPerson = `${personKey}|${formationKey}|${yearKey}`;
+    const byId = `${ins.etudiant_id}|${formationKey}|${yearKey}`;
+    if (seen.has(byPerson) || seen.has(byId)) continue;
+    seen.add(byPerson);
+    seen.add(byId);
+    result.push(ins);
+  }
+  return result;
+}

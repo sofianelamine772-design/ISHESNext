@@ -1,18 +1,22 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { Search, Send, User, Loader2, Megaphone, CheckCheck } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { htmlToPlainText, looksLikeHtml } from "@/lib/email-html";
 
-export default function MessageriePage() {
+function MessageriePageInner() {
   const { user } = useUser();
+  const searchParams = useSearchParams();
+  const shouldFocusReply = searchParams?.get("reply") === "1";
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const replyInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user) fetchData();
@@ -22,6 +26,12 @@ export default function MessageriePage() {
     // Auto-scroll vers le bas à chaque nouveau message
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    if (!shouldFocusReply || loading) return;
+    const t = setTimeout(() => replyInputRef.current?.focus(), 200);
+    return () => clearTimeout(t);
+  }, [shouldFocusReply, loading, messages.length]);
 
   async function fetchData() {
     setLoading(true);
@@ -191,6 +201,7 @@ export default function MessageriePage() {
           <div className="p-3 md:p-5 bg-white border-t border-gray-100 shrink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <div className="bg-gray-50 rounded-[1.25rem] md:rounded-[1.5rem] px-2 py-1.5 md:px-3 md:py-2 flex items-center gap-2 border border-gray-100 focus-within:border-ishes-blue/30 focus-within:ring-2 focus-within:ring-[#086b51]/10 transition-all">
               <input 
+                ref={replyInputRef}
                 type="text" 
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
@@ -212,5 +223,17 @@ export default function MessageriePage() {
           </div>
         </div>
     </div>
+  );
+}
+
+export default function MessageriePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-[50vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-ishes-blue" />
+      </div>
+    }>
+      <MessageriePageInner />
+    </Suspense>
   );
 }

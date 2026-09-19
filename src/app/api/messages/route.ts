@@ -40,6 +40,87 @@ if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
 
 type BroadcastRecipient = { email: string; first_name: string; subject?: string; studentId?: string };
 
+function getBaseEmail(email: string): string {
+  if (!email) return '';
+  const [local, domain] = email.toLowerCase().split('@');
+  if (!domain) return email.toLowerCase();
+  return `${local.split('+')[0]}@${domain}`;
+}
+
+/** Résout l'expéditeur d'un message élève → admin (familles = plusieurs lignes même clerk_user_id). */
+async function resolveMessagingSender(clerkId: string): Promise<{
+  studentName: string;
+  studentEmail: string;
+}> {
+  const pickBestName = (
+    rows: Array<{ first_name?: string | null; last_name?: string | null; email?: string | null }>,
+  ) => {
+    const ranked = [...rows].sort((a, b) => {
+      const score = (r: typeof a) =>
+        (r.first_name?.trim() ? 2 : 0) + (r.last_name?.trim() ? 1 : 0);
+      return score(b) - score(a);
+    });
+    return ranked[0] || null;
+  };
+
+  // 1) Profils liés à ce compte Clerk (peut être > 1 pour une famille)
+  const { data: byClerk } = await supabaseAdmin
+    .from('etudiants')
+    .select('first_name, last_name, email')
+    .eq('clerk_user_id', clerkId)
+    .limit(30);
+
+  let clerkEmail = '';
+  let clerkFirst = '';
+  let clerkLast = '';
+  try {
+    const { clerkClient } = await import('@clerk/nextjs/server');
+    const client = await clerkClient();
+    const user = await client.users.getUser(clerkId);
+    clerkFirst = user.firstName || '';
+    clerkLast = user.lastName || '';
+    clerkEmail =
+      user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)?.emailAddress ||
+      user.emailAddresses[0]?.emailAddress ||
+      '';
+  } catch (err) {
+    console.warn('[MESSAGES] Impossible de lire le profil Clerk pour', clerkId, err);
+  }
+
+  // 2) Fallback email (base) si clerk_user_id pas encore lié
+  let byEmail: Array<{ first_name?: string | null; last_name?: string | null; email?: string | null }> = [];
+  const emailForLookup = getBaseEmail(clerkEmail || byClerk?.[0]?.email || '');
+  if (emailForLookup && (!byClerk || byClerk.length === 0)) {
+    const { data } = await supabaseAdmin
+      .from('etudiants')
+      .select('first_name, last_name, email')
+      .eq('email', emailForLookup)
+      .limit(30);
+    byEmail = data || [];
+  }
+
+  const rows = (byClerk && byClerk.length > 0) ? byClerk : byEmail;
+  const best = pickBestName(rows);
+
+  const clerkFullName = `${clerkFirst} ${clerkLast}`.trim();
+  const dbFullName = best
+    ? `${best.first_name || ''} ${best.last_name || ''}`.trim()
+    : '';
+
+  // Le compte parent Clerk est la meilleure source pour « qui a écrit »
+  const studentName = clerkFullName || dbFullName || 'Élève ISHES';
+  const studentEmail =
+    clerkEmail ||
+    best?.email ||
+    rows.find((r) => r.email)?.email ||
+    '';
+
+  return {
+    studentName,
+    studentEmail: studentEmail || 'Email inconnu',
+  };
+}
+
 async function collectBroadcastRecipients(params: {
   type?: string;
   receiver_id?: string;
@@ -172,7 +253,7 @@ async function deliverAdminBroadcast(params: {
           const plain = htmlToPlainText(params.content);
           return plain.length > 50 ? plain.substring(0, 50) + '...' : plain;
         })(),
-        url: params.type === 'private' ? '/app/eleve/messagerie' : '/app/eleve',
+        url: params.type === 'private' ? '/app/eleve/messagerie?reply=1' : '/app/eleve',
       });
       await Promise.all(pushData.map(async (sub) => {
         try {
@@ -322,26 +403,17 @@ export async function POST(req: Request) {
     // Envoi de Notification à l'admin si l'élève écrit
     if (sender_id !== 'admin_system' && receiver_id === 'admin_system') {
       try {
-        // 1. Récupérer les informations de l'élève dans Supabase
-        const { data: student } = await supabaseAdmin
-          .from('etudiants')
-          .select('first_name, last_name, email')
-          .eq('clerk_user_id', sender_id || userId)
-          .maybeSingle();
+        const chatId = sender_id || userId;
+        const { studentName, studentEmail } = await resolveMessagingSender(chatId);
 
-        const studentName = student 
-          ? `${student.first_name || ''} ${student.last_name || ''}`.trim() || 'Élève ISHES'
-          : 'Élève ISHES';
-        const studentEmail = student?.email || 'Non renseigné';
-
-        // 2. Envoyer le mail à l'administrateur
         const { sendAdminNewMessageEmail } = await import('@/lib/mail');
         await sendAdminNewMessageEmail({
           studentName,
           studentEmail,
-          messageContent: content
+          messageContent: content,
+          chatId,
         });
-        console.log(`[MESSAGES_POST] Notification email sent to admin for student: ${studentName}`);
+        console.log(`[MESSAGES_POST] Notification email sent to admin for student: ${studentName} (chat=${chatId})`);
       } catch (err) {
         console.error('[ADMIN_NOTIFY_ERROR]', err);
       }
@@ -405,21 +477,44 @@ export async function GET(req: Request) {
 
       if (studentInfo.size === 0) return NextResponse.json([]);
 
-      const { data: stds, error: stdError } = await supabaseAdmin
-        .from('etudiants')
-        .select('id, first_name, last_name, email')
-        .in('id', Array.from(studentInfo.keys()));
+      const threadIds = Array.from(studentInfo.keys());
+      const [{ data: stdsById, error: stdErrorById }, { data: stdsByClerk, error: stdErrorByClerk }] = await Promise.all([
+        supabaseAdmin
+          .from('etudiants')
+          .select('id, first_name, last_name, email, clerk_user_id')
+          .in('id', threadIds),
+        supabaseAdmin
+          .from('etudiants')
+          .select('id, first_name, last_name, email, clerk_user_id')
+          .in('clerk_user_id', threadIds),
+      ]);
 
-      if (stdError) {
-        console.error('[STUDENTS_ERROR]', stdError);
-        return NextResponse.json({ error: stdError.message }, { status: 500 });
+      if (stdErrorById || stdErrorByClerk) {
+        console.error('[STUDENTS_ERROR]', stdErrorById || stdErrorByClerk);
+        return NextResponse.json({ error: (stdErrorById || stdErrorByClerk)?.message }, { status: 500 });
       }
 
-      // Attacher les infos et trier (non lus en premier, puis par date)
-      const enrichedStds = (stds || []).map(std => ({
-        ...std,
-        ...studentInfo.get(std.id)
-      })).sort((a, b) => {
+      const byEtudiantId = new Map((stdsById || []).map((s) => [s.id, s]));
+      const byClerkId = new Map(
+        (stdsByClerk || [])
+          .filter((s) => s.clerk_user_id)
+          .map((s) => [s.clerk_user_id as string, s]),
+      );
+
+      // Garder l'id de thread (= sender/receiver des messages) pour ouvrir le bon chat
+      const enrichedStds = threadIds.map((threadId) => {
+        const std = byEtudiantId.get(threadId) || byClerkId.get(threadId);
+        const info = studentInfo.get(threadId)!;
+        return {
+          id: threadId,
+          etudiant_id: std?.id || null,
+          clerk_user_id: std?.clerk_user_id || (threadId.startsWith('user_') ? threadId : null),
+          first_name: std?.first_name || null,
+          last_name: std?.last_name || null,
+          email: std?.email || null,
+          ...info,
+        };
+      }).sort((a, b) => {
         const aHasUnread = (a.unread_count || 0) > 0 || a.has_unread;
         const bHasUnread = (b.unread_count || 0) > 0 || b.has_unread;
         if (aHasUnread && !bHasUnread) return -1;

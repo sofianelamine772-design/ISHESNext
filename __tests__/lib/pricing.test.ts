@@ -3,6 +3,7 @@ import {
   getFamilyCheckoutTotal,
   getNamedChildren,
   getSiblingDiscount,
+  pickBillingInscriptions,
   SIBLING_DISCOUNT_EUR,
 } from '@/lib/pricing';
 
@@ -39,5 +40,79 @@ describe('Réduction fratrie (inscription simultanée)', () => {
       { prenom: 'Sara', nom: 'Benali' },
     ])).toHaveLength(2);
     expect(getNamedChildren(undefined)).toEqual([]);
+  });
+});
+
+describe('Déduplication facturation (doublons de saisie)', () => {
+  it('ne compte qu’une inscription par élève / formation / année', () => {
+    const picked = pickBillingInscriptions(
+      [
+        {
+          id: 'ins_old',
+          etudiant_id: 'stu_1',
+          formation_id: 'form_arabe',
+          academic_year: '2025-2026',
+          status: 'actif',
+          created_at: '2025-09-01T10:00:00Z',
+        },
+        {
+          id: 'ins_new',
+          etudiant_id: 'stu_1_bis',
+          formation_id: 'form_arabe',
+          academic_year: '2025-2026',
+          status: 'actif',
+          created_at: '2025-09-10T10:00:00Z',
+        },
+      ],
+      (id) =>
+        id === 'stu_1' || id === 'stu_1_bis'
+          ? { firstName: 'Amina', lastName: 'Benali' }
+          : { firstName: '', lastName: '' },
+    );
+
+    expect(picked).toHaveLength(1);
+    expect(picked[0].id).toBe('ins_new');
+  });
+
+  it('conserve deux formations différentes pour le même élève', () => {
+    const picked = pickBillingInscriptions(
+      [
+        {
+          id: 'ins_a',
+          etudiant_id: 'stu_1',
+          formation_id: 'form_arabe',
+          academic_year: '2025-2026',
+          status: 'actif',
+          created_at: '2025-09-01T10:00:00Z',
+        },
+        {
+          id: 'ins_b',
+          etudiant_id: 'stu_1',
+          formation_id: 'form_tajwid',
+          academic_year: '2025-2026',
+          status: 'actif',
+          created_at: '2025-09-02T10:00:00Z',
+        },
+      ],
+      () => ({ firstName: 'Amina', lastName: 'Benali' }),
+    );
+    expect(picked).toHaveLength(2);
+  });
+
+  it('ignore les inscriptions terminées', () => {
+    const picked = pickBillingInscriptions(
+      [
+        {
+          id: 'ins_done',
+          etudiant_id: 'stu_1',
+          formation_id: 'form_arabe',
+          academic_year: '2024-2025',
+          status: 'termine',
+          created_at: '2024-09-01T10:00:00Z',
+        },
+      ],
+      () => ({ firstName: 'Amina', lastName: 'Benali' }),
+    );
+    expect(picked).toHaveLength(0);
   });
 });
