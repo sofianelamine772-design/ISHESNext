@@ -68,9 +68,28 @@ export function getFournituresKindsFromExternalIds(ids: number[]): FournituresKi
   return Array.from(kinds);
 }
 
+/** Déduit prépa / élémentaire depuis le nom de classe ou de formation (si external_id manquant). */
+export function inferFournituresKindFromLabel(label?: string | null): FournituresKind | null {
+  const raw = (label || '').toLowerCase();
+  if (!raw.trim()) return null;
+  const t = raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (t.includes('femme') || t.includes('adulte')) return null;
+  if (t.includes('prepa') || t.includes('preparatoire')) return 'prepa';
+  if (t.includes('elem') || t.includes('elementaire')) return 'elem';
+  return null;
+}
+
 /** Présentiel enfants seulement (classes 1–23). Femmes 24–25 et distanciel : rien. */
-export function getFournituresKindsToSend(classRefs: string[] = []): FournituresKind[] {
-  return getFournituresKindsFromExternalIds(resolvePresentielExternalIds(classRefs));
+export function getFournituresKindsToSend(
+  classRefs: string[] = [],
+  labels: Array<string | null | undefined> = [],
+): FournituresKind[] {
+  const kinds = new Set<FournituresKind>(getFournituresKindsFromExternalIds(resolvePresentielExternalIds(classRefs)));
+  for (const label of labels) {
+    const inferred = inferFournituresKindFromLabel(label);
+    if (inferred) kinds.add(inferred);
+  }
+  return Array.from(kinds);
 }
 
 export type FournituresPublicDoc = {
@@ -81,11 +100,13 @@ export type FournituresPublicDoc = {
 
 export function getFournituresPublicDocs(
   classRefs: Array<string | number | null | undefined> = [],
+  labels: Array<string | null | undefined> = [],
 ): FournituresPublicDoc[] {
   const kinds = getFournituresKindsToSend(
     classRefs
       .filter((ref): ref is string | number => ref != null && String(ref).trim() !== "")
       .map(String),
+    labels,
   );
   return kinds.map((kind) => ({
     kind,

@@ -49,6 +49,16 @@ describe('Mail automatique des fournitures présentiel enfants', () => {
     expect(getFournituresPublicDocs([24, 25, null])).toEqual([]);
   });
 
+  it('déduit le PDF depuis le nom de classe si external_id manque', () => {
+    expect(getFournituresPublicDocs([], ['Préparatoire 1 – Samedi'])).toEqual([
+      { kind: 'prepa', label: 'Préparatoire 1re et 2e année', href: '/fournitures/Fournitures_preparatoire_1re_et_2e_annee_2026-2027.pdf' },
+    ]);
+    expect(getFournituresPublicDocs([], ['Élémentaire Débutant 1'])).toEqual([
+      { kind: 'elem', label: 'Élémentaire', href: '/fournitures/Fournitures_scolaires_elementaire_2026-2027.pdf' },
+    ]);
+    expect(getFournituresPublicDocs([], ['Classe Femmes – Mardi'])).toEqual([]);
+  });
+
   it('contient le niveau et trouve les PDF sur disque', () => {
     const prepa = buildPresentielFournituresEmail({
       kind: 'prepa',

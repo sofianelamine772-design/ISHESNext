@@ -1469,6 +1469,11 @@ export async function fetchStudentCertificateDataAction(profile: {
           const row = inscription.classes as { external_id?: number | string | null; id?: string | null } | null;
           return [row?.external_id, row?.id];
         });
+        const classLabels = memberInscriptions.flatMap((inscription: any) => {
+          const row = inscription.classes as { name?: string | null } | null;
+          const formation = inscription.formations as { title?: string | null } | null;
+          return [row?.name, formation?.title, className];
+        });
 
         return {
           id: member.id,
@@ -1483,7 +1488,7 @@ export async function fetchStudentCertificateDataAction(profile: {
           classType: classRow?.type || 'distanciel',
           whatsappLink: classRow?.whatsapp_link || null,
           status: latestInscription.status,
-          fournituresDocs: getFournituresPublicDocs(classRefs),
+          fournituresDocs: getFournituresPublicDocs(classRefs, classLabels),
         };
       })
       .filter(Boolean);

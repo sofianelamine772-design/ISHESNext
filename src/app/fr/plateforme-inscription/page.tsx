@@ -61,6 +61,7 @@ function InscriptionForm() {
   const [showAdultHoraireError, setShowAdultHoraireError] = useState(false);
   const [showChildNiveauError, setShowChildNiveauError] = useState<{ [key: number]: boolean }>({});
   const [showAdultNiveauError, setShowAdultNiveauError] = useState(false);
+  const [showHorairePopup, setShowHorairePopup] = useState(false);
   const [showDisabledSlotWarning, setShowDisabledSlotWarning] = useState(false);
 
   useEffect(() => {
@@ -156,6 +157,48 @@ function InscriptionForm() {
   };
 
   const namedChildren = registrationType === 'child' ? getNamedChildren(childrenList) : [];
+
+  const step1BlockReason = (() => {
+    if (registrationType === 'child') {
+      if (!formData.parentPrenom?.trim() || !formData.parentNom?.trim()) {
+        return "Indiquez le prénom et le nom du représentant.";
+      }
+      const incompleteChild = childrenList.find((c) => {
+        const hasIdentity = Boolean(c.prenom?.trim() && c.nom?.trim());
+        if (!hasIdentity) return false;
+        if (planId === 'presentiel-global' && !c.classId) return true;
+        if (planId !== 'presentiel-global' && !c.niveau) return true;
+        return false;
+      });
+      if (incompleteChild) {
+        if (planId === 'presentiel-global') {
+          return "Choisissez l'horaire disponible (matin / après-midi) pour chaque enfant — le niveau seul ne suffit pas.";
+        }
+        return "Sélectionnez le niveau pour chaque enfant.";
+      }
+      if (childrenList.some((c) => !c.prenom?.trim() || !c.nom?.trim())) {
+        return "Renseignez le prénom et le nom de chaque enfant.";
+      }
+    } else {
+      if (!formData.prenom?.trim() || !formData.nom?.trim()) {
+        return "Indiquez votre prénom et votre nom.";
+      }
+      if (planId === 'presentiel-global' && !formData.classId) {
+        return "Choisissez votre horaire disponible pour continuer.";
+      }
+      if (planId !== 'presentiel-global' && !formData.niveau) {
+        return "Sélectionnez votre niveau pour continuer.";
+      }
+    }
+    if (!formData.email?.trim()) {
+      return "Indiquez une adresse e-mail valide.";
+    }
+    if (!formData.telephone || !isPossiblePhoneNumber(formData.telephone)) {
+      return "Indiquez un numéro de téléphone mobile complet (ex. 06 XX XX XX XX).";
+    }
+    return null;
+  })();
+  const isStep1ContinueDisabled = Boolean(step1BlockReason);
 
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
@@ -277,6 +320,9 @@ function InscriptionForm() {
             } else {
               child.classId = "";
               child.horaire = "";
+              if (openClasses.length > 1) {
+                queueMicrotask(() => setShowHorairePopup(true));
+              }
             }
           }
         } else if (field === 'classId') {
@@ -285,6 +331,7 @@ function InscriptionForm() {
             if (matchingClass) {
               child.classId = value;
               child.horaire = matchingClass.horaire;
+              queueMicrotask(() => setShowHorairePopup(false));
             } else {
               child.classId = "";
               child.horaire = "";
@@ -872,9 +919,17 @@ function InscriptionForm() {
                               </div>
 
                               {/* Horaire select */}
-                              <div className="space-y-2 relative">
+                              <div className={cn(
+                                "space-y-2 relative rounded-2xl transition-all",
+                                child.niveau && !child.classId && "ring-2 ring-amber-400 ring-offset-2 bg-amber-50/40 p-3 -m-1",
+                              )}>
                                 <label className="text-[11px] font-bold tracking-widest text-gray-500 flex items-center gap-2 uppercase">
                                   <span>⏰</span> Horaire disponible *
+                                  {child.niveau && !child.classId && (
+                                    <span className="normal-case tracking-normal text-amber-700 font-black text-[10px]">
+                                      — à choisir pour continuer
+                                    </span>
+                                  )}
                                 </label>
                                 <div className="relative">
                                   <PresentielHorairePicker
@@ -894,6 +949,11 @@ function InscriptionForm() {
                                 </div>
                                 {showChildHoraireError[index] && !child.niveau && (
                                   <p className="text-red-500 text-[10px] mt-1 animate-pulse font-medium">Veuillez d'abord sélectionner le niveau de l'élève.</p>
+                                )}
+                                {child.niveau && !child.classId && (
+                                  <p className="text-amber-800 text-xs mt-1 font-semibold">
+                                    Sélectionnez Matin ou Après-midi pour débloquer le bouton Continuer.
+                                  </p>
                                 )}
                               </div>
                             </div>
@@ -1170,33 +1230,22 @@ function InscriptionForm() {
                 </div>
 
                 {/* Submit Button */}
+                {step1BlockReason && (
+                  <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 font-medium leading-relaxed">
+                    {step1BlockReason}
+                  </div>
+                )}
                 <button
-                  onClick={nextStep}
-                  disabled={
-                    !formData.email ||
-                    (registrationType === 'child'
-                      ? (
-                        !formData.parentPrenom ||
-                        !formData.parentNom ||
-                        childrenList.some(c =>
-                          !c.prenom ||
-                          !c.nom ||
-                          (planId === 'presentiel-global'
-                            ? !c.classId
-                            : !c.niveau)
-                        )
-                      )
-                      : (
-                        !formData.prenom ||
-                        !formData.nom ||
-                        (planId === 'presentiel-global'
-                          ? !formData.classId
-                          : !formData.niveau)
-                      )
-                    ) ||
-                    !formData.telephone ||
-                    !isPossiblePhoneNumber(formData.telephone)
-                  }
+                  type="button"
+                  onClick={() => {
+                    if (step1BlockReason?.toLowerCase().includes('horaire')) {
+                      setShowHorairePopup(true);
+                      return;
+                    }
+                    if (isStep1ContinueDisabled) return;
+                    nextStep();
+                  }}
+                  disabled={isStep1ContinueDisabled && !step1BlockReason?.toLowerCase().includes('horaire')}
                   className="w-full bg-ishes-blue hover:bg-[#007044] disabled:bg-gray-200 text-white font-bold text-lg py-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   Continuer <ChevronRight className="w-5 h-5" />
@@ -1517,6 +1566,47 @@ function InscriptionForm() {
         </div>
 
       </div>
+
+      <AnimatePresence>
+        {showHorairePopup && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowHorairePopup(false)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="horaire-popup-title"
+              className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-gray-100"
+              initial={{ opacity: 0, scale: 0.92, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 8 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-2xl">
+                ⏰
+              </div>
+              <h3 id="horaire-popup-title" className="text-center text-lg font-black text-[#101828]">
+                N&apos;oubliez pas l&apos;horaire
+              </h3>
+              <p className="mt-2 text-center text-sm font-medium leading-relaxed text-gray-600">
+                Sélectionnez <strong>Matin</strong> ou <strong>Après-midi</strong> dans « Horaire disponible »
+                pour pouvoir continuer.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowHorairePopup(false)}
+                className="mt-6 w-full rounded-xl bg-ishes-blue py-3.5 text-sm font-black uppercase tracking-wider text-white hover:bg-[#007044] transition-colors"
+              >
+                Compris
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
