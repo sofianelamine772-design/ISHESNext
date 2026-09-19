@@ -89,7 +89,7 @@ export async function registerStudentAction(formData: {
     // 2. Récupère ou crée la formation
     let { data: formation, error: fFetchError } = await supabaseAdmin
       .from('formations')
-      .select('id')
+      .select('id, price')
       .eq('slug', formData.planId)
       .maybeSingle();
 

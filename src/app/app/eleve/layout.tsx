@@ -9,7 +9,8 @@ import {
   MessageSquareText, 
   GraduationCap,
   UserPlus,
-  LayoutDashboard
+  LayoutDashboard,
+  Mail,
 } from "lucide-react";
 import { useUser, SignOutButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
@@ -139,6 +140,16 @@ export default function EleveLayout({
         </header>
 
         <div className="p-4 md:p-10 flex-1">
+          <div className="mb-6 flex gap-3 rounded-2xl border border-amber-200/80 bg-amber-50 px-4 py-3.5 text-amber-950 shadow-sm">
+            <Mail className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden />
+            <p className="text-sm leading-relaxed font-medium">
+              <span className="font-black text-amber-900">E-mails de l&apos;institut :</span>{" "}
+              si un message ISHES arrive dans les <strong>spams</strong> (courrier indésirable),
+              ouvrez-le et signalez-le comme <strong>« Non spam »</strong> ou{" "}
+              <strong>« Ce n&apos;est pas un spam »</strong>. Ajoutez aussi l&apos;expéditeur à vos contacts
+              pour bien recevoir les prochains e-mails (fournitures, messages, infos importantes).
+            </p>
+          </div>
           <PushNotificationManager />
           {children}
         </div>

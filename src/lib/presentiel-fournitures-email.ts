@@ -96,13 +96,13 @@ export function getFournituresPublicDocs(
 
 export function resolveFournituresPdfPath(kind: FournituresKind): string | null {
   const dirs = [
-    path.join(process.cwd(), 'public', 'fournitures'),
+    path.join(/*turbopackIgnore: true*/ process.cwd(), 'public', 'fournitures'),
     process.cwd(),
   ];
   for (const dir of dirs) {
     for (const name of FOURNITURES_PDF[kind].diskNames) {
-      const candidate = path.join(dir, name);
-      if (fs.existsSync(candidate)) return candidate;
+      const candidate = path.join(/*turbopackIgnore: true*/ dir, name);
+      if (fs.existsSync(/*turbopackIgnore: true*/ candidate)) return candidate;
     }
   }
   return null;
