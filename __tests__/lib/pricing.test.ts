@@ -5,6 +5,7 @@ import {
   getSiblingDiscount,
   pickBillingInscriptions,
   pickBillingPayments,
+  resolveBillingExpectedAmount,
   sumSucceededBillingPayments,
   SIBLING_DISCOUNT_EUR,
 } from '@/lib/pricing';
@@ -175,7 +176,20 @@ describe('Déduplication facturation (doublons de saisie)', () => {
   });
 });
 
-describe('Déduplication paiements (recréation de profil)', () => {
+describe('resolveBillingExpectedAmount', () => {
+  it('garde une réduction fratrie sous le catalogue', () => {
+    expect(resolveBillingExpectedAmount(430, 480)).toBe(430);
+  });
+
+  it('ignore un expected gonflé (ex: 3× catalogue collé)', () => {
+    expect(resolveBillingExpectedAmount(1197, 399)).toBe(399);
+  });
+
+  it('utilise le catalogue si expected absent', () => {
+    expect(resolveBillingExpectedAmount(null, 399)).toBe(399);
+  });
+});
+
   it('ne garde que le premier checkout cs_ et conserve les mensualités in_', () => {
     const picked = pickBillingPayments(
       [

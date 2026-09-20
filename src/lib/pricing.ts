@@ -31,6 +31,35 @@ export function getExpectedAmountForChild(
   return Math.max(0, basePrice - SIBLING_DISCOUNT_EUR);
 }
 
+/** Supabase renvoie parfois une relation en objet, parfois en tableau. */
+export function unwrapRelation<T>(value: T | T[] | null | undefined): T | null {
+  if (value == null) return null;
+  return Array.isArray(value) ? (value[0] ?? null) : value;
+}
+
+/**
+ * Prix facturé pour une inscription.
+ * Source de vérité = prix catalogue formation. expected_amount seulement s'il est ≤ catalogue
+ * (réduction fratrie). Sinon on ignore un expected gonflé (ex: 1197 = 3×399 après doublons).
+ */
+export function resolveBillingExpectedAmount(
+  expectedAmount: number | null | undefined,
+  formationPrice: number | null | undefined,
+): number {
+  const catalog = Number(formationPrice);
+  const raw =
+    expectedAmount !== null && expectedAmount !== undefined ? Number(expectedAmount) : NaN;
+  const hasCatalog = Number.isFinite(catalog) && catalog > 0;
+  const hasRaw = Number.isFinite(raw) && raw >= 0;
+
+  if (hasCatalog && hasRaw) {
+    return raw <= catalog + 0.01 ? raw : catalog;
+  }
+  if (hasCatalog) return catalog;
+  if (hasRaw) return raw;
+  return 0;
+}
+
 const ACTIVE_BILLING_STATUSES = new Set([
   'valide',
   'actif',
@@ -87,7 +116,11 @@ export function pickBillingInscriptions<
       .trim()
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\b(session|cours|formation|the)\b/g, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
   const normalizeEmail = (email?: string | null) =>
     String(email || '')

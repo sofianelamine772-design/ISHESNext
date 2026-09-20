@@ -11,7 +11,7 @@ import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursL
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
-import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments } from "@/lib/pricing";
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -1726,11 +1726,19 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       };
     };
 
+    const currentYear = getCurrentAcademicYear();
+
     const billingInscriptions = pickBillingInscriptions(
-      (inscriptions || []).map((ins: any) => ({
-        ...ins,
-        formation_title: ins.formations?.title || null,
-      })),
+      (inscriptions || []).map((ins: any) => {
+        const formation = unwrapRelation(ins.formations) as { title?: string; price?: number } | null;
+        return {
+          ...ins,
+          formations: formation,
+          formation_title: formation?.title || null,
+          // Année vide → année courante pour fusionner les doublons mal renseignés
+          academic_year: ins.academic_year || currentYear,
+        };
+      }),
       getBillingStudent,
     );
 
@@ -1739,17 +1747,11 @@ export async function fetchStudentBillingDataAction(studentId: string) {
 
     let total_expected = 0;
     const enrichedInscriptions = billingInscriptions.map((ins: any) => {
-      const fallbackPrice = ins.formations?.price ? Number(ins.formations.price) : 0;
-      const rawExpected = ins.expected_amount !== null && ins.expected_amount !== undefined
-        ? Number(ins.expected_amount)
-        : fallbackPrice;
-      // Ne jamais facturer plus que le prix catalogue (évite total session famille stocké par erreur)
-      const expected =
-        fallbackPrice > 0 && Number.isFinite(rawExpected)
-          ? Math.min(rawExpected, fallbackPrice)
-          : rawExpected;
+      const formation = unwrapRelation(ins.formations) as { title?: string; price?: number } | null;
+      const fallbackPrice = formation?.price != null ? Number(formation.price) : 0;
+      const expected = resolveBillingExpectedAmount(ins.expected_amount, fallbackPrice);
 
-      total_expected += Number.isFinite(expected) ? expected : 0;
+      total_expected += expected;
 
       return {
         id: ins.id,
@@ -1757,9 +1759,9 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         status: ins.status,
         paidStatus: ins.paid_status,
         expectedAmount: expected,
-        formationTitle: ins.formations?.title || 'Formation ISHES',
-        className: ins.classes?.name || '',
-        classType: ins.classes?.type || 'distanciel',
+        formationTitle: formation?.title || 'Formation ISHES',
+        className: (unwrapRelation(ins.classes) as { name?: string } | null)?.name || '',
+        classType: (unwrapRelation(ins.classes) as { type?: string } | null)?.type || 'distanciel',
         studentName: (() => {
           const student = (familyStudents || []).find((f: any) => f.id === ins.etudiant_id);
           return student ? `${student.first_name || ''} ${student.last_name || ''}`.trim() : 'Élève';
@@ -1957,28 +1959,26 @@ export async function fetchManualBalancesAction() {
       if (!isManualCreated && !hasManualPayments) return null;
 
       const billingInscriptions = pickBillingInscriptions(
-        (s.inscriptions || []).map((ins: any) => ({
-          ...ins,
-          etudiant_id: s.id,
-          formation_id: ins.formations?.id || ins.formation_id || null,
-          formation_title: ins.formations?.title || null,
-          academic_year: ins.academic_year || null,
-          created_at: ins.created_at || null,
-          status: ins.status || 'actif',
-        })),
+        (s.inscriptions || []).map((ins: any) => {
+          const formation = unwrapRelation(ins.formations) as { id?: string; title?: string; price?: number } | null;
+          return {
+            ...ins,
+            formations: formation,
+            etudiant_id: s.id,
+            formation_id: formation?.id || ins.formation_id || null,
+            formation_title: formation?.title || null,
+            academic_year: ins.academic_year || getCurrentAcademicYear(),
+            created_at: ins.created_at || null,
+            status: ins.status || 'actif',
+          };
+        }),
         () => ({ firstName: s.first_name, lastName: s.last_name, email: s.email }),
       );
 
       const totalDue = billingInscriptions.reduce((acc: number, ins: any) => {
-        const formationPrice = Number(ins.formations?.price || 0);
-        const raw = ins.expected_amount != null
-          ? Number(ins.expected_amount)
-          : formationPrice;
-        const expected =
-          formationPrice > 0 && Number.isFinite(raw)
-            ? Math.min(raw, formationPrice)
-            : raw;
-        return acc + (Number.isFinite(expected) ? expected : 0);
+        const formation = unwrapRelation(ins.formations) as { price?: number } | null;
+        const expected = resolveBillingExpectedAmount(ins.expected_amount, formation?.price);
+        return acc + expected;
       }, 0);
       const pickedPayments = pickBillingPayments(s.paiements || [], () => ({
         firstName: s.first_name,
