@@ -4,6 +4,8 @@ import {
   getNamedChildren,
   getSiblingDiscount,
   pickBillingInscriptions,
+  pickBillingPayments,
+  sumSucceededBillingPayments,
   SIBLING_DISCOUNT_EUR,
 } from '@/lib/pricing';
 
@@ -44,7 +46,7 @@ describe('Réduction fratrie (inscription simultanée)', () => {
 });
 
 describe('Déduplication facturation (doublons de saisie)', () => {
-  it('ne compte qu’une inscription par élève / formation / année', () => {
+  it('ne compte qu’une inscription et garde la première facture', () => {
     const picked = pickBillingInscriptions(
       [
         {
@@ -66,12 +68,68 @@ describe('Déduplication facturation (doublons de saisie)', () => {
       ],
       (id) =>
         id === 'stu_1' || id === 'stu_1_bis'
-          ? { firstName: 'Amina', lastName: 'Benali' }
+          ? { firstName: 'Amina', lastName: 'Benali', email: 'parent@test.com' }
           : { firstName: '', lastName: '' },
     );
 
     expect(picked).toHaveLength(1);
-    expect(picked[0].id).toBe('ins_new');
+    expect(picked[0].id).toBe('ins_old');
+  });
+
+  it('déduplique aussi par titre de formation si les ids formation diffèrent', () => {
+    const picked = pickBillingInscriptions(
+      [
+        {
+          id: 'ins_a',
+          etudiant_id: 'stu_1',
+          formation_id: 'form_a',
+          formation_title: 'Tarbiya Islamiya',
+          academic_year: '2026-2027',
+          status: 'actif',
+          created_at: '2026-09-01T10:00:00Z',
+        },
+        {
+          id: 'ins_b',
+          etudiant_id: 'stu_2',
+          formation_id: 'form_b',
+          formation_title: 'Tarbiya Islamiya',
+          academic_year: '2026-2027',
+          status: 'actif',
+          created_at: '2026-09-11T10:00:00Z',
+        },
+      ],
+      () => ({ firstName: 'Nora', lastName: 'Oojeeraully', email: 'voojeeraully@hotmail.com' }),
+    );
+    expect(picked).toHaveLength(1);
+    expect(picked[0].id).toBe('ins_a');
+  });
+
+  it('conserve deux frères/sœurs sur le même email et la même formation', () => {
+    const picked = pickBillingInscriptions(
+      [
+        {
+          id: 'ins_yaniss',
+          etudiant_id: 'stu_y',
+          formation_id: 'form_pres',
+          academic_year: '2026-2027',
+          status: 'actif',
+          created_at: '2026-09-01T10:00:00Z',
+        },
+        {
+          id: 'ins_ines',
+          etudiant_id: 'stu_i',
+          formation_id: 'form_pres',
+          academic_year: '2026-2027',
+          status: 'actif',
+          created_at: '2026-09-02T10:00:00Z',
+        },
+      ],
+      (id) =>
+        id === 'stu_y'
+          ? { firstName: 'Yaniss', lastName: 'Baudoin', email: 'nora4522@hotmail.fr' }
+          : { firstName: 'Inès', lastName: 'Baudoin', email: 'nora4522@hotmail.fr' },
+    );
+    expect(picked).toHaveLength(2);
   });
 
   it('conserve deux formations différentes pour le même élève', () => {
@@ -114,5 +172,70 @@ describe('Déduplication facturation (doublons de saisie)', () => {
       () => ({ firstName: 'Amina', lastName: 'Benali' }),
     );
     expect(picked).toHaveLength(0);
+  });
+});
+
+describe('Déduplication paiements (recréation de profil)', () => {
+  it('ne garde que le premier checkout cs_ et conserve les mensualités in_', () => {
+    const picked = pickBillingPayments(
+      [
+        {
+          id: 'p_new_cs',
+          etudiant_id: 'stu_nora',
+          stripe_session_id: 'cs_live_second',
+          amount: 79.8,
+          status: 'succeeded',
+          created_at: '2026-09-11T08:42:00Z',
+        },
+        {
+          id: 'p_old_cs',
+          etudiant_id: 'stu_nora',
+          stripe_session_id: 'cs_live_first',
+          amount: 79.8,
+          status: 'succeeded',
+          created_at: '2026-09-01T13:30:00Z',
+        },
+        {
+          id: 'p_invoice',
+          etudiant_id: 'stu_nora',
+          stripe_session_id: 'in_live_month2',
+          amount: 79.8,
+          status: 'succeeded',
+          created_at: '2026-10-01T10:00:00Z',
+        },
+      ],
+      () => ({ firstName: 'Nora', lastName: 'Oojeeraully', email: 'voojeeraully@hotmail.com' }),
+    );
+
+    expect(picked.map((p) => p.id).sort()).toEqual(['p_invoice', 'p_old_cs'].sort());
+    expect(sumSucceededBillingPayments(picked)).toBeCloseTo(159.6);
+  });
+
+  it('conserve un checkout par frère/sœur', () => {
+    const picked = pickBillingPayments(
+      [
+        {
+          id: 'p_y',
+          etudiant_id: 'stu_y',
+          stripe_session_id: 'cs_live_yaniss',
+          amount: 150,
+          status: 'succeeded',
+          created_at: '2026-09-01T10:00:00Z',
+        },
+        {
+          id: 'p_i',
+          etudiant_id: 'stu_i',
+          stripe_session_id: 'cs_live_ines',
+          amount: 150,
+          status: 'succeeded',
+          created_at: '2026-09-02T10:00:00Z',
+        },
+      ],
+      (id) =>
+        id === 'stu_y'
+          ? { firstName: 'Yaniss', lastName: 'Baudoin', email: 'nora4522@hotmail.fr' }
+          : { firstName: 'Inès', lastName: 'Baudoin', email: 'nora4522@hotmail.fr' },
+    );
+    expect(picked).toHaveLength(2);
   });
 });

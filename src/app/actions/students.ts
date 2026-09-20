@@ -11,7 +11,7 @@ import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursL
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
-import { pickBillingInscriptions } from "@/lib/pricing";
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -1337,7 +1337,7 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
     if (baseEmail) {
       const { data } = await supabaseAdmin
         .from('etudiants')
-        .select('id, first_name, last_name, inscriptions(id, status, paid_status, formations(title), classes(name))')
+        .select('id, first_name, last_name, email, inscriptions(id, status, paid_status, formations(title), classes(name))')
         .eq('email', baseEmail);
       familyStudents = data || [];
     } else {
@@ -1368,14 +1368,18 @@ export async function fetchPaymentsByStudentAction(studentId: string) {
 
     if (error) throw error;
 
-    // Dédupliquer par stripe_session_id
-    const seen = new Set<string>();
-    const deduplicated = (payments || []).filter((p: any) => {
-      const key = p.stripe_session_id || p.id;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
+    const getBillingStudent = (etudiantId: string) => {
+      const member = allMembers.find((m) => m.id === etudiantId);
+      const student = (familyStudents || []).find((f: any) => f.id === etudiantId);
+      return {
+        firstName: member?.firstName || student?.first_name,
+        lastName: member?.lastName || student?.last_name,
+        email: student?.email || etudiant.email,
+      };
+    };
+
+    // Même règle que la facturation admin : 1er checkout cs_ + mensualités
+    const deduplicated = pickBillingPayments(payments || [], getBillingStudent);
 
     // Enrichir avec le contexte familial
     const enriched = deduplicated.map((p: any) => {
@@ -1667,7 +1671,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
     if (baseEmail) {
       const { data } = await supabaseAdmin
         .from('etudiants')
-        .select('id, first_name, last_name')
+        .select('id, first_name, last_name, email')
         .eq('email', baseEmail);
       
       if (data && data.length > 0) {
@@ -1706,26 +1710,46 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       .order('created_at', { ascending: false });
 
     const seen = new Set<string>();
-    const deduplicatedPayments = (payments || []).filter((p: any) => {
+    const uniquePayments = (payments || []).filter((p: any) => {
       const key = p.stripe_session_id || p.id;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
 
-    const billingInscriptions = pickBillingInscriptions(inscriptions || [], (etudiantId) => {
+    const getBillingStudent = (etudiantId: string) => {
       const student = (familyStudents || []).find((f: any) => f.id === etudiantId);
-      return { firstName: student?.first_name, lastName: student?.last_name };
-    });
+      return {
+        firstName: student?.first_name,
+        lastName: student?.last_name,
+        email: student?.email || etudiant.email,
+      };
+    };
+
+    const billingInscriptions = pickBillingInscriptions(
+      (inscriptions || []).map((ins: any) => ({
+        ...ins,
+        formation_title: ins.formations?.title || null,
+      })),
+      getBillingStudent,
+    );
+
+    // Un seul checkout cs_ par élève (le plus ancien) + mensualités in_…
+    const deduplicatedPayments = pickBillingPayments(uniquePayments, getBillingStudent);
 
     let total_expected = 0;
     const enrichedInscriptions = billingInscriptions.map((ins: any) => {
       const fallbackPrice = ins.formations?.price ? Number(ins.formations.price) : 0;
-      const expected = ins.expected_amount !== null && ins.expected_amount !== undefined
+      const rawExpected = ins.expected_amount !== null && ins.expected_amount !== undefined
         ? Number(ins.expected_amount)
         : fallbackPrice;
+      // Ne jamais facturer plus que le prix catalogue (évite total session famille stocké par erreur)
+      const expected =
+        fallbackPrice > 0 && Number.isFinite(rawExpected)
+          ? Math.min(rawExpected, fallbackPrice)
+          : rawExpected;
 
-      total_expected += expected;
+      total_expected += Number.isFinite(expected) ? expected : 0;
 
       return {
         id: ins.id,
@@ -1743,10 +1767,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       };
     });
 
-    const total_paid = deduplicatedPayments
-      .filter((p: any) => p.status === 'succeeded' || p.status === 'paid' || p.status === 'payé')
-      .reduce((acc: number, p: any) => acc + Number(p.amount || 0), 0);
-
+    const total_paid = sumSucceededBillingPayments(deduplicatedPayments);
     const reste_a_payer = Math.max(0, total_expected - total_paid);
 
     return {
@@ -1940,22 +1961,31 @@ export async function fetchManualBalancesAction() {
           ...ins,
           etudiant_id: s.id,
           formation_id: ins.formations?.id || ins.formation_id || null,
+          formation_title: ins.formations?.title || null,
           academic_year: ins.academic_year || null,
           created_at: ins.created_at || null,
           status: ins.status || 'actif',
         })),
-        () => ({ firstName: s.first_name, lastName: s.last_name }),
+        () => ({ firstName: s.first_name, lastName: s.last_name, email: s.email }),
       );
 
       const totalDue = billingInscriptions.reduce((acc: number, ins: any) => {
-        const expected = ins.expected_amount != null
+        const formationPrice = Number(ins.formations?.price || 0);
+        const raw = ins.expected_amount != null
           ? Number(ins.expected_amount)
-          : Number(ins.formations?.price || 0);
+          : formationPrice;
+        const expected =
+          formationPrice > 0 && Number.isFinite(raw)
+            ? Math.min(raw, formationPrice)
+            : raw;
         return acc + (Number.isFinite(expected) ? expected : 0);
       }, 0);
-      const totalPaid = s.paiements
-        ?.filter((p: any) => p.status === 'succeeded' || p.status === 'paid' || p.status === 'payé')
-        ?.reduce((acc: number, p: any) => acc + (p.amount || 0), 0) || 0;
+      const pickedPayments = pickBillingPayments(s.paiements || [], () => ({
+        firstName: s.first_name,
+        lastName: s.last_name,
+        email: s.email,
+      }));
+      const totalPaid = sumSucceededBillingPayments(pickedPayments);
 
       return {
         id: s.id,
@@ -1972,7 +2002,7 @@ export async function fetchManualBalancesAction() {
           type: i.formations?.type,
           class: i.classes?.name
         })) || [],
-        paiements: s.paiements
+        paiements: pickedPayments
       };
     }).filter(Boolean);
 

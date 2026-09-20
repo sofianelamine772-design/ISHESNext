@@ -11,6 +11,7 @@ import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import { getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
+import { pickBillingPayments, sumSucceededBillingPayments } from "@/lib/pricing";
 
 // Types
 type StudentDetail = {
@@ -464,8 +465,12 @@ function EtudiantsContent() {
 
         const rows = filteredData.map((s: any) => {
           const formations = Array.isArray(s.inscriptions) ? s.inscriptions.map((i: any) => i.formations?.title).filter(Boolean).join(" | ") : "";
-          const totalPaid = Array.isArray(s.paiements) ? s.paiements.filter((p: any) => p.status === "paid" || p.status === "payé" || p.status === "succeeded").reduce((acc: number, p: any) => acc + (p.amount || 0), 0) : 0;
-          const stripeIds = Array.isArray(s.paiements) ? s.paiements.map((p: any) => p.stripe_session_id).filter(Boolean).join(" | ") : "";
+          const pickedPayments = pickBillingPayments(
+            Array.isArray(s.paiements) ? s.paiements : [],
+            () => ({ firstName: s.first_name, lastName: s.last_name, email: s.email }),
+          );
+          const totalPaid = sumSucceededBillingPayments(pickedPayments);
+          const stripeIds = pickedPayments.map((p: any) => p.stripe_session_id).filter(Boolean).join(" | ");
           const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('fr-FR') : "";
 
           return [

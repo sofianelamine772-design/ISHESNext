@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { sendBackupReportEmail } from '@/lib/mail';
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments } from '@/lib/pricing';
 
 function generateSqlInserts(tableName: string, records: any[]): string {
   if (!records || records.length === 0) return `-- Table ${tableName} is empty\n\n`;
@@ -121,16 +122,33 @@ export async function GET(request: Request) {
     sqlDump += generateSqlInserts('push_subscriptions', backupData.push_subscriptions);
 
     // Enrich etudiants with financial data just for JSON output
-    const enrichedEtudiants = backupData.etudiants.map(etudiant => {
-      const etudiantPaiements = backupData.paiements.filter((p: any) => p.etudiant_id === etudiant.id && p.status === 'succeeded');
-      const etudiantInscriptions = backupData.inscriptions.filter((i: any) => i.etudiant_id === etudiant.id);
+    const studentsById = new Map((backupData.etudiants || []).map((e: any) => [e.id, e]));
+    const enrichedEtudiants = backupData.etudiants.map((etudiant: any) => {
+      const etudiantInscriptions = pickBillingInscriptions(
+        (backupData.inscriptions || [])
+          .filter((i: any) => i.etudiant_id === etudiant.id)
+          .map((i: any) => ({
+            ...i,
+            formation_title: backupData.formations.find((f: any) => f.id === i.formation_id)?.title || null,
+          })),
+        (id) => {
+          const s = studentsById.get(id) || etudiant;
+          return { firstName: s.first_name, lastName: s.last_name, email: s.email };
+        },
+      );
+      const etudiantPaiements = pickBillingPayments(
+        (backupData.paiements || []).filter((p: any) => p.etudiant_id === etudiant.id),
+        (id) => {
+          const s = studentsById.get(id) || etudiant;
+          return { firstName: s.first_name, lastName: s.last_name, email: s.email };
+        },
+      );
       
-      const total_encaisse = etudiantPaiements.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
-      const montant_attendu = etudiantInscriptions.reduce((sum, i) => sum + (Number(i.expected_amount) || 0), 0);
+      const total_encaisse = sumSucceededBillingPayments(etudiantPaiements);
+      const montant_attendu = etudiantInscriptions.reduce((sum: number, i: any) => sum + (Number(i.expected_amount) || 0), 0);
       const reste_a_payer = montant_attendu > total_encaisse ? montant_attendu - total_encaisse : 0;
       
-      const allPaiements = backupData.paiements.filter((p: any) => p.etudiant_id === etudiant.id);
-      const stripeSessions = allPaiements.map((p: any) => p.stripe_session_id).filter(Boolean);
+      const stripeSessions = etudiantPaiements.map((p: any) => p.stripe_session_id).filter(Boolean);
       const stripe_session_id = stripeSessions.length > 0 ? stripeSessions[0] : '';
       
       return {
