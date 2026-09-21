@@ -163,14 +163,44 @@ export function pickBillingInscriptions<
 
 const SUCCEEDED_PAYMENT_STATUSES = new Set(['succeeded', 'paid', 'payé']);
 
-function isCheckoutSessionId(sessionId?: string | null): boolean {
-  return String(sessionId || '').startsWith('cs_');
+/** Paiement saisi en admin (liquide, virement, MyScol, settle…) — id préfixé `manual_`. */
+export function isManualBillingPayment(payment: {
+  stripe_session_id?: string | null;
+}): boolean {
+  return String(payment.stripe_session_id || '').startsWith('manual_');
 }
 
 /**
- * Après suppression/recréation de profil, un 2e checkout (cs_…) peut exister.
- * On garde le PREMIER checkout (bon abonnement Stripe) + toutes les mensualités (in_…).
- * Les frères/sœurs avec des checkouts distincts restent chacun avec leur 1er cs_.
+ * Paiement Stripe mode test (clés sk_test / checkout local).
+ * Ex. cs_test_…, in_test_…, pi_test_… — à exclure de l’encaissement réel.
+ */
+export function isTestStripePayment(payment: {
+  stripe_session_id?: string | null;
+}): boolean {
+  const id = String(payment.stripe_session_id || '').toLowerCase();
+  if (!id || id.startsWith('manual_')) return false;
+  return (
+    id.startsWith('cs_test_') ||
+    id.startsWith('in_test_') ||
+    id.startsWith('pi_test_') ||
+    id.includes('_test_')
+  );
+}
+
+/** Paiement Stripe live (vrai argent). */
+export function isLiveStripePayment(payment: {
+  stripe_session_id?: string | null;
+}): boolean {
+  if (isManualBillingPayment(payment) || isTestStripePayment(payment)) return false;
+  const id = String(payment.stripe_session_id || '');
+  return id.length > 0;
+}
+
+/**
+ * Encaissement = argent réellement reçu.
+ * On déduplique uniquement par stripe_session_id (même session listée 2 fois).
+ * Plusieurs cs_ pour le même élève sont conservés (ex: 2 formations = 2 checkouts).
+ * Les mensualités in_… sont toutes gardées.
  */
 export function pickBillingPayments<
   T extends {
@@ -183,7 +213,7 @@ export function pickBillingPayments<
   },
 >(
   payments: T[],
-  getStudentName: (etudiantId: string) => {
+  _getStudentName: (etudiantId: string) => {
     firstName?: string | null;
     lastName?: string | null;
     email?: string | null;
@@ -194,53 +224,80 @@ export function pickBillingPayments<
     const key = String(payment.stripe_session_id || payment.id);
     if (!bySession.has(key)) bySession.set(key, payment);
   }
-  const unique = Array.from(bySession.values());
 
-  const normalizeEmail = (email?: string | null) =>
-    String(email || '')
-      .trim()
-      .toLowerCase()
-      .split('+')[0];
-
-  const checkouts: T[] = [];
-  const others: T[] = [];
-  for (const payment of unique) {
-    if (isCheckoutSessionId(payment.stripe_session_id)) checkouts.push(payment);
-    else others.push(payment);
-  }
-
-  const sortedCheckouts = [...checkouts].sort(
-    (a, b) =>
-      new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime(),
-  );
-
-  const seenPersonCheckout = new Set<string>();
-  const keptCheckouts: T[] = [];
-  for (const payment of sortedCheckouts) {
-    const studentId = String(payment.etudiant_id || '');
-    const names = getStudentName(studentId);
-    const personKey = normalizeBillingPersonKey(names.firstName, names.lastName);
-    const emailKey = normalizeEmail(names.email);
-    const groupKey =
-      personKey !== '|'
-        ? `${emailKey}|${personKey}`
-        : studentId || payment.id;
-
-    if (seenPersonCheckout.has(groupKey)) continue;
-    seenPersonCheckout.add(groupKey);
-    keptCheckouts.push(payment);
-  }
-
-  return [...keptCheckouts, ...others].sort(
+  return Array.from(bySession.values()).sort(
     (a, b) =>
       new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime(),
   );
 }
 
+/** Somme des paiements réussis hors Stripe test (live + manuel uniquement). */
 export function sumSucceededBillingPayments<
-  T extends { amount?: number | null; status?: string | null },
+  T extends {
+    amount?: number | null;
+    status?: string | null;
+    stripe_session_id?: string | null;
+  },
 >(payments: T[]): number {
   return payments
-    .filter((p) => SUCCEEDED_PAYMENT_STATUSES.has(String(p.status || '')))
+    .filter(
+      (p) =>
+        SUCCEEDED_PAYMENT_STATUSES.has(String(p.status || '')) &&
+        !isTestStripePayment(p),
+    )
     .reduce((acc, p) => acc + Number(p.amount || 0), 0);
+}
+
+/**
+ * Totaux encaissés : Stripe live uniquement vs saisie manuelle.
+ * Les paiements cs_test_ / in_test_ / … sont exclus (tests locaux).
+ */
+export function sumSucceededPaymentsBySource<
+  T extends {
+    amount?: number | null;
+    status?: string | null;
+    stripe_session_id?: string | null;
+  },
+>(payments: T[]): { stripe: number; manual: number; total: number } {
+  let stripe = 0;
+  let manual = 0;
+  for (const p of payments || []) {
+    if (!SUCCEEDED_PAYMENT_STATUSES.has(String(p.status || ''))) continue;
+    if (isTestStripePayment(p)) continue;
+    const amount = Number(p.amount || 0);
+    if (isManualBillingPayment(p)) manual += amount;
+    else if (isLiveStripePayment(p)) stripe += amount;
+  }
+  return { stripe, manual, total: stripe + manual };
+}
+
+export type InscriptionPaidStatus = 'paye' | 'partiel' | 'impaye';
+
+/**
+ * Statut financier dérivé des totaux facturation.
+ * Un acompte Stripe (ex: 133 € sur 399 €) → partiel, jamais impaye.
+ * Sinon l’espace élève filtre les inscriptions et bloque la connexion utile.
+ */
+export function resolveInscriptionPaidStatus(
+  totalPaid: number,
+  resteAPayer: number,
+): InscriptionPaidStatus {
+  const paid = Number(totalPaid) || 0;
+  const reste = Number(resteAPayer) || 0;
+  if (reste <= 0.01) return 'paye'; // soldé ou formation à 0 €
+  if (paid > 0.01) return 'partiel';
+  return 'impaye';
+}
+
+/**
+ * L’espace élève n’affiche que les inscriptions « ouvertes » financièrement.
+ * partiel doit toujours passer (acomptes mensuels / 1er paiement).
+ */
+export function inscriptionGrantsStudentAccess(
+  paidStatus?: string | null,
+  options?: { isManualStudent?: boolean },
+): boolean {
+  if (options?.isManualStudent) return true;
+  const status = String(paidStatus || '').toLowerCase();
+  return status === 'paye' || status === 'partiel' || status === 'exonere';
 }

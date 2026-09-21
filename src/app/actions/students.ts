@@ -11,7 +11,7 @@ import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursL
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
-import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation } from "@/lib/pricing";
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -1095,7 +1095,7 @@ export async function fetchStudentTimetableAction(clerkUserId: string, email?: s
   try {
     let query = supabaseAdmin.from('etudiants').select('id');
     if (clerkUserId) {
-      query = query.eq('id', clerkUserId);
+      query = query.eq('clerk_user_id', clerkUserId);
     } else if (email) {
       query = query.ilike('email', email);
     }
@@ -1174,7 +1174,7 @@ export async function fetchStudentTimetableAction(clerkUserId: string, email?: s
 export async function fetchStudentClassInfoAction(clerkUserId: string, email?: string) {
   try {
     let query = supabaseAdmin.from('etudiants').select('id, first_name');
-    if (clerkUserId) query = query.eq('id', clerkUserId);
+    if (clerkUserId) query = query.eq('clerk_user_id', clerkUserId);
     else if (email) query = query.ilike('email', email);
     const { data: etudiant } = await query.maybeSingle();
     if (!etudiant) return { success: true, data: null };
@@ -1262,6 +1262,8 @@ export async function syncStudentStateOnLogin(profile: {
             .update({ clerk_user_id: clerkUserId })
             .eq('id', student.id);
         }
+        // Recalcule paye/partiel/impaye pour débloquer l'espace élève après acompte Stripe
+        await syncStudentPaidStatus(student.id);
       }
       console.log(`[SYNC_LOGIN] ${familyStudents.length} student(s) linked to ${clerkUserId} for ${baseEmail}`);
     } else {
@@ -1458,7 +1460,7 @@ export async function fetchStudentCertificateDataAction(profile: {
         const isManual = member.id && String(member.id).startsWith('manual_');
         const memberInscriptions = (inscriptions || []).filter((i: any) =>
           i.etudiant_id === member.id &&
-          (i.paid_status === 'paye' || i.paid_status === 'partiel' || i.paid_status === 'exonere' || isManual)
+          inscriptionGrantsStudentAccess(i.paid_status, { isManualStudent: isManual })
         );
         const latestInscription = memberInscriptions[0];
         if (!latestInscription) return null;
@@ -1863,13 +1865,7 @@ export async function syncStudentPaidStatus(studentId: string) {
     if (!inscriptions || inscriptions.length === 0) return;
 
     const familyIds = inscriptions.map((ins: any) => ins.studentId);
-
-    let targetStatus = 'impaye';
-    if (reste_a_payer <= 0) {
-      targetStatus = 'paye';
-    } else if (total_paid > 0) {
-      targetStatus = 'partiel';
-    }
+    const targetStatus = resolveInscriptionPaidStatus(total_paid, reste_a_payer);
 
     // Ne mettre à jour que les inscriptions valides, en attente ou actives
     await supabaseAdmin

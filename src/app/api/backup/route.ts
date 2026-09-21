@@ -1,7 +1,47 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { sendBackupReportEmail } from '@/lib/mail';
-import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments } from '@/lib/pricing';
+import {
+  pickBillingInscriptions,
+  pickBillingPayments,
+  resolveBillingExpectedAmount,
+  sumSucceededBillingPayments,
+  sumSucceededPaymentsBySource,
+} from '@/lib/pricing';
+import { getCurrentAcademicYear } from '@/lib/utils';
+
+const ACTIVE_INSCRIPTION_STATUSES = new Set([
+  'valide',
+  'actif',
+  'en_attente',
+  'en_attente_daffectation',
+]);
+
+function isPresentielFormation(formation?: { type?: string | null; title?: string | null } | null): boolean {
+  if (!formation) return false;
+  const title = String(formation.title || '').toLowerCase();
+  return (
+    formation.type === 'presentiel' ||
+    title.includes('présentiel') ||
+    title.includes('presentiel')
+  );
+}
+
+async function fetchAllRows<T>(table: string): Promise<T[]> {
+  const pageSize = 1000;
+  const rows: T[] = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabaseAdmin
+      .from(table)
+      .select('*')
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    const chunk = (data || []) as T[];
+    rows.push(...chunk);
+    if (chunk.length < pageSize) break;
+  }
+  return rows;
+}
 
 function generateSqlInserts(tableName: string, records: any[]): string {
   if (!records || records.length === 0) return `-- Table ${tableName} is empty\n\n`;
@@ -50,25 +90,35 @@ export async function GET(request: Request) {
 
     console.log('[BACKUP] Starting automated database backup (JSON + SQL)...');
 
-    // 1. Fetch data from all tables
-    const { data: etudiants } = await supabaseAdmin.from('etudiants').select('*');
-    const { data: formations } = await supabaseAdmin.from('formations').select('*');
-    const { data: classes } = await supabaseAdmin.from('classes').select('*');
-    const { data: inscriptions } = await supabaseAdmin.from('inscriptions').select('*');
-    const { data: paiements } = await supabaseAdmin.from('paiements').select('*');
-    const { data: messages } = await supabaseAdmin.from('messages').select('*');
-    const { data: pushSubscriptions } = await supabaseAdmin.from('push_subscriptions').select('*');
+    // 1. Fetch data from all tables (paginated — Supabase cap 1000/requête)
+    const [
+      etudiants,
+      formations,
+      classes,
+      inscriptions,
+      paiements,
+      messages,
+      pushSubscriptions,
+    ] = await Promise.all([
+      fetchAllRows<any>('etudiants'),
+      fetchAllRows<any>('formations'),
+      fetchAllRows<any>('classes'),
+      fetchAllRows<any>('inscriptions'),
+      fetchAllRows<any>('paiements'),
+      fetchAllRows<any>('messages'),
+      fetchAllRows<any>('push_subscriptions'),
+    ]);
 
     const backupData = {
-      backup_version: '1.1',
+      backup_version: '1.2',
       backup_date: new Date().toISOString(),
-      etudiants: etudiants || [],
-      formations: formations || [],
-      classes: classes || [],
-      inscriptions: inscriptions || [],
-      paiements: paiements || [],
-      messages: messages || [],
-      push_subscriptions: pushSubscriptions || [],
+      etudiants,
+      formations,
+      classes,
+      inscriptions,
+      paiements,
+      messages,
+      push_subscriptions: pushSubscriptions,
     };
 
     const now = Date.now();
@@ -79,6 +129,10 @@ export async function GET(request: Request) {
     let totalExpectedDistance = 0;
     let totalCollectedPresentiel = 0;
     let totalExpectedPresentiel = 0;
+    let totalCollectedStripeDistance = 0;
+    let totalCollectedManualDistance = 0;
+    let totalCollectedStripePresentiel = 0;
+    let totalCollectedManualPresentiel = 0;
     
     // We will compute the exact financials later after filtering students
     let newStudents24h = 0;
@@ -123,46 +177,90 @@ export async function GET(request: Request) {
 
     // Enrich etudiants with financial data just for JSON output
     const studentsById = new Map((backupData.etudiants || []).map((e: any) => [e.id, e]));
+    const formationsById = new Map((backupData.formations || []).map((f: any) => [f.id, f]));
+    const classesById = new Map((backupData.classes || []).map((c: any) => [c.id, c]));
+    const currentYear = getCurrentAcademicYear();
+
     const enrichedEtudiants = backupData.etudiants.map((etudiant: any) => {
+      const getBillingStudent = (id: string) => {
+        const s = studentsById.get(id) || etudiant;
+        return { firstName: s.first_name, lastName: s.last_name, email: s.email };
+      };
+
       const etudiantInscriptions = pickBillingInscriptions(
         (backupData.inscriptions || [])
           .filter((i: any) => i.etudiant_id === etudiant.id)
-          .map((i: any) => ({
-            ...i,
-            formation_title: backupData.formations.find((f: any) => f.id === i.formation_id)?.title || null,
-          })),
-        (id) => {
-          const s = studentsById.get(id) || etudiant;
-          return { firstName: s.first_name, lastName: s.last_name, email: s.email };
-        },
+          .map((i: any) => {
+            const formation = formationsById.get(i.formation_id);
+            return {
+              ...i,
+              formation_title: formation?.title || null,
+              academic_year: i.academic_year || currentYear,
+            };
+          }),
+        getBillingStudent,
       );
       const etudiantPaiements = pickBillingPayments(
         (backupData.paiements || []).filter((p: any) => p.etudiant_id === etudiant.id),
-        (id) => {
-          const s = studentsById.get(id) || etudiant;
-          return { firstName: s.first_name, lastName: s.last_name, email: s.email };
-        },
+        getBillingStudent,
       );
-      
+
       const total_encaisse = sumSucceededBillingPayments(etudiantPaiements);
-      const montant_attendu = etudiantInscriptions.reduce((sum: number, i: any) => sum + (Number(i.expected_amount) || 0), 0);
-      const reste_a_payer = montant_attendu > total_encaisse ? montant_attendu - total_encaisse : 0;
-      
+      const bySource = sumSucceededPaymentsBySource(etudiantPaiements);
+      const montant_attendu = etudiantInscriptions.reduce((sum: number, i: any) => {
+        const formation = formationsById.get(i.formation_id);
+        return sum + resolveBillingExpectedAmount(i.expected_amount, formation?.price);
+      }, 0);
+      const reste_a_payer = Math.max(0, montant_attendu - total_encaisse);
+
       const stripeSessions = etudiantPaiements.map((p: any) => p.stripe_session_id).filter(Boolean);
       const stripe_session_id = stripeSessions.length > 0 ? stripeSessions[0] : '';
-      
+
+      const activeInscriptions = (backupData.inscriptions || []).filter(
+        (i: any) =>
+          i.etudiant_id === etudiant.id &&
+          ACTIVE_INSCRIPTION_STATUSES.has(String(i.status || '')),
+      );
+      const isPresentiel = activeInscriptions.some((i: any) =>
+        isPresentielFormation(formationsById.get(i.formation_id)),
+      );
+      const isDistanciel = activeInscriptions.some((i: any) => {
+        const formation = formationsById.get(i.formation_id);
+        return formation && !isPresentielFormation(formation);
+      });
+
+      const labelInscription =
+        activeInscriptions.find((i: any) =>
+          isPresentiel
+            ? isPresentielFormation(formationsById.get(i.formation_id))
+            : formationsById.get(i.formation_id),
+        ) || activeInscriptions[0];
+      let formationName = 'Aucune formation';
+      if (labelInscription?.formation_id) {
+        formationName =
+          formationsById.get(labelInscription.formation_id)?.title || formationName;
+      }
+      if (labelInscription?.class_id) {
+        formationName = classesById.get(labelInscription.class_id)?.name || formationName;
+      }
+
       return {
         ...etudiant,
         total_encaisse,
+        encaisse_stripe: bySource.stripe,
+        encaisse_manuel: bySource.manual,
         reste_a_payer,
         montant_attendu,
-        stripe_session_id
+        stripe_session_id,
+        formation_ou_classe: formationName,
+        _billingBucket:
+          isPresentiel ? 'presentiel' : isDistanciel ? 'distanciel' : null,
       };
     });
 
     const jsonBackupData = {
       ...backupData,
-      etudiants: enrichedEtudiants
+      etudiants: enrichedEtudiants.map(({ _billingBucket, ...rest }) => rest),
     };
 
     // Generate JSON string with enriched data
@@ -176,6 +274,7 @@ export async function GET(request: Request) {
       const fn = (e.first_name || '').toLowerCase();
       const ln = (e.last_name || '').toLowerCase();
       if (em.includes('test') || fn.includes('test') || ln.includes('test') || em.includes('system_')) return false;
+      if (em.includes('email_archive') || e.id === 'email_archive') return false;
       return true;
     });
 
@@ -185,39 +284,19 @@ export async function GET(request: Request) {
     const presentielEtudiants: any[] = [];
 
     for (const e of realEtudiants) {
-      const etudiantInscriptions = backupData.inscriptions.filter((i: any) => i.etudiant_id === e.id);
-      const firstInscription = etudiantInscriptions.find((i: any) => i.status === 'valide' || i.status === 'en_attente') || etudiantInscriptions[0];
-      let isPresentiel = false;
-      let formationName = "Aucune formation";
-
-      if (firstInscription && firstInscription.formation_id) {
-        const formation = backupData.formations.find((f: any) => f.id === firstInscription.formation_id);
-        if (formation) {
-          formationName = formation.title || formationName;
-          if (formation.title?.toLowerCase().includes('présentiel') || formation.title?.toLowerCase().includes('presentiel') || formation.type === 'presentiel') {
-            isPresentiel = true;
-          }
-        }
-        
-        // Si assigné à une classe, prioriser le nom de la classe
-        if (firstInscription.classe_id) {
-            const classe = backupData.classes.find((c: any) => c.id === firstInscription.classe_id);
-            if (classe) {
-                formationName = classe.name || formationName;
-            }
-        }
-      }
-      
-      e.formation_ou_classe = formationName;
-      
-      if (isPresentiel) {
+      // Uniquement les élèves avec une inscription active (évite de gonfler « distance » avec les fiches vides)
+      if (e._billingBucket === 'presentiel') {
         presentielEtudiants.push(e);
         totalCollectedPresentiel += (e.total_encaisse || 0);
         totalExpectedPresentiel += (e.montant_attendu || 0);
-      } else {
+        totalCollectedStripePresentiel += (e.encaisse_stripe || 0);
+        totalCollectedManualPresentiel += (e.encaisse_manuel || 0);
+      } else if (e._billingBucket === 'distanciel') {
         distanceEtudiants.push(e);
         totalCollectedDistance += (e.total_encaisse || 0);
         totalExpectedDistance += (e.montant_attendu || 0);
+        totalCollectedStripeDistance += (e.encaisse_stripe || 0);
+        totalCollectedManualDistance += (e.encaisse_manuel || 0);
       }
     }
 
@@ -234,15 +313,19 @@ export async function GET(request: Request) {
       messages: backupData.messages.length,
       newStudents24h,
       totalCollectedDistance,
+      totalCollectedStripeDistance,
+      totalCollectedManualDistance,
       totalRemainingDistance,
       totalExpectedDistance,
       totalCollectedPresentiel,
+      totalCollectedStripePresentiel,
+      totalCollectedManualPresentiel,
       totalRemainingPresentiel,
       totalExpectedPresentiel,
       abandonedCheckouts24h,
     };
 
-    const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Formation / Classe,Status,Montant Attendu,Total Encaissé,Reste à Payer,Stripe Session ID\n";
+    const csvHeader = "ID,Nom,Prénom,Email,Téléphone,Formation / Classe,Status,Montant Attendu,Encaissé Stripe,Encaissé Manuel,Total Encaissé,Reste à Payer,Stripe Session ID\n";
     
     const escapeCsv = (str: string) => {
         if (!str) return '""';
@@ -250,13 +333,13 @@ export async function GET(request: Request) {
     };
 
     const distanceRows = distanceEtudiants.map(e => 
-      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0},${escapeCsv(e.stripe_session_id)}`
+      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.encaisse_stripe || 0},${e.encaisse_manuel || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0},${escapeCsv(e.stripe_session_id)}`
     );
     const csvStringDistance = csvHeader + distanceRows.join('\n');
     const fileNameCsvDistance = `db_backup_${fileDateStr}_etudiants_distance.csv`;
 
     const presentielRows = presentielEtudiants.map(e => 
-      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0},${escapeCsv(e.stripe_session_id)}`
+      `"${e.id}",${escapeCsv(e.last_name)},${escapeCsv(e.first_name)},${escapeCsv(e.email)},${escapeCsv(e.phone)},${escapeCsv(e.formation_ou_classe)},"${e.status || ''}",${e.montant_attendu || 0},${e.encaisse_stripe || 0},${e.encaisse_manuel || 0},${e.total_encaisse || 0},${e.reste_a_payer || 0},${escapeCsv(e.stripe_session_id)}`
     );
     const csvStringPresentiel = csvHeader + presentielRows.join('\n');
     const fileNameCsvPresentiel = `db_backup_${fileDateStr}_etudiants_presentiel.csv`;

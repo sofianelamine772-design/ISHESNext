@@ -611,9 +611,13 @@ export async function sendBackupReportEmail(params: {
     messages: number;
     newStudents24h?: number;
     totalCollectedDistance?: number;
+    totalCollectedStripeDistance?: number;
+    totalCollectedManualDistance?: number;
     totalRemainingDistance?: number;
     totalExpectedDistance?: number;
     totalCollectedPresentiel?: number;
+    totalCollectedStripePresentiel?: number;
+    totalCollectedManualPresentiel?: number;
     totalRemainingPresentiel?: number;
     totalExpectedPresentiel?: number;
     abandonedCheckouts24h?: number;
@@ -628,6 +632,10 @@ export async function sendBackupReportEmail(params: {
   const etudiantsDistance = stats.etudiantsDistance ?? 0;
   const etudiantsPresentiel = stats.etudiantsPresentiel ?? 0;
   const totalCollected = (stats.totalCollectedDistance ?? 0) + (stats.totalCollectedPresentiel ?? 0);
+  const totalCollectedStripe =
+    (stats.totalCollectedStripeDistance ?? 0) + (stats.totalCollectedStripePresentiel ?? 0);
+  const totalCollectedManual =
+    (stats.totalCollectedManualDistance ?? 0) + (stats.totalCollectedManualPresentiel ?? 0);
   const totalRemaining = (stats.totalRemainingDistance ?? 0) + (stats.totalRemainingPresentiel ?? 0);
   const totalExpected =
     (stats.totalExpectedDistance ?? ((stats.totalCollectedDistance ?? 0) + (stats.totalRemainingDistance ?? 0))) +
@@ -639,7 +647,7 @@ export async function sendBackupReportEmail(params: {
       <div style="padding: 40px 30px;">
         <h2 style="color: #0a192f; margin-top: 0; font-size: 20px;">Sauvegarde ISHES — ${date}</h2>
         <p style="color: #555; line-height: 1.6; font-size: 15px; margin: 0 0 8px;">
-          Sauvegarde automatique OK. Ci-dessous : vue utile séparée <strong>distanciel</strong> / <strong>présentiel</strong> (élèves réels uniquement, hors comptes test).
+          Sauvegarde automatique OK. Ci-dessous : vue utile séparée <strong>distanciel</strong> / <strong>présentiel</strong> (élèves réels uniquement, hors comptes test). Encaissement détaillé <strong>Stripe live</strong> vs <strong>saisie manuelle</strong> (les paiements Stripe test locaux sont exclus).
         </p>
 
         <h3 style="color: #0a192f; font-size: 15px; margin: 28px 0 10px; border-bottom: 2px solid #086b51; padding-bottom: 6px;">Distanciel</h3>
@@ -653,7 +661,15 @@ export async function sendBackupReportEmail(params: {
             <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalExpectedDistance ?? ((stats.totalCollectedDistance ?? 0) + (stats.totalRemainingDistance ?? 0)))}</td>
           </tr>
           <tr style="background-color: #f9f9f9;">
-            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé Stripe</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalCollectedStripeDistance)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé manuel</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalCollectedManualDistance)}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé (total)</td>
             <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${formatBackupEuro(stats.totalCollectedDistance)}</td>
           </tr>
           <tr>
@@ -678,7 +694,15 @@ export async function sendBackupReportEmail(params: {
             <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalExpectedPresentiel ?? ((stats.totalCollectedPresentiel ?? 0) + (stats.totalRemainingPresentiel ?? 0)))}</td>
           </tr>
           <tr style="background-color: #f9f9f9;">
-            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé</td>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé Stripe</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalCollectedStripePresentiel)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé manuel</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(stats.totalCollectedManualPresentiel)}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé (total)</td>
             <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #086b51;">${formatBackupEuro(stats.totalCollectedPresentiel)}</td>
           </tr>
           <tr>
@@ -697,6 +721,14 @@ export async function sendBackupReportEmail(params: {
           <tr style="background-color: #f4f6f8;">
             <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Élèves (total)</td>
             <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; font-weight: bold; color: #0a192f;">${stats.etudiants} <span style="font-weight: normal; color: #777; font-size: 12px;">(${etudiantsDistance} dist. + ${etudiantsPresentiel} prés.)</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé Stripe</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(totalCollectedStripe)}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Encaissé manuel</td>
+            <td style="text-align: right; padding: 9px 10px; border: 1px solid #eaeaea; color: #0a192f;">${formatBackupEuro(totalCollectedManual)}</td>
           </tr>
           <tr>
             <td style="padding: 9px 10px; border: 1px solid #eaeaea; color: #333;">Attendu / encaissé / reste</td>
