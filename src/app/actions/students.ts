@@ -11,6 +11,7 @@ import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursL
 import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
+import { getDistancielRentreePublicDocs } from "@/lib/distanciel-rentree";
 import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -1447,7 +1448,7 @@ export async function fetchStudentCertificateDataAction(profile: {
         status,
         paid_status,
         created_at,
-        formations (title),
+        formations (title, type),
         classes (id, name, type, whatsapp_link, external_id)
       `)
       .in('etudiant_id', familyIds)
@@ -1480,6 +1481,16 @@ export async function fetchStudentCertificateDataAction(profile: {
           const formation = inscription.formations as { title?: string | null } | null;
           return [row?.name, formation?.title, className];
         });
+        const rentreeSignals = memberInscriptions.map((inscription: any) => {
+          const row = inscription.classes as { name?: string | null; type?: string | null } | null;
+          const formation = inscription.formations as { title?: string | null; type?: string | null } | null;
+          return {
+            classType: row?.type,
+            formationType: formation?.type,
+            className: row?.name,
+            formationTitle: formation?.title,
+          };
+        });
 
         return {
           id: member.id,
@@ -1495,6 +1506,7 @@ export async function fetchStudentCertificateDataAction(profile: {
           whatsappLink: classRow?.whatsapp_link || null,
           status: latestInscription.status,
           fournituresDocs: getFournituresPublicDocs(classRefs, classLabels),
+          rentreeDocs: getDistancielRentreePublicDocs(rentreeSignals),
         };
       })
       .filter(Boolean);

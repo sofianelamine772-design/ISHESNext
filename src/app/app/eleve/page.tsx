@@ -402,6 +402,40 @@ export default function EleveDashboard() {
                   </div>
                 )}
 
+                {(certData.rentreeDocs || []).length > 0 && (
+                  <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border-2 border-ishes-blue/25 shadow-sm">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-2xl bg-ishes-blue/10 text-ishes-blue flex items-center justify-center shrink-0">
+                          <FileText className="w-7 h-7" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 mb-1">Rentrée 2026/2027</p>
+                          <h3 className="text-2xl font-black text-gray-900 tracking-tight">Courrier de rentrée distanciel</h3>
+                          <p className="text-sm text-gray-500 font-medium mt-2 max-w-xl">
+                            Informations de rentrée pour {certData.firstName || "votre formation"} à distance — horaires, organisation et consignes.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+                        {(certData.rentreeDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                          <a
+                            key={doc.kind}
+                            href={doc.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            className="inline-flex items-center justify-center gap-2 bg-ishes-blue text-white hover:bg-[#0a5a44] font-black py-4 px-7 rounded-2xl text-sm uppercase tracking-wider transition-all shadow-lg"
+                          >
+                            <Download className="w-4 h-4" />
+                            {doc.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <Link
                   href="/program"
                   className="block bg-gradient-to-r from-ishes-gold via-[#d4a017] to-[#b8860b] rounded-[2rem] p-6 md:p-8 text-white shadow-xl shadow-ishes-gold/25 relative overflow-hidden group"
@@ -498,6 +532,19 @@ export default function EleveDashboard() {
                               >
                                 <Download className="w-5 h-5 text-ishes-gold" />
                                 Fournitures {doc.label}
+                              </a>
+                            ))}
+                            {(certData.rentreeDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                              <a
+                                key={doc.kind}
+                                href={doc.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="flex-1 bg-white border-2 border-ishes-blue/25 text-[#0F172A] hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                              >
+                                <Download className="w-5 h-5 text-ishes-blue" />
+                                {doc.label}
                               </a>
                             ))}
                           </div>
