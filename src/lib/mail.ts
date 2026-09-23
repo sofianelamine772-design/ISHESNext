@@ -15,7 +15,15 @@ import {
   resolveFournituresPdfPath,
   type FournituresKind,
 } from './presentiel-fournitures-email';
+import {
+  DISTANCIEL_RENTREE_EMAIL_TYPE,
+  DISTANCIEL_RENTREE_PDF,
+  buildDistancielRentreeEmail,
+  resolveDistancielRentreePdfPath,
+  shouldSendDistancielRentreeEmail,
+} from './distanciel-rentree';
 export { isPresentielFormationSlug, shouldSendPresentielRentreeEmail } from './presentiel-rentree-email';
+export { shouldSendDistancielRentreeEmail } from './distanciel-rentree';
 
 // Envoi SMTP via Gmail (compte dédié : ishesmaill@gmail.com).
 const SMTP_SENDER_EMAIL = 'ishesmaill@gmail.com';
@@ -448,6 +456,68 @@ export async function sendPresentielRentreeEmail(email: string) {
     html,
     text,
     meta: { type: PRESENTIEL_RENTREE_EMAIL_TYPE },
+  });
+}
+
+export async function maybeSendDistancielRentreeEmail(
+  email: string,
+  formationId: string,
+  formationType?: string | null,
+): Promise<{ success: boolean; skipped: boolean; error?: unknown }> {
+  if (!email) return { success: false, skipped: true };
+  if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
+    return { success: true, skipped: true };
+  }
+
+  try {
+    if (await hasSentEmail({ recipientEmail: email, type: DISTANCIEL_RENTREE_EMAIL_TYPE })) {
+      return { success: true, skipped: true };
+    }
+  } catch (e) {
+    console.warn('[RENTREE_DISTANCIEL] Impossible de vérifier un envoi précédent, on envoie quand même.', e);
+  }
+
+  const result = await sendDistancielRentreeEmail(email);
+  return { success: result.success, skipped: false, error: result.error };
+}
+
+async function loadDistancielRentreePdf(): Promise<Buffer | null> {
+  const pdfPath = resolveDistancielRentreePdfPath();
+  if (pdfPath) return fs.readFileSync(pdfPath);
+
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  try {
+    const res = await fetch(`${appUrl}${DISTANCIEL_RENTREE_PDF.href}`);
+    if (!res.ok) return null;
+    return Buffer.from(await res.arrayBuffer());
+  } catch (e) {
+    console.error('[RENTREE_DISTANCIEL] Impossible de charger le PDF', e);
+    return null;
+  }
+}
+
+export async function sendDistancielRentreeEmail(email: string) {
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const pdfContent = await loadDistancielRentreePdf();
+  if (!pdfContent) {
+    const missing = 'PDF rentrée distanciel introuvable';
+    console.error(`[RENTREE_DISTANCIEL] ${missing}`);
+    return { success: false, error: missing };
+  }
+
+  const { subject, html, text } = buildDistancielRentreeEmail(`${appUrl}/logo.png`);
+
+  return sendEmail({
+    to: email,
+    subject,
+    html,
+    text,
+    attachments: [{
+      filename: DISTANCIEL_RENTREE_PDF.filename,
+      content: pdfContent,
+      contentType: 'application/pdf',
+    }],
+    meta: { type: DISTANCIEL_RENTREE_EMAIL_TYPE },
   });
 }
 

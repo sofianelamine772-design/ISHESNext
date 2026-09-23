@@ -206,13 +206,24 @@ const mockMaybeSendPresentielRentreeEmail = jest.fn().mockImplementation(
     return { success: true, skipped: false };
   }
 );
+const mockMaybeSendDistancielRentreeEmail = jest.fn().mockImplementation(
+  async (_email: string, formationId: string, formationType?: string | null) => {
+    const { shouldSendDistancielRentreeEmail } = jest.requireActual('@/lib/distanciel-rentree');
+    if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
+      return { success: true, skipped: true };
+    }
+    return { success: true, skipped: false };
+  }
+);
 jest.mock('@/lib/mail', () => ({
   sendAdminNewMessageEmail: (params: any) => mockSendAdminNewMessageEmail(params),
   sendWelcomeEmail: jest.fn(),
   sendPaymentReminderEmail: jest.fn().mockResolvedValue({ success: true }),
   sendClassAssignmentEmail: jest.fn(),
   sendPresentielRentreeEmail: jest.fn(),
+  sendDistancielRentreeEmail: jest.fn(),
   maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
+  maybeSendDistancielRentreeEmail: (...args: unknown[]) => mockMaybeSendDistancielRentreeEmail(...args),
   maybeSendPresentielFournituresEmail: jest.fn().mockResolvedValue({ success: true, skipped: true }),
   sendEmail: jest.fn(),
 }));
@@ -241,6 +252,15 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
       async (_email: string, formationId: string, formationType?: string | null) => {
         const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
         if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
+          return { success: true, skipped: true };
+        }
+        return { success: true, skipped: false };
+      }
+    );
+    mockMaybeSendDistancielRentreeEmail.mockImplementation(
+      async (_email: string, formationId: string, formationType?: string | null) => {
+        const { shouldSendDistancielRentreeEmail } = jest.requireActual('@/lib/distanciel-rentree');
+        if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
           return { success: true, skipped: true };
         }
         return { success: true, skipped: false };

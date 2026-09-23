@@ -337,7 +337,11 @@ export async function GET(req: Request) {
 
     if (payerEmail && studentIds.length > 0) {
       try {
-        const { maybeSendPresentielRentreeEmail, maybeSendPresentielFournituresEmail } = await import('@/lib/mail');
+        const {
+          maybeSendPresentielRentreeEmail,
+          maybeSendPresentielFournituresEmail,
+          maybeSendDistancielRentreeEmail,
+        } = await import('@/lib/mail');
         const { collectCheckoutClassRefs, getFournituresKindsToSend } = await import('@/lib/presentiel-fournitures-email');
         let formationType: string | null = null;
         if (formationUuid) {
@@ -351,6 +355,10 @@ export async function GET(req: Request) {
         const rentreeResult = await maybeSendPresentielRentreeEmail(payerEmail, formationId, formationType);
         if (!rentreeResult.skipped && rentreeResult.success) {
           console.log(`[LOCAL_SUCCESS] Présentiel rentrée email sent to ${payerEmail}`);
+        }
+        const distancielResult = await maybeSendDistancielRentreeEmail(payerEmail, formationId, formationType);
+        if (!distancielResult.skipped && distancielResult.success) {
+          console.log(`[LOCAL_SUCCESS] Distanciel rentrée email sent to ${payerEmail}`);
         }
         const metadata = session.metadata;
         const classRefs = collectCheckoutClassRefs(metadata);
@@ -371,7 +379,7 @@ export async function GET(req: Request) {
           console.log(`[LOCAL SUCCESS] Présentiel fournitures email sent to ${payerEmail}`);
         }
       } catch (e) {
-        console.error('[LOCAL_SUCCESS] Failed to send présentiel rentrée/fournitures email', e);
+        console.error('[LOCAL_SUCCESS] Failed to send rentrée/fournitures email', e);
       }
     }
 

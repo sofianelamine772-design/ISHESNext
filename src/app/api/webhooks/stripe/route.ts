@@ -399,10 +399,14 @@ export async function POST(req: Request) {
       await syncStudentPaidStatus(studentIds[0]); // Puisque c'est par famille, synchroniser un seul ID synchronise tout
     }
 
-    // Mail rentrée + fournitures : uniquement après une inscription présentiel réellement créée.
+    // Mail rentrée (présentiel / distanciel) + fournitures après inscription réellement créée.
     if (payerEmail && studentIds.length > 0) {
       try {
-        const { maybeSendPresentielRentreeEmail, maybeSendPresentielFournituresEmail } = await import('@/lib/mail');
+        const {
+          maybeSendPresentielRentreeEmail,
+          maybeSendPresentielFournituresEmail,
+          maybeSendDistancielRentreeEmail,
+        } = await import('@/lib/mail');
         const { collectCheckoutClassRefs } = await import('@/lib/presentiel-fournitures-email');
         let formationType: string | null = null;
         if (formationUuid) {
@@ -416,6 +420,10 @@ export async function POST(req: Request) {
         const rentreeResult = await maybeSendPresentielRentreeEmail(payerEmail, formationId, formationType);
         if (!rentreeResult.skipped && rentreeResult.success) {
           console.log(`[WEBHOOK] Présentiel rentrée email sent to ${payerEmail}`);
+        }
+        const distancielResult = await maybeSendDistancielRentreeEmail(payerEmail, formationId, formationType);
+        if (!distancielResult.skipped && distancielResult.success) {
+          console.log(`[WEBHOOK] Distanciel rentrée email sent to ${payerEmail}`);
         }
         let classRefs = collectCheckoutClassRefs(session.metadata);
         const { getFournituresKindsToSend } = await import('@/lib/presentiel-fournitures-email');
@@ -437,7 +445,7 @@ export async function POST(req: Request) {
           console.log(`[WEBHOOK] Présentiel fournitures email sent to ${payerEmail}`);
         }
       } catch (e) {
-        console.error('[WEBHOOK] Failed to send présentiel rentrée/fournitures email', e);
+        console.error('[WEBHOOK] Failed to send rentrée/fournitures email', e);
       }
     }
 

@@ -48,15 +48,26 @@ const mockMaybeSendPresentielRentreeEmail = jest.fn().mockImplementation(
     return { success: true, skipped: false };
   }
 );
+const mockMaybeSendDistancielRentreeEmail = jest.fn().mockImplementation(
+  async (_email: string, formationId: string, formationType?: string | null) => {
+    const { shouldSendDistancielRentreeEmail } = jest.requireActual('@/lib/distanciel-rentree');
+    if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
+      return { success: true, skipped: true };
+    }
+    return { success: true, skipped: false };
+  }
+);
 const mockMaybeSendPresentielFournituresEmail = jest.fn().mockResolvedValue({ success: true, skipped: true });
 
 jest.mock('@/lib/mail', () => ({
   maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
+  maybeSendDistancielRentreeEmail: (...args: unknown[]) => mockMaybeSendDistancielRentreeEmail(...args),
   maybeSendPresentielFournituresEmail: (...args: unknown[]) => mockMaybeSendPresentielFournituresEmail(...args),
   sendAdminNewStudentNotificationEmail: jest.fn().mockResolvedValue({ success: true }),
   sendWelcomeEmail: jest.fn(),
   sendClassAssignmentEmail: jest.fn(),
   sendPresentielRentreeEmail: jest.fn(),
+  sendDistancielRentreeEmail: jest.fn(),
 }));
 
 const DISTANCIEL_FORMATIONS = [
@@ -89,6 +100,15 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
       async (_email: string, formationId: string, formationType?: string | null) => {
         const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
         if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
+          return { success: true, skipped: true };
+        }
+        return { success: true, skipped: false };
+      }
+    );
+    mockMaybeSendDistancielRentreeEmail.mockImplementation(
+      async (_email: string, formationId: string, formationType?: string | null) => {
+        const { shouldSendDistancielRentreeEmail } = jest.requireActual('@/lib/distanciel-rentree');
+        if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
           return { success: true, skipped: true };
         }
         return { success: true, skipped: false };
@@ -170,6 +190,10 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
       const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
       expect(rentree.skipped).toBe(true);
     }
+    if (mockMaybeSendDistancielRentreeEmail.mock.calls.length > 0) {
+      const distanciel = await mockMaybeSendDistancielRentreeEmail.mock.results.at(-1)?.value;
+      expect(distanciel.skipped).toBe(false);
+    }
   });
 
   it('devrait assigner l\'élève à la classe SPÉCIFIQUE qu\'il a choisie (Présentiel)', async () => {
@@ -231,6 +255,13 @@ describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () =>
     );
     const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
     expect(rentree).toEqual({ success: true, skipped: false });
+    expect(mockMaybeSendDistancielRentreeEmail).toHaveBeenCalledWith(
+      'test_presentiel@example.com',
+      'presentiel-global',
+      null,
+    );
+    const distanciel = await mockMaybeSendDistancielRentreeEmail.mock.results.at(-1)?.value;
+    expect(distanciel).toEqual({ success: true, skipped: true });
     expect(mockMaybeSendPresentielFournituresEmail).toHaveBeenCalledWith(
       'test_presentiel@example.com',
       { classRefs: ['uuid-classe-specifique-choisie'] },

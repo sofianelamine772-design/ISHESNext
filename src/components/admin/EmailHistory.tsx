@@ -61,6 +61,7 @@ function typeLabel(type: string) {
     system: "Système",
     welcome: "Bienvenue",
     rentree: "Rentrée",
+    rentree_distanciel: "Rentrée distanciel",
     fournitures: "Fournitures",
     fournitures_prepa: "Fournitures prépa",
     fournitures_elem: "Fournitures élém.",
