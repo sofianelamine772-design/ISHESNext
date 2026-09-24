@@ -18,7 +18,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const navItems = [
-  { label: "Vue d'ensemble", href: "/app/admin", icon: LayoutDashboard },
+  { label: "Accueil", href: "/app/admin", icon: LayoutDashboard },
   { label: "Formations & Classes", href: "/app/admin/classes", icon: BookOpen },
   { label: "Messagerie & Com.", href: "/app/admin/communication", icon: MessageSquare },
   { label: "Tous les Étudiants", href: "/app/admin/etudiants", icon: Users },
@@ -67,7 +67,10 @@ export function AdminSidebar() {
 
         <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto custom-scrollbar relative z-10">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isExactHome = item.href === "/app/admin";
+            const isActive = isExactHome
+              ? pathname === "/app/admin"
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.href}

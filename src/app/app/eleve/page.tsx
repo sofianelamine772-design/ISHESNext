@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { fetchStudentCertificateDataAction, fetchStudentBillingDataAction } from "@/app/actions/students";
+import { fetchStudentCertificateDataAction, fetchStudentBillingDataAction, getStudentStripeReceiptUrlAction } from "@/app/actions/students";
 import { Button } from "@/components/ui/button";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { motion } from "framer-motion";
@@ -26,6 +26,12 @@ export default function EleveDashboard() {
   const [payments, setPayments] = useState<any[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(true);
   const [familyInscriptions, setFamilyInscriptions] = useState<any[]>([]);
+  const [billingTotals, setBillingTotals] = useState({
+    totalExpected: 0,
+    totalPaid: 0,
+    resteAPayer: 0,
+  });
+  const [loadingReceiptId, setLoadingReceiptId] = useState<string | null>(null);
 
   // PWA Install
   const [installPrompt, setInstallPrompt] = useState<any>(null);
@@ -59,6 +65,11 @@ export default function EleveDashboard() {
               if (payRes.success && payRes.data) {
                 setPayments(payRes.data.payments);
                 setFamilyInscriptions(payRes.data.inscriptions);
+                setBillingTotals({
+                  totalExpected: Number(payRes.data.total_expected) || 0,
+                  totalPaid: Number(payRes.data.total_paid) || 0,
+                  resteAPayer: Number(payRes.data.reste_a_payer) || 0,
+                });
               }
             } catch (payErr) {
               console.error("Error loading payments:", payErr);
@@ -201,31 +212,33 @@ export default function EleveDashboard() {
     }
   };
 
-  const getCoursePrice = (title: string): number => {
-    const t = (title || "").toLowerCase();
-    if (t.includes("intensif")) return 799;
-    if (t.includes("présentiel") || t.includes("presentiel") || t.includes("femme")) return 649;
-    if (t.includes("junior")) return 480;
-    if (t.includes("spiritualité") || t.includes("spiritualite") || t.includes("sciences du coran") || t.includes("hadith")) return 399;
-    if (t.includes("arabe") && t.includes("tajwid") && (t.includes("débutant") || t.includes("intermédiaire"))) return 480;
-    if (t.includes("tarbiya")) return 249;
-    if (t.includes("sirah")) return 649;
-    if (t.includes("aqida")) return 250;
-    if (t.includes("civilisation")) return 199;
-    if (t.includes("accompagnement")) return 49;
-    return 349;
+  const handleDownloadStripeReceipt = async (paymentId: string) => {
+    if (loadingReceiptId) return;
+    setLoadingReceiptId(paymentId);
+    try {
+      const res = await getStudentStripeReceiptUrlAction(paymentId);
+      if (res.success && res.url) {
+        window.open(res.url, '_blank', 'noopener,noreferrer');
+      } else {
+        alert(res.error || "Facture Stripe indisponible.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Impossible d'ouvrir la facture Stripe.");
+    } finally {
+      setLoadingReceiptId(null);
+    }
   };
 
   const getInstallmentDetails = () => {
     const paidPayments = payments.filter(p => p.status === 'succeeded' || p.status === 'paid');
     if (paidPayments.length === 0 || familyInscriptions.length === 0) return null;
 
-    const totalExpectedRaw = familyInscriptions.reduce((sum, ins) => {
-      return sum + (typeof ins.expectedAmount === 'number' ? ins.expectedAmount : getCoursePrice(ins.formationTitle));
-    }, 0);
+    // Affiche exactement les mêmes totaux que l’admin (même API)
+    const totalExpected = billingTotals.totalExpected;
+    const totalPaid = billingTotals.totalPaid;
+    const totalRemaining = billingTotals.resteAPayer;
 
-    const totalPaid = paidPayments.reduce((sum, p) => sum + (p.amount || 0), 0);
-    const totalExpected = Math.max(totalExpectedRaw, totalPaid);
     const firstPayment = [...paidPayments].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())[0];
     const firstAmount = firstPayment?.amount || 0;
 
@@ -277,7 +290,7 @@ export default function EleveDashboard() {
     return {
       totalExpected,
       totalPaid,
-      totalRemaining: Math.max(0, totalExpected - totalPaid),
+      totalRemaining,
       isInstallments,
       installmentsCount,
       amountPerInstallment: isInstallments ? firstAmount : totalExpected,
@@ -645,6 +658,7 @@ export default function EleveDashboard() {
                         const pDate = new Date(payment.created_at).toLocaleDateString('fr-FR', {
                           day: 'numeric', month: 'long', year: 'numeric'
                         });
+                        const canDownloadStripe = !!payment.isStripePayment;
                         return (
                           <div key={payment.id} className="border border-gray-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:bg-gray-50 transition-colors">
                             <div className="flex items-center gap-4 w-full sm:w-auto">
@@ -652,17 +666,35 @@ export default function EleveDashboard() {
                                 <CreditCard className="w-5 h-5" />
                               </div>
                               <div>
-                                <p className="font-bold text-gray-900">Paiement Scolarité</p>
+                                <p className="font-bold text-gray-900">
+                                  {canDownloadStripe ? 'Paiement Stripe' : payment.isManualPayment ? 'Paiement manuel' : 'Paiement Scolarité'}
+                                </p>
                                 <p className="text-xs text-gray-500 font-medium">Reçu le {pDate}</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-100">
+                            <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-100">
                               <span className="text-xl font-black text-gray-900">
                                 {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: payment.currency || 'EUR' }).format(payment.amount)}
                               </span>
                               <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
                                 Réussi
                               </span>
+                              {canDownloadStripe && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDownloadStripeReceipt(payment.id)}
+                                  disabled={loadingReceiptId === payment.id}
+                                  className="inline-flex items-center gap-1.5 bg-[#0F172A] text-white px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-ishes-blue transition-colors disabled:opacity-60"
+                                  title="Télécharger la facture Stripe"
+                                >
+                                  {loadingReceiptId === payment.id ? (
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  ) : (
+                                    <Download className="w-3.5 h-3.5" />
+                                  )}
+                                  Facture
+                                </button>
+                              )}
                             </div>
                           </div>
                         );

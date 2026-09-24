@@ -5,13 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2, ExternalLink } from "lucide-react";
-import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, deletePaymentAction, fetchUsersLoginsAction } from "@/app/actions/students";
+import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, deletePaymentAction, fetchUsersLoginsAction, getAdminStripeReceiptUrlAction } from "@/app/actions/students";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import { getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
-import { pickBillingPayments, sumSucceededBillingPayments } from "@/lib/pricing";
+import { pickBillingPayments, sumSucceededBillingPayments, isLiveStripePayment } from "@/lib/pricing";
 
 // Types
 type StudentDetail = {
@@ -56,6 +56,7 @@ function EtudiantsContent() {
   const [settleAmount, setSettleAmount] = useState("");
   const [settleMethod, setSettleMethod] = useState("liquide");
   const [isSettling, setIsSettling] = useState(false);
+  const [loadingReceiptId, setLoadingReceiptId] = useState<string | null>(null);
 
   // Only current and next academic year
   const currentAcademicYear = getCurrentAcademicYear();
@@ -239,6 +240,24 @@ function EtudiantsContent() {
     } catch (err) {
       console.error(err);
       alert("Erreur système.");
+    }
+  };
+
+  const handleDownloadStripeReceipt = async (paymentId: string) => {
+    if (loadingReceiptId) return;
+    setLoadingReceiptId(paymentId);
+    try {
+      const result = await getAdminStripeReceiptUrlAction(paymentId);
+      if (result.success && result.url) {
+        window.open(result.url, '_blank', 'noopener,noreferrer');
+      } else {
+        alert(result.error || "Facture Stripe indisponible.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Impossible d'ouvrir la facture Stripe.");
+    } finally {
+      setLoadingReceiptId(null);
     }
   };
 
@@ -949,7 +968,7 @@ function EtudiantsContent() {
                           </div>
                           <Button 
                             variant="ishes" 
-                            disabled={isSettling || !settleAmount || Number(settleAmount) <= 0 || Number(settleAmount) > billingData.resteAPayer}
+                            disabled={isSettling || !settleAmount || Number(settleAmount) <= 0 || Number(settleAmount) > billingData.resteAPayer + 0.009}
                             onClick={handleManualSettle}
                             className="w-full sm:w-auto h-[46px] rounded-xl font-black uppercase tracking-widest text-[10px] px-8"
                           >
@@ -1022,6 +1041,22 @@ function EtudiantsContent() {
                                     }`}>
                                     {isSucceeded ? 'Payé' : 'Échoué'}
                                   </span>
+                                  {isSucceeded && isLiveStripePayment(payment) && (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => { e.stopPropagation(); handleDownloadStripeReceipt(payment.id); }}
+                                      disabled={loadingReceiptId === payment.id}
+                                      className="mt-1 flex items-center gap-1 text-[9px] font-black text-ishes-blue hover:text-ishes-dark uppercase tracking-widest transition-colors disabled:opacity-50"
+                                      title="Télécharger la facture Stripe"
+                                    >
+                                      {loadingReceiptId === payment.id ? (
+                                        <Loader2 className="w-3 h-3 animate-spin" />
+                                      ) : (
+                                        <Download className="w-3 h-3" />
+                                      )}
+                                      Facture
+                                    </button>
+                                  )}
                                   {payment.stripe_session_id?.startsWith('manual_') && (
                                     <button 
                                       onClick={(e) => { e.stopPropagation(); handleDeletePayment(payment.id); }}

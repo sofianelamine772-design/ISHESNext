@@ -276,6 +276,9 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'payment',
+        invoice_creation: {
+          enabled: true,
+        },
         success_url: isLocal
           ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
           : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,

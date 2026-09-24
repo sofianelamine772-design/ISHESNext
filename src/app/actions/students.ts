@@ -12,7 +12,7 @@ import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
 import { getDistancielRentreePublicDocs } from "@/lib/distanciel-rentree";
-import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess } from "@/lib/pricing";
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess, isLiveStripePayment, isManualBillingPayment } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -1786,10 +1786,16 @@ export async function fetchStudentBillingDataAction(studentId: string) {
     const total_paid = sumSucceededBillingPayments(deduplicatedPayments);
     const reste_a_payer = Math.max(0, total_expected - total_paid);
 
+    const paymentsForClient = deduplicatedPayments.map((p: any) => ({
+      ...p,
+      isStripePayment: isLiveStripePayment(p),
+      isManualPayment: isManualBillingPayment(p),
+    }));
+
     return {
       success: true,
       data: {
-        payments: deduplicatedPayments,
+        payments: paymentsForClient,
         inscriptions: enrichedInscriptions,
         total_expected,
         total_paid,
@@ -1802,62 +1808,204 @@ export async function fetchStudentBillingDataAction(studentId: string) {
   }
 }
 
+/**
+ * URL facture / reçu Stripe pour un paiement de la famille connectée.
+ * - Checkout cs_… → facture PDF si dispo, sinon reçu de paiement
+ * - Facture d’abonnement in_… → PDF / page hébergée
+ */
+export async function getStudentStripeReceiptUrlAction(paymentId: string): Promise<{
+  success: boolean;
+  url?: string;
+  error?: string;
+}> {
+  try {
+    const { userId } = await auth();
+    const user = await currentUser();
+    if (!userId || !user) {
+      return { success: false, error: 'Non connecté.' };
+    }
+
+    if (!paymentId) {
+      return { success: false, error: 'Paiement introuvable.' };
+    }
+
+    const { data: payment } = await supabaseAdmin
+      .from('paiements')
+      .select('id, etudiant_id, stripe_session_id, status, amount')
+      .eq('id', paymentId)
+      .maybeSingle();
+
+    if (!payment) {
+      return { success: false, error: 'Paiement introuvable.' };
+    }
+
+    if (!isLiveStripePayment(payment)) {
+      return { success: false, error: 'Aucune facture Stripe pour ce règlement.' };
+    }
+
+    const email =
+      user.primaryEmailAddress?.emailAddress ||
+      user.emailAddresses?.[0]?.emailAddress ||
+      '';
+    const baseEmail = email.includes('@')
+      ? `${email.toLowerCase().split('@')[0].split('+')[0]}@${email.toLowerCase().split('@')[1]}`
+      : '';
+
+    const familyIds = new Set<string>();
+    const { data: byClerk } = await supabaseAdmin
+      .from('etudiants')
+      .select('id')
+      .eq('clerk_user_id', userId);
+    (byClerk || []).forEach((m: any) => familyIds.add(m.id));
+
+    if (baseEmail) {
+      const { data: byEmail } = await supabaseAdmin
+        .from('etudiants')
+        .select('id')
+        .eq('email', baseEmail);
+      (byEmail || []).forEach((m: any) => familyIds.add(m.id));
+    }
+
+    if (!familyIds.has(payment.etudiant_id)) {
+      return { success: false, error: 'Accès non autorisé à ce paiement.' };
+    }
+
+    const url = await resolveStripeReceiptUrl(String(payment.stripe_session_id));
+    if (!url) {
+      return { success: false, error: 'Facture Stripe indisponible pour le moment.' };
+    }
+
+    return { success: true, url };
+  } catch (err) {
+    console.error('[getStudentStripeReceiptUrlAction]', err);
+    return { success: false, error: 'Impossible de récupérer la facture Stripe.' };
+  }
+}
+
+/** Facture / reçu Stripe depuis le profil admin (n’importe quel élève). */
+export async function getAdminStripeReceiptUrlAction(paymentId: string): Promise<{
+  success: boolean;
+  url?: string;
+  error?: string;
+}> {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return { success: false, error: 'Non autorisé.' };
+    }
+
+    if (!paymentId) {
+      return { success: false, error: 'Paiement introuvable.' };
+    }
+
+    const { data: payment } = await supabaseAdmin
+      .from('paiements')
+      .select('id, stripe_session_id, status')
+      .eq('id', paymentId)
+      .maybeSingle();
+
+    if (!payment) {
+      return { success: false, error: 'Paiement introuvable.' };
+    }
+
+    if (!isLiveStripePayment(payment)) {
+      return { success: false, error: 'Aucune facture Stripe pour ce règlement.' };
+    }
+
+    const url = await resolveStripeReceiptUrl(String(payment.stripe_session_id));
+    if (!url) {
+      return { success: false, error: 'Facture Stripe indisponible pour le moment.' };
+    }
+
+    return { success: true, url };
+  } catch (err) {
+    console.error('[getAdminStripeReceiptUrlAction]', err);
+    return { success: false, error: 'Impossible de récupérer la facture Stripe.' };
+  }
+}
+
+async function resolveStripeReceiptUrl(stripeRef: string): Promise<string | null> {
+  const id = String(stripeRef || '').trim();
+  if (!id || id.startsWith('manual_')) return null;
+
+  // Facture d’abonnement / webhook invoice.*
+  if (id.startsWith('in_')) {
+    const invoice = await stripe.invoices.retrieve(id);
+    return invoice.invoice_pdf || invoice.hosted_invoice_url || null;
+  }
+
+  // Checkout Session (paiement unique ou 1ʳᵉ mensualité)
+  if (id.startsWith('cs_')) {
+    const session = await stripe.checkout.sessions.retrieve(id, {
+      expand: ['invoice', 'payment_intent.latest_charge'],
+    });
+
+    const inv = session.invoice;
+    if (inv && typeof inv === 'object') {
+      const pdf = (inv as Stripe.Invoice).invoice_pdf;
+      const hosted = (inv as Stripe.Invoice).hosted_invoice_url;
+      if (pdf || hosted) return pdf || hosted;
+    }
+    if (typeof inv === 'string') {
+      const invoice = await stripe.invoices.retrieve(inv);
+      if (invoice.invoice_pdf || invoice.hosted_invoice_url) {
+        return invoice.invoice_pdf || invoice.hosted_invoice_url;
+      }
+    }
+
+    const pi = session.payment_intent;
+    if (pi && typeof pi === 'object') {
+      const charge = (pi as Stripe.PaymentIntent).latest_charge;
+      if (charge && typeof charge === 'object') {
+        const receipt = (charge as Stripe.Charge).receipt_url;
+        if (receipt) return receipt;
+      }
+      if (typeof charge === 'string') {
+        const ch = await stripe.charges.retrieve(charge);
+        if (ch.receipt_url) return ch.receipt_url;
+      }
+    }
+    if (typeof pi === 'string') {
+      const intent = await stripe.paymentIntents.retrieve(pi, {
+        expand: ['latest_charge'],
+      });
+      const charge = intent.latest_charge;
+      if (charge && typeof charge === 'object' && (charge as Stripe.Charge).receipt_url) {
+        return (charge as Stripe.Charge).receipt_url;
+      }
+    }
+
+    return null;
+  }
+
+  // PaymentIntent direct
+  if (id.startsWith('pi_')) {
+    const intent = await stripe.paymentIntents.retrieve(id, {
+      expand: ['latest_charge'],
+    });
+    const charge = intent.latest_charge;
+    if (charge && typeof charge === 'object') {
+      return (charge as Stripe.Charge).receipt_url || null;
+    }
+    return null;
+  }
+
+  return null;
+}
+
 export async function addManualSettlePaymentAction(studentId: string, amount: number, method: string) {
   try {
     const authResult = await auth();
-    const adminId = authResult.userId;
-    if (!adminId) {
+    if (!authResult.userId) {
       return { success: false, error: "Non autorisé." };
-    }
-
-    const { data: adminUser } = await supabaseAdmin
-      .from('etudiants')
-      .select('role')
-      .eq('clerk_user_id', adminId)
-      .maybeSingle();
-
-    if (!adminUser || adminUser.role !== 'admin') {
-      return { success: false, error: "Non autorisé. Droits administrateur requis." };
     }
 
     if (!amount || amount <= 0) {
       return { success: false, error: "Le montant doit être supérieur à 0." };
     }
 
-    // Récupérer le bon ID étudiant
-    let realStudentId = studentId;
-    const { data: etudiant } = await supabaseAdmin.from('etudiants').select('id, email').eq('id', studentId).maybeSingle();
-    if (etudiant && etudiant.email) {
-      const baseEmail = etudiant.email.toLowerCase().split('+')[0] + '@' + etudiant.email.split('@')[1];
-      const { data: familyStudents } = await supabaseAdmin.from('etudiants').select('id').eq('email', baseEmail);
-      if (familyStudents && familyStudents.length > 0) {
-        realStudentId = familyStudents[0].id; // Associer le paiement au 1er membre de la famille
-      }
-    }
-
-    // Insérer le paiement
-    const stripe_session_id = `manual_settle_${method}_${Date.now()}`;
-    const { data: newPayment, error: insertError } = await supabaseAdmin
-      .from('paiements')
-      .insert({
-        etudiant_id: realStudentId,
-        amount,
-        currency: 'EUR',
-        status: 'succeeded',
-        stripe_session_id,
-      })
-      .select('id')
-      .single();
-
-    if (insertError) {
-      console.error("[addManualSettlePaymentAction] Insert error:", insertError);
-      return { success: false, error: "Erreur lors de l'insertion du paiement." };
-    }
-
-    // Recalculer le statut global
-    await syncStudentPaidStatus(realStudentId);
-
-    return { success: true };
+    // Même logique que la page Facturation (addManualPaymentAction)
+    return addManualPaymentAction(studentId, amount, method);
   } catch (error: any) {
     console.error("[addManualSettlePaymentAction] Exception:", error);
     return { success: false, error: "Erreur interne." };
