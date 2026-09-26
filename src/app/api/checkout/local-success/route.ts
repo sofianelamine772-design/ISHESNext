@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getCurrentAcademicYear } from '@/lib/utils';
 import { getExpectedAmountForChild } from '@/lib/pricing';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16' as any,
-});
+import {
+  getStripeClient,
+  isPresentielStripeConfigured,
+  normalizeStoredStripeAccount,
+  type StripeAccountId,
+} from '@/lib/stripe-accounts';
+import { insertPaiementWithStripeAccount } from '@/lib/paiements-insert';
 
 /** Normalise un email en supprimant le suffixe +xxx avant le @ */
 function getBaseEmail(email: string): string {
@@ -204,7 +206,34 @@ export async function GET(req: Request) {
   }
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    let stripeAccount: StripeAccountId = 'distanciel';
+    let session: Awaited<ReturnType<ReturnType<typeof getStripeClient>['checkout']['sessions']['retrieve']>> | null = null;
+
+    const tryAccounts: StripeAccountId[] = isPresentielStripeConfigured()
+      ? ['distanciel', 'presentiel']
+      : ['distanciel'];
+
+    for (const account of tryAccounts) {
+      try {
+        const client = getStripeClient(account, { legacyApi: true });
+        session = await client.checkout.sessions.retrieve(sessionId);
+        stripeAccount = account;
+        break;
+      } catch {
+        // essayer le compte suivant
+      }
+    }
+
+    if (!session) {
+      console.error('[LOCAL_SUCCESS] Session introuvable sur les comptes Stripe configurés');
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+
+    // Priorité metadata
+    const metaAcc = session.metadata?.stripe_account;
+    if (metaAcc === 'presentiel' || metaAcc === 'distanciel') {
+      stripeAccount = normalizeStoredStripeAccount(metaAcc);
+    }
 
     if (session.payment_status !== 'paid') {
       console.warn('[LOCAL_SUCCESS] Session not paid, skipping.');
@@ -325,12 +354,13 @@ export async function GET(req: Request) {
         .maybeSingle();
 
       if (!existingPayment) {
-        await supabaseAdmin.from('paiements').insert({
+        await insertPaiementWithStripeAccount({
           etudiant_id: studentIds[0],
           stripe_session_id: session.id,
           amount: (session.amount_total || 0) / 100,
           currency: (session.currency || 'eur').toUpperCase(),
           status: 'succeeded',
+          stripe_account: stripeAccount,
         });
       }
     }

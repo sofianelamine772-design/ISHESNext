@@ -15,7 +15,25 @@ jest.mock('@/lib/supabaseAdmin', () => ({
   }
 }));
 
-// Setup a basic mock for Stripe
+jest.mock('@/lib/stripe-accounts', () => {
+  const actual = jest.requireActual('@/lib/stripe-accounts');
+  const mStripe = {
+    checkout: {
+      sessions: {
+        create: jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' })
+      }
+    },
+    prices: {
+      create: jest.fn().mockResolvedValue({ id: 'price_test_123' })
+    }
+  };
+  return {
+    ...actual,
+    getStripeClient: jest.fn(() => mStripe),
+  };
+});
+
+// Setup a basic mock for Stripe (compat anciens asserts new Stripe())
 jest.mock('stripe', () => {
   const mStripe = {
     checkout: {
@@ -30,13 +48,13 @@ jest.mock('stripe', () => {
   return jest.fn(() => mStripe);
 });
 
-function mockFormation(price = 480, title = 'Cours enfants') {
+function mockFormation(price = 480, title = 'Cours enfants', type = 'presentiel') {
   const mockSelect = jest.fn().mockReturnValue({
     eq: jest.fn().mockReturnValue({
-      maybeSingle: jest.fn().mockResolvedValue({ data: { price, title } })
+      maybeSingle: jest.fn().mockResolvedValue({ data: { price, title, type } })
     })
   });
-  (supabaseAdmin.from as jest.Mock).mockReturnValue({ select: mockSelect });
+  (supabaseAdmin.from as jest.Mock).mockImplementation(() => ({ select: mockSelect }));
 }
 
 async function postCheckout(body: Record<string, unknown>) {

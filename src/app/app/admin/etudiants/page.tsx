@@ -11,7 +11,7 @@ import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import { getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
-import { pickBillingPayments, sumSucceededBillingPayments, isLiveStripePayment } from "@/lib/pricing";
+import { pickBillingPayments, sumSucceededBillingPayments, isLiveStripePayment, isTestStripePayment } from "@/lib/pricing";
 
 // Types
 type StudentDetail = {
@@ -922,19 +922,26 @@ function EtudiantsContent() {
                     </div>
 
                     {!loadingPayments && (
-                      <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
-                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Coût Total</span>
-                          <span className="text-xl font-black text-ishes-dark">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalExpected)}</span>
+                      <div className="mb-8 space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Coût Total</span>
+                            <span className="text-xl font-black text-ishes-dark">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalExpected)}</span>
+                          </div>
+                          <div className="bg-ishes-blue/[0.05] border border-ishes-blue/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                            <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest mb-1">Déjà Payé</span>
+                            <span className="text-xl font-black text-ishes-blue">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalPaid)}</span>
+                          </div>
+                          <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.resteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-100'}`}>
+                            <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.resteAPayer > 0 ? 'text-red-500' : 'text-gray-400'}`}>Reste à Payer</span>
+                            <span className={`text-xl font-black ${billingData.resteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.resteAPayer)}</span>
+                          </div>
                         </div>
-                        <div className="bg-ishes-blue/[0.05] border border-ishes-blue/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
-                          <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest mb-1">Déjà Payé</span>
-                          <span className="text-xl font-black text-ishes-blue">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalPaid)}</span>
-                        </div>
-                        <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.resteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-100'}`}>
-                          <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.resteAPayer > 0 ? 'text-red-500' : 'text-gray-400'}`}>Reste à Payer</span>
-                          <span className={`text-xl font-black ${billingData.resteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.resteAPayer)}</span>
-                        </div>
+                        {payments.some((p: any) => isTestStripePayment(p)) && (
+                          <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-4 py-2.5 font-medium">
+                            Des paiements Stripe en mode test (<span className="font-bold">cs_test_…</span>) sont visibles ci-dessous mais exclus du solde — ce n’est pas de l’argent réel.
+                          </p>
+                        )}
                       </div>
                     )}
 
@@ -1041,6 +1048,11 @@ function EtudiantsContent() {
                                     }`}>
                                     {isSucceeded ? 'Payé' : 'Échoué'}
                                   </span>
+                                  {isTestStripePayment(payment) && (
+                                    <span className="inline-block px-2 py-0.5 text-[9px] font-black uppercase rounded-lg tracking-wider bg-amber-100 text-amber-700">
+                                      Test — non compté
+                                    </span>
+                                  )}
                                   {isSucceeded && isLiveStripePayment(payment) && (
                                     <button
                                       type="button"

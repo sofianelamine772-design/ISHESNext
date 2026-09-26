@@ -1,9 +1,10 @@
 import Stripe from "stripe";
+import { getStripeClient } from "@/lib/stripe-accounts";
 
-// On utilise une clé factice pendant le build si la vraie est absente pour éviter de faire planter Vercel
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "sk_test_placeholder_for_build";
+/** Client Stripe Distance (compte actuel / défaut). Préférer getStripeClient(account). */
+export const stripe = getStripeClient("distanciel");
 
-export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: "2026-08-26.dahlia",
-  typescript: true,
-});
+export { getStripeClient, resolveStripeAccount, type StripeAccountId } from "@/lib/stripe-accounts";
+
+// Réexport type pour compat
+export type { Stripe };

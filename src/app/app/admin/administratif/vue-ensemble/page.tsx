@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AdminSidebar } from "@/components/AdminSidebar";
-import { stripe } from "@/lib/stripe";
+import { getStripeClient, isPresentielStripeConfigured } from "@/lib/stripe-accounts";
 import { SalesChart } from "@/components/admin/SalesChart";
 import { fetchStudentsAction } from "@/app/actions/students";
 import Link from "next/link";
@@ -24,7 +24,7 @@ export default async function AdminOverview() {
     !s.inscriptions?.some((ins: any) => ins.classes?.type === 'presentiel')
   ).length;
 
-  // Stripe Revenue Data
+  // Stripe Revenue Data (Distance + Présentiel si configuré)
   let monthlyRevenue = 0;
   let yearlyRevenue = 0;
 
@@ -36,23 +36,28 @@ export default async function AdminOverview() {
     const startOfMonthTimestamp = Math.floor(startOfMonth.getTime() / 1000);
     const startOfYearTimestamp = Math.floor(startOfYear.getTime() / 1000);
 
-    // Get monthly revenue (limit 100 for simplicity)
-    const monthPIs = await stripe.paymentIntents.list({
-      created: { gte: startOfMonthTimestamp },
-      limit: 100,
-    });
-    monthlyRevenue = monthPIs.data
-      .filter(pi => pi.status === 'succeeded')
-      .reduce((acc, pi) => acc + (pi.amount_received / 100), 0);
+    const accounts = isPresentielStripeConfigured()
+      ? (['distanciel', 'presentiel'] as const)
+      : (['distanciel'] as const);
 
-    // Get yearly revenue (limit 100)
-    const yearPIs = await stripe.paymentIntents.list({
-      created: { gte: startOfYearTimestamp },
-      limit: 100,
-    });
-    yearlyRevenue = yearPIs.data
-      .filter(pi => pi.status === 'succeeded')
-      .reduce((acc, pi) => acc + (pi.amount_received / 100), 0);
+    for (const account of accounts) {
+      const client = getStripeClient(account);
+      const monthPIs = await client.paymentIntents.list({
+        created: { gte: startOfMonthTimestamp },
+        limit: 100,
+      });
+      monthlyRevenue += monthPIs.data
+        .filter(pi => pi.status === 'succeeded')
+        .reduce((acc, pi) => acc + (pi.amount_received / 100), 0);
+
+      const yearPIs = await client.paymentIntents.list({
+        created: { gte: startOfYearTimestamp },
+        limit: 100,
+      });
+      yearlyRevenue += yearPIs.data
+        .filter(pi => pi.status === 'succeeded')
+        .reduce((acc, pi) => acc + (pi.amount_received / 100), 0);
+    }
   } catch (err) {
     console.error("Stripe Fetch Error:", err);
   }

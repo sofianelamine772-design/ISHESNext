@@ -10,6 +10,7 @@ import {
   inscriptionGrantsStudentAccess,
   sumSucceededBillingPayments,
   sumSucceededPaymentsBySource,
+  isTestStripePayment,
   SIBLING_DISCOUNT_EUR,
 } from '@/lib/pricing';
 
@@ -438,5 +439,68 @@ describe('resolveInscriptionPaidStatus', () => {
   it('reste impaye si aucun encaissement réel', () => {
     expect(resolveInscriptionPaidStatus(0, 399)).toBe('impaye');
     expect(resolveInscriptionPaidStatus(0.005, 399)).toBe('impaye');
+  });
+});
+
+describe('Double Stripe — facturation (pas de mélange test / live)', () => {
+  it('compte un checkout présentiel LIVE dans le solde', () => {
+    const payments = [
+      {
+        id: 'p1',
+        amount: 480,
+        status: 'succeeded',
+        stripe_session_id: 'cs_live_presentiel_abc',
+      },
+    ];
+    expect(sumSucceededBillingPayments(payments)).toBeCloseTo(480);
+    expect(resolveInscriptionPaidStatus(480, 0)).toBe('paye');
+  });
+
+  it('exclut un checkout présentiel TEST du solde (cs_test_)', () => {
+    const payments = [
+      {
+        id: 'p1',
+        amount: 480,
+        status: 'succeeded',
+        stripe_session_id: 'cs_test_a1r8rsDGWeKdLhO86YAOWJmNK8GOCtfFcJZLdwPwlZNzJkuxTyMPaNWrig',
+      },
+    ];
+    expect(isTestStripePayment(payments[0])).toBe(true);
+    expect(sumSucceededBillingPayments(payments)).toBe(0);
+    expect(resolveInscriptionPaidStatus(0, 480)).toBe('impaye');
+  });
+
+  it('cumule live distanciel + live présentiel sans double-compte', () => {
+    const payments = pickBillingPayments(
+      [
+        {
+          id: 'd1',
+          etudiant_id: 'stu',
+          amount: 399,
+          status: 'succeeded',
+          stripe_session_id: 'cs_live_fiqh',
+          created_at: '2026-09-01T10:00:00Z',
+        },
+        {
+          id: 'p1',
+          etudiant_id: 'stu',
+          amount: 480,
+          status: 'succeeded',
+          stripe_session_id: 'cs_live_presentiel',
+          created_at: '2026-09-02T10:00:00Z',
+        },
+        {
+          id: 'dup',
+          etudiant_id: 'stu',
+          amount: 480,
+          status: 'succeeded',
+          stripe_session_id: 'cs_live_presentiel',
+          created_at: '2026-09-02T10:01:00Z',
+        },
+      ],
+      () => ({ firstName: 'A', lastName: 'B', email: 'a@b.com' }),
+    );
+    expect(payments).toHaveLength(2);
+    expect(sumSucceededBillingPayments(payments)).toBeCloseTo(879);
   });
 });

@@ -5,12 +5,13 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { clerkClient } from '@clerk/nextjs/server';
 import { getCurrentAcademicYear } from '@/lib/utils';
 import { getExpectedAmountForChild } from '@/lib/pricing';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16' as any,
-});
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+import {
+  constructStripeWebhookEvent,
+  getStripeClient,
+  normalizeStoredStripeAccount,
+  type StripeAccountId,
+} from '@/lib/stripe-accounts';
+import { insertPaiementWithStripeAccount } from '@/lib/paiements-insert';
 
 /** Normalise un email en supprimant le suffixe +xxx avant le @ */
 function getBaseEmail(email: string): string {
@@ -211,9 +212,12 @@ export async function POST(req: Request) {
   const signature = headerList.get('stripe-signature') as string;
 
   let event: Stripe.Event;
+  let stripeAccount: StripeAccountId = 'distanciel';
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    const verified = constructStripeWebhookEvent(body, signature);
+    event = verified.event;
+    stripeAccount = verified.account;
   } catch (err: any) {
     console.error(`Webhook Error: ${err.message}`);
     try {
@@ -222,6 +226,13 @@ export async function POST(req: Request) {
     } catch {}
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
+
+  // Metadata checkout prioritaire si présente
+  const metaAccount = (event.data.object as any)?.metadata?.stripe_account;
+  if (metaAccount === 'presentiel' || metaAccount === 'distanciel') {
+    stripeAccount = normalizeStoredStripeAccount(metaAccount);
+  }
+  const stripe = getStripeClient(stripeAccount, { legacyApi: true });
 
   try {
 
@@ -363,12 +374,13 @@ export async function POST(req: Request) {
         .maybeSingle();
 
       if (!existingPayment) {
-        await supabaseAdmin.from('paiements').insert({
+        await insertPaiementWithStripeAccount({
           etudiant_id: studentIds[0],
           stripe_session_id: session.id,
           amount: (session.amount_total || 0) / 100,
           currency: (session.currency || 'eur').toUpperCase(),
           status: 'succeeded',
+          stripe_account: stripeAccount,
         });
       }
 
@@ -509,7 +521,7 @@ export async function POST(req: Request) {
           .limit(1)
           .maybeSingle();
 
-        const { data: insertedPayment, error } = await supabaseAdmin.from('paiements').insert({
+        const { data: insertedPayment, error } = await insertPaiementWithStripeAccount({
           inscription_id: inscription?.id || null,
           etudiant_id: primaryMember.id,
           stripe_session_id: invoice.id,
@@ -517,7 +529,8 @@ export async function POST(req: Request) {
           currency: (invoice.currency || 'eur').toUpperCase(),
           status,
           error_message: (invoice as any).last_payment_error?.message || null,
-        }).select('id').single();
+          stripe_account: stripeAccount,
+        });
 
         if (error) {
           console.error('[WEBHOOK paiement log error]', error);

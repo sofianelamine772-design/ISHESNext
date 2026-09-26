@@ -1,9 +1,9 @@
-import { SignUp, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
+import { ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { ArabicBackground } from "@/components/ArabicBackground";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { PostPaymentSignUp } from "@/components/auth/PostPaymentSignUp";
 
 export const metadata: Metadata = {
   title: "Inscription | Espace Membre ISHES",
@@ -20,7 +20,6 @@ export default async function SignUpPage({
 
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-[#FAFAFA] p-6 pt-20 overflow-hidden">
-      {/* Background decorations */}
       <ArabicBackground />
       <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-ishes-blue/5 blur-[120px] rounded-full pointer-events-none -z-10" />
       <div className="absolute bottom-[-10%] left-[10%] w-[600px] h-[600px] bg-ishes-gold/5 blur-[100px] rounded-full pointer-events-none -z-10" />
@@ -38,7 +37,11 @@ export default async function SignUpPage({
             />
           </div>
           <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Créer un compte</h1>
-          <p className="text-gray-500 font-medium text-sm">Rejoignez l'institut ISHES dès aujourd'hui</p>
+          <p className="text-gray-500 font-medium text-sm">
+            {email
+              ? `Utilisez l'adresse du paiement : ${email}`
+              : "Rejoignez l'institut ISHES dès aujourd'hui"}
+          </p>
         </div>
 
         <ClerkLoading>
@@ -49,25 +52,7 @@ export default async function SignUpPage({
         </ClerkLoading>
 
         <ClerkLoaded>
-          <SignUp
-            forceRedirectUrl="/app/eleve"
-            fallbackRedirectUrl="/app/eleve"
-            initialValues={email ? { emailAddress: email } : undefined}
-            appearance={{
-              elements: {
-                rootBox: "mx-auto w-full",
-                card: "shadow-2xl border-t-4 border-ishes-gold border-x border-b border-gray-100/80 rounded-[2.5rem] p-8 bg-white/95 backdrop-blur-sm",
-                headerTitle: "hidden",
-                headerSubtitle: "hidden",
-                socialButtonsBlockButton: "rounded-xl border-gray-200 hover:bg-gray-50 transition-all font-bold",
-                formButtonPrimary: "bg-ishes-gold hover:bg-[#b0935b] text-white font-bold py-3 rounded-xl shadow-lg shadow-ishes-gold/10 transition-all h-12 uppercase tracking-widest text-xs",
-                formFieldInput: "bg-gray-50 border-gray-200 rounded-xl focus:ring-ishes-gold/20 focus:border-ishes-gold transition-all",
-                footerActionLink: "text-ishes-gold font-bold hover:text-[#b0935b]",
-                identityPreviewEditButton: "text-ishes-gold",
-                formFieldLabel: "font-bold text-gray-700 text-xs mb-2 uppercase tracking-wide",
-              }
-            }}
-          />
+          <PostPaymentSignUp paymentEmail={email} />
         </ClerkLoaded>
       </div>
     </div>

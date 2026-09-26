@@ -139,15 +139,17 @@ export async function GET(request: Request) {
     
     let abandonedCheckouts24h = 0;
     try {
-      if (process.env.STRIPE_SECRET_KEY) {
-        const stripeModule = await import('stripe');
-        const stripe = new stripeModule.default(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' as any });
-        
+      const { getStripeClient, isPresentielStripeConfigured } = await import('@/lib/stripe-accounts');
+      const accounts = isPresentielStripeConfigured()
+        ? (['distanciel', 'presentiel'] as const)
+        : (['distanciel'] as const);
+      for (const account of accounts) {
+        const stripe = getStripeClient(account, { legacyApi: true });
         const sessions = await stripe.checkout.sessions.list({
           created: { gte: oneDayAgoUnix },
           limit: 100,
         });
-        abandonedCheckouts24h = sessions.data.filter(s => s.status === 'open' || s.status === 'expired').length;
+        abandonedCheckouts24h += sessions.data.filter(s => s.status === 'open' || s.status === 'expired').length;
       }
     } catch (err) {
       console.error('[BACKUP] Error fetching Stripe sessions:', err);

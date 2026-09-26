@@ -5,10 +5,7 @@ import { CLASS_ID_TO_UUID, resolvePresentielCheckoutSlug, getPresentielCapacityL
 import { DISTANCE_CLASS_ID_TO_UUID, isOfficialDistanceClassId } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-08-26.dahlia',
-});
+import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
 
 export async function POST(req: Request) {
   try {
@@ -68,7 +65,7 @@ export async function POST(req: Request) {
     // 1. Charger la formation depuis la base de données (Source unique de vérité)
     const { data: formation } = await supabaseAdmin
       .from('formations')
-      .select('price, title')
+      .select('price, title, type')
       .eq('slug', formationId)
       .maybeSingle();
 
@@ -178,6 +175,12 @@ export async function POST(req: Request) {
 
     let sessionParams: Stripe.Checkout.SessionCreateParams;
 
+    const stripeAccount = resolveStripeAccount({
+      formationId,
+      formationType: formationData?.type || null,
+    });
+    const stripe = getStripeClient(stripeAccount);
+
     const metadata: Record<string, string> = {
       clerkUserId: userId || '',
       formationId,
@@ -193,6 +196,7 @@ export async function POST(req: Request) {
       registrationType,
       expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
       sibling_discount: String(siblingDiscount),
+      stripe_account: stripeAccount,
     };
 
     if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {

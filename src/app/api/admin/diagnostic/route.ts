@@ -89,6 +89,26 @@ export async function GET() {
         : `Variables manquantes : ${missingEnv.join(', ')}`
     };
 
+    // Double Stripe (optionnel tant que non activé)
+    const hasPresentielStripe = Boolean(process.env.STRIPE_PRESENTIEL_SECRET_KEY?.trim());
+    const hasPresentielWhsec = Boolean(process.env.STRIPE_PRESENTIEL_WEBHOOK_SECRET?.trim());
+    if (hasPresentielStripe && hasPresentielWhsec) {
+      diagnostics['stripe_dual'] = {
+        success: true,
+        message: 'Double Stripe actif : Distance + Présentiel (secret + webhook).',
+      };
+    } else if (hasPresentielStripe || hasPresentielWhsec) {
+      diagnostics['stripe_dual'] = {
+        success: false,
+        message: 'Double Stripe incomplet : il faut STRIPE_PRESENTIEL_SECRET_KEY et STRIPE_PRESENTIEL_WEBHOOK_SECRET.',
+      };
+    } else {
+      diagnostics['stripe_dual'] = {
+        success: true,
+        message: 'Mode mono-Stripe (Distance uniquement). Ajoute les clés PRESENTIEL pour activer le split.',
+      };
+    }
+
     // 3. Alignement des clés Clerk (Test vs Production)
     const clerkPub = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || '';
     const clerkSec = process.env.CLERK_SECRET_KEY || '';

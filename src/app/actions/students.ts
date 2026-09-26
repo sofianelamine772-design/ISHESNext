@@ -2,7 +2,7 @@
 "use server";
 
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
@@ -13,10 +13,11 @@ import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, norm
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
 import { getDistancielRentreePublicDocs } from "@/lib/distanciel-rentree";
 import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess, isLiveStripePayment, isManualBillingPayment } from "@/lib/pricing";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16" as any,
-});
+import {
+  getStripeClient,
+  normalizeStoredStripeAccount,
+  resolveStripeAccount,
+} from "@/lib/stripe-accounts";
 
 export async function registerStudentAction(formData: {
   prenom: string;
@@ -1559,6 +1560,25 @@ export async function sendPaymentReminderWithLinkAction(paymentId: string) {
     const amountInCents = Math.round(parseFloat(paiement.amount) * 100);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
 
+    // Relance sur le même compte Stripe que le paiement d'origine
+    let stripeAccount = normalizeStoredStripeAccount(paiement.stripe_account);
+    if (!paiement.stripe_account) {
+      const { data: ins } = await supabaseAdmin
+        .from('inscriptions')
+        .select('formations(type), formation_id')
+        .eq('etudiant_id', student.id)
+        .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation'])
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const formation = Array.isArray(ins?.formations) ? ins?.formations[0] : ins?.formations;
+      stripeAccount = resolveStripeAccount({
+        formationType: (formation as any)?.type || null,
+      });
+    }
+
+    const stripe = getStripeClient(stripeAccount, { legacyApi: true });
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -1574,12 +1594,14 @@ export async function sendPaymentReminderWithLinkAction(paymentId: string) {
         },
       ],
       mode: 'payment',
+      invoice_creation: { enabled: true },
       success_url: `${appUrl}/app/eleve?success=true`,
       cancel_url: `${appUrl}/app/eleve?canceled=true`,
       metadata: {
         clerkUserId: student.id,
         type: 'regularisation',
-        originalPaymentId: paiement.id
+        originalPaymentId: paiement.id,
+        stripe_account: stripeAccount,
       },
       customer_email: student.email
     });
@@ -1831,7 +1853,7 @@ export async function getStudentStripeReceiptUrlAction(paymentId: string): Promi
 
     const { data: payment } = await supabaseAdmin
       .from('paiements')
-      .select('id, etudiant_id, stripe_session_id, status, amount')
+      .select('*')
       .eq('id', paymentId)
       .maybeSingle();
 
@@ -1870,7 +1892,10 @@ export async function getStudentStripeReceiptUrlAction(paymentId: string): Promi
       return { success: false, error: 'Accès non autorisé à ce paiement.' };
     }
 
-    const url = await resolveStripeReceiptUrl(String(payment.stripe_session_id));
+    const url = await resolveStripeReceiptUrl(
+      String(payment.stripe_session_id),
+      await inferPaymentStripeAccount(payment),
+    );
     if (!url) {
       return { success: false, error: 'Facture Stripe indisponible pour le moment.' };
     }
@@ -1900,7 +1925,7 @@ export async function getAdminStripeReceiptUrlAction(paymentId: string): Promise
 
     const { data: payment } = await supabaseAdmin
       .from('paiements')
-      .select('id, stripe_session_id, status')
+      .select('*')
       .eq('id', paymentId)
       .maybeSingle();
 
@@ -1912,7 +1937,10 @@ export async function getAdminStripeReceiptUrlAction(paymentId: string): Promise
       return { success: false, error: 'Aucune facture Stripe pour ce règlement.' };
     }
 
-    const url = await resolveStripeReceiptUrl(String(payment.stripe_session_id));
+    const url = await resolveStripeReceiptUrl(
+      String(payment.stripe_session_id),
+      await inferPaymentStripeAccount(payment),
+    );
     if (!url) {
       return { success: false, error: 'Facture Stripe indisponible pour le moment.' };
     }
@@ -1924,9 +1952,41 @@ export async function getAdminStripeReceiptUrlAction(paymentId: string): Promise
   }
 }
 
-async function resolveStripeReceiptUrl(stripeRef: string): Promise<string | null> {
+/** Compte Stripe du paiement : DB → sinon formation → sinon distanciel (historique). */
+async function inferPaymentStripeAccount(payment: {
+  stripe_account?: string | null;
+  etudiant_id?: string | null;
+}): Promise<'distanciel' | 'presentiel'> {
+  if (payment.stripe_account) {
+    return normalizeStoredStripeAccount(payment.stripe_account);
+  }
+  if (!payment.etudiant_id) return 'distanciel';
+  try {
+    const { data: ins } = await supabaseAdmin
+      .from('inscriptions')
+      .select('formations(type)')
+      .eq('etudiant_id', payment.etudiant_id)
+      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation'])
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const formation = Array.isArray(ins?.formations) ? ins?.formations[0] : ins?.formations;
+    return resolveStripeAccount({
+      formationType: (formation as { type?: string } | null)?.type || null,
+    });
+  } catch {
+    return 'distanciel';
+  }
+}
+
+async function resolveStripeReceiptUrl(
+  stripeRef: string,
+  account: ReturnType<typeof normalizeStoredStripeAccount> = 'distanciel',
+): Promise<string | null> {
   const id = String(stripeRef || '').trim();
   if (!id || id.startsWith('manual_')) return null;
+
+  const stripe = getStripeClient(account, { legacyApi: true });
 
   // Facture d’abonnement / webhook invoice.*
   if (id.startsWith('in_')) {
