@@ -2004,13 +2004,13 @@ async function resolveStripeReceiptUrl(
     if (inv && typeof inv === 'object') {
       const pdf = (inv as Stripe.Invoice).invoice_pdf;
       const hosted = (inv as Stripe.Invoice).hosted_invoice_url;
-      if (pdf || hosted) return pdf || hosted;
+      if (pdf) return pdf;
+      if (hosted) return hosted;
     }
     if (typeof inv === 'string') {
       const invoice = await stripe.invoices.retrieve(inv);
-      if (invoice.invoice_pdf || invoice.hosted_invoice_url) {
-        return invoice.invoice_pdf || invoice.hosted_invoice_url;
-      }
+      if (invoice.invoice_pdf) return invoice.invoice_pdf;
+      if (invoice.hosted_invoice_url) return invoice.hosted_invoice_url;
     }
 
     const pi = session.payment_intent;
