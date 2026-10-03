@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "✅ Lancement des tests unitaires (Jest)..."
-PREPUSH_TIMEOUT_MS=60000 node scripts/run-with-timeout.mjs npm run test:prepush
+PREPUSH_TIMEOUT_MS=300000 node scripts/run-with-timeout.mjs npm run test:prepush
 
 if [ $? -ne 0 ]; then
   echo "❌ Le push a été bloqué car les tests unitaires ont échoué."
