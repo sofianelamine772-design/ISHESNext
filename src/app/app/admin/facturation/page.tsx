@@ -7,7 +7,8 @@ import {
   Calendar, X, Phone, Mail, History, 
   AlertCircle, CreditCard, Users, GraduationCap, UserCheck
 } from "lucide-react";
-import { fetchPaymentsAction, sendPaymentReminderWithLinkAction, fetchManualBalancesAction, addManualPaymentAction } from "@/app/actions/students";
+import { fetchPaymentsAction, sendPaymentReminderWithLinkAction, fetchManualBalancesAction, addManualPaymentAction, syncStripeInvoicesAction } from "@/app/actions/students";
+import { RefreshCw } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -131,6 +132,32 @@ export default function FacturationPage() {
     }
   };
 
+  const [isSyncingStripe, setIsSyncingStripe] = useState(false);
+  const handleSyncStripe = async () => {
+    setIsSyncingStripe(true);
+    try {
+      const res = await syncStripeInvoicesAction(60);
+      if (res.success && res.data) {
+        const r = res.data;
+        const skippedTxt = r.skipped.length ? ` ${r.skipped.length} facture(s) sans élève correspondant.` : '';
+        const errTxt = r.errors.length ? ` ${r.errors.length} erreur(s).` : '';
+        setPopupMsg({
+          title: r.inserted || r.updated ? "Synchronisation terminée" : "Déjà à jour",
+          desc: `${r.scanned} factures Stripe lues · ${r.inserted} ajoutée(s) · ${r.updated} mise(s) à jour.${skippedTxt}${errTxt}`,
+          type: r.errors.length ? "error" : "success",
+        });
+        await loadData();
+      } else {
+        setPopupMsg({ title: "Erreur", desc: res.error || "Synchronisation impossible.", type: "error" });
+      }
+    } catch {
+      setPopupMsg({ title: "Erreur", desc: "Synchronisation impossible.", type: "error" });
+    } finally {
+      setIsSyncingStripe(false);
+      setTimeout(() => setPopupMsg(null), 8000);
+    }
+  };
+
   const filteredPayments = payments.filter(p => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = p.payerName.toLowerCase().includes(searchLower) ||
@@ -178,6 +205,16 @@ export default function FacturationPage() {
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Facturation & Paiements</h1>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
+            <button
+              id="sync-stripe-button"
+              onClick={handleSyncStripe}
+              disabled={isSyncingStripe}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-[11px] font-black tracking-widest bg-white text-ishes-blue border border-gray-100 hover:border-ishes-blue/30 hover:shadow-md transition-all disabled:opacity-50"
+              title="Récupère depuis Stripe les mensualités payées ou refusées manquantes (60 derniers jours)"
+            >
+              <RefreshCw className={cn("w-4 h-4", isSyncingStripe && "animate-spin")} />
+              <span className="hidden sm:inline">{isSyncingStripe ? "SYNCHRONISATION..." : "SYNCHRONISER STRIPE"}</span>
+            </button>
             <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9 md:w-10 md:h-10 border-2 border-ishes-blue p-[2px]" } }} />
           </div>
         </header>

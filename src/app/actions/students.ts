@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import type Stripe from "stripe";
 import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 import { isAdminEmail } from "@/lib/auth-utils";
+import { logSystemError } from "@/lib/error-logger";
 import { sendWelcomeEmail, sendPaymentReminderEmail } from "@/lib/mail";
 import { getCurrentAcademicYear } from "@/lib/utils";
 import { getPresentielCapacityLimit, isOfficialPresentielClass, presentielHoursLabel, resolvePresentielClassName } from "@/lib/presentiel-data";
@@ -471,41 +472,57 @@ export async function fetchClassesAction(academicYear?: string) {
   }
 }
 
-export async function assignStudentToClassAction(studentId: string, classId: string) {
+export async function assignStudentToClassAction(studentId: string, classId: string, customExpectedAmount?: number) {
   try {
     // 1. On récupère la formation liée à cette classe
     const { data: classe, error: classError } = await supabaseAdmin
       .from('classes')
-      .select('formation_id, name, whatsapp_link, formations (price)')
+      .select('formation_id, name, type, whatsapp_link, formations (price)')
       .eq('id', classId)
       .single();
 
     if (classError) throw classError;
 
     const formationPrice = Number((classe as any)?.formations?.price);
-    const expectedAmount = Number.isFinite(formationPrice) && formationPrice > 0 ? formationPrice : undefined;
+    const expectedAmount = customExpectedAmount !== undefined && customExpectedAmount > 0 
+      ? customExpectedAmount 
+      : (Number.isFinite(formationPrice) && formationPrice > 0 ? formationPrice : undefined);
     const academicYear = getCurrentAcademicYear();
 
-    // 2. On vérifie s'il y a déjà une inscription pour cette formation / année
-    const { data: existing, error: fetchError } = await supabaseAdmin
+    // 2. On cherche les inscriptions de l'élève pour cette année
+    const { data: yearInscriptions, error: fetchError } = await supabaseAdmin
       .from('inscriptions')
-      .select('id, expected_amount')
+      .select('id, expected_amount, formation_id, status, created_at, classes (type)')
       .eq('etudiant_id', studentId)
-      .eq('formation_id', classe.formation_id)
       .eq('academic_year', academicYear)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .order('created_at', { ascending: false });
 
     if (fetchError) throw fetchError;
 
+    const targetClassType = (classe as any)?.type || null;
+    const activeStatuses = ['valide', 'actif', 'en_attente', 'en_attente_daffectation'];
+    const sameFormation = (yearInscriptions || []).find((i: any) => i.formation_id === classe.formation_id);
+    // Présentiel : un élève n'a qu'un créneau → changer de classe = transfert,
+    // on ne doit pas cumuler 2 inscriptions facturées. (Distanciel : cumul autorisé.)
+    const transferable = targetClassType !== 'presentiel' ? [] : (yearInscriptions || []).filter((i: any) => {
+      if (i.formation_id === classe.formation_id) return false;
+      if (!activeStatuses.includes(i.status)) return false;
+      const t = (unwrapRelation(i.classes) as { type?: string } | null)?.type || null;
+      return t === 'presentiel';
+    });
+
+    const existing = sameFormation || transferable[0] || null;
+
     if (existing) {
+      const isTransfer = existing.formation_id !== classe.formation_id;
       const updatePayload: Record<string, unknown> = {
         class_id: classId,
         formation_id: classe.formation_id,
         status: 'actif',
       };
-      if (existing.expected_amount == null && expectedAmount !== undefined) {
+      if (customExpectedAmount !== undefined && customExpectedAmount > 0) {
+        updatePayload.expected_amount = customExpectedAmount;
+      } else if ((existing.expected_amount == null || isTransfer) && expectedAmount !== undefined) {
         updatePayload.expected_amount = expectedAmount;
       }
       const { error } = await supabaseAdmin
@@ -514,6 +531,15 @@ export async function assignStudentToClassAction(studentId: string, classId: str
         .eq('id', existing.id);
 
       if (error) throw error;
+
+      // Nettoyage des autres doublons actifs (anciennes formations) : on rattache
+      // leurs paiements à l'inscription conservée puis on les supprime.
+      const leftovers = transferable.filter((i: any) => i.id !== existing.id);
+      for (const old of leftovers) {
+        await supabaseAdmin.from('paiements').update({ inscription_id: existing.id }).eq('inscription_id', old.id);
+        const { error: delError } = await supabaseAdmin.from('inscriptions').delete().eq('id', old.id);
+        if (delError) console.error('[AssignClass] Failed to remove duplicate inscription', old.id, delError);
+      }
     } else {
       // Création d'une nouvelle inscription directe
       const { error } = await supabaseAdmin
@@ -2265,5 +2291,40 @@ export async function updateClassTeacherAction(externalId: number, teacherName: 
   } catch (err: any) {
     console.error("Update Teacher Name Error:", err);
     return { success: false, error: err.message || "Failed to update teacher name" };
+  }
+}
+
+/**
+ * Rattrapage : relit les factures Stripe (Distance + Présentiel) des N derniers jours
+ * et ajoute en base les mensualités réussies / échouées que le webhook aurait manquées.
+ */
+export async function syncStripeInvoicesAction(days = 60) {
+  try {
+    const user = await currentUser();
+    const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || '';
+    if (!email || !isAdminEmail(email)) {
+      return { success: false, error: 'Accès réservé aux administrateurs.' };
+    }
+
+    const { syncStripeInvoices } = await import('@/lib/stripe-invoice-sync');
+    const report = await syncStripeInvoices(days);
+
+    for (const studentId of report.touchedStudents) {
+      try {
+        await syncStudentPaidStatus(studentId);
+      } catch (e) {
+        console.error('[syncStripeInvoices] paid status', studentId, e);
+      }
+    }
+
+    if (report.errors.length) {
+      await logSystemError('Stripe Invoice Sync', new Error(JSON.stringify(report.errors).slice(0, 2000)));
+    }
+
+    return { success: true, data: report };
+  } catch (err: any) {
+    console.error('Sync Stripe Invoices Error:', err);
+    await logSystemError('Stripe Invoice Sync', err);
+    return { success: false, error: err?.message || 'Synchronisation Stripe impossible' };
   }
 }

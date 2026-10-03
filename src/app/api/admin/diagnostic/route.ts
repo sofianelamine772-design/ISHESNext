@@ -192,7 +192,7 @@ export async function GET() {
       };
     }
 
-    // 7. Test Stripe Webhook Configuration
+    // 7. Test Stripe Webhook Configuration (Distance)
     if (process.env.STRIPE_SECRET_KEY) {
       try {
         const webhooks = await stripe.webhookEndpoints.list();
@@ -211,7 +211,7 @@ export async function GET() {
           } else {
             diagnostics['webhooks'] = {
               success: true,
-              message: `Webhook actif trouvé pour l'adresse : ${match.url} (${match.enabled_events.length} événements écoutés)`
+              message: `Webhook Distance actif : ${match.url} (${match.enabled_events.length} événements)`
             };
           }
         } else if (appUrl.includes('localhost')) {
@@ -222,13 +222,13 @@ export async function GET() {
         } else {
           diagnostics['webhooks'] = {
             success: false,
-            message: `Aucun webhook actif configuré sur Stripe pointant vers /api/webhooks/stripe.`
+            message: `Aucun webhook Distance actif pointant vers /api/webhooks/stripe.`
           };
         }
       } catch (err: any) {
         diagnostics['webhooks'] = {
           success: false,
-          message: `Impossible de lister les webhooks Stripe : ${err.message || err}`
+          message: `Impossible de lister les webhooks Stripe Distance : ${err.message || err}`
         };
       }
     } else {
@@ -236,6 +236,56 @@ export async function GET() {
         success: false,
         message: 'Clé secrète Stripe absente pour vérifier les webhooks.'
       };
+    }
+
+    // 7b. Webhooks Présentiel (compte séparé)
+    if (hasPresentielStripe) {
+      try {
+        const { getStripeClient } = await import('@/lib/stripe-accounts');
+        const stripePres = getStripeClient('presentiel', { legacyApi: true });
+        const webhooksPres = await stripePres.webhookEndpoints.list({ limit: 20 });
+        const matchPres = webhooksPres.data.find((w) =>
+          w.url.includes('/api/webhooks/stripe'),
+        );
+        const required = [
+          'checkout.session.completed',
+          'invoice.payment_succeeded',
+          'invoice.payment_failed',
+        ];
+        if (!matchPres) {
+          diagnostics['webhooks_presentiel'] = {
+            success: false,
+            message:
+              'Aucun webhook Présentiel vers /api/webhooks/stripe — les paiements présentiel ne créeront PAS les dossiers élèves.',
+          };
+        } else {
+          const events = matchPres.enabled_events || [];
+          const missing = required.filter(
+            (e) => !events.includes('*') && !events.includes(e),
+          );
+          const secretOk = Boolean(
+            process.env.STRIPE_PRESENTIEL_WEBHOOK_SECRET?.startsWith('whsec_'),
+          );
+          if (matchPres.status !== 'enabled' || missing.length > 0 || !secretOk) {
+            diagnostics['webhooks_presentiel'] = {
+              success: false,
+              message: `Webhook Présentiel trouvé (${matchPres.url}) status=${matchPres.status}` +
+                (missing.length ? ` ; events manquants: ${missing.join(', ')}` : '') +
+                (!secretOk ? ' ; STRIPE_PRESENTIEL_WEBHOOK_SECRET invalide/absent' : ''),
+            };
+          } else {
+            diagnostics['webhooks_presentiel'] = {
+              success: true,
+              message: `Webhook Présentiel OK : ${matchPres.url}`,
+            };
+          }
+        }
+      } catch (err: any) {
+        diagnostics['webhooks_presentiel'] = {
+          success: false,
+          message: `Impossible de lister les webhooks Présentiel : ${err.message || err}`,
+        };
+      }
     }
 
     // 8. Test Supabase Database Connection

@@ -12,7 +12,7 @@ const products = [
     subtitle: "HISTOIRES ET MORALES POUR COMPRENDRE LÂ ILÂHA ILLA ALLAH",
     description: "Donnez du sens à votre foi à travers des histoires vraies et morales inspirantes pour vous aider à vous connecter à ALLAH ﷻ.",
     image: "/images/livre_chahada.jpg",
-    price: "19.90 €",
+    price: "14,98 €",
     tag: "Best-seller",
     amazonUrl: "https://www.amazon.fr/CHAHADA-chemin-son-coeur-comprendre/dp/B0GD7LVTMP"
   },
@@ -22,7 +22,7 @@ const products = [
     subtitle: "UNE BIOGRAPHIE ACCESSIBLE POUR DÉCOUVRIR SA NOBLE VIE",
     description: "Cette étape propose de découvrir la seconde partie de l’attestation de foi : MOHAMMAD ﷺ Le Messager d’ALLAHﷻ, par l’étude de la Sîrah du Prophète ﷺ.",
     image: "/images/livre_sirah.png",
-    price: "22.50 €",
+    price: "14,98 €",
     tag: "Must-have",
     amazonUrl: "https://www.amazon.fr/Mohammed-Messager-dALLAH-accessible-découvrir/dp/B0GDF23MZZ"
   },
@@ -32,7 +32,7 @@ const products = [
     subtitle: "VOTRE COMPAGNON D’APPRENTISSAGE AU QUOTIDIEN",
     description: "Conçu avec des invocations en arabe, phonétique et traduction française pour vous accompagner chaque jour.",
     image: "/images/livre_invocation.jpg",
-    price: "12.90 €",
+    price: "11,99 €",
     tag: "Essentiel",
     amazonUrl: "https://www.amazon.fr/Carnet-dinvocation-Tableau-suivi-dapprentissage/dp/B0G6WRKNFV"
   },
@@ -42,9 +42,19 @@ const products = [
     subtitle: "POUR ENFANTS : 30 JOURS DE SUIVI QUOTIDIEN",
     description: "De bonnes actions (Coran, prière, dhikr, dou'a...) et de bilans pour mieux comprendre et réussir son Ramadan.",
     image: "/images/livre_ramadan.png",
-    price: "15.00 €",
+    price: "14,98 €",
     tag: "Nouveauté",
     amazonUrl: "https://www.amazon.fr/s?k=rachida+reziga+ramadan"
+  },
+  {
+    id: "cles-coran",
+    title: "Les Clés du Coran",
+    subtitle: "AVEC TEHEJI DES SOURATES & LE POÈME \"LES CLÉS DU CORAN\"",
+    description: "La méthode Nour al Bayan pour les francophones, idéale pour faciliter l'apprentissage et la lecture du Coran (Vol 2).",
+    image: "/images/livre_cles_coran.png",
+    price: "15,81 €",
+    tag: "Nouveauté",
+    amazonUrl: "https://www.amazon.fr/dp/B0HKNDMYJM/"
   }
 ];
 

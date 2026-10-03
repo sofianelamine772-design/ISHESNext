@@ -28,7 +28,7 @@ type StudentDetail = {
   parentName: string | null;
   address: string;
   lastPayment: string;
-  paymentStatus: "a_jour" | "en_retard";
+  paymentStatus: "a_jour" | "partiel" | "en_retard";
   classId?: string | null;
   hasConnected?: boolean;
 };
@@ -84,6 +84,7 @@ function EtudiantsContent() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isExporting, setIsExporting] = useState<string | null>(null);
   const [popupMsg, setPopupMsg] = useState<{ title: string, desc: string, type: 'success' | 'error' } | null>(null);
+  const [customExpectedAmount, setCustomExpectedAmount] = useState<number | "">("");
 
   // Pagination for DOM performance
   const [visibleCount, setVisibleCount] = useState(50);
@@ -147,8 +148,17 @@ function EtudiantsContent() {
             status: s.status || "en_attente",
             parentName: null,
             address: s.address || "Adresse non renseignée",
-            lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
-            paymentStatus: (latestInscription?.paid_status === 'paye' || String(s.id).startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
+            lastPayment:
+              latestInscription?.paid_status === 'paye' || latestInscription?.paid_status === 'partiel'
+                ? "Stripe"
+                : "Aucun",
+            paymentStatus: (() => {
+              if (String(s.id).startsWith('manual_')) return "a_jour" as const;
+              const paid = String(latestInscription?.paid_status || '').toLowerCase();
+              if (paid === 'paye') return "a_jour" as const;
+              if (paid === 'partiel') return "partiel" as const;
+              return "en_retard" as const;
+            })(),
             classId: latestInscription?.class_id || null,
             hasConnected: !!(s.email && loginMap[s.email.toLowerCase()])
           };
@@ -348,9 +358,14 @@ function EtudiantsContent() {
     if (!selectedStudentId || !targetClassId) return;
     setIsSubmitting(true);
     try {
-      const result = await assignStudentToClassAction(selectedStudentId, targetClassId);
+      const result = await assignStudentToClassAction(
+        selectedStudentId, 
+        targetClassId, 
+        customExpectedAmount === "" ? undefined : Number(customExpectedAmount)
+      );
       if (result.success) {
         setShowScolariteModal(false);
+        setCustomExpectedAmount("");
         await fetchStudents();
       }
     } catch (err) {
@@ -683,6 +698,11 @@ function EtudiantsContent() {
                                 IMPAYÉ
                               </span>
                             )}
+                            {student.paymentStatus === 'partiel' && (
+                              <span className="ishes-label text-[8px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-600 font-bold border border-amber-100 shrink-0">
+                                PARTIEL
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -872,8 +892,18 @@ function EtudiantsContent() {
                           </div>
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Statut Financier</span>
-                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-blue' : 'text-red-500'}`}>
-                              {selectedStudent.paymentStatus === 'a_jour' ? 'À JOUR' : 'IMPAYÉ'}
+                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${
+                              selectedStudent.paymentStatus === 'a_jour'
+                                ? 'text-ishes-blue'
+                                : selectedStudent.paymentStatus === 'partiel'
+                                  ? 'text-amber-600'
+                                  : 'text-red-500'
+                            }`}>
+                              {selectedStudent.paymentStatus === 'a_jour'
+                                ? 'À JOUR'
+                                : selectedStudent.paymentStatus === 'partiel'
+                                  ? 'PARTIEL'
+                                  : 'IMPAYÉ'}
                             </span>
                           </div>
                         </div>
@@ -1444,7 +1474,10 @@ function EtudiantsContent() {
                   </div>
                   <h3 className="text-xl font-black text-ishes-blue tracking-tight">Modifier Scolarité</h3>
                 </div>
-                <button onClick={() => setShowScolariteModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+                <button onClick={() => {
+                  setShowScolariteModal(false);
+                  setCustomExpectedAmount("");
+                }} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -1487,8 +1520,36 @@ function EtudiantsContent() {
                 </div>
               </div>
 
+              {(() => {
+                const selectedClassObj = classes.find(c => c.id === targetClassId);
+                const isFormationEnseignant = selectedClassObj?.formationTitle?.toLowerCase().includes("enseignant") || selectedClassObj?.name?.toLowerCase().includes("enseignant");
+                
+                if (isFormationEnseignant) {
+                  return (
+                    <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">Tarif de la formation (Montant dû) *</label>
+                      <input
+                        type="number"
+                        placeholder="Ex: 500"
+                        value={customExpectedAmount}
+                        onChange={(e) => setCustomExpectedAmount(e.target.value === "" ? "" : Number(e.target.value))}
+                        className="w-full px-4 py-3 bg-gray-50 border border-ishes-blue/30 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold shadow-sm shadow-ishes-blue/5"
+                        required
+                      />
+                      <p className="text-[10px] text-gray-400 font-medium">
+                        Veuillez saisir le montant total que cet élève doit régler pour cette formation.
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
               <div className="mt-10 flex gap-3">
-                <Button variant="ishes-outline" className="flex-1 h-12 rounded-2xl" onClick={() => setShowScolariteModal(false)}>Annuler</Button>
+                <Button variant="ishes-outline" className="flex-1 h-12 rounded-2xl" onClick={() => {
+                  setShowScolariteModal(false);
+                  setCustomExpectedAmount("");
+                }}>Annuler</Button>
                 <Button variant="ishes" className="flex-[2] h-12 rounded-2xl" disabled={isSubmitting || !targetClassId} onClick={handleUpdateScolarite}>
                   {isSubmitting ? "Mise à jour..." : "Confirmer le changement"}
                 </Button>
