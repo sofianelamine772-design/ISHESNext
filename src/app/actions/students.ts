@@ -1834,11 +1834,15 @@ export async function fetchStudentBillingDataAction(studentId: string) {
     const total_paid = sumSucceededBillingPayments(deduplicatedPayments);
     const reste_a_payer = Math.max(0, total_expected - total_paid);
 
-    const paymentsForClient = deduplicatedPayments.map((p: any) => ({
-      ...p,
-      isStripePayment: isLiveStripePayment(p),
-      isManualPayment: isManualBillingPayment(p),
-    }));
+    const paymentsForClient = deduplicatedPayments.map((p: any) => {
+      const student = getBillingStudent(p.etudiant_id);
+      return {
+        ...p,
+        studentName: student ? `${student.firstName || ''} ${student.lastName || ''}`.trim() : '',
+        isStripePayment: isLiveStripePayment(p),
+        isManualPayment: isManualBillingPayment(p),
+      };
+    });
 
     return {
       success: true,

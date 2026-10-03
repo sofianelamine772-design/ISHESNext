@@ -1049,8 +1049,13 @@ function EtudiantsContent() {
                                     <CreditCard className="w-5 h-5" />
                                   </div>
                                   <div>
-                                    <div className="text-xs font-black text-ishes-dark">
+                                    <div className="text-xs font-black text-ishes-dark flex items-center gap-2 flex-wrap">
                                       {payment.inscriptions?.formations?.title || 'Règlement Formation'}
+                                      {payment.studentName && (
+                                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 font-bold tracking-wider uppercase">
+                                          {payment.studentName}
+                                        </span>
+                                      )}
                                     </div>
                                     <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
                                       {isSucceeded ? 'Reçu le' : 'Échoué le'} {paymentDate}
