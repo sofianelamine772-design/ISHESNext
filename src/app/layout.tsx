@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { frFR } from "@/lib/clerk-fr";
 
 export default function RootLayout({
@@ -49,7 +51,9 @@ export default function RootLayout({
         <body className={cn(inter.className, "min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-blue selection:text-white")}>
           {children}
           <SpeedInsights />
+          <AnalyticsTracker />
         </body>
+        <GoogleAnalytics gaId="G-WS8XG0WKXZ" />
       </html>
     </ClerkProvider>
   );

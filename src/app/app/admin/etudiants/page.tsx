@@ -23,6 +23,12 @@ type StudentDetail = {
   dateJoined: string;
   enrolledClass: string;
   exactClassName?: string;
+  activeFormations?: {
+    id: string;
+    classId?: string | null;
+    enrolledClass: string;
+    exactClassName?: string;
+  }[];
   classType: "distanciel" | "presentiel";
   status: "actif" | "inactif" | "en_attente" | "en_attente_daffectation" | "valide";
   parentName: string | null;
@@ -117,6 +123,11 @@ function EtudiantsContent() {
             s.inscriptions?.find((ins: any) => ins.status === 'actif' || ins.status === 'valide') ||
             s.inscriptions?.[0];
 
+          const activeInscriptions = s.inscriptions?.filter((ins: any) => 
+            (ins.academic_year === selectedYear && (ins.status === 'actif' || ins.status === 'valide'))
+          ) || [];
+          if (activeInscriptions.length === 0 && latestInscription) activeInscriptions.push(latestInscription);
+
           const getCleanEmail = (e: string) => {
             if (!e) return "";
             const parts = e.split('@');
@@ -141,6 +152,19 @@ function EtudiantsContent() {
               (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) ||
               "Non affecté",
             exactClassName: (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.name : latestInscription?.classes?.name) || undefined,
+            activeFormations: activeInscriptions.map((ins: any) => ({
+              id: ins.id,
+              classId: ins.class_id,
+              enrolledClass:
+                (Array.isArray(ins.formations) ? ins.formations[0]?.title : ins.formations?.title) ||
+                (Array.isArray(ins.classes)
+                  ? (Array.isArray(ins.classes[0]?.formations) ? ins.classes[0].formations[0]?.title : ins.classes[0]?.formations?.title)
+                  : (Array.isArray(ins.classes?.formations) ? ins.classes.formations[0]?.title : ins.classes?.formations?.title)
+                ) ||
+                (Array.isArray(ins.classes) ? ins.classes[0]?.name : ins.classes?.name) ||
+                "Non affecté",
+              exactClassName: (Array.isArray(ins.classes) ? ins.classes[0]?.name : ins.classes?.name) || undefined,
+            })),
             classType:
               (Array.isArray(latestInscription?.classes) ? latestInscription?.classes[0]?.type : latestInscription?.classes?.type) ||
               (Array.isArray(latestInscription?.formations) ? latestInscription?.formations[0]?.type : latestInscription?.formations?.type) ||
@@ -863,7 +887,30 @@ function EtudiantsContent() {
                         <div className="flex items-center justify-between group">
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Formation Actuelle</span>
-                            {selectedStudent.classId ? (
+                            {selectedStudent.activeFormations && selectedStudent.activeFormations.length > 0 ? (
+                              <div className="flex flex-col gap-3">
+                                {selectedStudent.activeFormations.map((formation, idx) => (
+                                  <div key={formation.id || idx} className="flex flex-col">
+                                    {formation.classId ? (
+                                      <Link
+                                        href={`/app/admin/classes?classId=${formation.classId}&studentId=${selectedStudent.id}`}
+                                        className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
+                                      >
+                                        {formation.enrolledClass}
+                                        <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
+                                      </Link>
+                                    ) : (
+                                      <span className="ishes-heading text-base md:text-lg text-gray-400">{formation.enrolledClass}</span>
+                                    )}
+                                    {formation.exactClassName && formation.exactClassName !== formation.enrolledClass && (
+                                      <span className="text-sm font-semibold text-gray-500 mt-0.5">
+                                        Classe : {formation.exactClassName}
+                                      </span>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : selectedStudent.classId ? (
                               <div className="flex flex-col">
                                 <Link
                                   href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
@@ -1527,27 +1574,27 @@ function EtudiantsContent() {
 
               {(() => {
                 const selectedClassObj = classes.find(c => c.id === targetClassId);
-                const isFormationEnseignant = selectedClassObj?.formationTitle?.toLowerCase().includes("enseignant") || selectedClassObj?.name?.toLowerCase().includes("enseignant");
+                if (!selectedClassObj) return null;
+                const isFormationEnseignant = selectedClassObj.formationTitle?.toLowerCase().includes("enseignant") || selectedClassObj.name?.toLowerCase().includes("enseignant");
                 
-                if (isFormationEnseignant) {
-                  return (
-                    <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">Tarif de la formation (Montant dû) *</label>
-                      <input
-                        type="number"
-                        placeholder="Ex: 500"
-                        value={customExpectedAmount}
-                        onChange={(e) => setCustomExpectedAmount(e.target.value === "" ? "" : Number(e.target.value))}
-                        className="w-full px-4 py-3 bg-gray-50 border border-ishes-blue/30 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold shadow-sm shadow-ishes-blue/5"
-                        required
-                      />
-                      <p className="text-[10px] text-gray-400 font-medium">
-                        Veuillez saisir le montant total que cet élève doit régler pour cette formation.
-                      </p>
-                    </div>
-                  );
-                }
-                return null;
+                return (
+                  <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">Tarif de la formation (Montant dû) {isFormationEnseignant ? '*' : ''}</label>
+                    <input
+                      type="number"
+                      placeholder={isFormationEnseignant ? "Ex: 500" : "Laissez vide pour utiliser le prix par défaut"}
+                      value={customExpectedAmount}
+                      onChange={(e) => setCustomExpectedAmount(e.target.value === "" ? "" : Number(e.target.value))}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold shadow-sm"
+                      required={!!isFormationEnseignant}
+                    />
+                    <p className="text-[10px] text-gray-400 font-medium">
+                      {isFormationEnseignant 
+                        ? "Veuillez saisir le montant total que cet élève doit régler pour cette formation." 
+                        : "Modifiez uniquement si vous souhaitez forcer un tarif différent (ex: erreur de saisie, remise exceptionnelle)."}
+                    </p>
+                  </div>
+                );
               })()}
 
               <div className="mt-10 flex gap-3">

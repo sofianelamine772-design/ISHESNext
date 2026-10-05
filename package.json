@@ -17,6 +17,7 @@
     "@base-ui/react": "^1.4.0",
     "@clerk/clerk-sdk-node": "^4.13.23",
     "@clerk/nextjs": "^7.2.3",
+    "@next/third-parties": "^16.3.8",
     "@stripe/stripe-js": "^9.3.1",
     "@supabase/supabase-js": "^2.103.3",
     "@tailwindcss/postcss": "^4",

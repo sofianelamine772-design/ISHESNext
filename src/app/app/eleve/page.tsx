@@ -484,86 +484,175 @@ export default function EleveDashboard() {
                       <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Formation Actuelle</h3>
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-8 items-start">
-                      <div className="flex-1 space-y-6">
-                        <div>
-                          <h4 className="text-3xl font-black text-gray-900 leading-tight">
-                            {certData.formationTitle}
-                          </h4>
-                          <div className="flex flex-wrap items-center gap-3 mt-4">
-                            <span className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
-                              {certData.classType === 'presentiel' ? <Users className="w-3.5 h-3.5" /> : <MonitorDown className="w-3.5 h-3.5" />}
-                              {certData.className}
-                            </span>
-                            {certData.status === 'actif' || certData.status === 'valide' ? (
-                              <span className="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-emerald-100">
-                                <CheckCircle className="w-3.5 h-3.5" /> Inscription Validée
-                              </span>
-                            ) : (
-                              <span className="bg-orange-50 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-orange-100">
-                                <Clock className="w-3.5 h-3.5" /> En attente
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                    {certData.activeFormations && certData.activeFormations.length > 0 ? (
+                      <div className="space-y-12">
+                        {certData.activeFormations.map((formation: any, idx: number) => (
+                          <div key={formation.id || idx} className="flex flex-col md:flex-row gap-8 items-start border-t border-gray-100 pt-8 first:border-0 first:pt-0">
+                            <div className="flex-1 space-y-6 w-full">
+                              <div>
+                                <h4 className="text-3xl font-black text-gray-900 leading-tight">
+                                  {formation.formationTitle}
+                                </h4>
+                                <div className="flex flex-wrap items-center gap-3 mt-4">
+                                  <span className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
+                                    {formation.classType === 'presentiel' ? <Users className="w-3.5 h-3.5" /> : <MonitorDown className="w-3.5 h-3.5" />}
+                                    {formation.className}
+                                  </span>
+                                  {formation.status === 'actif' || formation.status === 'valide' ? (
+                                    <span className="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-emerald-100">
+                                      <CheckCircle className="w-3.5 h-3.5" /> Inscription Validée
+                                    </span>
+                                  ) : (
+                                    <span className="bg-orange-50 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-orange-100">
+                                      <Clock className="w-3.5 h-3.5" /> En attente
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
 
-                        <div className="bg-gray-50/50 rounded-2xl p-6 border border-gray-100/50">
-                          <p className="text-sm text-gray-500 font-medium mb-4">Actions rapides :</p>
-                          <div className="flex flex-col sm:flex-row gap-3">
-                            {certData.whatsappLink ? (
-                              <a
-                                href={certData.whatsappLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex-1 bg-[#25D366] text-white hover:bg-[#20ba56] transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm shadow-sm shadow-[#25D366]/20"
+                              <div className="bg-gray-50/50 rounded-2xl p-6 border border-gray-100/50">
+                                <p className="text-sm text-gray-500 font-medium mb-4">Actions rapides :</p>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                  {formation.whatsappLink ? (
+                                    <a
+                                      href={formation.whatsappLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex-1 bg-[#25D366] text-white hover:bg-[#20ba56] transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm shadow-sm shadow-[#25D366]/20"
+                                    >
+                                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+                                      </svg>
+                                      Groupe WhatsApp
+                                    </a>
+                                  ) : (
+                                    <button disabled className="flex-1 bg-gray-100 text-gray-400 rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm cursor-not-allowed">
+                                      <Clock className="w-5 h-5" /> En attente
+                                    </button>
+                                  )}
+                                  {idx === 0 && (
+                                    <button
+                                      onClick={() => setShowPreviewModal(true)}
+                                      className="flex-1 bg-white border-2 border-gray-100 text-gray-700 hover:border-ishes-blue hover:text-ishes-blue transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                                    >
+                                      <FileText className="w-5 h-5" />
+                                      Certificat
+                                    </button>
+                                  )}
+                                  {idx === 0 && (certData.fournituresDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                                    <a
+                                      key={doc.kind}
+                                      href={doc.href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      download
+                                      className="flex-1 bg-white border-2 border-ishes-gold/30 text-[#0F172A] hover:border-ishes-gold hover:bg-ishes-gold/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                                    >
+                                      <Download className="w-5 h-5 text-ishes-gold" />
+                                      {doc.label}
+                                    </a>
+                                  ))}
+                                  {idx === 0 && (certData.rentreeDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                                    <a
+                                      key={doc.kind}
+                                      href={doc.href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      download
+                                      className="flex-1 bg-white border-2 border-ishes-blue/25 text-[#0F172A] hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                                    >
+                                      <Download className="w-5 h-5 text-ishes-blue" />
+                                      {doc.label}
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col md:flex-row gap-8 items-start">
+                        <div className="flex-1 space-y-6">
+                          <div>
+                            <h4 className="text-3xl font-black text-gray-900 leading-tight">
+                              {certData.formationTitle}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-3 mt-4">
+                              <span className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
+                                {certData.classType === 'presentiel' ? <Users className="w-3.5 h-3.5" /> : <MonitorDown className="w-3.5 h-3.5" />}
+                                {certData.className}
+                              </span>
+                              {certData.status === 'actif' || certData.status === 'valide' ? (
+                                <span className="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-emerald-100">
+                                  <CheckCircle className="w-3.5 h-3.5" /> Inscription Validée
+                                </span>
+                              ) : (
+                                <span className="bg-orange-50 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-orange-100">
+                                  <Clock className="w-3.5 h-3.5" /> En attente
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="bg-gray-50/50 rounded-2xl p-6 border border-gray-100/50">
+                            <p className="text-sm text-gray-500 font-medium mb-4">Actions rapides :</p>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              {certData.whatsappLink ? (
+                                <a
+                                  href={certData.whatsappLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex-1 bg-[#25D366] text-white hover:bg-[#20ba56] transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm shadow-sm shadow-[#25D366]/20"
+                                >
+                                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
+                                  </svg>
+                                  Rejoindre le groupe WhatsApp
+                                </a>
+                              ) : (
+                                <button disabled className="flex-1 bg-gray-100 text-gray-400 rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm cursor-not-allowed">
+                                  <Clock className="w-5 h-5" /> En attente de classe
+                                </button>
+                              )}
+                              <button
+                                onClick={() => setShowPreviewModal(true)}
+                                className="flex-1 bg-white border-2 border-gray-100 text-gray-700 hover:border-ishes-blue hover:text-ishes-blue transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
                               >
-                                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.799-4.382 9.802-9.77.001-2.61-1.01-5.063-2.848-6.903C16.388 2.093 13.937.086 11.99.086c-5.412 0-9.808 4.385-9.81 9.774-.001 1.94.512 3.826 1.492 5.518L2.6 21.43l6.047-1.586z" />
-                                </svg>
-                                Rejoindre le groupe WhatsApp
-                              </a>
-                            ) : (
-                              <button disabled className="flex-1 bg-gray-100 text-gray-400 rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm cursor-not-allowed">
-                                <Clock className="w-5 h-5" /> En attente de classe
+                                <FileText className="w-5 h-5" />
+                                Voir le Certificat
                               </button>
-                            )}
-                            <button
-                              onClick={() => setShowPreviewModal(true)}
-                              className="flex-1 bg-white border-2 border-gray-100 text-gray-700 hover:border-ishes-blue hover:text-ishes-blue transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
-                            >
-                              <FileText className="w-5 h-5" />
-                              Voir le Certificat
-                            </button>
-                            {(certData.fournituresDocs || []).map((doc: { kind: string; label: string; href: string }) => (
-                              <a
-                                key={doc.kind}
-                                href={doc.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                download
-                                className="flex-1 bg-white border-2 border-ishes-gold/30 text-[#0F172A] hover:border-ishes-gold hover:bg-ishes-gold/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
-                              >
-                                <Download className="w-5 h-5 text-ishes-gold" />
-                                Fournitures {doc.label}
-                              </a>
-                            ))}
-                            {(certData.rentreeDocs || []).map((doc: { kind: string; label: string; href: string }) => (
-                              <a
-                                key={doc.kind}
-                                href={doc.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                download
-                                className="flex-1 bg-white border-2 border-ishes-blue/25 text-[#0F172A] hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
-                              >
-                                <Download className="w-5 h-5 text-ishes-blue" />
-                                {doc.label}
-                              </a>
-                            ))}
+                              {(certData.fournituresDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                                <a
+                                  key={doc.kind}
+                                  href={doc.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  download
+                                  className="flex-1 bg-white border-2 border-ishes-gold/30 text-[#0F172A] hover:border-ishes-gold hover:bg-ishes-gold/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                                >
+                                  <Download className="w-5 h-5 text-ishes-gold" />
+                                  Fournitures {doc.label}
+                                </a>
+                              ))}
+                              {(certData.rentreeDocs || []).map((doc: { kind: string; label: string; href: string }) => (
+                                <a
+                                  key={doc.kind}
+                                  href={doc.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  download
+                                  className="flex-1 bg-white border-2 border-ishes-blue/25 text-[#0F172A] hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 font-bold text-sm"
+                                >
+                                  <Download className="w-5 h-5 text-ishes-blue" />
+                                  {doc.label}
+                                </a>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 

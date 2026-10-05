@@ -1534,6 +1534,18 @@ export async function fetchStudentCertificateDataAction(profile: {
           status: latestInscription.status,
           fournituresDocs: getFournituresPublicDocs(classRefs, classLabels),
           rentreeDocs: getDistancielRentreePublicDocs(rentreeSignals),
+          activeFormations: memberInscriptions.map((ins: any) => ({
+            id: ins.id,
+            formationTitle: (ins.formations as any)?.title || 'FORMATION ISHES',
+            className: ins.status === 'en_attente_daffectation'
+              ? "En attente d'affectation"
+              : ins.status === 'en_attente'
+                ? 'En attente de validation'
+                : ((ins.classes as any)?.name || 'Session Standard'),
+            classType: (ins.classes as any)?.type || 'distanciel',
+            status: ins.status,
+            whatsappLink: (ins.classes as any)?.whatsapp_link || null,
+          })),
         };
       })
       .filter(Boolean);
