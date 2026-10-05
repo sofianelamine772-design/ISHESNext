@@ -51,7 +51,7 @@ const products = [
     title: "Les Clés du Coran",
     subtitle: "AVEC TEHEJI DES SOURATES & LE POÈME \"LES CLÉS DU CORAN\"",
     description: "La méthode Nour al Bayan pour les francophones, idéale pour faciliter l'apprentissage et la lecture du Coran (Vol 2).",
-    image: "/images/livre_cles_coran.png",
+    image: "/images/livre-ishes.png",
     price: "15,81 €",
     tag: "Nouveauté",
     amazonUrl: "https://www.amazon.fr/dp/B0HKNDMYJM/"
