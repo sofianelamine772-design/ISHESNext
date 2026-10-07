@@ -17,15 +17,45 @@ export function WhatsappButton() {
     show(); // affiche dès le départ
     const interval = setInterval(show, 8000);
     return () => clearInterval(interval);
-  }, []);
+  }, [pathname]);
 
   if (pathname?.startsWith("/inscription")) {
     return null;
   }
 
+  const courseNames: Record<string, string> = {
+    "cours-lecture-tajwid": "Lecture et Tajwid",
+    "cours-arabe-adulte": "Arabe Adulte",
+    "cours-arabe-enfant": "Arabe Enfant",
+    "cours-as-sirah": "Sîrah",
+    "cours-fiqh-malikite": "Fiqh Malikite",
+    "cours-memoriser-coran": "Mémorisation du Coran",
+    "cours-tajwid-intensif": "Tajwid Intensif",
+    "cours-tajwid-enfant": "Tajwid Enfant",
+    "formation-nour-al-bayane": "Nour Al Bayane",
+    "formation-tarbya-islamya": "Tarbiya Islamya",
+    "formation-enseignant-tajwid": "Formation Enseignant Tajwid",
+    "formation-enseignant-tarbya": "Formation Enseignant Tarbya",
+    "cours-sciences-coran": "Sciences du Coran",
+    "cours-sciences-hadith": "Sciences du Hadith",
+    "cours-al-aqida": "Al Aqida",
+    "civilisation-arabo-musulmane": "Civilisation Arabo-Musulmane",
+    "spiritualite-islam": "Spiritualité en Islam"
+  };
+
+  let message = "Bonjour, j'aimerais plus d'information sur vos formations.";
+  if (pathname) {
+    const slug = pathname.split('/').pop() || "";
+    if (courseNames[slug]) {
+      message = `Bonjour je souhaite m'inscrire à la formation ${courseNames[slug]}, j'aimerais plus d'information`;
+    }
+  }
+  
+  const whatsappUrl = `https://wa.me/33666033519?text=${encodeURIComponent(message)}`;
+
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <a href="https://wa.me/33666033519" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
+      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
         {/* Tooltip animé toutes les 8s */}
         <div
           className="flex items-center justify-center bg-ishes-dark text-white px-5 py-3 rounded-xl shadow-2xl text-[10px] font-bold tracking-[0.15em] relative transition-all duration-500 ease-in-out"

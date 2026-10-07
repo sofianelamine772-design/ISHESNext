@@ -33,6 +33,25 @@ type Program = {
 
 export const PROGRAMS: Program[] = [
   {
+    id: "fiqh_malikite",
+    imageUrl: "/images/formations/fiqh-distance-1.png",
+    title: "Fiqh Mâlikite",
+    subtitle: "Apprendre à pratiquer les actes d'adoration correctement selon l'école Malikite",
+    tagText: "DROIT",
+    tagColor: "bg-indigo-100 text-indigo-700",
+    durationText: "4 mois",
+    features: [
+      "Pureté & Prière",
+      "Jeûne & Zakat",
+      "Pèlerinage (Hajj)",
+      "Preuves (Dalila)"
+    ],
+    price: "399 €",
+    priceSub: "/ SESSION",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
     id: "femme-debutante-presentiel",
     formationId: "femme-debutante-presentiel",
     imageUrl: "/images/formations/femme-presentiel-1.jpg",
@@ -187,25 +206,6 @@ export const PROGRAMS: Program[] = [
     price: "799 €",
     priceSub: "/ SESSION",
     isRecommended: true,
-    type: "distanciel",
-    audience: "adulte"
-  },
-  {
-    id: "fiqh_malikite",
-    imageUrl: "/images/formations/fiqh-distance-1.png",
-    title: "Fiqh Mâlikite",
-    subtitle: "Apprendre à pratiquer les actes d'adoration correctement selon l'école Malikite",
-    tagText: "DROIT",
-    tagColor: "bg-indigo-100 text-indigo-700",
-    durationText: "4 mois",
-    features: [
-      "Pureté & Prière",
-      "Jeûne & Zakat",
-      "Pèlerinage (Hajj)",
-      "Preuves (Dalila)"
-    ],
-    price: "399 €",
-    priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
   },

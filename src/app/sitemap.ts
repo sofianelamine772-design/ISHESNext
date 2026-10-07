@@ -29,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/cours-education-islamique',
     '/fr/cours-en-presentiel',
     '/fr/cours-fiqh-malikite',
+    '/fr/cours-fiqh-malikite/ibn-ashir',
     '/fr/cours-lecture-tajwid',
     '/fr/cours-memoriser-coran',
     '/fr/cours-particuliers',
@@ -58,7 +59,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/plateforme-inscription',
     '/conseil-spiritualite',
     '/fr/question-spiritualite-islam',
-    '/test-positionnement'
+    '/test-positionnement',
+    '/fr/rendez-vous'
   ];
 
   // Routes légales (faible priorité, mises à jour annuelles)
