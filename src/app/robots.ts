@@ -1,12 +1,25 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/private/', '/app/', '/api/'],
-    },
-    sitemap: 'https://www.ishes.fr/sitemap.xml',
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/app/',
+          '/api/',
+          '/private/',
+          '/sign-in',
+          '/sign-up',
+          '/unauthorized',
+          '/test-db',
+          '/accueil-eleve',
+        ],
+      },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

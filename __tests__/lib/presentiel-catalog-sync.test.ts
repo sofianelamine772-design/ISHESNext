@@ -17,7 +17,7 @@ import { filterVisiblePresentielSlots, isDayFullyBooked, getClassSlotStatus, isP
 
 function loadOfficialCsvClasses() {
   const csv = fs.readFileSync(
-    path.join(process.cwd(), 'classes_presentiel_final_corrige.csv'),
+    path.join(process.cwd(), 'archives/exports/classes_presentiel_final_corrige.csv'),
     'utf8',
   );
   return csv

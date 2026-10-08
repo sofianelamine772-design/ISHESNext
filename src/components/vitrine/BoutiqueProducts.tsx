@@ -76,7 +76,7 @@ export function BoutiqueProducts() {
               <div className="w-[60%] sm:w-64 md:w-56 lg:w-[60%] xl:w-56 aspect-[3/4] mx-auto md:mx-0 lg:mx-auto xl:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/30 shrink-0 relative">
                 <Image 
                   src={product.image} 
-                  alt={product.title}
+                  alt={`${product.title} — édition pédagogique Institut ISHES`}
                   fill
                   className="object-contain group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 30vw, 20vw"

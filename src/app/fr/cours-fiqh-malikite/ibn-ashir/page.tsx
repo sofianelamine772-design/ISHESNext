@@ -1,16 +1,48 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, BookOpen, MapPin, Star, CheckCircle2, ArrowRight, UserCheck, Heart, Users, HelpCircle } from 'lucide-react';
+import { buildPageMetadata, articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 
-export const metadata: Metadata = {
-  title: "Qui était l'Imam Ibn 'Âshir ? | Biographie, Œuvres et Fiqh Mâlikite | ISHES",
-  description: "Découvrez la biographie complète de l'Imam Abd al-Wahid Ibn 'Âshir, éminent savant marocain, auteur d'Al-Murshid al-Mu'in, le texte de référence en Fiqh Mâlikite.",
-  keywords: "ibn ashir, biographie ibn ashir, al murshid al mu'in, fiqh malikite, savant malikite, maroc, fes, abd al-wahid ibn ashir, droit musulman, doctrine asharite"
-};
+export const metadata = buildPageMetadata({
+  title: "Ibn Âchir — Biographie et Al-Murshid al-Mu'în | Fiqh Mâlikite",
+  description:
+    "Imam Abd al-Wahid Ibn Âchir (Fès, 1582–1631), auteur d'Al-Murshid al-Mu'în, texte de référence du Fiqh mâlikite. Biographie, œuvre et cours ISHES en ligne.",
+  path: "/fr/cours-fiqh-malikite/ibn-ashir",
+  keywords: [
+    "ibn ashir",
+    "ibn achir",
+    "ibn âchir",
+    "al murshid al muin",
+    "al murshid al mu'in",
+    "matn ibn ashir",
+    "fiqh malikite",
+    "savant malikite fès",
+    "abd al-wahid ibn ashir",
+    "cours fiqh malikite",
+  ],
+  type: "article",
+});
 
 export default function IbnAshirBiographyPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-0 pt-28">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Cours de Fiqh Mâlikite", path: "/fr/cours-fiqh-malikite" },
+          { name: "Ibn Âchir", path: "/fr/cours-fiqh-malikite/ibn-ashir" },
+        ])}
+      />
+      <JsonLd
+        data={articleJsonLd({
+          headline: "Ibn Âchir, auteur d'Al-Murshid al-Mu'în et maître du Fiqh mâlikite",
+          description:
+            "Biographie de l'imam Ibn Âchir de Fès et présentation d'Al-Murshid al-Mu'în, matn de référence pour étudier le Fiqh mâlikite.",
+          path: "/fr/cours-fiqh-malikite/ibn-ashir",
+          keywords: ["ibn ashir", "al murshid al muin", "fiqh malikite"],
+          about: ["Ibn Âchir", "Fiqh mâlikite", "Al-Murshid al-Mu'în"],
+        })}
+      />
       
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-[500px] bg-ishes-blue -z-10" />

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -22,6 +23,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-memoriser-coran") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-memoriser-coran"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours de Mémorisation du Coran | Hifz & Révision | ISHES",
   description: "Mémorisez le Livre d'Allah à votre rythme avec un suivi personnalisé. Correction rigoureuse et programme de révision (Mouraja'a) structuré.",
   keywords: "mémorisation coran, hifz coran, apprendre coran, révision coran, ishes toulouse"
@@ -106,7 +114,7 @@ export default function CoursMemoriserCoranPage() {
               ) : (
                 <Image 
                   src="/images/formations/memorisation-tilawa-1.jpg" 
-                  alt="Mémorisation du Coran"
+                  alt="Cours de mémorisation du Coran (Hifz) — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -149,7 +157,7 @@ export default function CoursMemoriserCoranPage() {
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
              <Image 
                src="/images/formations/memoristion-tilawa-1-ou-2.jpg" 
-               alt="Cours en direct sur Zoom"
+               alt="Séance de Hifz en direct sur Zoom — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -187,7 +195,7 @@ export default function CoursMemoriserCoranPage() {
           ].map((item, i) => (
             <div key={i} className="bg-[#fafafa] rounded-2xl shadow-sm border border-gray-100 flex flex-col group overflow-hidden relative pb-6 transition-all hover:shadow-md">
               <div className="w-full h-40 relative mb-4">
-                 <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
+                 <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
               </div>
               <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
             </div>

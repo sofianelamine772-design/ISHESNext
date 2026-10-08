@@ -1261,7 +1261,7 @@ function InscriptionForm() {
                 <div className="w-full max-w-[320px] relative">
                   <img
                     src="/images/mascotte-ishes-toulouse.png"
-                    alt="Mascotte ISHES"
+                    alt="Mascotte de l'Institut ISHES Toulouse"
                     className="w-full h-auto drop-shadow-2xl"
                   />
                 </div>

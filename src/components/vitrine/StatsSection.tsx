@@ -67,7 +67,7 @@ export function StatsSection() {
         <div className="flex -space-x-3 justify-center">
           {avatars.map((url, i) => (
             <div key={i} className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden relative shadow-sm hover:scale-110 transition-transform cursor-pointer z-10 hover:z-20">
-              <img src={url} alt="Avatar étudiant" className="w-full h-full object-cover" />
+              <img src={url} alt="Avatar d'un étudiant de l'Institut ISHES" className="w-full h-full object-cover" />
             </div>
           ))}
         </div>

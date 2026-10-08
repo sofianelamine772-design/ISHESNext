@@ -132,45 +132,6 @@ export const PROGRAMS: Program[] = [
     day: "Dimanche"
   },
   {
-    id: "pack_accompagnement",
-    imageUrl: "/images/formations/pack-acc-1.png",
-    title: "Pack Accompagnement",
-    subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
-    tagText: "INCLUS",
-    tagColor: "bg-ishes-gold/20 text-ishes-gold",
-    durationText: "8 mois",
-    features: [
-      "Vivre au quotidien",
-      "Groupe d'entraide",
-      "Cours de spiritualité",
-      "Accès Early Bird"
-    ],
-    price: "49 €",
-    originalPrice: "399 €",
-    priceSub: "/ AN",
-    type: "distanciel",
-    audience: "adulte"
-  },
-  {
-    id: "correction_fatiha",
-    imageUrl: "/images/ai_quran.png",
-    title: "Correction al Fatiha",
-    subtitle: "Corrigez la lecture de la Fatiha et des 3 dernières sourates. Module offert.",
-    tagText: "OFFERT",
-    tagColor: "bg-green-100 text-green-700",
-    durationText: "Session",
-    features: [
-      "Fatiha & 3 sourates",
-      "Validité de la prière",
-      "Prononciation correcte",
-      "Totalement gratuit"
-    ],
-    price: "0 €",
-    priceSub: "GRATUIT",
-    type: "distanciel",
-    audience: "adulte"
-  },
-  {
     id: "tajwid_standard",
     imageUrl: "/images/formations/tajwid-standar-1.jpg",
     title: "Tajwid Standard",
@@ -482,6 +443,51 @@ export const PROGRAMS: Program[] = [
     type: "distanciel",
     audience: "adulte"
   },
+  {
+    id: "pack_accompagnement",
+    imageUrl: "/images/formations/pack-acc-1.png",
+    title: "Pack Accompagnement",
+    subtitle: "Groupe WhatsApp, lives mensuels et module spiritualité exclusif pour booster ton parcours.",
+    tagText: "INCLUS",
+    tagColor: "bg-ishes-gold/20 text-ishes-gold",
+    durationText: "8 mois",
+    features: [
+      "Vivre au quotidien",
+      "Groupe d'entraide",
+      "Cours de spiritualité",
+      "Accès Early Bird"
+    ],
+    price: "49 €",
+    originalPrice: "399 €",
+    priceSub: "/ AN",
+    type: "distanciel",
+    audience: "adulte"
+  },
+  {
+    id: "correction_fatiha",
+    imageUrl: "/images/ai_quran.png",
+    title: "Cours de Fatiha gratuit",
+    subtitle: "Cours de Fatiha avec professeur, groupe WhatsApp, 100 % gratuit. Al-Fatiha et 3 dernières sourates.",
+    tagText: "OFFERT",
+    tagColor: "bg-green-100 text-green-700",
+    durationText: "Session",
+    features: [
+      "Professeur en direct",
+      "Groupe WhatsApp",
+      "Fatiha & 3 sourates",
+      "100 % gratuit"
+    ],
+    price: "0 €",
+    priceSub: "GRATUIT",
+    type: "distanciel",
+    audience: "adulte",
+    keywords: [
+      "cours de fatiha",
+      "cours fatiha gratuit",
+      "correction fatiha",
+      "groupe whatsapp",
+    ],
+  },
 ];
 
 export function ProgramContent() {
@@ -566,7 +572,7 @@ export function ProgramContent() {
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#fafafa] to-transparent z-10 lg:hidden" />
           <Image
             src="/images/quran-coffee.png"
-            alt="Coran et apprentissage"
+            alt="Apprentissage du Coran et de l'arabe à l'Institut ISHES"
             fill
             sizes="(max-width: 1024px) 100vw, 55vw"
             className="object-cover object-center lg:object-left opacity-20 lg:opacity-100"
@@ -579,14 +585,15 @@ export function ProgramContent() {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-16 relative z-20">
             <div className="max-w-2xl relative">
               <div className="font-black tracking-widest text-xs uppercase mb-6 text-ishes-gold">
-                Nos Formations
+                Catalogue des formations ISHES
               </div>
               <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight mb-6">
-                Choisis ton parcours, <br />
-                <span className="text-ishes-gold">avance à ton rythme.</span>
+                Cours d&apos;arabe, Tajwid &amp; sciences islamiques
+                <br />
+                <span className="text-ishes-gold">Toulouse &amp; en ligne.</span>
               </h1>
               <p className="text-lg sm:text-xl text-gray-500 font-medium max-w-lg leading-relaxed">
-                Présentiel ou à distance, adulte ou enfant : découvre le parcours qui t'aidera à apprendre, comprendre et transmettre ta religion.
+                Présentiel ou distanciel, adulte ou enfant : choisis le parcours adapté pour apprendre la langue arabe, lire le Coran et comprendre ta religion.
               </p>
             </div>
 
@@ -719,7 +726,7 @@ export function ProgramContent() {
                 <div className="w-full h-32 sm:h-48 relative bg-gray-100 shrink-0 overflow-hidden">
                   <Image 
                     src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
-                    alt={program.title} 
+                    alt={`${program.title} — formation Institut ISHES`} 
                     fill 
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className={`object-cover ${program.id === 'al_aqida' ? 'scale-[1.15] origin-top' : ''}`}

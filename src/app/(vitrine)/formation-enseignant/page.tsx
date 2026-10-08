@@ -1,301 +1,193 @@
-"use client";
-
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { CheckCircle2, GraduationCap, Monitor, CreditCard, ChevronRight, FileText, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { ArabicBackground } from "@/components/ArabicBackground";
+import { FormationEnseignantHero } from "@/components/vitrine/FormationEnseignantHero";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  breadcrumbJsonLd,
+  courseJsonLd,
+  faqJsonLd,
+  howToJsonLd,
+} from "@/lib/seo";
 
-const formations = [
+const ENSEIGNANT_FAQS = [
   {
-    id: "nour-al-bayan",
-    link: "/fr/formation-enseignant-tajwid",
-    image: "/images/formations/arabe-enfant-distance-2.jpg",
-    title: "Formation Enseignant de Tajwid",
-    subtitle: "Méthode Les Clés du Coran",
-    availableRemote: true,
-    paymentTerms: "Jusqu'à 10x sans frais",
-    tags: ["Pédagogie", "Certification", "Accompagnement"],
-    description: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.\n\nTu connais peut-être déjà les règles du Tajwid. Tu récites correctement. Mais lorsqu'il faut transmettre ce savoir, beaucoup réalisent qu'il existe une différence entre connaître une science… et savoir l'enseigner.\n\nC'est précisément pour répondre à ce besoin qu'a été créée la Formation Enseignant de Tajwid. L'objectif est de former des enseignants capables de transmettre le Coran avec rigueur, pédagogie et bienveillance.",
-    objectifs: [
-      "Construire une progression pédagogique logique",
-      "Présenter chaque règle avec simplicité",
-      "Gérer une classe et maintenir l'attention",
-      "Corriger efficacement sans décourager",
-      "S'adapter selon le niveau de chaque élève"
-    ],
-    deroulement: [
-      "Deux cours par semaine : le lundi et le jeudi, en direct sur Zoom",
-      "Replays accessibles pendant toute la durée",
-      "Formation organisée en trois modules",
-      "Vérification de la récitation (Module 3)",
-      "Évaluations et examens de validation"
-    ],
-    modules: [
-      {
-        title: "Module 1 — Enseigner le Tajwid",
-        desc: "Méthode pédagogique exclusive Les Clés du Coran (adaptation francophone inspirée de Nour Al Bayan)."
-      },
-      {
-        title: "Module 2 — « Apprendre à apprendre »",
-        desc: "Piliers de l'apprentissage, mémorisation, gestion de classe, psychologie et posture de l'enseignant."
-      },
-      {
-        title: "Module 3 — Perfectionnement de la récitation",
-        desc: "Vérification et correction de ta lecture pour t'assurer une parfaite maîtrise des règles à enseigner."
-      }
-    ],
-    pourQui: [
-      "Futurs enseignants ou enseignants en poste",
-      "Étudiants en sciences islamiques",
-      "Responsables d'écoles, mosquées, associations",
-      "Parents souhaitant transmettre le Coran"
-    ],
-    supports: "Tous les supports sont inclus (Méthode Les Clés du Coran, ressources pédagogiques, évaluations).",
-    accompagnement: "Accompagnement et supervision possibles même après la certification pour tes premiers pas d'enseignant.",
-    pricing: "Devis personnalisé",
-    format: "Enseignement à distance",
-    badgeColor: "bg-ishes-blue/10 text-ishes-blue"
+    question: "Comment devenir enseignant de Tajwid ?",
+    answer:
+      "Pour devenir enseignant de Tajwid, il ne suffit pas de réciter correctement : il faut savoir transmettre. La formation enseignant de Tajwid de l'Institut ISHES (méthode Les Clés du Coran) apprend à construire une progression, expliquer chaque règle simplement, corriger sans décourager et gérer une classe. Les cours ont lieu à distance, en direct, avec certification.",
   },
   {
-    id: "tarbya-islamya",
-    link: "/fr/formation-enseignant-tarbya",
-    title: "Formation Enseignant Tarbya Islamiya",
-    subtitle: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
-    availableRemote: true,
-    paymentTerms: "Paiement en plusieurs fois possible",
-    tags: ["Enfants & Ados", "Pédagogie", "Tarbya"],
-    description: "Tu aimes transmettre l'Islam aux enfants. Tu possèdes peut-être déjà des connaissances religieuses. Mais très vite, une réalité apparaît : comment parler d'ALLAH à un enfant ? Comment lui faire aimer son Seigneur plutôt que de lui transmettre uniquement des connaissances ? Comment expliquer des notions abstraites avec des mots adaptés à son âge ?\n\nLa plupart des enseignants n'ont jamais reçu de véritable formation pédagogique. C'est précisément pour répondre à ce besoin qu'a été créée cette formation, fruit de plus de 15 ans d'expérience de l'Institut ISHES.\n\nL'objectif est de former des éducateurs capables d'éveiller les cœurs, de développer l'amour d'ALLAH et d'accompagner les enfants dans leur cheminement spirituel.",
-    objectifs: [
-      "Maîtriser et transmettre les grands thèmes de l'éducation islamique de manière vivante",
-      "Savoir utiliser les histoires et récits pour rendre les enseignements concrets",
-      "Capter et maintenir l'attention des élèves",
-      "Gérer sereinement une classe, en présentiel comme à distance",
-      "Adopter une posture d'enseignant bienveillant et respecté"
-    ],
-    deroulement: [
-      "Deux cours par semaine : le lundi et le jeudi à 19h30, en direct sur Zoom",
-      "Formation d'une durée de 4 à 5 mois avec replays accessibles",
-      "Alternance de théorie, exercices pratiques et mises en situation",
-      "Évaluations et examens réguliers de validation des compétences",
-      "Possibilité de stage pratique au sein de l'Institut ISHES"
-    ],
-    modules: [
-      {
-        title: "Module 1 — Maîtriser et transmettre la Tarbya Islamiya",
-        desc: "Rôle de l'enseignant, fondements de la spiritualité, 5 piliers de l'Islam, 6 piliers de la foi, invocations et calendrier musulman, utilisation des histoires."
-      },
-      {
-        title: "Module 2 — « Apprendre à apprendre »",
-        desc: "Piliers de l'apprentissage, mémorisation, gestion de classe, prévention des conflits, création de cours interactifs et accompagnement personnalisé."
-      }
-    ],
-    pourQui: [
-      "Aux futurs enseignants en Tarbya Islamiya",
-      "Aux enseignants souhaitant professionnaliser leur pédagogie",
-      "Aux étudiants en sciences islamiques",
-      "Aux responsables d'écoles, de mosquées ou d'associations",
-      "Aux parents souhaitant transmettre les valeurs de l'Islam à leurs enfants"
-    ],
-    supports: "Manuel pédagogique sur le Tawhid, manuel sur la Sîrah pour enfants, livret d'invocations, fiches d'évaluation et supports complets pour animer les cours.",
-    accompagnement: "Suivi pédagogique continu, mentorat et supervision post-formation pour vous conseiller si vous rencontrez des difficultés dans vos cours.",
-    pricing: "Devis personnalisé",
-    format: "Enseignement à distance",
-    badgeColor: "bg-ishes-blue/10 text-ishes-blue"
-  }
+    question: "Comment devenir enseignant en Tarbiya Islamiyya ?",
+    answer:
+      "Devenir enseignant en éducation islamique, c'est apprendre à parler d'Allah aux enfants avec des mots adaptés à leur âge, à éveiller l'amour de la religion et à animer une classe avec bienveillance. La formation enseignant Tarbiya Islamiyya d'ISHES, fruit de plus de 15 ans d'expérience, forme des éducateurs pour écoles, mosquées, associations et familles.",
+  },
+  {
+    question: "Faut-il déjà être professeur pour suivre la formation ?",
+    answer:
+      "Non. Les parcours s'adressent aux futurs enseignants, aux enseignants déjà en poste, aux étudiants en sciences islamiques, aux responsables d'associations ou de mosquées, et aux parents qui veulent transmettre le Coran et les valeurs de l'islam avec une vraie pédagogie.",
+  },
+  {
+    question: "Quelle est la différence entre connaître le Tajwid et savoir l'enseigner ?",
+    answer:
+      "Connaître les règles permet de réciter. Enseigner demande une méthode : ordre des leçons, exemples, exercices, gestion de l'attention, correction bienveillante. C'est cette compétence professionnelle que visent les formations diplômantes ISHES.",
+  },
+  {
+    question: "La formation enseignant ISHES est-elle reconnue ?",
+    answer:
+      "ISHES est un institut spécialisé en France dans la formation certifiante des enseignants en Tajwid et en Tarbiya Islamiyya. La validation des modules débouche sur une certification. Un accompagnement reste possible après la formation pour vos premiers cours.",
+  },
+  {
+    question: "Où et comment se déroule la formation pour devenir enseignant ?",
+    answer:
+      "Les deux formations se font à distance, en direct sur Zoom (lundi et jeudi), pendant environ quatre mois, avec replays. Le paiement peut être étalé (jusqu'à 10 fois sans frais selon le parcours). Un devis personnalisé est proposé après un entretien gratuit.",
+  },
 ];
 
 export default function FormationEnseignantPage() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  const faqItems = [
-    {
-      q: "À qui s'adressent ces formations diplômantes ?",
-      a: "Nos cursus s'adressent à toute personne (enseignant, futur éducateur, parent) souhaitant acquérir des compétences professionnelles et pédagogiques solides pour enseigner la lecture du Coran (Nour Al Bayan) ou l'éducation religieuse bienveillante (Tarbya Islamya)."
-    },
-    {
-      q: "Quels sont les prérequis pour s'inscrire ?",
-      a: "Aucun prérequis technique n'est imposé, que ce soit pour la formation diplômante Tajwid (Nour Al Bayan) ou pour la formation Tarbya Islamya, si ce n'est une forte motivation pour la transmission et la pédagogie positive."
-    },
-    {
-      q: "Comment se déroulent l'évaluation et la remise de diplôme ?",
-      a: "C'est la validation de chacun des modules qui valident la formation."
-    },
-    {
-      q: "Proposez-vous des facilités de paiement ?",
-      a: "Absolument. Nous comprenons que l'investissement dans une formation professionnelle est important. C'est pourquoi nous proposons des options d'étalement de paiement allant jusqu'à 10 mensualités sans aucun frais."
-    },
-    {
-      q: "Quel est le rythme de travail et la durée de la formation ?",
-      a: "Environ 4 mois à hauteur de 2 cours par semaine."
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-blue selection:text-white pb-0">
-      {/* --- HERO SECTION --- */}
-      <section className="relative pt-44 pb-32 md:pt-56 md:pb-48 overflow-hidden">
-        <ArabicBackground />
-        <div className="absolute top-0 right-1/2 translate-x-1/2 w-[800px] h-[600px] bg-ishes-blue/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-blue selection:text-white">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Devenir enseignant", path: "/formation-enseignant" },
+        ])}
+      />
+      <JsonLd
+        data={courseJsonLd({
+          name: "Formation enseignant de Tajwid — Les Clés du Coran",
+          description:
+            "Formation diplômante pour devenir enseignant de Tajwid : pédagogie, gestion de classe et méthode Les Clés du Coran.",
+          path: "/fr/formation-enseignant-tajwid",
+          courseMode: "Online",
+          workload: "P16W",
+        })}
+      />
+      <JsonLd
+        data={courseJsonLd({
+          name: "Formation enseignant Tarbiya Islamiyya",
+          description:
+            "Formation pour devenir enseignant en éducation islamique et transmettre les valeurs de l'islam aux enfants avec pédagogie.",
+          path: "/fr/formation-enseignant-tarbya",
+          courseMode: "Online",
+          workload: "P16W",
+        })}
+      />
+      <JsonLd data={faqJsonLd(ENSEIGNANT_FAQS)} />
+      <JsonLd
+        data={howToJsonLd({
+          name: "Comment devenir enseignant de Tajwid ou de Tarbiya Islamiyya",
+          description:
+            "Étapes pour se former comme enseignant du Coran et de l'éducation islamique à l'Institut ISHES.",
+          path: "/formation-enseignant",
+          steps: [
+            {
+              name: "Clarifier votre projet d'enseignement",
+              text: "Tajwid (lecture du Coran) ou Tarbiya Islamiyya (éducation des enfants), pour une mosquée, une association, une école ou la famille.",
+            },
+            {
+              name: "Demander un entretien gratuit",
+              text: "Échangez avec un conseiller ISHES pour vérifier l'adéquation du parcours et obtenir un devis.",
+            },
+            {
+              name: "Suivre la formation à distance",
+              text: "Deux cours par semaine en direct, replays, modules pédagogiques, évaluations et certification.",
+            },
+            {
+              name: "Enseigner avec méthode",
+              text: "Appliquez la pédagogie apprise ; un accompagnement post-certification reste possible.",
+            },
+          ],
+        })}
+      />
 
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="max-w-5xl mx-auto">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-7xl lg:text-[95px] font-black text-ishes-dark leading-[0.9] tracking-tighter mb-10 uppercase"
-            >
-              <span className="block text-ishes-gold">DEVENEZ</span>
-              <span className="text-ishes-dark whitespace-nowrap">ENSEIGNANT CERTIFIÉ</span>
-            </motion.h1>
+      <FormationEnseignantHero />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="max-w-4xl mx-auto text-center"
-            >
-              <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-6">
-                Transmettre avec légitimité, amour, et pédagogie.
-              </h2>
-              <div className="space-y-4 text-lg text-gray-500 font-medium leading-relaxed">
-                <p>
-                  Vous aspirez à enseigner notre noble religion avec amour, légitimité et rigueur ? L'Institut ISHES vous forme à cette noble mission. Seul institut en France spécialisé dans la formation certifiante des enseignants en Tarbya Islamiyya et en Tajwid.
-                </p>
-                <p>
-                  Formation au service des associations, mosquées ou familles
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-20 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left relative z-20"
-            >
-              {formations.map((f, idx) => (
-                <div key={f.id} className="bg-ishes-dark rounded-[2.5rem] p-10 border border-ishes-gold/20 shadow-xl hover:shadow-2xl hover:border-ishes-gold/40 hover:-translate-y-2 transition-all duration-500 group relative flex flex-col h-full overflow-hidden items-center text-center">
-                  {f.image && (
-                    <>
-                      <div className="absolute inset-0 z-0">
-                        <img src={f.image} alt={f.title} className="w-full h-full object-cover opacity-30 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" />
-                      </div>
-                      <div className="absolute inset-0 bg-ishes-dark/60 z-0" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-ishes-dark via-transparent to-transparent z-0" />
-                    </>
-                  )}
-                  {/* Decorative background element */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-ishes-gold/5 rounded-bl-[100px] transition-transform group-hover:scale-110 z-0"></div>
-
-                  <div className="relative z-10 flex flex-col h-full w-full justify-between gap-12">
-                    <h3 className="text-2xl md:text-3xl font-black text-white leading-tight mt-4 group-hover:text-ishes-gold transition-colors uppercase">
-                      {f.title}
-                    </h3>
-
-                    <div className="flex flex-col items-center gap-6 w-full">
-                      <span className="text-xl font-black text-white">{f.pricing}</span>
-                      
-                      <Link
-                        href={f.link}
-                        className="w-full py-4 rounded-2xl bg-ishes-gold text-white hover:brightness-95 font-black transition-all duration-300 text-sm uppercase tracking-widest text-center shadow-lg shadow-ishes-gold/20 hover:-translate-y-1 hover:shadow-xl"
-                      >
-                        Voir le programme
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- CHIFFRES CLES --- */}
-      <section className="relative z-20 -mt-16 mb-16 px-6">
-        <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
-          <div className="flex-1 text-center">
-            <h3 className="text-4xl font-black text-ishes-blue mb-2">15+</h3>
-            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">années d'expérience dans la formation d'enseignants</p>
-          </div>
-          <div className="hidden md:block w-px h-16 bg-gray-100"></div>
-          <div className="flex-1 text-center">
-            <h3 className="text-4xl font-black text-ishes-blue mb-2">Méthode</h3>
-            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">exclusive "Les Clés du Coran"</p>
-          </div>
-          <div className="hidden md:block w-px h-16 bg-gray-100"></div>
-          <div className="flex-1 text-center">
-            <h3 className="text-4xl font-black text-ishes-blue mb-2">100%</h3>
-            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">Accompagnement avant, pendant et après</p>
-          </div>
-        </div>
-      </section>
-
-
-
-
-
-      {/* --- REASSURANCE --- */}
-      <section className="bg-ishes-blue/5 py-24 border-y border-ishes-blue/10 relative overflow-hidden">
-        <ArabicBackground />
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <div className="w-20 h-20 bg-ishes-blue/10 text-ishes-blue rounded-3xl flex items-center justify-center mx-auto mb-8">
-            <Sparkles className="w-10 h-10" />
-          </div>
-          <h2 className="text-4xl md:text-5xl font-black text-ishes-blue mb-6 tracking-tight uppercase">Besoin de plus d'informations ?</h2>
-          <p className="text-xl text-gray-400 font-medium mb-12">
-            Nos conseillers pédagogiques sont à votre disposition pour vous guider dans votre projet professionnel.
-          </p>
-          <div className="flex justify-center">
-            <Link href="/contact" className="bg-ishes-blue text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#007044] transition-all hover:shadow-xl shadow-ishes-blue/20 hover:-translate-y-1">
-              Nous contacter
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* --- FAQ SECTION --- */}
-      <section className="py-24 bg-white border-t border-gray-100 relative z-10">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-ishes-blue font-black uppercase tracking-[0.25em] text-xs mb-4 block">Questions Fréquentes</span>
-            <h2 className="text-4xl md:text-5xl font-black text-ishes-blue leading-none tracking-tight uppercase">
-              Tout savoir sur la <span className="text-ishes-blue ">certification.</span>
+      <article className="py-20 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto space-y-10 text-[15px] leading-relaxed text-gray-600">
+          <header className="text-center mb-4">
+            <p className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-3">
+              Métier d&apos;enseignant
+            </p>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue leading-tight">
+              Devenir enseignant du Coran et de l&apos;éducation islamique
             </h2>
-          </div>
+          </header>
 
-          <div className="space-y-4">
-            {faqItems.map((item, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 bg-[#fafafa]"
-                >
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-blue transition-colors"
-                  >
-                    <span>{item.q}</span>
-                    <ChevronRight
-                      className={`w-5 h-5 text-ishes-blue transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
-                    />
-                  </button>
-                  <div
-                    className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-                      } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
-                  >
-                    {item.a}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              Devenir enseignant de Tajwid : plus qu&apos;une belle récitation
+            </h3>
+            <p>
+              Beaucoup de musulmans et de musulmanes récitent correctement le Coran. Peu savent{" "}
+              <strong>enseigner le Tajwid</strong> : poser une progression, expliquer une règle à un débutant,
+              corriger un élève sans le blesser, tenir une classe — en présentiel ou à distance.{" "}
+              <strong>Devenir enseignant de Tajwid</strong>, c&apos;est passer de « je sais lire » à « je sais
+              transmettre ». C&apos;est le cœur de la{" "}
+              <Link href="/fr/formation-enseignant-tajwid" className="text-ishes-blue font-bold hover:underline">
+                formation enseignant de Tajwid
+              </Link>{" "}
+              de l&apos;Institut ISHES, fondée sur la méthode francophone{" "}
+              <Link href="/fr/les-cles-du-coran" className="text-ishes-blue font-bold hover:underline">
+                Les Clés du Coran
+              </Link>{" "}
+              (inspiration Nour Al Bayan).
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              Devenir enseignant en Tarbiya Islamiyya : éveiller les cœurs
+            </h3>
+            <p>
+              <strong>Enseigner l&apos;islam aux enfants</strong> ne consiste pas à empiler des leçons. Un bon
+              enseignant de Tarbiya Islamiyya sait parler d&apos;Allah avec des mots d&apos;enfant, raconter la
+              Sîrah, ancrer les piliers de la foi, capter l&apos;attention et poser un cadre bienveillant. La{" "}
+              <Link href="/fr/formation-enseignant-tarbya" className="text-ishes-blue font-bold hover:underline">
+                formation enseignant Tarbiya Islamiyya
+              </Link>{" "}
+              prépare à ce métier : pédagogie, gestion de classe, outils (manuels, invocations, évaluations) et
+              posture de l&apos;éducateur — pour mosquées, associations, écoles et familles.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              Pourquoi se former pour enseigner, même si l&apos;on connaît déjà la science ?
+            </h3>
+            <p>
+              Un <strong>professeur de Coran</strong> ou un <strong>enseignant d&apos;éducation islamique</strong>{" "}
+              porte une responsabilité : la qualité de ce que les enfants et les adultes retiendront. Sans
+              méthode, le cours fatigue, les élèves décrochent, les parents doutent. Avec une formation
+              pédagogique, l&apos;enseignant gagne en clarté, en confiance et en légitimité. ISHES forme des
+              enseignants depuis plus de quinze ans, en France, à distance, avec un suivi avant, pendant et après
+              la certification.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">À qui s&apos;adresse ce métier ?</h3>
+            <p>
+              Futurs enseignants, enseignants déjà en poste, étudiants en sciences islamiques, imams et
+              responsables d&apos;associations, parents qui souhaitent transmettre le Coran à la maison : la
+              formation diplômante ISHES est conçue pour professionnaliser la transmission. Deux cours par
+              semaine en visio, replays, évaluations, devis et paiement échelonné. Pour démarrer, demandez un{" "}
+              <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+                entretien gratuit
+              </Link>{" "}
+              ou consultez le{" "}
+              <Link href="/program" className="text-ishes-blue font-bold hover:underline">
+                catalogue des formations
+              </Link>
+              .
+            </p>
+          </section>
         </div>
-      </section>
+      </article>
+
+      <VitrineFaq
+        eyebrow="FAQ — Devenir enseignant"
+        title="Questions pour ceux qui veulent enseigner"
+        items={ENSEIGNANT_FAQS}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ export function InstitutManifesto() {
   return (
     <section className="bg-white py-32 relative overflow-hidden">
       <div className="absolute top-0 right-0 p-20 opacity-[0.03] pointer-events-none">
-         <Image src="/logo.png" width={600} height={200} className="grayscale" alt="" />
+         <Image src="/logo.png" width={600} height={200} className="grayscale" alt="Logo de l'Institut ISHES — arabe et sciences islamiques" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6">
@@ -48,7 +48,7 @@ export function InstitutManifesto() {
              >
                <Image 
                  src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=800&auto=format&fit=crop" 
-                 alt="Learning space" 
+                 alt="Salle de cours de l'Institut ISHES à Toulouse" 
                  fill
                  className="object-cover"
                  sizes="(max-width: 768px) 50vw, 25vw"
@@ -63,7 +63,7 @@ export function InstitutManifesto() {
              >
                <Image 
                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" 
-                 alt="Inspiring interior" 
+                 alt="Espace d'apprentissage inspirant à l'Institut ISHES" 
                  fill
                  className="object-cover"
                  sizes="(max-width: 768px) 50vw, 25vw"

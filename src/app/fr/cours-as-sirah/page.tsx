@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -24,6 +25,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-as-sirah") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-as-sirah"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours de Sîrah An-Nabawiyya | Vie du Prophète ﷺ | ISHES",
   description: "Découvrez la vie du Prophète Mohamed ﷺ. Un cursus annuel complet pour comprendre son héritage, ses vertus et tirer des enseignements pour notre quotidien.",
   keywords: "sira, vie du prophete, biographie prophétique, cours islam toulouse, ishes, apprentissage islam"
@@ -118,7 +126,7 @@ export default function CoursAsSirahPage() {
               ) : (
                 <Image 
                   src="/images/formations/sirah-distance-1.png" 
-                  alt="Sîrah An-Nabawiyya"
+                  alt="Cours de Sîrah An-Nabawiyya (biographie du Prophète) — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -161,7 +169,7 @@ export default function CoursAsSirahPage() {
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/sirah-dist-2.png" 
-               alt="Étude de la Sîrah sur Zoom"
+               alt="Étude de la Sîrah en direct sur Zoom — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -200,7 +208,7 @@ export default function CoursAsSirahPage() {
           ].map((item, i) => (
             <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col group overflow-hidden relative pb-6 transition-all hover:shadow-md">
               <div className="w-full h-40 relative mb-4">
-                 <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
+                 <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
               </div>
               <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
             </div>

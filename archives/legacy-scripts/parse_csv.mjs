@@ -1,11 +1,19 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.join(__dirname, '../..');
+dotenv.config({ path: path.join(ROOT, '.env.local') });
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const headers = { 'apikey': key, 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
 
-const file = fs.readFileSync('ishes_etudiants_distance_15_09_2026_03_26_51 copie.csv', 'utf8');
+const file = fs.readFileSync(
+  path.join(__dirname, '../exports/ishes_etudiants_distance_15_09_2026_03_26_51 copie.csv'),
+  'utf8',
+);
 const lines = file.trim().split('\n').slice(1);
 
 const classMap = {

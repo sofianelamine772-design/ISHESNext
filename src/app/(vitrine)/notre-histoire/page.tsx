@@ -29,7 +29,7 @@ export default function NotreHistoirePage() {
           
           <Image 
             src="/images/ai_medina.png" 
-            alt="Médina"
+            alt="Illustration inspirée de la Médine — histoire de l'Institut ISHES"
             fill
             priority
             className="object-cover object-center"
@@ -116,7 +116,7 @@ export default function NotreHistoirePage() {
               className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col sm:flex-row h-full"
             >
               <div className="w-full sm:w-[45%] h-64 sm:h-auto relative shrink-0">
-                <Image src="/images/OustedhaRahida.jpeg" alt="Oustedha Rachida" fill className="object-cover object-center" />
+                <Image src="/images/OustedhaRahida.jpeg" alt="Oustadha Rachida, cofondatrice de l'Institut ISHES" fill className="object-cover object-center" />
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
                 <h3 className="text-2xl font-black text-ishes-blue mb-1">Oustedha Rachida</h3>
@@ -145,7 +145,7 @@ export default function NotreHistoirePage() {
               className="bg-[#f9f5f0] rounded-[2.5rem] overflow-hidden shadow-lg flex flex-col sm:flex-row h-full"
             >
               <div className="w-full sm:w-[45%] h-64 sm:h-auto relative shrink-0">
-                <Image src="/images/oustedhRyad.jpeg" alt="Oustedh Riad" fill className="object-cover object-center" />
+                <Image src="/images/oustedhRyad.jpeg" alt="Oustadh Riad, cofondateur de l'Institut ISHES" fill className="object-cover object-center" />
               </div>
               <div className="p-8 sm:p-10 flex flex-col justify-center flex-1 bg-gradient-to-l from-[#f9f5f0] to-[#f4ebe1]/50">
                 <h3 className="text-2xl font-black text-ishes-blue mb-1">Oustedh Riad</h3>
@@ -182,7 +182,7 @@ export default function NotreHistoirePage() {
           
           <div className="rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
             <div className="w-full md:w-[45%] h-64 md:h-auto relative bg-gray-200">
-              <Image src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop" alt="Notre équipe" fill className="object-cover" />
+              <Image src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop" alt="Équipe pédagogique de l'Institut ISHES" fill className="object-cover" />
             </div>
             <div className="w-full md:w-[55%] bg-[#0c1f2e] p-12 md:p-16 flex flex-col justify-center text-white relative overflow-hidden">
               <ArabicBackground />
@@ -191,7 +191,7 @@ export default function NotreHistoirePage() {
                 <p className="text-white/80 font-medium mb-10 max-w-sm">Notre équipe est là pour t'accompagner et répondre à toutes tes questions.</p>
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <Link href="https://wa.me/33666033519" target="_blank" className="bg-ishes-gold hover:bg-[#b0935b] text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg flex items-center gap-3 w-full sm:w-auto justify-center">
-                    <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="w-6 h-6 rounded-full object-cover" />
+                    <img src="/images/whatsapp-logo.avif" alt="Contacter l'Institut ISHES sur WhatsApp" className="w-6 h-6 rounded-full object-cover" />
                     Nous contacter sur WhatsApp
                   </Link>
                   <span className="text-sm font-medium text-white/70">Réponse rapide et personnalisée</span>

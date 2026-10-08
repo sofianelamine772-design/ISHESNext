@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -23,6 +24,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-al-aqida") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-al-aqida"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours d'Al-Aqîda | Fondements de la Foi | ISHES",
   description: "Comprendre la foi en Islam avec clarté, certitude et sérénité à partir du Matn d'Ibn 'Âchir.",
   keywords: "aqida, croyance islamique, ibn achir, foi musulmane, cours islam en ligne, ishes"
@@ -109,7 +117,7 @@ export default function CoursAlAqidaPage() {
               ) : (
                 <Image 
                   src="/images/formations/aqida-distance-1.jpeg" 
-                  alt="Al-Aqîda"
+                  alt="Cours d'Al-Aqîda (dogme islamique) en ligne — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -152,7 +160,7 @@ export default function CoursAlAqidaPage() {
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/aqida-2.png" 
-               alt="Étude d'Al-Aqîda sur Zoom"
+               alt="Étude d'Al-Aqîda en direct sur Zoom — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -191,7 +199,7 @@ export default function CoursAlAqidaPage() {
           ].map((item, i) => (
             <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col group overflow-hidden relative pb-6 transition-all hover:shadow-md">
               <div className="w-full h-40 relative mb-4">
-                 <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
+                 <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
               </div>
               <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
             </div>

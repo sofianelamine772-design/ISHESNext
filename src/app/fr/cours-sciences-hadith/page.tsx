@@ -1,9 +1,17 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import { CourseDetailView } from "@/components/CourseDetailView";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-sciences-hadith") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-sciences-hadith"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours de Sciences du Hadith | Authenticité | ISHES",
   description: "Découvrez comment la parole du Prophète ﷺ a été préservée. Un cursus approfondi sur l'authentification et la transmission des hadiths.",
   keywords: "sciences du hadith, authentification hadith, sunnah, cours islam académique, ishes"

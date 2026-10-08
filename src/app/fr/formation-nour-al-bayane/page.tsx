@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   CheckCircle2, 
@@ -15,6 +16,13 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/formation-nour-al-bayane") },
+  openGraph: {
+    url: absoluteUrl("/fr/formation-nour-al-bayane"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Formation Nour Al Bayane | Lecture Accélérée Coran | ISHES",
   description: "Maîtrisez la lecture du Coran avec la méthode Nour Al Bayane. Une approche pédagogique éprouvée pour lire avec fluidité en un temps record.",
   keywords: "nour al bayane, méthode lecture coran, apprendre lire arabe, tajwid accéléré, ishes"
@@ -58,12 +66,14 @@ export default function NourAlBayanePage() {
                   href="/inscription?plan=tajwid_standard&audience=adulte" 
                   className="w-full sm:w-auto bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1 active:scale-95"
                 >
-                  S'INSCRIRE À LA FORMATION
+                  S&apos;INSCRIRE À LA FORMATION
                 </Link>
-                <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-gray-100">
-                   <p className="text-sm font-black text-ishes-dark uppercase tracking-widest">Type de cours</p>
-                   <p className="text-ishes-blue text-lg font-black ">Accéléré</p>
-                </div>
+                <Link
+                  href="/fr/les-cles-du-coran"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-ishes-blue text-ishes-blue hover:bg-ishes-blue/5 px-8 py-5 rounded-2xl text-[15px] font-black transition-all"
+                >
+                  Fiche — Les Clés du Coran
+                </Link>
               </div>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4">

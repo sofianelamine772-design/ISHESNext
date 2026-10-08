@@ -162,7 +162,7 @@ export default function InstitutPage() {
         <div className="absolute inset-0">
           <Image 
             src="/images/campus.png" 
-            alt="ISHES Institut Toulouse" 
+            alt="Institut ISHES à Toulouse — campus et cours en présentiel" 
             fill
             priority
             className="object-cover scale-105"

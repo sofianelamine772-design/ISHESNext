@@ -3,9 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * `npm run dev` remplace `.next` par un symlink vers ~/Library/Caches/ishes-next.
- * Ce symlink casse `next build` (PostCSS ne résout plus @tailwindcss/postcss).
- * On le retire avant le build Vercel / local.
+ * Si un ancien symlink .next (cache hors projet) est encore là, on le retire
+ * avant `next build` pour que PostCSS trouve bien les packages.
  */
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const nextDir = path.join(root, ".next");

@@ -43,7 +43,7 @@ export function Navbar() {
               <div className="flex items-center justify-center h-10 md:h-12 w-32 md:w-36">
                 <Image
                   src="/logo.png"
-                  alt="ISHES Logo"
+                  alt="Institut ISHES — logo, cours d'arabe et sciences islamiques"
                   width={144}
                   height={48}
                   priority

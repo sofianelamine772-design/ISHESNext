@@ -1,7 +1,11 @@
-import { PRESENTIEL_CLASSES } from './src/lib/presentiel-data';
+import { PRESENTIEL_CLASSES } from '../../src/lib/presentiel-data';
 import * as fs from 'fs';
+import * as path from 'path';
 
-const csvContent = fs.readFileSync('classes_presentiel_final_corrige.csv', 'utf-8');
+const csvContent = fs.readFileSync(
+  path.join(__dirname, '../exports/classes_presentiel_final_corrige.csv'),
+  'utf-8',
+);
 const csvLines = csvContent.split('\n').filter(l => l.trim() !== '');
 
 const csvClasses = [];

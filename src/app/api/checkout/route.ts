@@ -197,7 +197,13 @@ export async function POST(req: Request) {
       expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
       sibling_discount: String(siblingDiscount),
       stripe_account: stripeAccount,
+      order_bump: body.orderBump || '',
     };
+    if (body.orderBumpPrices) {
+      Object.keys(body.orderBumpPrices).forEach(id => {
+        metadata[`price_${id}`] = String(body.orderBumpPrices[id]);
+      });
+    }
 
     if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
       metadata.parent_first_name = body.parentPrenom || '';

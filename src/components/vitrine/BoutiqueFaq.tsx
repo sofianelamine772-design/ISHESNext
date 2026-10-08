@@ -56,12 +56,13 @@ export function BoutiqueFaq() {
                     className={`w-5 h-5 text-ishes-gold transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
                   />
                 </button>
-                <div 
-                  className={`transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-[500px] border-t border-ishes-gold/10 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-                  } bg-[#f9f5f0] text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
+                <div
+                  className={`bg-[#f9f5f0] text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? "max-h-[500px] border-t border-ishes-gold/10 p-6" : "max-h-0 p-0"
+                  }`}
                 >
-                  {item.a}
+                  {/* Texte toujours présent dans le HTML pour le référencement */}
+                  <p>{item.a}</p>
                 </div>
               </div>
             );

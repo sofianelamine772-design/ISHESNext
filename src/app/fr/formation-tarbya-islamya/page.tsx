@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -23,6 +24,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/formation-tarbya-islamya") },
+  openGraph: {
+    url: absoluteUrl("/fr/formation-tarbya-islamya"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Tarbiya Islamiya | Éducation Spirituelle & Éveil du Cœur | ISHES",
   description: "Accompagnez l'éveil spirituel de votre enfant avec nos cours de Tarbiya Islamiya. Une pédagogie ludique pour ancrer les valeurs et l'amour d'Allah.",
   keywords: "éducation islamique enfant, tarbiya islamiya, cours islam junior, adab enfant, ishes toulouse"
@@ -88,7 +96,7 @@ export default function FormationTarbyaPage() {
               ) : (
                 <Image 
                   src="/images/formations/tarbya-islamya-distance-1.jpg" 
-                  alt="Tarbiya Islamiyya"
+                  alt="Formation Tarbiya Islamiyya en ligne — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -172,7 +180,7 @@ export default function FormationTarbyaPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/tarbya-islamya-distance-2.jpg" 
-               alt="Cahier de Tarbiya Islamiyya"
+               alt="Cahier pédagogique Tarbiya Islamiyya — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"

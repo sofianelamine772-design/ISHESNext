@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   CheckCircle2, 
@@ -21,13 +22,14 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-en-presentiel") },
   title: "Cours en Présentiel | Institut ISHES Toulouse",
   description: "Découvrez nos formations d'excellence à Toulouse en présentiel : Tajwid Progressif, Tajwid Accéléré, Tilawa, Hifdh, Sîrah du Prophète ﷺ et langue Arabe. Pédagogie structurée avec supports exclusifs.",
   keywords: "cours islam toulouse, cours tajwid presentiel, apprendre arabe toulouse, memorisation coran toulouse, sirah prophète, nour al bayan francophone, habib haffes arabe, institut ishes",
   openGraph: {
     title: "Cours en Présentiel | Institut ISHES Toulouse",
     description: "Formations d'excellence à Toulouse en présentiel : Tajwid, Coran, Langue Arabe et Sîrah. Supports exclusifs et suivi personnalisé.",
-    url: "https://ishes.org/fr/cours-en-presentiel",
+    url: "https://www.ishes.fr/fr/cours-en-presentiel",
     type: "website",
     images: [
       {
@@ -45,7 +47,7 @@ const coursesJsonLd = {
   "@type": "ItemList",
   "name": "Formations en Présentiel - Institut ISHES",
   "description": "Découvrez notre catalogue exclusif de cours en présentiel à Toulouse. Apprentissage du Tajwid, mémorisation du Coran, Sîrah et Arabe.",
-  "url": "https://ishes.org/fr/cours-en-presentiel",
+  "url": "https://www.ishes.fr/fr/cours-en-presentiel",
   "numberOfItems": 6,
   "itemListElement": [
     {
@@ -58,7 +60,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://ishes.org"
+          "sameAs": "https://www.ishes.fr"
         }
       }
     },
@@ -72,7 +74,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://ishes.org"
+          "sameAs": "https://www.ishes.fr"
         }
       }
     },
@@ -86,7 +88,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://ishes.org"
+          "sameAs": "https://www.ishes.fr"
         }
       }
     },
@@ -100,7 +102,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://ishes.org"
+          "sameAs": "https://www.ishes.fr"
         }
       }
     },
@@ -114,7 +116,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://ishes.org"
+          "sameAs": "https://www.ishes.fr"
         }
       }
     },
@@ -128,7 +130,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://ishes.org"
+          "sameAs": "https://www.ishes.fr"
         }
       }
     }
@@ -587,6 +589,30 @@ export default function CoursPresentielPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── FICHE PRATIQUE MÉTHODE ─── */}
+      <section className="py-8 px-6 max-w-7xl mx-auto">
+        <div className="bg-white border border-[#e6d5b8]/50 rounded-[2rem] p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+          <div>
+            <p className="text-ishes-gold font-black text-xs uppercase tracking-[0.2em] mb-2">
+              Fiche pratique
+            </p>
+            <h2 className="text-2xl font-black text-ishes-blue mb-2">
+              Les Clés du Coran — méthode utilisée en présentiel
+            </h2>
+            <p className="text-gray-600 font-medium max-w-2xl leading-relaxed">
+              Volume 1 &amp; 2, tahajjî, règles du Tajwid et poème didactique en français : tout le
+              détail de l&apos;ouvrage étudié à Toulouse et en ligne.
+            </p>
+          </div>
+          <Link
+            href="/fr/les-cles-du-coran"
+            className="inline-flex items-center gap-2 shrink-0 bg-ishes-gold hover:bg-[#b08b54] text-white px-6 py-3.5 rounded-xl text-sm font-black uppercase tracking-wider"
+          >
+            Lire la fiche <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 

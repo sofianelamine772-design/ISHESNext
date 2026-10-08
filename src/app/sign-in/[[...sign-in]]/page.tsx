@@ -22,7 +22,7 @@ export default function SignInPage() {
           <div className="mx-auto mb-6 bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center justify-center h-16 w-48">
             <Image
               src="/logo.png"
-              alt="ISHES Logo"
+              alt="Institut ISHES — connexion à l'espace élève"
               width={192}
               height={64}
               priority

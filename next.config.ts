@@ -24,7 +24,6 @@ const redirectPaths = [
   'cours-tajwid-intensif',
   'formation-nour-al-bayane',
   'formation-tarbya-islamya',
-  'pack-accompagnement',
   'plateforme-inscription',
   'question-spiritualite-islam',
   'sciences-islamiques',
@@ -33,6 +32,8 @@ const redirectPaths = [
 
 const nextConfig: NextConfig = {
   images: {
+    // Dev uniquement : évite "internal image response is empty" (Turbopack / Next 16).
+    unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
       {
         protocol: 'https',
@@ -45,30 +46,19 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-      }
+      },
     ],
   },
   experimental: {
     optimizePackageImports: ['lucide-react'],
-    // Relance `next dev` avec le cache Turbopack (défaut Next 16.1+).
-    // Sans ça, chaque démarrage recompile tout (~2 min).
-    turbopackFileSystemCacheForDev: true,
   },
   async redirects() {
-    const redirectsList = redirectPaths.map((path) => ({
+    // Anciennes URLs sans /fr → pages FR
+    return redirectPaths.map((path) => ({
       source: `/${path}`,
       destination: `/fr/${path}`,
       permanent: true,
     }));
-
-    // Redirection canonique de la racine (/) vers /fr pour éviter le duplicate content
-    redirectsList.push({
-      source: '/',
-      destination: '/fr',
-      permanent: true,
-    });
-
-    return redirectsList;
   },
   async headers() {
     return [

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -24,6 +25,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-tajwid-intensif") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-tajwid-intensif"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours de Tajwid Intensif | ISHES",
   description: "Lis le Coran avec assurance en seulement 3 mois avec une méthode intensive.",
   keywords: "tajwid intensif, apprendre coran, cours tajwid accéléré, ishes"
@@ -88,7 +96,7 @@ export default function CoursTajwidIntensifPage() {
               ) : (
                 <Image 
                   src="/images/formations/tajwid-intensif-1.jpg" 
-                  alt="Cours de Tajwid Intensif"
+                  alt="Cours de Tajwid intensif en 3 mois — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -216,7 +224,7 @@ export default function CoursTajwidIntensifPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/taj-int-2.png" 
-               alt="Apprentissage Intensif du Tajwid"
+               alt="Apprentissage intensif des règles du Tajwid — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -235,6 +243,14 @@ export default function CoursTajwidIntensifPage() {
                 <p className="text-[17px] font-bold text-ishes-dark leading-snug">{text}</p>
               </div>
             ))}
+            <Link
+              href="/fr/les-cles-du-coran"
+              className="inline-flex items-center gap-2 mt-2 text-ishes-gold font-bold text-sm hover:underline"
+            >
+              <BookOpen className="w-4 h-4" />
+              Fiche pratique — Les Clés du Coran (Vol. 1 &amp; 2)
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>

@@ -1,6 +1,5 @@
 export const dynamic = 'force-static';
 
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Heart, ShieldCheck, Users, Sparkles, BookHeart, Gift, BookOpen, Video } from "lucide-react";
@@ -11,20 +10,75 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 import { DynamicTestimonials } from "@/components/vitrine/DynamicTestimonials";
 import { InstitutVideo } from "@/components/vitrine/InstitutVideo";
 import { NewHomeSections } from "@/components/vitrine/NewHomeSections";
+import { buildPageMetadata, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { INSTITUT_CONTACT_FAQS } from "@/lib/institut-contact";
 
-export const metadata: Metadata = {
-  title: "ISHES - L'excellence de la langue arabe à Toulouse",
-  description: "Découvrez l'Institut des Sciences Humaines et Spirituelles de Toulouse. Formation en langue arabe, sciences islamiques et tajwid. Pédagogie certifiée CECRL.",
-  openGraph: {
-    title: "ISHES - Institut des Sciences Humaines et Spirituelles",
-    description: "Apprenez l'arabe et les sciences islamiques avec une pédagogie d'excellence à Toulouse et à distance.",
-    images: ["/images/institut-ishes-accueil-hero.png"],
+const HOME_FAQS = [
+  ...INSTITUT_CONTACT_FAQS,
+  {
+    question: "Quels cours propose l'Institut ISHES ?",
+    answer:
+      "L'Institut ISHES propose des cours d'arabe (adultes et enfants), de Tajwid et lecture du Coran, de Fiqh mâlikite, d'Aqîda, de Sîrah, de Tarbiya islamique, ainsi que des formations d'enseignants. Les cursus sont disponibles en présentiel à Toulouse et à distance.",
   },
-};
+  {
+    question: "Où apprendre la religion en ligne avec un vrai institut ?",
+    answer:
+      "L'Institut ISHES propose d'apprendre l'islam en français, en ligne et à Toulouse : arabe, Tajwid, Fiqh mâlikite et sciences islamiques. Le Pack Accompagnement ajoute une communauté, des lives et un suivi pour ne pas rester seul devant l'écran.",
+  },
+  {
+    question: "Quels sont les meilleurs instituts de science religieuse en ligne ?",
+    answer:
+      "Les meilleurs instituts de science religieuse en ligne allient enseignants identifiés, programme (arabe, Coran, Fiqh), cours en direct et suivi. ISHES est un institut de sciences religieuses à Toulouse et à distance, avec Pack Accompagnement, lives et communauté — pas une simple plateforme de vidéos.",
+  },
+  {
+    question: "Y a-t-il un cours de Fatiha gratuit avec un professeur ?",
+    answer:
+      "Oui. L'Institut ISHES propose un cours de Fatiha 100 % gratuit, avec un professeur : correction d'Al-Fatiha et des 3 dernières sourates, en ligne, plus un groupe WhatsApp. Inscription sans frais sur ishes.fr/fr/correction-fatiha.",
+  },
+  {
+    question: "Proposez-vous un cours de Fiqh mâlikite ?",
+    answer:
+      "Oui. L'Institut ISHES propose un cours de Fiqh mâlikite en ligne, en français, basé sur le Matn Ibn Âchir (Al-Murshid al-Mu'în) : purification, prière, zakat, jeûne et hajj. Formation de 4 mois, en direct avec replays.",
+  },
+  {
+    question: "Les cours à distance sont-ils en direct ?",
+    answer:
+      "Oui. La plupart des formations à distance se déroulent en direct sur Zoom, avec des replays accessibles. Un suivi pédagogique et des supports (dont Les Clés du Coran pour le Tajwid) accompagnent la progression.",
+  },
+  {
+    question: "Puis-je commencer le Tajwid sans savoir lire l'arabe ?",
+    answer:
+      "Oui. Le parcours Tajwid Standard est conçu pour les adultes débutants, y compris ceux qui ne savent pas encore lire l'arabe. La méthode progresse étape par étape jusqu'à l'application des règles dans le Moushaf.",
+  },
+];
+
+export const metadata = buildPageMetadata({
+  title: "Institut ISHES — Sciences religieuses en ligne, Arabe & Tajwid",
+  description:
+    "Institut de sciences religieuses en ligne et à Toulouse : arabe, Tajwid, Fiqh mâlikite. Parmi les instituts de science religieuse en français, ISHES propose enseignants, direct, replays et Pack Accompagnement.",
+  path: "/",
+  keywords: [
+    "institut ishes",
+    "meilleurs instituts de science religieuse en ligne",
+    "institut de sciences religieuses en ligne",
+    "sciences religieuses en ligne",
+    "cours arabe toulouse",
+    "cours tajwid",
+    "fiqh malikite",
+    "cours fiqh malikite",
+    "sciences islamiques toulouse",
+    "apprendre le coran en ligne",
+    "apprendre la religion en ligne",
+    "institut islamique en ligne",
+  ],
+});
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#fafafa]">
+      <JsonLd data={faqJsonLd(HOME_FAQS)} />
       {/* Background decoration */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-ishes-blue/5 blur-[120px] rounded-full" />
@@ -146,7 +200,7 @@ export default function Home() {
             {/* Zoom Card */}
             <div className="flex-1 flex flex-col items-center text-center p-6 sm:p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-3xl sm:rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-6 sm:mb-8 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
-                <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain" />
+                <img src="/images/Zoom-Logo.png" alt="Cours en direct sur Zoom — Institut ISHES" className="h-10 object-contain" />
               </div>
               <h4 className="text-2xl font-black text-ishes-blue mb-4 tracking-tight">Cours en direct & Replays</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Suivez nos formations à distance de chez vous. Si vous manquez un cours, le <strong className="text-ishes-blue">replay vidéo</strong> est disponible dès la fin de chaque séance.</p>
@@ -155,7 +209,7 @@ export default function Home() {
             {/* WhatsApp Card */}
             <div className="flex-1 flex flex-col items-center text-center p-6 sm:p-10 bg-[#f9f5f0] border border-ishes-gold/10 rounded-3xl sm:rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 w-full group">
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-center mb-6 sm:mb-8 rotate-[3deg] group-hover:rotate-0 transition-transform duration-500">
-                <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-12 w-12 sm:h-14 sm:w-14 object-cover rounded-full" />
+                <img src="/images/whatsapp-logo.avif" alt="Contacter l'Institut ISHES sur WhatsApp" className="h-12 w-12 sm:h-14 sm:w-14 object-cover rounded-full" />
               </div>
               <h4 className="text-2xl font-black text-ishes-blue mb-4 tracking-tight">Suivi pédagogique</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-lg">Intégrez le <strong className="text-[#25D366]">groupe WhatsApp de la classe</strong>. Posez vos questions, recevez les annonces et échangez avec vos camarades.</p>
@@ -260,7 +314,7 @@ export default function Home() {
       {/* ===== TÉMOIGNAGES SECTION ===== */}
       <DynamicTestimonials />
 
-      {/* ===== SEO TEXT BLOCK ===== */}
+      {/* ===== SEO TEXT BLOCK (visible) ===== */}
       <section className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-8 text-center">
@@ -270,24 +324,30 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 text-gray-600 text-[15px] leading-relaxed text-justify">
             <div className="space-y-4">
               <p>
-                L'<strong>Institut des Sciences Humaines et Spirituelles (ISHES)</strong> est une référence incontournable pour toute personne souhaitant approfondir sa connaissance de la religion musulmane. Que vous cherchiez des <strong>cours d'arabe à Toulouse</strong> ou que vous préfériez <strong>apprendre l'arabe en ligne</strong>, notre institut propose une pédagogie certifiée (CECRL) adaptée aux adultes comme aux enfants, pour maîtriser la langue du Coran avec fluidité.
+                L&apos;<strong>Institut des Sciences Humaines et Spirituelles (ISHES)</strong> est une référence pour approfondir la religion musulmane. Que vous cherchiez des <strong>cours d&apos;arabe à Toulouse</strong> ou que vous préfériez <strong>apprendre l&apos;arabe en ligne</strong>, notre institut propose une pédagogie adaptée aux adultes comme aux enfants, pour maîtriser la langue du Coran avec fluidité.
               </p>
               <p>
-                Plongez au cœur des sciences islamiques avec nos cursus spécialisés. Nous enseignons le <strong>Fiqh Mâlikite</strong> (la jurisprudence selon l'école de l'Imam Malik), basé sur des textes de référence comme <em>Al-Murshid al-Mu'in</em> de l'Imam Ibn 'Ashir. Nos programmes couvrent l'intégralité des obligations religieuses : la purification, la prière, la Zakat, le jeûne du mois de Ramadan et le pèlerinage.
+                Plongez au cœur des sciences islamiques avec nos cursus spécialisés. Nous enseignons le <strong>Fiqh Mâlikite</strong> (jurisprudence selon l&apos;école de l&apos;Imam Malik), basé sur des textes de référence comme <em>Al-Murshid al-Mu&apos;in</em> de l&apos;Imam Ibn &apos;Ashir : purification, prière, Zakat, jeûne et pèlerinage.
               </p>
             </div>
             
             <div className="space-y-4">
               <p>
-                Pour ceux qui souhaitent perfectionner leur récitation, notre <strong>formation de lecture et Tajwid</strong> offre un suivi rigoureux pour lire le Coran avec éloquence et respect des règles (Makharij al-Huruf). Par ailleurs, l'ISHES est le seul institut en France à proposer une véritable formation des enseignants en <strong>Tarbiya Islamiyya</strong> (éducation spirituelle) et en Tajwid.
+                Pour perfectionner la récitation, notre <strong>formation de lecture et Tajwid</strong> offre un suivi pour lire le Coran avec justesse. L&apos;ISHES propose aussi une formation des enseignants en <strong>Tarbiya Islamiyya</strong> et en Tajwid.
               </p>
               <p>
-                Notre mission va au-delà de la simple transmission théorique. Nous accordons une importance majeure à la spiritualité et à la purification de l'âme (Tazkiyat an-Nafs). En rejoignant nos <strong>cours de sciences islamiques à distance ou en présentiel</strong>, vous intégrez une communauté bienveillante, avec un suivi de proximité, des classes virtuelles en direct, des supports pédagogiques complets et des replays illimités.
+                Notre mission dépasse la théorie : spiritualité, purification de l&apos;âme (Tazkiyat an-Nafs), communauté bienveillante, cours en direct, supports pédagogiques et replays. Découvrez nos <strong>cours de sciences islamiques à distance ou en présentiel</strong>.
               </p>
             </div>
           </div>
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ"
+        title="Questions fréquentes sur l'Institut ISHES"
+        items={HOME_FAQS}
+      />
 
       {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
       <SocialSection />

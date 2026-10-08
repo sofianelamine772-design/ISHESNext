@@ -94,7 +94,7 @@ export default function CoursDistancePage() {
                <div className="absolute inset-0 bg-gradient-to-tr from-ishes-blue to-ishes-gold rounded-[3rem] rotate-3 blur-xl opacity-20" />
                <div className="w-full aspect-[4/3] bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden relative group">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20 z-10" />
-                  <Image src="/images/institut-ishes-accueil-hero.png" alt="Cours" fill className="object-cover" />
+                  <Image src="/images/institut-ishes-accueil-hero.png" alt="Cours d'islam à distance — Institut ISHES en ligne" fill className="object-cover" />
                   
                   <div className="absolute bottom-0 left-0 w-full p-8 z-20 text-white">
                     <div className="flex items-center gap-3 mb-3">
@@ -133,7 +133,7 @@ export default function CoursDistancePage() {
                
                <div className="flex gap-6">
                  <div className="w-16 h-16 shrink-0 bg-[#0b5cff]/10 rounded-2xl flex items-center justify-center">
-                    <img src="/images/Zoom-Logo.png" alt="Zoom" className="w-10 h-10 object-contain" />
+                    <img src="/images/Zoom-Logo.png" alt="Cours d'islam à distance en direct sur Zoom — Institut ISHES" className="w-10 h-10 object-contain" />
                  </div>
                  <div>
                    <h3 className="text-2xl font-black text-ishes-blue mb-2">Des cours 100% en direct sur Zoom</h3>
@@ -157,7 +157,7 @@ export default function CoursDistancePage() {
 
                <div className="flex gap-6">
                  <div className="w-16 h-16 shrink-0 bg-[#25D366]/10 rounded-2xl flex items-center justify-center">
-                    <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="w-8 h-8 object-contain rounded-full" />
+                    <img src="/images/whatsapp-logo.avif" alt="Contacter l'Institut ISHES sur WhatsApp" className="w-8 h-8 object-contain rounded-full" />
                  </div>
                  <div>
                    <h3 className="text-2xl font-black text-ishes-blue mb-2">Accompagnement continu</h3>
@@ -291,7 +291,7 @@ export default function CoursDistancePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
              <div className="relative">
-                <Image src="/images/institut-ishes-accueil-hero.png" alt="Etudiante" width={600} height={600} className="rounded-[3rem] object-cover aspect-square shadow-2xl" />
+                <Image src="/images/institut-ishes-accueil-hero.png" alt="Étudiante ISHES suivant un cours d'arabe et de sciences islamiques en ligne" width={600} height={600} className="rounded-[3rem] object-cover aspect-square shadow-2xl" />
                 <div className="absolute -bottom-8 -right-8 bg-white p-6 rounded-3xl shadow-xl max-w-xs border border-gray-100 hidden md:block">
                    <div className="flex items-center gap-2 mb-2">
                       {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 text-ishes-gold fill-current" />)}

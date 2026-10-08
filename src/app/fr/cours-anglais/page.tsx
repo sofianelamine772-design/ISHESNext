@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   CheckCircle2, 
@@ -11,6 +12,13 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-anglais") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-anglais"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours d'Anglais | Maîtrisez la Langue Internationale | ISHES",
   description: "Développez vos compétences en anglais avec l'Institut ISHES. Des cours dynamiques pour adultes et enfants, axés sur la communication concrète.",
   keywords: "cours anglais toulouse, apprendre anglais, english classes, formation anglais ishes"

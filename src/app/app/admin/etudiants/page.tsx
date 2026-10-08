@@ -34,7 +34,7 @@ type StudentDetail = {
   parentName: string | null;
   address: string;
   lastPayment: string;
-  paymentStatus: "a_jour" | "partiel" | "en_retard";
+  paymentStatus: "a_jour" | "en_retard";
   classId?: string | null;
   hasConnected?: boolean;
 };
@@ -172,17 +172,8 @@ function EtudiantsContent() {
             status: s.status || "en_attente",
             parentName: null,
             address: s.address || "Adresse non renseignée",
-            lastPayment:
-              latestInscription?.paid_status === 'paye' || latestInscription?.paid_status === 'partiel'
-                ? "Stripe"
-                : "Aucun",
-            paymentStatus: (() => {
-              if (String(s.id).startsWith('manual_')) return "a_jour" as const;
-              const paid = String(latestInscription?.paid_status || '').toLowerCase();
-              if (paid === 'paye') return "a_jour" as const;
-              if (paid === 'partiel') return "partiel" as const;
-              return "en_retard" as const;
-            })(),
+            lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
+            paymentStatus: (latestInscription?.paid_status === 'paye' || String(s.id).startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
             classId: latestInscription?.class_id || null,
             hasConnected: !!(s.email && loginMap[s.email.toLowerCase()])
           };
@@ -722,11 +713,6 @@ function EtudiantsContent() {
                                 IMPAYÉ
                               </span>
                             )}
-                            {student.paymentStatus === 'partiel' && (
-                              <span className="ishes-label text-[8px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-600 font-bold border border-amber-100 shrink-0">
-                                PARTIEL
-                              </span>
-                            )}
                           </div>
                         </div>
                       </div>
@@ -939,18 +925,8 @@ function EtudiantsContent() {
                           </div>
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Statut Financier</span>
-                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${
-                              selectedStudent.paymentStatus === 'a_jour'
-                                ? 'text-ishes-blue'
-                                : selectedStudent.paymentStatus === 'partiel'
-                                  ? 'text-amber-600'
-                                  : 'text-red-500'
-                            }`}>
-                              {selectedStudent.paymentStatus === 'a_jour'
-                                ? 'À JOUR'
-                                : selectedStudent.paymentStatus === 'partiel'
-                                  ? 'PARTIEL'
-                                  : 'IMPAYÉ'}
+                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-blue' : 'text-red-500'}`}>
+                              {selectedStudent.paymentStatus === 'a_jour' ? 'À JOUR' : 'IMPAYÉ'}
                             </span>
                           </div>
                         </div>

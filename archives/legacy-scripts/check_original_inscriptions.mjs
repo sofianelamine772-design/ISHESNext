@@ -1,6 +1,9 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const backup = JSON.parse(fs.readFileSync('db_backup.json', 'utf8'));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const backup = JSON.parse(fs.readFileSync(path.join(__dirname, '../exports/db_backup.json'), 'utf8'));
 const classes = backup.classes;
 const inscriptions = backup.inscriptions;
 

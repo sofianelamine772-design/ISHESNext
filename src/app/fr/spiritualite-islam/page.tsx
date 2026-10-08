@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -22,13 +23,14 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/spiritualite-islam") },
   title: "Spiritualité Musulmane | Éducation de l'Âme & Purification | ISHES",
   description: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam. Un cursus complet de 4 mois pour nourrir votre cœur et apaiser votre esprit.",
   keywords: "spiritualité islam, éducation de l'ame, purification du coeur, tazkiya, paix intérieure islam, cours islam, ishes",
   openGraph: {
     title: "Spiritualité Musulmane | Éducation de l'Âme & Purification | ISHES",
     description: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam. Un cursus complet de 4 mois pour nourrir votre cœur et apaiser votre esprit.",
-    url: "https://ishes.org/fr/spiritualite-islam",
+    url: "https://www.ishes.fr/fr/spiritualite-islam",
     type: "website",
     images: [
       {
@@ -49,7 +51,7 @@ const courseSchema = {
   "provider": {
     "@type": "Organization",
     "name": "Institut ISHES",
-    "sameAs": "https://ishes.org"
+    "sameAs": "https://www.ishes.fr"
   },
   "offers": {
     "@type": "Offer",
@@ -131,7 +133,7 @@ export default function SpiritualiteIslamPage() {
                 ) : (
                   <Image 
                     src="/images/formations/spiritualite-distance.png" 
-                    alt="Spiritualité Musulmane"
+                    alt="Cours de spiritualité musulmane en ligne — Institut ISHES"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -174,7 +176,7 @@ export default function SpiritualiteIslamPage() {
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100">
                <Image 
                  src="/images/formations/spiritualite-distance-2.jpg" 
-                 alt="Étude d'Al-Aqîda sur Zoom"
+                 alt="Cours de spiritualité musulmane en direct sur Zoom — Institut ISHES"
                  fill
                  className="object-cover"
                  sizes="(max-width: 768px) 100vw, 50vw"
@@ -213,7 +215,7 @@ export default function SpiritualiteIslamPage() {
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col group overflow-hidden relative pb-6 transition-all hover:shadow-md">
                 <div className="w-full h-40 relative mb-4">
-                   <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
+                   <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
                 </div>
                 <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
               </div>

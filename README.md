@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3005](http://localhost:3005) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
@@ -27,7 +27,7 @@ Si vous rencontrez des erreurs de type `MODULE_NOT_FOUND`, `corrupted database` 
 
 **Solutions :**
 1. **Le Reset Ultime** : Lancez `npm run clean`. Cela supprimera le dossier `.next` et relancera le serveur proprement.
-2. **Mode Ultra-Stable** : Si les erreurs persistent, utilisez `npm run dev` (qui est maintenant configuré avec `--webpack` pour éviter ces bugs) ou forcez le mode stable avec `npm run dev:stable`.
+2. Relancez ensuite `npm run dev` (port 3005). Un seul serveur à la fois.
 
 ### Icônes & PWA
 Les icônes Apple et le favicon sont générés et stockés dans `/public`. Si le navigateur affiche des erreurs 404 sur `apple-touch-icon.png`, vérifiez que les fichiers sont bien présents dans le dossier `public`.

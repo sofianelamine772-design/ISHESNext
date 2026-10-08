@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -23,6 +24,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-education-islamique") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-education-islamique"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours d'Éducation Islamique | Tarbiya Islamiya | ISHES",
   description: "Accompagnez l'éveil spirituel de votre enfant avec nos cours de Tarbiya Islamiya. Une pédagogie ludique pour ancrer les valeurs et l'amour d'Allah.",
   keywords: "éducation islamique enfant, tarbiya islamiya, cours islam junior, adab enfant, ishes toulouse"
@@ -88,7 +96,7 @@ export default function CoursEducationIslamiquePage() {
               ) : (
                 <Image 
                   src="/images/ai_pro.png" 
-                  alt="Tarbiya Islamiyya"
+                  alt="Cours de Tarbiya Islamiyya (éducation islamique) — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -172,7 +180,7 @@ export default function CoursEducationIslamiquePage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/quran-coffee.png" 
-               alt="Cahier de Tarbiya Islamiyya"
+               alt="Cahier pédagogique de Tarbiya Islamiyya — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"

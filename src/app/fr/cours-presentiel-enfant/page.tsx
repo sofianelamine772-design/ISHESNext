@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -10,6 +11,13 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-presentiel-enfant") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-presentiel-enfant"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours Enfants Présentiel | Arabe, Coran & Éducation Islamique | ISHES",
   description: "Un programme complet et bienveillant pour accompagner les enfants de 4 à 15 ans dans l'apprentissage de leur religion à Toulouse.",
   keywords: "cours arabe enfant toulouse, coran enfant toulouse, éducation islamique enfant, ishes"
@@ -59,7 +67,7 @@ export default function CoursPresentielEnfantPage() {
           </div>
           <div className="flex-1 w-full relative">
             <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[4/3] border-[6px] border-white bg-white">
-              <Image src="/images/formations/presentiel-enfants-1.png" alt="Enfants ISHES" fill className="object-cover" />
+              <Image src="/images/formations/presentiel-enfants-1.png" alt="Cours en présentiel pour enfants à Toulouse — Institut ISHES" fill className="object-cover" />
             </div>
           </div>
         </div>

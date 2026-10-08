@@ -15,7 +15,14 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#fafafa] via-[#fafafa]/90 to-transparent z-10 hidden lg:block w-1/2" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#fafafa] via-[#fafafa]/90 to-transparent z-10 lg:hidden" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#fafafa] via-transparent to-transparent z-10" />
-        <Image src="/images/ai_medina.png" alt="Medina Background" fill className="object-cover object-right" priority />
+        <Image
+          src="/images/ai_medina.png"
+          alt="Institut ISHES — enseignement de l'arabe, du Coran et des sciences islamiques"
+          fill
+          className="object-cover object-right"
+          priority
+          sizes="(max-width: 1024px) 100vw, 60vw"
+        />
       </div>
 
       <ArabicBackground />
@@ -40,7 +47,7 @@ export function HeroSection() {
 
             <div className="w-full lg:w-8/12 xl:w-7/12 text-left">
               <p className="max-w-[650px] text-base md:text-lg text-gray-600 leading-relaxed font-medium mt-8">
-                Depuis plus de 16 ans, ISHES accompagne les adultes et les enfants avec un enseignement ancré dans l’islam traditionnel, une pédagogie adaptée à notre époque et un cheminement vécu ensemble.
+                Depuis plus de 16 ans, ISHES est un institut de sciences religieuses en ligne et à Toulouse : adultes et enfants, islam traditionnel, pédagogie claire, et un cheminement vécu en communauté.
               </p>
             </div>
 
@@ -58,6 +65,9 @@ export function HeroSection() {
               <Link href="/program" className="bg-[#C69C6D] text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center justify-center gap-3 hover:bg-[#b08b5e] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 transform group">
                 Découvrir nos formations 
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link href="/contact" className="bg-white text-ishes-blue border border-ishes-blue/15 px-10 py-5 rounded-2xl text-lg font-black flex items-center justify-center gap-3 hover:bg-[#f9f5f0] transition-all shadow-lg hover:-translate-y-1">
+                Entretien gratuit
               </Link>
             </div>
           </motion.div>

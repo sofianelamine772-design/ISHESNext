@@ -113,6 +113,12 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                            ? "Contacter nous pour un devis" 
                            : (audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant")} <ArrowRight className="w-6 h-6" />
                      </Link>
+                     <Link
+                        href="/contact"
+                        className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3 active:scale-95"
+                     >
+                        Entretien gratuit
+                     </Link>
                      {id === "arabe_coran_junior" && (
                         <Link
                            href="/test-positionnement"
@@ -164,7 +170,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </div>
                      ) : id !== "arabe_coran_junior" && (
                         <a href="https://www.zoom.com/fr" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-blue-50 rounded-3xl shadow-md hover:shadow-lg hover:border-[#0b5cff]/30 transition-all group">
-                           <img src="/images/Zoom-Logo.png" alt="Zoom" className="h-10 object-contain group-hover:scale-110 transition-transform" />
+                           <img src="/images/Zoom-Logo.png" alt="Cours en direct sur Zoom — Institut ISHES" className="h-10 object-contain group-hover:scale-110 transition-transform" />
                            <div>
                               <p className="text-[13px] font-black text-[#0b5cff] uppercase tracking-widest">Cours en direct</p>
                               <p className="text-xs font-bold text-gray-500 mt-1">Replay vidéo disponible</p>
@@ -172,7 +178,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         </a>
                      )}
                      <div className="flex-1 flex items-center gap-5 px-6 py-5 bg-white border-2 border-green-50 rounded-3xl shadow-md">
-                        <img src="/images/whatsapp-logo.avif" alt="WhatsApp" className="h-10 w-10 object-cover rounded-full shadow-sm" />
+                        <img src="/images/whatsapp-logo.avif" alt="Contacter l'Institut ISHES sur WhatsApp" className="h-10 w-10 object-cover rounded-full shadow-sm" />
                         <div>
                            <p className="text-[13px] font-black text-[#25D366] uppercase tracking-widest">Suivi pédagogique</p>
                            <p className="text-xs font-bold text-gray-500 mt-1">Groupe WhatsApp de la classe</p>
@@ -196,7 +202,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                         <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/40 to-transparent z-10"></div>
                         <img
                            src="/images/kaaba.jpg"
-                           alt={course.title}
+                           alt={`${course.title} — formation Institut ISHES`}
                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -637,7 +643,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                   ) : (
                      <img
                         src={course.flyerUrl}
-                        alt="Flyer de la formation"
+                        alt="Flyer de la formation Institut ISHES"
                         className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
                      />
                   )}

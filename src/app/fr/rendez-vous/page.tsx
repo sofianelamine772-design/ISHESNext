@@ -1,12 +1,19 @@
-import { Metadata } from "next";
 import Script from "next/script";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Demande de Devis & Rendez-vous - ISHES",
-  description: "Prenez rendez-vous avec notre équipe pour discuter de votre projet de formation enseignant et obtenir un devis personnalisé.",
-};
+export const metadata = buildPageMetadata({
+  title: "Entretien gratuit 15 min — Institut ISHES",
+  description:
+    "Réservez un rendez-vous Zoom gratuit de 15 minutes pour discuter de l'Institut ISHES, choisir une formation et poser vos questions (adulte, enfant, Toulouse ou distance).",
+  path: "/fr/rendez-vous",
+  keywords: [
+    "rendez-vous ishes",
+    "entretien gratuit institut islamique",
+    "devis formation ishes",
+  ],
+});
 
 export default function RendezVousPage() {
   return (
@@ -24,10 +31,11 @@ export default function RendezVousPage() {
 
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-            Demande de devis & Rendez-vous
+            Entretien gratuit — 15 minutes
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Vous souhaitez rejoindre l'une de nos formations pour enseignants ? Choisissez un créneau ci-dessous pour discuter avec notre équipe et obtenir votre devis personnalisé.
+            Posez vos questions sur l&apos;Institut ISHES, les cours enfants ou adultes, le présentiel à Toulouse
+            ou le distanciel. Choisissez un créneau Zoom : l&apos;échange est gratuit et sans engagement.
           </p>
         </div>
 

@@ -42,7 +42,7 @@ export default function EleveLayout({
           <Link href="/app" className="flex items-center">
             <Image
               src="/logo.png"
-              alt="ISHES Logo"
+              alt="Institut ISHES — espace élève"
               width={144}
               height={48}
               priority

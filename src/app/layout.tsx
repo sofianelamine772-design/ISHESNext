@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE, absoluteUrl } from "@/lib/seo";
 
 
 const inter = Inter({
@@ -10,13 +11,71 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-  title: "ISHES - L'excellence de la langue arabe à votre portée",
-  description: "Institut des Sciences Humaines et Spirituelles. Pédagogie certifiée pour une maîtrise complète, du niveau débutant à l'expertise.",
+  // Toujours le domaine prod pour que Google résolve correctement les OG / canonical relatifs
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Arabe, Coran & Sciences Islamiques à Toulouse et en ligne`,
+    // Pas de suffixe auto : beaucoup de pages ont déjà « | ISHES » dans le titre
+    template: "%s",
+  },
+  description:
+    "Institut des Sciences Humaines et Spirituelles (ISHES) : cours d'arabe, Tajwid, Fiqh mâlikite et sciences islamiques. Présentiel à Toulouse et formations à distance.",
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "education",
+  keywords: [
+    "institut ishes",
+    "cours arabe toulouse",
+    "cours tajwid en ligne",
+    "fiqh malikite",
+    "sciences islamiques",
+    "apprendre le coran",
+    "cours islam à distance",
+  ],
   manifest: "/manifest.json",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Arabe, Coran & Sciences Islamiques`,
+    description:
+      "Formations d'excellence en langue arabe, Tajwid et sciences islamiques. Présentiel Toulouse & distanciel.",
+    images: [
+      {
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+        width: 1200,
+        height: 630,
+        alt: "Institut ISHES",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Arabe, Coran & Sciences Islamiques`,
+    description:
+      "Formations d'excellence en langue arabe, Tajwid et sciences islamiques.",
+    images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 

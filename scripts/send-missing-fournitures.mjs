@@ -17,8 +17,9 @@ const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABA
   realtime: { transport: ws },
 });
 
-const PREPA_PDF = path.join(process.cwd(), 'Fournitures preparatoire_1re_et_2e_annee_2026-2027.pdf');
-const ELEM_PDF = path.join(process.cwd(), 'Fournitures_scolaires_elementaire_2026-2027.pdf');
+const FOURNITURES_DIR = path.join(process.cwd(), 'public', 'fournitures');
+const PREPA_PDF = path.join(FOURNITURES_DIR, 'Fournitures_preparatoire_1re_et_2e_annee_2026-2027.pdf');
+const ELEM_PDF = path.join(FOURNITURES_DIR, 'Fournitures_scolaires_elementaire_2026-2027.pdf');
 
 const targets = [
   { email: 'chabbi1444@gmail.com', name: 'ADAM', kind: 'prepa' },

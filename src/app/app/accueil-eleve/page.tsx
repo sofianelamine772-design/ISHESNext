@@ -27,7 +27,7 @@ export default function AccueilEleve() {
           <div className="w-24 h-24 rounded-full bg-emerald-50 border-4 border-white shadow-xl shadow-gray-200/50 flex items-center justify-center overflow-hidden mb-2">
             <img 
                src="https://i.pravatar.cc/150?u=a042581f4e290267041" 
-               alt="Profil" 
+               alt="Photo de profil élève Institut ISHES" 
                className="w-full h-full object-cover"
             />
           </div>

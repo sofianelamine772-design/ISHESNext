@@ -16,10 +16,11 @@ export function ContactContent() {
         className="text-center mb-24"
       >
         <h1 className="ishes-heading text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] text-ishes-blue leading-none mb-8 uppercase tracking-tighter">
-          Nous <span className="text-ishes-gold">contacter</span>
+          Contact <span className="text-ishes-gold">gratuit</span>
         </h1>
-        <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
-          Notre équipe est disponible pour répondre à toutes vos questions sur nos formations et inscription.
+        <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
+          Discutez de l&apos;Institut ISHES avec un conseiller : présentiel à Toulouse, cours à distance,
+          inscription d&apos;un enfant ou d&apos;un adulte. L&apos;entretien est gratuit, sans engagement.
         </p>
       </motion.div>
 

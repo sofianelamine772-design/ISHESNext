@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -23,12 +22,66 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { CivilisationCtas } from "@/components/vitrine/CivilisationCtas";
+import {
+  CIVILISATION_PATH,
+  CIVILISATION_PERIODS,
+  CIVILISATION_SAVANTS,
+  savantPath,
+} from "@/lib/civilisation-savants";
+import {
+  buildPageMetadata,
+  courseJsonLd,
+  breadcrumbJsonLd,
+  faqJsonLd,
+  articleJsonLd,
+} from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Civilisation Arabo-Musulmane | Héritage & Savoir | ISHES",
-  description: "Explorez l&apos;âge d&apos;or des sciences, des arts et de la philosophie arabo-musulmane. Un voyage historique pour comprendre l'héritage universel de cette civilisation.",
-  keywords: "civilisation arabo-musulmane, histoire islam, age d'or islam, sciences arabes, ishes"
-};
+const CIV_FAQS = [
+  {
+    question: "Qu'est-ce que la civilisation arabo-musulmane ?",
+    answer:
+      "C'est un vaste ensemble historique, culturel, scientifique et artistique, développé dans les sociétés marquées par l'islam, où l'arabe a joué un rôle central. Elle n'est pas exclusivement arabe ni uniquement musulmane : Persans, Berbères, Turcs, savants d'Asie centrale, chrétiens et juifs y ont contribué.",
+  },
+  {
+    question: "Quelles sont les grandes périodes de cette civilisation ?",
+    answer:
+      "Arabie préislamique, naissance de l'islam (610–632), premiers califats, Omeyyades (Damas), Abbassides (Bagdad et l'âge d'or), grandes dynasties (Xe–XVe s.), puis l'héritage dans le monde moderne.",
+  },
+  {
+    question: "Qui sont les savants étudiés dans le cours ISHES ?",
+    answer:
+      "Parmi d'autres : Al-Khwārizmī (algèbre), Ibn Sīnā (médecine), Al-Rāzī, Ibn al-Haytham (optique), Al-Bīrūnī, Ibn Khaldūn, Al-Idrīsī, Ibn Rushd (Averroès) et Al-Zahrāwī (chirurgie). Chaque nom a une mini-biographie sur ishes.fr.",
+  },
+  {
+    question: "La formation est-elle en ligne ?",
+    answer:
+      "Oui. Cours en direct le mercredi 20h–21h, replays, supports, 2 mois. Inscription en ligne. Un entretien WhatsApp est possible via la page contact.",
+  },
+];
+
+export const metadata = buildPageMetadata({
+  title: "Civilisation arabo-musulmane — histoire, âge d'or et savants | ISHES",
+  description:
+    "Cours en ligne : civilisation arabo-musulmane, de l'Arabie à l'Andalousie. Âge d'or, Bagdad, Cordoue, Al-Khwārizmī, Avicenne, Averroès, Ibn Khaldūn. Formation ISHES 2 mois.",
+  path: CIVILISATION_PATH,
+  keywords: [
+    "civilisation arabo-musulmane",
+    "âge d'or islam",
+    "histoire civilisation musulmane",
+    "savants musulmans",
+    "maison de la sagesse bagdad",
+    "cordoue andalousie",
+    "avicenne",
+    "averroes",
+    "al khwarizmi",
+    "ibn khaldun",
+    "cours histoire islam en ligne",
+  ],
+  image: "/images/formations/civilisation-hero.jpg",
+});
 
 export default function CivilisationPage() {
   const course = PROGRAMS_DATA["civilisation_arabo_musulmane"];
@@ -36,20 +89,51 @@ export default function CivilisationPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
+      <JsonLd
+        data={courseJsonLd({
+          name: "Civilisation arabo-musulmane — histoire, âge d'or et héritage",
+          description:
+            "Formation ISHES en ligne : de l'Arabie à l'Andalousie, savants, sciences et patrimoine.",
+          path: CIVILISATION_PATH,
+          price: "199",
+          courseMode: "Online",
+          workload: "P8W",
+          image: "/images/formations/civilisation-hero.jpg",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Civilisation arabo-musulmane", path: CIVILISATION_PATH },
+        ])}
+      />
+      <JsonLd data={faqJsonLd(CIV_FAQS)} />
+      <JsonLd
+        data={articleJsonLd({
+          headline: "Civilisation arabo-musulmane : histoire, âge d'or et savants",
+          description:
+            "Qu'est-ce que la civilisation arabo-musulmane, ses périodes, ses contributions et ses savants.",
+          path: CIVILISATION_PATH,
+          image: "/images/formations/civilisation-hero.jpg",
+          keywords: ["civilisation arabo-musulmane", "âge d'or", "savants musulmans"],
+          about: ["Civilisation arabo-musulmane", "Âge d'or islamique", "Bagdad", "Cordoue"],
+        })}
+      />
       
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 space-y-6">
             <h2 className="text-ishes-gold font-black text-sm tracking-[0.2em] uppercase flex items-center gap-2">
-              HÉRITAGE & SAVOIR
+              Histoire · âge d&apos;or · savants
             </h2>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
-              Civilisation <br />
-              Arabo-Musulmane
+              Civilisation arabo-musulmane
             </h1>
-            <p className="text-gray-600 font-medium max-w-md text-lg leading-relaxed border-l-2 border-ishes-gold pl-4">
-              Explorez l'âge d'or des sciences, des arts et de la philosophie arabo-musulmane.
+            <p className="text-gray-600 font-medium max-w-xl text-lg leading-relaxed border-l-2 border-ishes-gold pl-4">
+              Histoire, âge d&apos;or, grandes découvertes et héritage dans le monde. Une civilisation qui a
+              profondément marqué l&apos;humanité — de l&apos;Arabie à l&apos;Andalousie, du Maghreb à l&apos;Asie
+              centrale.
             </p>
             <div className="pt-4 flex flex-wrap items-center gap-4">
               <Link 
@@ -114,7 +198,7 @@ export default function CivilisationPage() {
                 <div className="w-full h-full relative group">
                   <Image 
                     src="/images/formations/civilisation-hero.jpg" 
-                    alt="Civilisation Arabo-Musulmane"
+                    alt="Cours de civilisation arabo-musulmane — Institut ISHES"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -156,13 +240,138 @@ export default function CivilisationPage() {
         </div>
       </section>
 
+      <section className="py-16 px-6 max-w-4xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-6">
+          Qu&apos;est-ce que la civilisation arabo-musulmane ?
+        </h2>
+        <div className="space-y-4 text-[16px] text-gray-700 font-medium leading-relaxed">
+          <p>
+            La <strong>civilisation arabo-musulmane</strong> désigne un vaste ensemble historique, culturel,
+            scientifique et artistique, développé dans les sociétés marquées par l&apos;islam et dans lesquelles
+            la <strong>langue arabe</strong> a joué un rôle central. Elle ne fut pas exclusivement arabe, ni
+            composée uniquement de musulmans : des Persans, des Berbères, des Turcs, des savants d&apos;Asie
+            centrale, ainsi que des chrétiens, des juifs et d&apos;autres communautés ont contribué à son
+            développement.
+          </p>
+          <p>
+            De l&apos;Arabie à l&apos;Andalousie, du Maghreb à l&apos;Asie centrale, elle a fait rayonner le
+            savoir, la science, l&apos;art et la sagesse pendant plusieurs siècles, laissant un héritage qui
+            influence encore le monde d&apos;aujourd&apos;hui. Cette diversité est l&apos;une des clés de son
+            rayonnement : rassembler des savoirs venus de différentes traditions, les étudier, les enrichir et
+            les transmettre.
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-4 mt-10">
+          {[
+            "Une histoire fascinante",
+            "Des grandes civilisations",
+            "Des découvertes qui ont marqué le monde",
+            "Des savants d'exception",
+            "Un patrimoine culturel unique",
+            "Un héritage toujours vivant",
+          ].map((t) => (
+            <div key={t} className="rounded-2xl bg-[#f9f5f0] border border-ishes-gold/15 p-4 font-black text-ishes-blue text-sm">
+              {t}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="py-16 px-6 bg-white border-y border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-3 text-center">
+            Les grandes périodes de la civilisation arabo-musulmane
+          </h2>
+          <p className="text-center text-gray-500 font-medium italic mb-12">
+            « Voyage au cœur d&apos;un héritage qui éclaire le présent et inspire l&apos;avenir. »
+          </p>
+          <ol className="space-y-6">
+            {CIVILISATION_PERIODS.map((p, i) => (
+              <li key={p.title} className="flex gap-5">
+                <span className="w-10 h-10 shrink-0 rounded-full bg-ishes-blue text-white font-black flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 className="text-lg font-black text-ishes-dark">{p.title}</h3>
+                  <p className="text-gray-600 font-medium leading-relaxed mt-1">{p.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="py-16 px-6 max-w-6xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-10 text-center">
+          Les grandes contributions
+        </h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            ["Sciences et savoir", "Mathématiques, astronomie, médecine, optique, chimie, géographie."],
+            ["Pensée et philosophie", "Une réflexion sur la raison, la connaissance et la nature."],
+            ["Art et architecture", "Calligraphie, art du livre, réalisations architecturales uniques."],
+            ["Éducation et institutions", "Bibliothèques, madrasas et hôpitaux : modèles d'enseignement et de recherche."],
+            ["Échanges et commerce", "Des réseaux reliant l'Orient, l'Afrique, l'Europe et l'Asie."],
+            ["Transmission au monde", "Un héritage qui a influencé durablement l'histoire de l'humanité."],
+          ].map(([t, d]) => (
+            <div key={t} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <h3 className="font-black text-ishes-blue text-lg mb-2">{t}</h3>
+              <p className="text-sm text-gray-600 font-medium leading-relaxed">{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="savants" className="py-16 px-6 bg-[#f9f5f0]">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-3 text-center">
+            Des savants qui ont marqué l&apos;histoire
+          </h2>
+          <p className="text-center text-gray-600 font-medium max-w-2xl mx-auto mb-10">
+            Découvrez leurs vies, leurs ouvrages et leurs contributions. Chaque fiche propose de vous
+            inscrire à la formation ou de nous contacter.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {CIVILISATION_SAVANTS.map((s) => (
+              <Link
+                key={s.slug}
+                href={savantPath(s.slug)}
+                className="block bg-white rounded-2xl p-6 border border-gray-100 hover:border-ishes-gold/40 hover:shadow-md transition-all"
+              >
+                <h3 className="text-xl font-black text-ishes-blue">{s.name}</h3>
+                {s.latinName ? (
+                  <p className="text-ishes-gold text-sm font-bold">{s.latinName}</p>
+                ) : null}
+                <p className="text-xs text-gray-400 font-bold mt-1">{s.fields.join(" · ")}</p>
+                <p className="text-sm text-gray-600 mt-3 font-medium leading-relaxed">{s.summary}</p>
+                <span className="inline-block mt-4 text-ishes-blue font-black text-sm">
+                  Lire la biographie →
+                </span>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link
+              href={`${CIVILISATION_PATH}/savants`}
+              className="font-black text-ishes-gold hover:underline"
+            >
+              Voir toutes les mini-biographies
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <CivilisationCtas className="justify-center" />
+      </div>
+
       {/* ─── POURQUOI DIFFERENT ─── */}
       <section className="py-24 px-6 bg-white my-12">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 flex items-center justify-center bg-gray-50">
              <Image 
                src="/images/formations/civilisation-details.jpg" 
-               alt="Thématiques abordées"
+               alt="Thématiques du cours de civilisation arabo-musulmane ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -202,7 +411,7 @@ export default function CivilisationPage() {
           ].map((item, i) => (
             <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col group overflow-hidden relative pb-6 transition-all hover:shadow-md">
               <div className="w-full h-40 relative mb-4">
-                 <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
+                 <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" />
               </div>
               <h3 className="font-bold text-ishes-blue text-sm whitespace-pre-line px-4">{item.title}</h3>
             </div>
@@ -275,6 +484,12 @@ export default function CivilisationPage() {
           
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ civilisation arabo-musulmane"
+        title="Questions fréquentes sur l'histoire, les savants et le cours"
+        items={CIV_FAQS}
+      />
 
     </div>
   );

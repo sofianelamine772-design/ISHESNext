@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -33,12 +32,82 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { buildPageMetadata, courseJsonLd, breadcrumbJsonLd, faqJsonLd, articleJsonLd, howToJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cours de Fiqh Mâlikite | Droit Musulman | ISHES",
-  description: "Saches enfin comment réaliser tes actes d'adorations correctement et améliore ta relation avec ALLAH.",
-  keywords: "fiqh malikite, droit musulman, ibn achir, cours malikite toulouse, ishes"
-};
+const FIQH_FAQS = [
+  {
+    question: "Qu'est-ce que le Fiqh mâlikite ?",
+    answer:
+      "Le Fiqh mâlikite (ou madhhab malikite) est l'une des quatre écoles de jurisprudence sunnite, fondée par l'imam Mâlik ibn Anas (médine). Il encadre les actes d'adoration et la vie quotidienne. Au Maghreb, en Afrique de l'Ouest et dans une grande partie de la francophonie, c'est l'école de référence. Le cours ISHES s'appuie sur Al-Murshid al-Mu'în (Matn Ibn Âchir).",
+  },
+  {
+    question: "Pourquoi suivre un cours de Fiqh mâlikite en français ?",
+    answer:
+      "Beaucoup de musulmans francophones prient et jeûnent sans connaître les règles qui valident ou invalident l'adoration. Un cours de Fiqh mâlikite en ligne, en français, permet d'apprendre le wudu, la prière, la zakat, le jeûne et le hajj selon l'école malikite, avec des exemples concrets.",
+  },
+  {
+    question: "Le cours de Fiqh mâlikite est-il adapté aux débutants ?",
+    answer:
+      "Oui. Aucune formation préalable en sciences islamiques n'est exigée. Le parcours commence par les adab de l'étudiant et une introduction aux écoles juridiques, puis entre dans le fiqh des adorations (ibâdât).",
+  },
+  {
+    question: "Qui est Ibn Âchir et pourquoi étudier Al-Murshid al-Mu'în ?",
+    answer:
+      "L'imam Abd al-Wahid Ibn Âchir (Fès, 1582–1631) a composé Al-Murshid al-Mu'în, un poème enseigné depuis des siècles au Maghreb. Il condense le fiqh malikite des adorations, l'aqîda ash'arite et la spiritualité. C'est le texte de référence du cours ISHES.",
+  },
+  {
+    question: "Quelle est la différence entre le fiqh malikite et les autres écoles ?",
+    answer:
+      "Les quatre écoles sunnites (hanafite, malikite, chaféite, hanbalite) sont valides. L'école malikite se distingue notamment par l'importance de la pratique des gens de Médine ('amal ahl al-Madîna) et par sa diffusion au Maghreb. Le cours ISHES enseigne exclusivement le madhhab malikite, sans polémique.",
+  },
+  {
+    question: "Comment se déroule le cours de Fiqh mâlikite en ligne ?",
+    answer:
+      "Formation de 4 mois, un cours par semaine en direct, replays, supports PDF, exercices et diplôme ISHES. Inscription en ligne. Paiement en plusieurs fois possible. Idéal depuis la France, la Belgique, la Suisse, le Maghreb ou le Canada.",
+  },
+  {
+    question: "Le fiqh malikite concerne-t-il seulement la prière ?",
+    answer:
+      "Non. Le programme couvre la purification (tahâra, wudu, ghusl, tayammum), la prière (salât), la zakat, le jeûne du Ramadan et les règles de la 'umra et du hajj, plus une introduction aux usûl al-fiqh.",
+  },
+  {
+    question: "Puis-je étudier le Fiqh mâlikite si je vis loin de Toulouse ?",
+    answer:
+      "Oui. Le cours est 100 % à distance. L'Institut ISHES est à Toulouse pour le présentiel d'autres formations, mais le Fiqh mâlikite se suit en ligne, partout dans le monde francophone.",
+  },
+];
+
+export const metadata = buildPageMetadata({
+  title: "Cours de Fiqh Mâlikite en ligne — Ibn Âchir | Droit musulman",
+  description:
+    "Cours de Fiqh mâlikite en français : école de l'imam Mâlik, Matn Ibn Âchir (Al-Murshid al-Mu'în). Purification, prière, zakat, jeûne et hajj. Formation en ligne 4 mois, Institut ISHES.",
+  path: "/fr/cours-fiqh-malikite",
+  keywords: [
+    "fiqh malikite",
+    "cours fiqh malikite",
+    "fiqh mâlikite en ligne",
+    "fiqh malikite en français",
+    "école malikite",
+    "madhhab malik",
+    "imam malik",
+    "droit musulman malikite",
+    "jurisprudence islamique malikite",
+    "ibn achir",
+    "ibn ashir",
+    "al murshid al muin",
+    "matn ibn ashir",
+    "apprendre le fiqh",
+    "cours fiqh en ligne",
+    "prière malikite",
+    "ablutions malikite",
+    "wudu malikite",
+    "fiqh des adorations",
+    "sciences islamiques fiqh",
+  ],
+  image: "/images/fiqh_students.png",
+});
 
 export default function CoursFiqhMalikitePage() {
   const course = PROGRAMS_DATA["fiqh_malikite"];
@@ -46,19 +115,91 @@ export default function CoursFiqhMalikitePage() {
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd
+        data={courseJsonLd({
+          name: "Cours de Fiqh Mâlikite — Droit Musulman (Matn Ibn Achir)",
+          description:
+            "Apprenez à réaliser vos actes d'adoration correctement selon l'école malikite : purification, prière, jeûne, zakat et hajj.",
+          path: "/fr/cours-fiqh-malikite",
+          price: "399",
+          courseMode: "Online",
+          workload: "P4M",
+          image: "/images/fiqh_students.png",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Formations", path: "/program" },
+          { name: "Fiqh Mâlikite", path: "/fr/cours-fiqh-malikite" },
+        ])}
+      />
+      <JsonLd data={faqJsonLd(FIQH_FAQS)} />
+      <JsonLd
+        data={articleJsonLd({
+          headline: "Cours de Fiqh Mâlikite en ligne : Ibn Âchir et le droit musulman",
+          description:
+            "Guide et formation ISHES pour apprendre le Fiqh mâlikite en français : madhhab de l'imam Mâlik, Al-Murshid al-Mu'în, purification, prière, zakat, jeûne et hajj.",
+          path: "/fr/cours-fiqh-malikite",
+          image: "/images/fiqh_students.png",
+          keywords: [
+            "fiqh malikite",
+            "ibn achir",
+            "al murshid al muin",
+            "école malikite",
+            "cours fiqh en ligne",
+          ],
+          wordCount: 1800,
+          about: [
+            "Fiqh mâlikite",
+            "Imam Mâlik",
+            "Ibn Âchir",
+            "Al-Murshid al-Mu'în",
+            "Droit musulman",
+          ],
+        })}
+      />
+      <JsonLd
+        data={howToJsonLd({
+          name: "Comment apprendre le Fiqh mâlikite en ligne",
+          description:
+            "Étapes pour suivre le cours de Fiqh mâlikite de l'Institut ISHES, basé sur Ibn Âchir.",
+          path: "/fr/cours-fiqh-malikite",
+          steps: [
+            {
+              name: "Comprendre l'école malikite",
+              text: "Le madhhab de l'imam Mâlik est l'école de jurisprudence du Maghreb et d'une grande partie de l'Afrique. Le cours pose d'abord ce cadre.",
+            },
+            {
+              name: "Étudier Al-Murshid al-Mu'în (Ibn Âchir)",
+              text: "Le matn en vers sert de fil conducteur : tahâra, salât, zakat, sawm, hajj.",
+            },
+            {
+              name: "Suivre le cours en direct et les replays",
+              text: "Une séance par semaine pendant 4 mois, supports PDF, exercices corrigés.",
+            },
+            {
+              name: "Pratiquer ses adorations correctement",
+              text: "À l'issue du parcours, l'étudiant sait distinguer obligation, sounna et ce qui invalide l'acte.",
+            },
+          ],
+        })}
+      />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 space-y-6">
             <h2 className="text-ishes-gold font-black text-sm tracking-[0.2em] uppercase">
-              Droit Musulman
+              Droit musulman · École malikite · Ibn Âchir
             </h2>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
-              Fiqh Mâlikite
+              Cours de Fiqh Mâlikite en ligne
             </h1>
-            <p className="text-gray-600 font-medium max-w-md text-lg leading-relaxed">
-              Saches enfin comment réaliser tes actes d'adorations correctement et améliore ta relation avec ALLAH.
+            <p className="text-gray-600 font-medium max-w-xl text-lg leading-relaxed">
+              Apprends le <strong>Fiqh mâlikite</strong> en français, selon le Matn Ibn Âchir (
+              <em>Al-Murshid al-Mu&apos;în</em>) : purification, prière, zakat, jeûne et hajj. Pratiquer tes
+              adorations correctement, selon l&apos;école de l&apos;imam Mâlik.
             </p>
             <div className="pt-4">
               <Link 
@@ -119,7 +260,7 @@ export default function CoursFiqhMalikitePage() {
               ) : (
                 <Image 
                   src="/images/formations/fiqh-distance-1.png" 
-                  alt="Fiqh Mâlikite"
+                  alt="Cours de Fiqh mâlikite en ligne — droit musulman Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -134,7 +275,7 @@ export default function CoursFiqhMalikitePage() {
       <section className="pt-20 pb-12 px-6 max-w-7xl mx-auto border-t border-gray-100">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
           <div className="flex-1 space-y-6">
-            <h2 className="text-4xl font-serif text-ishes-blue font-black">Pourquoi apprendre le fiqh ?</h2>
+            <h2 className="text-4xl font-serif text-ishes-blue font-black">Pourquoi apprendre le Fiqh mâlikite ?</h2>
             <p className="text-lg text-gray-700 leading-relaxed font-bold">
               Nous prions, nous jeûnons, nous faisons nos ablutions... mais connaissons-nous réellement les règles qui encadrent ces adorations ?
             </p>
@@ -167,9 +308,10 @@ export default function CoursFiqhMalikitePage() {
           <div className="flex-1 relative aspect-[4/3] w-full max-w-md mx-auto">
              <div className="absolute inset-0 bg-black/10 rounded-2xl rotate-3 shadow-2xl"></div>
              <Image 
-               src="/images/formations/ibn-ashir-book.jpg" 
-               alt="Livre Al-Murshid al-Mu'in"
+               src="/images/fiqh_book.png" 
+               alt="Livre Al-Murshid al-Mu'in (Matn Ibn 'Ashir) – texte de référence du fiqh malikite"
                fill
+               sizes="(max-width: 768px) 100vw, 448px"
                className="object-cover rounded-2xl shadow-xl relative z-10"
              />
           </div>
@@ -248,18 +390,117 @@ export default function CoursFiqhMalikitePage() {
               <span className="text-sm font-medium text-white">Les supports complets sont réservés<br/>aux étudiants inscrits à la formation.</span>
             </div>
           </div>
-          <div className="flex-1 relative w-full h-[400px]">
-             {/* Abstract representation of PDFs (use actual images if available in your public folder) */}
-             <div className="absolute top-10 left-10 w-[200px] h-[280px] bg-white rounded-lg shadow-2xl transform -rotate-6 p-4">
-                <div className="w-full h-4 bg-gray-200 rounded mb-2"></div><div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+          <div className="flex-1 relative w-full h-[400px] group cursor-pointer">
+             {/* Support 5: Zakat (Background Left) */}
+             <div className="absolute top-20 left-4 w-[180px] h-[250px] bg-white rounded-xl shadow-xl transform -rotate-12 scale-90 opacity-60 overflow-hidden border border-gray-100 flex flex-col transition-all duration-500 ease-out group-hover:-translate-x-16 group-hover:-translate-y-2 group-hover:-rotate-[20deg] group-hover:opacity-90 z-0 hover:!z-50 hover:!scale-110 hover:!opacity-100">
+               <div className="h-24 bg-yellow-600 relative overflow-hidden">
+                 <div className="absolute inset-0 opacity-20 bg-[url('/images/formations/tarbya-islamya-distance-1.jpg')] bg-cover bg-center"></div>
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                 <div className="absolute bottom-2 left-3 right-3 text-white">
+                   <span className="text-[8px] font-bold uppercase tracking-wider opacity-80 mb-0.5 block">Support #4</span>
+                   <h4 className="font-black text-[11px] leading-tight">La Zakat<br/>(Az-Zakât)</h4>
+                 </div>
+               </div>
+               <div className="p-3 flex-1 flex flex-col bg-white">
+                 <div className="space-y-2 mt-1">
+                   <div className="w-full h-1 bg-gray-100 rounded-full"></div>
+                   <div className="w-5/6 h-1 bg-gray-100 rounded-full"></div>
+                 </div>
+               </div>
              </div>
-             <div className="absolute top-0 left-[30%] w-[200px] h-[280px] bg-white rounded-lg shadow-2xl transform rotate-3 p-4">
-                <div className="w-full h-4 bg-gray-200 rounded mb-2"></div><div className="w-1/2 h-4 bg-gray-200 rounded"></div>
+
+             {/* Support 1: La Purification (Mid Left) */}
+             <div className="absolute top-10 left-16 w-[200px] h-[280px] bg-white rounded-xl shadow-2xl transform -rotate-6 overflow-hidden border border-gray-100 flex flex-col transition-all duration-500 ease-out group-hover:-translate-x-8 group-hover:-translate-y-4 group-hover:-rotate-12 z-10 hover:!z-50 hover:!scale-110">
+               <div className="h-32 bg-ishes-blue relative overflow-hidden">
+                 <div className="absolute inset-0 opacity-20 bg-[url('/images/formations/fiqh-distance-1.png')] bg-cover bg-center"></div>
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                 <div className="absolute bottom-3 left-4 right-4 text-white">
+                   <span className="text-[9px] font-bold uppercase tracking-wider opacity-80 mb-1 block">Support de Cours #1</span>
+                   <h4 className="font-black text-sm leading-tight">La Purification<br/>(At-Tahâra)</h4>
+                 </div>
+               </div>
+               <div className="p-4 flex-1 flex flex-col bg-white">
+                 <div className="space-y-2.5 mt-2">
+                   <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-5/6 h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-4/6 h-1.5 bg-gray-100 rounded-full"></div>
+                 </div>
+                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
+                   <div className="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center">
+                     <Book className="w-3 h-3 text-ishes-gold" />
+                   </div>
+                   <span className="text-[9px] font-bold text-gray-400">Format PDF • 12 pages</span>
+                 </div>
+               </div>
              </div>
-             <div className="absolute top-20 right-10 w-[200px] h-[280px] bg-white rounded-lg shadow-2xl transform 6 p-4 border border-gray-100">
-                <div className="w-full h-12 bg-ishes-blue/10 rounded mb-4"></div>
-                <div className="w-full h-4 bg-gray-200 rounded mb-2"></div><div className="w-full h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+
+             {/* Support 2: La Prière (Center) */}
+             <div className="absolute top-0 left-[30%] w-[200px] h-[280px] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] transform rotate-0 overflow-hidden border border-gray-100 flex flex-col transition-all duration-500 ease-out group-hover:-translate-y-6 z-20 hover:!z-50 hover:!scale-110">
+               <div className="h-32 bg-ishes-gold relative overflow-hidden">
+                 <div className="absolute inset-0 opacity-20 bg-[url('/images/formations/fiqh-distance-2.png')] bg-cover bg-center"></div>
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                 <div className="absolute bottom-3 left-4 right-4 text-white">
+                   <span className="text-[9px] font-bold uppercase tracking-wider opacity-80 mb-1 block">Support de Cours #2</span>
+                   <h4 className="font-black text-sm leading-tight">La Prière<br/>(As-Salât)</h4>
+                 </div>
+               </div>
+               <div className="p-4 flex-1 flex flex-col bg-white">
+                 <div className="space-y-2.5 mt-2">
+                   <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-3/4 h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-1/2 h-1.5 bg-gray-100 rounded-full"></div>
+                 </div>
+                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
+                   <div className="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center">
+                     <Book className="w-3 h-3 text-ishes-blue" />
+                   </div>
+                   <span className="text-[9px] font-bold text-gray-400">Format PDF • 24 pages</span>
+                 </div>
+               </div>
+             </div>
+
+             {/* Support 3: Le Jeûne (Mid Right) */}
+             <div className="absolute top-10 right-16 w-[200px] h-[280px] bg-white rounded-xl shadow-2xl transform rotate-6 overflow-hidden border border-gray-100 flex flex-col transition-all duration-500 ease-out group-hover:translate-x-8 group-hover:-translate-y-4 group-hover:rotate-12 z-10 hover:!z-50 hover:!scale-110">
+               <div className="h-32 bg-[#0F172A] relative overflow-hidden">
+                 <div className="absolute inset-0 opacity-30 bg-[url('/images/formations/civilisation-hero.jpg')] bg-cover bg-center"></div>
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                 <div className="absolute bottom-3 left-4 right-4 text-white">
+                   <span className="text-[9px] font-bold uppercase tracking-wider opacity-80 mb-1 block">Support de Cours #3</span>
+                   <h4 className="font-black text-sm leading-tight">Le Jeûne<br/>(As-Siyâm)</h4>
+                 </div>
+               </div>
+               <div className="p-4 flex-1 flex flex-col bg-white">
+                 <div className="space-y-2.5 mt-2">
+                   <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-4/5 h-1.5 bg-gray-100 rounded-full"></div>
+                   <div className="w-5/6 h-1.5 bg-gray-100 rounded-full"></div>
+                 </div>
+                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
+                   <div className="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center">
+                     <Book className="w-3 h-3 text-ishes-gold" />
+                   </div>
+                   <span className="text-[9px] font-bold text-gray-400">Format PDF • 18 pages</span>
+                 </div>
+               </div>
+             </div>
+
+             {/* Support 6: Hajj & Umra (Background Right) */}
+             <div className="absolute top-20 right-4 w-[180px] h-[250px] bg-white rounded-xl shadow-xl transform rotate-12 scale-90 opacity-60 overflow-hidden border border-gray-100 flex flex-col transition-all duration-500 ease-out group-hover:translate-x-16 group-hover:-translate-y-2 group-hover:rotate-[20deg] group-hover:opacity-90 z-0 hover:!z-50 hover:!scale-110 hover:!opacity-100">
+               <div className="h-24 bg-emerald-700 relative overflow-hidden">
+                 <div className="absolute inset-0 opacity-20 bg-[url('/images/kaaba.jpg')] bg-cover bg-center"></div>
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                 <div className="absolute bottom-2 left-3 right-3 text-white">
+                   <span className="text-[8px] font-bold uppercase tracking-wider opacity-80 mb-0.5 block">Support #5</span>
+                   <h4 className="font-black text-[11px] leading-tight">Hajj & 'Umra</h4>
+                 </div>
+               </div>
+               <div className="p-3 flex-1 flex flex-col bg-white">
+                 <div className="space-y-2 mt-1">
+                   <div className="w-full h-1 bg-gray-100 rounded-full"></div>
+                   <div className="w-3/4 h-1 bg-gray-100 rounded-full"></div>
+                 </div>
+               </div>
              </div>
           </div>
         </div>
@@ -278,7 +519,7 @@ export default function CoursFiqhMalikitePage() {
           ].map((item, i) => (
             <div key={i} className="w-40 md:w-48 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center group overflow-hidden relative pb-6 transition-all hover:shadow-md">
               <div className="w-full h-32 relative mb-8">
-                 <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 50vw, 16vw" />
+                 <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 50vw, 16vw" />
                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-ishes-dark rounded-full flex items-center justify-center text-ishes-gold border-4 border-white shadow-md z-10">
                    <item.icon className="w-5 h-5" />
                  </div>
@@ -426,6 +667,87 @@ export default function CoursFiqhMalikitePage() {
           </div>
         </div>
       </section>
+
+      <article className="py-20 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto space-y-10 text-[15px] leading-relaxed text-gray-700">
+          <header className="text-center">
+            <p className="text-ishes-gold font-black uppercase tracking-[0.25em] text-xs mb-3">
+              Guide · Fiqh mâlikite
+            </p>
+            <h2 className="text-3xl md:text-4xl font-black text-ishes-blue leading-tight">
+              Le Fiqh mâlikite expliqué : école de l&apos;imam Mâlik, Ibn Âchir et adorations
+            </h2>
+          </header>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">Qu&apos;est-ce que le Fiqh mâlikite ?</h3>
+            <p>
+              Le <strong>Fiqh mâlikite</strong> est l&apos;une des quatre grandes écoles de{" "}
+              <strong>jurisprudence islamique</strong> (hanafite, malikite, chaféite, hanbalite). Fondée à Médine
+              par l&apos;<strong>imam Mâlik ibn Anas</strong> (auteur d'<em>al-Muwatta&apos;</em>), elle s&apos;appuie
+              sur le Coran, la Sounna, le consensus, et la pratique des gens de Médine. C&apos;est le{" "}
+              <strong>madhhab</strong> historique du Maghreb (Maroc, Algérie, Tunisie, Mauritanie), d&apos;une
+              large part de l&apos;Afrique de l&apos;Ouest, et de nombreuses familles musulmanes en France.
+            </p>
+            <p>
+              Apprendre le <strong>fiqh malikite en français</strong>, ce n&apos;est pas accumuler des avis
+              théoriques : c&apos;est savoir si tes <strong>ablutions (wudu)</strong> sont valides, si ta{" "}
+              <strong>prière malikite</strong> comporte les piliers exigés, comment sortir la zakat, comment jeûner
+              le Ramadan, comment aborder la &apos;umra et le hajj.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              Ibn Âchir et Al-Murshid al-Mu&apos;în : le texte du cours
+            </h3>
+            <p>
+              Le cursus ISHES suit <strong>Al-Murshid al-Mu&apos;în</strong>, le matn en vers d&apos;
+              <Link href="/fr/cours-fiqh-malikite/ibn-ashir" className="text-ishes-blue font-bold hover:underline">
+                l&apos;imam Ibn Âchir
+              </Link>{" "}
+              (Fès). Depuis des siècles, les étudiants du fiqh malikite mémorisent ce poème puis le détaillent
+              avec un enseignant : tahâra, salât, zakat, sawm, hajj, auxquels s&apos;ajoutent des bases d&apos;aqîda
+              et de spiritualité. C&apos;est le fil rouge du{" "}
+              <strong>cours de Fiqh mâlikite en ligne</strong>.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              Un cours de Fiqh mâlikite en ligne, pour francophones
+            </h3>
+            <p>
+              L&apos;<strong>Institut ISHES</strong> propose cette formation à distance (direct + replays), sur 4
+              mois, avec supports, exercices et diplôme. Elle s&apos;adresse aux débutants comme à ceux qui
+              pratiquent déjà sans avoir jamais étudié le <strong>droit musulman malikite</strong>. Complète-la
+              éventuellement par l&apos;
+              <Link href="/fr/cours-al-aqida" className="text-ishes-blue font-bold hover:underline">
+                aqîda
+              </Link>
+              , la{" "}
+              <Link href="/fr/cours-as-sirah" className="text-ishes-blue font-bold hover:underline">
+                sîrah
+              </Link>{" "}
+              ou le{" "}
+              <Link href="/fr/cours-a-distance" className="text-ishes-blue font-bold hover:underline">
+                catalogue des cours à distance
+              </Link>
+              . Question de niveau ?{" "}
+              <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+                Contacte l&apos;équipe sur WhatsApp
+              </Link>
+              .
+            </p>
+          </section>
+        </div>
+      </article>
+
+      <VitrineFaq
+        eyebrow="FAQ Fiqh mâlikite"
+        title="Questions fréquentes : cours, école malikite, Ibn Âchir"
+        items={FIQH_FAQS}
+      />
 
     </div>
   );

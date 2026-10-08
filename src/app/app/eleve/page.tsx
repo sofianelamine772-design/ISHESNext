@@ -864,7 +864,7 @@ export default function EleveDashboard() {
                   {/* Header */}
                   <div className="flex justify-between items-start w-full mb-12">
                     <div className="w-32">
-                      <img src="/logo.png" alt="ISHES Logo" className="w-full h-auto" />
+                      <img src="/logo.png" alt="Institut ISHES — espace élève" className="w-full h-auto" />
                     </div>
                     <div className="text-right">
                       <h2 className="font-amiri text-2xl text-ishes-blue font-bold">معهد إيشس</h2>

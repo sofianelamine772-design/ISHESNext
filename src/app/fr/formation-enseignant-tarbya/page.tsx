@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -22,9 +23,18 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
-  title: "Formation Enseignant Tarbya Islamiyya | ISHES",
-  description: "Transmettre les valeurs de l'Islam avec pédagogie et former la génération musulmane de demain.",
-  keywords: "enseigner islam, professeur education islamique, formation enseignant tarbya, ishes"
+  alternates: { canonical: absoluteUrl("/fr/formation-enseignant-tarbya") },
+  openGraph: {
+    url: absoluteUrl("/fr/formation-enseignant-tarbya"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
+  title: "Devenir enseignant en Tarbiya Islamiyya — Formation | ISHES",
+  description:
+    "Devenez enseignant en Tarbiya Islamiyya : pédagogie, gestion de classe et transmission des valeurs de l'islam aux enfants. Formation à distance, certification ISHES.",
+  keywords:
+    "devenir enseignant tarbiya, enseigner l'islam aux enfants, professeur education islamique, formation enseignant islam, pédagogie islamique",
 };
 
 export default function FormationEnseignantTarbyaPage() {
@@ -86,7 +96,7 @@ export default function FormationEnseignantTarbyaPage() {
               ) : (
                 <Image 
                   src="/images/formations/enseignant-tarbya-islamya-1.jpg" 
-                  alt="Formation Enseignant Tarbya Islamiyya"
+                  alt="Formation enseignant Tarbiya Islamiyya — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -214,7 +224,7 @@ export default function FormationEnseignantTarbyaPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/enseignant-tarbya-2.jpg" 
-               alt="Livres Tarbya Islamiyya et appel Zoom"
+               alt="Supports Tarbiya Islamiyya et formation enseignant sur Zoom — ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -268,6 +278,37 @@ export default function FormationEnseignantTarbyaPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-6 max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-6">
+          Devenir enseignant en Tarbiya Islamiyya
+        </h2>
+        <div className="space-y-4 text-gray-600 font-medium leading-relaxed text-[15px]">
+          <p>
+            <strong>Devenir enseignant en Tarbiya Islamiyya</strong>, c&apos;est apprendre à transmettre l&apos;islam
+            aux enfants sans les noyer sous le jargon : Tawhid, Sîrah, invocations, piliers de la foi, avec des
+            histoires, des activités et une posture bienveillante. Cette formation prépare au métier d&apos;
+            <strong>enseignant d&apos;éducation islamique</strong> pour une mosquée, une association, une école ou
+            la famille.
+          </p>
+          <p>
+            Fruit de plus de quinze ans de pratique à l&apos;Institut ISHES : pédagogie, gestion de classe,
+            supports prêts à l&apos;emploi, certification. Pour un parcours Coran / lecture, voir aussi comment{" "}
+            <Link href="/fr/formation-enseignant-tajwid" className="text-ishes-blue font-bold hover:underline">
+              devenir enseignant de Tajwid
+            </Link>
+            . Vue d&apos;ensemble :{" "}
+            <Link href="/formation-enseignant" className="text-ishes-blue font-bold hover:underline">
+              devenir enseignant certifié
+            </Link>
+            . Un{" "}
+            <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+              entretien gratuit
+            </Link>{" "}
+            permet d&apos;obtenir un devis.
+          </p>
         </div>
       </section>
 

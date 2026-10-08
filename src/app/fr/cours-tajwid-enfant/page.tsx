@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -24,6 +25,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-tajwid-enfant") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-tajwid-enfant"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours de Tajwid pour Enfants | Récitation Junior | ISHES",
   description: "Apprenez à votre enfant à lire le Coran avec excellence. Une pédagogie douce et adaptée pour maîtriser les règles de Tajwid dès le plus jeune âge.",
   keywords: "tajwid enfant, cours coran junior, lecture coran enfant, ishes toulouse"
@@ -90,7 +98,7 @@ export default function CoursTajwidEnfantPage() {
               ) : (
                 <Image 
                   src="/images/formations/tajwid-enfant-distance-1.jpg" 
-                  alt="Cours Tajwid Enfant"
+                  alt="Cours de Tajwid pour enfants en ligne — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -174,7 +182,7 @@ export default function CoursTajwidEnfantPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/tajwid-enfant-distance-2.jpg" 
-               alt="Livres Tajwid et café"
+               alt="Supports Les Clés du Coran pour enfants — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"

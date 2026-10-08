@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { absoluteUrl, courseJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -22,6 +24,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-arabe-adulte") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-arabe-adulte"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours d'Arabe Littéraire (Adulte) | ISHES",
   description: "Maîtrisez la langue arabe moderne. De l'alphabet à la conversation courante avec une méthode immersive et des professeurs qualifiés.",
   keywords: "cours arabe adulte, apprendre arabe toulouse, arabe littéraire, al arabiya bayna yadayk, ishes"
@@ -33,7 +42,24 @@ export default function CoursArabeAdultePage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd
+        data={courseJsonLd({
+          name: "Cours d'Arabe Littéraire (Adulte)",
+          description:
+            "Maîtrisez la langue arabe moderne. De l'alphabet à la conversation courante avec une méthode immersive.",
+          path: "/fr/cours-arabe-adulte",
+          price: course?.price || "399",
+          courseMode: "Online",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Formations", path: "/program" },
+          { name: "Arabe Adulte", path: "/fr/cours-arabe-adulte" },
+        ])}
+      />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -89,7 +115,7 @@ export default function CoursArabeAdultePage() {
               ) : (
                 <Image 
                   src="/images/formations/arabe-ditanvce-1.png" 
-                  alt="Apprenez l'arabe et comprenez enfin le Coran"
+                  alt="Cours d'arabe pour adultes — comprendre le Coran avec l'Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -173,7 +199,7 @@ export default function CoursArabeAdultePage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/arabe-distance-2.png" 
-               alt="Livres d'arabe et café"
+               alt="Manuels de langue arabe pour adultes — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"

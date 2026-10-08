@@ -349,6 +349,28 @@ export async function fulfillCheckoutSession(params: {
           expectedAmount,
         });
         if (insId) studentIds.push(studentId);
+
+        // --- ORDER BUMPS (Hybrid Logic) ---
+        const orderBumps = session.metadata?.order_bump?.split(',').filter(Boolean) || [];
+        for (const bumpId of orderBumps) {
+          // Pack accompagnement is applied only once to the first child
+          if (bumpId === 'pack_accompagnement' && i !== 0) continue;
+
+          const bumpUuid = await resolveFormationUuid(bumpId);
+          if (bumpUuid) {
+            const basePriceBump = parseFloat(session.metadata?.[`price_${bumpId}`] || '49');
+            
+            const expectedAmountBump = basePriceBump;
+
+            await upsertInscription({
+              studentId,
+              formationUuid: bumpUuid,
+              classId: null,
+              academicYear,
+              expectedAmount: expectedAmountBump,
+            });
+          }
+        }
       }
     } else {
       const firstName = session.metadata?.first_name || '';
@@ -389,6 +411,22 @@ export async function fulfillCheckoutSession(params: {
             expectedAmount,
           });
           if (insId) studentIds.push(studentId);
+
+          // --- ORDER BUMPS ---
+          const orderBumps = session.metadata?.order_bump?.split(',').filter(Boolean) || [];
+          for (const bumpId of orderBumps) {
+            const bumpUuid = await resolveFormationUuid(bumpId);
+            if (bumpUuid) {
+              const basePriceBump = parseFloat(session.metadata?.[`price_${bumpId}`] || '49');
+              await upsertInscription({
+                studentId,
+                formationUuid: bumpUuid,
+                classId: null,
+                academicYear,
+                expectedAmount: basePriceBump,
+              });
+            }
+          }
         }
       }
     }

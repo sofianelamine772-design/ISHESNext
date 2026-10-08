@@ -1,90 +1,100 @@
 import { MetadataRoute } from 'next';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
+import { SITE_URL } from '@/lib/seo';
+import { CIVILISATION_SAVANTS, savantPath } from '@/lib/civilisation-savants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.ishes.fr';
+  const baseUrl = SITE_URL;
 
-  // Routes principales (haute priorité, mises à jour régulières)
-  const mainRoutes = [
-    '',
-    '/fr',
-    '/program',
-    '/institut',
-    '/boutique',
-    '/fr/boutique',
-    '/notre-histoire',
-    '/formation-enseignant'
+  // Homepage unique (pas /fr en doublon — /fr a un canonical vers /)
+  const mainRoutes: Array<{ route: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }> = [
+    { route: '', priority: 1.0, changeFrequency: 'weekly' },
+    { route: '/program', priority: 0.95, changeFrequency: 'weekly' },
+    { route: '/institut', priority: 0.9, changeFrequency: 'monthly' },
+    { route: '/boutique', priority: 0.85, changeFrequency: 'weekly' },
+    { route: '/notre-histoire', priority: 0.7, changeFrequency: 'yearly' },
+    { route: '/formation-enseignant', priority: 0.85, changeFrequency: 'monthly' },
+    { route: '/pack-accompagnement', priority: 0.92, changeFrequency: 'weekly' },
   ];
 
-  // Routes des cours et formations (priorité moyenne, mises à jour mensuelles)
-  const courseRoutes = [
-    '/fr/civilisation-arabo-musulmane',
-    '/fr/correction-fatiha',
-    '/fr/cours-a-distance',
-    '/fr/cours-al-aqida',
-    '/fr/cours-anglais',
-    '/fr/cours-arabe-adulte',
-    '/fr/cours-arabe-enfant',
-    '/fr/cours-as-sirah',
-    '/fr/cours-education-islamique',
-    '/fr/cours-en-presentiel',
+  // Pages cours — priorité haute pour les piliers SEO
+  const highPriorityCourses = [
     '/fr/cours-fiqh-malikite',
     '/fr/cours-fiqh-malikite/ibn-ashir',
     '/fr/cours-lecture-tajwid',
+    '/fr/cours-tajwid-intensif',
+    '/fr/les-cles-du-coran',
+    '/fr/cours-sciences-coran',
+    '/fr/cours-sciences-coran/guide',
+    '/fr/cours-sciences-coran/frise-chronologique',
+    '/fr/fiches-pratiques',
+    '/fr/cours-arabe-adulte',
     '/fr/cours-memoriser-coran',
+    '/fr/cours-en-presentiel',
+    '/fr/cours-a-distance',
+    '/fr/correction-fatiha',
+    '/fr/civilisation-arabo-musulmane',
+    '/fr/civilisation-arabo-musulmane/savants',
+  ];
+
+  const courseRoutes = [
+    '/fr/cours-al-aqida',
+    '/fr/cours-anglais',
+    '/fr/cours-arabe-enfant',
+    '/fr/cours-as-sirah',
+    '/fr/cours-education-islamique',
     '/fr/cours-particuliers',
     '/fr/cours-particuliers-coran',
     '/fr/cours-presentiel-enfant',
     '/fr/cours-presentiel-femme-debutante',
     '/fr/cours-presentiel-femme-intermediaire',
-    '/fr/cours-sciences-coran',
     '/fr/cours-sciences-hadith',
     '/fr/cours-tajwid-enfant',
-    '/fr/cours-tajwid-intensif',
     '/fr/formation-enseignant-tajwid',
     '/fr/formation-enseignant-tarbya',
     '/fr/formation-nour-al-bayane',
     '/fr/formation-tarbya-islamya',
-    '/fr/pack-accompagnement',
-    '/pack-accompagnement',
     '/fr/sciences-islamiques',
-    '/fr/spiritualite-islam'
+    '/fr/spiritualite-islam',
   ];
 
-  // Routes de services et contact (priorité normale, mises à jour mensuelles/annuelles)
   const serviceRoutes = [
     '/contact',
-    '/fr/contact',
     '/inscription',
-    '/fr/plateforme-inscription',
     '/conseil-spiritualite',
     '/fr/question-spiritualite-islam',
     '/test-positionnement',
-    '/fr/rendez-vous'
+    '/fr/rendez-vous',
   ];
 
-  // Routes légales (faible priorité, mises à jour annuelles)
   const legalRoutes = [
     '/cgv',
     '/mentions-legales',
-    '/politique-de-confidentialite'
+    '/politique-de-confidentialite',
   ];
 
-  const sitemap: MetadataRoute.Sitemap = [];
+  const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  // Mapping des routes principales
-  mainRoutes.forEach((route) => {
-    sitemap.push({
+  mainRoutes.forEach(({ route, priority, changeFrequency }) => {
+    sitemapEntries.push({
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: route === '' || route === '/fr' ? 1.0 : 0.9,
+      changeFrequency,
+      priority,
     });
   });
 
-  // Mapping des routes de cours
+  highPriorityCourses.forEach((route) => {
+    sitemapEntries.push({
+      url: `${baseUrl}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    });
+  });
+
   courseRoutes.forEach((route) => {
-    sitemap.push({
+    sitemapEntries.push({
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -92,35 +102,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  // Mapping des routes de services
   serviceRoutes.forEach((route) => {
-    sitemap.push({
+    sitemapEntries.push({
       url: `${baseUrl}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.65,
+    });
+  });
+
+  legalRoutes.forEach((route) => {
+    sitemapEntries.push({
+      url: `${baseUrl}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    });
+  });
+
+  CIVILISATION_SAVANTS.forEach((s) => {
+    sitemapEntries.push({
+      url: `${baseUrl}${savantPath(s.slug)}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.82,
+    });
+  });
+
+  Object.keys(PROGRAMS_DATA).forEach((key) => {
+    sitemapEntries.push({
+      url: `${baseUrl}/program/${key}`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     });
   });
 
-  // Mapping des routes légales
-  legalRoutes.forEach((route) => {
-    sitemap.push({
-      url: `${baseUrl}${route}`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    });
-  });
-
-  // Mapping des nouvelles pages programmes dynamiques
-  Object.keys(PROGRAMS_DATA).forEach((key) => {
-    sitemap.push({
-      url: `${baseUrl}/program/${key}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    });
-  });
-
-  return sitemap;
+  return sitemapEntries;
 }

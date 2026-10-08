@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -13,6 +14,13 @@ import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-presentiel-femme-intermediaire") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-presentiel-femme-intermediaire"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours Présentiel Femme Intermédiaire | Arabe & Tajwid | ISHES",
   description: "Formation en présentiel pour femmes de niveau intermédiaire combinant l'arabe littéraire et le Tajwid à Toulouse. Cursus académique et spirituel 100% femme.",
   keywords: "cours arabe femme intermediaire, cours tajwid femme toulouse, perfectionnement arabe femme, ishes"
@@ -57,7 +65,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
             </div>
           </div>
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl h-[300px] sm:h-[400px] lg:h-[500px] border-4 border-white">
-            <Image src="/images/formations/presentiel-femme-interlediare-1.png" alt="Femme Intermédiaire ISHES" fill className="object-cover" />
+            <Image src="/images/formations/presentiel-femme-interlediare-1.png" alt="Cours présentiel femmes niveau intermédiaire à Toulouse — Institut ISHES" fill className="object-cover" />
             <div className="absolute inset-0 bg-[#0a192f]/10" />
             {/* Play button overlay */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -119,7 +127,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
             ].map((item, idx) => (
               <div key={idx} className="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
                 <div className="h-48 relative border-b border-gray-100">
-                  <Image src={item.img} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover" />
+                  <Image src={item.img} alt={`${item.title} — Institut ISHES`} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover" />
                   <div className="absolute -bottom-7 left-6 w-14 h-14 bg-[#0a192f] rounded-2xl rotate-3 flex items-center justify-center text-[#C69C6D] border-4 border-white shadow-lg">
                     <div className="-rotate-3">{item.icon}</div>
                   </div>
@@ -173,7 +181,7 @@ export default function CoursPresentielFemmeIntermediairePage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative rounded-[2rem] overflow-hidden h-[400px] lg:h-[600px] shadow-2xl border-8 border-[#fcfaf8]">
-            <Image src="/images/formations/femme-presentiel-inter-2.jpg" alt="Pourquoi ce programme" fill className="object-cover" />
+            <Image src="/images/formations/femme-presentiel-inter-2.jpg" alt="Programme présentiel femmes intermédiaire — arabe et Tajwid ISHES" fill className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/40 to-transparent" />
           </div>
           <div className="flex flex-col justify-center">

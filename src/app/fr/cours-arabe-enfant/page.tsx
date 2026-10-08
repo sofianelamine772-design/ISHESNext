@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -24,6 +25,13 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/fr/cours-arabe-enfant") },
+  openGraph: {
+    url: absoluteUrl("/fr/cours-arabe-enfant"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
   title: "Cours d'Arabe Enfant | Arabe & Coran Junior | ISHES",
   description: "Faites aimer la langue arabe à vos enfants avec une méthode immersive et ludique. Apprentissage de l'alphabet, lecture et mémorisation du Coran.",
   keywords: "cours arabe enfant, arabe junior, coran enfant, pédagogie islamique junior, ishes"
@@ -89,7 +97,7 @@ export default function CoursArabeEnfantPage() {
               ) : (
                 <Image 
                   src="/images/formations/arabe-enfant-distance-1.jpg" 
-                  alt="Cours Arabe Enfant"
+                  alt="Cours d'arabe pour enfants en ligne — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -173,7 +181,7 @@ export default function CoursArabeEnfantPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/arabe-enfant-distance-2.jpg" 
-               alt="Livres d'arabe et café"
+               alt="Supports de langue arabe pour enfants — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"

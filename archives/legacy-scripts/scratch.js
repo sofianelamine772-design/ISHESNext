@@ -1,7 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const csvContent = fs.readFileSync('classes_presentiel_final_corrige.csv', 'utf-8');
+const csvContent = fs.readFileSync(
+  path.join(__dirname, '../exports/classes_presentiel_final_corrige.csv'),
+  'utf-8',
+);
 const csvLines = csvContent.split('\n').filter(l => l.trim() !== '');
 
 const csvClasses = [];
@@ -18,7 +21,7 @@ for (let i = 1; i < csvLines.length; i++) { // Skip header
 }
 
 // Quick script to extract from TS
-const tsContent = fs.readFileSync('src/lib/presentiel-data.ts', 'utf-8');
+const tsContent = fs.readFileSync(path.join(__dirname, '../../src/lib/presentiel-data.ts'), 'utf-8');
 const match = tsContent.match(/export const PRESENTIEL_CLASSES: PresentielClass\[\] = (\[[\s\S]*?\]);\n/);
 
 let appClasses = [];

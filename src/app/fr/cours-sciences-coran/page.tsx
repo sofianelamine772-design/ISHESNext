@@ -1,9 +1,7 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { 
   Calendar, 
   Clock, 
-  Video, 
   Award, 
   Hourglass,
   Gift,
@@ -19,22 +17,91 @@ import {
   GraduationCap,
   ShieldCheck,
   Sparkles,
-  ClipboardList
+  ClipboardList,
+  ScrollText,
+  FileText,
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import {
+  buildPageMetadata,
+  courseJsonLd,
+  breadcrumbJsonLd,
+  faqJsonLd,
+} from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cours de Sciences du Coran | Histoire & Révélation | ISHES",
-  description: "Découvrez l'histoire de la révélation, de la compilation et de la transmission du Livre Saint. Une formation diplômante de l'Institut ISHES.",
-  keywords: "sciences du coran, histoire coran, révélation, compilation coran, ishes toulouse, sciences islamiques, cours coran",
-};
+import {
+  SciencesDuCoranGuideArticle,
+  SCIENCES_GUIDE_FAQS,
+} from "@/components/vitrine/SciencesDuCoranGuideArticle";
+
+const SCIENCES_FAQS = [
+  {
+    question: "Qu'apprend-on en Sciences du Coran à l'ISHES ?",
+    answer:
+      "L'histoire de la Révélation, le rôle du Prophète ﷺ et des Compagnons, la collecte et la transmission du texte, les grandes disciplines (‘Ulûm al-Qur'ân) et les enjeux liés aux manuscrits anciens — avec une pédagogie claire pour francophones.",
+  },
+  {
+    question: "Combien coûte la formation ?",
+    answer:
+      "La formation complète dure 4 mois, à 399 €, avec 1 cours par semaine en direct sur Zoom, replays, supports et diplôme ISHES.",
+  },
+  ...SCIENCES_GUIDE_FAQS,
+];
+
+export const metadata = buildPageMetadata({
+  title: "Les Sciences du Coran : la fascinante histoire du Livre d'ALLAH | Institut ISHES",
+  description:
+    "Cours en ligne 4 mois (399 €) et guide gratuit : Révélation, mission prophétique, Compagnons, préservation, manuscrits Birmingham & Sanaa, miracle du Coran. ‘Ulûm al-Qur'ân — ISHES.",
+  path: "/fr/cours-sciences-coran",
+  keywords: [
+    "sciences du coran",
+    "histoire du livre d'allah",
+    "ulum al quran",
+    "révélation coran",
+    "mission prophetique",
+    "compagnons transmission coran",
+    "manuscrit birmingham",
+    "palimpseste sanaa",
+    "compilation coran uthman",
+    "asbab an nuzul",
+    "qiraat",
+    "ijaz al quran",
+    "ishes toulouse",
+    "cours sciences du coran en ligne",
+  ],
+  image: "/images/formations/sc-du-coran-dsita-1.png",
+});
 
 export default function CoursSciencesCoranPage() {
   const course = PROGRAMS_DATA["sciences_du_coran"];
   const videoUrl = course?.videoUrl;
 
   return (
+    <>
+      <JsonLd
+        data={courseJsonLd({
+          name: "Cours de Sciences du Coran",
+          description:
+            "Découvrez l'histoire de la révélation, de la compilation et de la transmission du Livre Saint.",
+          path: "/fr/cours-sciences-coran",
+          price: "399",
+          courseMode: "Online",
+          workload: "P4M",
+          image: "/images/formations/sc-du-coran-dsita-1.png",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Formations", path: "/program" },
+          { name: "Sciences du Coran", path: "/fr/cours-sciences-coran" },
+        ])}
+      />
+      <JsonLd data={faqJsonLd(SCIENCES_FAQS)} />
+
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
       
       {/* ─── HERO SECTION ─── */}
@@ -44,18 +111,27 @@ export default function CoursSciencesCoranPage() {
             <h2 className="text-ishes-gold font-black text-sm tracking-[0.2em] uppercase">
               SCIENCE DU CORAN
             </h2>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
-              Science <br /> du Coran
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
+              Les Sciences du Coran :{" "}
+              <span className="text-ishes-gold">la fascinante histoire du Livre d&apos;ALLAH</span>
             </h1>
-            <p className="text-gray-600 font-medium max-w-md text-xl leading-relaxed border-l-2 border-ishes-gold pl-4">
-              Découvrez l'histoire vivante du Livre d'ALLAH.
+            <p className="text-gray-600 font-medium max-w-xl text-lg leading-relaxed border-l-2 border-ishes-gold pl-4">
+              Guide pédagogique et formation : Révélation, Compagnons, préservation, manuscrits et
+              miracle du Coran.
             </p>
-            <div className="pt-4">
+            <div className="pt-4 flex flex-wrap gap-3">
               <Link 
                 href="/inscription?plan=sciences_du_coran&audience=adulte" 
                 className="inline-flex items-center justify-center gap-2 bg-[#c19b6c] hover:bg-[#a67b3f] text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-xl shadow-[#c19b6c]/20 hover:-translate-y-1"
               >
-                JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
+                JE M&apos;INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/fr/cours-sciences-coran/guide"
+                className="inline-flex items-center justify-center gap-2 border border-[#c19b6c] text-[#c19b6c] hover:bg-[#c19b6c]/10 px-6 py-4 rounded-md text-[15px] font-black transition-all"
+              >
+                <FileText className="w-5 h-5" />
+                Guide gratuit
               </Link>
             </div>
             
@@ -109,7 +185,7 @@ export default function CoursSciencesCoranPage() {
               ) : (
                 <Image 
                   src="/images/formations/sc-du-coran-dsita-1.png" 
-                  alt="Science du Coran"
+                  alt="Cours de sciences du Coran en ligne — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -150,7 +226,7 @@ export default function CoursSciencesCoranPage() {
           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
              <Image 
                src="/images/formations/sc-du-coran-distance-2.jpg" 
-               alt="Zoom Étude"
+               alt="Étude des sciences du Coran en direct sur Zoom — Institut ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -189,7 +265,7 @@ export default function CoursSciencesCoranPage() {
           ].map((item, i) => (
             <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center overflow-hidden pb-6 group hover:shadow-md transition-shadow">
               <div className="w-full h-32 relative mb-8">
-                 <Image src={item.image} alt={item.title} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 20vw" />
+                 <Image src={item.image} alt={`${item.title} — Institut ISHES`} fill className="object-cover transition-transform group-hover:scale-105" sizes="(max-width: 768px) 100vw, 20vw" />
                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#c19b6c] rounded-full border-4 border-white flex items-center justify-center z-10 shadow-sm">
                    <item.icon className="w-5 h-5 text-white" />
                  </div>
@@ -251,6 +327,62 @@ export default function CoursSciencesCoranPage() {
         </div>
       </section>
 
+      {/* ─── FICHES PRATIQUES SEO ─── */}
+      <section className="py-16 px-6 max-w-6xl mx-auto">
+        <div className="text-center mb-10">
+          <p className="text-ishes-gold font-black text-xs uppercase tracking-[0.2em] mb-3">
+            Ressources gratuites
+          </p>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-4">
+            Fiches pratiques Sciences du Coran
+          </h2>
+          <p className="text-gray-600 font-medium max-w-2xl mx-auto leading-relaxed">
+            Avant ou pendant le cursus, consulte nos guides en texte libre : idéal pour le
+            référencement et pour approfondir l&apos;histoire du Livre d&apos;ALLAH.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Link
+            href="/fr/cours-sciences-coran/guide"
+            className="group bg-white border border-[#e6d5b8]/40 hover:border-ishes-gold/50 rounded-3xl p-8 shadow-sm transition-all hover:shadow-md"
+          >
+            <FileText className="w-8 h-8 text-ishes-gold mb-4" />
+            <h3 className="text-xl font-black text-ishes-blue group-hover:text-ishes-gold mb-2">
+              Guide complet — Sciences du Coran
+            </h3>
+            <p className="text-gray-600 font-medium text-sm leading-relaxed mb-4">
+              Révélation, Compagnons, collecte, disciplines (‘Ulûm al-Qur&apos;ân), manuscrits de
+              Birmingham et Sanaa, miracle du Coran.
+            </p>
+            <span className="inline-flex items-center gap-2 text-ishes-gold font-bold text-sm">
+              Lire la fiche <ArrowRight className="w-4 h-4" />
+            </span>
+          </Link>
+          <Link
+            href="/fr/cours-sciences-coran/frise-chronologique"
+            className="group bg-white border border-[#e6d5b8]/40 hover:border-ishes-gold/50 rounded-3xl p-8 shadow-sm transition-all hover:shadow-md"
+          >
+            <ScrollText className="w-8 h-8 text-ishes-gold mb-4" />
+            <h3 className="text-xl font-black text-ishes-blue group-hover:text-ishes-gold mb-2">
+              Frise chronologique de la Révélation
+            </h3>
+            <p className="text-gray-600 font-medium text-sm leading-relaxed mb-4">
+              De 610 à la codification de l&apos;arabe : califats d&apos;Abû Bakr et ‘Uthmân,
+              vocalisation, points distinctifs, qirâ&apos;ât.
+            </p>
+            <span className="inline-flex items-center gap-2 text-ishes-gold font-bold text-sm">
+              Voir la frise <ArrowRight className="w-4 h-4" />
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <article className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto fiche-prose space-y-12">
+          <SciencesDuCoranGuideArticle />
+        </div>
+      </article>
+
       {/* ─── PRICING BANNER ─── */}
       <section className="py-12 px-6 max-w-6xl mx-auto mb-10">
         <div className="bg-ishes-blue rounded-[2rem] p-8 md:p-12 shadow-2xl text-white relative flex flex-col md:flex-row items-center justify-between gap-8">
@@ -265,7 +397,7 @@ export default function CoursSciencesCoranPage() {
               href="/inscription?plan=sciences_du_coran&audience=adulte" 
               className="inline-flex items-center justify-center gap-2 bg-[#c19b6c] hover:bg-[#a67b3f] text-white px-8 py-5 rounded-md text-[15px] font-black transition-all shadow-xl shadow-[#c19b6c]/20 hover:-translate-y-1 w-full"
             >
-              JE M'INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
+              JE M&apos;INSCRIS MAINTENANT <ArrowRight className="w-5 h-5" />
             </Link>
             <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
               <Lock className="w-4 h-4 text-[#c19b6c]" />
@@ -276,6 +408,13 @@ export default function CoursSciencesCoranPage() {
         </div>
       </section>
 
+      <VitrineFaq
+        eyebrow="FAQ Sciences du Coran"
+        title="Questions fréquentes sur le cours"
+        items={SCIENCES_FAQS}
+      />
+
     </div>
+    </>
   );
 }

@@ -6,7 +6,7 @@ import 'react-phone-number-input/style.css';
 import { useSearchParams, useRouter } from "next/navigation";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText } from "lucide-react";
+import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText, Sparkles, Search, Gift } from "lucide-react";
 import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
@@ -100,7 +100,19 @@ function InscriptionForm() {
   const [childrenList, setChildrenList] = useState([{ prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }]);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [additionalCourses, setAdditionalCourses] = useState<string[]>([]);
+  const [searchCourseQuery, setSearchCourseQuery] = useState("");
   const [slotsStatus, setSlotsStatus] = useState<SlotStatusRow[]>([]);
+
+  const distanceCoursesList = [
+    { id: 'fiqh_malikite', title: 'Fiqh Mâlikite', price: 399, emoji: '⚖️' },
+    { id: 'tajwid_standard', title: 'Tajwid Standard', price: 649, emoji: '🕌' },
+    { id: 'pack_accompagnement', title: 'Pack Accompagnement', price: 49, emoji: '✨' },
+    { id: 'sciences_du_coran', title: 'Sciences du Coran', price: 399, emoji: '📖' },
+    { id: 'tarbiya_islamiya', title: 'Tarbiya Islamiya', price: 249, emoji: '🌱' },
+    { id: 'as_sirah', title: 'As Sirah', price: 649, emoji: '📜' },
+    { id: 'spiritualite_islam', title: 'Spiritualité', price: 399, emoji: '❤️' },
+  ];
 
   const [showChildHoraireError, setShowChildHoraireError] = useState<{ [key: number]: boolean }>({});
   const [showAdultHoraireError, setShowAdultHoraireError] = useState(false);
@@ -261,23 +273,61 @@ function InscriptionForm() {
   })();
 
   const isStep1ContinueDisabled = Boolean(step1BlockReason);
+  const isPresentielCart = () => {
+    const normalized = (planId || "").toLowerCase().replace(/-/g, '_');
+    const currentSlot = (formData?.slot || slot || "").toLowerCase();
+    const isChildSlot = (childrenList?.[0]?.slot || "").toLowerCase();
+    
+    return normalized === 'presentiel_global' || 
+           normalized.includes('presentiel') || 
+           normalized === 'arabe_coran_junior' ||
+           (normalized === 'tajwid_standard' && audienceParam === 'enfant') ||
+           currentSlot === 'samedi' || 
+           currentSlot === 'dimanche' || 
+           currentSlot === 'mardi-vendredi' || 
+           currentSlot === 'mercredi-dimanche' || 
+           currentSlot === 'mercredi-dimanche-hifdh' || 
+           currentSlot === 'samedi-sirah' ||
+           isChildSlot === 'mercredi' ||
+           isChildSlot === 'samedi' ||
+           isChildSlot === 'dimanche';
+  };
+
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
-    if (registrationType === 'child') {
-      return getFamilyCheckoutTotal(basePrice, namedChildren.length);
-    }
-    return basePrice;
+    let total = registrationType === 'child'
+      ? (isPresentielCart() ? getFamilyCheckoutTotal(basePrice, namedChildren.length) : basePrice * namedChildren.length)
+      : basePrice;
+    
+    additionalCourses.forEach(id => {
+      const coursePrice = getBasePriceOfPlan(id);
+      if (id === 'pack_accompagnement') {
+        total += coursePrice;
+      } else {
+        total += registrationType === 'child' ? coursePrice * namedChildren.length : coursePrice;
+      }
+    });
+
+    return total;
   };
 
   const getSubtotal = () => {
     const basePrice = getBasePriceOfPlan(planId);
-    if (registrationType === 'child') {
-      return basePrice * namedChildren.length;
-    }
-    return basePrice;
+    let total = registrationType === 'child' ? basePrice * namedChildren.length : basePrice;
+    
+    additionalCourses.forEach(id => {
+      const coursePrice = getBasePriceOfPlan(id);
+      if (id === 'pack_accompagnement') {
+        total += coursePrice;
+      } else {
+        total += registrationType === 'child' ? coursePrice * namedChildren.length : coursePrice;
+      }
+    });
+
+    return total;
   };
 
-  const siblingDiscount = getSiblingDiscount(namedChildren.length);
+  const siblingDiscount = isPresentielCart() ? getSiblingDiscount(namedChildren.length) : 0;
 
   const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5 | 10>(1);
 
@@ -338,6 +388,11 @@ function InscriptionForm() {
           niveau: formData.niveau,
           parentPrenom: formData.parentPrenom,
           parentNom: formData.parentNom,
+          orderBump: additionalCourses.length > 0 ? additionalCourses.join(',') : undefined,
+          orderBumpPrices: additionalCourses.reduce((acc, id) => {
+            acc[id] = getBasePriceOfPlan(id);
+            return acc;
+          }, {} as Record<string, number>),
           childrenList: registrationType === 'child' ? namedChildren.map(c => ({
             prenom: c.prenom,
             nom: c.nom,
@@ -1358,6 +1413,99 @@ function InscriptionForm() {
                   </div>
                 )}
               </div>
+
+              {/* SUGGESTION DE FORMATIONS SUPPLEMENTAIRES */}
+              <div className="bg-white rounded-3xl p-6 md:p-8 max-w-xl mx-auto mb-10 text-left shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-ishes-gold/10 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-ishes-gold" />
+                  </div>
+                  <h3 className="text-sm font-black text-[#101828] uppercase tracking-widest">
+                    Complétez votre inscription
+                  </h3>
+                </div>
+                <p className="text-xs text-gray-500 font-medium mb-6 pl-11">
+                  Découvrez nos autres formations distancielles et profitez de la réduction fratrie si applicable.
+                </p>
+
+                <div className="relative mb-6 group">
+                  <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-ishes-blue transition-colors" />
+                  <input 
+                    type="text"
+                    placeholder="Rechercher une formation (ex: Tajwid...)"
+                    value={searchCourseQuery}
+                    onChange={(e) => setSearchCourseQuery(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 border border-gray-200/80 rounded-2xl text-sm font-medium focus:outline-none focus:border-ishes-blue focus:bg-white focus:ring-4 focus:ring-ishes-blue/10 transition-all placeholder:text-gray-400"
+                  />
+                </div>
+
+                <div className="space-y-3 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                  {distanceCoursesList
+                    .filter(c => c.id !== planId && !additionalCourses.includes(c.id))
+                    .filter(c => c.title.toLowerCase().includes(searchCourseQuery.toLowerCase()))
+                    .map(course => (
+                      <div key={course.id} className="bg-white p-4 rounded-2xl border border-gray-100/80 flex items-center justify-between group hover:border-ishes-blue/20 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                        <div className="flex items-center gap-4">
+                          <div className="text-2xl w-12 h-12 flex items-center justify-center bg-gray-50/80 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                            {course.emoji}
+                          </div>
+                          <div>
+                            <h4 className="text-[13px] font-black text-[#101828] mb-0.5">{course.title}</h4>
+                            <p className="text-xs font-bold text-ishes-blue">
+                              {registrationType === 'child' && course.id !== 'pack_accompagnement' 
+                                ? `${course.price * namedChildren.length} € (pour ${namedChildren.length} enfant${namedChildren.length > 1 ? 's' : ''})` 
+                                : `${course.price} €`}
+                            </p>
+                          </div>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => setAdditionalCourses([...additionalCourses, course.id])}
+                          className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-ishes-blue hover:bg-ishes-blue hover:text-white transition-all duration-300 shadow-sm"
+                        >
+                          <Plus className="w-5 h-5" />
+                        </button>
+                      </div>
+                    ))}
+                  
+                  {distanceCoursesList.filter(c => c.title.toLowerCase().includes(searchCourseQuery.toLowerCase()) && c.id !== planId && !additionalCourses.includes(c.id)).length === 0 && (
+                    <div className="text-center py-8 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                      <p className="text-xs text-gray-400 font-medium">Aucune formation trouvée.</p>
+                    </div>
+                  )}
+                </div>
+
+                {additionalCourses.length > 0 && (
+                  <div className="mt-8 pt-6 border-t border-gray-100">
+                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Votre panier additionnel</h4>
+                    <div className="space-y-2.5">
+                      {additionalCourses.map(id => {
+                        const course = distanceCoursesList.find(c => c.id === id);
+                        if (!course) return null;
+                        const finalCoursePrice = (registrationType === 'child' && id !== 'pack_accompagnement') 
+                          ? course.price * namedChildren.length 
+                          : course.price;
+
+                        return (
+                          <div key={id} className="flex items-center justify-between bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50 group">
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{course.emoji}</span>
+                              <span className="text-xs font-bold text-ishes-blue">{course.title}</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className="text-xs font-black text-ishes-dark">+{finalCoursePrice} €</span>
+                              <button onClick={() => setAdditionalCourses(additionalCourses.filter(c => c !== id))} className="text-gray-400 hover:text-red-500 transition-colors p-1">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
 
               {/* Action Buttons */}
               <div className="w-full flex flex-col md:flex-row gap-4 max-w-xl mx-auto">

@@ -1,10 +1,16 @@
-import { Metadata } from 'next';
+import { buildPageMetadata } from "@/lib/seo";
+import { PACK_ACCOMPAGNEMENT_METADATA } from "@/lib/pack-accompagnement-seo";
 
-export const metadata: Metadata = {
-  title: "Pack Accompagnement - Boostez Votre Réussite | ISHES",
-  description: "Accédez à un groupe WhatsApp d'entraide, des sessions de questions-réponses en direct et des conseils spirituels pour réussir vos études de la langue arabe.",
-};
+export const metadata = buildPageMetadata({
+  ...PACK_ACCOMPAGNEMENT_METADATA,
+  path: "/pack-accompagnement",
+  image: "/images/pack-hero.png",
+});
 
-export default function PackAccompagnementLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+export default function FrPackAccompagnementLayout({
+  children,
+}: {
+  children: unknown;
+}) {
+  return children;
 }

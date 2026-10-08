@@ -14,7 +14,7 @@ export function Footer() {
           {/* Logo + réseaux */}
           <div className="col-span-2 lg:col-span-1 flex flex-col items-center lg:items-start text-center lg:text-left">
             <Link href="/" className="mb-4 sm:mb-6 inline-block transition-transform hover:scale-105 active:scale-95">
-              <img src="/logo.png" alt="ISHES Logo" className="h-24 md:h-32 w-auto object-contain" />
+              <img src="/logo.png" alt="Institut ISHES — logo officiel" className="h-24 md:h-32 w-auto object-contain" />
             </Link>
             <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">
               L'excellence de la langue arabe et des sciences islamiques à votre portée.
@@ -56,7 +56,7 @@ export function Footer() {
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Distance & Présentiel</span>
               </li>
               <li>
-                <Link href="/fr/correction-fatiha" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Correction al Fatiha</Link>
+                <Link href="/fr/correction-fatiha" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Cours de Fatiha gratuit</Link>
                 <span className="text-[9px] text-ishes-blue font-black uppercase tracking-tighter">Gratuit</span>
               </li>
             </ul>
@@ -122,8 +122,12 @@ export function Footer() {
             <ul className="space-y-2 sm:space-y-4 mb-8">
               <li><Link href="/institut" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">À propos</Link></li>
               <li><Link href="/boutique" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Boutique</Link></li>
+              <li>
+                <Link href="/fr/fiches-pratiques" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Fiches pratiques</Link>
+              </li>
               <li><Link href="/app/admin" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Espace Membre</Link></li>
-              <li><Link href="/contact" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Contact</Link></li>
+              <li><Link href="/contact" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Contact gratuit</Link></li>
+              <li><Link href="/fr/rendez-vous" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">RDV Zoom 15 min</Link></li>
             </ul>
             <h4 className="font-bold text-gray-900 mb-4 text-[11px] uppercase tracking-widest">Nous Trouver</h4>
             <ul className="space-y-3">
@@ -157,16 +161,20 @@ export function Footer() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-3">
             {[
               ["Accueil ISHES", "/fr/"],["Boutique", "/fr/boutique"],["Civilisation Arabo-Musulmane", "/fr/civilisation-arabo-musulmane"],
-              ["Contact", "/fr/contact"],["Correction Fatiha", "/fr/correction-fatiha"],["Cours à distance", "/fr/cours-a-distance"],
+              ["Savants arabo-musulmans", "/fr/civilisation-arabo-musulmane/savants"],
+              ["Contact", "/fr/contact"],["Cours de Fatiha gratuit", "/fr/correction-fatiha"],["Cours à distance", "/fr/cours-a-distance"],
               ["Cours Al Aqida", "/fr/cours-al-aqida"],["Cours Anglais", "/fr/cours-anglais"],["Cours Arabe Adulte", "/fr/cours-arabe-adulte"],
               ["Cours Arabe Enfant", "/fr/cours-arabe-enfant"],["Cours As Sirah", "/fr/cours-as-sirah"],["Éducation Islamique", "/fr/cours-education-islamique"],
-              ["Cours en Présentiel", "/fr/cours-en-presentiel"],["Cours Fiqh Malikite", "/fr/cours-fiqh-malikite"],["Cours Lecture Tajwid", "/fr/cours-lecture-tajwid"],
+              ["Cours en Présentiel", "/fr/cours-en-presentiel"],["Cours Fiqh Malikite", "/fr/cours-fiqh-malikite"],["Ibn Âchir — Al-Murshid al-Mu'în", "/fr/cours-fiqh-malikite/ibn-ashir"],["Cours Lecture Tajwid", "/fr/cours-lecture-tajwid"],
               ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers-coran"],["Sciences du Coran", "/fr/cours-sciences-coran"],
+              ["Guide Sciences du Coran", "/fr/cours-sciences-coran/guide"],["Frise Révélation", "/fr/cours-sciences-coran/frise-chronologique"],
+              ["Les Clés du Coran", "/fr/les-cles-du-coran"],["Fiches pratiques", "/fr/fiches-pratiques"],
               ["Sciences du Hadith", "/fr/cours-sciences-hadith"],["Tajwid Enfant", "/fr/cours-tajwid-enfant"],["Tajwid Intensif", "/fr/cours-tajwid-intensif"],
                ["Formation Tarbya Islamya", "/fr/formation-tarbya-islamya"],
+               ["Pack Accompagnement — institut de science religieuse en ligne", "/pack-accompagnement"],
                ["Questions Spiritualité", "/conseil-spiritualite"],["Spiritualité Islam", "/fr/spiritualite-islam"],
             ].map(([label, href]) => (
-              <Link key={href} href={href} className="text-xs text-gray-500 hover:text-ishes-blue transition-colors leading-tight">{label}</Link>
+              <Link key={`${href}-${label}`} href={href} className="text-xs text-gray-500 hover:text-ishes-blue transition-colors leading-tight">{label}</Link>
             ))}
           </div>
         </div>
@@ -186,10 +194,10 @@ export function Footer() {
               Paiement 100% Sécurisé avec Stripe
             </span>
             <div className="flex items-center justify-center gap-4">
-              <img src="/visa-logo.png" alt="Visa / Cards" className="h-5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-              <img src="/mastercard-logo.png" alt="MasterCard" className="h-4.5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/visa-logo.png" alt="Paiement sécurisé par carte Visa" className="h-5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/mastercard-logo.png" alt="Paiement sécurisé par MasterCard" className="h-4.5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
               <div className="w-[1px] h-3.5 bg-gray-200"></div>
-              <img src="/stripe-logo.png" alt="Stripe" className="h-4 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/stripe-logo.png" alt="Paiements sécurisés via Stripe" className="h-4 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
             </div>
           </div>
 

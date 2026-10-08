@@ -21,7 +21,7 @@ export function InstitutHero() {
       <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
         <Image 
           src="/images/campus.png" 
-          alt="ISHES Institut" 
+          alt="Campus de l'Institut ISHES à Toulouse — cours d'arabe et sciences islamiques" 
           fill
           priority
           className="object-cover scale-110"

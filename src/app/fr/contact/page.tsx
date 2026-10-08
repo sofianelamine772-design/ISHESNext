@@ -1,18 +1,19 @@
-import { Metadata } from "next";
-import { ContactContent } from "@/components/vitrine/ContactContent";
+import ContactPage from "@/app/(vitrine)/contact/page";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contactez l'Institut ISHES - Toulouse & Distance",
-  description: "Vous avez une question ? Contactez notre équipe par téléphone, WhatsApp ou retrouvez-nous à notre institut de Toulouse.",
-};
+export const metadata = buildPageMetadata({
+  title: "Contact gratuit Institut ISHES — Toulouse & distance",
+  description:
+    "Demandez un entretien gratuit avec l'Institut ISHES. Questions sur les cours d'arabe, le Tajwid, les groupes enfants à Toulouse ou à distance : l'équipe vous oriente sans engagement.",
+  path: "/contact",
+  keywords: [
+    "contact institut ishes",
+    "entretien gratuit ishes",
+    "cours arabe toulouse contact",
+    "inscription cours coran toulouse",
+  ],
+});
 
-export default function ContactPage() {
-  return (
-    <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-blue selection:text-white">
-      {/* BG decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-ishes-blue/5 blur-[140px] rounded-full pointer-events-none -z-10" />
-      
-      <ContactContent />
-    </div>
-  );
+export default function FrContactPage() {
+  return <ContactPage />;
 }

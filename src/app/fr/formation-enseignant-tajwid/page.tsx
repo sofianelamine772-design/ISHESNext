@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -24,9 +25,18 @@ import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
 export const metadata: Metadata = {
-  title: "Formation Enseignant de Tajwid | ISHES",
-  description: "Apprendre à enseigner le Tajwid avec une méthode éprouvée et devenir un véritable pédagogue.",
-  keywords: "enseigner tajwid, professeur coran, formation enseignant tajwid, ishes"
+  alternates: { canonical: absoluteUrl("/fr/formation-enseignant-tajwid") },
+  openGraph: {
+    url: absoluteUrl("/fr/formation-enseignant-tajwid"),
+    siteName: "Institut ISHES",
+    locale: "fr_FR",
+    type: "website",
+  },
+  title: "Devenir enseignant de Tajwid — Formation diplômante | ISHES",
+  description:
+    "Devenez enseignant de Tajwid : pédagogie, gestion de classe et méthode Les Clés du Coran. Formation à distance pour transmettre le Coran avec clarté et bienveillance.",
+  keywords:
+    "devenir enseignant tajwid, enseigner le tajwid, professeur de coran, formation enseignant tajwid, les clés du coran, nour al bayan, pédagogie coran",
 };
 
 export default function FormationEnseignantTajwidPage() {
@@ -88,7 +98,7 @@ export default function FormationEnseignantTajwidPage() {
               ) : (
                 <Image 
                   src="/images/formations/enseignant-tajwid-1.jpg" 
-                  alt="Formation Enseignant de Tajwid"
+                  alt="Formation enseignant de Tajwid — Institut ISHES"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -175,9 +185,15 @@ export default function FormationEnseignantTajwidPage() {
             <h3 className="text-xl font-black text-ishes-blue mb-4 leading-tight">
               Apprendre à enseigner<br/>le Tajwid avec la méthode<br/>Les Clés du Coran
             </h3>
-            <p className="text-gray-600 font-medium text-sm leading-relaxed mt-auto">
+            <p className="text-gray-600 font-medium text-sm leading-relaxed mb-4">
               Maîtrisez la méthode pédagogique pas à pas pour transmettre les règles du Tajwid avec clarté et impact.
             </p>
+            <Link
+              href="/fr/les-cles-du-coran"
+              className="inline-flex items-center gap-2 text-ishes-gold font-bold text-sm hover:underline mt-auto"
+            >
+              Fiche pratique — Les Clés du Coran <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
           {/* Module 2 */}
@@ -224,7 +240,7 @@ export default function FormationEnseignantTajwidPage() {
           <div className="relative aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-100">
              <Image 
                src="/images/formations/enseignant-tajwid-2.png" 
-               alt="Les clés du Coran et appel Zoom"
+               alt="Méthode Les Clés du Coran et formation enseignant sur Zoom — ISHES"
                fill
                className="object-cover"
                sizes="(max-width: 768px) 100vw, 50vw"
@@ -245,6 +261,37 @@ export default function FormationEnseignantTajwidPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-6 max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-6">
+          Devenir enseignant de Tajwid avec une vraie méthode
+        </h2>
+        <div className="space-y-4 text-gray-600 font-medium leading-relaxed text-[15px]">
+          <p>
+            <strong>Devenir enseignant de Tajwid</strong> demande autre chose que de bien réciter. Il faut savoir
+            poser une leçon, expliquer une règle à un adulte ou à un enfant, corriger sans décourager et construire
+            une année scolaire cohérente. Cette formation diplômante d&apos;ISHES transforme un lecteur du Coran en
+            pédagogue, avec la méthode francophone{" "}
+            <Link href="/fr/les-cles-du-coran" className="text-ishes-blue font-bold hover:underline">
+              Les Clés du Coran
+            </Link>
+            .
+          </p>
+          <p>
+            Idéale pour un futur <strong>professeur de Coran</strong>, un enseignant déjà en poste, un responsable
+            d&apos;association ou un parent qui veut transmettre avec rigueur. Cours en direct, replays, certification
+            et accompagnement. Découvrez aussi comment{" "}
+            <Link href="/formation-enseignant" className="text-ishes-blue font-bold hover:underline">
+              devenir enseignant
+            </Link>{" "}
+            en Tarbiya Islamiyya, ou demandez un{" "}
+            <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+              entretien gratuit
+            </Link>
+            .
+          </p>
         </div>
       </section>
 
