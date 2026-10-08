@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { buildPageMetadata } from "@/lib/seo";
 import { PACK_ACCOMPAGNEMENT_METADATA } from "@/lib/pack-accompagnement-seo";
 
@@ -10,7 +11,7 @@ export const metadata = buildPageMetadata({
 export default function PackAccompagnementLayout({
   children,
 }: {
-  children: unknown;
+  children: ReactNode;
 }) {
   return children;
 }
