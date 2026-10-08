@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, SITE_URL } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   Calendar, 
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Spiritualité Musulmane | Éducation de l'Âme & Purification | ISHES",
     description: "Initiez-vous à l'éducation de l'âme et aux préceptes profonds de l'Islam. Un cursus complet de 4 mois pour nourrir votre cœur et apaiser votre esprit.",
-    url: "https://www.ishes.fr/fr/spiritualite-islam",
+    url: `${SITE_URL}/fr/spiritualite-islam`,
     type: "website",
     images: [
       {
@@ -51,7 +51,7 @@ const courseSchema = {
   "provider": {
     "@type": "Organization",
     "name": "Institut ISHES",
-    "sameAs": "https://www.ishes.fr"
+    "sameAs": SITE_URL
   },
   "offers": {
     "@type": "Offer",

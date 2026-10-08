@@ -7,7 +7,7 @@ import {
 } from "@/lib/civilisation-savants";
 import { CivilisationCtas } from "@/components/vitrine/CivilisationCtas";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbJsonLd, buildPageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, buildPageMetadata, SITE_URL } from "@/lib/seo";
 
 export const metadata = buildPageMetadata({
   title: "Savants de la civilisation arabo-musulmane | Biographies ISHES",
@@ -40,11 +40,11 @@ export default function SavantsIndexPage() {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: "Savants de la civilisation arabo-musulmane",
-          url: `https://www.ishes.fr${CIVILISATION_PATH}/savants`,
+          url: `${SITE_URL}${CIVILISATION_PATH}/savants`,
           hasPart: CIVILISATION_SAVANTS.map((s) => ({
             "@type": "Person",
             name: s.name,
-            url: `https://www.ishes.fr${savantPath(s.slug)}`,
+            url: `${SITE_URL}${savantPath(s.slug)}`,
           })),
         }}
       />

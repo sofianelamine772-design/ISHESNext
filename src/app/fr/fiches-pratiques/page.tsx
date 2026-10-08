@@ -114,7 +114,7 @@ export default function FichesPratiquesPage() {
           description:
             "Ressources pédagogiques gratuites sur le Tajwid et les Sciences du Coran.",
           url: absoluteUrl("/fr/fiches-pratiques"),
-          isPartOf: { "@type": "WebSite", name: "Institut ISHES", url: "https://www.ishes.fr" },
+          isPartOf: { "@type": "WebSite", name: "Institut ISHES", url: absoluteUrl("/") },
           about: [
             { "@type": "Thing", name: "Tajwid" },
             { "@type": "Thing", name: "Sciences du Coran" },

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
-/** URL canonique de production — une seule source de vérité SEO. */
-export const SITE_URL = 'https://www.ishes.fr';
+/** Canonique de prod : Vercel + Clerk servent ishes.fr (www redirige vers l’apex). */
+export const SITE_URL = 'https://ishes.fr';
 
 export const SITE_NAME = 'Institut ISHES';
 
@@ -33,7 +33,7 @@ type BuildPageMetadataInput = {
 };
 
 /**
- * Metadata SEO complète (canonical www.ishes.fr + Open Graph + Twitter).
+ * Metadata SEO complète (canonical https://ishes.fr + Open Graph + Twitter).
  * À utiliser sur toutes les pages vitrine.
  */
 export function buildPageMetadata({

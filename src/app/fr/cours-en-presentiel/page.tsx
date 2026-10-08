@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, SITE_URL } from "@/lib/seo";
 import Link from 'next/link';
 import { 
   CheckCircle2, 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cours en Présentiel | Institut ISHES Toulouse",
     description: "Formations d'excellence à Toulouse en présentiel : Tajwid, Coran, Langue Arabe et Sîrah. Supports exclusifs et suivi personnalisé.",
-    url: "https://www.ishes.fr/fr/cours-en-presentiel",
+    url: `${SITE_URL}/fr/cours-en-presentiel`,
     type: "website",
     images: [
       {
@@ -47,7 +47,7 @@ const coursesJsonLd = {
   "@type": "ItemList",
   "name": "Formations en Présentiel - Institut ISHES",
   "description": "Découvrez notre catalogue exclusif de cours en présentiel à Toulouse. Apprentissage du Tajwid, mémorisation du Coran, Sîrah et Arabe.",
-  "url": "https://www.ishes.fr/fr/cours-en-presentiel",
+  "url": `${SITE_URL}/fr/cours-en-presentiel`,
   "numberOfItems": 6,
   "itemListElement": [
     {
@@ -60,7 +60,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://www.ishes.fr"
+          "sameAs": SITE_URL
         }
       }
     },
@@ -74,7 +74,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://www.ishes.fr"
+          "sameAs": SITE_URL
         }
       }
     },
@@ -88,7 +88,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://www.ishes.fr"
+          "sameAs": SITE_URL
         }
       }
     },
@@ -102,7 +102,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://www.ishes.fr"
+          "sameAs": SITE_URL
         }
       }
     },
@@ -116,7 +116,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://www.ishes.fr"
+          "sameAs": SITE_URL
         }
       }
     },
@@ -130,7 +130,7 @@ const coursesJsonLd = {
         "provider": {
           "@type": "Organization",
           "name": "Institut ISHES",
-          "sameAs": "https://www.ishes.fr"
+          "sameAs": SITE_URL
         }
       }
     }

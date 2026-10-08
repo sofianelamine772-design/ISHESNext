@@ -75,7 +75,7 @@ function isTransientSmtpError(error: unknown): boolean {
 }
 
 export function getAppBaseUrl() {
-  return (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  return (process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr').replace(/\/$/, '');
 }
 
 /** Lien « Répondre » des e-mails de messagerie → conversation dans l’app. */
@@ -447,7 +447,7 @@ export async function maybeSendPresentielRentreeEmail(
 }
 
 export async function sendPresentielRentreeEmail(email: string) {
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr').replace(/\/$/, '');
   const { subject, html, text } = buildPresentielRentreeEmail(`${appUrl}/logo.png`);
 
   return sendEmail({
@@ -485,7 +485,7 @@ async function loadDistancielRentreePdf(): Promise<Buffer | null> {
   const pdfPath = resolveDistancielRentreePdfPath();
   if (pdfPath) return fs.readFileSync(pdfPath);
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr').replace(/\/$/, '');
   try {
     const res = await fetch(`${appUrl}${DISTANCIEL_RENTREE_PDF.href}`);
     if (!res.ok) return null;
@@ -497,7 +497,7 @@ async function loadDistancielRentreePdf(): Promise<Buffer | null> {
 }
 
 export async function sendDistancielRentreeEmail(email: string) {
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr').replace(/\/$/, '');
   const pdfContent = await loadDistancielRentreePdf();
   if (!pdfContent) {
     const missing = 'PDF rentrée distanciel introuvable';
@@ -560,7 +560,7 @@ async function loadFournituresPdf(kind: FournituresKind): Promise<Buffer | null>
   const pdfPath = resolveFournituresPdfPath(kind);
   if (pdfPath) return fs.readFileSync(pdfPath);
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr').replace(/\/$/, '');
   try {
     const res = await fetch(`${appUrl}/fournitures/${FOURNITURES_PDF[kind].filename}`);
     if (!res.ok) return null;
@@ -576,7 +576,7 @@ export async function sendPresentielFournituresEmail(
   kind: FournituresKind,
   recipientName?: string | null,
 ) {
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.ishes.fr').replace(/\/$/, '');
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://ishes.fr').replace(/\/$/, '');
   const pdfContent = await loadFournituresPdf(kind);
   if (!pdfContent) {
     const missing = `PDF fournitures introuvable (${kind})`;

@@ -53,12 +53,16 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
   async redirects() {
-    // Anciennes URLs sans /fr → pages FR
-    return redirectPaths.map((path) => ({
+    const frRedirects = redirectPaths.map((path) => ({
       source: `/${path}`,
       destination: `/fr/${path}`,
       permanent: true,
     }));
+    return [
+      { source: '/fr/sitemap', destination: '/sitemap.xml', permanent: true },
+      { source: '/sitemap', destination: '/sitemap.xml', permanent: true },
+      ...frRedirects,
+    ];
   },
   async headers() {
     return [
