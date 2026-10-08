@@ -3,18 +3,32 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * Si un ancien symlink .next (cache hors projet) est encore là, on le retire
- * avant `next build` pour que PostCSS trouve bien les packages.
+ * En local, iCloud utilise des symlinks *.nosync.
+ * Sur Vercel, Next/Turbopack doivent voir un vrai dossier node_modules (pas node_modules.nosync).
  */
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const nextDir = path.join(root, ".next");
 
-try {
-  const st = fs.lstatSync(nextDir);
-  if (st.isSymbolicLink()) {
-    fs.unlinkSync(nextDir);
-    console.log("[prepare-build] symlink .next retiré");
+function flattenNosync(linkName, nosyncName) {
+  const link = path.join(root, linkName);
+  const real = path.join(root, nosyncName);
+  try {
+    const st = fs.lstatSync(link);
+    if (st.isSymbolicLink()) {
+      fs.unlinkSync(link);
+      if (fs.existsSync(real)) {
+        fs.renameSync(real, link);
+        console.log(`[prepare-build] ${nosyncName} → ${linkName}`);
+      }
+      return;
+    }
+  } catch {
+    // pas de lien
   }
-} catch {
-  // pas de .next — ok
+  if (!fs.existsSync(link) && fs.existsSync(real)) {
+    fs.renameSync(real, link);
+    console.log(`[prepare-build] ${nosyncName} → ${linkName}`);
+  }
 }
+
+flattenNosync("node_modules", "node_modules.nosync");
+flattenNosync(".next", ".next.nosync");
