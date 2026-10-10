@@ -7,11 +7,9 @@ const redirectPaths = [
   'correction-fatiha',
   'cours-a-distance',
   'cours-al-aqida',
-  'cours-anglais',
   'cours-arabe-adulte',
   'cours-arabe-enfant',
   'cours-as-sirah',
-  'cours-education-islamique',
   'cours-en-presentiel',
   'cours-fiqh-malikite',
   'cours-lecture-tajwid',
@@ -22,10 +20,8 @@ const redirectPaths = [
   'cours-sciences-hadith',
   'cours-tajwid-enfant',
   'cours-tajwid-intensif',
-  'formation-nour-al-bayane',
   'formation-tarbya-islamya',
   'plateforme-inscription',
-  'question-spiritualite-islam',
   'sciences-islamiques',
   'spiritualite-islam'
 ];
@@ -59,6 +55,14 @@ const nextConfig: NextConfig = {
       permanent: true,
     }));
     return [
+      { source: '/fr/cours-anglais', destination: '/program', permanent: true },
+      { source: '/cours-anglais', destination: '/program', permanent: true },
+      { source: '/fr/cours-education-islamique', destination: '/fr/formation-tarbya-islamya', permanent: true },
+      { source: '/cours-education-islamique', destination: '/fr/formation-tarbya-islamya', permanent: true },
+      { source: '/fr/formation-nour-al-bayane', destination: '/fr/cours-lecture-tajwid', permanent: true },
+      { source: '/formation-nour-al-bayane', destination: '/fr/cours-lecture-tajwid', permanent: true },
+      { source: '/fr/question-spiritualite-islam', destination: '/conseil-spiritualite', permanent: true },
+      { source: '/question-spiritualite-islam', destination: '/conseil-spiritualite', permanent: true },
       { source: '/fr/cours-particuliers-coran', destination: '/fr/cours-particuliers', permanent: true },
       { source: '/cours-particuliers-coran', destination: '/fr/cours-particuliers', permanent: true },
       { source: '/fr/sitemap', destination: '/sitemap.xml', permanent: true },

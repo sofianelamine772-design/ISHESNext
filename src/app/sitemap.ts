@@ -41,10 +41,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const courseRoutes = [
     '/fr/cours-al-aqida',
-    '/fr/cours-anglais',
     '/fr/cours-arabe-enfant',
     '/fr/cours-as-sirah',
-    '/fr/cours-education-islamique',
     '/fr/cours-presentiel-enfant',
     '/fr/cours-presentiel-femme-debutante',
     '/fr/cours-presentiel-femme-intermediaire',
@@ -52,7 +50,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/fr/cours-tajwid-enfant',
     '/fr/formation-enseignant-tajwid',
     '/fr/formation-enseignant-tarbya',
-    '/fr/formation-nour-al-bayane',
     '/fr/formation-tarbya-islamya',
     '/fr/sciences-islamiques',
     '/fr/spiritualite-islam',
@@ -62,7 +59,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/contact',
     '/inscription',
     '/conseil-spiritualite',
-    '/fr/question-spiritualite-islam',
     '/test-positionnement',
     '/fr/rendez-vous',
   ];

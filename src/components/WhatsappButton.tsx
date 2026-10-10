@@ -32,7 +32,6 @@ export function WhatsappButton() {
     "cours-memoriser-coran": "Mémorisation du Coran",
     "cours-tajwid-intensif": "Tajwid Intensif",
     "cours-tajwid-enfant": "Tajwid Enfant",
-    "formation-nour-al-bayane": "Nour Al Bayane",
     "formation-tarbya-islamya": "Tarbiya Islamya",
     "formation-enseignant-tajwid": "Formation Enseignant Tajwid",
     "formation-enseignant-tarbya": "Formation Enseignant Tarbya",
