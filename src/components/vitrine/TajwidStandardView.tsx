@@ -53,38 +53,22 @@ export function TajwidStandardView() {
                 qualifié.
               </p>
             </div>
-            <div className="relative min-h-[280px] sm:min-h-[340px]">
-              <blockquote className="absolute top-0 right-0 max-w-xs bg-[#f7f1e6] border border-[#e6d5b8]/50 rounded-2xl p-5 shadow-sm z-20 hidden sm:block">
+            <div className="w-full">
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-ishes-blue">
+                <iframe
+                  src="https://www.youtube.com/embed/y0MCrrbSogY"
+                  title="Présentation du cours de Tajwid — Institut ISHES"
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+              <blockquote className="mt-4 bg-[#f7f1e6] border border-[#e6d5b8]/50 rounded-2xl p-5 shadow-sm">
                 <p className="text-sm font-medium text-ishes-blue leading-relaxed italic">
                   « Une lecture correcte du Coran est une adoration, une marque de respect et un
                   lien direct avec la parole d&apos;ALLAH. »
                 </p>
               </blockquote>
-              <div className="relative mx-auto w-[220px] sm:w-[240px] mt-8 sm:mt-16">
-                <div className="absolute -left-16 top-8 w-[180px] sm:w-[200px] rotate-[-8deg] drop-shadow-2xl">
-                  <Image
-                    src="/images/livre-ishes.png"
-                    alt="Les Clés du Coran — Volume 1, support Tajwid ISHES"
-                    width={400}
-                    height={560}
-                    className="w-full h-auto rounded-md"
-                    priority
-                  />
-                  <span className="absolute bottom-3 left-3 bg-ishes-blue text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded">
-                    Volume 1
-                  </span>
-                </div>
-                <div className="relative z-10 rotate-[6deg] drop-shadow-2xl">
-                  <Image
-                    src="/images/livre-ishes.png"
-                    alt="Les Clés du Coran — Volume 2, support Tajwid ISHES"
-                    width={400}
-                    height={560}
-                    className="w-full h-auto rounded-md"
-                    priority
-                  />
-                </div>
-              </div>
             </div>
           </div>
 

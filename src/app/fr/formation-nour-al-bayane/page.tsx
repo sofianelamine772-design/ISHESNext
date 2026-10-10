@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   CheckCircle2, 
   Monitor, 
@@ -136,6 +137,12 @@ export default function NourAlBayanePage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, un cours par semaine, le mercredi à 20h30, en direct sur Zoom, avec les
+        replays. Le programme s&apos;étale sur 8 mois, répartis sur deux années scolaires. Tous les
+        supports sont inclus, et le diplôme ISHES vient à la fin.
+      </CourseCadenceNote>
 
       {/* ─── CONTENT SECTION ─── */}
       <section className="py-24 px-6">

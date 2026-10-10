@@ -16,8 +16,8 @@ const redirectPaths = [
   'cours-fiqh-malikite',
   'cours-lecture-tajwid',
   'cours-memoriser-coran',
+  'guide-tilawa-memorisation-coran',
   'cours-particuliers',
-  'cours-particuliers-coran',
   'cours-sciences-coran',
   'cours-sciences-hadith',
   'cours-tajwid-enfant',
@@ -59,6 +59,8 @@ const nextConfig: NextConfig = {
       permanent: true,
     }));
     return [
+      { source: '/fr/cours-particuliers-coran', destination: '/fr/cours-particuliers', permanent: true },
+      { source: '/cours-particuliers-coran', destination: '/fr/cours-particuliers', permanent: true },
       { source: '/fr/sitemap', destination: '/sitemap.xml', permanent: true },
       { source: '/sitemap', destination: '/sitemap.xml', permanent: true },
       ...frRedirects,

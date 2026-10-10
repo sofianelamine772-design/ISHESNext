@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -136,6 +137,12 @@ export default function CoursAsSirahPage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, la Sîrah se suit un cours par semaine, le samedi à 10h30, en direct sur
+        Zoom. Les replays restent disponibles. Le parcours dure 8 mois, supports inclus, et se
+        termine par le diplôme ISHES.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

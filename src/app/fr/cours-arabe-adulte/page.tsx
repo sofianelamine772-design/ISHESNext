@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { absoluteUrl, courseJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -163,6 +164,12 @@ export default function CoursArabeAdultePage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, le cours a lieu le vendredi à 19h30 pour les frères, en direct sur Zoom.
+        Le parcours dure 8 mois, avec un groupe WhatsApp privé par classe, et se conclut par le
+        diplôme ISHES.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

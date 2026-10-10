@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -271,6 +272,12 @@ export default function CoursFiqhMalikitePage() {
         </div>
       </section>
 
+      <CourseCadenceNote>
+        Dès octobre 2026, le fiqh mâlikite se suit à raison d&apos;un cours par semaine, le samedi
+        à 11h00, en direct sur Zoom. Les replays couvrent les séances manquées. Le parcours dure
+        4 mois, avec tous les supports inclus, et se conclut par le diplôme ISHES.
+      </CourseCadenceNote>
+
       {/* ─── POURQUOI APPRENDRE LE FIQH ─── */}
       <section className="pt-20 pb-12 px-6 max-w-7xl mx-auto border-t border-gray-100">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
@@ -305,15 +312,17 @@ export default function CoursFiqhMalikitePage() {
       {/* ─── OUVRAGE DE REFERENCE ─── */}
       <section className="py-24 px-6 bg-[#EBE7DF]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 items-center">
-          <div className="flex-1 relative aspect-[4/3] w-full max-w-md mx-auto">
-             <div className="absolute inset-0 bg-black/10 rounded-2xl rotate-3 shadow-2xl"></div>
-             <Image 
-               src="/images/fiqh_book.png" 
-               alt="Livre Al-Murshid al-Mu'in (Matn Ibn 'Ashir) – texte de référence du fiqh malikite"
-               fill
-               sizes="(max-width: 768px) 100vw, 448px"
-               className="object-cover rounded-2xl shadow-xl relative z-10"
-             />
+          <div className="flex-1 relative w-full max-w-[280px] mx-auto">
+             <div className="absolute inset-4 bg-black/10 rounded-2xl rotate-3 shadow-2xl"></div>
+             <div className="relative aspect-[474/668] w-full">
+               <Image
+                 src="/images/formations/ibn-ashir-cover.png"
+                 alt="Couverture d'Al-Murshid al-Mu'în d'Ibn 'Âshir, texte de référence du fiqh mâlikite"
+                 fill
+                 sizes="280px"
+                 className="object-contain drop-shadow-2xl relative z-10"
+               />
+             </div>
           </div>
           <div className="flex-1 space-y-8">
             <h2 className="text-4xl font-serif text-ishes-blue font-black">
@@ -550,7 +559,7 @@ export default function CoursFiqhMalikitePage() {
             {[
               { num: 1, icon: ClipboardCheck, title: "Tu t'inscris", desc: "Choisis ton mode de paiement et valide ton inscription." },
               { num: 2, icon: Mail, title: "Tu reçois tes accès", desc: "Accès immédiat à la plateforme et au groupe WhatsApp." },
-              { num: 3, icon: Users, title: "Tu assistes aux cours", desc: "Cours en direct sur Zoom tous les mercredis à 21h30." },
+              { num: 3, icon: Users, title: "Tu assistes aux cours", desc: "Cours en direct sur Zoom, le samedi à 11h00." },
               { num: 4, icon: Upload, title: "Tu envoies tes exercices", desc: "Des exercices pratiques et des questions à envoyer régulièrement." },
               { num: 5, icon: Award, title: "Tu valides ton diplôme", desc: "À la fin des 4 mois après validation de ton parcours." }
             ].map((step, i) => (
@@ -614,7 +623,7 @@ export default function CoursFiqhMalikitePage() {
               <div className="space-y-4">
                 {[
                   "4 mois de formation intensive",
-                  "Cours en direct (mercredi 21h30)",
+                  "Cours en direct (samedi 11h00)",
                   "En direct sur Zoom",
                   "Replays illimités disponibles 24/7",
                   "Exercices et évaluations corrigés",

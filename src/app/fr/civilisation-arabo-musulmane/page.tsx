@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -213,6 +214,11 @@ export default function CivilisationPage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, un cours par semaine, le mercredi de 20h à 21h, en direct sur Zoom, avec
+        les replays. Le cycle dure 2 mois, et tous les supports sont inclus.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { absoluteUrl, SITE_URL } from "@/lib/seo";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -143,6 +144,11 @@ export default function SpiritualiteIslamPage() {
             </div>
           </div>
         </section>
+
+        <CourseCadenceNote>
+          Le cours démarre en janvier 2027. Un rendez-vous par semaine, le samedi à 10h30, en direct
+          sur Zoom. Le parcours dure 4 mois et se termine par un diplôme de fin de parcours.
+        </CourseCadenceNote>
 
         {/* ─── POUR QUI ─── */}
         <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

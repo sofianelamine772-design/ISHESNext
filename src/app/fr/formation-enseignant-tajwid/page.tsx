@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -140,6 +141,12 @@ export default function FormationEnseignantTajwidPage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, deux cours par semaine, le lundi et le jeudi à 19h30, en direct sur Zoom,
+        avec les replays. La formation dure 4 à 5 mois et se conclut par la certification Formation
+        enseignant ISHES.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

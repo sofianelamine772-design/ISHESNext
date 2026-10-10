@@ -334,6 +334,16 @@ export function SciencesDuCoranGuideArticle() {
             >
               birmingham.ac.uk
             </a>
+            {" "}
+            et{" "}
+            <a
+              href="https://www.birmingham.ac.uk/facilities/cadbury/birmingham-quran-mingana-collection/birmingham-quran/faqs"
+              className="text-ishes-gold font-bold hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              FAQ sur la datation
+            </a>
           </li>
           <li>
             Corpus Coranicum (Académie des sciences de Berlin-Brandebourg) —{" "}

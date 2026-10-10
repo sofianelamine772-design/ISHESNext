@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -146,6 +147,12 @@ export default function CoursTajwidEnfantPage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, un cours de Tajwid par semaine, le mardi ou le jeudi à 18h30 selon le
+        niveau, en direct sur Zoom, avec les replays à vie. Le parcours dure 8 mois, avec le diplôme
+        ISHES et un groupe WhatsApp privé par classe.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

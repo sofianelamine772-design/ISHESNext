@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -145,6 +146,12 @@ export default function CoursArabeEnfantPage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, un cours par semaine, le mardi ou le jeudi à 18h30 selon le niveau, en
+        direct sur Zoom, avec les replays à vie. L&apos;année dure 8 mois. Le diplôme ISHES est remis
+        à la fin, et chaque classe a son groupe WhatsApp privé.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">

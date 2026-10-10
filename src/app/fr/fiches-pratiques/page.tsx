@@ -19,6 +19,16 @@ import {
 
 const FICHES = [
   {
+    href: "/fr/guide-tilawa-memorisation-coran",
+    title: "Tilawa et mémorisation du Coran",
+    desc: "Guide gratuit : fluidifier sa récitation, réviser, choisir 12 sourates courtes. Planning 30 jours, plan de révision et 7 conseils, en ligne ou en PDF.",
+    tag: "Tilawa · Hifdh",
+    pdf: "/fiches-pratiques/tilawa-planning-30-jours.pdf",
+    icon: BookOpen,
+    image: "/images/tilawa_quran.png",
+    keywords: "tilawa, mémoriser le coran",
+  },
+  {
     href: "/fr/les-cles-du-coran",
     title: "Les Clés du Coran — Volume 1 & 2",
     desc: "Méthode Tajwid francophone ISHES : tahajjî, fondations de lecture, règles de récitation et poème didactique. Alternative pédagogique à Nour Al Bayan.",

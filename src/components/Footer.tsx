@@ -67,7 +67,7 @@ export function Footer() {
             <p className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Sciences</p>
             <ul className="space-y-3 sm:space-y-4">
               <li>
-                <Link href="/fr/cours-al-aqida" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Al-'Aqîda (Tahawiya)</Link>
+                <Link href="/fr/cours-al-aqida" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Al-'Aqîda (Ibn 'Âshir)</Link>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Disponible à distance</span>
               </li>
               <li>
@@ -166,7 +166,7 @@ export function Footer() {
               ["Cours Al Aqida", "/fr/cours-al-aqida"],["Cours Anglais", "/fr/cours-anglais"],["Cours Arabe Adulte", "/fr/cours-arabe-adulte"],
               ["Cours Arabe Enfant", "/fr/cours-arabe-enfant"],["Cours As Sirah", "/fr/cours-as-sirah"],["Éducation Islamique", "/fr/cours-education-islamique"],
               ["Cours en Présentiel", "/fr/cours-en-presentiel"],["Cours Fiqh Malikite", "/fr/cours-fiqh-malikite"],["Ibn Âchir — Al-Murshid al-Mu'în", "/fr/cours-fiqh-malikite/ibn-ashir"],["Cours Lecture Tajwid", "/fr/cours-lecture-tajwid"],
-              ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers-coran"],["Sciences du Coran", "/fr/cours-sciences-coran"],
+              ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Guide Tilawa et Hifdh", "/fr/guide-tilawa-memorisation-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers"],["Sciences du Coran", "/fr/cours-sciences-coran"],
               ["Guide Sciences du Coran", "/fr/cours-sciences-coran/guide"],["Frise Révélation", "/fr/cours-sciences-coran/frise-chronologique"],
               ["Les Clés du Coran", "/fr/les-cles-du-coran"],["Fiches pratiques", "/fr/fiches-pratiques"],
               ["Sciences du Hadith", "/fr/cours-sciences-hadith"],["Tajwid Enfant", "/fr/cours-tajwid-enfant"],["Tajwid Intensif", "/fr/cours-tajwid-intensif"],

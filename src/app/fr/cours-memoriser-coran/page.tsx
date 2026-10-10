@@ -1,6 +1,9 @@
-import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
 import Link from 'next/link';
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { TilawaGuideBody, TILAWA_FAQS } from "@/components/vitrine/TilawaGuideBody";
+import { buildPageMetadata, courseJsonLd, breadcrumbJsonLd, faqJsonLd, articleJsonLd } from "@/lib/seo";
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
   Calendar, 
   Clock, 
@@ -22,18 +25,26 @@ import {
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
-export const metadata: Metadata = {
-  alternates: { canonical: absoluteUrl("/fr/cours-memoriser-coran") },
-  openGraph: {
-    url: absoluteUrl("/fr/cours-memoriser-coran"),
-    siteName: "Institut ISHES",
-    locale: "fr_FR",
-    type: "website",
-  },
-  title: "Cours de Mémorisation du Coran | Hifz & Révision | ISHES",
-  description: "Mémorisez le Livre d'Allah à votre rythme avec un suivi personnalisé. Correction rigoureuse et programme de révision (Mouraja'a) structuré.",
-  keywords: "mémorisation coran, hifz coran, apprendre coran, révision coran, ishes toulouse"
-};
+export const metadata = buildPageMetadata({
+  title: "Tilawa et mémorisation du Coran en ligne",
+  description:
+    "Cours de Tilawa et de Hifdh : récitation, révision, mémorisation. Mercredi 19h30, dimanche 12h, 4 mois, 399 €. Fiches gratuites.",
+  path: "/fr/cours-memoriser-coran",
+  keywords: [
+    "mémorisation coran",
+    "hifz coran",
+    "hifdh",
+    "tilawa",
+    "récitation du coran",
+    "cours de mémorisation du coran",
+    "mouraja'a",
+    "révision coran",
+    "apprendre le coran",
+    "sourates courtes",
+    "ishes",
+  ],
+  image: "/images/formations/memorisation-tilawa-1.jpg",
+});
 
 export default function CoursMemoriserCoranPage() {
   const course = PROGRAMS_DATA["memoriser_coran"];
@@ -41,6 +52,39 @@ export default function CoursMemoriserCoranPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-ishes-gold selection:text-white pb-20">
+      <JsonLd
+        data={courseJsonLd({
+          name: "Cours de Tilawa et de mémorisation du Coran",
+          description:
+            "Accompagnement individuel pour réciter avec justesse et mémoriser le Coran, avec corrections et révisions.",
+          path: "/fr/cours-memoriser-coran",
+          price: "399",
+          courseMode: "Online",
+          workload: "P4M",
+          image: "/images/formations/memorisation-tilawa-1.jpg",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Accueil", path: "/" },
+          { name: "Formations", path: "/program" },
+          { name: "Tilawa et mémorisation", path: "/fr/cours-memoriser-coran" },
+        ])}
+      />
+      <JsonLd data={faqJsonLd(TILAWA_FAQS)} />
+      <JsonLd
+        data={articleJsonLd({
+          headline: "Tilawa et Hifdh : réciter et mémoriser le Coran avec un enseignant",
+          description:
+            "Cours ISHES de récitation et de mémorisation, avec guide gratuit, sourates courtes et planning de révision.",
+          path: "/fr/cours-memoriser-coran",
+          image: "/images/formations/memorisation-tilawa-1.jpg",
+          dateModified: "2026-10-10",
+          keywords: ["tilawa", "hifdh", "mémorisation du coran"],
+          wordCount: 1600,
+          about: ["Tilawa", "Hifdh", "Mémorisation du Coran"],
+        })}
+      />
       
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
@@ -52,8 +96,10 @@ export default function CoursMemoriserCoranPage() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ishes-blue leading-[1.1] tracking-tight">
               Mémorisation / Lecture du Coran avec la Tilawa
             </h1>
-            <p className="text-gray-600 font-medium max-w-md text-lg leading-relaxed">
-              Accompagnement personnalisé pour mémoriser et lire le Livre d'Allah à votre rythme.
+            <p className="text-gray-600 font-medium max-w-xl text-lg leading-relaxed">
+              Accompagnement individuel pour réciter avec justesse et mémoriser le Coran à ton rythme,
+              quelques sourates ou un projet plus long. Corrections, révisions, et quatre fiches
+              gratuites pour t&apos;organiser.
             </p>
             <div className="pt-4">
               <Link 
@@ -124,6 +170,12 @@ export default function CoursMemoriserCoranPage() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Dès octobre 2026, deux cours par semaine : le mercredi à 19h30 et le dimanche à 12h, en
+        direct sur Zoom, avec les replays. Le parcours dure 4 mois, tous les supports sont inclus,
+        et il débouche sur le diplôme ISHES.
+      </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
       <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
@@ -256,6 +308,28 @@ export default function CoursMemoriserCoranPage() {
           </div>
         </div>
       </section>
+
+      <article className="py-16 px-6 bg-[#f7f4ef]">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-ishes-gold font-black text-xs tracking-[0.2em] uppercase mb-3">
+            Guide pédagogique gratuit
+          </p>
+          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue leading-tight mb-8">
+            Comment améliorer sa récitation et mémoriser le Coran ?
+          </h2>
+          <div className="bg-white border border-[#e6d5b8]/40 rounded-[1.75rem] p-6 sm:p-10 shadow-sm">
+            <div className="space-y-12">
+              <TilawaGuideBody />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <VitrineFaq
+        eyebrow="FAQ Tilawa et Hifdh"
+        title="Questions fréquentes sur la récitation et la mémorisation"
+        items={TILAWA_FAQS}
+      />
 
     </div>
   );

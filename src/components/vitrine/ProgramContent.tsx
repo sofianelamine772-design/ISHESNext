@@ -252,14 +252,14 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "al_aqida",
-    imageUrl: "/images/formations/aqida-distance-1.jpeg",
+    imageUrl: "/images/formations/ibn-ashir-cover.png",
     title: "Al-'Aqîda",
-    subtitle: "Étude de la Tahawiya pour comprendre les fondements de la foi musulmane sunnite.",
+    subtitle: "Étude d'Al-Murshid al-Mu'în d'Ibn 'Âshir : les fondements de la foi musulmane sunnite.",
     tagText: "FOI",
     tagColor: "bg-green-100 text-green-700",
     durationText: "4 mois",
     features: [
-      "Étude de la Tahawiya",
+      "Matn d'Ibn 'Âshir",
       "Fondements de la foi",
       "Monde invisible",
       "Cours hebdomadaire"
@@ -723,13 +723,15 @@ export function ProgramContent() {
                   }`}
               >
                 {/* IMAGE COVER */}
-                <div className="w-full h-32 sm:h-48 relative bg-gray-100 shrink-0 overflow-hidden">
+                <div className={`w-full h-32 sm:h-48 relative shrink-0 overflow-hidden ${program.id === 'al_aqida' ? 'bg-[#140e08]' : 'bg-gray-100'}`}>
                   <Image 
                     src={program.imageUrl || "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=600&q=80"} 
-                    alt={`${program.title} — formation Institut ISHES`} 
+                    alt={program.id === 'al_aqida'
+                      ? "Couverture d'Al-Murshid al-Mu'în d'Ibn 'Âshir — cours d'Al-'Aqîda, Institut ISHES"
+                      : `${program.title} — formation Institut ISHES`} 
                     fill 
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    className={`object-cover ${program.id === 'al_aqida' ? 'scale-[1.15] origin-top' : ''}`}
+                    className={program.id === 'al_aqida' ? 'object-cover object-[center_38%]' : 'object-cover'}
                   />
                   {/* Gradient Overlay for tags */}
                   <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent z-0" />
