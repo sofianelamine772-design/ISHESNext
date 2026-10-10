@@ -21,7 +21,7 @@ describe('Vérification de l\'assignation des classes (Toutes Formations)', () =
     expect('femme-debutante-presentiel').not.toBe('presentiel-global');
     expect('femme-intermediaire-presentiel').not.toBe('presentiel-global');
     expect(PROGRAMS_DATA.femme_debutante_presentiel.price).toBe('649 €');
-    expect(PROGRAMS_DATA.tajwid_intensif.price).toBe('799 €');
+    expect(PROGRAMS_DATA.tajwid_intensif.price).toBe('649 €');
   });
 
   it('le catalogue 1–25 est inscriptible (chaque classe a un UUID checkout)', () => {

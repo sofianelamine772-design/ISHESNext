@@ -50,10 +50,10 @@ describe('Vérification globale des Formations et Classes (End-to-End)', () => {
       }
     );
 
-    it('Tajwid Intensif est à 799 € en base (source de vérité checkout)', () => {
+    it('Tajwid Intensif est à 649 € en base (source de vérité checkout)', () => {
       const row = dbFormations.find((f: any) => f.slug === 'tajwid_intensif');
       expect(row).toBeDefined();
-      expect(row.price).toBe(799);
+      expect(row.price).toBe(649);
     });
   });
 

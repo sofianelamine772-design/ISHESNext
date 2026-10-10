@@ -259,8 +259,8 @@ describe('Checkout API', () => {
     expect(session.metadata.childrenCount).toBe('1');
   });
 
-  it('facture le Tajwid Intensif à 799 € depuis la base, pas 649 €', async () => {
-    mockFormation(799, 'Tajwid Intensif');
+  it('facture le Tajwid Intensif à 649 € depuis la base', async () => {
+    mockFormation(649, 'Tajwid Intensif');
     const stripeInstance = new Stripe('fake', {} as any);
     const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
 
@@ -275,7 +275,7 @@ describe('Checkout API', () => {
     expect(res.status).toBe(200);
     expect(mockCreate).toHaveBeenCalledTimes(1);
     const session = mockCreate.mock.calls[0][0];
-    expect(session.line_items[0].price_data.unit_amount).toBe(79900);
+    expect(session.line_items[0].price_data.unit_amount).toBe(64900);
     expect(session.metadata.formationId).toBe('tajwid_intensif');
   });
 

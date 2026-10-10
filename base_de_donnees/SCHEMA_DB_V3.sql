@@ -274,7 +274,7 @@ INSERT INTO public.formations (title, slug, description, price, duration, type) 
 ('Tarbiya Islamiya', 'tarbiya_islamiya', 'Éducation spirituelle pour les enfants (6-15 ans).', 399, 'Annuel', 'distanciel'),
 ('Arabe Littéraire (Adulte)', 'arabe_adulte', 'Maîtrisez la langue arabe moderne et littéraire.', 649, '9 mois', 'distanciel'),
 ('Tajwid (Standard)', 'tajwid_standard', 'Apprendre à lire le Coran avec les règles de Tajwid.', 649, '8 mois', 'distanciel'),
-('Tajwid Intensif', 'tajwid_intensif', '3 mois pour transformer votre lecture du Coran.', 799, '3 mois', 'distanciel'),
+('Tajwid Intensif', 'tajwid_intensif', '3 mois pour transformer votre lecture du Coran.', 649, '3 mois', 'distanciel'),
 ('Fiqh Mâlikite', 'fiqh_malikite', 'Étude approfondie du rite malikite (Matn Ibn Achir).', 399, '9 mois', 'distanciel'),
 ('Sciences Islamiques', 'sciences_islamiques', 'Socle de connaissances solide (Fiqh, Sîrah, Coran).', 349, '8 mois', 'distanciel'),
 ('Sciences du Coran', 'sciences_du_coran', 'Histoire, compilation et transmission du Livre Saint.', 399, '5 mois', 'distanciel'),

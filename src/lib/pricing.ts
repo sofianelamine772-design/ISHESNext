@@ -38,9 +38,10 @@ export function unwrapRelation<T>(value: T | T[] | null | undefined): T | null {
 }
 
 /**
- * Prix facturé pour une inscription.
- * Source de vérité = prix catalogue formation. expected_amount seulement s'il est ≤ catalogue
- * (réduction fratrie). Sinon on ignore un expected gonflé (ex: 1197 = 3×399 après doublons).
+ * Montant dû d'une inscription déjà créée.
+ * expected_amount est figé à l'inscription (réduction fratrie, ou tarif d'alors).
+ * Une baisse du catalogue (ex. Tajwid intensif 799 € → 649 €) ne réécrit pas cette dette.
+ * On ignore seulement un expected gonflé (ex. 1197 = 3×399 après doublons).
  */
 export function resolveBillingExpectedAmount(
   expectedAmount: number | null | undefined,
@@ -53,7 +54,8 @@ export function resolveBillingExpectedAmount(
   const hasRaw = Number.isFinite(raw) && raw >= 0;
 
   if (hasCatalog && hasRaw) {
-    return raw <= catalog + 0.01 ? raw : catalog;
+    if (raw <= catalog * 1.5 + 0.01) return raw;
+    return catalog;
   }
   if (hasCatalog) return catalog;
   if (hasRaw) return raw;

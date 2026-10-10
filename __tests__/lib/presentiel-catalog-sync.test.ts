@@ -137,8 +137,8 @@ describe('Catalogue présentiel (site = admin = CSV)', () => {
 });
 
 describe('Tarifs catalogue (affichage)', () => {
-  it('affiche 799 € pour le Tajwid Intensif', () => {
-    expect(PROGRAMS_DATA.tajwid_intensif.price).toBe('799 €');
+  it('affiche 649 € pour le Tajwid Intensif', () => {
+    expect(PROGRAMS_DATA.tajwid_intensif.price).toBe('649 €');
   });
 
   it('ne confond pas le Tajwid Intensif avec les autres formations à 649 €', () => {

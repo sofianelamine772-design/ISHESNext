@@ -767,7 +767,7 @@ export async function createStudentManualAction(data: {
     if (data.payment_status === 'a_jour' && newStudent?.id) {
       const amount = parseFloat(data.amount_paid || '0') || 0;
       if (amount <= 0) {
-        return { success: false, error: "Indiquez le montant réellement payé (ex. 799 pour le Tajwid intensif)." };
+        return { success: false, error: "Indiquez le montant réellement payé (ex. 649 pour le Tajwid intensif)." };
       }
       const methodLabel = data.payment_method === 'liquide' ? 'Liquide' : 'Virement';
       await supabaseAdmin.from('paiements').insert({

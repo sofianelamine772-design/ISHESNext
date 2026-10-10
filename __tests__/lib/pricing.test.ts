@@ -190,6 +190,10 @@ describe('resolveBillingExpectedAmount', () => {
     expect(resolveBillingExpectedAmount(1197, 399)).toBe(399);
   });
 
+  it('garde l’ancien tarif d’une inscription déjà créée si le catalogue baisse', () => {
+    expect(resolveBillingExpectedAmount(799, 649)).toBe(799);
+  });
+
   it('utilise le catalogue si expected absent', () => {
     expect(resolveBillingExpectedAmount(null, 399)).toBe(399);
   });

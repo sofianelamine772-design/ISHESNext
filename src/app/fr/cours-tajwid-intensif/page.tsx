@@ -68,7 +68,7 @@ const INTENSIF_FAQS = [
   {
     question: "Quel est le tarif du Tajwid intensif ?",
     answer:
-      "799 € pour les 3 mois : deux cours par semaine, replays, corrections audio, Les Clés du Coran volumes 1 et 2, suivi et diplôme ISHES. Paiement en plusieurs fois, sans frais.",
+      "649 € pour les 3 mois : deux cours par semaine, replays, corrections audio, Les Clés du Coran volumes 1 et 2, suivi et diplôme ISHES. Paiement en plusieurs fois, sans frais.",
   },
   {
     question: "Le diplôme est-il remis à la fin ?",
@@ -102,7 +102,7 @@ export const metadata = buildPageMetadata({
 });
 
 export default function CoursTajwidIntensifPage() {
-  const price = PROGRAMS_DATA.tajwid_intensif?.price ?? "799 €";
+  const price = PROGRAMS_DATA.tajwid_intensif?.price ?? "649 €";
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans text-[#101828]">

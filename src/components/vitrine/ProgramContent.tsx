@@ -164,7 +164,7 @@ export const PROGRAMS: Program[] = [
       "Coach en direct + audio 24/24h",
       "Diplôme final"
     ],
-    price: "799 €",
+    price: "649 €",
     priceSub: "/ SESSION",
     isRecommended: true,
     type: "distanciel",

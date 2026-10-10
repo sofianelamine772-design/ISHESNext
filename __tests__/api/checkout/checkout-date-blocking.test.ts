@@ -103,7 +103,7 @@ describe('Checkout API - Présentiel Date Blocking Logic', () => {
     expect(json.error).toContain("Les inscriptions en présentiel sont fermées");
   });
 
-  it('devrait autoriser le Tajwid Intensif (distanciel 799 €) en février', async () => {
+  it('devrait autoriser le Tajwid Intensif (distanciel 649 €) en février', async () => {
     jest.useFakeTimers().setSystemTime(new Date('2026-02-15T12:00:00Z'));
 
     const req = new NextRequest('http://localhost:3000/api/checkout', {

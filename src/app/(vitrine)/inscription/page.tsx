@@ -214,7 +214,7 @@ function InscriptionForm() {
     }
 
     if (normalized === 'tarbiya_islamiya') return 249;
-    if (normalized === 'tajwid_intensif') return 799;
+    if (normalized === 'tajwid_intensif') return 649;
     if (normalized === 'sciences_du_coran') return 399;
     if (normalized === 'spiritualite_islam') return 399;
     if (normalized === 'al_aqida') return 250;

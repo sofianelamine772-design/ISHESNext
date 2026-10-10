@@ -195,7 +195,7 @@ export default function CoursPresentielPage() {
         "Replays disponibles et suivi rigoureux",
         "Support de formation inclus"
       ],
-      priceText: "799 € / session",
+      priceText: "649 € / session",
       cta: "S'inscrire au Tajwid Accéléré",
       target: "Élèves motivés sachant déjà lire l'arabe, ou débutants très investis prêts à s'engager sérieusement."
     },

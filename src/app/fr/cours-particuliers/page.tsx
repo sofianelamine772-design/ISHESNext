@@ -49,7 +49,7 @@ const FAQS = [
   {
     question: "Quelle est la différence avec le cours de Tajwid en groupe ?",
     answer:
-      "Le Tajwid standard (649 €) et le Tajwid intensif (799 €) suivent un calendrier fixé, avec d'autres élèves, les replays et Les Clés du Coran. Le cours particulier n'a pas d'horaire imposé : la séance est pour toi seul, le contenu change selon ce que tu dois travailler, et le prix est établi après un échange sur le rythme souhaité.",
+      "Le Tajwid standard et le Tajwid intensif sont à 649 €. Ils suivent un calendrier fixé, avec d'autres élèves, les replays et Les Clés du Coran. Le cours particulier n'a pas d'horaire imposé : la séance est pour toi seul, le contenu change selon ce que tu dois travailler, et le prix est établi après un échange sur le rythme souhaité.",
   },
   {
     question: "Comment obtenir un devis pour des cours particuliers ?",
@@ -421,7 +421,7 @@ export default function CoursParticuliersPage() {
               {
                 href: "/fr/cours-tajwid-intensif",
                 title: "Tajwid intensif",
-                text: "3 mois, mardi et vendredi à 19h30, corrections audio, 799 €. Le même support, un calendrier serré.",
+                text: "3 mois, mardi et vendredi à 19h30, corrections audio, 649 €. Le même support, un calendrier serré.",
               },
               {
                 href: "/fr/cours-memoriser-coran",
