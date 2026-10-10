@@ -17,8 +17,8 @@ const navLinks: NavLink[] = [
   { name: "Nos formations", href: "/program" },
   { name: "Devenir enseignant", href: "/formation-enseignant" },
   { name: "Pack accompagnement", href: "/pack-accompagnement" },
-  { name: "Boutique", href: "/boutique" },
-  { name: "Contact", href: "/contact" },
+  { name: "Boutique", href: "/fr/boutique" },
+  { name: "Contact", href: "/fr/contact" },
 ];
 
 export function Navbar() {

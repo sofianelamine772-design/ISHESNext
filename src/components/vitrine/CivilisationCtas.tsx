@@ -13,7 +13,7 @@ export function CivilisationCtas({ className = "" }: { className?: string }) {
         <ArrowRight className="w-5 h-5" />
       </Link>
       <Link
-        href="/contact"
+        href="/fr/contact"
         className="inline-flex items-center justify-center gap-2 bg-ishes-blue hover:bg-[#007044] text-white font-black px-6 py-4 rounded-2xl transition-all"
       >
         <MessageCircle className="w-5 h-5" />

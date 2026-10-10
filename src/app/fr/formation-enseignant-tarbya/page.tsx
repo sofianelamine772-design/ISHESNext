@@ -304,7 +304,7 @@ export default function FormationEnseignantTarbyaPage() {
               devenir enseignant certifié
             </Link>
             . Un{" "}
-            <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+            <Link href="/fr/contact" className="text-ishes-blue font-bold hover:underline">
               entretien gratuit
             </Link>{" "}
             permet d&apos;obtenir un devis.

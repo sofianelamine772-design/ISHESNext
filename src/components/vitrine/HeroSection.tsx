@@ -66,7 +66,7 @@ export function HeroSection() {
                 Découvrir nos formations 
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/contact" className="bg-white text-ishes-blue border border-ishes-blue/15 px-10 py-5 rounded-2xl text-lg font-black flex items-center justify-center gap-3 hover:bg-[#f9f5f0] transition-all shadow-lg hover:-translate-y-1">
+              <Link href="/fr/contact" className="bg-white text-ishes-blue border border-ishes-blue/15 px-10 py-5 rounded-2xl text-lg font-black flex items-center justify-center gap-3 hover:bg-[#f9f5f0] transition-all shadow-lg hover:-translate-y-1">
                 Entretien gratuit
               </Link>
             </div>

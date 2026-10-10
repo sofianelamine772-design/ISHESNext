@@ -270,7 +270,7 @@ export default function CGVPage() {
             <p className="text-xs text-gray-400 font-medium leading-relaxed mb-4">
               Notre équipe d'assistance administrative est à votre disposition pour vous éclairer sur le règlement ou les facilités de paiement.
             </p>
-            <a href="/contact" className="inline-flex items-center gap-2 bg-ishes-blue text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#007044] transition-all">
+            <a href="/fr/contact" className="inline-flex items-center gap-2 bg-ishes-blue text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#007044] transition-all">
               Nous contacter
             </a>
           </div>

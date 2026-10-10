@@ -145,7 +145,7 @@ export function FormationEnseignantHero() {
             sans engagement.
           </p>
           <Link
-            href="/contact"
+            href="/fr/contact"
             className="inline-flex bg-ishes-blue text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#007044] transition-all hover:shadow-xl shadow-ishes-blue/20 hover:-translate-y-1"
           >
             Entretien gratuit

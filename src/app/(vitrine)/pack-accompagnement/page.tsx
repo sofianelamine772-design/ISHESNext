@@ -142,7 +142,7 @@ export default function PackAccompagnementPage() {
                 Tajwid
               </Link>
               . Une question ?{" "}
-              <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+              <Link href="/fr/contact" className="text-ishes-blue font-bold hover:underline">
                 Contact WhatsApp gratuit
               </Link>
               .

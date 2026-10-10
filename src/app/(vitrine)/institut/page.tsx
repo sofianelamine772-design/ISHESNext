@@ -441,7 +441,7 @@ export default function InstitutPage() {
                    >
                       Lancer l'itinéraire <MapPin className="w-4 h-4 text-white" />
                    </a>
-                   <Link href="/contact" className="bg-white/10 backdrop-blur-md border border-white/10 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/20 transition-all flex items-center justify-center">
+                   <Link href="/fr/contact" className="bg-white/10 backdrop-blur-md border border-white/10 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/20 transition-all flex items-center justify-center">
                       Réserver une visite
                    </Link>
                 </div>

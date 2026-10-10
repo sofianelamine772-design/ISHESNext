@@ -1,8 +1,7 @@
 export const dynamic = 'force-static';
 
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Heart, ShieldCheck, Users, Sparkles, BookHeart, Gift, BookOpen, Video } from "lucide-react";
+import { ArrowRight, Gift } from "lucide-react";
 import { HeroSection } from "@/components/vitrine/HeroSection";
 import { StatsSection } from "@/components/vitrine/StatsSection";
 import { SocialSection } from "@/components/vitrine/SocialSection";
@@ -14,6 +13,54 @@ import { buildPageMetadata, faqJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import { INSTITUT_CONTACT_FAQS } from "@/lib/institut-contact";
+
+function CursusCardArt({
+  src,
+  alt,
+  tone,
+}: {
+  src: string;
+  alt: string;
+  tone: "blue" | "green" | "gold" | "violet";
+}) {
+  const wash = {
+    blue: "from-[#1e3a5f]/35 via-transparent to-[#0f2924]/40",
+    green: "from-[#0f2924]/30 via-transparent to-[#1a3d32]/40",
+    gold: "from-[#c8a063]/25 via-transparent to-[#8a6a32]/35",
+    violet: "from-[#3d2a4d]/30 via-transparent to-[#1e1530]/40",
+  }[tone];
+
+  return (
+    <div className="w-full h-28 rounded-xl mb-3 relative overflow-hidden bg-[#0f2924]">
+      <img
+        src={src}
+        alt={alt}
+        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+      />
+      <div className={`absolute inset-0 bg-gradient-to-br ${wash}`} />
+      <svg
+        className="absolute inset-0 w-full h-full opacity-40 mix-blend-overlay pointer-events-none"
+        viewBox="0 0 200 100"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden
+      >
+        <defs>
+          <pattern id={`star-${tone}`} width="28" height="28" patternUnits="userSpaceOnUse">
+            <path
+              d="M14 2 L16.5 9.5 L24 10 L18 15 L20 23 L14 18.5 L8 23 L10 15 L4 10 L11.5 9.5 Z"
+              fill="none"
+              stroke="white"
+              strokeWidth="0.6"
+            />
+            <circle cx="14" cy="14" r="2.2" fill="none" stroke="white" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="200" height="100" fill={`url(#star-${tone})`} />
+      </svg>
+      <div className="absolute bottom-0 inset-x-0 h-6 bg-gradient-to-t from-white to-transparent" />
+    </div>
+  );
+}
 
 const HOME_FAQS = [
   ...INSTITUT_CONTACT_FAQS,
@@ -95,89 +142,100 @@ export default function Home() {
       <NewHomeSections />
 
       {/* ===== NOS PROGRAMMES PHARES (FLOATING CARDS) ===== */}
-      <section className="py-24 px-6 bg-gradient-to-br from-ishes-blue to-[#112521] text-white relative overflow-hidden">
+      <section className="py-12 md:py-16 px-6 bg-gradient-to-br from-ishes-blue to-[#112521] text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full md:w-[800px] h-full bg-[#152233] rounded-l-full -z-10 translate-x-1/3 blur-3xl opacity-50"></div>
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-14 items-center">
           
-          <div className="flex-1 space-y-8 z-10">
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">Nos cursus<br/><span className="text-ishes-gold">d'excellence</span></h2>
-            <p className="text-lg text-gray-300 font-medium max-w-lg leading-relaxed">
-              Découvrez nos programmes structurés pour vous accompagner dans votre cheminement. Chaque cursus est pensé pour vous offrir les clés fondamentales de votre religion.
+          <div className="flex-1 space-y-5 z-10">
+            <h2 className="text-3xl md:text-4xl font-black text-white leading-tight">Nos cursus<br/><span className="text-ishes-gold">d&apos;excellence</span></h2>
+            <p className="text-base text-gray-300 font-medium max-w-lg leading-relaxed">
+              À l&apos;Institut ISHES, apprenez l&apos;islam en français : <strong className="text-white">cours d&apos;arabe</strong>, <strong className="text-white">Tajwid</strong> et lecture du Coran, <strong className="text-white">Fiqh mâlikite</strong> et <strong className="text-white">Tarbiya islamique</strong>. Formations en ligne (Zoom, replays) et en présentiel à Toulouse, avec un enseignant et un suivi réel.
             </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Link href="/fr/cours-fiqh-malikite" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full text-sm font-bold transition-all border border-white/20 hover:border-ishes-gold">
+            <p className="text-sm text-gray-400 font-medium max-w-lg leading-relaxed">
+              Chaque programme est progressif : des bases jusqu&apos;à une pratique plus sûre — récitation, adorations selon l&apos;école de l&apos;imam Mâlik, langue du Coran et éducation spirituelle.
+            </p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <Link href="/fr/cours-fiqh-malikite" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-xs font-bold transition-all border border-white/20 hover:border-ishes-gold">
                 Fiqh Mâlikite
               </Link>
-              <Link href="/fr/cours-lecture-tajwid" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full text-sm font-bold transition-all border border-white/20 hover:border-ishes-gold">
+              <Link href="/fr/cours-lecture-tajwid" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-xs font-bold transition-all border border-white/20 hover:border-ishes-gold">
                 Lecture & Tajwid
               </Link>
-              <Link href="/fr/formation-tarbya-islamya" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full text-sm font-bold transition-all border border-white/20 hover:border-ishes-gold">
+              <Link href="/fr/formation-tarbya-islamya" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-xs font-bold transition-all border border-white/20 hover:border-ishes-gold">
                 Tarbya Islamya
               </Link>
-              <Link href="/fr/cours-arabe-adulte" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full text-sm font-bold transition-all border border-white/20 hover:border-ishes-gold">
+              <Link href="/fr/cours-arabe-adulte" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-xs font-bold transition-all border border-white/20 hover:border-ishes-gold">
                 Langue Arabe
               </Link>
             </div>
-            <div className="pt-6">
-              <Link href="/inscription" className="inline-flex items-center gap-2 text-ishes-gold font-bold hover:underline">
-                Voir toutes les modalités d'inscription <ArrowRight className="w-4 h-4" />
+            <div className="pt-2">
+              <Link href="/inscription" className="inline-flex items-center gap-2 text-ishes-gold font-bold text-sm hover:underline">
+                Voir toutes les modalités d&apos;inscription <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
 
-          <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10 pb-16 sm:pb-0">
+          <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10 pb-8 sm:pb-0">
              {/* Card 1: Fiqh */}
-             <Link href="/fr/cours-fiqh-malikite" className="bg-white rounded-2xl shadow-2xl transform -rotate-3 hover:-translate-y-4 hover:-rotate-1 hover:shadow-[0_20px_50px_rgba(198,168,116,0.3)] transition-all duration-300 p-6 flex flex-col group border border-gray-100 z-20">
-                <div className="w-full h-24 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl mb-6 relative overflow-hidden">
-                  <BookHeart className="absolute bottom-[-10px] right-[-10px] w-16 h-16 text-blue-200 opacity-50" />
-                </div>
-                <h3 className="text-xl font-black text-ishes-blue mb-2 group-hover:text-ishes-gold transition-colors">Fiqh Mâlikite</h3>
-                <p className="text-sm text-gray-500 font-medium">Comprendre les règles de tes adorations (Prière, Zakat, Jeûne...)</p>
-                <div className="mt-auto pt-6 flex justify-end">
-                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
-                    <ArrowRight className="w-5 h-5" />
+             <Link href="/fr/cours-fiqh-malikite" className="bg-white rounded-2xl shadow-xl transform -rotate-2 hover:-translate-y-2 hover:-rotate-1 hover:shadow-[0_16px_40px_rgba(198,168,116,0.28)] transition-all duration-300 p-4 flex flex-col group border border-gray-100 z-20">
+                <CursusCardArt
+                  src="/images/formations/fiqh-distance-1.png"
+                  alt="Cours de Fiqh mâlikite — Institut ISHES"
+                  tone="blue"
+                />
+                <h3 className="text-base font-black text-ishes-blue mb-1 group-hover:text-ishes-gold transition-colors">Fiqh Mâlikite</h3>
+                <p className="text-xs text-gray-500 font-medium leading-snug">Comprendre les règles de tes adorations (Prière, Zakat, Jeûne...)</p>
+                <div className="mt-auto pt-3 flex justify-end">
+                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
              </Link>
 
              {/* Card 2: Tajwid */}
-             <Link href="/fr/cours-lecture-tajwid" className="bg-white rounded-2xl shadow-2xl transform rotate-3 hover:-translate-y-4 hover:rotate-1 hover:shadow-[0_20px_50px_rgba(198,168,116,0.3)] transition-all duration-300 p-6 flex flex-col group border border-gray-100 z-10 sm:translate-y-12">
-                <div className="w-full h-24 bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl mb-6 relative overflow-hidden">
-                  <Sparkles className="absolute bottom-[-10px] right-[-10px] w-16 h-16 text-green-200 opacity-50" />
-                </div>
-                <h3 className="text-xl font-black text-ishes-blue mb-2 group-hover:text-ishes-gold transition-colors">Lecture & Tajwid</h3>
-                <p className="text-sm text-gray-500 font-medium">Apprendre à lire le Saint Coran avec perfection et éloquence.</p>
-                <div className="mt-auto pt-6 flex justify-end">
-                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
-                    <ArrowRight className="w-5 h-5" />
+             <Link href="/fr/cours-lecture-tajwid" className="bg-white rounded-2xl shadow-xl transform rotate-2 hover:-translate-y-2 hover:rotate-1 hover:shadow-[0_16px_40px_rgba(198,168,116,0.28)] transition-all duration-300 p-4 flex flex-col group border border-gray-100 z-10 sm:translate-y-6">
+                <CursusCardArt
+                  src="/images/formations/tajwid-standar-1.jpg"
+                  alt="Cours de lecture et Tajwid — Institut ISHES"
+                  tone="green"
+                />
+                <h3 className="text-base font-black text-ishes-blue mb-1 group-hover:text-ishes-gold transition-colors">Lecture & Tajwid</h3>
+                <p className="text-xs text-gray-500 font-medium leading-snug">Apprendre à lire le Saint Coran avec perfection et éloquence.</p>
+                <div className="mt-auto pt-3 flex justify-end">
+                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
              </Link>
 
              {/* Card 3: Tarbya */}
-             <Link href="/fr/formation-tarbya-islamya" className="bg-white rounded-2xl shadow-2xl transform rotate-2 hover:-translate-y-4 hover:rotate-0 hover:shadow-[0_20px_50px_rgba(198,168,116,0.3)] transition-all duration-300 p-6 flex flex-col group border-t-4 border-ishes-gold z-30">
-                <div className="w-full h-24 bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl mb-6 relative overflow-hidden">
-                  <ShieldCheck className="absolute bottom-[-10px] right-[-10px] w-16 h-16 text-amber-200 opacity-50" />
-                </div>
-                <h3 className="text-xl font-black text-ishes-blue mb-2 group-hover:text-ishes-gold transition-colors">Tarbya Islamya</h3>
-                <p className="text-sm text-gray-500 font-medium">Éducation spirituelle, purification de l'âme et bon comportement.</p>
-                <div className="mt-auto pt-6 flex justify-end">
-                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
-                    <ArrowRight className="w-5 h-5" />
+             <Link href="/fr/formation-tarbya-islamya" className="bg-white rounded-2xl shadow-xl transform rotate-1 hover:-translate-y-2 hover:rotate-0 hover:shadow-[0_16px_40px_rgba(198,168,116,0.28)] transition-all duration-300 p-4 flex flex-col group border-t-4 border-ishes-gold z-30">
+                <CursusCardArt
+                  src="/images/formations/tarbya-islamya-distance-1.jpg"
+                  alt="Formation Tarbya Islamya — Institut ISHES"
+                  tone="gold"
+                />
+                <h3 className="text-base font-black text-ishes-blue mb-1 group-hover:text-ishes-gold transition-colors">Tarbya Islamya</h3>
+                <p className="text-xs text-gray-500 font-medium leading-snug">Éducation spirituelle, purification de l&apos;âme et bon comportement.</p>
+                <div className="mt-auto pt-3 flex justify-end">
+                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
              </Link>
 
              {/* Card 4: Langue Arabe */}
-             <Link href="/fr/cours-arabe-adulte" className="bg-white rounded-2xl shadow-2xl transform -rotate-2 hover:-translate-y-4 hover:-rotate-1 hover:shadow-[0_20px_50px_rgba(198,168,116,0.3)] transition-all duration-300 p-6 flex flex-col group border border-gray-100 z-20 sm:translate-y-12">
-                <div className="w-full h-24 bg-gradient-to-r from-purple-50 to-fuchsia-100 rounded-xl mb-6 relative overflow-hidden">
-                  <BookOpen className="absolute bottom-[-10px] right-[-10px] w-16 h-16 text-purple-200 opacity-50" />
-                </div>
-                <h3 className="text-xl font-black text-ishes-blue mb-2 group-hover:text-ishes-gold transition-colors">Langue Arabe</h3>
-                <p className="text-sm text-gray-500 font-medium">Maîtriser la langue du Coran : lecture, écriture et expression.</p>
-                <div className="mt-auto pt-6 flex justify-end">
-                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
-                    <ArrowRight className="w-5 h-5" />
+             <Link href="/fr/cours-arabe-adulte" className="bg-white rounded-2xl shadow-xl transform -rotate-1 hover:-translate-y-2 hover:-rotate-1 hover:shadow-[0_16px_40px_rgba(198,168,116,0.28)] transition-all duration-300 p-4 flex flex-col group border border-gray-100 z-20 sm:translate-y-6">
+                <CursusCardArt
+                  src="/images/formations/arabe-ditanvce-1.png"
+                  alt="Cours de langue arabe — Institut ISHES"
+                  tone="violet"
+                />
+                <h3 className="text-base font-black text-ishes-blue mb-1 group-hover:text-ishes-gold transition-colors">Langue Arabe</h3>
+                <p className="text-xs text-gray-500 font-medium leading-snug">Maîtriser la langue du Coran : lecture, écriture et expression.</p>
+                <div className="mt-auto pt-3 flex justify-end">
+                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-ishes-gold group-hover:text-white text-gray-400 transition-colors">
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
              </Link>

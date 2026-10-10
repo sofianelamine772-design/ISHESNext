@@ -23,6 +23,10 @@ import {
   XCircle,
   ArrowRight,
   Star,
+  Eye,
+  Target,
+  Lightbulb,
+  GraduationCap,
 } from "lucide-react";
 
 const INSCRIPTION_HREF = "/inscription?plan=tajwid_standard&audience=adulte";
@@ -30,54 +34,74 @@ const INSCRIPTION_HREF = "/inscription?plan=tajwid_standard&audience=adulte";
 export function TajwidStandardView() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans text-[#101828]">
-      {/* ----------------- HERO SECTION ----------------- */}
-      <section className="relative w-full overflow-hidden bg-[#fafafa] pt-32 pb-16 lg:pb-24 border-b border-gray-100">
-        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full z-0">
-          <div className="absolute inset-y-0 left-0 w-full sm:w-1/2 bg-gradient-to-r from-[#fafafa] via-[#fafafa]/80 to-transparent z-10" />
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#fafafa] to-transparent z-10 lg:hidden" />
-          <Image
-            src="/images/quran-coffee.png"
-            alt="Cours de Tajwid en ligne — apprendre à lire le Coran"
-            fill
-            className="object-cover object-center lg:object-left opacity-30 lg:opacity-100"
-            priority
-          />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 z-10">
-          <div className="max-w-2xl relative pt-10">
-            <div className="font-black tracking-widest text-xs uppercase mb-6 text-ishes-gold">
-              Cours de Tajwid en ligne
+      {/* ----------------- HERO (landing visuel) ----------------- */}
+      <section className="relative w-full overflow-hidden bg-white pt-28 pb-12 lg:pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div>
+              <p className="font-black tracking-[0.22em] text-[11px] uppercase mb-5 text-ishes-gold">
+                Formation en ligne
+              </p>
+              <h1 className="ishes-heading text-[36px] sm:text-5xl md:text-[52px] font-black text-ishes-blue leading-[1.12] tracking-tight mb-6">
+                Apprends à lire le Coran{" "}
+                <span className="text-ishes-gold">avec justesse, méthode et compréhension</span>
+              </h1>
+              <p className="text-lg text-gray-600 font-medium max-w-xl leading-relaxed">
+                Un parcours complet, accessible à tous, même si tu pars de zéro. Découvre la
+                beauté des lettres arabes, apprends à lire le Coran pas à pas et applique les
+                règles du Tajwid, dans un cadre bienveillant et structuré, avec un enseignant
+                qualifié.
+              </p>
             </div>
-            <h1 className="ishes-heading text-[40px] sm:text-5xl md:text-[56px] font-black text-ishes-blue leading-[1.1] tracking-tight mb-6">
-              Apprends à lire le Coran{" "}
-              <span className="text-ishes-gold">avec justesse, méthode et compréhension</span>
-            </h1>
-            <p className="text-lg text-gray-600 font-medium max-w-xl leading-relaxed mb-8">
-              Un parcours progressif pour apprendre les bases de la lecture, comprendre les règles
-              du Tajwid et les appliquer dans le Moushaf, accompagné par un enseignant.
-            </p>
-            <Link
-              href={INSCRIPTION_HREF}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#c8a063] hover:bg-[#b08b54] text-white font-black text-sm uppercase tracking-wider rounded-xl shadow-xl shadow-[#c8a063]/30 transition-all transform hover:scale-105 active:scale-95"
-            >
-              Je découvre le programme et je m&apos;inscris <ArrowRight className="w-5 h-5" />
-            </Link>
+            <div className="relative min-h-[280px] sm:min-h-[340px]">
+              <blockquote className="absolute top-0 right-0 max-w-xs bg-[#f7f1e6] border border-[#e6d5b8]/50 rounded-2xl p-5 shadow-sm z-20 hidden sm:block">
+                <p className="text-sm font-medium text-ishes-blue leading-relaxed italic">
+                  « Une lecture correcte du Coran est une adoration, une marque de respect et un
+                  lien direct avec la parole d&apos;ALLAH. »
+                </p>
+              </blockquote>
+              <div className="relative mx-auto w-[220px] sm:w-[240px] mt-8 sm:mt-16">
+                <div className="absolute -left-16 top-8 w-[180px] sm:w-[200px] rotate-[-8deg] drop-shadow-2xl">
+                  <Image
+                    src="/images/livre-ishes.png"
+                    alt="Les Clés du Coran — Volume 1, support Tajwid ISHES"
+                    width={400}
+                    height={560}
+                    className="w-full h-auto rounded-md"
+                    priority
+                  />
+                  <span className="absolute bottom-3 left-3 bg-ishes-blue text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded">
+                    Volume 1
+                  </span>
+                </div>
+                <div className="relative z-10 rotate-[6deg] drop-shadow-2xl">
+                  <Image
+                    src="/images/livre-ishes.png"
+                    alt="Les Clés du Coran — Volume 2, support Tajwid ISHES"
+                    width={400}
+                    height={560}
+                    className="w-full h-auto rounded-md"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          <dl className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl">
+          <dl className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
-              { label: "Format", value: "En ligne — cours en direct" },
-              { label: "Parcours", value: "Progressif sur l'année" },
-              { label: "Support", value: "Les Clés du Coran — Vol. 1 & 2" },
-              { label: "Replays", value: "Accessibles" },
-              { label: "Public", value: "Adultes, y compris débutants" },
-              { label: "Tarif", value: "649 €" },
+              { icon: Calendar, label: "Cursus", value: "Sur deux années scolaires" },
+              { icon: Monitor, label: "Format", value: "En ligne, en direct" },
+              { icon: Clock, label: "Rythme", value: "1h par semaine" },
+              { icon: Users, label: "Public", value: "Adultes (hommes et femmes) Débutants acceptés" },
+              { icon: Play, label: "Replays", value: "Inclus et illimités" },
+              { icon: Award, label: "Diplôme", value: "Remis en fin de formation" },
             ].map((item) => (
               <div
                 key={item.label}
-                className="bg-white/90 backdrop-blur-sm border border-[#e6d5b8]/40 rounded-2xl p-4 shadow-sm"
+                className="bg-[#faf8f4] border border-[#e6d5b8]/40 rounded-2xl p-4 shadow-sm"
               >
+                <item.icon className="w-5 h-5 text-[#c8a063] mb-2" />
                 <dt className="text-[10px] font-black uppercase tracking-widest text-[#c8a063] mb-1">
                   {item.label}
                 </dt>
@@ -85,10 +109,232 @@ export function TajwidStandardView() {
               </div>
             ))}
           </dl>
+
+          <div className="mt-8">
+            <Link
+              href={INSCRIPTION_HREF}
+              className="inline-flex items-center gap-3 px-8 py-4 bg-[#c8a063] hover:bg-[#b08b54] text-white font-black text-sm rounded-xl shadow-xl shadow-[#c8a063]/30 transition-all"
+            >
+              Je m&apos;inscris à la première année de Tajwid <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ----------------- MAIN LAYOUT (Content + Sidebar) ----------------- */}
+      <section className="py-16 px-4 sm:px-6 bg-[#fafafa] border-y border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-black text-ishes-blue text-center mb-10">
+            Cette formation est faite pour toi si…
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { icon: Eye, text: "Tu veux apprendre à lire le Coran depuis les toutes premières lettres." },
+              { icon: Heart, text: "Tu n'as jamais étudié le Tajwid ou tu souhaites reprendre sur des bases solides." },
+              { icon: Target, text: "Tu veux lire avec justesse et confiance, à ton rythme." },
+              { icon: Lightbulb, text: "Tu ressens le besoin de te rapprocher du Coran et de vivre une relation plus forte avec la parole d'ALLAH." },
+              { icon: GraduationCap, text: "Tu souhaites un accompagnement bienveillant, par un enseignant qualifié." },
+            ].map((item) => (
+              <div key={item.text} className="bg-white border border-[#e6d5b8]/40 rounded-2xl p-5 text-center shadow-sm">
+                <div className="w-12 h-12 rounded-full border border-[#e6d5b8] flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="w-6 h-6 text-[#c8a063]" />
+                </div>
+                <p className="text-xs font-bold text-gray-700 leading-snug">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-4 sm:px-6 bg-white">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-5">
+              Pourquoi apprendre le Tajwid ?
+            </h2>
+            <p className="text-gray-600 font-medium leading-relaxed mb-8">
+              Lire le Coran comme il a été révélé, en donnant à chaque lettre son droit, est une
+              adoration, une préservation de la parole d&apos;ALLAH et une source de récompenses
+              immenses. Le Tajwid t&apos;aide à lire de manière juste, fluide et respectueuse, en
+              comprenant ce que tu lis et en vivant pleinement la récitation.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                "Une lecture plus belle",
+                "Une meilleure compréhension",
+                "Une adoration plus complète",
+                "Un lien plus fort avec le Coran",
+              ].map((label) => (
+                <div key={label} className="bg-[#faf8f4] border border-[#e6d5b8]/40 rounded-xl px-4 py-3 text-sm font-bold text-ishes-blue text-center">
+                  {label}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+              <Image
+                src="/images/quran-coffee.png"
+                alt="Moushaf ouvert — apprendre à lire le Coran avec le Tajwid"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+            <blockquote className="absolute -bottom-6 left-6 right-6 sm:left-auto sm:right-6 sm:w-72 bg-white rounded-2xl p-5 shadow-xl border border-[#e6d5b8]/40">
+              <p className="text-sm font-medium text-ishes-blue leading-relaxed">
+                « Chaque lettre du Coran lue correctement est une lumière dans ta vie. »
+              </p>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 sm:px-6 bg-[#fafafa] mt-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-black text-ishes-blue text-center mb-3">
+            Un cursus en deux années scolaires, inchaAllah
+          </h2>
+          <p className="text-center text-gray-600 font-medium max-w-2xl mx-auto mb-12">
+            Une progression claire et structurée, pour t&apos;accompagner jusqu&apos;à
+            l&apos;application des règles de Tajwid.
+          </p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <article className="bg-white border border-[#e6d5b8]/40 rounded-3xl p-8 shadow-sm">
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-widest text-[#c8a063] mb-1">1</p>
+                  <h3 className="text-lg font-black text-ishes-blue">
+                    Première année — les bases de la lecture
+                  </h3>
+                  <p className="text-sm text-gray-500 font-medium mt-1">Les Clés du Coran, Volume 1</p>
+                </div>
+                <Image src="/images/livre-ishes.png" alt="Les Clés du Coran Volume 1" width={72} height={100} className="w-16 h-auto rounded shadow-md shrink-0" />
+              </div>
+              <ul className="space-y-2.5 text-sm font-medium text-gray-700">
+                {[
+                  "Découverte de l'alphabet arabe (lettres, formes, sons)",
+                  "Voyelles et Harakat",
+                  "Lecture de mots et de phrases simples",
+                  "Madd (allongements) et premières règles",
+                  "Lecture de passages coraniques courts",
+                  "Exercices progressifs et mises en pratique",
+                  "Corrections et suivi par l'enseignant",
+                ].map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-[#c8a063] shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </article>
+            <article className="bg-white border border-[#e6d5b8]/40 rounded-3xl p-8 shadow-sm">
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-widest text-[#c8a063] mb-1">2</p>
+                  <h3 className="text-lg font-black text-ishes-blue">
+                    Deuxième année — les règles du Tajwid
+                  </h3>
+                  <p className="text-sm text-gray-500 font-medium mt-1">Les Clés du Coran, Volume 2</p>
+                </div>
+                <Image src="/images/livre-ishes.png" alt="Les Clés du Coran Volume 2" width={72} height={100} className="w-16 h-auto rounded shadow-md shrink-0" />
+              </div>
+              <ul className="space-y-2.5 text-sm font-medium text-gray-700">
+                {[
+                  "Application des règles du Tajwid",
+                  "Règles essentielles : idgham, iqlab, ikhfa…",
+                  "Règles de prolongement (moudoud)",
+                  "Lecture fluide dans le Moushaf",
+                  "Lecture de sourates choisies",
+                  "Perfectionnement de la récitation",
+                  "Corrections régulières et suivi personnalisé",
+                ].map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-[#c8a063] shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
+        <Image
+          src="/images/ai_medina.png"
+          alt="Mosquée au coucher du soleil — commencer le Tajwid"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-[#101828]/55" />
+        <div className="relative max-w-3xl mx-auto text-center z-10">
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+            Commence dès maintenant ton apprentissage du Tajwid
+          </h2>
+          <p className="text-white/85 font-medium mb-8 leading-relaxed">
+            Rejoins la première année et fais le premier pas vers une lecture du Coran juste,
+            confiante et pleine de sens.
+          </p>
+          <Link
+            href={INSCRIPTION_HREF}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-[#c8a063] hover:bg-[#b08b54] text-white font-black text-sm rounded-xl shadow-xl"
+          >
+            Je m&apos;inscris à la première année de Tajwid <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </section>
+
+      <section className="py-16 px-4 sm:px-6 bg-white">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-black text-ishes-blue mb-4">
+              Le support de la formation : Les Clés du Coran
+            </h2>
+            <p className="text-gray-600 font-medium leading-relaxed mb-4">
+              Un support en deux volumes, inspiré de la méthode Nour Al Bayan, spécialement adapté
+              aux francophones pour apprendre pas à pas la lecture du Coran, avec les règles du
+              Tajwid.
+            </p>
+            <p className="text-sm font-bold text-ishes-blue mb-6 leading-relaxed">
+              Un poème didactique unique en langue française accompagne le Volume 2 : il aide à
+              mémoriser les règles du Tajwid. « Le Coran est une porte vers ALLAH, le Tajwid en
+              est la clé. »
+            </p>
+            <Link href="/fr/les-cles-du-coran" className="inline-flex items-center gap-2 text-[#c8a063] font-black text-sm hover:underline">
+              Découvrir le support en détail <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="flex justify-center gap-4">
+            <Image src="/images/livre-ishes.png" alt="Les Clés du Coran Volume 1" width={220} height={308} className="w-40 sm:w-52 h-auto rounded-lg shadow-xl -rotate-6" />
+            <Image src="/images/livre-ishes.png" alt="Les Clés du Coran Volume 2" width={220} height={308} className="w-40 sm:w-52 h-auto rounded-lg shadow-xl rotate-6 mt-8" />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 px-4 sm:px-6 bg-[#fafafa] border-y border-gray-100">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-2xl font-black text-ishes-blue mb-3">Un accompagnement personnalisé</h2>
+          <p className="text-gray-600 font-medium max-w-3xl mx-auto mb-8 leading-relaxed">
+            Tu avances avec un enseignant qualifié, tu poses tes questions, tu récites, tu es
+            corrigé et tu bénéficies d&apos;un suivi tout au long de la formation. Rejoins une
+            classe bienveillante et motivante.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { icon: CheckCircle2, t: "Corrections personnalisées" },
+              { icon: Target, t: "Suivi de ta progression" },
+              { icon: Users, t: "Une communauté qui te soutient" },
+            ].map((item) => (
+              <div key={item.t} className="bg-white border border-[#e6d5b8]/40 rounded-2xl p-5 flex items-center justify-center gap-3">
+                <item.icon className="w-5 h-5 text-[#c8a063]" />
+                <span className="text-sm font-bold text-ishes-blue">{item.t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------- PROGRAMME DÉTAILLÉ + SIDEBAR ----------------- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex flex-col lg:flex-row gap-16 relative">
         {/* --- LEFT COLUMN : CONTENT --- */}
         <div className="flex-1 w-full max-w-3xl space-y-24">
@@ -219,7 +465,7 @@ export function TajwidStandardView() {
               </p>
               <p>
                 Le support{" "}
-                <Link href="/boutique" className="text-[#c8a063] font-bold underline underline-offset-2">
+                <Link href="/fr/boutique" className="text-[#c8a063] font-bold underline underline-offset-2">
                   Les Clés du Coran
                 </Link>{" "}
                 est une adaptation francophone inspirée de la méthode Nour Al Bayan. Il sert de
@@ -550,9 +796,9 @@ export function TajwidStandardView() {
 
       {/* ----------------- BOTTOM CTA BANNER ----------------- */}
       <section className="relative w-full bg-[#101828] py-24 lg:py-32 overflow-hidden mt-10">
-        <div className="absolute inset-0 opacity-10 mix-blend-overlay">
+        <div className="absolute inset-0 opacity-30 mix-blend-overlay">
           <Image
-            src="/images/quran-coffee.png"
+            src="/images/ai_medina.png"
             alt="Cours de Tajwid en ligne — lecture du Coran avec l'Institut ISHES"
             fill
             className="object-cover"

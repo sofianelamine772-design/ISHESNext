@@ -170,7 +170,7 @@ export default function FormationEnseignantPage() {
               responsables d&apos;associations, parents qui souhaitent transmettre le Coran à la maison : la
               formation diplômante ISHES est conçue pour professionnaliser la transmission. Deux cours par
               semaine en visio, replays, évaluations, devis et paiement échelonné. Pour démarrer, demandez un{" "}
-              <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+              <Link href="/fr/contact" className="text-ishes-blue font-bold hover:underline">
                 entretien gratuit
               </Link>{" "}
               ou consultez le{" "}

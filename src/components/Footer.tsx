@@ -14,7 +14,7 @@ export function Footer() {
           {/* Logo + réseaux */}
           <div className="col-span-2 lg:col-span-1 flex flex-col items-center lg:items-start text-center lg:text-left">
             <Link href="/" className="mb-4 sm:mb-6 inline-block transition-transform hover:scale-105 active:scale-95">
-              <img src="/logo.png" alt="Institut ISHES — logo officiel" className="h-24 md:h-32 w-auto object-contain" />
+              <img src="/logo.png" alt="Institut ISHES — logo officiel" width="128" height="128" className="h-24 md:h-32 w-auto object-contain" />
             </Link>
             <p className="text-gray-500 text-sm font-medium leading-relaxed mb-6">
               L'excellence de la langue arabe et des sciences islamiques à votre portée.
@@ -37,7 +37,7 @@ export function Footer() {
 
           {/* Coran & Langues */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Coran & Langues</h4>
+            <p className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Coran & Langues</p>
             <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link href="/fr/cours-lecture-tajwid" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Cours de Tajwid</Link>
@@ -64,7 +64,7 @@ export function Footer() {
 
           {/* Sciences Islamiques */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Sciences</h4>
+            <p className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Sciences</p>
             <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link href="/fr/cours-al-aqida" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Al-'Aqîda (Tahawiya)</Link>
@@ -91,7 +91,7 @@ export function Footer() {
 
           {/* Junior & Autres */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Cursus Spéciaux</h4>
+            <p className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">Cursus Spéciaux</p>
             <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link href="/fr/cours-arabe-enfant" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors block">Junior (4-15 ans)</Link>
@@ -118,18 +118,18 @@ export function Footer() {
 
           {/* Institut & Contact */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">L'Institut</h4>
+            <p className="font-bold text-gray-900 mb-5 text-[13px] uppercase tracking-widest">L'Institut</p>
             <ul className="space-y-2 sm:space-y-4 mb-8">
               <li><Link href="/institut" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">À propos</Link></li>
-              <li><Link href="/boutique" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Boutique</Link></li>
+              <li><Link href="/fr/boutique" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Boutique</Link></li>
               <li>
                 <Link href="/fr/fiches-pratiques" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Fiches pratiques</Link>
               </li>
               <li><Link href="/app/admin" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Espace Membre</Link></li>
-              <li><Link href="/contact" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Contact gratuit</Link></li>
+              <li><Link href="/fr/contact" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">Contact</Link></li>
               <li><Link href="/fr/rendez-vous" className="text-sm text-gray-500 font-bold hover:text-ishes-blue transition-colors">RDV Zoom 15 min</Link></li>
             </ul>
-            <h4 className="font-bold text-gray-900 mb-4 text-[11px] uppercase tracking-widest">Nous Trouver</h4>
+            <p className="font-bold text-gray-900 mb-4 text-[11px] uppercase tracking-widest">Nous Trouver</p>
             <ul className="space-y-3">
               <li className="flex gap-2 items-start">
                 <MapPin className="w-4 h-4 text-ishes-blue shrink-0 mt-0.5" />
@@ -157,7 +157,7 @@ export function Footer() {
 
         {/* SEO links */}
         <div className="mt-10 pt-10 border-t border-gray-100">
-          <h4 className="text-ishes-blue font-black text-xs uppercase tracking-[0.3em] mb-6">Enseignements &amp; Formations</h4>
+          <p className="text-ishes-blue font-black text-xs uppercase tracking-[0.3em] mb-6">Enseignements &amp; Formations</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-3">
             {[
               ["Accueil ISHES", "/fr/"],["Boutique", "/fr/boutique"],["Civilisation Arabo-Musulmane", "/fr/civilisation-arabo-musulmane"],
@@ -194,10 +194,10 @@ export function Footer() {
               Paiement 100% Sécurisé avec Stripe
             </span>
             <div className="flex items-center justify-center gap-4">
-              <img src="/visa-logo.png" alt="Paiement sécurisé par carte Visa" className="h-5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-              <img src="/mastercard-logo.png" alt="Paiement sécurisé par MasterCard" className="h-4.5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/visa-logo.png" alt="Paiement sécurisé par carte Visa" width="48" height="20" className="h-5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/mastercard-logo.png" alt="Paiement sécurisé par MasterCard" width="40" height="18" className="h-4.5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
               <div className="w-[1px] h-3.5 bg-gray-200"></div>
-              <img src="/stripe-logo.png" alt="Paiements sécurisés via Stripe" className="h-4 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src="/stripe-logo.png" alt="Paiements sécurisés via Stripe" width="48" height="16" className="h-4 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
             </div>
           </div>
 

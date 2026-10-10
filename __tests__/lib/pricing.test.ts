@@ -11,6 +11,7 @@ import {
   sumSucceededBillingPayments,
   sumSucceededPaymentsBySource,
   isTestStripePayment,
+  billingTotalsForStudent,
   SIBLING_DISCOUNT_EUR,
 } from '@/lib/pricing';
 
@@ -191,6 +192,26 @@ describe('resolveBillingExpectedAmount', () => {
 
   it('utilise le catalogue si expected absent', () => {
     expect(resolveBillingExpectedAmount(null, 399)).toBe(399);
+  });
+});
+
+describe('billingTotalsForStudent', () => {
+  it('ne cumule pas le présentiel des autres enfants du même e-mail', () => {
+    const totals = billingTotalsForStudent(
+      'stu_rm',
+      [
+        { studentId: 'stu_rm', expectedAmount: 799 },
+        { studentId: 'stu_enfant_1', expectedAmount: 480 },
+        { studentId: 'stu_enfant_2', expectedAmount: 480 },
+        { studentId: 'stu_enfant_3', expectedAmount: 480 },
+      ],
+      [
+        { etudiant_id: 'stu_rm', amount: 150, status: 'succeeded', stripe_session_id: 'manual_1' },
+      ],
+    );
+    expect(totals.totalExpected).toBe(799);
+    expect(totals.totalPaid).toBe(150);
+    expect(totals.resteAPayer).toBe(649);
   });
 });
 

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   // Toujours le domaine prod pour que Google résolve correctement les OG / canonical relatifs
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Arabe, Coran & Sciences Islamiques à Toulouse et en ligne`,
+    default: `ISHES — Arabe, Coran et sciences islamiques`,
     // Pas de suffixe auto : beaucoup de pages ont déjà « | ISHES » dans le titre
     template: "%s",
   },

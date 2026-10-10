@@ -59,7 +59,7 @@ export default function CoursAnglaisPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
-                  href="/contact" 
+                  href="/fr/contact" 
                   className="w-full sm:w-auto bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1 active:scale-95"
                 >
                   DEMANDER DES INFOS

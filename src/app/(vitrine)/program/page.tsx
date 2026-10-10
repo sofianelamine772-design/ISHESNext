@@ -377,7 +377,7 @@ export default function ProgrammesPage() {
                 </ol>
                 <p className="mt-4 text-white/80 font-medium">
                   Une question sur le niveau, le créneau ou l&apos;inscription d&apos;un enfant&nbsp;? Demandez un{" "}
-                  <Link href="/contact" className="text-ishes-gold font-bold underline underline-offset-2">
+                  <Link href="/fr/contact" className="text-ishes-gold font-bold underline underline-offset-2">
                     entretien gratuit
                   </Link>{" "}
                   : l&apos;équipe vous oriente vers le parcours adapté, sans engagement.
@@ -402,7 +402,7 @@ export default function ProgrammesPage() {
               institut présentiel
             </Link>
             , la{" "}
-            <Link href="/boutique" className="text-ishes-blue font-bold hover:underline">
+            <Link href="/fr/boutique" className="text-ishes-blue font-bold hover:underline">
               boutique de supports
             </Link>{" "}
             et le{" "}

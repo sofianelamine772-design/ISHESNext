@@ -60,6 +60,29 @@ export function resolveBillingExpectedAmount(
   return 0;
 }
 
+/** Totaux d’un élève, sans cumuler le reste de la famille (même e-mail). */
+export function billingTotalsForStudent<
+  TIns extends { studentId?: string; etudiant_id?: string; expectedAmount?: number },
+  TPay extends { etudiant_id?: string | null; amount?: number; status?: string | null; stripe_session_id?: string | null },
+>(
+  studentId: string,
+  inscriptions: TIns[],
+  payments: TPay[],
+): { totalExpected: number; totalPaid: number; resteAPayer: number } {
+  const totalExpected = (inscriptions || []).reduce((sum, ins) => {
+    const id = ins.studentId || ins.etudiant_id;
+    if (id !== studentId) return sum;
+    return sum + (Number(ins.expectedAmount) || 0);
+  }, 0);
+  const studentPayments = (payments || []).filter((p) => p.etudiant_id === studentId);
+  const totalPaid = sumSucceededBillingPayments(studentPayments as any);
+  return {
+    totalExpected,
+    totalPaid,
+    resteAPayer: Math.max(0, totalExpected - totalPaid),
+  };
+}
+
 const ACTIVE_BILLING_STATUSES = new Set([
   'valide',
   'actif',

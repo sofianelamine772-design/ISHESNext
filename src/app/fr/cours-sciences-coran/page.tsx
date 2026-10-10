@@ -18,7 +18,6 @@ import {
   ShieldCheck,
   Sparkles,
   ClipboardList,
-  ScrollText,
   FileText,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -324,56 +323,6 @@ export default function CoursSciencesCoranPage() {
                <span className="text-sm font-bold text-ishes-dark whitespace-pre-line leading-snug">{item.text}</span>
              </div>
            ))}
-        </div>
-      </section>
-
-      {/* ─── FICHES PRATIQUES SEO ─── */}
-      <section className="py-16 px-6 max-w-6xl mx-auto">
-        <div className="text-center mb-10">
-          <p className="text-ishes-gold font-black text-xs uppercase tracking-[0.2em] mb-3">
-            Ressources gratuites
-          </p>
-          <h2 className="text-3xl md:text-4xl font-black text-ishes-blue mb-4">
-            Fiches pratiques Sciences du Coran
-          </h2>
-          <p className="text-gray-600 font-medium max-w-2xl mx-auto leading-relaxed">
-            Avant ou pendant le cursus, consulte nos guides en texte libre : idéal pour le
-            référencement et pour approfondir l&apos;histoire du Livre d&apos;ALLAH.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-6">
-          <Link
-            href="/fr/cours-sciences-coran/guide"
-            className="group bg-white border border-[#e6d5b8]/40 hover:border-ishes-gold/50 rounded-3xl p-8 shadow-sm transition-all hover:shadow-md"
-          >
-            <FileText className="w-8 h-8 text-ishes-gold mb-4" />
-            <h3 className="text-xl font-black text-ishes-blue group-hover:text-ishes-gold mb-2">
-              Guide complet — Sciences du Coran
-            </h3>
-            <p className="text-gray-600 font-medium text-sm leading-relaxed mb-4">
-              Révélation, Compagnons, collecte, disciplines (‘Ulûm al-Qur&apos;ân), manuscrits de
-              Birmingham et Sanaa, miracle du Coran.
-            </p>
-            <span className="inline-flex items-center gap-2 text-ishes-gold font-bold text-sm">
-              Lire la fiche <ArrowRight className="w-4 h-4" />
-            </span>
-          </Link>
-          <Link
-            href="/fr/cours-sciences-coran/frise-chronologique"
-            className="group bg-white border border-[#e6d5b8]/40 hover:border-ishes-gold/50 rounded-3xl p-8 shadow-sm transition-all hover:shadow-md"
-          >
-            <ScrollText className="w-8 h-8 text-ishes-gold mb-4" />
-            <h3 className="text-xl font-black text-ishes-blue group-hover:text-ishes-gold mb-2">
-              Frise chronologique de la Révélation
-            </h3>
-            <p className="text-gray-600 font-medium text-sm leading-relaxed mb-4">
-              De 610 à la codification de l&apos;arabe : califats d&apos;Abû Bakr et ‘Uthmân,
-              vocalisation, points distinctifs, qirâ&apos;ât.
-            </p>
-            <span className="inline-flex items-center gap-2 text-ishes-gold font-bold text-sm">
-              Voir la frise <ArrowRight className="w-4 h-4" />
-            </span>
-          </Link>
         </div>
       </section>
 

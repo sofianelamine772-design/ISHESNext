@@ -17,6 +17,8 @@ import { pickBillingPayments, sumSucceededBillingPayments, isLiveStripePayment, 
 type StudentDetail = {
   id: string;
   name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   avatar: string;
@@ -48,11 +50,24 @@ function EtudiantsContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   
-  const [billingData, setBillingData] = useState<{ totalExpected: number; totalPaid: number; resteAPayer: number; inscriptions: any[] }>({
+  const [billingData, setBillingData] = useState<{
+    totalExpected: number;
+    totalPaid: number;
+    resteAPayer: number;
+    inscriptions: any[];
+    familyTotalExpected: number;
+    familyTotalPaid: number;
+    familyResteAPayer: number;
+    familyMemberCount: number;
+  }>({
     totalExpected: 0,
     totalPaid: 0,
     resteAPayer: 0,
-    inscriptions: []
+    inscriptions: [],
+    familyTotalExpected: 0,
+    familyTotalPaid: 0,
+    familyResteAPayer: 0,
+    familyMemberCount: 1,
   });
   
   const [payments, setPayments] = useState<any[]>([]);
@@ -103,7 +118,7 @@ function EtudiantsContent() {
     address: "",
     payment_status: "en_attente",
     payment_method: "virement",
-    amount_paid: "150"
+    amount_paid: ""
   });
 
   const fetchStudents = async () => {
@@ -138,7 +153,9 @@ function EtudiantsContent() {
 
           return {
             id: s.id,
-            name: `${s.first_name || ''} ${s.last_name || ''}`.trim() || (s.email ? s.email.split('@')[0] : 'Sans nom'),
+            firstName: String(s.first_name || "").replace(/\s+/g, " ").trim(),
+            lastName: String(s.last_name || "").replace(/\s+/g, " ").trim(),
+            name: `${s.first_name || ''} ${s.last_name || ''}`.replace(/\s+/g, " ").trim() || (s.email ? s.email.split('@')[0] : 'Sans nom'),
             email: s.email ? getCleanEmail(s.email) : "",
             phone: s.phone || "Non renseigné",
             avatar: ((s.first_name?.[0] || "") + (s.last_name?.[0] || "")).toUpperCase() || (s.email ? s.email[0].toUpperCase() : "?"),
@@ -209,7 +226,11 @@ function EtudiantsContent() {
           totalExpected: result.data.total_expected || 0,
           totalPaid: result.data.total_paid || 0,
           resteAPayer: result.data.reste_a_payer || 0,
-          inscriptions: result.data.inscriptions || []
+          inscriptions: result.data.inscriptions || [],
+          familyTotalExpected: result.data.family_total_expected || 0,
+          familyTotalPaid: result.data.family_total_paid || 0,
+          familyResteAPayer: result.data.family_reste_a_payer || 0,
+          familyMemberCount: result.data.family_member_count || 1,
         });
       } else {
         setPayments([]);
@@ -227,7 +248,16 @@ function EtudiantsContent() {
       fetchStudentPayments(selectedStudentId);
     } else {
       setPayments([]);
-      setBillingData({ totalExpected: 0, totalPaid: 0, resteAPayer: 0, inscriptions: [] });
+      setBillingData({
+        totalExpected: 0,
+        totalPaid: 0,
+        resteAPayer: 0,
+        inscriptions: [],
+        familyTotalExpected: 0,
+        familyTotalPaid: 0,
+        familyResteAPayer: 0,
+        familyMemberCount: 1,
+      });
     }
   }, [selectedStudentId]);
 
@@ -456,7 +486,7 @@ function EtudiantsContent() {
       address: "",
       payment_status: "en_attente",
       payment_method: "virement",
-      amount_paid: "150"
+      amount_paid: ""
     });
   };
 
@@ -473,7 +503,7 @@ function EtudiantsContent() {
       address: s.address,
       payment_status: hasPaid ? 'a_jour' : 'en_attente',
       payment_method: "liquide",
-      amount_paid: "150",
+      amount_paid: "",
       _original_payment_status: hasPaid ? 'a_jour' : 'en_attente'
     } as any);
     setShowEditModal(true);
@@ -566,6 +596,9 @@ function EtudiantsContent() {
     const username = parts[0].split('+')[0];
     return `${username}@${parts[1]}`.toLowerCase();
   };
+
+  const formatEur = (n: number) =>
+    new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 
   const familyMembers = useMemo(() => {
     if (!selectedStudent) return [];
@@ -683,8 +716,8 @@ function EtudiantsContent() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-0.5 gap-2">
-                            <h3 className="ishes-heading text-sm truncate text-ishes-blue flex items-center gap-1.5">
-                              {student.name}
+                            <h3 className="ishes-heading text-sm truncate text-ishes-blue flex items-center gap-1.5 min-w-0">
+                              {student.name.replace(/\s+/g, " ").trim()}
                               {student.hasConnected ? (
                                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" title="Connecté à l'espace" />
                               ) : (
@@ -774,12 +807,20 @@ function EtudiantsContent() {
                       </div>
                       <div className="pb-1 md:pb-2 min-w-0 flex-1">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-ishes-dark/70 mb-1 md:mb-2 block">Documentation Élève</span>
-                        <div className="flex flex-wrap items-center gap-3">
-                          <h2 className="text-2xl md:text-4xl font-black text-ishes-blue tracking-tight leading-normal break-words">{selectedStudent.name}</h2>
+                        <h2 className="text-2xl md:text-3xl font-black text-ishes-blue tracking-normal leading-snug flex flex-wrap gap-x-2 gap-y-1">
+                          {selectedStudent.firstName ? (
+                            <span className="whitespace-nowrap">{selectedStudent.firstName}</span>
+                          ) : null}
+                          {selectedStudent.lastName ? (
+                            <span className="whitespace-nowrap">{selectedStudent.lastName}</span>
+                          ) : null}
+                          {!selectedStudent.firstName && !selectedStudent.lastName ? selectedStudent.name : null}
+                        </h2>
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
                           {selectedStudent.hasConnected ? (
-                            <span className="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full border border-green-200 shrink-0 mt-1 md:mt-0">Connecté</span>
+                            <span className="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full border border-green-200 shrink-0">Connecté</span>
                           ) : (
-                            <span className="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200 shrink-0 mt-1 md:mt-0">Jamais connecté</span>
+                            <span className="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200 shrink-0">Jamais connecté</span>
                           )}
                         </div>
                         <p className="text-[8px] md:text-[10px] font-black tracking-widest text-ishes-blue mt-2 md:mt-3 uppercase">Inscrit le {selectedStudent.dateJoined}</p>
@@ -975,20 +1016,49 @@ function EtudiantsContent() {
                     </div>
 
                     {!loadingPayments && (
-                      <div className="mb-8 space-y-3">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Coût Total</span>
-                            <span className="text-xl font-black text-ishes-dark">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalExpected)}</span>
+                      <div className="mb-8 space-y-6">
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-ishes-blue mb-3 px-1">
+                            Cet élève
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Coût</span>
+                              <span className="text-xl font-black text-ishes-dark">{formatEur(billingData.totalExpected)}</span>
+                            </div>
+                            <div className="bg-ishes-blue/[0.05] border border-ishes-blue/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                              <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest mb-1">Déjà payé</span>
+                              <span className="text-xl font-black text-ishes-blue">{formatEur(billingData.totalPaid)}</span>
+                            </div>
+                            <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.resteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-100'}`}>
+                              <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.resteAPayer > 0 ? 'text-red-500' : 'text-gray-400'}`}>Reste à payer</span>
+                              <span className={`text-xl font-black ${billingData.resteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{formatEur(billingData.resteAPayer)}</span>
+                            </div>
                           </div>
-                          <div className="bg-ishes-blue/[0.05] border border-ishes-blue/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
-                            <span className="text-[10px] font-black text-ishes-blue uppercase tracking-widest mb-1">Déjà Payé</span>
-                            <span className="text-xl font-black text-ishes-blue">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.totalPaid)}</span>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-600 mb-3 px-1">
+                            Famille · {billingData.familyMemberCount} profil{billingData.familyMemberCount > 1 ? 's' : ''} (même e-mail)
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div className="bg-purple-50/70 border border-purple-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                              <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-1">Coût cumulé</span>
+                              <span className="text-xl font-black text-ishes-dark">{formatEur(billingData.familyTotalExpected)}</span>
+                            </div>
+                            <div className="bg-purple-50/70 border border-purple-100 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                              <span className="text-[10px] font-black text-purple-500 uppercase tracking-widest mb-1">Déjà payé</span>
+                              <span className="text-xl font-black text-purple-700">{formatEur(billingData.familyTotalPaid)}</span>
+                            </div>
+                            <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.familyResteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-purple-50/70 border-purple-100'}`}>
+                              <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.familyResteAPayer > 0 ? 'text-red-500' : 'text-purple-400'}`}>Reste famille</span>
+                              <span className={`text-xl font-black ${billingData.familyResteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{formatEur(billingData.familyResteAPayer)}</span>
+                            </div>
                           </div>
-                          <div className={`border rounded-2xl p-4 flex flex-col justify-center items-center text-center ${billingData.resteAPayer > 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-100'}`}>
-                            <span className={`text-[10px] font-black uppercase tracking-widest mb-1 ${billingData.resteAPayer > 0 ? 'text-red-500' : 'text-gray-400'}`}>Reste à Payer</span>
-                            <span className={`text-xl font-black ${billingData.resteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingData.resteAPayer)}</span>
-                          </div>
+                          {billingData.familyMemberCount <= 1 && (
+                            <p className="text-[11px] text-gray-500 font-medium px-1 mt-2">
+                              Aucun autre élève n’est lié à cet e-mail : le cumul famille est identique à cet élève.
+                            </p>
+                          )}
                         </div>
                         {payments.some((p: any) => isTestStripePayment(p)) && (
                           <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-4 py-2.5 font-medium">
@@ -1353,7 +1423,7 @@ function EtudiantsContent() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant perçu (EUR)</label>
                     <input
                       type="number"
-                      placeholder="Ex: 150"
+                      placeholder="Ex: 799"
                       value={formData.amount_paid}
                       onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
@@ -1470,7 +1540,7 @@ function EtudiantsContent() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant perçu (EUR)</label>
                     <input
                       type="number"
-                      placeholder="Ex: 150"
+                      placeholder="Ex: 799"
                       value={formData.amount_paid}
                       onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"

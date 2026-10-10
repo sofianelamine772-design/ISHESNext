@@ -361,7 +361,7 @@ export default function CoursDistancePage() {
               <Link href="/program" className="bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl font-black transition-all shadow-xl shadow-ishes-blue/20 hover:-translate-y-1">
                  PARCOURIR LES FORMATIONS
               </Link>
-              <Link href="/contact" className="bg-white/10 hover:bg-white/20 text-white px-10 py-5 rounded-2xl font-black transition-all border border-white/10 backdrop-blur-sm">
+              <Link href="/fr/contact" className="bg-white/10 hover:bg-white/20 text-white px-10 py-5 rounded-2xl font-black transition-all border border-white/10 backdrop-blur-sm">
                  NOUS CONTACTER
               </Link>
             </div>

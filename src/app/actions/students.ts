@@ -13,7 +13,7 @@ import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
 import { getDistancielRentreePublicDocs } from "@/lib/distanciel-rentree";
-import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess, isLiveStripePayment, isManualBillingPayment } from "@/lib/pricing";
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess, isLiveStripePayment, isManualBillingPayment, billingTotalsForStudent } from "@/lib/pricing";
 import {
   getStripeClient,
   normalizeStoredStripeAccount,
@@ -483,7 +483,8 @@ export async function assignStudentToClassAction(studentId: string, classId: str
 
     if (classError) throw classError;
 
-    const formationPrice = Number((classe as any)?.formations?.price);
+    const formationRow = unwrapRelation((classe as any)?.formations) as { price?: number } | null;
+    const formationPrice = Number(formationRow?.price);
     const expectedAmount = customExpectedAmount !== undefined && customExpectedAmount > 0 
       ? customExpectedAmount 
       : (Number.isFinite(formationPrice) && formationPrice > 0 ? formationPrice : undefined);
@@ -764,7 +765,10 @@ export async function createStudentManualAction(data: {
 
     // Si paiement manuel effectué, on l'enregistre dans 'paiements'
     if (data.payment_status === 'a_jour' && newStudent?.id) {
-      const amount = parseFloat(data.amount_paid || '150') || 150;
+      const amount = parseFloat(data.amount_paid || '0') || 0;
+      if (amount <= 0) {
+        return { success: false, error: "Indiquez le montant réellement payé (ex. 799 pour le Tajwid intensif)." };
+      }
       const methodLabel = data.payment_method === 'liquide' ? 'Liquide' : 'Virement';
       await supabaseAdmin.from('paiements').insert({
         etudiant_id: newStudent.id,
@@ -1843,8 +1847,14 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       };
     });
 
-    const total_paid = sumSucceededBillingPayments(deduplicatedPayments);
-    const reste_a_payer = Math.max(0, total_expected - total_paid);
+    const family_total_paid = sumSucceededBillingPayments(deduplicatedPayments);
+    const family_reste_a_payer = Math.max(0, total_expected - family_total_paid);
+
+    const studentTotals = billingTotalsForStudent(
+      studentId,
+      enrichedInscriptions,
+      deduplicatedPayments,
+    );
 
     const paymentsForClient = deduplicatedPayments.map((p: any) => {
       const student = getBillingStudent(p.etudiant_id);
@@ -1861,9 +1871,13 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       data: {
         payments: paymentsForClient,
         inscriptions: enrichedInscriptions,
-        total_expected,
-        total_paid,
-        reste_a_payer
+        total_expected: studentTotals.totalExpected,
+        total_paid: studentTotals.totalPaid,
+        reste_a_payer: studentTotals.resteAPayer,
+        family_total_expected: total_expected,
+        family_total_paid,
+        family_reste_a_payer,
+        family_member_count: familyIds.length,
       }
     };
   } catch (err) {
@@ -2124,16 +2138,15 @@ export async function syncStudentPaidStatus(studentId: string) {
     if (!billingRes.success || !billingRes.data) return;
 
     const { reste_a_payer, total_paid, inscriptions } = billingRes.data;
-    if (!inscriptions || inscriptions.length === 0) return;
+    const studentIns = (inscriptions || []).filter((ins: any) => ins.studentId === studentId);
+    if (studentIns.length === 0) return;
 
-    const familyIds = inscriptions.map((ins: any) => ins.studentId);
     const targetStatus = resolveInscriptionPaidStatus(total_paid, reste_a_payer);
 
-    // Ne mettre à jour que les inscriptions valides, en attente ou actives
     await supabaseAdmin
       .from('inscriptions')
       .update({ paid_status: targetStatus })
-      .in('etudiant_id', familyIds)
+      .eq('etudiant_id', studentId)
       .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
 
   } catch (err) {

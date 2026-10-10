@@ -174,7 +174,7 @@ export default function AdminDashboard() {
     address: "",
     payment_status: "en_attente",
     payment_method: "virement",
-    amount_paid: "150"
+    amount_paid: ""
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [classSearchQuery, setClassSearchQuery] = useState("");
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
       address: "",
       payment_status: "en_attente",
       payment_method: "virement",
-      amount_paid: "150"
+      amount_paid: ""
     });
   };
 
@@ -1255,7 +1255,7 @@ export default function AdminDashboard() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant perçu (EUR)</label>
                     <input
                       type="number"
-                      placeholder="Ex: 150"
+                      placeholder="Ex: 799"
                       value={formData.amount_paid}
                       onChange={(e) => setFormData({ ...formData, amount_paid: e.target.value })}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"

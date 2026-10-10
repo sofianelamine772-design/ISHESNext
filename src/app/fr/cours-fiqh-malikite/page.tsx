@@ -734,7 +734,7 @@ export default function CoursFiqhMalikitePage() {
                 catalogue des cours à distance
               </Link>
               . Question de niveau ?{" "}
-              <Link href="/contact" className="text-ishes-blue font-bold hover:underline">
+              <Link href="/fr/contact" className="text-ishes-blue font-bold hover:underline">
                 Contacte l&apos;équipe sur WhatsApp
               </Link>
               .

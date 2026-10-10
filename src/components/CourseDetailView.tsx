@@ -114,7 +114,7 @@ export function CourseDetailView({ course, id }: CourseDetailViewProps) {
                            : (audience === 'enfant' ? "Inscrire mon enfant" : "S'inscrire maintenant")} <ArrowRight className="w-6 h-6" />
                      </Link>
                      <Link
-                        href="/contact"
+                        href="/fr/contact"
                         className="px-10 py-5 bg-white border-2 border-gray-100 text-[#101828] font-black text-lg rounded-2xl hover:bg-gray-50 transition-all flex items-center gap-3 active:scale-95"
                      >
                         Entretien gratuit

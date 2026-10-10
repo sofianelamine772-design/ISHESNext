@@ -30,6 +30,10 @@ export default function EleveDashboard() {
     totalExpected: 0,
     totalPaid: 0,
     resteAPayer: 0,
+    familyTotalExpected: 0,
+    familyTotalPaid: 0,
+    familyResteAPayer: 0,
+    familyMemberCount: 1,
   });
   const [loadingReceiptId, setLoadingReceiptId] = useState<string | null>(null);
 
@@ -56,26 +60,7 @@ export default function EleveDashboard() {
           });
           if (res.success && res.data && res.data.length > 0) {
             setChildrenData(res.data);
-            setActiveChildId(res.data[0]?.id || null);
-
-            // Load billing data in background
-            try {
-              setLoadingPayments(true);
-              const payRes = await fetchStudentBillingDataAction(res.data[0]?.id || "");
-              if (payRes.success && payRes.data) {
-                setPayments(payRes.data.payments);
-                setFamilyInscriptions(payRes.data.inscriptions);
-                setBillingTotals({
-                  totalExpected: Number(payRes.data.total_expected) || 0,
-                  totalPaid: Number(payRes.data.total_paid) || 0,
-                  resteAPayer: Number(payRes.data.reste_a_payer) || 0,
-                });
-              }
-            } catch (payErr) {
-              console.error("Error loading payments:", payErr);
-            } finally {
-              setLoadingPayments(false);
-            }
+            setActiveChildId((current) => current || res.data[0]?.id || null);
           } else {
             setCertError(res.error || "Aucune inscription active trouvée.");
             router.push("/unauthorized");
@@ -90,6 +75,37 @@ export default function EleveDashboard() {
       loadCertData();
     }
   }, [user, router]);
+
+  useEffect(() => {
+    if (!activeChildId) return;
+    let cancelled = false;
+    const loadBilling = async () => {
+      setLoadingPayments(true);
+      try {
+        const payRes = await fetchStudentBillingDataAction(activeChildId);
+        if (cancelled || !payRes.success || !payRes.data) return;
+        setPayments(payRes.data.payments);
+        setFamilyInscriptions(payRes.data.inscriptions);
+        setBillingTotals({
+          totalExpected: Number(payRes.data.total_expected) || 0,
+          totalPaid: Number(payRes.data.total_paid) || 0,
+          resteAPayer: Number(payRes.data.reste_a_payer) || 0,
+          familyTotalExpected: Number(payRes.data.family_total_expected ?? payRes.data.total_expected) || 0,
+          familyTotalPaid: Number(payRes.data.family_total_paid ?? payRes.data.total_paid) || 0,
+          familyResteAPayer: Number(payRes.data.family_reste_a_payer ?? payRes.data.reste_a_payer) || 0,
+          familyMemberCount: Number(payRes.data.family_member_count) || 1,
+        });
+      } catch (payErr) {
+        console.error("Error loading payments:", payErr);
+      } finally {
+        if (!cancelled) setLoadingPayments(false);
+      }
+    };
+    loadBilling();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeChildId]);
 
   // Capture the PWA install prompt event
   useEffect(() => {
@@ -235,9 +251,9 @@ export default function EleveDashboard() {
     if (paidPayments.length === 0 || familyInscriptions.length === 0) return null;
 
     // Affiche exactement les mêmes totaux que l’admin (même API)
-    const totalExpected = billingTotals.totalExpected;
-    const totalPaid = billingTotals.totalPaid;
-    const totalRemaining = billingTotals.resteAPayer;
+    const totalExpected = billingTotals.familyTotalExpected;
+    const totalPaid = billingTotals.familyTotalPaid;
+    const totalRemaining = billingTotals.familyResteAPayer;
 
     const firstPayment = [...paidPayments].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())[0];
     const firstAmount = firstPayment?.amount || 0;
@@ -703,28 +719,68 @@ export default function EleveDashboard() {
             {activeTab === "billing" && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
                 {/* Financial Summary */}
-                {installmentDetails && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm flex items-center justify-between group hover:border-emerald-100 transition-colors">
-                      <div>
-                        <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Total Réglé</p>
-                        <p className="text-4xl font-black text-emerald-600">
-                          {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(installmentDetails.totalPaid)}
-                        </p>
-                      </div>
-                      <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform">
-                        <CheckCircle className="w-7 h-7" />
+                {(installmentDetails || billingTotals.totalExpected > 0 || billingTotals.familyTotalExpected > 0) && (
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.2em] text-ishes-blue mb-3 px-1">Cet élève</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Déjà payé</p>
+                            <p className="text-4xl font-black text-emerald-600">
+                              {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.totalPaid)}
+                            </p>
+                          </div>
+                          <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500">
+                            <CheckCircle className="w-7 h-7" />
+                          </div>
+                        </div>
+                        <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Reste à payer</p>
+                            <p className="text-4xl font-black text-gray-900">
+                              {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.resteAPayer)}
+                            </p>
+                            <p className="text-sm text-gray-400 font-medium mt-1">
+                              Coût : {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.totalExpected)}
+                            </p>
+                          </div>
+                          <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
+                            <CreditCard className="w-7 h-7" />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm flex items-center justify-between group hover:border-gray-200 transition-colors">
-                      <div>
-                        <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Reste à payer</p>
-                        <p className="text-4xl font-black text-gray-900">
-                          {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(installmentDetails.totalRemaining)}
-                        </p>
-                      </div>
-                      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform">
-                        <CreditCard className="w-7 h-7" />
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.2em] text-purple-600 mb-3 px-1">
+                        Famille{billingTotals.familyMemberCount > 1 ? ` · ${billingTotals.familyMemberCount} élèves` : ''}
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white rounded-[2.5rem] p-8 border border-purple-100 shadow-sm flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Total réglé (famille)</p>
+                            <p className="text-4xl font-black text-purple-700">
+                              {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.familyTotalPaid)}
+                            </p>
+                          </div>
+                          <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-500">
+                            <Users className="w-7 h-7" />
+                          </div>
+                        </div>
+                        <div className="bg-white rounded-[2.5rem] p-8 border border-purple-100 shadow-sm flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Reste famille</p>
+                            <p className="text-4xl font-black text-gray-900">
+                              {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.familyResteAPayer)}
+                            </p>
+                            <p className="text-sm text-gray-400 font-medium mt-1">
+                              Coût cumulé : {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.familyTotalExpected)}
+                            </p>
+                          </div>
+                          <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
+                            <CreditCard className="w-7 h-7" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

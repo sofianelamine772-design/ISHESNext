@@ -22,6 +22,15 @@ export function truncateDescription(text: string, max = 155): string {
   return `${clean.slice(0, max - 1).trim()}…`;
 }
 
+/** Titres SERP : ~50–60 caractères (les outils pénalisent au-delà). */
+export function truncateTitle(text: string, max = 58): string {
+  const clean = String(text || '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (clean.length <= max) return clean;
+  return `${clean.slice(0, max - 1).trim()}…`;
+}
+
 type BuildPageMetadataInput = {
   title: string;
   description: string;
@@ -47,9 +56,10 @@ export function buildPageMetadata({
 }: BuildPageMetadataInput): Metadata {
   const url = absoluteUrl(path);
   const imageUrl = image.startsWith('http') ? image : absoluteUrl(image);
-  const desc = truncateDescription(description);
+  const desc = truncateDescription(description, 155);
 
-  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const withBrand = title.includes('ISHES') ? title : `${title} | ISHES`;
+  const fullTitle = truncateTitle(withBrand, 58);
 
   return {
     // absolute = évite le double suffixe du template root (« | Institut ISHES »)

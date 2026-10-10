@@ -153,7 +153,7 @@ export default function UnauthorizedPage() {
 
               {/* Secondary Action - Contact Support */}
               <Link
-                href="/contact"
+                href="/fr/contact"
                 className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10 py-4 rounded-2xl font-black text-[9px] sm:text-xs uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Mail className="w-4 h-4" /> Contacter

@@ -82,7 +82,7 @@ export default function CoursParticuliersPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link 
-                  href="/contact" 
+                  href="/fr/contact" 
                   className="w-full sm:w-auto bg-[#101828] text-white px-10 py-5 rounded-2xl text-[15px] font-black transition-all shadow-xl hover:-translate-y-1 active:scale-95"
                 >
                   DEMANDER UN DEVIS
@@ -178,7 +178,7 @@ export default function CoursParticuliersPage() {
                     </p>
                     <div className="pt-4">
                        <Link 
-                         href="/contact" 
+                         href="/fr/contact" 
                          className="flex items-center justify-center gap-3 bg-ishes-blue text-white py-5 rounded-2xl font-black text-lg hover:bg-ishes-blue-hover transition-all shadow-xl shadow-ishes-blue/20"
                        >
                          <MessageCircle className="w-6 h-6" />

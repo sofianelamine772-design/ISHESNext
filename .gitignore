@@ -17,9 +17,12 @@
 # next.js
 .next
 /.next/
-.next *
+.next.nosync
 /.next.nosync
 /out/
+
+# iCloud : copies locales hors sync
+.git.nosync/
 
 # production
 /build

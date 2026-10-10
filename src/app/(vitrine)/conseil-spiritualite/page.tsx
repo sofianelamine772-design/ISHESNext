@@ -102,7 +102,7 @@ export default function ConseilSpiritualitePage() {
                 </p>
 
                 <Link 
-                  href="/contact" 
+                  href="/fr/contact" 
                   className="inline-flex items-center justify-center gap-3 bg-ishes-blue hover:bg-ishes-blue-hover text-white px-10 py-5 rounded-2xl text-[16px] font-bold transition-all hover:scale-105 shadow-xl shadow-ishes-blue/20 relative z-10 group"
                 >
                   Contacter un conseiller
