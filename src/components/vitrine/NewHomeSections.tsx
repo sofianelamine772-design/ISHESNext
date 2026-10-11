@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Book, Users, GraduationCap, Moon, MapPin, MonitorPlay, ArrowRight, FileText, Gift, Video, Heart, Sparkles, ShieldCheck } from "lucide-react";
+import { BookOpen, Book, Users, GraduationCap, Moon, MapPin, MonitorPlay, ArrowRight, FileText, Gift, Video, Heart, ShieldCheck } from "lucide-react";
 
 export function NewHomeSections() {
   return (
@@ -88,28 +88,19 @@ export function NewHomeSections() {
         </div>
       </section>
 
-      {/* ─── CTA FOOTER BANNER ─── */}
-      <section className="py-12 bg-[#fafafa] relative z-10 px-6">
-        <div className="max-w-7xl mx-auto bg-[#0a192f] rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden border border-white/10">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#C69C6D]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#C69C6D]/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
-          
-          <div className="flex items-center gap-6 relative z-10 text-center md:text-left">
-            <div className="w-16 h-16 rounded-2xl bg-[#C69C6D]/20 flex items-center justify-center shrink-0 border border-[#C69C6D]/30 shadow-inner hidden sm:flex">
-              <Sparkles className="w-8 h-8 text-[#C69C6D]" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-black text-white leading-snug">
-              Quel que soit votre niveau,<br className="hidden md:block"/>
-              votre cheminement commence aujourd'hui
-            </h2>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row items-center gap-4 relative z-10 w-full md:w-auto">
-            <Link href="/program" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#b88c4d] text-white px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-[#a67b3f] shadow-lg shadow-[#C69C6D]/20">
+      {/* ─── CTA ─── */}
+      <section className="w-full bg-[#f7f3ec] border-y border-[#e4dccb] relative z-10">
+        <div className="max-w-6xl mx-auto px-6 py-16 md:py-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <h2 className="text-3xl md:text-4xl font-black text-[#101828] leading-tight max-w-3xl">
+            Quel que soit votre niveau, votre cheminement commence aujourd&apos;hui
+          </h2>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
+            <Link href="/program" className="inline-flex items-center justify-center gap-2 bg-[#152233] hover:bg-[#101828] text-white border border-[#c8a96e] px-6 py-3.5 rounded-full text-sm font-black transition-colors">
               Je découvre les formations <ArrowRight className="w-4 h-4" />
             </Link>
-            <a href="https://wa.me/33666033519" target="_blank" rel="noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#0a192f] px-8 py-4 rounded-xl text-[15px] font-black transition-all hover:bg-gray-100 shadow-sm border border-transparent">
-              Nous contacter <img src="/images/whatsapp-logo.avif" className="w-5 h-5 rounded-full" alt="Contacter l'Institut ISHES sur WhatsApp" />
+            <a href="https://wa.me/33666033519" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#1f8f4e] hover:bg-[#187a42] text-white px-6 py-3.5 rounded-full text-sm font-black transition-colors">
+              Nous contacter <img src="/images/whatsapp-logo.avif" className="w-5 h-5 rounded-full" alt="" />
             </a>
           </div>
         </div>

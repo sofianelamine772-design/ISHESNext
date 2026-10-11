@@ -4,111 +4,69 @@ import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-
-const products = [
-  {
-    id: "chahada",
-    title: "LA CHAHADA, le chemin de son cœur",
-    subtitle: "HISTOIRES ET MORALES POUR COMPRENDRE LÂ ILÂHA ILLA ALLAH",
-    description: "Donnez du sens à votre foi à travers des histoires vraies et morales inspirantes pour vous aider à vous connecter à ALLAH ﷻ.",
-    image: "/images/livre_chahada.jpg",
-    price: "14,98 €",
-    tag: "Best-seller",
-    amazonUrl: "https://www.amazon.fr/CHAHADA-chemin-son-coeur-comprendre/dp/B0GD7LVTMP"
-  },
-  {
-    id: "mohammed",
-    title: "Mohammed ﷺ le Messager d'ALLAH ﷻ",
-    subtitle: "UNE BIOGRAPHIE ACCESSIBLE POUR DÉCOUVRIR SA NOBLE VIE",
-    description: "Cette étape propose de découvrir la seconde partie de l’attestation de foi : MOHAMMAD ﷺ Le Messager d’ALLAHﷻ, par l’étude de la Sîrah du Prophète ﷺ.",
-    image: "/images/livre_sirah.png",
-    price: "14,98 €",
-    tag: "Must-have",
-    amazonUrl: "https://www.amazon.fr/Mohammed-Messager-dALLAH-accessible-découvrir/dp/B0GDF23MZZ"
-  },
-  {
-    id: "invocation",
-    title: "Carnet d’invocation",
-    subtitle: "VOTRE COMPAGNON D’APPRENTISSAGE AU QUOTIDIEN",
-    description: "Conçu avec des invocations en arabe, phonétique et traduction française pour vous accompagner chaque jour.",
-    image: "/images/livre_invocation.jpg",
-    price: "11,99 €",
-    tag: "Essentiel",
-    amazonUrl: "https://www.amazon.fr/Carnet-dinvocation-Tableau-suivi-dapprentissage/dp/B0G6WRKNFV"
-  },
-  {
-    id: "ramadan",
-    title: "Mon Ramadan Planner",
-    subtitle: "POUR ENFANTS : 30 JOURS DE SUIVI QUOTIDIEN",
-    description: "De bonnes actions (Coran, prière, dhikr, dou'a...) et de bilans pour mieux comprendre et réussir son Ramadan.",
-    image: "/images/livre_ramadan.png",
-    price: "14,98 €",
-    tag: "Nouveauté",
-    amazonUrl: "https://www.amazon.fr/s?k=rachida+reziga+ramadan"
-  },
-  {
-    id: "cles-coran",
-    title: "Les Clés du Coran",
-    subtitle: "AVEC TEHEJI DES SOURATES & LE POÈME \"LES CLÉS DU CORAN\"",
-    description: "La méthode Nour al Bayan pour les francophones, idéale pour faciliter l'apprentissage et la lecture du Coran (Vol 2).",
-    image: "/images/livre-ishes.png",
-    price: "15,81 €",
-    tag: "Nouveauté",
-    amazonUrl: "https://www.amazon.fr/dp/B0HKNDMYJM/"
-  }
-];
+import { BOUTIQUE_BOOKS } from "@/lib/boutique-catalog";
 
 export function BoutiqueProducts() {
   return (
     <section className="pb-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-16">
-          {products.map((product, idx) => (
-            <motion.div
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          {BOUTIQUE_BOOKS.map((product, idx) => (
+            <motion.article
               key={product.id}
-              initial={{ opacity: 0, y: 30 }}
+              id={product.id}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="group flex flex-col md:flex-row lg:flex-col xl:flex-row gap-8 items-center md:items-start lg:items-center xl:items-start bg-ishes-dark p-8 rounded-[2.5rem] border border-ishes-gold/20 hover:border-ishes-gold/40 hover:shadow-2xl hover:shadow-black/20 transition-all duration-500"
+              transition={{ duration: 0.45, delay: idx * 0.05 }}
+              className="flex flex-col sm:flex-row gap-6 items-stretch bg-white p-5 sm:p-6 rounded-3xl border border-[#e4dccb] shadow-sm scroll-mt-28"
             >
-              {/* Product Image */}
-              <div className="w-[60%] sm:w-64 md:w-56 lg:w-[60%] xl:w-56 aspect-[3/4] mx-auto md:mx-0 lg:mx-auto xl:mx-0 rounded-2xl overflow-hidden shadow-lg shadow-black/30 shrink-0 relative">
-                <Image 
-                  src={product.image} 
-                  alt={`${product.title} — édition pédagogique Institut ISHES`}
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 30vw, 20vw"
-                />
+              <div className="w-full sm:w-44 shrink-0">
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#f6f1e8] border border-[#eadfcb]">
+                  <Image
+                    src={product.image}
+                    alt={`${product.title} — ${product.subtitle}`}
+                    fill
+                    className="object-contain p-3"
+                    sizes="(max-width: 640px) 80vw, 180px"
+                  />
+                </div>
               </div>
 
-              {/* Product Content */}
-              <div className="flex-1 flex flex-col min-w-0 h-full justify-between py-2 w-full">
-                <div>
-                  <h2 className="ishes-heading text-2xl text-ishes-gold mb-2 transition-colors leading-tight group-hover:text-white truncate whitespace-normal">
-                    {product.title}
-                  </h2>
-                  <p className="ishes-label text-[10px] text-ishes-gold mb-4 leading-tight opacity-80">
-                    {product.subtitle}
-                  </p>
-                  <p className="text-gray-400 text-sm font-medium leading-relaxed mb-6">
-                    {product.description}
-                  </p>
-                </div>
+              <div className="flex-1 flex flex-col min-w-0">
+                <h2 className="text-xl sm:text-2xl font-black text-[#101828] leading-tight">
+                  {product.title}
+                </h2>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-[#6e5730]">
+                  {product.subtitle}
+                </p>
+                <p className="mt-4 text-sm text-[#344054] leading-relaxed">
+                  {product.lead}
+                </p>
+                <details className="group mt-3">
+                  <summary className="cursor-pointer list-none inline-flex items-center text-sm font-bold text-ishes-blue [&::-webkit-details-marker]:hidden">
+                    <span className="group-open:hidden">Lire plus</span>
+                    <span className="hidden group-open:inline">Réduire</span>
+                  </summary>
+                  <div className="mt-3 space-y-3 text-sm text-[#344054] leading-relaxed">
+                    {product.more.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                </details>
 
-                <div className="flex flex-wrap items-center justify-between gap-4 mt-auto pt-6 border-t border-gray-800">
-                  <span className="ishes-heading text-xl text-white whitespace-nowrap">
+                <div className="flex flex-wrap items-center justify-between gap-4 mt-auto pt-5">
+                  <span className="text-xl font-black text-ishes-blue whitespace-nowrap">
                     {product.price}
                   </span>
-                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto xl:w-full 2xl:w-auto shrink-0 max-w-full">
-                    <Button variant="ishes-gold" className="w-full sm:w-auto xl:w-full 2xl:w-auto h-12 px-4 md:px-6 gap-2 text-xs md:text-sm">
+                  <a href={product.amazonUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                    <Button variant="ishes-dark-gold" className="w-full sm:w-auto h-11 px-5 gap-2 text-xs shadow-none">
                       Acheter en ligne <ShoppingBag className="w-4 h-4" />
                     </Button>
                   </a>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>

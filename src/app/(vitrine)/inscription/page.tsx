@@ -6,7 +6,7 @@ import 'react-phone-number-input/style.css';
 import { useSearchParams, useRouter } from "next/navigation";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText, Sparkles, Search, Gift } from "lucide-react";
+import { CheckCircle2, ChevronRight, ArrowRight, User, Mail, Phone, BookOpen, GraduationCap, Users, Plus, Trash2, ArrowLeft, Monitor, MessageSquareText, Search, Gift } from "lucide-react";
 import Link from "next/link";
 import { registerStudentAction } from "@/app/actions/students";
 import { ArabicBackground } from "@/components/ArabicBackground";
@@ -105,13 +105,13 @@ function InscriptionForm() {
   const [slotsStatus, setSlotsStatus] = useState<SlotStatusRow[]>([]);
 
   const distanceCoursesList = [
-    { id: 'fiqh_malikite', title: 'Fiqh Mâlikite', price: 399, emoji: '⚖️' },
-    { id: 'tajwid_standard', title: 'Tajwid Standard', price: 649, emoji: '🕌' },
-    { id: 'pack_accompagnement', title: 'Pack Accompagnement', price: 49, emoji: '✨' },
-    { id: 'sciences_du_coran', title: 'Sciences du Coran', price: 399, emoji: '📖' },
-    { id: 'tarbiya_islamiya', title: 'Tarbiya Islamiya', price: 249, emoji: '🌱' },
-    { id: 'as_sirah', title: 'As Sirah', price: 649, emoji: '📜' },
-    { id: 'spiritualite_islam', title: 'Spiritualité', price: 399, emoji: '❤️' },
+    { id: 'fiqh_malikite', title: 'Fiqh Mâlikite', detail: 'Droit musulman', price: 399 },
+    { id: 'tajwid_standard', title: 'Tajwid Standard', detail: 'Lecture du Coran', price: 649 },
+    { id: 'pack_accompagnement', title: 'Pack Accompagnement', detail: 'Suivi pédagogique', price: 49 },
+    { id: 'sciences_du_coran', title: 'Sciences du Coran', detail: 'Histoire du Livre', price: 399 },
+    { id: 'tarbiya_islamiya', title: 'Tarbiya Islamiya', detail: 'Éveil de l’enfant', price: 249 },
+    { id: 'as_sirah', title: 'Sîrah', detail: 'Vie du Prophète', price: 649 },
+    { id: 'spiritualite_islam', title: 'Spiritualité', detail: 'Conseil et pratique', price: 399 },
   ];
 
   const [showChildHoraireError, setShowChildHoraireError] = useState<{ [key: number]: boolean }>({});
@@ -1356,28 +1356,29 @@ function InscriptionForm() {
               <h2 className="text-2xl font-black text-[#101828] text-center mb-8">Récapitulatif de votre programme</h2>
 
               {/* Recap Card */}
-              <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 max-w-xl mx-auto mb-10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="text-4xl bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    {planId === 'tajwid_intensif' ? '🚀' :
-                      planId === 'tajwid_standard' ? '🕌' :
-                        planId === 'sciences_islamiques' ? '📖' :
-                          planId === 'arabe_coran_junior' ? '👶' : '✨'}
+              <div className="bg-white rounded-2xl border border-[#e7e2d8] max-w-xl mx-auto mb-8 overflow-hidden">
+                <div className="flex items-center gap-4 px-5 py-5 sm:px-6">
+                  <div className="w-11 h-11 rounded-xl bg-ishes-blue text-white flex items-center justify-center shrink-0">
+                    <BookOpen className="w-5 h-5" />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-black text-[#101828]">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ishes-gold mb-1">Votre cursus</p>
+                    <h3 className="text-base font-black text-[#101828] leading-snug">
                       {((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'debutante_presentiel') ? 'Arabe & Tajwid débutant' 
                       : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'intermediaire_presentiel') ? 'Arabe & Tajwid 2eme année'
                       : (planName || "Votre Formation")}
                     </h3>
-                    <p className="text-xs font-bold text-ishes-blue uppercase tracking-widest mt-1">
-                      Durée : {PROGRAMS_DATA[planId || ""]?.duration || PROGRAMS_DATA[(planId || "").replace(/-/g, "_")]?.duration || "Selon programme"}
+                    <p className="text-sm text-gray-500 font-medium mt-1">
+                      {PROGRAMS_DATA[planId || ""]?.duration || PROGRAMS_DATA[(planId || "").replace(/-/g, "_")]?.duration || "Selon programme"}
+                      {" · "}
+                      {(planId || "").includes("presentiel") || planId === "presentiel-global" ? "Présentiel" : "À distance"}
                     </p>
                   </div>
+                  <p className="text-lg font-black text-ishes-blue shrink-0">{getBasePriceOfPlan(planId)} €</p>
                 </div>
 
                 {registrationType === 'child' && (
-                  <div className="border-t border-gray-200/50 pt-4">
+                  <div className="border-t border-[#e7e2d8] px-5 sm:px-6 pt-4 pb-5">
                     <p className="text-xs font-bold text-gray-400 text-center mb-4">
                       Élèves inscrits (<span className="text-[#101828] font-black">{childrenList.length}</span>) :
                     </p>
@@ -1415,17 +1416,12 @@ function InscriptionForm() {
               </div>
 
               {/* SUGGESTION DE FORMATIONS SUPPLEMENTAIRES */}
-              <div className="bg-white rounded-3xl p-6 md:p-8 max-w-xl mx-auto mb-10 text-left shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-ishes-gold/10 flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-ishes-gold" />
-                  </div>
-                  <h3 className="text-sm font-black text-[#101828] uppercase tracking-widest">
-                    Complétez votre inscription
-                  </h3>
-                </div>
-                <p className="text-xs text-gray-500 font-medium mb-6 pl-11">
-                  Découvrez nos autres formations distancielles et profitez de la réduction fratrie si applicable.
+              <div className="bg-[#fafafa] rounded-2xl p-5 md:p-6 max-w-xl mx-auto mb-8 text-left border border-[#e7e2d8]">
+                <h3 className="text-sm font-black text-[#101828] tracking-tight">
+                  Ajouter une autre formation
+                </h3>
+                <p className="text-sm text-gray-500 font-medium mt-1 mb-5">
+                  Facultatif. Le tarif s’ajoute à cette inscription.
                 </p>
 
                 <div className="relative mb-6 group">
@@ -1439,36 +1435,34 @@ function InscriptionForm() {
                   />
                 </div>
 
-                <div className="space-y-3 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
                   {distanceCoursesList
                     .filter(c => c.id !== planId && !additionalCourses.includes(c.id))
-                    .filter(c => c.title.toLowerCase().includes(searchCourseQuery.toLowerCase()))
+                    .filter(c => `${c.title} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()))
                     .map(course => (
-                      <div key={course.id} className="bg-white p-4 rounded-2xl border border-gray-100/80 flex items-center justify-between group hover:border-ishes-blue/20 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-                        <div className="flex items-center gap-4">
-                          <div className="text-2xl w-12 h-12 flex items-center justify-center bg-gray-50/80 rounded-xl group-hover:bg-blue-50/50 transition-colors">
-                            {course.emoji}
-                          </div>
-                          <div>
-                            <h4 className="text-[13px] font-black text-[#101828] mb-0.5">{course.title}</h4>
-                            <p className="text-xs font-bold text-ishes-blue">
-                              {registrationType === 'child' && course.id !== 'pack_accompagnement' 
-                                ? `${course.price * namedChildren.length} € (pour ${namedChildren.length} enfant${namedChildren.length > 1 ? 's' : ''})` 
-                                : `${course.price} €`}
-                            </p>
-                          </div>
+                      <div key={course.id} className="bg-white px-4 py-3.5 rounded-xl border border-[#e7e2d8] flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-bold text-[#101828]">{course.title}</h4>
+                          <p className="text-xs text-gray-500 font-medium mt-0.5">{course.detail}</p>
                         </div>
-                        <button 
-                          type="button"
-                          onClick={() => setAdditionalCourses([...additionalCourses, course.id])}
-                          className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-ishes-blue hover:bg-ishes-blue hover:text-white transition-all duration-300 shadow-sm"
-                        >
-                          <Plus className="w-5 h-5" />
-                        </button>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <p className="text-sm font-bold text-[#101828]">
+                            {registrationType === 'child' && course.id !== 'pack_accompagnement'
+                              ? `${course.price * namedChildren.length} €`
+                              : `${course.price} €`}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setAdditionalCourses([...additionalCourses, course.id])}
+                            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg border border-ishes-blue text-ishes-blue text-xs font-bold hover:bg-ishes-blue hover:text-white transition-colors"
+                          >
+                            <Plus className="w-3.5 h-3.5" /> Ajouter
+                          </button>
+                        </div>
                       </div>
                     ))}
                   
-                  {distanceCoursesList.filter(c => c.title.toLowerCase().includes(searchCourseQuery.toLowerCase()) && c.id !== planId && !additionalCourses.includes(c.id)).length === 0 && (
+                  {distanceCoursesList.filter(c => `${c.title} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()) && c.id !== planId && !additionalCourses.includes(c.id)).length === 0 && (
                     <div className="text-center py-8 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                       <p className="text-xs text-gray-400 font-medium">Aucune formation trouvée.</p>
                     </div>
@@ -1477,8 +1471,8 @@ function InscriptionForm() {
 
                 {additionalCourses.length > 0 && (
                   <div className="mt-8 pt-6 border-t border-gray-100">
-                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Votre panier additionnel</h4>
-                    <div className="space-y-2.5">
+                    <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-[0.14em] mb-3">Ajoutées à cette inscription</h4>
+                    <div className="space-y-2">
                       {additionalCourses.map(id => {
                         const course = distanceCoursesList.find(c => c.id === id);
                         if (!course) return null;
@@ -1487,14 +1481,11 @@ function InscriptionForm() {
                           : course.price;
 
                         return (
-                          <div key={id} className="flex items-center justify-between bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50 group">
+                          <div key={id} className="flex items-center justify-between bg-white px-4 py-3 rounded-xl border border-[#e7e2d8]">
+                            <span className="text-sm font-bold text-[#101828]">{course.title}</span>
                             <div className="flex items-center gap-3">
-                              <span className="text-lg">{course.emoji}</span>
-                              <span className="text-xs font-bold text-ishes-blue">{course.title}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <span className="text-xs font-black text-ishes-dark">+{finalCoursePrice} €</span>
-                              <button onClick={() => setAdditionalCourses(additionalCourses.filter(c => c !== id))} className="text-gray-400 hover:text-red-500 transition-colors p-1">
+                              <span className="text-sm font-bold text-ishes-blue">+{finalCoursePrice} €</span>
+                              <button type="button" onClick={() => setAdditionalCourses(additionalCourses.filter(c => c !== id))} className="text-gray-400 hover:text-red-600 transition-colors p-1" aria-label={`Retirer ${course.title}`}>
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>

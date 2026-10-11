@@ -1316,11 +1316,8 @@ function InscriptionForm() {
               {/* Recap Card */}
               <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 max-w-xl mx-auto mb-10">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="text-4xl bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    {planId === 'tajwid_intensif' ? '🚀' :
-                      planId === 'tajwid_standard' ? '🕌' :
-                        planId === 'sciences_islamiques' ? '📖' :
-                          planId === 'arabe_coran_junior' ? '👶' : '✨'}
+                  <div className="w-11 h-11 rounded-xl bg-ishes-blue text-white flex items-center justify-center shrink-0">
+                    <BookOpen className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-[#101828]">

@@ -226,6 +226,41 @@ export function breadcrumbJsonLd(
   };
 }
 
+export function booksJsonLd(
+  books: Array<{
+    name: string;
+    description: string;
+    image: string;
+    price: string;
+    url: string;
+  }>,
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Boutique ISHES — livres et supports',
+    itemListElement: books.map((book, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Book',
+        name: book.name,
+        description: book.description,
+        image: absoluteUrl(book.image),
+        inLanguage: 'fr',
+        url: book.url,
+        offers: {
+          '@type': 'Offer',
+          price: book.price,
+          priceCurrency: 'EUR',
+          availability: 'https://schema.org/InStock',
+          url: book.url,
+        },
+      },
+    })),
+  };
+}
+
 export function faqJsonLd(faqs: Array<{ question: string; answer: string }>) {
   return {
     '@context': 'https://schema.org',
