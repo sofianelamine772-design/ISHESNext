@@ -104,14 +104,36 @@ function InscriptionForm() {
   const [searchCourseQuery, setSearchCourseQuery] = useState("");
   const [slotsStatus, setSlotsStatus] = useState<SlotStatusRow[]>([]);
 
-  const distanceCoursesList = [
-    { id: 'fiqh_malikite', title: 'Fiqh Mâlikite', detail: 'Droit musulman', price: 399 },
-    { id: 'tajwid_standard', title: 'Tajwid Standard', detail: 'Lecture du Coran', price: 649 },
-    { id: 'pack_accompagnement', title: 'Pack Accompagnement', detail: 'Suivi pédagogique', price: 49 },
-    { id: 'sciences_du_coran', title: 'Sciences du Coran', detail: 'Histoire du Livre', price: 399 },
-    { id: 'tarbiya_islamiya', title: 'Tarbiya Islamiya', detail: 'Éveil de l’enfant', price: 249 },
-    { id: 'as_sirah', title: 'Sîrah', detail: 'Vie du Prophète', price: 649 },
-    { id: 'spiritualite_islam', title: 'Spiritualité', detail: 'Conseil et pratique', price: 399 },
+  const distanceCoursesList: Array<{
+    id: string;
+    title: string;
+    audience: "Adulte" | "Enfant" | "Adulte et enfant";
+    detail: string;
+    price: number | null;
+  }> = [
+    { id: "tajwid_standard", title: "Tajwid", audience: "Adulte", detail: "À distance", price: 649 },
+    { id: "tajwid_enfant_distance", title: "Tajwid", audience: "Enfant", detail: "À distance", price: 399 },
+    { id: "tajwid_intensif", title: "Tajwid intensif", audience: "Adulte", detail: "À distance · 3 mois", price: 649 },
+    { id: "arabe_adulte", title: "Arabe", audience: "Adulte", detail: "À distance", price: 649 },
+    { id: "arabe_enfant_distance", title: "Arabe", audience: "Enfant", detail: "À distance", price: 399 },
+    { id: "memoriser_coran", title: "Mémorisation du Coran", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "fiqh_malikite", title: "Fiqh Mâlikite", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "al_aqida", title: "Al-Aqîda", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "as_sirah", title: "Sîrah", audience: "Adulte", detail: "À distance", price: 649 },
+    { id: "sciences_du_coran", title: "Sciences du Coran", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "spiritualite_islam", title: "Spiritualité", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "civilisation_arabo_musulmane", title: "Civilisation arabo-musulmane", audience: "Adulte", detail: "À distance", price: 199 },
+    { id: "tarbiya_islamiya", title: "Tarbiya Islamiya", audience: "Enfant", detail: "À distance", price: 399 },
+    { id: "femme-debutante-presentiel", title: "Arabe et Tajwid · débutante", audience: "Adulte", detail: "Présentiel · dimanche", price: 649 },
+    { id: "femme-intermediaire-presentiel", title: "Arabe et Tajwid · 2e année", audience: "Adulte", detail: "Présentiel · samedi", price: 649 },
+    { id: "enfant-mercredi-presentiel", title: "Scolarité enfants", audience: "Enfant", detail: "Présentiel · mercredi", price: 480 },
+    { id: "enfant-samedi-presentiel", title: "Scolarité enfants", audience: "Enfant", detail: "Présentiel · samedi", price: 480 },
+    { id: "enfant-dimanche-presentiel", title: "Scolarité enfants", audience: "Enfant", detail: "Présentiel · dimanche", price: 480 },
+    { id: "pack_accompagnement", title: "Pack Accompagnement", audience: "Adulte", detail: "Suivi pédagogique", price: 49 },
+    { id: "correction_fatiha", title: "Cours de Fatiha", audience: "Adulte", detail: "À distance", price: 0 },
+    { id: "cours_particuliers", title: "Cours particuliers", audience: "Adulte et enfant", detail: "À distance", price: null },
+    { id: "formation_enseignante_tajwid", title: "Formation enseignant Tajwid", audience: "Adulte", detail: "À distance", price: null },
+    { id: "formation_enseignante_tarbya", title: "Formation enseignant Tarbiya", audience: "Adulte", detail: "À distance", price: null },
   ];
 
   const [showChildHoraireError, setShowChildHoraireError] = useState<{ [key: number]: boolean }>({});
@@ -293,6 +315,24 @@ function InscriptionForm() {
            isChildSlot === 'dimanche';
   };
 
+  const quoteAddOn = (id: string) => {
+    const course = distanceCoursesList.find((c) => c.id === id);
+    if (!course || course.price == null) return 0;
+    if (registrationType === "child" && course.audience === "Enfant") {
+      return course.price * Math.max(namedChildren.length, 1);
+    }
+    return course.price;
+  };
+
+  const addOnPriceLabel = (course: (typeof distanceCoursesList)[number]) => {
+    if (course.price == null) return "Sur devis";
+    if (course.price === 0) return "Gratuit";
+    return `${quoteAddOn(course.id)} €`;
+  };
+
+  const isSamePlan = (a: string | null, b: string) =>
+    Boolean(a) && a!.replace(/-/g, "_") === b.replace(/-/g, "_");
+
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
     let total = registrationType === 'child'
@@ -300,12 +340,7 @@ function InscriptionForm() {
       : basePrice;
     
     additionalCourses.forEach(id => {
-      const coursePrice = getBasePriceOfPlan(id);
-      if (id === 'pack_accompagnement') {
-        total += coursePrice;
-      } else {
-        total += registrationType === 'child' ? coursePrice * namedChildren.length : coursePrice;
-      }
+      total += quoteAddOn(id);
     });
 
     return total;
@@ -316,12 +351,7 @@ function InscriptionForm() {
     let total = registrationType === 'child' ? basePrice * namedChildren.length : basePrice;
     
     additionalCourses.forEach(id => {
-      const coursePrice = getBasePriceOfPlan(id);
-      if (id === 'pack_accompagnement') {
-        total += coursePrice;
-      } else {
-        total += registrationType === 'child' ? coursePrice * namedChildren.length : coursePrice;
-      }
+      total += quoteAddOn(id);
     });
 
     return total;
@@ -390,7 +420,8 @@ function InscriptionForm() {
           parentNom: formData.parentNom,
           orderBump: additionalCourses.length > 0 ? additionalCourses.join(',') : undefined,
           orderBumpPrices: additionalCourses.reduce((acc, id) => {
-            acc[id] = getBasePriceOfPlan(id);
+            const course = distanceCoursesList.find((c) => c.id === id);
+            acc[id] = course?.price ?? getBasePriceOfPlan(id);
             return acc;
           }, {} as Record<string, number>),
           childrenList: registrationType === 'child' ? namedChildren.map(c => ({
@@ -654,18 +685,18 @@ function InscriptionForm() {
   const getPlanName = (id: string | null) => {
     switch (id) {
       case "presentiel-global": return "Cours en Présentiel";
-      case "tajwid_intensif": return "Tajwid Intensif (Distanciel)";
+      case "tajwid_intensif": return "Tajwid intensif · adulte";
       case "sciences_islamiques": return "Sciences Islamiques (Distanciel)";
       case "arabe_coran_junior": return "Arabe & Coran Junior";
       case "pack_accompagnement": return "Pack Accompagnement";
-      case "tajwid_standard": return "Tajwid Standard (Distanciel)";
+      case "tajwid_standard": return audienceParam === "enfant" ? "Tajwid enfant" : "Tajwid adulte";
       case "sciences_du_coran": return "Sciences du Coran (Distanciel)";
       case "sciences_hadith": return "Sciences du Hadith (Distanciel)";
       case "memoriser_coran": return "Mémorisation du Coran (Distanciel)";
       case "as_sirah": return "Sîrah An-Nabawiyya (Distanciel)";
       case "al_aqida": return "Al-Aqîda (Distanciel)";
       case "fiqh_malikite": return "Fiqh Mâlikite (Distanciel)";
-      case "arabe_adulte": return "Arabe Littéraire (Adulte) (Distanciel)";
+      case "arabe_adulte": return "Arabe adulte";
       case "tarbiya_islamiya": return "Tarbiya Islamiya (Distanciel)";
       case "spiritualite_islam": return "Spiritualité Musulmane (Distanciel)";
       case "correction_fatiha": return "Correction al Fatiha (Distanciel)";
@@ -676,8 +707,8 @@ function InscriptionForm() {
       case "enfant-dimanche-presentiel": return "Arabe & Coran Enfant (Dimanche)";
       case "femme-debutante-presentiel": return "Arabe & Tajwid Femme Débutante (Présentiel)";
       case "femme-intermediaire-presentiel": return "Arabe & Tajwid Femme Intermédiaire (Présentiel)";
-      case "tajwid_enfant_distance": return "Tajwid Enfant (Distanciel)";
-      case "arabe_enfant_distance": return "Arabe Enfant (Distanciel)";
+      case "tajwid_enfant_distance": return "Tajwid enfant";
+      case "arabe_enfant_distance": return "Arabe enfant";
       case "formation_enseignante_tajwid": return "Formation Enseignant Tajwid";
       case "formation_enseignante_tarbya": return "Formation Enseignant Tarbya";
       default: return "";
@@ -703,6 +734,12 @@ function InscriptionForm() {
 
   const levelLabel = selectedClass ? selectedClass.niveau : getLevelLabel(level);
   const planName = (levelLabel ? levelLabel : getPlanName(originalPlanId || planId)) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
+  const recapAudience = (() => {
+    const id = (originalPlanId || planId || "").toLowerCase();
+    if (audienceParam === "enfant" || id.includes("enfant") || id === "tarbiya_islamiya" || id === "arabe_coran_junior") return "Enfant";
+    if (id === "cours_particuliers") return "Adulte et enfant";
+    return "Adulte";
+  })();
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -714,7 +751,7 @@ function InscriptionForm() {
       {/* Main Container */}
       <div
         ref={formContainerRef}
-        className="relative z-10 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 md:p-12 scroll-mt-24"
+        className="relative z-10 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-4 sm:p-8 md:p-12 scroll-mt-24"
       >
 
         {/* Progress Bar */}
@@ -1353,28 +1390,32 @@ function InscriptionForm() {
 
           {step === 2 && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-6">
-              <h2 className="text-2xl font-black text-[#101828] text-center mb-8">Récapitulatif de votre programme</h2>
+              <h2 className="text-xl sm:text-2xl font-black text-[#101828] text-center mb-6 sm:mb-8">Récapitulatif de votre programme</h2>
 
               {/* Recap Card */}
               <div className="bg-white rounded-2xl border border-[#e7e2d8] max-w-xl mx-auto mb-8 overflow-hidden">
-                <div className="flex items-center gap-4 px-5 py-5 sm:px-6">
-                  <div className="w-11 h-11 rounded-xl bg-ishes-blue text-white flex items-center justify-center shrink-0">
-                    <BookOpen className="w-5 h-5" />
+                <div className="flex flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:px-6">
+                  <div className="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
+                    <div className="w-11 h-11 rounded-xl bg-ishes-blue text-white flex items-center justify-center shrink-0">
+                      <BookOpen className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ishes-gold mb-1">Votre cursus</p>
+                      <h3 className="text-base sm:text-lg font-black text-[#101828] leading-snug break-words">
+                        {((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'femme-debutante-presentiel' || planId === 'debutante_presentiel') ? 'Arabe et Tajwid · adulte débutante'
+                        : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'femme-intermediaire-presentiel' || planId === 'intermediaire_presentiel') ? 'Arabe et Tajwid · adulte, 2e année'
+                        : (getPlanName(originalPlanId || planId) || planName || "Votre formation")}
+                      </h3>
+                      <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-[#6e5730]">{recapAudience}</p>
+                      <p className="text-sm text-[#344054] font-medium mt-1 leading-relaxed">
+                        {PROGRAMS_DATA[planId || ""]?.duration || PROGRAMS_DATA[(planId || "").replace(/-/g, "_")]?.duration || "Selon programme"}
+                        {" · "}
+                        {(planId || "").includes("presentiel") || planId === "presentiel-global" || (planId === "tajwid_standard" && audienceParam === "enfant") ? "Présentiel" : "À distance"}
+                        {levelLabel && !/femme/i.test(levelLabel) ? ` · ${levelLabel.replace("🧕 ", "")}` : ""}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ishes-gold mb-1">Votre cursus</p>
-                    <h3 className="text-base font-black text-[#101828] leading-snug">
-                      {((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'debutante_presentiel') ? 'Arabe & Tajwid débutant' 
-                      : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'intermediaire_presentiel') ? 'Arabe & Tajwid 2eme année'
-                      : (planName || "Votre Formation")}
-                    </h3>
-                    <p className="text-sm text-gray-500 font-medium mt-1">
-                      {PROGRAMS_DATA[planId || ""]?.duration || PROGRAMS_DATA[(planId || "").replace(/-/g, "_")]?.duration || "Selon programme"}
-                      {" · "}
-                      {(planId || "").includes("presentiel") || planId === "presentiel-global" ? "Présentiel" : "À distance"}
-                    </p>
-                  </div>
-                  <p className="text-lg font-black text-ishes-blue shrink-0">{getBasePriceOfPlan(planId)} €</p>
+                  <p className="text-lg font-black text-ishes-blue sm:shrink-0">{getBasePriceOfPlan(planId)} €</p>
                 </div>
 
                 {registrationType === 'child' && (
@@ -1421,7 +1462,7 @@ function InscriptionForm() {
                   Ajouter une autre formation
                 </h3>
                 <p className="text-sm text-gray-500 font-medium mt-1 mb-5">
-                  Facultatif. Le tarif s’ajoute à cette inscription.
+                  Facultatif. Le public est indiqué sous chaque formation : adulte ou enfant.
                 </p>
 
                 <div className="relative mb-6 group">
@@ -1435,26 +1476,25 @@ function InscriptionForm() {
                   />
                 </div>
 
-                <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
+                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
                   {distanceCoursesList
-                    .filter(c => c.id !== planId && !additionalCourses.includes(c.id))
-                    .filter(c => `${c.title} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()))
+                    .filter(c => !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id))
+                    .filter(c => `${c.title} ${c.audience} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()))
                     .map(course => (
-                      <div key={course.id} className="bg-white px-4 py-3.5 rounded-xl border border-[#e7e2d8] flex items-center justify-between gap-3">
+                      <div key={course.id} className="bg-white px-4 py-3.5 rounded-xl border border-[#e7e2d8] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="min-w-0">
-                          <h4 className="text-sm font-bold text-[#101828]">{course.title}</h4>
-                          <p className="text-xs text-gray-500 font-medium mt-0.5">{course.detail}</p>
+                          <h4 className="text-sm font-bold text-[#101828] leading-snug break-words">{course.title}</h4>
+                          <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-[#6e5730]">{course.audience}</p>
+                          <p className="text-xs text-[#667085] font-medium mt-0.5 leading-relaxed">{course.detail}</p>
                         </div>
-                        <div className="flex items-center gap-3 shrink-0">
+                        <div className="flex items-center justify-between gap-3 sm:shrink-0">
                           <p className="text-sm font-bold text-[#101828]">
-                            {registrationType === 'child' && course.id !== 'pack_accompagnement'
-                              ? `${course.price * namedChildren.length} €`
-                              : `${course.price} €`}
+                            {addOnPriceLabel(course)}
                           </p>
                           <button
                             type="button"
                             onClick={() => setAdditionalCourses([...additionalCourses, course.id])}
-                            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg border border-ishes-blue text-ishes-blue text-xs font-bold hover:bg-ishes-blue hover:text-white transition-colors"
+                            className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-lg border border-ishes-blue text-ishes-blue text-xs font-bold hover:bg-ishes-blue hover:text-white transition-colors"
                           >
                             <Plus className="w-3.5 h-3.5" /> Ajouter
                           </button>
@@ -1462,7 +1502,7 @@ function InscriptionForm() {
                       </div>
                     ))}
                   
-                  {distanceCoursesList.filter(c => `${c.title} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()) && c.id !== planId && !additionalCourses.includes(c.id)).length === 0 && (
+                  {distanceCoursesList.filter(c => `${c.title} ${c.audience} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()) && !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id)).length === 0 && (
                     <div className="text-center py-8 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                       <p className="text-xs text-gray-400 font-medium">Aucune formation trouvée.</p>
                     </div>
@@ -1476,15 +1516,17 @@ function InscriptionForm() {
                       {additionalCourses.map(id => {
                         const course = distanceCoursesList.find(c => c.id === id);
                         if (!course) return null;
-                        const finalCoursePrice = (registrationType === 'child' && id !== 'pack_accompagnement') 
-                          ? course.price * namedChildren.length 
-                          : course.price;
+                        const priceLabel = addOnPriceLabel(course);
 
                         return (
-                          <div key={id} className="flex items-center justify-between bg-white px-4 py-3 rounded-xl border border-[#e7e2d8]">
-                            <span className="text-sm font-bold text-[#101828]">{course.title}</span>
-                            <div className="flex items-center gap-3">
-                              <span className="text-sm font-bold text-ishes-blue">+{finalCoursePrice} €</span>
+                          <div key={id} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between bg-white px-4 py-3 rounded-xl border border-[#e7e2d8]">
+                            <div className="min-w-0">
+                              <p className="text-sm font-bold text-[#101828] leading-snug break-words">{course.title}</p>
+                              <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-[#6e5730]">{course.audience}</p>
+                              <p className="text-xs text-[#667085] font-medium mt-0.5 leading-relaxed">{course.detail}</p>
+                            </div>
+                            <div className="flex items-center justify-between gap-3 sm:shrink-0">
+                              <span className="text-sm font-bold text-ishes-blue">{priceLabel.startsWith("Sur") || priceLabel === "Gratuit" ? priceLabel : `+${priceLabel}`}</span>
                               <button type="button" onClick={() => setAdditionalCourses(additionalCourses.filter(c => c !== id))} className="text-gray-400 hover:text-red-600 transition-colors p-1" aria-label={`Retirer ${course.title}`}>
                                 <Trash2 className="w-4 h-4" />
                               </button>
