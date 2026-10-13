@@ -21,6 +21,38 @@ export function getFamilyCheckoutTotal(basePrice: number, childrenCount: number)
   return Math.max(0, subtotal - getSiblingDiscount(count));
 }
 
+/**
+ * Ces formations s'ajoutent une fois par enfant.
+ * Les autres (adulte, pack, devis) s'ajoutent une seule fois au paiement.
+ */
+export const PER_CHILD_FORMATION_SLUGS = new Set([
+  "tajwid_enfant_distance",
+  "arabe_enfant_distance",
+  "tarbiya_islamiya",
+  "enfant-mercredi-presentiel",
+  "enfant-samedi-presentiel",
+  "enfant-dimanche-presentiel",
+]);
+
+/** Tarif d'une formation ajoutée, lu en base. Le prix envoyé par le navigateur n'est pas utilisé. */
+export function addedFormationCharge(
+  unitPrice: number,
+  slug: string,
+  registrationType: string,
+  childrenCount: number,
+): number {
+  const unit = Number(unitPrice);
+  if (!Number.isFinite(unit) || unit <= 0) return 0;
+  const perChild = registrationType === "child" && PER_CHILD_FORMATION_SLUGS.has(slug);
+  const count = perChild ? Math.max(1, Number(childrenCount) || 1) : 1;
+  return unit * count;
+}
+
+/** Clé Stripe metadata (40 caractères max, sans tiret). */
+export function bumpPriceMetadataKey(slug: string): string {
+  return `price_${slug.replace(/-/g, "_")}`.slice(0, 40);
+}
+
 /** Premier enfant au tarif plein, chaque enfant suivant à −50 €. */
 export function getExpectedAmountForChild(
   basePrice: number,

@@ -318,6 +318,53 @@ describe('Checkout API', () => {
     expect(session.metadata.child_0_classId).toBe('e0a12345-0007-4000-8000-777777777777');
   });
 
+  it('encaisse la somme des formations ajoutées, sans le prix envoyé par le navigateur', async () => {
+    mockFormation(649, 'Tajwid', 'distanciel');
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'tajwid_standard',
+      registrationType: 'adult',
+      email: 'a@example.com',
+      prenom: 'Amina',
+      nom: 'Benali',
+      orderBump: 'fiqh_malikite,al_aqida',
+      orderBumpPrices: { fiqh_malikite: 1, al_aqida: 1 },
+    });
+
+    expect(res.status).toBe(200);
+    const session = mockCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(64900 * 3);
+    expect(session.metadata.order_bump).toBe('fiqh_malikite,al_aqida');
+    expect(session.metadata.price_fiqh_malikite).toBe('649');
+    expect(session.metadata.price_al_aqida).toBe('649');
+  });
+
+  it('multiplie une formation enfant ajoutée par le nombre d enfants', async () => {
+    mockFormation(399, 'Tajwid enfant', 'distanciel');
+    const stripeInstance = new Stripe('fake', {} as any);
+    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      orderBump: 'tajwid_enfant_distance',
+      childrenList: [
+        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: 'Youssef', nom: 'Benali' },
+      ],
+    });
+
+    expect(res.status).toBe(200);
+    const session = mockCreate.mock.calls[0][0];
+    // 399 × 2 enfants − 50 € de fratrie, plus 399 × 2 pour le Tajwid enfant
+    expect(session.line_items[0].price_data.unit_amount).toBe((748 + 798) * 100);
+    expect(session.metadata.order_bump).toBe('tajwid_enfant_distance');
+    expect(session.metadata.price_tajwid_enfant_distance).toBe('399');
+  });
+
   it('autorise toutes les classes distanciel enfant (101–108)', async () => {
     mockFormation(399, 'Cours enfant distanciel');
     const stripeInstance = new Stripe('fake', {} as any);

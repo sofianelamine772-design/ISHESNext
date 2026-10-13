@@ -13,7 +13,7 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 import { areClassesAllFull, isClassFull, type SlotStatusRow } from "@/lib/class-availability";
 import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug, type PresentielClass } from "@/lib/presentiel-data";
 import { DISTANCE_CLASSES } from "@/lib/distance-data";
-import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
+import { addedFormationCharge, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
 import { PresentielChoicePicker, PresentielHorairePicker } from "@/components/vitrine/PresentielHorairePicker";
 import { cn } from "@/lib/utils";
 
@@ -318,10 +318,7 @@ function InscriptionForm() {
   const quoteAddOn = (id: string) => {
     const course = distanceCoursesList.find((c) => c.id === id);
     if (!course || course.price == null) return 0;
-    if (registrationType === "child" && course.audience === "Enfant") {
-      return course.price * Math.max(namedChildren.length, 1);
-    }
-    return course.price;
+    return addedFormationCharge(course.price, course.id, registrationType, namedChildren.length);
   };
 
   const addOnPriceLabel = (course: (typeof distanceCoursesList)[number]) => {
@@ -346,17 +343,6 @@ function InscriptionForm() {
     return total;
   };
 
-  const getSubtotal = () => {
-    const basePrice = getBasePriceOfPlan(planId);
-    let total = registrationType === 'child' ? basePrice * namedChildren.length : basePrice;
-    
-    additionalCourses.forEach(id => {
-      total += quoteAddOn(id);
-    });
-
-    return total;
-  };
-
   const siblingDiscount = isPresentielCart() ? getSiblingDiscount(namedChildren.length) : 0;
 
   const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5 | 10>(1);
@@ -365,7 +351,7 @@ function InscriptionForm() {
     if (getPrice() < 100) {
       setSelectedInstallments(1);
     }
-  }, [childrenList.length, registrationType, planId]);
+  }, [childrenList.length, registrationType, planId, additionalCourses.length]);
 
   const handleCheckout = async () => {
     // === VALIDATION AVANT PAIEMENT (Correction du bug à la source) ===
@@ -419,11 +405,6 @@ function InscriptionForm() {
           parentPrenom: formData.parentPrenom,
           parentNom: formData.parentNom,
           orderBump: additionalCourses.length > 0 ? additionalCourses.join(',') : undefined,
-          orderBumpPrices: additionalCourses.reduce((acc, id) => {
-            const course = distanceCoursesList.find((c) => c.id === id);
-            acc[id] = course?.price ?? getBasePriceOfPlan(id);
-            return acc;
-          }, {} as Record<string, number>),
           childrenList: registrationType === 'child' ? namedChildren.map(c => ({
             prenom: c.prenom,
             nom: c.nom,
@@ -1493,7 +1474,7 @@ function InscriptionForm() {
                           </p>
                           <button
                             type="button"
-                            onClick={() => setAdditionalCourses([...additionalCourses, course.id])}
+                            onClick={() => setAdditionalCourses((prev) => prev.includes(course.id) ? prev : [...prev, course.id])}
                             className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-lg border border-ishes-blue text-ishes-blue text-xs font-bold hover:bg-ishes-blue hover:text-white transition-colors"
                           >
                             <Plus className="w-3.5 h-3.5" /> Ajouter
@@ -1527,7 +1508,7 @@ function InscriptionForm() {
                             </div>
                             <div className="flex items-center justify-between gap-3 sm:shrink-0">
                               <span className="text-sm font-bold text-ishes-blue">{priceLabel.startsWith("Sur") || priceLabel === "Gratuit" ? priceLabel : `+${priceLabel}`}</span>
-                              <button type="button" onClick={() => setAdditionalCourses(additionalCourses.filter(c => c !== id))} className="text-gray-400 hover:text-red-600 transition-colors p-1" aria-label={`Retirer ${course.title}`}>
+                              <button type="button" onClick={() => setAdditionalCourses((prev) => prev.filter((c) => c !== id))} className="text-gray-400 hover:text-red-600 transition-colors p-1" aria-label={`Retirer ${course.title}`}>
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
@@ -1571,23 +1552,46 @@ function InscriptionForm() {
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100 mb-10 max-w-md mx-auto">
+              <div className="bg-gray-50 rounded-3xl p-4 sm:p-8 border border-gray-100 mb-10 max-w-md mx-auto text-left">
+                <ul className="space-y-3">
+                  <li className="flex items-start justify-between gap-3">
+                    <span className="min-w-0">
+                      <span className="block text-sm font-bold text-[#101828] leading-snug break-words">
+                        {getPlanName(originalPlanId || planId) || planName || "Votre formation"}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] font-black uppercase tracking-[0.12em] text-[#6e5730]">{recapAudience}</span>
+                    </span>
+                    <span className="text-sm font-bold text-[#101828] shrink-0">
+                      {(registrationType === "child"
+                        ? getBasePriceOfPlan(planId) * Math.max(namedChildren.length, 1)
+                        : getBasePriceOfPlan(planId)
+                      ).toLocaleString("fr-FR")} €
+                    </span>
+                  </li>
+                  {additionalCourses.map((id) => {
+                    const course = distanceCoursesList.find((c) => c.id === id);
+                    if (!course) return null;
+                    return (
+                      <li key={id} className="flex items-start justify-between gap-3">
+                        <span className="min-w-0">
+                          <span className="block text-sm font-bold text-[#101828] leading-snug break-words">{course.title}</span>
+                          <span className="mt-0.5 block text-[11px] font-black uppercase tracking-[0.12em] text-[#6e5730]">{course.audience}</span>
+                        </span>
+                        <span className="text-sm font-bold text-[#101828] shrink-0">{addOnPriceLabel(course)}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
                 {siblingDiscount > 0 && (
-                  <div className="space-y-2 mb-4 text-sm font-bold text-gray-500">
-                    <div className="flex justify-between items-center">
-                      <span className="uppercase tracking-widest text-[11px]">Sous-total ({childrenList.length} × {getBasePriceOfPlan(planId)} €)</span>
-                      <span className="text-gray-400 line-through">{getSubtotal()},00 €</span>
-                    </div>
-                    <div className="flex justify-between items-center text-ishes-blue">
-                      <span className="uppercase tracking-widest text-[11px]">Réduction fratrie</span>
-                      <span>−{siblingDiscount},00 €</span>
-                    </div>
+                  <div className="mt-3 flex justify-between gap-3 text-sm font-bold text-ishes-blue">
+                    <span>Réduction fratrie</span>
+                    <span>−{siblingDiscount} €</span>
                   </div>
                 )}
-                <div className="flex justify-between items-center mb-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
+                <div className="mt-4 flex justify-between items-center gap-3 border-t border-gray-200 pt-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
                   <span>Total à régler</span>
-                  <span className="text-ishes-dark">
-                    {getPrice()},00 €
+                  <span className="text-ishes-dark normal-case tracking-normal text-base">
+                    {getPrice().toLocaleString("fr-FR")} €
                   </span>
                 </div>
                 <div className="h-[1px] bg-gray-200 mb-6" />

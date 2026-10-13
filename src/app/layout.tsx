@@ -81,6 +81,7 @@ export const metadata: Metadata = {
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { frFR } from "@/lib/clerk-fr";
@@ -113,6 +114,18 @@ export default function RootLayout({
           <AnalyticsTracker />
         </body>
         <GoogleAnalytics gaId="G-WS8XG0WKXZ" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18510499480"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-aw" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-18510499480');
+          `}
+        </Script>
       </html>
     </ClerkProvider>
   );

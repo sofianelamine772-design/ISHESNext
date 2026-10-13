@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import { clerkClient } from '@clerk/nextjs/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getCurrentAcademicYear } from '@/lib/utils';
-import { getExpectedAmountForChild } from '@/lib/pricing';
+import { bumpPriceMetadataKey, getExpectedAmountForChild, PER_CHILD_FORMATION_SLUGS } from '@/lib/pricing';
 import { insertPaiementWithStripeAccount } from '@/lib/paiements-insert';
 import type { StripeAccountId } from '@/lib/stripe-accounts';
 
@@ -61,7 +61,10 @@ async function upsertStudent(params: {
   return newStudent?.id || null;
 }
 
-async function resolveFormationUuid(formationId: string): Promise<string | null> {
+async function resolveFormationUuid(
+  formationId: string,
+  options?: { strict?: boolean },
+): Promise<string | null> {
   if (!formationId) return null;
   const isUuid =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
@@ -75,6 +78,7 @@ async function resolveFormationUuid(formationId: string): Promise<string | null>
     .eq('slug', formationId)
     .maybeSingle();
   if (data) return data.id;
+  if (options?.strict) return null;
 
   const { data: fallback } = await supabaseAdmin
     .from('formations')
@@ -82,6 +86,29 @@ async function resolveFormationUuid(formationId: string): Promise<string | null>
     .eq('slug', 'presentiel-global')
     .maybeSingle();
   return fallback?.id || null;
+}
+
+async function readBumpUnit(
+  metadata: Stripe.Metadata | null | undefined,
+  slug: string,
+): Promise<number | null> {
+  const raw = metadata?.[bumpPriceMetadataKey(slug)] ?? metadata?.[`price_${slug}`];
+  if (raw != null && raw !== '') {
+    const parsed = parseFloat(raw);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  const { data } = await supabaseAdmin
+    .from('formations')
+    .select('price')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (!data) return null;
+  const price = Number(data.price);
+  return Number.isFinite(price) ? price : null;
+}
+
+function listOrderBumps(metadata: Stripe.Metadata | null | undefined): string[] {
+  return (metadata?.order_bump || '').split(',').map((slug) => slug.trim()).filter(Boolean);
 }
 
 async function upsertInscription(params: {
@@ -350,26 +377,23 @@ export async function fulfillCheckoutSession(params: {
         });
         if (insId) studentIds.push(studentId);
 
-        // --- ORDER BUMPS (Hybrid Logic) ---
-        const orderBumps = session.metadata?.order_bump?.split(',').filter(Boolean) || [];
+        const orderBumps = listOrderBumps(session.metadata);
         for (const bumpId of orderBumps) {
-          // Pack accompagnement is applied only once to the first child
-          if (bumpId === 'pack_accompagnement' && i !== 0) continue;
+          const perChild = PER_CHILD_FORMATION_SLUGS.has(bumpId);
+          if (!perChild && i !== 0) continue;
 
-          const bumpUuid = await resolveFormationUuid(bumpId);
-          if (bumpUuid) {
-            const basePriceBump = parseFloat(session.metadata?.[`price_${bumpId}`] || '49');
-            
-            const expectedAmountBump = basePriceBump;
+          const bumpUuid = await resolveFormationUuid(bumpId, { strict: true });
+          if (!bumpUuid) continue;
+          const unit = await readBumpUnit(session.metadata, bumpId);
+          if (unit == null) continue;
 
-            await upsertInscription({
-              studentId,
-              formationUuid: bumpUuid,
-              classId: null,
-              academicYear,
-              expectedAmount: expectedAmountBump,
-            });
-          }
+          await upsertInscription({
+            studentId,
+            formationUuid: bumpUuid,
+            classId: null,
+            academicYear,
+            expectedAmount: unit,
+          });
         }
       }
     } else {
@@ -412,20 +436,19 @@ export async function fulfillCheckoutSession(params: {
           });
           if (insId) studentIds.push(studentId);
 
-          // --- ORDER BUMPS ---
-          const orderBumps = session.metadata?.order_bump?.split(',').filter(Boolean) || [];
+          const orderBumps = listOrderBumps(session.metadata);
           for (const bumpId of orderBumps) {
-            const bumpUuid = await resolveFormationUuid(bumpId);
-            if (bumpUuid) {
-              const basePriceBump = parseFloat(session.metadata?.[`price_${bumpId}`] || '49');
-              await upsertInscription({
-                studentId,
-                formationUuid: bumpUuid,
-                classId: null,
-                academicYear,
-                expectedAmount: basePriceBump,
-              });
-            }
+            const bumpUuid = await resolveFormationUuid(bumpId, { strict: true });
+            if (!bumpUuid) continue;
+            const unit = await readBumpUnit(session.metadata, bumpId);
+            if (unit == null) continue;
+            await upsertInscription({
+              studentId,
+              formationUuid: bumpUuid,
+              classId: null,
+              academicYear,
+              expectedAmount: unit,
+            });
           }
         }
       }

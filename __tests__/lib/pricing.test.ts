@@ -3,6 +3,7 @@ import {
   getFamilyCheckoutTotal,
   getNamedChildren,
   getSiblingDiscount,
+  addedFormationCharge,
   pickBillingInscriptions,
   pickBillingPayments,
   resolveBillingExpectedAmount,
@@ -32,6 +33,17 @@ describe('Réduction fratrie (inscription simultanée)', () => {
   it('ignore les inscriptions déjà existantes hors de ce paiement', () => {
     expect(getSiblingDiscount(0)).toBe(0);
     expect(getFamilyCheckoutTotal(480, 0)).toBe(0);
+  });
+
+  it('additionne chaque formation ajoutée, une fois pour un adulte et par enfant pour un cours enfant', () => {
+    expect(addedFormationCharge(399, 'fiqh_malikite', 'adult', 1)).toBe(399);
+    expect(addedFormationCharge(399, 'fiqh_malikite', 'child', 2)).toBe(399);
+    expect(addedFormationCharge(399, 'tajwid_enfant_distance', 'child', 2)).toBe(798);
+    expect(addedFormationCharge(0, 'cours_particuliers', 'adult', 1)).toBe(0);
+    const total = 649
+      + addedFormationCharge(399, 'fiqh_malikite', 'adult', 1)
+      + addedFormationCharge(399, 'al_aqida', 'adult', 1);
+    expect(total).toBe(1447);
   });
 
   it('facture le premier enfant plein tarif et les suivants à −50 €', () => {

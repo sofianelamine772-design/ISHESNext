@@ -4,7 +4,7 @@ import { auth } from '@clerk/nextjs/server';
 import { CLASS_ID_TO_UUID, resolvePresentielCheckoutSlug, getPresentielCapacityLimit } from '@/lib/presentiel-data';
 import { DISTANCE_CLASS_ID_TO_UUID, isOfficialDistanceClassId } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
+import { addedFormationCharge, bumpPriceMetadataKey, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
 
 export async function POST(req: Request) {
@@ -98,6 +98,32 @@ export async function POST(req: Request) {
       childrenCount = namedChildren.length;
       siblingDiscount = getSiblingDiscount(childrenCount);
       totalAmount = getFamilyCheckoutTotal(basePrice, childrenCount);
+    }
+
+    const mainSlug = formationId.replace(/-/g, '_');
+    const bumpSlugs = [...new Set(
+      String(body.orderBump || '')
+        .split(',')
+        .map((slug: string) => slug.trim())
+        .filter(Boolean),
+    )].filter((slug) => slug.replace(/-/g, '_') !== mainSlug);
+
+    const bumpUnitPrices: Record<string, number> = {};
+    for (const slug of bumpSlugs) {
+      const { data: bump } = await supabaseAdmin
+        .from('formations')
+        .select('price')
+        .eq('slug', slug)
+        .maybeSingle();
+      if (!bump) {
+        return NextResponse.json(
+          { error: `Formation ajoutée introuvable : ${slug}` },
+          { status: 404 },
+        );
+      }
+      const unit = Number(bump.price) || 0;
+      bumpUnitPrices[slug] = unit;
+      totalAmount += addedFormationCharge(unit, slug, registrationType, childrenCount);
     }
 
     // --- SECURITY: Check if présentiel classes are full / inactive ---
@@ -197,12 +223,10 @@ export async function POST(req: Request) {
       expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
       sibling_discount: String(siblingDiscount),
       stripe_account: stripeAccount,
-      order_bump: body.orderBump || '',
+      order_bump: bumpSlugs.join(','),
     };
-    if (body.orderBumpPrices) {
-      Object.keys(body.orderBumpPrices).forEach(id => {
-        metadata[`price_${id}`] = String(body.orderBumpPrices[id]);
-      });
+    for (const slug of bumpSlugs) {
+      metadata[bumpPriceMetadataKey(slug)] = String(bumpUnitPrices[slug] ?? 0);
     }
 
     if (registrationType === 'child' && body.childrenList && Array.isArray(body.childrenList)) {
