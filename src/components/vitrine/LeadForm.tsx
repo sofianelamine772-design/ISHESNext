@@ -72,10 +72,6 @@ export function LeadForm() {
     >
       <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#6e5730]">Demande écrite</p>
       <h2 className="mt-3 text-3xl md:text-4xl font-black text-[#101828]">Envoyer une demande</h2>
-      <p className="mt-4 max-w-2xl text-base text-[#344054]">
-        Ce formulaire transmet votre message à l&apos;institut. Les boutons WhatsApp ouvrent une discussion :
-        ils n&apos;envoient pas cette demande.
-      </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         <label className="block text-sm font-bold text-[#101828]">
