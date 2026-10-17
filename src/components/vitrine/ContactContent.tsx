@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { LeadForm } from "@/components/vitrine/LeadForm";
 
 export function ContactContent() {
   return (
@@ -23,6 +24,8 @@ export function ContactContent() {
           inscription d&apos;un enfant ou d&apos;un adulte. L&apos;entretien est gratuit, sans engagement.
         </p>
       </motion.div>
+
+      <LeadForm />
 
       {/* ═══════ DEUX BRANCHES ═══════ */}
       <motion.div
