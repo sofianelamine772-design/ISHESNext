@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toE164Phone, trackLeadFormSent } from "@/lib/google-ads-lead";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -8,12 +8,12 @@ type Status = "idle" | "sending" | "sent" | "error";
 export function LeadForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (status === "sending") return;
+  async function send(form: HTMLFormElement) {
+    if (status === "sending" || status === "sent") return;
+    if (!form.reportValidity()) return;
 
-    const form = event.currentTarget;
     const data = new FormData(form);
     const name = String(data.get("name") || "");
     const email = String(data.get("email") || "");
@@ -66,8 +66,14 @@ export function LeadForm() {
 
   return (
     <form
+      ref={formRef}
       id="envoi-formulaire-lead"
-      onSubmit={onSubmit}
+      onSubmit={(event) => event.preventDefault()}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" || !(event.target instanceof HTMLInputElement)) return;
+        event.preventDefault();
+        if (formRef.current) void send(formRef.current);
+      }}
       className="mb-16 rounded-[2.5rem] border border-[#e4dccb] bg-white p-6 sm:p-10 md:p-12"
     >
       <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#6e5730]">Demande écrite</p>
@@ -131,8 +137,11 @@ export function LeadForm() {
       {error ? <p className="mt-4 text-sm font-bold text-red-700">{error}</p> : null}
 
       <button
-        type="submit"
+        type="button"
         disabled={status === "sending"}
+        onClick={() => {
+          if (formRef.current) void send(formRef.current);
+        }}
         className="mt-6 inline-flex items-center justify-center rounded-full bg-[#152233] px-6 py-3.5 text-sm font-black text-white border border-[#c8a96e] hover:bg-[#101828] disabled:opacity-60"
       >
         {status === "sending" ? "Envoi en cours…" : "Envoyer ma demande"}
