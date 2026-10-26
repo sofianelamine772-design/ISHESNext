@@ -14,6 +14,8 @@ import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { matchesCourseModalityFilter, resolveCourseModality, type CourseModality, type CourseModalityFilter } from "@/lib/course-modality";
+import { ModalityFilter } from "@/components/admin/ModalityFilter";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type FamilyMember = {
@@ -24,10 +26,33 @@ type FamilyMember = {
   inscription?: {
     status: string;
     paid_status: string;
-    formations?: { title: string };
+    formations?: { title: string; type?: string };
     classes?: { name: string; type: string };
   };
 };
+
+function unwrapOne<T>(value: T | T[] | null | undefined): T | null {
+  if (!value) return null;
+  return Array.isArray(value) ? value[0] ?? null : value;
+}
+
+function collectModalities(inscription?: any, familyMembers: FamilyMember[] = []): CourseModality[] {
+  const found = new Set<CourseModality>();
+  const addFrom = (row: any) => {
+    const formation = unwrapOne(row?.formations);
+    const classe = unwrapOne(row?.classes);
+    const modality = resolveCourseModality({
+      classType: classe?.type,
+      formationType: formation?.type,
+      formationTitle: formation?.title,
+      className: classe?.name,
+    });
+    if (modality) found.add(modality);
+  };
+  addFrom(inscription);
+  for (const member of familyMembers) addFrom(member.inscription);
+  return [...found];
+}
 
 type Payment = {
   id: string;
@@ -44,10 +69,12 @@ type Payment = {
   reason?: string;
   familyMembers: FamilyMember[];
   isFamilyPayment: boolean;
+  modalities: CourseModality[];
 };
 
 export default function FacturationPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState<CourseModalityFilter>("tous");
   const [activeTab, setActiveTab] = useState<"refuse" | "tous" | "manuelle">("refuse");
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -78,6 +105,7 @@ export default function FacturationPage() {
 
         const familyMembers: FamilyMember[] = p.familyMembers || [];
         const isFamilyPayment = familyMembers.length > 0;
+        const modalities = collectModalities(inscription, familyMembers);
 
         return {
           id: p.id.slice(0, 8),
@@ -94,6 +122,7 @@ export default function FacturationPage() {
           reason: p.error_message || undefined,
           familyMembers,
           isFamilyPayment,
+          modalities,
         };
       });
       setPayments(formatted as Payment[]);
@@ -167,8 +196,35 @@ export default function FacturationPage() {
         `${m.firstName} ${m.lastName}`.toLowerCase().includes(searchLower)
       );
     const matchesTab = activeTab === "tous" || p.status === "refuse";
-    return matchesSearch && matchesTab;
+    return matchesSearch && matchesTab && matchesCourseModalityFilter(p.modalities, typeFilter);
   });
+
+  const filteredManualBalances = manualBalances.filter((student) => {
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch =
+      `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchLower) ||
+      (student.email || "").toLowerCase().includes(searchLower);
+    const modalities = (student.inscriptions || []).map((inscription: any) =>
+      resolveCourseModality({
+        formationType: inscription.type,
+        formationTitle: inscription.title,
+        className: inscription.class,
+      })
+    );
+    return matchesSearch && matchesCourseModalityFilter(modalities, typeFilter);
+  });
+
+  const modalityCounts = {
+    tous: payments.filter((p) => activeTab === "tous" || p.status === "refuse").length,
+    presentiel: payments.filter((p) =>
+      (activeTab === "tous" || p.status === "refuse") &&
+      matchesCourseModalityFilter(p.modalities, "presentiel")
+    ).length,
+    distanciel: payments.filter((p) =>
+      (activeTab === "tous" || p.status === "refuse") &&
+      matchesCourseModalityFilter(p.modalities, "distanciel")
+    ).length,
+  };
 
   
   const handleRelance = async (paymentId: string) => {
@@ -270,32 +326,39 @@ export default function FacturationPage() {
             </div>
 
             {/* ── Filtres ─────────────────────────────────────────────── */}
-            <div className="flex flex-wrap gap-3 items-center justify-between">
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher par nom, email, ID..."
-                  className="w-full sm:w-96 bg-white border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium shadow-sm"
-                />
-              </div>
-              <div className="flex gap-2 flex-wrap">
-                {(["refuse", "tous", "manuelle"] as const).map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={cn(
-                      "px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-widest transition-all",
-                      activeTab === tab
-                        ? "bg-ishes-blue text-white shadow-xl shadow-ishes-blue/20 scale-105"
-                        : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-blue/20 hover:text-ishes-dark"
-                    )}
-                  >
-                    {tab === "refuse" ? "REFUSÉS" : tab === "manuelle" ? "SAISIE MANUELLE" : "TOUS"}
-                  </button>
-                ))}
+            <div className="space-y-3">
+              <ModalityFilter
+                value={typeFilter}
+                onChange={setTypeFilter}
+                counts={activeTab === "manuelle" ? undefined : modalityCounts}
+              />
+              <div className="flex flex-wrap gap-3 items-center justify-between">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Rechercher par nom, email, ID..."
+                    className="w-full sm:w-96 bg-white border border-gray-100 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-ishes-blue/5 focus:border-ishes-blue transition-all font-medium shadow-sm"
+                  />
+                </div>
+                <div className="flex gap-2 flex-wrap items-center">
+                  {(["refuse", "tous", "manuelle"] as const).map(tab => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={cn(
+                        "px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-widest transition-all",
+                        activeTab === tab
+                          ? "bg-ishes-blue text-white shadow-xl shadow-ishes-blue/20 scale-105"
+                          : "bg-white text-gray-400 border border-gray-100 hover:border-ishes-blue/20 hover:text-ishes-dark"
+                      )}
+                    >
+                      {tab === "refuse" ? "REFUSÉS" : tab === "manuelle" ? "SAISIE MANUELLE" : "TOUTES LES TRANSACTIONS"}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -306,7 +369,7 @@ export default function FacturationPage() {
                   <div>
                     <h2 className="text-xl ishes-heading text-ishes-blue">Paiements Manuels & Impayés</h2>
                     <p className="text-[11px] text-gray-400 font-medium mt-0.5">
-                      {manualBalances.length} dossier{manualBalances.length !== 1 ? 's' : ''} suivi{manualBalances.length !== 1 ? 's' : ''} manuellement
+                      {filteredManualBalances.length} dossier{filteredManualBalances.length !== 1 ? 's' : ''} suivi{filteredManualBalances.length !== 1 ? 's' : ''} manuellement
                     </p>
                   </div>
                 </div>
@@ -332,8 +395,8 @@ export default function FacturationPage() {
                             </div>
                           </td>
                         </tr>
-                      ) : manualBalances.length > 0 ? (
-                        manualBalances.map((student) => (
+                      ) : filteredManualBalances.length > 0 ? (
+                        filteredManualBalances.map((student) => (
                           <tr key={student.id} className="hover:bg-gray-50/30 transition-colors">
                             <td className="px-6 py-5">
                               <div className="font-bold text-ishes-dark text-sm whitespace-nowrap">{student.first_name} {student.last_name}</div>

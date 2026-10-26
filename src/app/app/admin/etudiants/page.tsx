@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import { getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
 import { pickBillingPayments, sumSucceededBillingPayments, isLiveStripePayment, isTestStripePayment } from "@/lib/pricing";
+import { matchesCourseModalityFilter, resolveCourseModality, type CourseModality, type CourseModalityFilter } from "@/lib/course-modality";
+import { ModalityFilter } from "@/components/admin/ModalityFilter";
 
 // Types
 type StudentDetail = {
@@ -41,6 +43,25 @@ type StudentDetail = {
   hasConnected?: boolean;
 };
 
+function studentModalities(student: StudentDetail): CourseModality[] {
+  const found = new Set<CourseModality>();
+  const add = (modality: CourseModality | null) => {
+    if (modality) found.add(modality);
+  };
+  add(resolveCourseModality({
+    classType: student.classType,
+    formationTitle: student.enrolledClass,
+    className: student.exactClassName,
+  }));
+  for (const formation of student.activeFormations || []) {
+    add(resolveCourseModality({
+      formationTitle: formation.enrolledClass,
+      className: formation.exactClassName,
+    }));
+  }
+  return [...found];
+}
+
 function EtudiantsContent() {
   const searchParams = useSearchParams();
   const studentIdFromUrl = searchParams.get("id");
@@ -48,6 +69,7 @@ function EtudiantsContent() {
   const [students, setStudents] = useState<StudentDetail[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState<CourseModalityFilter>("tous");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   
   const [billingData, setBillingData] = useState<{
@@ -520,12 +542,33 @@ function EtudiantsContent() {
   };
 
   const filteredStudents = useMemo(() => {
-    return students.filter(s =>
-      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.enrolledClass.toLowerCase().includes(searchQuery.toLowerCase())
+    const query = searchQuery.toLowerCase();
+    return students.filter((s) => {
+      const matchesSearch =
+        s.name.toLowerCase().includes(query) ||
+        s.email.toLowerCase().includes(query) ||
+        s.enrolledClass.toLowerCase().includes(query);
+      return matchesSearch && matchesCourseModalityFilter(studentModalities(s), typeFilter);
+    });
+  }, [students, searchQuery, typeFilter]);
+
+  const modalityCounts = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    const searched = students.filter((s) =>
+      s.name.toLowerCase().includes(query) ||
+      s.email.toLowerCase().includes(query) ||
+      s.enrolledClass.toLowerCase().includes(query)
     );
+    return {
+      tous: searched.length,
+      presentiel: searched.filter((s) => matchesCourseModalityFilter(studentModalities(s), "presentiel")).length,
+      distanciel: searched.filter((s) => matchesCourseModalityFilter(studentModalities(s), "distanciel")).length,
+    };
   }, [students, searchQuery]);
+
+  useEffect(() => {
+    setVisibleCount(50);
+  }, [searchQuery, typeFilter, selectedYear]);
 
   const visibleStudents = useMemo(() => filteredStudents.slice(0, visibleCount), [filteredStudents, visibleCount]);
 
@@ -626,7 +669,7 @@ function EtudiantsContent() {
             <div className="w-10 lg:hidden" /> {/* Spacer for menu button */}
             <h1 className="text-xl md:text-2xl ishes-heading text-ishes-blue truncate">Base Étudiants</h1>
             <span className="hidden sm:inline-block px-3 py-1 bg-ishes-blue/5 text-ishes-blue text-[10px] font-black rounded-full border border-ishes-blue/10">
-              {students.length} INSCRITS
+              {filteredStudents.length} INSCRITS
             </span>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
@@ -692,6 +735,14 @@ function EtudiantsContent() {
                   <option value={currentAcademicYear}>Année Scolaire {currentAcademicYear}</option>
                   <option value={nextAcademicYear}>Année Scolaire {nextAcademicYear}</option>
                 </select>
+              </div>
+              <div className="mt-3">
+                <ModalityFilter
+                  compact
+                  value={typeFilter}
+                  onChange={setTypeFilter}
+                  counts={modalityCounts}
+                />
               </div>
             </div>
 

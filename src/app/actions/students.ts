@@ -1061,7 +1061,8 @@ export async function fetchPaymentsAction() {
           status,
           paid_status,
           formations (
-            title
+            title,
+            type
           ),
           classes (
             name,
@@ -1097,7 +1098,7 @@ export async function fetchPaymentsAction() {
             id, first_name, last_name, email,
             inscriptions (
               id, status, paid_status,
-            formations ( title ),
+            formations ( title, type ),
             classes ( name, type )
           )
         `)
