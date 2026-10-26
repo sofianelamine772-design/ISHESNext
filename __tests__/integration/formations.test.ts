@@ -143,18 +143,18 @@ describe('Catalogue présentiel live (déploiement)', () => {
     presentielClasses = data || [];
   });
 
-  it('a exactement 25 classes officielles actives (1–25), sans doublon', () => {
+  it('a exactement 26 classes officielles actives (1–26), sans doublon', () => {
     const official = presentielClasses.filter(
-      (c) => typeof c.external_id === 'number' && c.external_id >= 1 && c.external_id <= 25
+      (c) => typeof c.external_id === 'number' && c.external_id >= 1 && c.external_id <= 26
     );
     const active = official.filter((c) => c.is_active);
-    expect(active).toHaveLength(25);
-    expect(new Set(active.map((c) => c.external_id)).size).toBe(25);
+    expect(active).toHaveLength(26);
+    expect(new Set(active.map((c) => c.external_id)).size).toBe(26);
   });
 
   it('les classes hors catalogue (1024+, session fantôme) sont inactives', () => {
     const leftovers = presentielClasses.filter(
-      (c) => !(typeof c.external_id === 'number' && c.external_id >= 1 && c.external_id <= 25)
+      (c) => !(typeof c.external_id === 'number' && c.external_id >= 1 && c.external_id <= 26)
     );
     expect(leftovers.length).toBeGreaterThan(0);
     expect(leftovers.every((c) => c.is_active === false)).toBe(true);

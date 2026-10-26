@@ -322,6 +322,7 @@ VALUES
 ((SELECT id FROM public.formations WHERE slug = 'enfant-samedi-presentiel'), 'Élémentaire Débutant 1 (7-15 ans) — Samedi après-midi',     'presentiel', true, 'Samedi',   'après-midi',  'Élémentaire Débutant 1', '7-15 ans', 'enfant', 'mixte', 'elementaire_1', 23, 9,  'https://chat.whatsapp.com/GROUPE_CLASSE_09'),
 ((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire Débutant 1 (7-15 ans) — Dimanche matin', 'presentiel', true, 'Dimanche', 'matin',       'Élémentaire Débutant 1', '7-15 ans', 'enfant', 'mixte', 'elementaire_1', 23, 10, 'https://chat.whatsapp.com/GROUPE_CLASSE_10'),
 ((SELECT id FROM public.formations WHERE slug = 'enfant-dimanche-presentiel'), 'Élémentaire Débutant 1 (7-15 ans) — Dimanche après-midi',   'presentiel', true, 'Dimanche', 'après-midi',  'Élémentaire Débutant 1', '7-15 ans', 'enfant', 'mixte', 'elementaire_1', 23, 11, 'https://chat.whatsapp.com/GROUPE_CLASSE_11'),
+((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Élémentaire Débutant 1 (7-15 ans) — Mercredi après-midi',       'presentiel', true, 'Mercredi', 'après-midi',  'Élémentaire Débutant 1', '7-15 ans', 'enfant', 'mixte', 'elementaire_1', 18, 26, NULL),
 
 -- BLOC 4 – ÉLÉMENTAIRE 1+ (NON débutant)
 ((SELECT id FROM public.formations WHERE slug = 'enfant-mercredi-presentiel'), 'Élémentaire 1+ (NON débutant) — Mercredi après-midi',       'presentiel', true, 'Mercredi', 'après-midi', 'Élémentaire 1+', 'NON débutant', 'enfant', 'mixte', 'elementaire_1_plus', 23, 12, 'https://chat.whatsapp.com/GROUPE_CLASSE_12'),
@@ -364,8 +365,8 @@ ON CONFLICT (external_id) DO UPDATE SET
     capacity_limit= EXCLUDED.capacity_limit,
     whatsapp_link = EXCLUDED.whatsapp_link;
 
--- 8. DÉSACTIVER TOUT CE QUI N'EST PAS DANS LE CATALOGUE OFFICIEL (1-25)
+-- 8. DÉSACTIVER TOUT CE QUI N'EST PAS DANS LE CATALOGUE OFFICIEL (1-26)
 UPDATE public.classes
 SET is_active = false
 WHERE type = 'presentiel'
-  AND (external_id IS NULL OR external_id NOT BETWEEN 1 AND 25);
+  AND (external_id IS NULL OR external_id NOT BETWEEN 1 AND 26);

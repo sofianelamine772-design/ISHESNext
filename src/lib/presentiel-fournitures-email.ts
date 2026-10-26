@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { CLASS_ID_TO_UUID } from './presentiel-data';
+import { CLASS_ID_TO_UUID, PRESENTIEL_CLASSES } from './presentiel-data';
 
 export type FournituresKind = 'prepa' | 'elem';
 
@@ -47,7 +47,7 @@ export function resolvePresentielExternalId(ref?: string | null): number | null 
   const trimmed = String(ref).trim();
   if (!trimmed) return null;
   const asNum = Number(trimmed);
-  if (Number.isInteger(asNum) && asNum >= 1 && asNum <= 25 && String(asNum) === trimmed) {
+  if (Number.isInteger(asNum) && PRESENTIEL_CLASSES.some((c) => c.id === asNum) && String(asNum) === trimmed) {
     return asNum;
   }
   return UUID_TO_CLASS_ID[trimmed] ?? null;
@@ -62,8 +62,10 @@ export function resolvePresentielExternalIds(classRefs: string[]): number[] {
 export function getFournituresKindsFromExternalIds(ids: number[]): FournituresKind[] {
   const kinds = new Set<FournituresKind>();
   for (const id of ids) {
-    if (id >= 1 && id <= 7) kinds.add('prepa');
-    else if (id >= 8 && id <= 23) kinds.add('elem');
+    const classe = PRESENTIEL_CLASSES.find((c) => c.id === id);
+    if (!classe || classe.audience === 'adulte') continue;
+    if (classe.niveauKey.startsWith('maternel')) kinds.add('prepa');
+    else kinds.add('elem');
   }
   return Array.from(kinds);
 }

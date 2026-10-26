@@ -24,10 +24,10 @@ describe('Vérification de l\'assignation des classes (Toutes Formations)', () =
     expect(PROGRAMS_DATA.tajwid_intensif.price).toBe('649 €');
   });
 
-  it('le catalogue 1–25 est inscriptible (chaque classe a un UUID checkout)', () => {
+  it('le catalogue 1–26 est inscriptible (chaque classe a un UUID checkout)', () => {
     const uuids = Object.values(CLASS_ID_TO_UUID);
     const uniqueUuids = new Set(uuids);
-    expect(uuids).toHaveLength(25);
+    expect(uuids).toHaveLength(26);
     expect(uuids.length).toBe(uniqueUuids.size);
     
     for (const uuid of uuids) {

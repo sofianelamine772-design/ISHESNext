@@ -26,7 +26,7 @@ if (error) {
 }
 
 const presentiel = (classes || []).filter(
-  (c) => c.type === 'presentiel' && c.external_id >= 1 && c.external_id <= 25,
+  (c) => c.type === 'presentiel' && c.external_id >= 1 && c.external_id <= 26,
 );
 const distance = (classes || []).filter(
   (c) => c.type === 'distanciel'
@@ -34,7 +34,7 @@ const distance = (classes || []).filter(
 
 const presentielIds = new Set(presentiel.map((c) => c.external_id));
 const missingPresentiel = [];
-for (let i = 1; i <= 25; i++) {
+for (let i = 1; i <= 26; i++) {
   if (!presentielIds.has(i)) missingPresentiel.push(i);
 }
 
@@ -48,5 +48,5 @@ if (distance.length === 0) {
   process.exit(1);
 }
 
-console.log(`✅ Catalogue OK : présentiel 1–25 et ${distance.length} classes distanciel actives.`);
+console.log(`✅ Catalogue OK : présentiel 1–26 et ${distance.length} classes distanciel actives.`);
 process.exit(0);

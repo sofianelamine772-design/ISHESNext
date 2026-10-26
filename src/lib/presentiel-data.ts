@@ -158,6 +158,19 @@ export const PRESENTIEL_CLASSES: PresentielClass[] = [
     niveauKey: "elementaire_1"
   },
   {
+    id: 26,
+    niveau: "Élémentaire Débutant 1",
+    ageCondition: "7-15 ans",
+    horaire: "MERCREDI",
+    audience: "enfant",
+    type: "mixte",
+    jour: "mercredi",
+    periode: "après-midi",
+    planId: "presentiel-global",
+    slotKey: "mercredi",
+    niveauKey: "elementaire_1"
+  },
+  {
     id: 12,
     niveau: "Élémentaire 1+",
     ageCondition: "NON débutant",
@@ -431,15 +444,16 @@ export function presentielHoursLabel(jour: string, periode?: string | null): str
 }
 
 export function isOfficialPresentielClass(externalId?: number | null): boolean {
-  return typeof externalId === "number" && externalId >= 1 && externalId <= 25;
+  return typeof externalId === "number" && PRESENTIEL_CLASSES.some((c) => c.id === externalId);
 }
 
-/** Plafonds officiels : prépa 1–2 = 13, élémentaire = 18, femmes = 20. */
+/** Plafonds officiels : prépa = 13, élémentaire = 18, femmes = 20. */
 export function getPresentielCapacityLimit(externalId?: number | null): number | null {
-  if (!isOfficialPresentielClass(externalId)) return null;
-  if (externalId! <= 7) return 13;
-  if (externalId! <= 23) return 18;
-  return 20;
+  const classe = PRESENTIEL_CLASSES.find((c) => c.id === externalId);
+  if (!classe) return null;
+  if (classe.audience === "adulte") return 20;
+  if (classe.niveauKey.startsWith("maternel")) return 13;
+  return 18;
 }
 
 export const FEMME_DEBUTANTE_CLASS_ID = 24;
@@ -494,4 +508,5 @@ export const CLASS_ID_TO_UUID: Record<number, string> = {
   23: '10804885-481b-4544-8c62-c6c0f1828c43', // Élémentaire 4 – Mercredi
   24: 'c68f1ae9-e7b0-4876-a99c-283152aaf382', // Femme Débutante – Arabe + Tajwid
   25: '4c1b3968-21ff-414c-b709-249ec1e4c087', // Femme Intermédiaire – Arabe + Tajwid
+  26: '1805c4dc-6071-4de1-abfd-3c3641a6e57e', // Élémentaire Déb.1 – Mercredi
 };

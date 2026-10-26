@@ -23,9 +23,16 @@ describe('Mail automatique des fournitures présentiel enfants', () => {
     expect(getFournituresKindsToSend([CLASS_ID_TO_UUID[1]])).toEqual(['prepa']);
   });
 
-  it('envoie le PDF élémentaire pour les classes 8–23', () => {
+  it('envoie le PDF élémentaire pour les classes élémentaires, y compris le mercredi niv. 1', () => {
     expect(getFournituresKindsToSend(['23'])).toEqual(['elem']);
     expect(getFournituresKindsToSend([CLASS_ID_TO_UUID[8]])).toEqual(['elem']);
+    expect(getFournituresKindsToSend(['26'])).toEqual(['elem']);
+    expect(getFournituresKindsToSend([CLASS_ID_TO_UUID[26]])).toEqual(['elem']);
+    expect(resolvePresentielExternalId('26')).toBe(26);
+    expect(resolvePresentielExternalId(CLASS_ID_TO_UUID[26])).toBe(26);
+    expect(getFournituresPublicDocs([26])).toEqual([
+      { kind: 'elem', label: 'Élémentaire', href: '/fournitures/Fournitures_scolaires_elementaire_2026-2027.pdf' },
+    ]);
   });
 
   it('envoie les deux PDF si la famille a prépa et élémentaire', () => {
