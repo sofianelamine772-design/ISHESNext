@@ -12,6 +12,7 @@ import { EmailComposer, filesToEmailAttachments } from "@/components/admin/Email
 import { EmailSubjectAutocomplete } from "@/components/admin/EmailSubjectAutocomplete";
 import { htmlToPlainText } from "@/lib/email-html";
 import { cn, getCurrentAcademicYear, getNextAcademicYear } from "@/lib/utils";
+import { isPresentielFemmeClass } from "@/lib/presentiel-data";
 import { UserButton } from "@clerk/nextjs";
 
 // Types
@@ -615,10 +616,10 @@ export default function AdminDashboard() {
                         onClick={() => setSelectedClassId(c.id)}
                         className={`w-full text-left p-3 rounded-xl transition-all border ${
                           selectedClassId === c.id
-                            ? (c.name.toLowerCase().includes('femme') || (c.externalId ?? 0) >= 24)
+                            ? isPresentielFemmeClass(c.externalId, c.name)
                               ? "bg-pink-100 border-pink-200 shadow-sm"
                               : "bg-ishes-blue/10 border-ishes-blue/20 shadow-sm"
-                            : (c.name.toLowerCase().includes('femme') || (c.externalId ?? 0) >= 24)
+                            : isPresentielFemmeClass(c.externalId, c.name)
                               ? "bg-pink-50/50 border-pink-100 hover:border-pink-200 hover:bg-pink-50"
                               : "bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50"
                         }`}

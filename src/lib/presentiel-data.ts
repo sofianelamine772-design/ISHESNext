@@ -459,6 +459,18 @@ export function getPresentielCapacityLimit(externalId?: number | null): number |
 export const FEMME_DEBUTANTE_CLASS_ID = 24;
 export const FEMME_INTERMEDIAIRE_CLASS_ID = 25;
 
+/** Rose admin = classes femmes (24–25), jamais un id enfant ≥ 24. */
+export function isPresentielFemmeClass(
+  externalId?: number | null,
+  name?: string | null,
+): boolean {
+  if (typeof externalId === "number") {
+    const classe = PRESENTIEL_CLASSES.find((c) => c.id === externalId);
+    if (classe) return classe.audience === "adulte" || classe.type === "femme";
+  }
+  return Boolean(name && name.toLowerCase().includes("femme"));
+}
+
 export const FEMME_PRESENTIEL_CLASS_BY_PLAN: Record<string, number> = {
   "femme-debutante-presentiel": FEMME_DEBUTANTE_CLASS_ID,
   "femme_debutante_presentiel": FEMME_DEBUTANTE_CLASS_ID,

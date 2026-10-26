@@ -12,6 +12,7 @@ import {
   presentielHoursLabel,
   FEMME_DEBUTANTE_CLASS_ID,
   FEMME_INTERMEDIAIRE_CLASS_ID,
+  isPresentielFemmeClass,
 } from '@/lib/presentiel-data';
 import { PROGRAMS_DATA } from '@/lib/programs-data';
 import { DISTANCE_CLASSES, DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
@@ -236,6 +237,11 @@ describe('Élémentaire Débutant 1 mercredi (classe 26)', () => {
     expect(getPresentielCapacityLimit(26)).toBe(18);
     expect(FEMME_DEBUTANTE_CLASS_ID).toBe(24);
     expect(FEMME_INTERMEDIAIRE_CLASS_ID).toBe(25);
+    expect(isPresentielFemmeClass(24)).toBe(true);
+    expect(isPresentielFemmeClass(25)).toBe(true);
+    expect(isPresentielFemmeClass(26)).toBe(false);
+    expect(isPresentielFemmeClass(26, 'Élémentaire Débutant 1 (7-15 ans) — Mercredi après-midi')).toBe(false);
+    expect(isPresentielFemmeClass(8)).toBe(false);
     expect(resolvePresentielCheckoutSlug('presentiel-global', [26])).toBe('presentiel-global');
     expect(CLASS_ID_TO_UUID[26]).toBe('1805c4dc-6071-4de1-abfd-3c3641a6e57e');
     expect(filterVisiblePresentielSlots(
