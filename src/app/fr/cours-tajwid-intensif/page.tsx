@@ -53,7 +53,7 @@ const INTENSIF_FAQS = [
   {
     question: "Quels sont les horaires du cours de Tajwid intensif ?",
     answer:
-      "À partir d'octobre 2026, le mardi et le vendredi à 19h30, une heure par séance, en direct sur Zoom. Si tu rates un cours, le replay reste disponible. Le cursus dure 3 mois.",
+      "À partir de janvier 2027, le mardi et le vendredi à 19h30, une heure par séance, en direct sur Zoom. Si tu rates un cours, le replay reste disponible. Le cursus dure 3 mois.",
   },
   {
     question: "Le support Les Clés du Coran est-il inclus ?",
@@ -240,7 +240,7 @@ export default function CoursTajwidIntensifPage() {
       </section>
 
       <CourseCadenceNote>
-        Dès octobre 2026, deux cours par semaine, le mardi et le vendredi à 19h30, en direct sur
+        Dès janvier 2027, deux cours par semaine, le mardi et le vendredi à 19h30, en direct sur
         Zoom. Si tu rates une séance, le replay est là. En 3 mois, avec Les Clés du Coran et les
         corrections audio, tu valides le diplôme ISHES.
       </CourseCadenceNote>
@@ -502,7 +502,7 @@ export default function CoursTajwidIntensifPage() {
               ["Durée", "3 mois (12 semaines)"],
               ["Rythme", "2 cours / semaine, mardi et vendredi 19h30"],
               ["Format", "Zoom en direct + replays"],
-              ["Début", "Octobre 2026"],
+              ["Début", "Janvier 2027"],
               ["Tarif", price],
               ["Diplôme", "Diplôme ISHES"],
               ["Public", "Adultes, hommes et femmes"],
@@ -579,7 +579,7 @@ export default function CoursTajwidIntensifPage() {
               suit la même méthode, à raison d&apos;une heure par semaine, sur deux années
               scolaires. Le <strong>Tajwid intensif</strong> tient le parcours en{" "}
               <strong>3 mois</strong>, avec <strong>deux cours par semaine</strong>, le mardi et le
-              vendredi à <strong>19h30</strong>, dès octobre 2026. Même diplôme, même support,
+              vendredi à <strong>19h30</strong>, dès janvier 2027. Même diplôme, même support,
               rythme plus serré, et les corrections audio en plus. On le suit de partout : France,
               Belgique, Suisse, Maghreb, Canada.
             </p>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import {
   CheckCircle2,
   Play,
@@ -74,7 +75,7 @@ export function TajwidStandardView() {
 
           <dl className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
-              { icon: Calendar, label: "Cursus", value: "Sur deux années scolaires" },
+              { icon: Calendar, label: "Début", value: "Janvier 2027" },
               { icon: Monitor, label: "Format", value: "En ligne, en direct" },
               { icon: Clock, label: "Rythme", value: "1h par semaine" },
               { icon: Users, label: "Public", value: "Adultes (hommes et femmes) Débutants acceptés" },
@@ -104,6 +105,11 @@ export function TajwidStandardView() {
           </div>
         </div>
       </section>
+
+      <CourseCadenceNote>
+        Le cours démarre en janvier 2027. Un rendez-vous par semaine, en direct sur Zoom, avec les
+        replays. Cursus sur deux années scolaires, diplôme ISHES en fin de parcours.
+      </CourseCadenceNote>
 
       <section className="py-16 px-4 sm:px-6 bg-[#fafafa] border-y border-gray-100">
         <div className="max-w-6xl mx-auto">

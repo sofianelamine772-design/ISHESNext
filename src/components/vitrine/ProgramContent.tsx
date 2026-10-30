@@ -140,9 +140,9 @@ export const PROGRAMS: Program[] = [
     tagColor: "bg-green-100 text-green-700",
     durationText: "8 mois",
     features: [
+      "Début : Janvier 2027",
       "Prononciation",
       "Base de la lecture",
-      "Théorie",
       "Pratique"
     ],
     price: "649 €",
@@ -159,8 +159,8 @@ export const PROGRAMS: Program[] = [
     tagColor: "bg-orange-100 text-orange-700",
     durationText: "3 mois",
     features: [
+      "Début : Janvier 2027",
       "Méthode intensive",
-      "Suivi personnalisé",
       "Coach en direct + audio 24/24h",
       "Diplôme final"
     ],
@@ -195,17 +195,16 @@ export const PROGRAMS: Program[] = [
     imageUrl: "/images/formations/civ-mus-dist-1.png",
     title: "Civilisation Arabo-Musulmane",
     subtitle: "Explorez l'âge d'or des sciences, des arts et de la philosophie arabo-musulmane.",
-    tagText: "LANCEMENT",
+    tagText: "HISTOIRE",
     tagColor: "bg-amber-100 text-amber-700",
     durationText: "Mercredi 20h-21h",
     features: [
-      "Session de 2 mois",
-      "Début : Octobre",
+      "Module 4 à 5 mois",
+      "Début : Janvier 2027",
       "Histoire & Sciences",
       "Arts & Philosophie",
     ],
-    price: "199 €",
-    originalPrice: "349 €",
+    price: "349 €",
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte"
@@ -297,9 +296,9 @@ export const PROGRAMS: Program[] = [
     tagColor: "bg-purple-100 text-purple-700",
     durationText: "4 mois",
     features: [
+      "Début : Janvier 2027",
       "Éducation de l'âme",
       "Purification du cœur",
-      "Session de 4 mois",
       "Paiement en 4 fois"
     ],
     price: "399 €",
@@ -433,9 +432,9 @@ export const PROGRAMS: Program[] = [
     tagColor: "bg-blue-100 text-blue-700",
     durationText: "8 mois",
     features: [
+      "Début : Janvier 2027",
       "Cours en direct",
       "Accès aux replays",
-      "Supports numériques",
       "Suivi personnalisé"
     ],
     price: "649 €",

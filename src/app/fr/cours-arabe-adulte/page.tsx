@@ -130,7 +130,7 @@ export default function CoursArabeAdultePage() {
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-6 pt-12 mt-12 border-t border-gray-200 w-full">
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-ishes-gold" />
-            <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
+            <span className="text-sm font-bold text-gray-700 leading-tight">Janvier 2027</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-gray-200"></div>
           
@@ -166,7 +166,7 @@ export default function CoursArabeAdultePage() {
       </section>
 
       <CourseCadenceNote>
-        Dès octobre 2026, le cours a lieu le vendredi à 19h30 pour les frères, en direct sur Zoom.
+        Dès janvier 2027, le cours a lieu le vendredi à 19h30 pour les frères, en direct sur Zoom.
         Le parcours dure 8 mois, avec un groupe WhatsApp privé par classe, et se conclut par le
         diplôme ISHES.
       </CourseCadenceNote>

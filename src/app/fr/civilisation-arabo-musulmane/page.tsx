@@ -59,14 +59,14 @@ const CIV_FAQS = [
   {
     question: "La formation est-elle en ligne ?",
     answer:
-      "Oui. Cours en direct le mercredi 20h–21h, replays, supports, 2 mois. Inscription en ligne. Un entretien WhatsApp est possible via la page contact.",
+      "Oui. Cours en direct le mercredi 20h–21h, replays, supports, module de 4 à 5 mois. Tarif 349 €. Inscription en ligne. Un entretien WhatsApp est possible via la page contact.",
   },
 ];
 
 export const metadata = buildPageMetadata({
   title: "Civilisation arabo-musulmane — histoire, âge d'or et savants | ISHES",
   description:
-    "Cours en ligne : civilisation arabo-musulmane, de l'Arabie à l'Andalousie. Âge d'or, Bagdad, Cordoue, Al-Khwārizmī, Avicenne, Averroès, Ibn Khaldūn. Formation ISHES 2 mois.",
+    "Cours en ligne : civilisation arabo-musulmane, de l'Arabie à l'Andalousie. Âge d'or, Bagdad, Cordoue, Al-Khwārizmī, Avicenne, Averroès, Ibn Khaldūn. Formation ISHES 4 à 5 mois, 349 €.",
   path: CIVILISATION_PATH,
   keywords: [
     "civilisation arabo-musulmane",
@@ -96,9 +96,9 @@ export default function CivilisationPage() {
           description:
             "Formation ISHES en ligne : de l'Arabie à l'Andalousie, savants, sciences et patrimoine.",
           path: CIVILISATION_PATH,
-          price: "199",
+          price: "349",
           courseMode: "Online",
-          workload: "P8W",
+          workload: "P4M",
           image: "/images/formations/civilisation-hero.jpg",
         })}
       />
@@ -157,7 +157,7 @@ export default function CivilisationPage() {
             <div className="flex flex-wrap items-center gap-x-8 gap-y-6 pt-12 mt-12 border-t border-gray-200">
               <div className="flex items-center gap-3">
                 <Calendar className="w-6 h-6 text-ishes-gold" />
-                <span className="text-sm font-bold text-gray-700 leading-tight">Octobre 2026</span>
+                <span className="text-sm font-bold text-gray-700 leading-tight">Janvier 2027</span>
               </div>
               <div className="hidden md:block w-px h-8 bg-gray-200"></div>
               
@@ -175,7 +175,7 @@ export default function CivilisationPage() {
 
               <div className="flex items-center gap-3">
                 <Hourglass className="w-6 h-6 text-ishes-gold" />
-                <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">2 mois</span></span>
+                <span className="text-xs font-bold text-ishes-dark leading-tight">Durée<br/><span className="text-gray-500 font-medium">4 à 5 mois</span></span>
               </div>
               <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
@@ -216,8 +216,8 @@ export default function CivilisationPage() {
       </section>
 
       <CourseCadenceNote>
-        Dès octobre 2026, un cours par semaine, le mercredi de 20h à 21h, en direct sur Zoom, avec
-        les replays. Le cycle dure 2 mois, et tous les supports sont inclus.
+        Dès janvier 2027, un cours par semaine, le mercredi de 20h à 21h, en direct sur Zoom, avec
+        les replays. Le module dure 4 à 5 mois, tarif 349 €, et tous les supports sont inclus.
       </CourseCadenceNote>
 
       {/* ─── POUR QUI ─── */}
@@ -440,7 +440,7 @@ export default function CivilisationPage() {
               { num: 1, icon: Calendar, title: "Tu t'inscris", desc: "Sélectionne la formation et valide ton inscription." },
               { num: 2, icon: Mail, title: "Tu reçois tes accès", desc: "Accès immédiat au groupe WhatsApp dédié." },
               { num: 3, icon: Video, title: "Tu assistes aux cours", desc: "Tous les mercredis de 20h à 21h en direct." },
-              { num: 4, icon: BookOpen, title: "Tu parcours l'histoire", desc: "Immersion sur 2 mois dans notre riche héritage." }
+              { num: 4, icon: BookOpen, title: "Tu parcours l'histoire", desc: "Immersion sur 4 à 5 mois dans notre riche héritage." }
             ].map((step, i) => (
                <div key={i} className="relative flex flex-col items-center text-center group">
                  <div className="w-12 h-12 bg-ishes-dark text-white rounded-full flex items-center justify-center font-black text-xl mb-6 relative z-10 border-4 border-white shadow-lg group-hover:scale-110 transition-transform">
@@ -462,10 +462,9 @@ export default function CivilisationPage() {
           {/* Section Gauche : Prix */}
           <div className="text-center md:text-left space-y-2 flex-1 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0">
             <div className="text-5xl md:text-6xl font-black text-ishes-gold flex items-baseline gap-4 justify-center md:justify-start">
-              199 €
-              <span className="text-2xl text-gray-400 line-through">349 €</span>
+              349 €
             </div>
-            <h3 className="text-lg font-medium text-gray-300">Prix de lancement (avant le 15 Septembre) - 2 mois</h3>
+            <h3 className="text-lg font-medium text-gray-300">Module 4 à 5 mois · début janvier 2027</h3>
           </div>
 
           {/* Section Milieu : Info */}

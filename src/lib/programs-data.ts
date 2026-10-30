@@ -609,19 +609,19 @@ Piliers de l'apprentissage, gestion de classe, prévention des conflits, créati
   },
   "civilisation_arabo_musulmane": {
     title: "Civilisation Arabo-Musulmane",
-    duration: "2 mois",
-    tag: "LANCEMENT",
-    price: "199 €",
+    duration: "4 à 5 mois",
+    tag: "HISTOIRE",
+    price: "349 €",
     hook: "Explorez l'âge d'or des sciences, des arts et de la philosophie arabo-musulmane.",
     description: "Un voyage historique pour comprendre l'héritage universel de cette civilisation. De Bagdad à Cordoue, nous retraçons le parcours des savants qui ont révolutionné la médecine, l'astronomie, les mathématiques et les arts, tout en restant ancrés dans leur foi.",
     features: [
       { t: "L'Âge d'Or", d: "Histoire des Sciences et des Arts" },
       { t: "Philosophie", d: "Éthique et transmission des savoirs" },
       { t: "Inter-culturel", d: "Échanges et héritage contemporain" },
-      { t: "En Direct", d: "Mercredi de 20h à 21h (Début octobre)" }
+      { t: "En Direct", d: "Mercredi de 20h à 21h (Début janvier 2027)" }
     ],
     whyMe: [
-      "Tarif de lancement exceptionnel jusqu'au 15 septembre",
+      "Module de 4 à 5 mois, un cours par semaine",
       "Découvrir notre histoire sous un angle inédit",
       "Immersion culturelle et historique",
       "Comprendre l'apport de l'Islam à l'humanité"

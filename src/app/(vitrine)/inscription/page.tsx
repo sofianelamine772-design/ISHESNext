@@ -122,7 +122,7 @@ function InscriptionForm() {
     { id: "as_sirah", title: "Sîrah", audience: "Adulte", detail: "À distance", price: 649 },
     { id: "sciences_du_coran", title: "Sciences du Coran", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "spiritualite_islam", title: "Spiritualité", audience: "Adulte", detail: "À distance", price: 399 },
-    { id: "civilisation_arabo_musulmane", title: "Civilisation arabo-musulmane", audience: "Adulte", detail: "À distance", price: 199 },
+    { id: "civilisation_arabo_musulmane", title: "Civilisation arabo-musulmane", audience: "Adulte", detail: "À distance · 4-5 mois", price: 349 },
     { id: "tarbiya_islamiya", title: "Tarbiya Islamiya", audience: "Enfant", detail: "À distance", price: 399 },
     { id: "femme-debutante-presentiel", title: "Arabe et Tajwid · débutante", audience: "Adulte", detail: "Présentiel · dimanche", price: 649 },
     { id: "femme-intermediaire-presentiel", title: "Arabe et Tajwid · 2e année", audience: "Adulte", detail: "Présentiel · samedi", price: 649 },
