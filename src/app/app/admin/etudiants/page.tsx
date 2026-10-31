@@ -30,6 +30,7 @@ type StudentDetail = {
   activeFormations?: {
     id: string;
     classId?: string | null;
+    formationId?: string | null;
     enrolledClass: string;
     exactClassName?: string;
   }[];
@@ -111,6 +112,8 @@ function EtudiantsContent() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showScolariteModal, setShowScolariteModal] = useState(false);
+  const [scolariteInscriptionId, setScolariteInscriptionId] = useState<string | null>(null);
+  const [scolariteFormationId, setScolariteFormationId] = useState<string | null>(null);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageContent, setMessageContent] = useState("");
   const [messageSending, setMessageSending] = useState(false);
@@ -194,6 +197,9 @@ function EtudiantsContent() {
             activeFormations: activeInscriptions.map((ins: any) => ({
               id: ins.id,
               classId: ins.class_id,
+              formationId: ins.formation_id
+                || (Array.isArray(ins.formations) ? ins.formations[0]?.id : ins.formations?.id)
+                || null,
               enrolledClass:
                 (Array.isArray(ins.formations) ? ins.formations[0]?.title : ins.formations?.title) ||
                 (Array.isArray(ins.classes)
@@ -428,11 +434,14 @@ function EtudiantsContent() {
       const result = await assignStudentToClassAction(
         selectedStudentId, 
         targetClassId, 
-        customExpectedAmount === "" ? undefined : Number(customExpectedAmount)
+        customExpectedAmount === "" ? undefined : Number(customExpectedAmount),
+        scolariteInscriptionId || undefined,
       );
       if (result.success) {
         setShowScolariteModal(false);
         setCustomExpectedAmount("");
+        setScolariteInscriptionId(null);
+        setScolariteFormationId(null);
         await fetchStudents();
       }
     } catch (err) {
@@ -531,7 +540,15 @@ function EtudiantsContent() {
     setShowEditModal(true);
   };
 
-  const openScolariteModal = async () => {
+  const openScolariteModal = async (opts?: {
+    inscriptionId?: string | null;
+    formationId?: string | null;
+    classId?: string | null;
+  }) => {
+    setScolariteInscriptionId(opts?.inscriptionId || null);
+    setScolariteFormationId(opts?.formationId || null);
+    setTargetClassId(opts?.classId || "");
+    setClassSearchQuery("");
     setShowScolariteModal(true);
     try {
       const res = await fetchClassesAction();
@@ -962,13 +979,14 @@ function EtudiantsContent() {
                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-blue">Scolarité</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">
-                        <div className="flex items-center justify-between group">
-                          <div className="flex flex-col">
+                        <div className="flex items-start justify-between group gap-3">
+                          <div className="flex flex-col flex-1 min-w-0">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Formation Actuelle</span>
                             {selectedStudent.activeFormations && selectedStudent.activeFormations.length > 0 ? (
                               <div className="flex flex-col gap-3">
                                 {selectedStudent.activeFormations.map((formation, idx) => (
-                                  <div key={formation.id || idx} className="flex flex-col">
+                                  <div key={formation.id || idx} className="flex items-start justify-between gap-2">
+                                    <div className="flex flex-col min-w-0">
                                     {formation.classId ? (
                                       <Link
                                         href={`/app/admin/classes?classId=${formation.classId}&studentId=${selectedStudent.id}`}
@@ -985,11 +1003,25 @@ function EtudiantsContent() {
                                         Classe : {formation.exactClassName}
                                       </span>
                                     )}
+                                    </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue shrink-0"
+                                      onClick={() => openScolariteModal({
+                                        inscriptionId: formation.id,
+                                        formationId: formation.formationId,
+                                        classId: formation.classId,
+                                      })}
+                                    >
+                                      MODIFIER
+                                    </Button>
                                   </div>
                                 ))}
                               </div>
                             ) : selectedStudent.classId ? (
-                              <div className="flex flex-col">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex flex-col min-w-0">
                                 <Link
                                   href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
                                   className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
@@ -1002,13 +1034,29 @@ function EtudiantsContent() {
                                     Classe : {selectedStudent.exactClassName}
                                   </span>
                                 )}
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue shrink-0"
+                                  onClick={() => openScolariteModal({ classId: selectedStudent.classId })}
+                                >
+                                  MODIFIER
+                                </Button>
                               </div>
                             ) : (
                               <span className="ishes-heading text-base md:text-lg text-gray-400">{selectedStudent.enrolledClass}</span>
                             )}
                           </div>
-                          <Button variant="ghost" size="sm" className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue" onClick={openScolariteModal}>MODIFIER</Button>
                         </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue self-start -mt-1"
+                          onClick={() => openScolariteModal()}
+                        >
+                          + AJOUTER UNE FORMATION
+                        </Button>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div className="flex flex-col">
@@ -1621,18 +1669,29 @@ function EtudiantsContent() {
                   <div className="w-10 h-10 bg-ishes-blue/10 rounded-xl flex items-center justify-center text-ishes-blue">
                     <GraduationCap className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-black text-ishes-blue tracking-tight">Modifier Scolarité</h3>
+                  <h3 className="text-xl font-black text-ishes-blue tracking-tight">
+                    {scolariteInscriptionId ? "Changer cette classe" : "Ajouter une formation"}
+                  </h3>
                 </div>
                 <button onClick={() => {
                   setShowScolariteModal(false);
                   setCustomExpectedAmount("");
+                  setScolariteInscriptionId(null);
+                  setScolariteFormationId(null);
                 }} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Sélectionner une nouvelle classe</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                  {scolariteInscriptionId ? "Remplacer par une autre classe" : "Sélectionner une classe"}
+                </label>
+                {scolariteInscriptionId ? (
+                  <p className="text-[11px] text-gray-500 font-medium -mt-2">
+                    La classe actuelle sera remplacée. Aucune formation supplémentaire ne sera créée.
+                  </p>
+                ) : null}
 
                 {/* Search Bar for Classes */}
                 <div className="relative">
@@ -1649,8 +1708,9 @@ function EtudiantsContent() {
                 <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                   {classes
                     .filter(c =>
-                      (c.name || '').toLowerCase().includes(classSearchQuery.toLowerCase()) ||
-                      (c.formationTitle || '').toLowerCase().includes(classSearchQuery.toLowerCase())
+                      (!scolariteFormationId || c.formationId === scolariteFormationId) &&
+                      ((c.name || '').toLowerCase().includes(classSearchQuery.toLowerCase()) ||
+                      (c.formationTitle || '').toLowerCase().includes(classSearchQuery.toLowerCase()))
                     )
                     .map((c) => (
                       <button
@@ -1698,9 +1758,11 @@ function EtudiantsContent() {
                 <Button variant="ishes-outline" className="flex-1 h-12 rounded-2xl" onClick={() => {
                   setShowScolariteModal(false);
                   setCustomExpectedAmount("");
+                  setScolariteInscriptionId(null);
+                  setScolariteFormationId(null);
                 }}>Annuler</Button>
                 <Button variant="ishes" className="flex-[2] h-12 rounded-2xl" disabled={isSubmitting || !targetClassId} onClick={handleUpdateScolarite}>
-                  {isSubmitting ? "Mise à jour..." : "Confirmer le changement"}
+                  {isSubmitting ? "Mise à jour..." : scolariteInscriptionId ? "Remplacer la classe" : "Ajouter la formation"}
                 </Button>
               </div>
             </div>

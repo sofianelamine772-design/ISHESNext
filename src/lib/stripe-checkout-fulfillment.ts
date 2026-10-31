@@ -122,17 +122,28 @@ async function upsertInscription(params: {
   let resolvedClassId = params.classId;
 
   if (!resolvedClassId) {
-    const { data: activeClass } = await supabaseAdmin
+    const { data: activeClasses } = await supabaseAdmin
       .from('classes')
-      .select('id')
+      .select('id, name, external_id')
       .eq('formation_id', formationUuid)
-      .eq('is_active', true)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .eq('is_active', true);
 
-    if (activeClass) {
-      resolvedClassId = activeClass.id;
+    const { pickCheckoutFallbackClass } = await import('@/lib/checkout-class-fallback');
+    const { isOfficialDistanceClassId } = await import('@/lib/distance-data');
+    const { isOfficialPresentielClass } = await import('@/lib/presentiel-data');
+    const picked = pickCheckoutFallbackClass(
+      (activeClasses || []).map((classe) => ({
+        id: classe.id,
+        name: classe.name,
+        externalId: classe.external_id,
+      })),
+      (externalId) => isOfficialDistanceClassId(externalId) || isOfficialPresentielClass(externalId),
+    );
+
+    if (picked) {
+      resolvedClassId = picked.id;
+    } else if ((activeClasses || []).length > 0) {
+      resolvedClassId = null;
     } else {
       const { data: formation } = await supabaseAdmin
         .from('formations')

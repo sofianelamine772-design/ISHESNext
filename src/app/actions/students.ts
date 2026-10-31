@@ -271,12 +271,13 @@ export async function fetchStudentsAction(academicYear?: string) {
       .select(`
         *,
         inscriptions (
+          id,
           status,
           paid_status,
           formation_id,
           class_id,
           academic_year,
-          formations (title, type),
+          formations (id, title, type),
           classes (
             name,
             type,
@@ -439,6 +440,7 @@ export async function fetchClassesAction(academicYear?: string) {
         schedule: scheduleStr,
         capacity_limit: getPresentielCapacityLimit(c.external_id) ?? c.capacity_limit ?? 20,
         formationTitle: c.formations?.title,
+        formationId: c.formation_id || null,
         whatsappLink: c.whatsapp_link || null,
         teacherName: c.teacher_name || null,
       students: c.inscriptions
@@ -472,7 +474,12 @@ export async function fetchClassesAction(academicYear?: string) {
   }
 }
 
-export async function assignStudentToClassAction(studentId: string, classId: string, customExpectedAmount?: number) {
+export async function assignStudentToClassAction(
+  studentId: string,
+  classId: string,
+  customExpectedAmount?: number,
+  inscriptionId?: string,
+) {
   try {
     // 1. On récupère la formation liée à cette classe
     const { data: classe, error: classError } = await supabaseAdmin
@@ -485,8 +492,8 @@ export async function assignStudentToClassAction(studentId: string, classId: str
 
     const formationRow = unwrapRelation((classe as any)?.formations) as { price?: number } | null;
     const formationPrice = Number(formationRow?.price);
-    const expectedAmount = customExpectedAmount !== undefined && customExpectedAmount > 0 
-      ? customExpectedAmount 
+    const expectedAmount = customExpectedAmount !== undefined && customExpectedAmount > 0
+      ? customExpectedAmount
       : (Number.isFinite(formationPrice) && formationPrice > 0 ? formationPrice : undefined);
     const academicYear = getCurrentAcademicYear();
 
@@ -500,19 +507,23 @@ export async function assignStudentToClassAction(studentId: string, classId: str
 
     if (fetchError) throw fetchError;
 
-    const targetClassType = (classe as any)?.type || null;
-    const activeStatuses = ['valide', 'actif', 'en_attente', 'en_attente_daffectation'];
-    const sameFormation = (yearInscriptions || []).find((i: any) => i.formation_id === classe.formation_id);
-    // Présentiel : un élève n'a qu'un créneau → changer de classe = transfert,
-    // on ne doit pas cumuler 2 inscriptions facturées. (Distanciel : cumul autorisé.)
-    const transferable = targetClassType !== 'presentiel' ? [] : (yearInscriptions || []).filter((i: any) => {
-      if (i.formation_id === classe.formation_id) return false;
-      if (!activeStatuses.includes(i.status)) return false;
-      const t = (unwrapRelation(i.classes) as { type?: string } | null)?.type || null;
-      return t === 'presentiel';
+    const { resolveScolariteAssignTarget } = await import('@/lib/scolarite-assign');
+    const target = resolveScolariteAssignTarget({
+      inscriptionId,
+      yearInscriptions: (yearInscriptions || []).map((i: any) => ({
+        id: i.id,
+        formation_id: i.formation_id,
+        status: i.status,
+        classType: (unwrapRelation(i.classes) as { type?: string } | null)?.type || null,
+      })),
+      targetFormationId: classe.formation_id,
+      targetClassType: (classe as any)?.type || null,
     });
 
-    const existing = sameFormation || transferable[0] || null;
+    const existing = target.mode === "update"
+      ? (yearInscriptions || []).find((i: any) => i.id === target.inscriptionId)
+        || { id: target.inscriptionId, formation_id: null, expected_amount: null }
+      : null;
 
     if (existing) {
       const isTransfer = existing.formation_id !== classe.formation_id;
@@ -533,9 +544,16 @@ export async function assignStudentToClassAction(studentId: string, classId: str
 
       if (error) throw error;
 
-      // Nettoyage des autres doublons actifs (anciennes formations) : on rattache
-      // leurs paiements à l'inscription conservée puis on les supprime.
-      const leftovers = transferable.filter((i: any) => i.id !== existing.id);
+      // Présentiel sans inscription ciblée : ne pas laisser 2 créneaux facturés.
+      // Si on modifie UNE formation existante, on ne touche pas aux autres.
+      const leftovers = inscriptionId || (classe as any)?.type !== 'presentiel'
+        ? []
+        : (yearInscriptions || []).filter((i: any) => {
+            if (i.id === existing.id) return false;
+            if (!['valide', 'actif', 'en_attente', 'en_attente_daffectation'].includes(i.status)) return false;
+            const t = (unwrapRelation(i.classes) as { type?: string } | null)?.type || null;
+            return t === 'presentiel';
+          });
       for (const old of leftovers) {
         await supabaseAdmin.from('paiements').update({ inscription_id: existing.id }).eq('inscription_id', old.id);
         const { error: delError } = await supabaseAdmin.from('inscriptions').delete().eq('id', old.id);
