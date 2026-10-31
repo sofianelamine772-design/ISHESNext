@@ -979,75 +979,73 @@ function EtudiantsContent() {
                         <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-ishes-blue">Scolarité</h3>
                       </div>
                       <div className="space-y-4 md:space-y-6">
-                        <div className="flex items-start justify-between group gap-3">
-                          <div className="flex flex-col flex-1 min-w-0">
-                            <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Formation Actuelle</span>
-                            {selectedStudent.activeFormations && selectedStudent.activeFormations.length > 0 ? (
-                              <div className="flex flex-col gap-3">
-                                {selectedStudent.activeFormations.map((formation, idx) => (
-                                  <div key={formation.id || idx} className="flex items-start justify-between gap-2">
-                                    <div className="flex flex-col min-w-0">
+                        <div className="flex flex-col gap-3 w-full">
+                          <span className="ishes-label text-[8px] md:text-[9px] opacity-40">Formation Actuelle</span>
+                          {selectedStudent.activeFormations && selectedStudent.activeFormations.length > 0 ? (
+                            <div className="flex flex-col gap-2 w-full">
+                              {selectedStudent.activeFormations.map((formation, idx) => (
+                                <div key={formation.id || idx} className="flex items-center justify-between gap-3 w-full rounded-xl border border-gray-100 px-3 py-2.5">
+                                  <div className="flex flex-col min-w-0 flex-1">
                                     {formation.classId ? (
                                       <Link
                                         href={`/app/admin/classes?classId=${formation.classId}&studentId=${selectedStudent.id}`}
-                                        className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
+                                        className="ishes-heading text-sm md:text-base text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
                                       >
-                                        {formation.enrolledClass}
-                                        <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
+                                        <span className="truncate">{formation.enrolledClass}</span>
+                                        <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity shrink-0" />
                                       </Link>
                                     ) : (
-                                      <span className="ishes-heading text-base md:text-lg text-gray-400">{formation.enrolledClass}</span>
+                                      <span className="ishes-heading text-sm md:text-base text-gray-400 truncate">{formation.enrolledClass}</span>
                                     )}
                                     {formation.exactClassName && formation.exactClassName !== formation.enrolledClass && (
-                                      <span className="text-sm font-semibold text-gray-500 mt-0.5">
+                                      <span className="text-xs font-semibold text-gray-500 mt-0.5 truncate">
                                         Classe : {formation.exactClassName}
                                       </span>
                                     )}
-                                    </div>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue shrink-0"
-                                      onClick={() => openScolariteModal({
-                                        inscriptionId: formation.id,
-                                        formationId: formation.formationId,
-                                        classId: formation.classId,
-                                      })}
-                                    >
-                                      MODIFIER
-                                    </Button>
                                   </div>
-                                ))}
-                              </div>
-                            ) : selectedStudent.classId ? (
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="flex flex-col min-w-0">
+                                  <Button
+                                    variant="ishes-outline"
+                                    size="sm"
+                                    className="h-8 px-3 text-[10px] shrink-0 whitespace-nowrap"
+                                    onClick={() => openScolariteModal({
+                                      inscriptionId: formation.id,
+                                      formationId: formation.formationId,
+                                      classId: formation.classId,
+                                    })}
+                                  >
+                                    Modifier
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+                          ) : selectedStudent.classId ? (
+                            <div className="flex items-center justify-between gap-3 w-full rounded-xl border border-gray-100 px-3 py-2.5">
+                              <div className="flex flex-col min-w-0 flex-1">
                                 <Link
                                   href={`/app/admin/classes?classId=${selectedStudent.classId}&studentId=${selectedStudent.id}`}
-                                  className="ishes-heading text-base md:text-lg text-ishes-blue hover:underline flex items-center gap-1.5 font-bold group/link"
+                                  className="ishes-heading text-sm md:text-base text-ishes-blue hover:underline flex items-center gap-1.5 font-bold"
                                 >
-                                  {selectedStudent.enrolledClass}
-                                  <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:opacity-100 transition-opacity" />
+                                  <span className="truncate">{selectedStudent.enrolledClass}</span>
+                                  <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-50" />
                                 </Link>
                                 {selectedStudent.exactClassName && selectedStudent.exactClassName !== selectedStudent.enrolledClass && (
-                                  <span className="text-sm font-semibold text-gray-500 mt-0.5">
+                                  <span className="text-xs font-semibold text-gray-500 mt-0.5 truncate">
                                     Classe : {selectedStudent.exactClassName}
                                   </span>
                                 )}
-                                </div>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="ishes-label text-[9px] md:text-[10px] hover:bg-ishes-blue/5 text-ishes-blue shrink-0"
-                                  onClick={() => openScolariteModal({ classId: selectedStudent.classId })}
-                                >
-                                  MODIFIER
-                                </Button>
                               </div>
-                            ) : (
-                              <span className="ishes-heading text-base md:text-lg text-gray-400">{selectedStudent.enrolledClass}</span>
-                            )}
-                          </div>
+                              <Button
+                                variant="ishes-outline"
+                                size="sm"
+                                className="h-8 px-3 text-[10px] shrink-0 whitespace-nowrap"
+                                onClick={() => openScolariteModal({ classId: selectedStudent.classId })}
+                              >
+                                Modifier
+                              </Button>
+                            </div>
+                          ) : (
+                            <span className="ishes-heading text-base md:text-lg text-gray-400">{selectedStudent.enrolledClass}</span>
+                          )}
                         </div>
                         <Button
                           variant="ghost"
