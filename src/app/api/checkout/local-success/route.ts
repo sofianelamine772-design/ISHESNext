@@ -302,11 +302,27 @@ export async function GET(req: Request) {
       return NextResponse.redirect(new URL('/app/eleve?success=true', req.url));
     }
 
+    const {
+      takePromoFromAmount,
+      resolveSessionPromoDiscountEuros,
+    } = await import('@/lib/stripe-promo');
+    const remainingPromo = { current: resolveSessionPromoDiscountEuros(session) };
+
     if (isRenewal) {
       // Réinscription : l'étudiant existe déjà par ID
       const studentId = session.metadata?.studentId;
       if (studentId && formationUuid) {
-        const insId = await upsertInscription({ studentId, formationUuid, classId: null, academicYear: renewalYear });
+        const expectedAmount = takePromoFromAmount(
+          parseFloat(session.metadata?.expected_amount || '0') || undefined,
+          remainingPromo,
+        );
+        const insId = await upsertInscription({
+          studentId,
+          formationUuid,
+          classId: null,
+          academicYear: renewalYear,
+          expectedAmount,
+        });
         if (insId) studentIds.push(studentId);
       }
     } else {
@@ -327,20 +343,12 @@ export async function GET(req: Request) {
 
           const baseExpected = parseFloat(session.metadata?.expected_amount || '0') || undefined;
           const siblingDiscount = parseFloat(session.metadata?.sibling_discount || '0') || 0;
-          const {
-            applyPromoToExpectedAmount,
-            resolveSessionPromoDiscountEuros,
-          } = await import('@/lib/stripe-promo');
           const rawExpected = baseExpected !== undefined
             ? (siblingDiscount > 0
               ? getExpectedAmountForChild(baseExpected, i, childrenCount)
               : baseExpected)
             : undefined;
-          const expectedAmount = applyPromoToExpectedAmount(
-            rawExpected,
-            resolveSessionPromoDiscountEuros(session),
-            i,
-          );
+          const expectedAmount = takePromoFromAmount(rawExpected, remainingPromo);
 
           const finalClassId = classId || null;
           const insId = await upsertInscription({ studentId, formationUuid, classId: finalClassId, academicYear, expectedAmount });
@@ -355,14 +363,9 @@ export async function GET(req: Request) {
         if (firstName && lastName) {
           const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
           if (studentId && formationUuid) {
-            const {
-              applyPromoToExpectedAmount,
-              resolveSessionPromoDiscountEuros,
-            } = await import('@/lib/stripe-promo');
-            const expectedAmount = applyPromoToExpectedAmount(
+            const expectedAmount = takePromoFromAmount(
               parseFloat(session.metadata?.expected_amount || '0') || undefined,
-              resolveSessionPromoDiscountEuros(session),
-              0,
+              remainingPromo,
             );
             const insId = await upsertInscription({
               studentId,
@@ -386,6 +389,8 @@ export async function GET(req: Request) {
         .maybeSingle();
 
       if (!existingPayment) {
+        const { buildPromoPaymentNote } = await import('@/lib/stripe-promo');
+        const promoNote = buildPromoPaymentNote(session);
         await insertPaiementWithStripeAccount({
           etudiant_id: studentIds[0],
           stripe_session_id: session.id,
@@ -393,6 +398,7 @@ export async function GET(req: Request) {
           currency: (session.currency || 'eur').toUpperCase(),
           status: 'succeeded',
           stripe_account: stripeAccount,
+          ...(promoNote ? { error_message: promoNote } : {}),
         });
       }
     }

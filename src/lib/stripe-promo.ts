@@ -156,6 +156,33 @@ export function applyPromoToExpectedAmount(
 }
 
 /**
+ * Consomme la promo restante sur une ligne de dette (formation, bump…).
+ * Permet d’aligner la somme des expected sur le total Stripe quand la
+ * remise dépasse le seul tarif principal (ex. promo + options).
+ */
+export function takePromoFromAmount(
+  amount: number | undefined,
+  remainingPromoEuros: { current: number },
+): number | undefined {
+  if (amount === undefined) return undefined;
+  const value = Math.max(0, Number(amount) || 0);
+  const remaining = Math.max(0, Number(remainingPromoEuros.current) || 0);
+  if (!(remaining > 0)) return value;
+  const cut = Math.min(value, remaining);
+  remainingPromoEuros.current = Math.round((remaining - cut) * 100) / 100;
+  return Math.max(0, Math.round((value - cut) * 100) / 100);
+}
+
+/** Répartit une promo sur une liste ordonnée de montants (tests / preview). */
+export function applyPromoAcrossAmounts(
+  amounts: number[],
+  promoDiscountEuros: number,
+): number[] {
+  const remaining = { current: Math.max(0, Number(promoDiscountEuros) || 0) };
+  return amounts.map((amount) => takePromoFromAmount(amount, remaining) ?? 0);
+}
+
+/**
  * Remise à appliquer sur la dette après paiement.
  * Priorité : metadata (promo saisie sur le site, montants déjà nets)
  * puis remise native Stripe Checkout (total_details).
@@ -168,4 +195,52 @@ export function resolveSessionPromoDiscountEuros(session: {
   if (Number.isFinite(fromMeta) && fromMeta > 0) return fromMeta;
   const fromStripe = (session.total_details?.amount_discount || 0) / 100;
   return Number.isFinite(fromStripe) && fromStripe > 0 ? fromStripe : 0;
+}
+
+/** Extrait code + remise depuis le libellé stocké sur un paiement. */
+export function parsePromoNoteFromPayment(errorMessage?: string | null): {
+  code: string;
+  discountEuros: number;
+} | null {
+  const raw = String(errorMessage || '');
+  const match = raw.match(/Code promo\s+([A-Z0-9_-]+)\s*(?:\(−\s*([0-9]+(?:[.,][0-9]+)?)\s*€\))?/i);
+  if (!match) return null;
+  const discountEuros = match[2]
+    ? parseFloat(match[2].replace(',', '.'))
+    : 0;
+  return {
+    code: match[1].toUpperCase(),
+    discountEuros: Number.isFinite(discountEuros) ? discountEuros : 0,
+  };
+}
+
+/**
+ * Libellé à stocker sur le paiement (code + remise).
+ * Couvre la saisie site (metadata) et le champ promo natif Stripe Checkout.
+ */
+export function buildPromoPaymentNote(session: {
+  metadata?: Record<string, string> | null;
+  total_details?: { amount_discount?: number | null } | null;
+  discounts?: Array<{
+    promotion_code?: string | { id?: string; code?: string | null } | null;
+  }> | null;
+}): string | null {
+  const fromMeta = String(session.metadata?.promo_code || '').trim();
+  let code = fromMeta;
+  if (!code && Array.isArray(session.discounts)) {
+    for (const d of session.discounts) {
+      const pc = d?.promotion_code;
+      if (pc && typeof pc === 'object' && pc.code) {
+        code = String(pc.code).trim();
+        break;
+      }
+    }
+  }
+  const discountEuros = resolveSessionPromoDiscountEuros(session);
+  if (!code && !(discountEuros > 0)) return null;
+  if (code && discountEuros > 0) {
+    return `Code promo ${code.toUpperCase()} (−${discountEuros.toFixed(2)} €)`;
+  }
+  if (code) return `Code promo ${code.toUpperCase()}`;
+  return `Code promo (−${discountEuros.toFixed(2)} €)`;
 }

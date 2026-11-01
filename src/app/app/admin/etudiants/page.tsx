@@ -83,6 +83,8 @@ function EtudiantsContent() {
     familyTotalPaid: number;
     familyResteAPayer: number;
     familyMemberCount: number;
+    promoCode: string | null;
+    promoDiscountEuros: number | null;
   }>({
     totalExpected: 0,
     totalPaid: 0,
@@ -92,6 +94,8 @@ function EtudiantsContent() {
     familyTotalPaid: 0,
     familyResteAPayer: 0,
     familyMemberCount: 1,
+    promoCode: null,
+    promoDiscountEuros: null,
   });
   
   const [payments, setPayments] = useState<any[]>([]);
@@ -271,6 +275,8 @@ function EtudiantsContent() {
           familyTotalPaid: result.data.family_total_paid || 0,
           familyResteAPayer: result.data.family_reste_a_payer || 0,
           familyMemberCount: result.data.family_member_count || 1,
+          promoCode: result.data.promo_code || null,
+          promoDiscountEuros: result.data.promo_discount_euros ?? null,
         });
       } else {
         setPayments([]);
@@ -297,6 +303,8 @@ function EtudiantsContent() {
         familyTotalPaid: 0,
         familyResteAPayer: 0,
         familyMemberCount: 1,
+        promoCode: null,
+        promoDiscountEuros: null,
       });
     }
   }, [selectedStudentId]);
@@ -1231,6 +1239,14 @@ function EtudiantsContent() {
                               <span className={`text-xl font-black ${billingData.resteAPayer > 0 ? 'text-red-600' : 'text-ishes-dark'}`}>{formatEur(billingData.resteAPayer)}</span>
                             </div>
                           </div>
+                          {billingData.promoCode && (
+                            <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[12px] font-bold text-emerald-800">
+                              Code promo {billingData.promoCode}
+                              {billingData.promoDiscountEuros != null && billingData.promoDiscountEuros > 0
+                                ? ` · remise −${formatEur(billingData.promoDiscountEuros)} (déjà intégrée au coût ci-dessus)`
+                                : ''}
+                            </div>
+                          )}
                         </div>
                         <div>
                           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-600 mb-3 px-1">

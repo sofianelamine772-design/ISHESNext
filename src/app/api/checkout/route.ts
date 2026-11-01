@@ -283,6 +283,14 @@ export async function POST(req: Request) {
     const unitAmount = applyPromoToTotalCents(unitAmountBeforePromo, promoDiscountCents);
     const promoDiscountEuros = promoDiscountCents / 100;
 
+    // Stripe refuse unit_amount = 0 ; une promo à 100 % doit être gérée hors Checkout carte.
+    if (unitAmount <= 0) {
+      return NextResponse.json(
+        { error: 'Le montant après code promo est nul. Contactez l’administration pour une inscription offerte.' },
+        { status: 400 },
+      );
+    }
+
     const metadata: Record<string, string> = {
       clerkUserId: userId || '',
       formationId,
@@ -353,6 +361,12 @@ export async function POST(req: Request) {
         promoDiscountCents,
         installments,
       );
+      if (installmentAmount < 50) {
+        return NextResponse.json(
+          { error: 'Mensualité trop faible après promo (minimum 0,50 €). Choisissez moins d’échéances ou un autre code.' },
+          { status: 400 },
+        );
+      }
 
       // Création dynamique du tarif Stripe récurrent
       const dynamicPrice = await stripe.prices.create({

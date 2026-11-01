@@ -53,11 +53,17 @@ export async function POST(req: Request) {
       const result = await recordInvoicePayment({ stripe, invoice, status, stripeAccount });
       console.log(`[WEBHOOK] invoice ${invoice.id} ${status} → ${result.action}${'reason' in result ? ` (${result.reason})` : ''}`);
 
-      if (result.action === 'skipped' && invoice.billing_reason !== 'subscription_create') {
+      // Ne pas alerter pour les skips volontaires (1× Checkout, 1er mois abo).
+      const intentionalSkip =
+        result.action === 'skipped' &&
+        (invoice.billing_reason === 'subscription_create' ||
+          String('reason' in result ? result.reason : '').includes('hors abonnement') ||
+          String('reason' in result ? result.reason : '').includes('subscription_create'));
+      if (result.action === 'skipped' && !intentionalSkip) {
         const { logSystemError } = await import('@/lib/error-logger');
         await logSystemError(
           'Stripe Webhook Invoice',
-          new Error(`Facture ${invoice.id} (${status}, ${stripeAccount}) non enregistrée : ${result.reason}`),
+          new Error(`Facture ${invoice.id} (${status}, ${stripeAccount}) non enregistrée : ${'reason' in result ? result.reason : ''}`),
         );
       }
 
@@ -74,26 +80,56 @@ export async function POST(req: Request) {
         await syncStudentPaidStatus(result.etudiantId);
       }
 
-      if (event.type === 'invoice.payment_succeeded' && (invoice as any).subscription) {
+      const rawSub = (invoice as any).subscription;
+      const subscriptionId =
+        typeof rawSub === 'string' ? rawSub : rawSub?.id || null;
+
+      if (event.type === 'invoice.payment_succeeded' && subscriptionId) {
         try {
-          const subscription = await stripe.subscriptions.retrieve(
-            (invoice as any).subscription as string,
-          );
-          const installmentsTotal = subscription.metadata?.installments_total;
-          if (installmentsTotal) {
-            const total = parseInt(installmentsTotal, 10);
+          const {
+            computeInstallmentCancelAt,
+            shouldCancelSubscriptionNow,
+          } = await import('@/lib/stripe-subscription-stop');
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          const total = parseInt(String(subscription.metadata?.installments_total || ''), 10);
+          if (Number.isFinite(total) && total > 0) {
             const invoices = await stripe.invoices.list({
               subscription: subscription.id,
               status: 'paid',
               limit: 100,
             });
-            if (invoices.data.length >= total) {
-              await stripe.subscriptions.update(subscription.id, {
-                cancel_at_period_end: true,
-              });
+            const paidCount = invoices.data.length;
+
+            if (shouldCancelSubscriptionNow({ installmentsTotal: total, paidInvoiceCount: paidCount })) {
+              // Dernière mensualité encaissée → plus aucun prélèvement suivant
+              // (y compris après une promo qui a baissé le montant mensuel).
+              if (subscription.status === 'active' || subscription.status === 'trialing') {
+                await stripe.subscriptions.cancel(subscription.id);
+              } else {
+                await stripe.subscriptions.update(subscription.id, {
+                  cancel_at_period_end: true,
+                });
+              }
               console.log(
-                `[WEBHOOK] Abonnement ${subscription.id} terminé (${total} mensualités).`,
+                `[WEBHOOK] Abonnement ${subscription.id} annulé après ${paidCount}/${total} mensualités.`,
               );
+            } else if (subscription.status === 'active' || subscription.status === 'trialing') {
+              // Filet natif Stripe : même si un webhook futur rate, l'abo s'arrête.
+              const cancelAt = computeInstallmentCancelAt({
+                installmentsTotal: total,
+                paidInvoiceCount: paidCount,
+                currentPeriodStart: (subscription as any).current_period_start,
+                currentPeriodEnd: (subscription as any).current_period_end,
+              });
+              if (
+                cancelAt &&
+                (!subscription.cancel_at || Math.abs((subscription.cancel_at || 0) - cancelAt) > 60)
+              ) {
+                await stripe.subscriptions.update(subscription.id, { cancel_at: cancelAt });
+                console.log(
+                  `[WEBHOOK] Abonnement ${subscription.id} cancel_at=${cancelAt} (${paidCount}/${total}).`,
+                );
+              }
             }
           }
         } catch (subErr) {

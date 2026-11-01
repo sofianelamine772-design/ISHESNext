@@ -230,6 +230,47 @@ describe('billingTotalsForStudent', () => {
     expect(totals.totalPaid).toBe(150);
     expect(totals.resteAPayer).toBe(649);
   });
+
+  it('répartit un checkout famille Stripe (tout sur l’aîné) au prorata des dettes', () => {
+    const inscriptions = [
+      { studentId: 'child_a', expectedAmount: 299 }, // 399 − promo 100
+      { studentId: 'child_b', expectedAmount: 349 }, // 399 − fratrie 50
+    ];
+    const payments = [
+      {
+        etudiant_id: 'child_a',
+        amount: 648,
+        status: 'succeeded',
+        stripe_session_id: 'cs_live_family',
+      },
+    ];
+    const a = billingTotalsForStudent('child_a', inscriptions, payments);
+    const b = billingTotalsForStudent('child_b', inscriptions, payments);
+    expect(a.totalPaid).toBeCloseTo(299);
+    expect(a.resteAPayer).toBeCloseTo(0);
+    expect(b.totalPaid).toBeCloseTo(349);
+    expect(b.resteAPayer).toBeCloseTo(0);
+  });
+
+  it('ne dilue pas un paiement solo quand un frère a une dette séparée', () => {
+    const inscriptions = [
+      { studentId: 'child_a', expectedAmount: 399 },
+      { studentId: 'child_b', expectedAmount: 399 },
+    ];
+    const payments = [
+      {
+        etudiant_id: 'child_a',
+        amount: 399,
+        status: 'succeeded',
+        stripe_session_id: 'cs_live_solo_a',
+      },
+    ];
+    const a = billingTotalsForStudent('child_a', inscriptions, payments);
+    const b = billingTotalsForStudent('child_b', inscriptions, payments);
+    expect(a.resteAPayer).toBeCloseTo(0);
+    expect(b.totalPaid).toBe(0);
+    expect(b.resteAPayer).toBeCloseTo(399);
+  });
 });
 
 describe('pickBillingPayments (encaissement réel)', () => {

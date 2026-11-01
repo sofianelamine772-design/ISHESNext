@@ -77,6 +77,31 @@ export async function resolveStudentForInvoice(
 }
 
 /**
+ * Factures à enregistrer comme mensualités (hors 1er mois déjà loggé via checkout).
+ * Ignore les factures one-shot Checkout (`invoice_creation`, billing_reason manual)
+ * qui doublonneraient le paiement `cs_…`.
+ */
+export function shouldRecordSubscriptionInvoice(invoice: {
+  billing_reason?: string | null;
+  subscription?: string | { id?: string } | null;
+}): { ok: true } | { ok: false; reason: string } {
+  const subscriptionId =
+    typeof invoice.subscription === 'string'
+      ? invoice.subscription
+      : invoice.subscription?.id || null;
+  if (!subscriptionId) {
+    return {
+      ok: false,
+      reason: 'facture hors abonnement (checkout 1× / manuel — déjà via cs_…)',
+    };
+  }
+  if (invoice.billing_reason === 'subscription_create') {
+    return { ok: false, reason: 'subscription_create (géré par checkout)' };
+  }
+  return { ok: true };
+}
+
+/**
  * Enregistre (ou met à jour) une facture d'abonnement dans `paiements`.
  * Idempotent : la clé est l'ID de facture `in_…`. Un échec suivi d'un succès
  * (nouvelle tentative) met à jour la même ligne.
@@ -89,8 +114,9 @@ export async function recordInvoicePayment(params: {
 }): Promise<RecordInvoiceResult> {
   const { stripe, invoice, status, stripeAccount } = params;
 
-  if (invoice.billing_reason === 'subscription_create') {
-    return { action: 'skipped', reason: 'subscription_create (géré par checkout)' };
+  const gate = shouldRecordSubscriptionInvoice(invoice);
+  if (!gate.ok) {
+    return { action: 'skipped', reason: gate.reason };
   }
 
   const amountInCents = invoice.amount_paid > 0 ? invoice.amount_paid : invoice.amount_due;
@@ -192,7 +218,7 @@ export async function syncStripeInvoices(days = 60): Promise<StripeSyncReport> {
     for await (const invoice of stripe.invoices.list({ created: { gte: since }, limit: 100 })) {
       report.scanned++;
       const status = invoiceRecordStatus(invoice);
-      if (!status || invoice.billing_reason === 'subscription_create') continue;
+      if (!status || !shouldRecordSubscriptionInvoice(invoice).ok) continue;
       try {
         const res = await recordInvoicePayment({ stripe, invoice, status, stripeAccount: account });
         if (res.action === 'inserted') report.inserted++;

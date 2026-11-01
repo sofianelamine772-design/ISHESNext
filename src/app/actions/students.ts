@@ -1915,15 +1915,22 @@ export async function fetchStudentBillingDataAction(studentId: string) {
       deduplicatedPayments,
     );
 
+    const { parsePromoNoteFromPayment } = await import('@/lib/stripe-promo');
     const paymentsForClient = deduplicatedPayments.map((p: any) => {
       const student = getBillingStudent(p.etudiant_id);
+      const promo = parsePromoNoteFromPayment(p.error_message);
       return {
         ...p,
         studentName: student ? `${student.firstName || ''} ${student.lastName || ''}`.trim() : '',
         isStripePayment: isLiveStripePayment(p),
         isManualPayment: isManualBillingPayment(p),
+        promoCode: promo?.code || null,
+        promoDiscountEuros: promo?.discountEuros || null,
       };
     });
+    const billingPromo = paymentsForClient.find(
+      (p: { promoCode?: string | null }) => Boolean(p.promoCode),
+    );
 
     return {
       success: true,
@@ -1937,6 +1944,8 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         family_total_paid,
         family_reste_a_payer,
         family_member_count: familyIds.length,
+        promo_code: billingPromo?.promoCode || null,
+        promo_discount_euros: billingPromo?.promoDiscountEuros ?? null,
       }
     };
   } catch (err) {

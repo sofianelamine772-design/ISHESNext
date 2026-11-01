@@ -329,11 +329,20 @@ export async function fulfillCheckoutSession(params: {
     };
   }
 
+  const {
+    takePromoFromAmount,
+    resolveSessionPromoDiscountEuros,
+  } = await import('@/lib/stripe-promo');
+  // Une seule « cagnotte » promo pour tout le panier (enfants + options).
+  const remainingPromo = { current: resolveSessionPromoDiscountEuros(session) };
+
   if (isRenewal) {
     const studentId = session.metadata?.studentId;
     if (studentId && formationUuid) {
-      const expectedAmount =
-        parseFloat(session.metadata?.expected_amount || '0') || undefined;
+      const expectedAmount = takePromoFromAmount(
+        parseFloat(session.metadata?.expected_amount || '0') || undefined,
+        remainingPromo,
+      );
       const insId = await upsertInscription({
         studentId,
         formationUuid,
@@ -381,22 +390,13 @@ export async function fulfillCheckoutSession(params: {
           parseFloat(session.metadata?.expected_amount || '0') || undefined;
         const siblingDiscount =
           parseFloat(session.metadata?.sibling_discount || '0') || 0;
-        const {
-          applyPromoToExpectedAmount,
-          resolveSessionPromoDiscountEuros,
-        } = await import('@/lib/stripe-promo');
-        const promoDiscountEuros = resolveSessionPromoDiscountEuros(session);
         const rawExpected =
           baseExpected !== undefined
             ? siblingDiscount > 0
               ? getExpectedAmountForChild(baseExpected, i, childrenCount)
               : baseExpected
             : undefined;
-        const expectedAmount = applyPromoToExpectedAmount(
-          rawExpected,
-          promoDiscountEuros,
-          i,
-        );
+        const expectedAmount = takePromoFromAmount(rawExpected, remainingPromo);
         const insId = await upsertInscription({
           studentId,
           formationUuid,
@@ -421,7 +421,7 @@ export async function fulfillCheckoutSession(params: {
             formationUuid: bumpUuid,
             classId: null,
             academicYear,
-            expectedAmount: unit,
+            expectedAmount: takePromoFromAmount(unit, remainingPromo),
           });
         }
       }
@@ -454,14 +454,9 @@ export async function fulfillCheckoutSession(params: {
             }
           }
 
-          const {
-            applyPromoToExpectedAmount,
-            resolveSessionPromoDiscountEuros,
-          } = await import('@/lib/stripe-promo');
-          const expectedAmount = applyPromoToExpectedAmount(
+          const expectedAmount = takePromoFromAmount(
             parseFloat(session.metadata?.expected_amount || '0') || undefined,
-            resolveSessionPromoDiscountEuros(session),
-            0,
+            remainingPromo,
           );
           const insId = await upsertInscription({
             studentId,
@@ -483,7 +478,7 @@ export async function fulfillCheckoutSession(params: {
               formationUuid: bumpUuid,
               classId: null,
               academicYear,
-              expectedAmount: unit,
+              expectedAmount: takePromoFromAmount(unit, remainingPromo),
             });
           }
         }
@@ -510,6 +505,9 @@ export async function fulfillCheckoutSession(params: {
     .maybeSingle();
 
   if (!existingPayment) {
+    const { buildPromoPaymentNote } = await import('@/lib/stripe-promo');
+    const promoNote = buildPromoPaymentNote(session);
+
     await insertPaiementWithStripeAccount({
       etudiant_id: studentIds[0],
       stripe_session_id: session.id,
@@ -517,6 +515,7 @@ export async function fulfillCheckoutSession(params: {
       currency: (session.currency || 'eur').toUpperCase(),
       status: 'succeeded',
       stripe_account: stripeAccount,
+      ...(promoNote ? { error_message: promoNote } : {}),
     });
   }
 

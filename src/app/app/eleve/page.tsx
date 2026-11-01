@@ -34,6 +34,8 @@ export default function EleveDashboard() {
     familyTotalPaid: 0,
     familyResteAPayer: 0,
     familyMemberCount: 1,
+    promoCode: null as string | null,
+    promoDiscountEuros: null as number | null,
   });
   const [loadingReceiptId, setLoadingReceiptId] = useState<string | null>(null);
 
@@ -94,6 +96,8 @@ export default function EleveDashboard() {
           familyTotalPaid: Number(payRes.data.family_total_paid ?? payRes.data.total_paid) || 0,
           familyResteAPayer: Number(payRes.data.family_reste_a_payer ?? payRes.data.reste_a_payer) || 0,
           familyMemberCount: Number(payRes.data.family_member_count) || 1,
+          promoCode: payRes.data.promo_code || null,
+          promoDiscountEuros: payRes.data.promo_discount_euros ?? null,
         });
       } catch (payErr) {
         console.error("Error loading payments:", payErr);
@@ -744,6 +748,14 @@ export default function EleveDashboard() {
                             <p className="text-sm text-gray-400 font-medium mt-1">
                               Coût : {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.totalExpected)}
                             </p>
+                            {billingTotals.promoCode && (
+                              <p className="text-sm font-bold text-emerald-700 mt-2">
+                                Code promo {billingTotals.promoCode}
+                                {billingTotals.promoDiscountEuros != null && billingTotals.promoDiscountEuros > 0
+                                  ? ` (−${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(billingTotals.promoDiscountEuros)})`
+                                  : ''}
+                              </p>
+                            )}
                           </div>
                           <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
                             <CreditCard className="w-7 h-7" />

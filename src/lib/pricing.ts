@@ -94,7 +94,12 @@ export function resolveBillingExpectedAmount(
   return 0;
 }
 
-/** Totaux d’un élève, sans cumuler le reste de la famille (même e-mail). */
+/**
+ * Totaux d’un élève.
+ * Checkout famille : Stripe n’enregistre souvent qu’un seul `etudiant_id`.
+ * On répartit alors l’encaissement Stripe au prorata des `expected_amount`,
+ * sans toucher aux règlements manuels (attribués à l’enfant choisi).
+ */
 export function billingTotalsForStudent<
   TIns extends { studentId?: string; etudiant_id?: string; expectedAmount?: number },
   TPay extends { etudiant_id?: string | null; amount?: number; status?: string | null; stripe_session_id?: string | null },
@@ -103,13 +108,55 @@ export function billingTotalsForStudent<
   inscriptions: TIns[],
   payments: TPay[],
 ): { totalExpected: number; totalPaid: number; resteAPayer: number } {
-  const totalExpected = (inscriptions || []).reduce((sum, ins) => {
-    const id = ins.studentId || ins.etudiant_id;
-    if (id !== studentId) return sum;
-    return sum + (Number(ins.expectedAmount) || 0);
-  }, 0);
-  const studentPayments = (payments || []).filter((p) => p.etudiant_id === studentId);
-  const totalPaid = sumSucceededBillingPayments(studentPayments as any);
+  const expectedByStudent = new Map<string, number>();
+  for (const ins of inscriptions || []) {
+    const id = String(ins.studentId || ins.etudiant_id || '');
+    if (!id) continue;
+    expectedByStudent.set(id, (expectedByStudent.get(id) || 0) + (Number(ins.expectedAmount) || 0));
+  }
+  const totalExpected = expectedByStudent.get(studentId) || 0;
+
+  const succeeded = (payments || []).filter(
+    (p) =>
+      SUCCEEDED_PAYMENT_STATUSES.has(String(p.status || '')) &&
+      !isTestStripePayment(p as any),
+  );
+  const manualPaid = succeeded
+    .filter((p) => isManualBillingPayment(p as any) && p.etudiant_id === studentId)
+    .reduce((acc, p) => acc + Number(p.amount || 0), 0);
+
+  const stripePayments = succeeded.filter((p) => !isManualBillingPayment(p as any));
+  const stripeDirect = stripePayments
+    .filter((p) => p.etudiant_id === studentId)
+    .reduce((acc, p) => acc + Number(p.amount || 0), 0);
+
+  const payeeIds = [
+    ...new Set(stripePayments.map((p) => p.etudiant_id).filter(Boolean)),
+  ] as string[];
+  const studentsWithDebt = [...expectedByStudent.entries()]
+    .filter(([, v]) => v > 0.01)
+    .map(([id]) => id);
+  const familyExpected = [...expectedByStudent.values()].reduce((a, b) => a + b, 0);
+  const stripeFamilyPaid = stripePayments.reduce((acc, p) => acc + Number(p.amount || 0), 0);
+
+  let stripePaid = stripeDirect;
+
+  if (payeeIds.length === 1 && studentsWithDebt.length > 1 && familyExpected > 0.01) {
+    const payee = payeeIds[0];
+    const payeeExpected = expectedByStudent.get(payee) || 0;
+    // Total famille (1×) OU mensualité / acompte encore < dette du seul payeur en base
+    const looksLikeSharedCheckout =
+      stripeFamilyPaid > payeeExpected + 1.01 ||
+      (stripeFamilyPaid > 0.01 && stripeFamilyPaid < payeeExpected - 1.01);
+
+    if (looksLikeSharedCheckout) {
+      stripePaid = stripeFamilyPaid * (totalExpected / familyExpected);
+    } else if (studentId !== payee) {
+      stripePaid = 0;
+    }
+  }
+
+  const totalPaid = stripePaid + manualPaid;
   return {
     totalExpected,
     totalPaid,

@@ -340,8 +340,10 @@ function InscriptionForm() {
 
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
+    // Même règle que /api/checkout : réduction fratrie pour TOUTE inscription multi-enfants
+    // (présentiel et distanciel), sinon l’UI affiche trop cher vs Stripe / dette.
     let total = registrationType === 'child'
-      ? (isPresentielCart() ? getFamilyCheckoutTotal(basePrice, namedChildren.length) : basePrice * namedChildren.length)
+      ? getFamilyCheckoutTotal(basePrice, namedChildren.length)
       : basePrice;
     
     additionalCourses.forEach(id => {
@@ -351,7 +353,8 @@ function InscriptionForm() {
     return total;
   };
 
-  const siblingDiscount = isPresentielCart() ? getSiblingDiscount(namedChildren.length) : 0;
+  const siblingDiscount =
+    registrationType === 'child' ? getSiblingDiscount(namedChildren.length) : 0;
 
   const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5 | 10>(1);
   const [promoCodeInput, setPromoCodeInput] = useState("");

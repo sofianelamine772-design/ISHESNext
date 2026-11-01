@@ -5,6 +5,8 @@ import {
   computeCouponDiscountCents,
   installmentAmountAfterPromoCents,
   resolveSessionPromoDiscountEuros,
+  parsePromoNoteFromPayment,
+  buildPromoPaymentNote,
 } from '@/lib/stripe-promo';
 
 describe('stripe-promo', () => {
@@ -44,5 +46,25 @@ describe('stripe-promo', () => {
       metadata: {},
       total_details: { amount_discount: 0 },
     })).toBe(0);
+  });
+
+  it('parse le libellé promo stocké sur un paiement', () => {
+    expect(parsePromoNoteFromPayment('Code promo ISHES2026 (−100.00 €)')).toEqual({
+      code: 'ISHES2026',
+      discountEuros: 100,
+    });
+    expect(parsePromoNoteFromPayment('Paiement Manuel (liquide)')).toBeNull();
+  });
+
+  it('construit le libellé promo depuis metadata ou Stripe Checkout', () => {
+    expect(buildPromoPaymentNote({
+      metadata: { promo_code: 'ISHES2026', promo_discount_euros: '100' },
+    })).toBe('Code promo ISHES2026 (−100.00 €)');
+    expect(buildPromoPaymentNote({
+      metadata: {},
+      total_details: { amount_discount: 10000 },
+      discounts: [{ promotion_code: { code: 'ISHES2026' } }],
+    })).toBe('Code promo ISHES2026 (−100.00 €)');
+    expect(buildPromoPaymentNote({ metadata: {} })).toBeNull();
   });
 });
