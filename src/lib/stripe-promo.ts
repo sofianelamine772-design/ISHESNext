@@ -52,9 +52,18 @@ export function installmentAmountAfterPromoCents(
   return Math.round(net / n);
 }
 
+/** API Stripe récente : coupon sous promotion.coupon (plus sous .coupon). */
+function extractCouponRef(promo: Stripe.PromotionCode): string | Stripe.Coupon | null {
+  const fromPromotion = promo.promotion?.coupon ?? null;
+  if (fromPromotion) return fromPromotion;
+  // Anciennes réponses éventuelles
+  const legacy = (promo as unknown as { coupon?: string | Stripe.Coupon | null }).coupon;
+  return legacy ?? null;
+}
+
 /**
  * Résout un code promo Stripe actif et calcule la remise sur le panier.
- * Le code doit exister sur le même compte Stripe que le checkout.
+ * Le code doit exister sur le même compte Stripe que le checkout (distanciel).
  */
 export async function resolveStripePromoDiscount(
   stripe: Stripe,
@@ -77,7 +86,7 @@ export async function resolveStripePromoDiscount(
       code,
       active: true,
       limit: 1,
-      expand: ['data.coupon'],
+      expand: ['data.promotion.coupon'],
     });
   } catch (err: any) {
     console.error('[stripe-promo] list error', err?.message || err);
@@ -89,9 +98,18 @@ export async function resolveStripePromoDiscount(
     return { ok: false, error: 'Code promo invalide ou expiré.' };
   }
 
-  const coupon = typeof promo.coupon === 'string'
-    ? null
-    : promo.coupon;
+  let couponRef = extractCouponRef(promo);
+  let coupon: Stripe.Coupon | null =
+    couponRef && typeof couponRef !== 'string' ? couponRef : null;
+
+  if (!coupon && typeof couponRef === 'string') {
+    try {
+      coupon = await stripe.coupons.retrieve(couponRef);
+    } catch (err: any) {
+      console.error('[stripe-promo] coupon retrieve', err?.message || err);
+      return { ok: false, error: 'Coupon Stripe introuvable pour ce code.' };
+    }
+  }
 
   if (!coupon) {
     return { ok: false, error: 'Coupon Stripe introuvable pour ce code.' };
@@ -99,6 +117,14 @@ export async function resolveStripePromoDiscount(
 
   if (coupon.valid === false) {
     return { ok: false, error: 'Ce code promo n’est plus valide.' };
+  }
+
+  const minAmount = promo.restrictions?.minimum_amount;
+  if (typeof minAmount === 'number' && minAmount > 0 && total < minAmount) {
+    return {
+      ok: false,
+      error: `Montant minimum requis : ${(minAmount / 100).toFixed(2)} €.`,
+    };
   }
 
   const discountCents = computeCouponDiscountCents(coupon, total);
@@ -127,4 +153,19 @@ export function applyPromoToExpectedAmount(
   if (expectedAmount === undefined) return undefined;
   if (!(promoDiscountEuros > 0) || indexInFamily !== 0) return expectedAmount;
   return Math.max(0, Number(expectedAmount) - promoDiscountEuros);
+}
+
+/**
+ * Remise à appliquer sur la dette après paiement.
+ * Priorité : metadata (promo saisie sur le site, montants déjà nets)
+ * puis remise native Stripe Checkout (total_details).
+ */
+export function resolveSessionPromoDiscountEuros(session: {
+  metadata?: Record<string, string> | null;
+  total_details?: { amount_discount?: number | null } | null;
+}): number {
+  const fromMeta = parseFloat(session.metadata?.promo_discount_euros || '0');
+  if (Number.isFinite(fromMeta) && fromMeta > 0) return fromMeta;
+  const fromStripe = (session.total_details?.amount_discount || 0) / 100;
+  return Number.isFinite(fromStripe) && fromStripe > 0 ? fromStripe : 0;
 }

@@ -10,6 +10,11 @@ import {
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { addedFormationCharge, bumpPriceMetadataKey, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
+import {
+  applyPromoToTotalCents,
+  installmentAmountAfterPromoCents,
+  resolveStripePromoDiscount,
+} from '@/lib/stripe-promo';
 
 export async function POST(req: Request) {
   try {
@@ -227,7 +232,7 @@ export async function POST(req: Request) {
     }
     // ------------------------------------------
 
-    const unitAmount = Math.round(totalAmount * 100);
+    const unitAmountBeforePromo = Math.round(totalAmount * 100);
 
     const installments = body.installments ? parseInt(String(body.installments), 10) : 1;
 
@@ -249,11 +254,34 @@ export async function POST(req: Request) {
     });
     const stripe = getStripeClient(stripeAccount);
 
-    // Codes promo Stripe : UNIQUEMENT distanciel (champ natif sur la page de paiement Stripe).
+    // Codes promo : UNIQUEMENT distanciel.
     const isDistancielCheckout =
       !isPlanPresentiel &&
       formationData?.type !== 'presentiel' &&
       stripeAccount !== 'presentiel';
+
+    let promoDiscountCents = 0;
+    let promoCodeLabel = '';
+    let promoPromotionCodeId = '';
+    const rawPromoCode = String(body.promoCode || body.promotionCode || '').trim();
+    if (rawPromoCode) {
+      if (!isDistancielCheckout) {
+        return NextResponse.json(
+          { error: 'Les codes promo sont réservés aux formations distanciel.' },
+          { status: 400 },
+        );
+      }
+      const resolved = await resolveStripePromoDiscount(stripe, rawPromoCode, unitAmountBeforePromo);
+      if (!resolved.ok) {
+        return NextResponse.json({ error: resolved.error }, { status: 400 });
+      }
+      promoDiscountCents = resolved.discount.discountCents;
+      promoCodeLabel = resolved.discount.code;
+      promoPromotionCodeId = resolved.discount.promotionCodeId;
+    }
+
+    const unitAmount = applyPromoToTotalCents(unitAmountBeforePromo, promoDiscountCents);
+    const promoDiscountEuros = promoDiscountCents / 100;
 
     const metadata: Record<string, string> = {
       clerkUserId: userId || '',
@@ -270,6 +298,12 @@ export async function POST(req: Request) {
       registrationType,
       expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
       sibling_discount: String(siblingDiscount),
+      promo_code: promoCodeLabel,
+      promo_discount_euros: String(promoDiscountEuros || 0),
+      promo_discount_cents: String(promoDiscountCents || 0),
+      promo_promotion_code_id: promoPromotionCodeId,
+      amount_before_promo_cents: String(unitAmountBeforePromo),
+      amount_after_promo_cents: String(unitAmount),
       allow_promo: isDistancielCheckout ? 'true' : 'false',
       stripe_account: stripeAccount,
       order_bump: bumpSlugs.join(','),
@@ -303,8 +337,22 @@ export async function POST(req: Request) {
       ? `Inscription de ${childrenCount} enfants — réduction fratrie ${siblingDiscount} €`
       : 'Inscription — Institut ISHES';
 
+    const promoLineNote = promoDiscountCents > 0
+      ? ` · code ${promoCodeLabel} −${promoDiscountEuros.toFixed(2)} €`
+      : '';
+
+    // Promo native Stripe UNIQUEMENT en paiement 1× sans code déjà appliqué.
+    // En mensualités, un coupon « once » ne touche que le 1er mois → dette fausse.
+    // On force donc la saisie site (répartition correcte) pour le Nx.
+    const showStripePromoField =
+      isDistancielCheckout && promoDiscountCents <= 0 && !(installments > 1);
+
     if (installments > 1) {
-      const installmentAmount = Math.round(unitAmount / installments);
+      const installmentAmount = installmentAmountAfterPromoCents(
+        unitAmountBeforePromo,
+        promoDiscountCents,
+        installments,
+      );
 
       // Création dynamique du tarif Stripe récurrent
       const dynamicPrice = await stripe.prices.create({
@@ -314,7 +362,7 @@ export async function POST(req: Request) {
           interval: 'month',
         },
         product_data: {
-          name: `Paiement en ${installments}x - ${formationTitle}`,
+          name: `Paiement en ${installments}x - ${formationTitle}${promoLineNote}`,
         },
       });
 
@@ -327,8 +375,7 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'subscription',
-        // Promo Stripe : visible uniquement sur le checkout distanciel
-        ...(isDistancielCheckout ? { allow_promotion_codes: true } : {}),
+        ...(showStripePromoField ? { allow_promotion_codes: true } : {}),
         success_url: isLocal
           ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
           : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
@@ -355,7 +402,7 @@ export async function POST(req: Request) {
               currency: 'eur',
               product_data: {
                 name: `Inscription : ${formationTitle}`,
-                description: stripeDescription,
+                description: `${stripeDescription}${promoLineNote}`,
               },
               unit_amount: unitAmount,
             },
@@ -363,8 +410,7 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'payment',
-        // Promo Stripe : visible uniquement sur le checkout distanciel
-        ...(isDistancielCheckout ? { allow_promotion_codes: true } : {}),
+        ...(showStripePromoField ? { allow_promotion_codes: true } : {}),
         invoice_creation: {
           enabled: true,
         },

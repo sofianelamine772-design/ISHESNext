@@ -354,6 +354,10 @@ function InscriptionForm() {
   const siblingDiscount = isPresentielCart() ? getSiblingDiscount(namedChildren.length) : 0;
 
   const [selectedInstallments, setSelectedInstallments] = useState<1 | 3 | 5 | 10>(1);
+  const [promoCodeInput, setPromoCodeInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<{ code: string; discountEuros: number } | null>(null);
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [promoChecking, setPromoChecking] = useState(false);
 
   useEffect(() => {
     if (getPrice() < 100) {
@@ -407,6 +411,7 @@ function InscriptionForm() {
           telephone: formData.telephone,
           registrationType: registrationType,
           installments: selectedInstallments,
+          promoCode: !isPresentielCart() ? (appliedPromo?.code || promoCodeInput || undefined) : undefined,
           prenom: formData.prenom,
           nom: formData.nom,
           niveau: formData.niveau,
@@ -1596,13 +1601,97 @@ function InscriptionForm() {
                     <span>−{siblingDiscount} €</span>
                   </div>
                 )}
-                <div className="mt-4 flex justify-between items-center gap-3 border-t border-gray-200 pt-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
-                  <span>Total à régler</span>
-                  <span className="text-ishes-dark normal-case tracking-normal text-base">
-                    {getPrice().toLocaleString("fr-FR")} €
-                  </span>
-                </div>
+                {appliedPromo && !isPresentielCart() && (
+                  <div className="mt-3 flex justify-between gap-3 text-sm font-bold text-emerald-700">
+                    <span>Code promo {appliedPromo.code}</span>
+                    <span>−{appliedPromo.discountEuros.toLocaleString("fr-FR")} €</span>
+                  </div>
+                )}
+                {(() => {
+                  const payable = Math.max(
+                    0,
+                    getPrice() - (!isPresentielCart() ? (appliedPromo?.discountEuros || 0) : 0),
+                  );
+                  return (
+                    <div className="mt-4 flex justify-between items-center gap-3 border-t border-gray-200 pt-4 text-sm font-bold text-gray-500 uppercase tracking-widest">
+                      <span>Total à régler</span>
+                      <span className="text-ishes-dark normal-case tracking-normal text-base">
+                        {payable.toLocaleString("fr-FR")} €
+                      </span>
+                    </div>
+                  );
+                })()}
                 <div className="h-[1px] bg-gray-200 mb-6" />
+
+                {/* Code promo distanciel (ex. ISHES2026) */}
+                {getPrice() > 0 && !isPresentielCart() && (
+                  <div className="mb-6 text-left">
+                    <label className="text-[10px] font-black tracking-widest text-gray-400 uppercase block mb-2">
+                      Code promo
+                    </label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <input
+                        type="text"
+                        value={promoCodeInput}
+                        onChange={(e) => {
+                          setPromoCodeInput(e.target.value.toUpperCase());
+                          setPromoError(null);
+                          if (appliedPromo) setAppliedPromo(null);
+                        }}
+                        placeholder="Ex: ISHES2026"
+                        className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-bold tracking-wider uppercase"
+                      />
+                      <button
+                        type="button"
+                        disabled={promoChecking || !promoCodeInput.trim()}
+                        onClick={async () => {
+                          setPromoChecking(true);
+                          setPromoError(null);
+                          try {
+                            const res = await fetch("/api/checkout/validate-promo", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                promoCode: promoCodeInput.trim(),
+                                planId,
+                                amountEuros: getPrice(),
+                              }),
+                            });
+                            const data = await res.json();
+                            if (!res.ok) {
+                              setAppliedPromo(null);
+                              setPromoError(data.error || "Code invalide");
+                              return;
+                            }
+                            setAppliedPromo({
+                              code: data.code,
+                              discountEuros: Number(data.discountEuros) || 0,
+                            });
+                          } catch {
+                            setPromoError("Impossible de vérifier le code.");
+                          } finally {
+                            setPromoChecking(false);
+                          }
+                        }}
+                        className="h-[46px] px-5 rounded-xl bg-ishes-blue text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-50"
+                      >
+                        {promoChecking ? "…" : appliedPromo ? "OK" : "Appliquer"}
+                      </button>
+                    </div>
+                    {promoError && (
+                      <p className="text-[11px] text-red-600 font-semibold mt-2">{promoError}</p>
+                    )}
+                    {appliedPromo && (
+                      <p className="text-[11px] text-emerald-700 font-semibold mt-2">
+                        Remise −{appliedPromo.discountEuros.toLocaleString("fr-FR")} €
+                        {selectedInstallments > 1
+                          ? ` répartie sur ${selectedInstallments} mensualités`
+                          : ""}
+                      </p>
+                    )}
+                    <div className="h-[1px] bg-gray-200 mt-6 mb-6" />
+                  </div>
+                )}
 
                 {/* Sélecteur interactive de mensualités */}
                 {getPrice() > 0 && (
@@ -1610,6 +1699,12 @@ function InscriptionForm() {
                     <label className="text-[10px] font-black tracking-widest text-gray-400 uppercase block mb-3">
                       Option de paiement
                     </label>
+                    {(() => {
+                      const payable = Math.max(
+                        0,
+                        getPrice() - (!isPresentielCart() ? (appliedPromo?.discountEuros || 0) : 0),
+                      );
+                      return (
                     <div className="grid grid-cols-1 gap-2.5">
                       {/* Option 1x */}
                       <button
@@ -1625,12 +1720,12 @@ function InscriptionForm() {
                           <span className="text-[10px] text-gray-400 font-medium">Règlement unique sans frais</span>
                         </div>
                         <div className="text-right">
-                          <span className="font-bold text-sm text-ishes-blue">{getPrice()},00 €</span>
+                          <span className="font-bold text-sm text-ishes-blue">{payable.toFixed(2)} €</span>
                         </div>
                       </button>
 
                       {/* Option 3x */}
-                      {getPrice() >= 100 && (
+                      {payable >= 100 && (
                         <button
                           type="button"
                           onClick={() => setSelectedInstallments(3)}
@@ -1644,14 +1739,14 @@ function InscriptionForm() {
                             <span className="text-[10px] text-gray-400 font-medium">3 mensualités</span>
                           </div>
                           <div className="text-right flex flex-col">
-                            <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 3).toFixed(2)} €</span>
+                            <span className="font-bold text-sm text-ishes-blue">{(payable / 3).toFixed(2)} €</span>
                             <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
                           </div>
                         </button>
                       )}
 
                       {/* Option 5x */}
-                      {getPrice() >= 100 && (
+                      {payable >= 100 && (
                         <button
                           type="button"
                           onClick={() => setSelectedInstallments(5)}
@@ -1665,14 +1760,14 @@ function InscriptionForm() {
                             <span className="text-[10px] text-gray-400 font-medium">5 mensualités</span>
                           </div>
                           <div className="text-right flex flex-col">
-                            <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 5).toFixed(2)} €</span>
+                            <span className="font-bold text-sm text-ishes-blue">{(payable / 5).toFixed(2)} €</span>
                             <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
                           </div>
                         </button>
                       )}
 
                       {/* Option 10x (Seulement Présentiel) */}
-                      {getPrice() >= 100 && (planId === 'tajwid_standard' || planId === 'presentiel-global' || planId?.includes('presentiel')) && (
+                      {payable >= 100 && (planId === 'tajwid_standard' || planId === 'presentiel-global' || planId?.includes('presentiel')) && (
                         <button
                           type="button"
                           onClick={() => setSelectedInstallments(10)}
@@ -1686,12 +1781,14 @@ function InscriptionForm() {
                             <span className="text-[10px] text-gray-400 font-medium">10 mensualités (Spécial Présentiel)</span>
                           </div>
                           <div className="text-right flex flex-col">
-                            <span className="font-bold text-sm text-ishes-blue">{(getPrice() / 10).toFixed(2)} €</span>
+                            <span className="font-bold text-sm text-ishes-blue">{(payable / 10).toFixed(2)} €</span>
                             <span className="text-[9px] text-gray-400 font-medium leading-none mt-0.5">/ mois</span>
                           </div>
                         </button>
                       )}
                     </div>
+                      );
+                    })()}
                     <div className="h-[1px] bg-gray-200 mt-6 mb-6" />
                   </div>
                 )}

@@ -381,12 +381,11 @@ export async function fulfillCheckoutSession(params: {
           parseFloat(session.metadata?.expected_amount || '0') || undefined;
         const siblingDiscount =
           parseFloat(session.metadata?.sibling_discount || '0') || 0;
-        // Remise Stripe (distanciel) lue sur la session après paiement
-        const promoDiscountEuros =
-          (session.total_details?.amount_discount || 0) / 100 ||
-          parseFloat(session.metadata?.promo_discount_euros || '0') ||
-          0;
-        const { applyPromoToExpectedAmount } = await import('@/lib/stripe-promo');
+        const {
+          applyPromoToExpectedAmount,
+          resolveSessionPromoDiscountEuros,
+        } = await import('@/lib/stripe-promo');
+        const promoDiscountEuros = resolveSessionPromoDiscountEuros(session);
         const rawExpected =
           baseExpected !== undefined
             ? siblingDiscount > 0
@@ -455,14 +454,13 @@ export async function fulfillCheckoutSession(params: {
             }
           }
 
-          const { applyPromoToExpectedAmount } = await import('@/lib/stripe-promo');
-          const promoDiscountEuros =
-            (session.total_details?.amount_discount || 0) / 100 ||
-            parseFloat(session.metadata?.promo_discount_euros || '0') ||
-            0;
+          const {
+            applyPromoToExpectedAmount,
+            resolveSessionPromoDiscountEuros,
+          } = await import('@/lib/stripe-promo');
           const expectedAmount = applyPromoToExpectedAmount(
             parseFloat(session.metadata?.expected_amount || '0') || undefined,
-            promoDiscountEuros,
+            resolveSessionPromoDiscountEuros(session),
             0,
           );
           const insId = await upsertInscription({

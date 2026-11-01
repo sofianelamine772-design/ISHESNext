@@ -327,11 +327,20 @@ export async function GET(req: Request) {
 
           const baseExpected = parseFloat(session.metadata?.expected_amount || '0') || undefined;
           const siblingDiscount = parseFloat(session.metadata?.sibling_discount || '0') || 0;
-          const expectedAmount = baseExpected !== undefined
+          const {
+            applyPromoToExpectedAmount,
+            resolveSessionPromoDiscountEuros,
+          } = await import('@/lib/stripe-promo');
+          const rawExpected = baseExpected !== undefined
             ? (siblingDiscount > 0
               ? getExpectedAmountForChild(baseExpected, i, childrenCount)
               : baseExpected)
             : undefined;
+          const expectedAmount = applyPromoToExpectedAmount(
+            rawExpected,
+            resolveSessionPromoDiscountEuros(session),
+            i,
+          );
 
           const finalClassId = classId || null;
           const insId = await upsertInscription({ studentId, formationUuid, classId: finalClassId, academicYear, expectedAmount });
@@ -346,7 +355,22 @@ export async function GET(req: Request) {
         if (firstName && lastName) {
           const studentId = await upsertStudent({ email: payerEmail, firstName, lastName, phone: telephone });
           if (studentId && formationUuid) {
-            const insId = await upsertInscription({ studentId, formationUuid, classId, academicYear });
+            const {
+              applyPromoToExpectedAmount,
+              resolveSessionPromoDiscountEuros,
+            } = await import('@/lib/stripe-promo');
+            const expectedAmount = applyPromoToExpectedAmount(
+              parseFloat(session.metadata?.expected_amount || '0') || undefined,
+              resolveSessionPromoDiscountEuros(session),
+              0,
+            );
+            const insId = await upsertInscription({
+              studentId,
+              formationUuid,
+              classId,
+              academicYear,
+              expectedAmount,
+            });
             if (insId) studentIds.push(studentId);
           }
         }
