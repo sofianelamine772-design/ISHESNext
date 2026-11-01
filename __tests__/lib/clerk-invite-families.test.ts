@@ -46,19 +46,19 @@ describe('resolveProductionAppUrl', () => {
   });
 
   it('accepte la prod et retombe sur le site en ligne si l’URL est vide', () => {
-    const res = resolveProductionAppUrl('https://ishees.vercel.app');
+    const res = resolveProductionAppUrl('https://ishes.fr');
     expect(res.ok).toBe(true);
-    if (res.ok) expect(res.url).toBe('https://ishees.vercel.app');
+    if (res.ok) expect(res.url).toBe('https://ishes.fr');
     const fallback = resolveProductionAppUrl('');
     expect(fallback.ok).toBe(true);
-    if (fallback.ok) expect(fallback.url).toBe('https://ishees.vercel.app');
+    if (fallback.ok) expect(fallback.url).toBe('https://ishes.fr');
   });
 });
 
 describe('clerkInviteRedirectUrl', () => {
   it('envoie vers la page de création de compte, pas vers l’espace déjà protégé', () => {
-    expect(clerkInviteRedirectUrl('https://ishees.vercel.app')).toBe('https://ishees.vercel.app/sign-up');
-    expect(clerkInviteRedirectUrl('https://ishees.vercel.app/')).toBe('https://ishees.vercel.app/sign-up');
+    expect(clerkInviteRedirectUrl('https://ishes.fr')).toBe('https://ishes.fr/sign-up');
+    expect(clerkInviteRedirectUrl('https://ishes.fr/')).toBe('https://ishes.fr/sign-up');
   });
 });
 

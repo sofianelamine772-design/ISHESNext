@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
 import { CLASS_ID_TO_UUID, resolvePresentielCheckoutSlug, getPresentielCapacityLimit } from '@/lib/presentiel-data';
-import { DISTANCE_CLASS_ID_TO_UUID, isOfficialDistanceClassId } from '@/lib/distance-data';
+import {
+  DISTANCE_CLASS_ID_TO_UUID,
+  isOfficialDistanceClassId,
+  isLeveledDistanceFormationSlug,
+} from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { addedFormationCharge, bumpPriceMetadataKey, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
@@ -33,10 +37,16 @@ export async function POST(req: Request) {
       collectClassId(body.classId);
     }
 
-    const formationId = resolvePresentielCheckoutSlug(
+    let formationId = resolvePresentielCheckoutSlug(
       body.formationId || body.planId || '',
       classIdsToCheck,
     );
+    // Anciens slugs doublons → formations remplacées
+    if (formationId === 'arabe_coran_junior' || formationId === 'arabe-coran-junior') {
+      formationId = 'arabe_enfant_distance';
+    } else if (formationId === 'sciences-islamiques') {
+      formationId = 'sciences_islamiques';
+    }
 
     // --- SÉCURITÉ : BLOCAGE DES INSCRIPTIONS PRÉSENTIELLES (30 Nov - 30 Avril) ---
     const isPlanPresentiel = formationId.toLowerCase().includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire';
@@ -139,6 +149,38 @@ export async function POST(req: Request) {
       );
     }
 
+    // Arabe / Tajwid / Tarbiya distance : le niveau (classe 101–108) est obligatoire.
+    if (isLeveledDistanceFormationSlug(formationId)) {
+      const namedChildren = getNamedChildren(body.childrenList || []);
+      const needsChildLevels = registrationType === 'child' || namedChildren.length > 0;
+      if (needsChildLevels) {
+        if (namedChildren.length === 0) {
+          return NextResponse.json(
+            { error: 'Indiquez chaque enfant et son niveau avant le paiement.' },
+            { status: 400 },
+          );
+        }
+        const missingLevel = namedChildren.some((child: any) => {
+          const id = parseInt(String(child.classId ?? ''), 10);
+          return !isOfficialDistanceClassId(id);
+        });
+        if (missingLevel) {
+          return NextResponse.json(
+            { error: 'Choisissez le niveau de chaque enfant (Niveau 1, 2 ou 3 / année).' },
+            { status: 400 },
+          );
+        }
+      } else {
+        const adultClassId = parseInt(String(body.classId ?? ''), 10);
+        if (!isOfficialDistanceClassId(adultClassId)) {
+          return NextResponse.json(
+            { error: 'Choisissez un niveau avant le paiement.' },
+            { status: 400 },
+          );
+        }
+      }
+    }
+
     if (presentielIdsToCheck.length > 0) {
       const { data: selectedClasses, error: classLookupError } = await supabaseAdmin
         .from('classes')
@@ -207,6 +249,12 @@ export async function POST(req: Request) {
     });
     const stripe = getStripeClient(stripeAccount);
 
+    // Codes promo Stripe : UNIQUEMENT distanciel (champ natif sur la page de paiement Stripe).
+    const isDistancielCheckout =
+      !isPlanPresentiel &&
+      formationData?.type !== 'presentiel' &&
+      stripeAccount !== 'presentiel';
+
     const metadata: Record<string, string> = {
       clerkUserId: userId || '',
       formationId,
@@ -222,6 +270,7 @@ export async function POST(req: Request) {
       registrationType,
       expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
       sibling_discount: String(siblingDiscount),
+      allow_promo: isDistancielCheckout ? 'true' : 'false',
       stripe_account: stripeAccount,
       order_bump: bumpSlugs.join(','),
     };
@@ -278,6 +327,8 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'subscription',
+        // Promo Stripe : visible uniquement sur le checkout distanciel
+        ...(isDistancielCheckout ? { allow_promotion_codes: true } : {}),
         success_url: isLocal
           ? `${baseUrl}/api/checkout/local-success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(body.email || '')}`
           : `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
@@ -285,11 +336,13 @@ export async function POST(req: Request) {
         metadata: {
           ...metadata,
           installments_total: String(installments),
+          installment_amount_cents: String(installmentAmount),
         },
         subscription_data: {
           metadata: {
             ...metadata,
             installments_total: String(installments),
+            installment_amount_cents: String(installmentAmount),
           },
         },
       };
@@ -310,6 +363,8 @@ export async function POST(req: Request) {
           },
         ],
         mode: 'payment',
+        // Promo Stripe : visible uniquement sur le checkout distanciel
+        ...(isDistancielCheckout ? { allow_promotion_codes: true } : {}),
         invoice_creation: {
           enabled: true,
         },

@@ -13,7 +13,7 @@ import { isOfficialDistanceClassId } from "@/lib/distance-data";
 import { clerkInviteErrorMessage, clerkInviteRedirectUrl, isInvitableEmail, normalizeInviteEmail, resolveProductionAppUrl } from "@/lib/clerk-invite-families";
 import { getFournituresPublicDocs } from "@/lib/presentiel-fournitures-email";
 import { getDistancielRentreePublicDocs } from "@/lib/distanciel-rentree";
-import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess, isLiveStripePayment, isManualBillingPayment, billingTotalsForStudent } from "@/lib/pricing";
+import { pickBillingInscriptions, pickBillingPayments, sumSucceededBillingPayments, resolveBillingExpectedAmount, unwrapRelation, resolveInscriptionPaidStatus, inscriptionGrantsStudentAccess, isLiveStripePayment, isManualBillingPayment, billingTotalsForStudent, isFormationEnseignante } from "@/lib/pricing";
 import {
   getStripeClient,
   normalizeStoredStripeAccount,
@@ -183,22 +183,36 @@ export async function registerStudentAction(formData: {
         if (insError) throw insError;
       }
     } else {
-      // 3. Distanciel: Utilise la classe passée ou récupère la classe la plus récente pour cette formation
+      // 3. Distanciel: classe passée, sinon fallback sûr (jamais Session au hasard si niveaux officiels).
       let finalClassId = dbClassId;
 
       if (!finalClassId) {
-        let { data: classe, error: cFetchError } = await supabaseAdmin
+        const { data: activeClasses, error: cFetchError } = await supabaseAdmin
           .from('classes')
-          .select('id')
+          .select('id, name, external_id')
           .eq('formation_id', formation!.id)
-          .eq('is_active', true)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle();
+          .eq('is_active', true);
 
         if (cFetchError) console.error("Class Fetch Error:", cFetchError);
 
-        if (!classe) {
+        const { pickCheckoutFallbackClass } = await import('@/lib/checkout-class-fallback');
+        const {
+          isOfficialDistanceClassId,
+          isLeveledDistanceFormationSlug,
+        } = await import('@/lib/distance-data');
+        const { isOfficialPresentielClass } = await import('@/lib/presentiel-data');
+        const picked = pickCheckoutFallbackClass(
+          (activeClasses || []).map((classe: any) => ({
+            id: classe.id,
+            name: classe.name,
+            externalId: classe.external_id,
+          })),
+          (externalId) => isOfficialDistanceClassId(externalId) || isOfficialPresentielClass(externalId),
+        );
+
+        if (picked) {
+          finalClassId = picked.id;
+        } else if ((activeClasses || []).length === 0 && !isLeveledDistanceFormationSlug(formation!.slug)) {
           console.log("Class not found for formation, creating default class");
           const { data: newClass, error: cError } = await supabaseAdmin
             .from('classes')
@@ -216,8 +230,6 @@ export async function registerStudentAction(formData: {
             throw cError || new Error("Failed to create default class");
           }
           finalClassId = newClass.id;
-        } else {
-          finalClassId = classe.id;
         }
       }
 
@@ -399,7 +411,7 @@ export async function fetchClassesAction(academicYear?: string) {
       .from('classes')
       .select(`
         *,
-        formations (title),
+        formations (title, slug),
         inscriptions (
           status,
           etudiant_id,
@@ -440,6 +452,7 @@ export async function fetchClassesAction(academicYear?: string) {
         schedule: scheduleStr,
         capacity_limit: getPresentielCapacityLimit(c.external_id) ?? c.capacity_limit ?? 20,
         formationTitle: c.formations?.title,
+        formationSlug: c.formations?.slug || null,
         formationId: c.formation_id || null,
         whatsappLink: c.whatsapp_link || null,
         teacherName: c.teacher_name || null,
@@ -484,14 +497,30 @@ export async function assignStudentToClassAction(
     // 1. On récupère la formation liée à cette classe
     const { data: classe, error: classError } = await supabaseAdmin
       .from('classes')
-      .select('formation_id, name, type, whatsapp_link, formations (price)')
+      .select('formation_id, name, type, whatsapp_link, formations (price, title, slug)')
       .eq('id', classId)
       .single();
 
     if (classError) throw classError;
 
-    const formationRow = unwrapRelation((classe as any)?.formations) as { price?: number } | null;
+    const formationRow = unwrapRelation((classe as any)?.formations) as {
+      price?: number;
+      title?: string;
+      slug?: string;
+    } | null;
     const formationPrice = Number(formationRow?.price);
+    const isEnseignant = isFormationEnseignante({
+      slug: formationRow?.slug,
+      title: formationRow?.title || (classe as any)?.name,
+      name: (classe as any)?.name,
+    });
+    if (isEnseignant && !(customExpectedAmount !== undefined && customExpectedAmount > 0)) {
+      return {
+        success: false,
+        error: "Pour une formation enseignant, saisissez le montant dû (tarif sur devis).",
+      };
+    }
+
     const expectedAmount = customExpectedAmount !== undefined && customExpectedAmount > 0
       ? customExpectedAmount
       : (Number.isFinite(formationPrice) && formationPrice > 0 ? formationPrice : undefined);
@@ -803,7 +832,7 @@ export async function createStudentManualAction(data: {
       .catch(mailErr => console.error("Failed to send welcome email:", mailErr));
 
     const clerkPromise = clerkClient().then(client => {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishes.fr";
       return client.invitations.createInvitation({
         emailAddress: baseEmail || data.email,
         publicMetadata: { role: 'etudiant' },
@@ -831,7 +860,7 @@ async function sendClerkAccountInvite(email: string, firstName?: string | null) 
   }
 
   const app = resolveProductionAppUrl(process.env.NEXT_PUBLIC_APP_URL);
-  const appUrl = app.ok ? app.url : "https://ishees.vercel.app";
+  const appUrl = app.ok ? app.url : "https://ishes.fr";
 
   try {
     const client = await clerkClient();
@@ -1619,7 +1648,7 @@ export async function sendPaymentReminderWithLinkAction(paymentId: string) {
     }
 
     const amountInCents = Math.round(parseFloat(paiement.amount) * 100);
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishees.vercel.app";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ishes.fr";
 
     // Relance sur le même compte Stripe que le paiement d'origine
     let stripeAccount = normalizeStoredStripeAccount(paiement.stripe_account);
@@ -1788,7 +1817,7 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         paid_status,
         created_at,
         expected_amount,
-        formations (title, price),
+        formations (title, price, slug),
         classes (name, type)
       `)
       .in('etudiant_id', familyIds)
@@ -1844,9 +1873,16 @@ export async function fetchStudentBillingDataAction(studentId: string) {
 
     let total_expected = 0;
     const enrichedInscriptions = billingInscriptions.map((ins: any) => {
-      const formation = unwrapRelation(ins.formations) as { title?: string; price?: number } | null;
+      const formation = unwrapRelation(ins.formations) as { title?: string; price?: number; slug?: string } | null;
       const fallbackPrice = formation?.price != null ? Number(formation.price) : 0;
-      const expected = resolveBillingExpectedAmount(ins.expected_amount, fallbackPrice);
+      const enseignant = isFormationEnseignante({
+        slug: formation?.slug,
+        title: formation?.title,
+      });
+      const needsManualTariff = enseignant && (ins.expected_amount == null || ins.expected_amount === '');
+      const expected = needsManualTariff
+        ? 0
+        : resolveBillingExpectedAmount(ins.expected_amount, enseignant ? null : fallbackPrice);
 
       total_expected += expected;
 
@@ -1856,6 +1892,10 @@ export async function fetchStudentBillingDataAction(studentId: string) {
         status: ins.status,
         paidStatus: ins.paid_status,
         expectedAmount: expected,
+        rawExpectedAmount: ins.expected_amount == null ? null : Number(ins.expected_amount),
+        isFormationEnseignant: enseignant,
+        needsManualTariff,
+        formationSlug: formation?.slug || null,
         formationTitle: formation?.title || 'Formation ISHES',
         className: (unwrapRelation(ins.classes) as { name?: string } | null)?.name || '',
         classType: (unwrapRelation(ins.classes) as { type?: string } | null)?.type || 'distanciel',
@@ -2147,6 +2187,58 @@ export async function addManualSettlePaymentAction(studentId: string, amount: nu
   }
 }
 
+/** Saisie / mise à jour du montant dû (tarif sur devis) pour une inscription enseignant. */
+export async function updateInscriptionExpectedAmountAction(
+  studentId: string,
+  inscriptionId: string,
+  amount: number,
+) {
+  try {
+    const authResult = await auth();
+    if (!authResult.userId) {
+      return { success: false, error: "Non autorisé." };
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return { success: false, error: "Le montant dû doit être supérieur à 0." };
+    }
+
+    const { data: inscription, error: fetchError } = await supabaseAdmin
+      .from('inscriptions')
+      .select('id, etudiant_id, formations (title, slug)')
+      .eq('id', inscriptionId)
+      .eq('etudiant_id', studentId)
+      .maybeSingle();
+
+    if (fetchError) throw fetchError;
+    if (!inscription) {
+      return { success: false, error: "Inscription introuvable." };
+    }
+
+    const formation = unwrapRelation((inscription as any).formations) as { title?: string; slug?: string } | null;
+    if (!isFormationEnseignante({ slug: formation?.slug, title: formation?.title })) {
+      return {
+        success: false,
+        error: "La saisie manuelle du tarif est réservée aux formations enseignant.",
+      };
+    }
+
+    const { error } = await supabaseAdmin
+      .from('inscriptions')
+      .update({ expected_amount: amount })
+      .eq('id', inscriptionId)
+      .eq('etudiant_id', studentId);
+
+    if (error) throw error;
+
+    await syncStudentPaidStatus(studentId);
+    return { success: true };
+  } catch (err: any) {
+    console.error("[updateInscriptionExpectedAmountAction]", err);
+    return { success: false, error: err?.message || "Impossible d'enregistrer le montant dû." };
+  }
+}
+
 /**
  * Fonction de synchronisation absolue : Calcule le reste à payer et force le statut de toutes
  * les inscriptions actives à la réalité mathématique (paye, partiel, impaye).
@@ -2160,7 +2252,8 @@ export async function syncStudentPaidStatus(studentId: string) {
     const studentIns = (inscriptions || []).filter((ins: any) => ins.studentId === studentId);
     if (studentIns.length === 0) return;
 
-    const targetStatus = resolveInscriptionPaidStatus(total_paid, reste_a_payer);
+    const needsManualTariff = studentIns.some((ins: any) => ins.needsManualTariff);
+    const targetStatus = resolveInscriptionPaidStatus(total_paid, reste_a_payer, { needsManualTariff });
 
     await supabaseAdmin
       .from('inscriptions')
@@ -2305,13 +2398,26 @@ export async function fetchManualBalancesAction() {
 
 export async function addManualPaymentAction(studentId: string, amount: number, method: string) {
   try {
+    // Lier l'acompte à une inscription enseignant ouverte si possible (historique plus clair).
+    const { data: openInscriptions } = await supabaseAdmin
+      .from('inscriptions')
+      .select('id, expected_amount, formations (title, slug)')
+      .eq('etudiant_id', studentId)
+      .in('status', ['valide', 'actif', 'en_attente', 'en_attente_daffectation']);
+
+    const enseignantIns = (openInscriptions || []).find((ins: any) => {
+      const formation = unwrapRelation(ins.formations) as { title?: string; slug?: string } | null;
+      return isFormationEnseignante({ slug: formation?.slug, title: formation?.title });
+    });
+
     const { error } = await supabaseAdmin.from('paiements').insert({
       etudiant_id: studentId,
       amount: amount,
       currency: 'EUR',
       status: 'succeeded',
       stripe_session_id: `manual_${method}_${Date.now()}`,
-      error_message: `Paiement Manuel (${method})`
+      error_message: `Paiement Manuel (${method})`,
+      ...(enseignantIns?.id ? { inscription_id: enseignantIns.id } : {}),
     });
 
     if (error) throw error;
@@ -2338,6 +2444,71 @@ export async function updateClassTeacherAction(externalId: number, teacherName: 
     return { success: true };
   } catch (err: any) {
     console.error("Update Teacher Name Error:", err);
+    return { success: false, error: err.message || "Failed to update teacher name" };
+  }
+}
+
+/** Planning distanciel : maj professeur sur les classes liées (external_id et/ou slug formation). */
+export async function updateDistanceSlotTeacherAction(params: {
+  externalIds?: number[];
+  formationSlugs?: string[];
+  teacherName: string;
+}) {
+  try {
+    const teacherName = String(params.teacherName || "").trim();
+    const externalIds = (params.externalIds || []).filter((id) => Number.isInteger(id));
+    const formationSlugs = (params.formationSlugs || [])
+      .map((s) => String(s || "").trim())
+      .filter(Boolean);
+
+    if (externalIds.length === 0 && formationSlugs.length === 0) {
+      return {
+        success: false,
+        error: "Ce créneau n'est lié à aucune classe en base : impossible d'enregistrer le professeur.",
+      };
+    }
+
+    let updated = 0;
+
+    if (externalIds.length > 0) {
+      const { data, error } = await supabaseAdmin
+        .from("classes")
+        .update({ teacher_name: teacherName || null })
+        .in("external_id", externalIds)
+        .select("id");
+      if (error) throw error;
+      updated += data?.length || 0;
+    }
+
+    if (formationSlugs.length > 0) {
+      const { data: formations, error: fErr } = await supabaseAdmin
+        .from("formations")
+        .select("id, slug")
+        .in("slug", formationSlugs);
+      if (fErr) throw fErr;
+      const formationIds = (formations || []).map((f: any) => f.id).filter(Boolean);
+      if (formationIds.length > 0) {
+        const { data, error } = await supabaseAdmin
+          .from("classes")
+          .update({ teacher_name: teacherName || null })
+          .in("formation_id", formationIds)
+          .eq("is_active", true)
+          .select("id");
+        if (error) throw error;
+        updated += data?.length || 0;
+      }
+    }
+
+    if (updated === 0) {
+      return {
+        success: false,
+        error: "Aucune classe active trouvée pour ce créneau.",
+      };
+    }
+
+    return { success: true, updated };
+  } catch (err: any) {
+    console.error("Update Distance Slot Teacher Error:", err);
     return { success: false, error: err.message || "Failed to update teacher name" };
   }
 }

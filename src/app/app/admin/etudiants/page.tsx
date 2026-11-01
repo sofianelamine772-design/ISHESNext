@@ -5,7 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2, ExternalLink } from "lucide-react";
-import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, deletePaymentAction, fetchUsersLoginsAction, getAdminStripeReceiptUrlAction } from "@/app/actions/students";
+import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, updateInscriptionExpectedAmountAction, deletePaymentAction, fetchUsersLoginsAction, getAdminStripeReceiptUrlAction } from "@/app/actions/students";
+import { isFormationEnseignante } from "@/lib/pricing";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { cn } from "@/lib/utils";
@@ -39,7 +40,7 @@ type StudentDetail = {
   parentName: string | null;
   address: string;
   lastPayment: string;
-  paymentStatus: "a_jour" | "en_retard";
+  paymentStatus: "a_jour" | "partiel" | "en_retard";
   classId?: string | null;
   hasConnected?: boolean;
 };
@@ -100,6 +101,8 @@ function EtudiantsContent() {
   const [settleAmount, setSettleAmount] = useState("");
   const [settleMethod, setSettleMethod] = useState("liquide");
   const [isSettling, setIsSettling] = useState(false);
+  const [enseignantDebtDrafts, setEnseignantDebtDrafts] = useState<Record<string, string>>({});
+  const [savingEnseignantDebtId, setSavingEnseignantDebtId] = useState<string | null>(null);
   const [loadingReceiptId, setLoadingReceiptId] = useState<string | null>(null);
 
   // Only current and next academic year
@@ -217,8 +220,17 @@ function EtudiantsContent() {
             status: s.status || "en_attente",
             parentName: null,
             address: s.address || "Adresse non renseignée",
-            lastPayment: latestInscription?.paid_status === 'paye' ? "Stripe" : "Aucun",
-            paymentStatus: (latestInscription?.paid_status === 'paye' || String(s.id).startsWith('manual_')) ? "a_jour" as const : "en_retard" as const,
+            lastPayment:
+              latestInscription?.paid_status === 'paye' || latestInscription?.paid_status === 'partiel'
+                ? (String(s.id).startsWith('manual_') ? "Manuel" : "Stripe")
+                : "Aucun",
+            // Ne plus forcer « À JOUR » pour les dossiers manuels (formations enseignant sur devis).
+            paymentStatus: (() => {
+              const ps = String(latestInscription?.paid_status || '').toLowerCase();
+              if (ps === 'paye') return 'a_jour' as const;
+              if (ps === 'partiel') return 'partiel' as const;
+              return 'en_retard' as const;
+            })(),
             classId: latestInscription?.class_id || null,
             hasConnected: !!(s.email && loginMap[s.email.toLowerCase()])
           };
@@ -296,8 +308,13 @@ function EtudiantsContent() {
       const result = await addManualSettlePaymentAction(selectedStudentId, Number(settleAmount), settleMethod);
       if (result.success) {
         setSettleAmount("");
-        // Rafraîchir les paiements
-        fetchStudentPayments(selectedStudentId);
+        await fetchStudentPayments(selectedStudentId);
+        await fetchStudents();
+        setPopupMsg({
+          title: "Acompte enregistré",
+          desc: "Le règlement a été ajouté. Le déjà payé et le reste à payer ont été mis à jour.",
+          type: "success",
+        });
       } else {
         alert(result.error || "Erreur lors de l'enregistrement du règlement.");
       }
@@ -306,6 +323,41 @@ function EtudiantsContent() {
       alert("Erreur système.");
     } finally {
       setIsSettling(false);
+    }
+  };
+
+  const handleSaveEnseignantDebt = async (inscriptionId: string) => {
+    if (!selectedStudentId) return;
+    const raw = enseignantDebtDrafts[inscriptionId];
+    const amount = Number(raw);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      alert("Saisissez un montant dû supérieur à 0.");
+      return;
+    }
+    setSavingEnseignantDebtId(inscriptionId);
+    try {
+      const result = await updateInscriptionExpectedAmountAction(selectedStudentId, inscriptionId, amount);
+      if (result.success) {
+        setEnseignantDebtDrafts((prev) => {
+          const next = { ...prev };
+          delete next[inscriptionId];
+          return next;
+        });
+        await fetchStudentPayments(selectedStudentId);
+        await fetchStudents();
+        setPopupMsg({
+          title: "Montant enregistré",
+          desc: "La dette de la formation enseignant a été mise à jour. Vous pouvez maintenant saisir les acomptes.",
+          type: "success",
+        });
+      } else {
+        alert(result.error || "Impossible d'enregistrer le montant.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur système.");
+    } finally {
+      setSavingEnseignantDebtId(null);
     }
   };
 
@@ -390,7 +442,7 @@ function EtudiantsContent() {
           setPopupMsg({ title: "Succès !", desc: "Invitation Clerk envoyée (mail officiel de création de compte).", type: "success" });
         }
       } else {
-        setPopupMsg({ title: "Erreur d'envoi", desc: result.error || "Avez-vous vérifié votre domaine sur Resend ?", type: "error" });
+        setPopupMsg({ title: "Erreur d'envoi", desc: result.error || "Vérifiez la configuration SMTP (SMTP_USER / SMTP_PASS).", type: "error" });
       }
     } catch (err: any) {
       console.error(err);
@@ -429,6 +481,15 @@ function EtudiantsContent() {
 
   const handleUpdateScolarite = async () => {
     if (!selectedStudentId || !targetClassId) return;
+    const selectedClassObj = classes.find((c) => c.id === targetClassId);
+    const isEnseignant = isFormationEnseignante({
+      title: selectedClassObj?.formationTitle,
+      name: selectedClassObj?.name,
+    });
+    if (isEnseignant && (customExpectedAmount === "" || Number(customExpectedAmount) <= 0)) {
+      alert("Pour une formation enseignant, saisissez le montant dû (tarif sur devis).");
+      return;
+    }
     setIsSubmitting(true);
     try {
       const result = await assignStudentToClassAction(
@@ -443,9 +504,13 @@ function EtudiantsContent() {
         setScolariteInscriptionId(null);
         setScolariteFormationId(null);
         await fetchStudents();
+        if (selectedStudentId) await fetchStudentPayments(selectedStudentId);
+      } else {
+        alert((result as any).error || "Impossible de mettre à jour la scolarité.");
       }
     } catch (err) {
       console.error(err);
+      alert("Erreur système.");
     } finally {
       setIsSubmitting(false);
     }
@@ -814,6 +879,11 @@ function EtudiantsContent() {
                                 IMPAYÉ
                               </span>
                             )}
+                            {student.paymentStatus === 'partiel' && (
+                              <span className="ishes-label text-[8px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-bold border border-amber-100 shrink-0">
+                                PARTIEL
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1063,9 +1133,29 @@ function EtudiantsContent() {
                           </div>
                           <div className="flex flex-col">
                             <span className="ishes-label text-[8px] md:text-[9px] opacity-40 mb-1">Statut Financier</span>
-                            <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${selectedStudent.paymentStatus === 'a_jour' ? 'text-ishes-blue' : 'text-red-500'}`}>
-                              {selectedStudent.paymentStatus === 'a_jour' ? 'À JOUR' : 'IMPAYÉ'}
-                            </span>
+                            {(() => {
+                              const needsTariff = (billingData.inscriptions || []).some(
+                                (ins: any) => ins.studentId === selectedStudentId && ins.needsManualTariff,
+                              );
+                              const label = needsTariff
+                                ? 'À TARIFER'
+                                : billingData.resteAPayer <= 0.01 && billingData.totalExpected > 0
+                                  ? 'À JOUR'
+                                  : billingData.totalPaid > 0.01
+                                    ? 'PARTIEL'
+                                    : selectedStudent.paymentStatus === 'a_jour'
+                                      ? 'À JOUR'
+                                      : selectedStudent.paymentStatus === 'partiel'
+                                        ? 'PARTIEL'
+                                        : 'IMPAYÉ';
+                              const ok = label === 'À JOUR';
+                              const warn = label === 'PARTIEL' || label === 'À TARIFER';
+                              return (
+                                <span className={`ishes-label text-[9px] md:text-[10px] mt-1 ${ok ? 'text-ishes-blue' : warn ? 'text-amber-600' : 'text-red-500'}`}>
+                                  {label}
+                                </span>
+                              );
+                            })()}
                           </div>
                         </div>
                       </div>
@@ -1111,6 +1201,15 @@ function EtudiantsContent() {
                         <CreditCard className="w-4 h-4" /> Facturation & Historique des règlements
                       </h3>
                     </div>
+
+                    {/* Bloc enseignant placé en tête de facturation pour ne pas le manquer */}
+                    {!loadingPayments && (billingData.inscriptions || []).some((ins: any) =>
+                      ins.studentId === selectedStudentId && ins.isFormationEnseignant && ins.needsManualTariff
+                    ) && (
+                      <div className="mb-6 rounded-2xl border-2 border-amber-400 bg-amber-100 px-4 py-3 text-[12px] font-bold text-amber-950">
+                        Formation enseignant sans tarif : saisissez le montant total dû dans le cadre orange ci-dessous, puis les acomptes au fur et à mesure.
+                      </div>
+                    )}
 
                     {!loadingPayments && (
                       <div className="mb-8 space-y-6">
@@ -1165,10 +1264,135 @@ function EtudiantsContent() {
                       </div>
                     )}
 
-                    {/* Formulaire Règlement Manuel */}
-                    {!loadingPayments && billingData.resteAPayer > 0 && (
+                    {/* Formation enseignant UNIQUEMENT : dette manuelle + acomptes partiels */}
+                    {!loadingPayments && (billingData.inscriptions || []).some((ins: any) =>
+                      ins.studentId === selectedStudentId && ins.isFormationEnseignant
+                    ) && (
+                      <div className="mb-8 space-y-4">
+                        {(billingData.inscriptions || [])
+                          .filter((ins: any) => ins.studentId === selectedStudentId && ins.isFormationEnseignant)
+                          .map((ins: any) => {
+                            const draft = enseignantDebtDrafts[ins.id] ?? (ins.rawExpectedAmount != null ? String(ins.rawExpectedAmount) : "");
+                            const paidForStudent = billingData.totalPaid;
+                            const due = Number(ins.expectedAmount) || 0;
+                            const reste = Math.max(0, due - paidForStudent);
+                            const canRecordPartial = !ins.needsManualTariff && due > 0 && reste > 0;
+                            return (
+                              <div key={ins.id} className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 shadow-sm space-y-5">
+                                <div>
+                                  <h4 className="text-[10px] font-black uppercase tracking-widest text-amber-800 mb-1">
+                                    Formation enseignant · saisie manuelle
+                                  </h4>
+                                  <p className="text-sm font-black text-ishes-dark">{ins.formationTitle}</p>
+                                  <p className="text-[11px] text-amber-900/70 font-medium mt-1">
+                                    1) Indiquez le montant total dû (devis). 2) À chaque règlement, saisissez l&apos;acompte : le déjà payé et le reste se mettent à jour jusqu&apos;à 0 €.
+                                  </p>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                  <div className="bg-white border border-amber-100 rounded-xl p-3 text-center">
+                                    <div className="text-[9px] font-black uppercase tracking-widest text-gray-400">Montant dû</div>
+                                    <div className="text-lg font-black text-ishes-dark">
+                                      {ins.needsManualTariff ? "—" : formatEur(due)}
+                                    </div>
+                                  </div>
+                                  <div className="bg-white border border-amber-100 rounded-xl p-3 text-center">
+                                    <div className="text-[9px] font-black uppercase tracking-widest text-ishes-blue">Déjà payé</div>
+                                    <div className="text-lg font-black text-ishes-blue">{formatEur(paidForStudent)}</div>
+                                  </div>
+                                  <div className={`border rounded-xl p-3 text-center ${reste > 0 || ins.needsManualTariff ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                                    <div className={`text-[9px] font-black uppercase tracking-widest ${reste > 0 || ins.needsManualTariff ? 'text-red-500' : 'text-emerald-600'}`}>Reste</div>
+                                    <div className={`text-lg font-black ${reste > 0 || ins.needsManualTariff ? 'text-red-600' : 'text-emerald-700'}`}>
+                                      {ins.needsManualTariff ? "À tarifer" : formatEur(reste)}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="bg-white/80 border border-amber-200 rounded-xl p-4 space-y-3">
+                                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-600">
+                                    {ins.needsManualTariff ? "① Montant total dû (€) *" : "Montant total dû (€)"}
+                                  </label>
+                                  <div className="flex flex-col sm:flex-row gap-3 items-end">
+                                    <input
+                                      type="number"
+                                      min={1}
+                                      step="0.01"
+                                      placeholder="Ex: 1200"
+                                      value={draft}
+                                      onChange={(e) => setEnseignantDebtDrafts((prev) => ({ ...prev, [ins.id]: e.target.value }))}
+                                      className="flex-1 w-full px-4 py-3 bg-white border border-amber-200 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
+                                    />
+                                    <Button
+                                      variant="ishes"
+                                      disabled={savingEnseignantDebtId === ins.id || !draft || Number(draft) <= 0}
+                                      onClick={() => handleSaveEnseignantDebt(ins.id)}
+                                      className="w-full sm:w-auto h-[46px] rounded-xl font-black uppercase tracking-widest text-[10px] px-6"
+                                    >
+                                      {savingEnseignantDebtId === ins.id ? <Loader2 className="w-4 h-4 animate-spin" /> : (ins.needsManualTariff ? "Enregistrer la dette" : "Mettre à jour")}
+                                    </Button>
+                                  </div>
+                                </div>
+                                {canRecordPartial && (
+                                  <div className="bg-white border border-ishes-blue/20 rounded-xl p-4 space-y-3">
+                                    <h5 className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">
+                                      ② Saisir un acompte / règlement partiel
+                                    </h5>
+                                    <p className="text-[11px] text-gray-500 font-medium">
+                                      Chaque paiement s&apos;ajoute au déjà payé. Reste max : {formatEur(reste)}.
+                                    </p>
+                                    <div className="flex flex-col sm:flex-row gap-3 items-end">
+                                      <div className="flex-1 w-full space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Méthode</label>
+                                        <select
+                                          value={settleMethod}
+                                          onChange={(e) => setSettleMethod(e.target.value)}
+                                          className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
+                                        >
+                                          <option value="liquide">Espèces / Liquide</option>
+                                          <option value="virement">Virement bancaire</option>
+                                          <option value="cheque">Chèque</option>
+                                        </select>
+                                      </div>
+                                      <div className="flex-1 w-full space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Montant (€)</label>
+                                        <input
+                                          type="number"
+                                          placeholder={`Ex: ${reste}`}
+                                          value={settleAmount}
+                                          onChange={(e) => setSettleAmount(e.target.value)}
+                                          max={reste}
+                                          className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold"
+                                        />
+                                      </div>
+                                      <Button
+                                        variant="ishes"
+                                        disabled={isSettling || !settleAmount || Number(settleAmount) <= 0 || Number(settleAmount) > reste + 0.009}
+                                        onClick={handleManualSettle}
+                                        className="w-full sm:w-auto h-[46px] rounded-xl font-black uppercase tracking-widest text-[10px] px-8"
+                                      >
+                                        {isSettling ? <Loader2 className="w-4 h-4 animate-spin" /> : "Valider l'acompte"}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
+                                {ins.needsManualTariff && (
+                                  <p className="text-[11px] font-bold text-amber-800 bg-amber-100/80 rounded-xl px-3 py-2">
+                                    Enregistrez d&apos;abord le montant total dû pour pouvoir saisir les acomptes.
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          })}
+                      </div>
+                    )}
+
+                    {/* Règlement manuel (autres formations — pas enseignant) */}
+                    {!loadingPayments && billingData.resteAPayer > 0 && !(billingData.inscriptions || []).some(
+                      (ins: any) => ins.studentId === selectedStudentId && ins.isFormationEnseignant
+                    ) && (
                       <div className="mb-8 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                        <h4 className="text-[10px] font-black uppercase tracking-widest text-ishes-blue mb-4">Saisir un règlement</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-ishes-blue mb-4">Saisir un règlement / acompte</h4>
+                        <p className="text-[11px] text-gray-500 font-medium mb-4">
+                          Chaque paiement partiel s&apos;ajoute au déjà payé. Le reste diminue jusqu&apos;à 0 €.
+                        </p>
                         <div className="flex flex-col sm:flex-row gap-4 items-end">
                           <div className="flex-1 w-full space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Méthode</label>
@@ -1730,22 +1954,25 @@ function EtudiantsContent() {
               {(() => {
                 const selectedClassObj = classes.find(c => c.id === targetClassId);
                 if (!selectedClassObj) return null;
-                const isFormationEnseignant = selectedClassObj.formationTitle?.toLowerCase().includes("enseignant") || selectedClassObj.name?.toLowerCase().includes("enseignant");
-                
+                const isFormationEnseignant = isFormationEnseignante({
+                  title: selectedClassObj.formationTitle,
+                  name: selectedClassObj.name,
+                });
+
                 return (
                   <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-ishes-blue">Tarif de la formation (Montant dû) {isFormationEnseignant ? '*' : ''}</label>
                     <input
                       type="number"
-                      placeholder={isFormationEnseignant ? "Ex: 500" : "Laissez vide pour utiliser le prix par défaut"}
+                      placeholder={isFormationEnseignant ? "Ex: 1200" : "Laissez vide pour utiliser le prix par défaut"}
                       value={customExpectedAmount}
                       onChange={(e) => setCustomExpectedAmount(e.target.value === "" ? "" : Number(e.target.value))}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-ishes-blue transition-all text-sm font-bold shadow-sm"
                       required={!!isFormationEnseignant}
                     />
                     <p className="text-[10px] text-gray-400 font-medium">
-                      {isFormationEnseignant 
-                        ? "Veuillez saisir le montant total que cet élève doit régler pour cette formation." 
+                      {isFormationEnseignant
+                        ? "Obligatoire pour les formations enseignant (tarif sur devis). Les acomptes se saisissent ensuite dans la fiche élève."
                         : "Modifiez uniquement si vous souhaitez forcer un tarif différent (ex: erreur de saisie, remise exceptionnelle)."}
                     </p>
                   </div>
@@ -1759,7 +1986,21 @@ function EtudiantsContent() {
                   setScolariteInscriptionId(null);
                   setScolariteFormationId(null);
                 }}>Annuler</Button>
-                <Button variant="ishes" className="flex-[2] h-12 rounded-2xl" disabled={isSubmitting || !targetClassId} onClick={handleUpdateScolarite}>
+                <Button
+                  variant="ishes"
+                  className="flex-[2] h-12 rounded-2xl"
+                  disabled={(() => {
+                    if (isSubmitting || !targetClassId) return true;
+                    const selectedClassObj = classes.find((c) => c.id === targetClassId);
+                    const isEnseignant = isFormationEnseignante({
+                      title: selectedClassObj?.formationTitle,
+                      name: selectedClassObj?.name,
+                    });
+                    if (isEnseignant && (customExpectedAmount === "" || Number(customExpectedAmount) <= 0)) return true;
+                    return false;
+                  })()}
+                  onClick={handleUpdateScolarite}
+                >
                   {isSubmitting ? "Mise à jour..." : scolariteInscriptionId ? "Remplacer la classe" : "Ajouter la formation"}
                 </Button>
               </div>

@@ -330,15 +330,30 @@ export function sumSucceededPaymentsBySource<
 
 export type InscriptionPaidStatus = 'paye' | 'partiel' | 'impaye';
 
+/** Formations « sur devis » : le montant dû est saisi manuellement par la scolarité. */
+export function isFormationEnseignante(input?: {
+  slug?: string | null;
+  title?: string | null;
+  name?: string | null;
+}): boolean {
+  const slug = String(input?.slug || "").toLowerCase();
+  if (slug.includes("formation_enseignante") || slug.includes("formation_enseignant")) return true;
+  const label = `${input?.title || ""} ${input?.name || ""}`.toLowerCase();
+  return label.includes("formation enseignant");
+}
+
 /**
  * Statut financier dérivé des totaux facturation.
  * Un acompte Stripe (ex: 133 € sur 399 €) → partiel, jamais impaye.
  * Sinon l’espace élève filtre les inscriptions et bloque la connexion utile.
+ * Si une formation enseignant n’a pas encore de tarif saisi, on reste en impaye.
  */
 export function resolveInscriptionPaidStatus(
   totalPaid: number,
   resteAPayer: number,
+  options?: { needsManualTariff?: boolean },
 ): InscriptionPaidStatus {
+  if (options?.needsManualTariff) return 'impaye';
   const paid = Number(totalPaid) || 0;
   const reste = Number(resteAPayer) || 0;
   if (reste <= 0.01) return 'paye'; // soldé ou formation à 0 €

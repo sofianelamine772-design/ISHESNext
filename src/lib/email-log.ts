@@ -67,16 +67,41 @@ export async function hasSentEmail(params: {
   type: string;
   status?: EmailLogStatus;
 }): Promise<boolean> {
+  const email = normalizeEmail(params.recipientEmail);
+  const wantedStatus = params.status || 'sent';
+
   const { data, error } = await supabaseAdmin
     .from('email_logs')
     .select('id')
-    .eq('recipient_email', normalizeEmail(params.recipientEmail))
+    .eq('recipient_email', email)
     .eq('type', params.type)
-    .eq('status', params.status || 'sent')
+    .eq('status', wantedStatus)
     .limit(1)
     .maybeSingle();
 
-  return !error && !!data;
+  if (!error && data) return true;
+  // Table email_logs absente en prod → fallback archive messages (sinon doublons rentrée/fournitures).
+  if (error) {
+    const { data: archiveRows } = await supabaseAdmin
+      .from('messages')
+      .select('id, content')
+      .eq('sender_id', EMAIL_ARCHIVE_ID)
+      .eq('receiver_id', EMAIL_ARCHIVE_ID)
+      .eq('type', 'private')
+      .order('created_at', { ascending: false })
+      .limit(400);
+
+    for (const row of archiveRows || []) {
+      const entry = parseArchiveMessage(row);
+      if (!entry) continue;
+      if (normalizeEmail(entry.recipient_email) !== email) continue;
+      if ((entry.type || '') !== params.type) continue;
+      if (entry.status !== wantedStatus) continue;
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export async function recordEmailLog(entry: EmailLogEntry) {

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Download, Search, Filter, LayoutDashboard, ArrowRight } from "lucide-react";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { UserButton } from "@clerk/nextjs";
-import { AdminScheduleGrid } from "@/components/admin/AdminScheduleGrid";
+import { AdminPlanningTabs } from "@/components/admin/AdminPlanningTabs";
 import { fetchClassesAction } from "@/app/actions/students";
 import Link from "next/link";
 
@@ -66,7 +66,7 @@ export default async function AdministratifPage() {
               <div className="p-8 border-b border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-6 bg-gray-50/50">
                  <div>
                    <h2 className="text-xl ishes-heading text-ishes-blue">Gestion documentaire & Effectifs</h2>
-                   <p className="text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">Planning & classes de l&apos;institut</p>
+                   <p className="text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">Planning présentiel & distanciel</p>
                  </div>
 
                  <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -85,7 +85,7 @@ export default async function AdministratifPage() {
               </div>
 
               <div className="p-6 md:p-8">
-                 <AdminScheduleGrid classes={classes} />
+                 <AdminPlanningTabs classes={classes} />
               </div>
             </div>
           </div>

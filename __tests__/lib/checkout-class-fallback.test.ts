@@ -24,4 +24,18 @@ describe("pickCheckoutFallbackClass", () => {
       { id: "only", name: "Session Pack Accompagnement", externalId: null },
     ], isOfficial)?.id).toBe("only");
   });
+
+  it("ignore les Session s’il existe une seule classe non-Session sans external_id", () => {
+    expect(pickCheckoutFallbackClass([
+      { id: "session", name: "Session Arabe Enfant (Distance)", externalId: null },
+      { id: "other", name: "Classe unique", externalId: null },
+    ], isOfficial)?.id).toBe("other");
+  });
+
+  it("ne choisit rien s’il n’y a que plusieurs Session", () => {
+    expect(pickCheckoutFallbackClass([
+      { id: "a", name: "Session A", externalId: null },
+      { id: "b", name: "Session B", externalId: null },
+    ], isOfficial)).toBeNull();
+  });
 });

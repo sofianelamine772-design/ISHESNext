@@ -22,6 +22,7 @@ import {
   resolveDistancielRentreePdfPath,
   shouldSendDistancielRentreeEmail,
 } from './distanciel-rentree';
+
 export { isPresentielFormationSlug, shouldSendPresentielRentreeEmail } from './presentiel-rentree-email';
 export { shouldSendDistancielRentreeEmail } from './distanciel-rentree';
 
@@ -158,7 +159,7 @@ export async function sendEmail({ to, subject, html, text, from, replyTo, attach
       return { success: false, error: "SMTP non configuré" };
     }
 
-    const unsubscribeMailto = smtpReplyTo || smtpUser || SMTP_SENDER_EMAIL;
+    const unsubscribeMailto = replyTo || smtpReplyTo || smtpUser || SMTP_SENDER_EMAIL;
     const unsubscribeUrl = `${getAppBaseUrl()}/contact?unsubscribe=1`;
     const mailOptions = {
       from: from || smtpFrom,
@@ -220,42 +221,26 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #333; margin-top: 0; font-size: 24px;">Ahlan wa Sahlan, ${firstName} ! 🎉</h2>
+        <h2 style="color: #333; margin-top: 0; font-size: 24px;">Ahlan wa Sahlan, ${firstName}</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Un immense merci pour votre inscription à <strong>ISHES</strong>. C'est avec une immense joie que nous vous accueillons au sein de notre institut.
+          Merci pour votre inscription à <strong>ISHES</strong>. Nous sommes heureux de vous accueillir au sein de l&apos;institut.
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Nous avons tout préparé pour que votre apprentissage soit exceptionnel. Vous allez passer d'excellents moments en notre compagnie, riches en savoir et en partage. Toute notre équipe pédagogique est là pour vous accompagner pas à pas vers la réussite.
-        </p>
-
-        <!-- Instagram Group Block -->
-        <div style="background-color: #fdf2f8; border-left: 4px solid #ee2a7b; padding: 20px; margin: 25px 0; border-radius: 8px;">
-          <p style="margin: 0 0 10px 0; color: #ee2a7b; font-weight: bold; font-size: 16px;">📸 Rejoignez notre communauté Instagram !</p>
-          <p style="margin: 0 0 15px 0; color: #86198f; font-size: 14px; line-height: 1.5;">Pour suivre l'actualité de l'institut, nos conseils quotidiens, nos partages et nos événements en direct, rejoignez dès maintenant notre page officielle Instagram :</p>
-          <div style="text-align: center;">
-            <a href="https://www.instagram.com/institutishes/" target="_blank" style="display: inline-block; background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px;">Rejoindre notre Instagram</a>
-          </div>
-        </div>
-
-        <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Pour bien commencer, nous vous invitons à découvrir votre espace personnel. Vous y retrouverez vos cours, votre emploi du temps et tous vos documents.
+          Votre espace personnel est prêt : cours, emploi du temps et documents y sont regroupés.
         </p>
         <div style="text-align: center; margin: 35px 0;">
-          <a href="https://ishees.vercel.app/app" style="${buttonStyle}">Accéder à mon espace</a>
+          <a href="${getAppBaseUrl()}/app" style="${buttonStyle}">Accéder à mon espace</a>
         </div>
-
         <p style="color: #777; font-size: 14px; margin-top: 30px; background-color: #f9f9f9; padding: 15px; border-radius: 8px;">
-          <em>💡 <strong>Astuce :</strong> Si vous n'avez pas encore défini de mot de passe, cliquez sur "Se connecter", puis inscrivez-vous ou utilisez la connexion sans mot de passe avec cette adresse e-mail.</em>
+          <strong>Astuce :</strong> si vous n&apos;avez pas encore de mot de passe, connectez-vous avec cette adresse e-mail (lien magique ou inscription).
         </p>
-
-        <!-- WhatsApp Support Block -->
         <div style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #eee;">
-          <p style="color: #333; font-weight: bold; font-size: 16px; margin: 0 0 10px 0;">💬 Des questions ? Un besoin d'assistance ?</p>
+          <p style="color: #333; font-weight: bold; font-size: 16px; margin: 0 0 10px 0;">Une question ?</p>
           <p style="color: #555; line-height: 1.6; font-size: 15px; margin: 0 0 15px 0;">
-            Notre équipe reste entièrement à votre écoute. Vous pouvez nous écrire directement sur WhatsApp au <strong>+33 6 66 03 35 19</strong> (pour les cours à distance) ou au <strong>+33 7 68 65 20 91</strong> (pour le présentiel).
+            WhatsApp distanciel : <strong>+33 6 66 03 35 19</strong> · présentiel : <strong>+33 7 68 65 20 91</strong>
           </p>
           <div style="text-align: center;">
-            <a href="https://wa.me/33666033519" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px;">Nous écrire sur WhatsApp</a>
+            <a href="https://wa.me/33666033519" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px;">Écrire sur WhatsApp</a>
           </div>
         </div>
       </div>
@@ -265,19 +250,19 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
 
   return sendEmail({
     to: email,
-    subject: "✨ Bienvenue dans la famille ISHES ! Votre espace vous attend",
+    subject: "Bienvenue à ISHES — votre espace élève",
     html,
     meta: { type: 'welcome', recipientName: firstName },
   });
 }
 
 export async function sendPaymentReminderEmail(email: string, firstName: string, paymentLink?: string) {
-  const link = paymentLink || "https://ishees.vercel.app/app";
+  const link = paymentLink || `${getAppBaseUrl()}/app`;
   const html = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #333; margin-top: 0;">Rappel de paiement ⚠️</h2>
+        <h2 style="color: #333; margin-top: 0;">Rappel de paiement</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Bonjour ${firstName},
         </p>
@@ -384,32 +369,32 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
     <div style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       ${emailHeader}
       <div style="padding: 40px 30px;">
-        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Bienvenue à l'institut ISHES ! 🎉</h2>
+        <h2 style="color: #333; margin-top: 0; font-size: 20px;">Bienvenue à l&apos;institut ISHES</h2>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
           Bonjour ${firstName},
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Toute l'équipe de l'institut vous souhaite la bienvenue. Votre inscription a été validée avec succès et vous avez été affecté(e) à la classe <strong>${className}</strong>.
+          Votre inscription a été validée. Vous êtes affecté(e) à la classe <strong>${className}</strong>.
         </p>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Pour ne rien manquer (annonces, échanges avec le professeur, suivi), <strong>voici le groupe WhatsApp à rejoindre impérativement :</strong>
+          Pour les annonces et le suivi avec le professeur, rejoignez le groupe WhatsApp de votre classe :
         </p>
         <div style="text-align: center; margin: 25px 0;">
-          <a href="${whatsappLink}" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif;">💬 Rejoindre mon groupe WhatsApp</a>
+          <a href="${whatsappLink}" target="_blank" style="display: inline-block; background-color: #25D366; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: Helvetica, Arial, sans-serif;">Rejoindre mon groupe WhatsApp</a>
         </div>
         
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
         
-        <h3 style="color: #333; font-size: 18px;">Votre Espace Élève</h3>
+        <h3 style="color: #333; font-size: 18px;">Votre espace élève</h3>
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Vous pouvez dès à présent vous connecter à votre espace personnel pour retrouver vos informations, vos cours et vos paiements :
+          Retrouvez vos informations, cours et paiements dans votre espace personnel :
         </p>
         <div style="text-align: center; margin: 25px 0;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ishees.vercel.app'}/app" target="_blank" style="${buttonStyle}">Accéder à mon espace</a>
+          <a href="${getAppBaseUrl()}/app" target="_blank" style="${buttonStyle}">Accéder à mon espace</a>
         </div>
         
         <p style="color: #555; line-height: 1.6; font-size: 16px;">
-          Nous vous souhaitons une excellente réussite dans votre apprentissage !
+          Nous vous souhaitons une excellente réussite dans votre apprentissage.
         </p>
       </div>
       ${emailFooter}
@@ -418,7 +403,7 @@ export async function sendClassAssignmentEmail(email: string, firstName: string,
 
   return sendEmail({
     to: email,
-    subject: "✅ ISHES - Votre classe et groupe WhatsApp",
+    subject: "ISHES — votre classe et groupe WhatsApp",
     html,
     meta: { type: 'class_whatsapp', recipientName: firstName },
   });

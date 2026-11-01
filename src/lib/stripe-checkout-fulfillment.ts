@@ -129,7 +129,10 @@ async function upsertInscription(params: {
       .eq('is_active', true);
 
     const { pickCheckoutFallbackClass } = await import('@/lib/checkout-class-fallback');
-    const { isOfficialDistanceClassId } = await import('@/lib/distance-data');
+    const {
+      isOfficialDistanceClassId,
+      isLeveledDistanceFormationSlug,
+    } = await import('@/lib/distance-data');
     const { isOfficialPresentielClass } = await import('@/lib/presentiel-data');
     const picked = pickCheckoutFallbackClass(
       (activeClasses || []).map((classe) => ({
@@ -143,15 +146,20 @@ async function upsertInscription(params: {
     if (picked) {
       resolvedClassId = picked.id;
     } else if ((activeClasses || []).length > 0) {
+      // Plusieurs niveaux officiels → on n'affecte pas au hasard (surtout pas une Session).
       resolvedClassId = null;
     } else {
       const { data: formation } = await supabaseAdmin
         .from('formations')
-        .select('type')
+        .select('type, slug')
         .eq('id', formationUuid)
         .maybeSingle();
 
-      if (formation?.type !== 'presentiel') {
+      // Arabe / Tajwid / Tarbiya distance : jamais de Session générique auto-créée.
+      if (
+        formation?.type !== 'presentiel' &&
+        !isLeveledDistanceFormationSlug(formation?.slug)
+      ) {
         const { data: newClass } = await supabaseAdmin
           .from('classes')
           .insert({
@@ -373,12 +381,23 @@ export async function fulfillCheckoutSession(params: {
           parseFloat(session.metadata?.expected_amount || '0') || undefined;
         const siblingDiscount =
           parseFloat(session.metadata?.sibling_discount || '0') || 0;
-        const expectedAmount =
+        // Remise Stripe (distanciel) lue sur la session après paiement
+        const promoDiscountEuros =
+          (session.total_details?.amount_discount || 0) / 100 ||
+          parseFloat(session.metadata?.promo_discount_euros || '0') ||
+          0;
+        const { applyPromoToExpectedAmount } = await import('@/lib/stripe-promo');
+        const rawExpected =
           baseExpected !== undefined
             ? siblingDiscount > 0
               ? getExpectedAmountForChild(baseExpected, i, childrenCount)
               : baseExpected
             : undefined;
+        const expectedAmount = applyPromoToExpectedAmount(
+          rawExpected,
+          promoDiscountEuros,
+          i,
+        );
         const insId = await upsertInscription({
           studentId,
           formationUuid,
@@ -436,8 +455,16 @@ export async function fulfillCheckoutSession(params: {
             }
           }
 
-          const expectedAmount =
-            parseFloat(session.metadata?.expected_amount || '0') || undefined;
+          const { applyPromoToExpectedAmount } = await import('@/lib/stripe-promo');
+          const promoDiscountEuros =
+            (session.total_details?.amount_discount || 0) / 100 ||
+            parseFloat(session.metadata?.promo_discount_euros || '0') ||
+            0;
+          const expectedAmount = applyPromoToExpectedAmount(
+            parseFloat(session.metadata?.expected_amount || '0') || undefined,
+            promoDiscountEuros,
+            0,
+          );
           const insId = await upsertInscription({
             studentId,
             formationUuid,

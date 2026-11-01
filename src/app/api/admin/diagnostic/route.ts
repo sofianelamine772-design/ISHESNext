@@ -76,7 +76,8 @@ export async function GET() {
       'SUPABASE_SERVICE_ROLE_KEY',
       'CLERK_SECRET_KEY',
       'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-      'RESEND_API_KEY',
+      'SMTP_USER',
+      'SMTP_PASS',
       'NEXT_PUBLIC_VAPID_PUBLIC_KEY',
       'VAPID_PRIVATE_KEY',
       'ADMIN_EMAIL'

@@ -41,6 +41,14 @@ function InscriptionForm() {
     slot = 'dimanche';
   } else if (planId === 'femme-intermediaire-presentiel' || planId === 'femme_intermediaire_presentiel') {
     slot = 'samedi';
+  } else if (
+    // Anciens doublons remplacés (classes / formations supprimées)
+    planId === 'arabe_coran_junior' ||
+    planId === 'arabe-coran-junior'
+  ) {
+    planId = 'arabe_enfant_distance';
+  } else if (planId === 'sciences-islamiques') {
+    planId = 'sciences_islamiques';
   }
 
   const level = searchParams?.get("level");

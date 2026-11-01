@@ -9,6 +9,7 @@ import {
   resolveBillingExpectedAmount,
   resolveInscriptionPaidStatus,
   inscriptionGrantsStudentAccess,
+  isFormationEnseignante,
   sumSucceededBillingPayments,
   sumSucceededPaymentsBySource,
   isTestStripePayment,
@@ -539,5 +540,20 @@ describe('Double Stripe — facturation (pas de mélange test / live)', () => {
     );
     expect(payments).toHaveLength(2);
     expect(sumSucceededBillingPayments(payments)).toBeCloseTo(879);
+  });
+});
+
+describe('Formation enseignant (tarif sur devis)', () => {
+  it('détecte les formations enseignant par slug ou titre', () => {
+    expect(isFormationEnseignante({ slug: 'formation_enseignante_tarbya' })).toBe(true);
+    expect(isFormationEnseignante({ slug: 'formation_enseignante_tajwid' })).toBe(true);
+    expect(isFormationEnseignante({ title: 'Formation Enseignant Tarbya Islamiya' })).toBe(true);
+    expect(isFormationEnseignante({ slug: 'tajwid_intensif', title: 'Tajwid Intensif' })).toBe(false);
+  });
+
+  it('reste impaye tant que le tarif enseignant n’est pas saisi', () => {
+    expect(resolveInscriptionPaidStatus(0, 0, { needsManualTariff: true })).toBe('impaye');
+    expect(resolveInscriptionPaidStatus(200, 1000)).toBe('partiel');
+    expect(resolveInscriptionPaidStatus(1200, 0)).toBe('paye');
   });
 });

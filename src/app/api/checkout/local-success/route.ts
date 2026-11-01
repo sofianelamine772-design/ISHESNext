@@ -103,31 +103,42 @@ async function upsertInscription(params: {
   const { studentId, formationUuid, academicYear, expectedAmount } = params;
   let resolvedClassId = params.classId;
 
-  // Si aucun classId n'est fourni, on cherche si c'est un cours distanciel ou s'il y a une classe active pour cette formation
+  // Même logique que le fulfillment Stripe : jamais la Session la plus récente au hasard.
   if (!resolvedClassId) {
-    const { data: formation } = await supabaseAdmin
-      .from('formations')
-      .select('type')
-      .eq('id', formationUuid)
-      .maybeSingle();
+    const { data: activeClasses } = await supabaseAdmin
+      .from('classes')
+      .select('id, name, external_id')
+      .eq('formation_id', formationUuid)
+      .eq('is_active', true);
 
-    const isPresentiel = formation?.type === 'presentiel';
+    const { pickCheckoutFallbackClass } = await import('@/lib/checkout-class-fallback');
+    const {
+      isOfficialDistanceClassId,
+      isLeveledDistanceFormationSlug,
+    } = await import('@/lib/distance-data');
+    const { isOfficialPresentielClass } = await import('@/lib/presentiel-data');
+    const picked = pickCheckoutFallbackClass(
+      (activeClasses || []).map((classe) => ({
+        id: classe.id,
+        name: classe.name,
+        externalId: classe.external_id,
+      })),
+      (externalId) => isOfficialDistanceClassId(externalId) || isOfficialPresentielClass(externalId),
+    );
 
-    if (!isPresentiel) {
-      // Pour les cours distanciels, on affecte automatiquement une classe active
-      const { data: activeClass } = await supabaseAdmin
-        .from('classes')
-        .select('id')
-        .eq('formation_id', formationUuid)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .limit(1)
+    if (picked) {
+      resolvedClassId = picked.id;
+    } else if ((activeClasses || []).length === 0) {
+      const { data: formation } = await supabaseAdmin
+        .from('formations')
+        .select('type, slug')
+        .eq('id', formationUuid)
         .maybeSingle();
 
-      if (activeClass) {
-        resolvedClassId = activeClass.id;
-      } else {
-        // Créer une classe par défaut si aucune n'est active
+      if (
+        formation?.type !== 'presentiel' &&
+        !isLeveledDistanceFormationSlug(formation?.slug)
+      ) {
         const { data: newClass } = await supabaseAdmin
           .from('classes')
           .insert({
@@ -135,20 +146,17 @@ async function upsertInscription(params: {
             name: `Session ${new Date().getFullYear()}`,
             type: 'distanciel',
             academic_year: academicYear,
-            is_active: true
+            is_active: true,
           })
           .select('id')
           .maybeSingle();
-
-        if (newClass) {
-          resolvedClassId = newClass.id;
-        }
+        if (newClass) resolvedClassId = newClass.id;
       }
     }
   }
 
   const hasClass = !!resolvedClassId;
-  const targetStatus = hasClass ? 'valide' : 'en_attente_daffectation';
+  const targetStatus = hasClass ? 'actif' : 'en_attente';
 
   const { data: existing } = await supabaseAdmin
     .from('inscriptions')

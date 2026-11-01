@@ -136,3 +136,19 @@ export const DISTANCE_CLASS_ID_TO_UUID: Record<number, string> = {
 export function isOfficialDistanceClassId(id?: number | null): boolean {
   return typeof id === 'number' && Number.isInteger(id) && DISTANCE_CLASS_ID_TO_UUID[id] != null;
 }
+
+/** Formations distanciel à niveaux obligatoires (101–108) : plus de « Session … » générique. */
+export const LEVELED_DISTANCE_FORMATION_SLUGS = new Set([
+  'arabe_enfant_distance',
+  'tajwid_enfant_distance',
+  'tarbiya_islamiya',
+]);
+
+export function isLeveledDistanceFormationSlug(slug?: string | null): boolean {
+  if (!slug) return false;
+  return LEVELED_DISTANCE_FORMATION_SLUGS.has(slug.replace(/-/g, '_'));
+}
+
+export function isLegacySessionClassName(name?: string | null): boolean {
+  return /^\s*session\b/i.test(String(name || ''));
+}

@@ -66,7 +66,7 @@ export function groupStudentsByInviteEmail(
   return { families, skipped };
 }
 
-const PRODUCTION_APP_URL = "https://ishees.vercel.app";
+const PRODUCTION_APP_URL = "https://ishes.fr";
 
 export function resolveProductionAppUrl(rawUrl: string | undefined) {
   const url = String(rawUrl || "").replace(/\/$/, "");
