@@ -233,7 +233,7 @@ export const DISTANCE_WEEKLY_SCHEDULE: DistanceScheduleDay[] = [
         title: "Hifz Coran / Tilawa hommes et femmes",
         teacher: "Riad et Raoud",
         tone: "enfant",
-        formationSlugs: ["memoriser_coran", "tilawa"],
+        formationSlugs: ["memoriser_coran"],
       },
     ],
   },

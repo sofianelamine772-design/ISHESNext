@@ -353,26 +353,6 @@ export const PROGRAMS_DATA: Record<string, any> = {
       "Éveil spirituel à travers des récits de Sîrah adaptés"
     ]
   },
-  "tilawa": {
-    title: "Tilawa — Lecture & Récitation",
-    duration: "4 mois",
-    tag: "Lecture & Récitation",
-    price: "399 €",
-    hook: "Transformer les règles du Tajwid en une récitation naturelle, fluide et maîtrisée.",
-    description: "Transformer les règles du Tajwid en une récitation naturelle, fluide et maîtrisée.\nPour que ta récitation devienne une connexion avec ALLAH.\nTu connais peut-être déjà les règles du Tajwid… mais au moment de réciter, tu hésites encore.\nTu réfléchis aux règles pendant ta lecture.\nTu t’arrêtes souvent.\nCertaines erreurs reviennent malgré tes efforts.\nEt parfois, tu ressens un décalage entre ce que tu connais “en théorie” et ce qui sort réellement dans ta récitation.\nLe cours de Tilawa a été pensé pour t’aider à transformer les règles apprises en automatismes naturels dans ta lecture du Coran.\n⚠ Ce cours nécessite déjà de connaître les règles de Tajwid.\nL’objectif est de te permettre d’appliquer les règles avec plus d’aisance, jusqu’à ce qu’elles deviennent progressivement naturelles dans ta récitation.\n\n✨ UN ACCOMPAGNEMENT PERSONNALISÉ EN TÊTE À TÊTE\nLe cours se déroule individuellement avec l’enseignant afin de permettre :\n• des corrections précises,\n• un suivi personnalisé,\n• un travail adapté à ton niveau,\n• ainsi qu’une progression plus efficace et plus régulière.\nChaque élève avance à son rythme avec un accompagnement entièrement centré sur sa récitation.\n\n💛 RETROUVER DU PLAISIR DANS LA RÉCITATION\nAu fil des semaines, tu passes progressivement :\n• d’une lecture hésitante vers plus de fluidité,\n• d’une récitation mécanique vers une lecture plus vivante,\n• et d’une application forcée vers une récitation plus naturelle.\nPetit à petit, tu développes plus de confiance, plus de sérénité… et plus de plaisir dans ta lecture du Coran.\n\n🎓 UN ENSEIGNEMENT BASÉ SUR LA PRATIQUE ET LA CORRECTION\nLe cours allie :\n• récitation régulière,\n• corrections détaillées,\n• application concrète des règles,\n• accompagnement pédagogique personnalisé,\n• et progression étape par étape.\nChaque séance est pensée pour t’aider à améliorer concrètement ta récitation du Coran.\n\n🎓 DIPLÔME DE FIN DE PARCOURS\nÀ la fin de la formation, un diplôme délivré par l’Institut ISHES est remis aux élèves ayant validé le parcours.\n\n👤 POUR QUI ?\nLe cours est accessible :\n• aux élèves connaissant déjà les règles de Tajwid,\n• aux personnes souhaitant améliorer leur récitation,\n• aux étudiants désirant gagner en fluidité et en aisance,\n• ainsi qu’à toute personne voulant renforcer sa relation avec le Coran.\n\n💻 COMMENT SE DÉROULE LE COURS ?\n• Cours individuels en tête à tête avec l’enseignant\n• Cours le mercredi soir et le dimanche matin\n• L’heure précise de ton créneau est définie avec l’enseignant après l’inscription\n• Replays accessibles\n• Corrections régulières\n• Accompagnement pédagogique personnalisé\n• Travail pratique de récitation\n\n👉 Je m’inscris au cours de Tilawa",
-    features: [
-      { t: "Récitation régulière", d: "Pratique encadrée pour assimiler les règles naturellement." },
-      { t: "Corrections détaillées", d: "Reprise des erreurs pour ne plus les reproduire." },
-      { t: "Accompagnement personnalisé", d: "En tête à tête avec un professeur expert." },
-      { t: "Progression étape par étape", d: "Vers une lecture plus vivante et sans hésitation." }
-    ],
-    whyMe: [
-      "Cours individuels en tête à tête avec l’enseignant",
-      "Horaires flexibles (mercredi soir ou dimanche matin)",
-      "Transformez la théorie en automatisme",
-      "Replays accessibles pour s'entraîner"
-    ]
-  },
   "femme_debutante_presentiel": {
     title: "🧕 Arabe & Tajwid — Femme Débutante",
     duration: "Annuel",

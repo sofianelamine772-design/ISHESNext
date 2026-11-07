@@ -250,26 +250,6 @@ export const PROGRAMS: Program[] = [
     keywords: ["hifz", "hifdh", "mémorisation", "memorisation", "tilawa", "récitation", "recitation", "lecture fluide", "lecture", "coran"]
   },
   {
-    id: "tilawa",
-    imageUrl: "/images/tilawa_quran.png",
-    title: "Tilawa — Lecture & Récitation",
-    subtitle: "Transformer les règles du Tajwid en une récitation naturelle, fluide et maîtrisée.",
-    tagText: "RÉCITATION",
-    tagColor: "bg-amber-100 text-amber-700",
-    durationText: "4 mois",
-    features: [
-      "Cours individuels",
-      "Corrections détaillées",
-      "Fluidité de lecture",
-      "Replays accessibles"
-    ],
-    price: "399 €",
-    priceSub: "/ SESSION",
-    type: "distanciel",
-    audience: "adulte",
-    keywords: ["tilawa", "récitation", "lecture", "tajwid"]
-  },
-  {
     id: "al_aqida",
     imageUrl: "/images/formations/ibn-ashir-cover.png",
     title: "Al-'Aqîda",
@@ -714,7 +694,6 @@ export function ProgramContent() {
                               program.id === 'sciences_du_coran' ? '/fr/cours-sciences-coran' :
                                 program.id === 'sciences_hadith' ? '/fr/cours-sciences-hadith' :
                                   program.id === 'memoriser_coran' ? '/fr/cours-memoriser-coran' :
-                                  program.id === 'tilawa' ? '/program/tilawa' :
                                     program.id === 'al_aqida' ? '/fr/cours-al-aqida' :
                                       program.id === 'as_sirah' ? '/fr/cours-as-sirah' :
                                         program.id === 'spiritualite_islam' ? '/fr/spiritualite-islam' :

@@ -204,7 +204,7 @@ export function Footer() {
               ["Cours Al Aqida", "/fr/cours-al-aqida"],["Cours Arabe Adulte", "/fr/cours-arabe-adulte"],
               ["Cours Arabe Enfant", "/fr/cours-arabe-enfant"],["Cours As Sirah", "/fr/cours-as-sirah"],
               ["Cours en Présentiel", "/fr/cours-en-presentiel"],["Cours Fiqh Malikite", "/fr/cours-fiqh-malikite"],["Ibn Âchir — Al-Murshid al-Mu'în", "/fr/cours-fiqh-malikite/ibn-ashir"],["Cours Lecture Tajwid", "/fr/cours-lecture-tajwid"],
-              ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Tilawa — Lecture & Récitation", "/program/tilawa"],["Guide Tilawa et Hifdh", "/fr/guide-tilawa-memorisation-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers"],["Sciences du Coran", "/fr/cours-sciences-coran"],
+              ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Guide Tilawa et Hifdh", "/fr/guide-tilawa-memorisation-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers"],["Sciences du Coran", "/fr/cours-sciences-coran"],
               ["Guide Sciences du Coran", "/fr/cours-sciences-coran/guide"],["Frise Révélation", "/fr/cours-sciences-coran/frise-chronologique"],
               ["Les Clés du Coran", "/fr/les-cles-du-coran"],["Fiches pratiques", "/fr/fiches-pratiques"],
               ["Sciences du Hadith", "/fr/cours-sciences-hadith"],["Tajwid Enfant", "/fr/cours-tajwid-enfant"],["Tajwid Intensif", "/fr/cours-tajwid-intensif"],

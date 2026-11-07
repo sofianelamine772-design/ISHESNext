@@ -65,6 +65,8 @@ const nextConfig: NextConfig = {
       { source: '/question-spiritualite-islam', destination: '/conseil-spiritualite', permanent: true },
       { source: '/fr/cours-particuliers-coran', destination: '/fr/cours-particuliers', permanent: true },
       { source: '/cours-particuliers-coran', destination: '/fr/cours-particuliers', permanent: true },
+      { source: '/program/tilawa', destination: '/program/memoriser_coran', permanent: true },
+      { source: '/fr/program/tilawa', destination: '/program/memoriser_coran', permanent: true },
       { source: '/fr/sitemap', destination: '/sitemap.xml', permanent: true },
       { source: '/sitemap', destination: '/sitemap.xml', permanent: true },
       ...frRedirects,

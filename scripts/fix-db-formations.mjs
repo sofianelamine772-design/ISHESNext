@@ -26,7 +26,6 @@ async function fixDb() {
   console.log("Inserting missing formations...");
   
   const toInsert = [
-    { slug: 'tilawa', title: 'Tilawa — Lecture & Récitation', type: 'distanciel', price: 399 },
     { slug: 'femme_debutante_presentiel', title: 'Femme Débutante – Présentiel', type: 'presentiel', price: 480 },
     { slug: 'femme_intermediaire_presentiel', title: 'Femme Intermédiaire – Présentiel', type: 'presentiel', price: 480 }
   ];

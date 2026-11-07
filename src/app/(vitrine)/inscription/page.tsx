@@ -686,7 +686,6 @@ function InscriptionForm() {
       case "sciences_du_coran": return "Sciences du Coran (Distanciel)";
       case "sciences_hadith": return "Sciences du Hadith (Distanciel)";
       case "memoriser_coran": return "Mémorisation du Coran (Distanciel)";
-      case "tilawa": return "Tilawa — Lecture & Récitation (Distanciel)";
       case "as_sirah": return "Sîrah An-Nabawiyya (Distanciel)";
       case "al_aqida": return "Al-Aqîda (Distanciel)";
       case "fiqh_malikite": return "Fiqh Mâlikite (Distanciel)";

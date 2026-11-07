@@ -42,9 +42,8 @@ function inferSlugFromTitle(title?: string | null): string {
   if (t.includes("spiritual")) return "spiritualite_islam";
   if (t.includes("sîra") || t.includes("sirah") || t.includes("sira")) return "as_sirah";
   if (t.includes("sciences du coran")) return "sciences_du_coran";
-  if (t.includes("mémorisation") || t.includes("memorisation") || t.includes("hifz") || t.includes("hifdh")) return "memoriser_coran";
-  if (t.includes("tilawa")) return "tilawa";
-  if (t.includes("formation") && t.includes("tajwid")) return "formation_enseignante_tajwid";
+  if (t.includes("mémorisation") || t.includes("memorisation") || t.includes("hifz") || t.includes("hifdh") || t.includes("tilawa")) return "memoriser_coran";
+    if (t.includes("formation") && t.includes("tajwid")) return "formation_enseignante_tajwid";
   if (t.includes("formation") && (t.includes("tarbya") || t.includes("tarbiya"))) return "formation_enseignante_tarbya";
   return normalizeSlug(title);
 }
