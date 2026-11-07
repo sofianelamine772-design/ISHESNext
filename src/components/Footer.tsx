@@ -1,9 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { MapPin, Mail, Phone } from "lucide-react";
+import { NewsletterEmbed } from "@/components/vitrine/NewsletterEmbed";
 
 export function Footer() {
+  // Le formulaire (760 px, iframe tierce) n'est chargé qu'à la demande pour ne pas
+  // alourdir toutes les pages ni agrandir le pied de page par défaut.
+  const [showNewsletter, setShowNewsletter] = useState(false);
+
   return (
     <footer className="bg-[#fcfaf7] border-t border-gray-100 pt-14 pb-8">
       <div className="max-w-7xl mx-auto px-5 sm:px-6">
@@ -155,6 +161,38 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Newsletter */}
+        <div className="mt-2 mb-10 rounded-3xl border border-gray-100 bg-white p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <p className="font-bold text-gray-900 text-[13px] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                <Mail className="w-4 h-4 text-ishes-blue" />
+                Lettres spirituelles
+              </p>
+              <p className="text-sm text-gray-500 font-medium mt-2 max-w-xl">
+                Recevez rappels, réflexions et actualités de l&apos;Institut par email.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowNewsletter((v) => !v)}
+              aria-expanded={showNewsletter}
+              aria-controls="footer-newsletter-form"
+              className="shrink-0 bg-ishes-blue text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-ishes-blue-dark transition-colors"
+            >
+              {showNewsletter ? "Masquer le formulaire" : "S'abonner à la newsletter"}
+            </button>
+          </div>
+          {showNewsletter && (
+            <div id="footer-newsletter-form" className="mt-6 max-w-xl mx-auto">
+              <NewsletterEmbed />
+            </div>
+          )}
+          <p className="mt-4 text-center sm:text-left text-xs text-gray-400">
+            <Link href="/newsletter" className="underline hover:text-ishes-blue">Page dédiée à la newsletter</Link>
+          </p>
+        </div>
+
         {/* SEO links */}
         <div className="mt-10 pt-10 border-t border-gray-100">
           <p className="text-ishes-blue font-black text-xs uppercase tracking-[0.3em] mb-6">Enseignements &amp; Formations</p>
@@ -166,7 +204,7 @@ export function Footer() {
               ["Cours Al Aqida", "/fr/cours-al-aqida"],["Cours Arabe Adulte", "/fr/cours-arabe-adulte"],
               ["Cours Arabe Enfant", "/fr/cours-arabe-enfant"],["Cours As Sirah", "/fr/cours-as-sirah"],
               ["Cours en Présentiel", "/fr/cours-en-presentiel"],["Cours Fiqh Malikite", "/fr/cours-fiqh-malikite"],["Ibn Âchir — Al-Murshid al-Mu'în", "/fr/cours-fiqh-malikite/ibn-ashir"],["Cours Lecture Tajwid", "/fr/cours-lecture-tajwid"],
-              ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Guide Tilawa et Hifdh", "/fr/guide-tilawa-memorisation-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers"],["Sciences du Coran", "/fr/cours-sciences-coran"],
+              ["Mémorisation Coran", "/fr/cours-memoriser-coran"],["Tilawa — Lecture & Récitation", "/program/tilawa"],["Guide Tilawa et Hifdh", "/fr/guide-tilawa-memorisation-coran"],["Cours Particuliers Coran", "/fr/cours-particuliers"],["Sciences du Coran", "/fr/cours-sciences-coran"],
               ["Guide Sciences du Coran", "/fr/cours-sciences-coran/guide"],["Frise Révélation", "/fr/cours-sciences-coran/frise-chronologique"],
               ["Les Clés du Coran", "/fr/les-cles-du-coran"],["Fiches pratiques", "/fr/fiches-pratiques"],
               ["Sciences du Hadith", "/fr/cours-sciences-hadith"],["Tajwid Enfant", "/fr/cours-tajwid-enfant"],["Tajwid Intensif", "/fr/cours-tajwid-intensif"],

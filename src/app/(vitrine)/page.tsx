@@ -9,6 +9,7 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 import { DynamicTestimonials } from "@/components/vitrine/DynamicTestimonials";
 import { InstitutVideo } from "@/components/vitrine/InstitutVideo";
 import { NewHomeSections } from "@/components/vitrine/NewHomeSections";
+import { NewsletterSection } from "@/components/vitrine/NewsletterSection";
 import { buildPageMetadata, faqJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
@@ -406,6 +407,9 @@ export default function Home() {
         title="Questions fréquentes sur l'Institut ISHES"
         items={HOME_FAQS}
       />
+
+      {/* ===== NEWSLETTER ===== */}
+      <NewsletterSection />
 
       {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
       <SocialSection />

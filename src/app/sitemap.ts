@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: '/notre-histoire', priority: 0.7, changeFrequency: 'yearly' },
     { route: '/formation-enseignant', priority: 0.85, changeFrequency: 'monthly' },
     { route: '/pack-accompagnement', priority: 0.92, changeFrequency: 'weekly' },
+    { route: '/newsletter', priority: 0.5, changeFrequency: 'yearly' },
   ];
 
   // Pages cours — priorité haute pour les piliers SEO

@@ -125,6 +125,7 @@ function InscriptionForm() {
     { id: "arabe_adulte", title: "Arabe", audience: "Adulte", detail: "À distance", price: 649 },
     { id: "arabe_enfant_distance", title: "Arabe", audience: "Enfant", detail: "À distance", price: 399 },
     { id: "memoriser_coran", title: "Mémorisation du Coran", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "tilawa", title: "Tilawa — Lecture & Récitation", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "fiqh_malikite", title: "Fiqh Mâlikite", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "al_aqida", title: "Al-Aqîda", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "as_sirah", title: "Sîrah", audience: "Adulte", detail: "À distance", price: 649 },
@@ -690,6 +691,7 @@ function InscriptionForm() {
       case "sciences_du_coran": return "Sciences du Coran (Distanciel)";
       case "sciences_hadith": return "Sciences du Hadith (Distanciel)";
       case "memoriser_coran": return "Mémorisation du Coran (Distanciel)";
+      case "tilawa": return "Tilawa — Lecture & Récitation (Distanciel)";
       case "as_sirah": return "Sîrah An-Nabawiyya (Distanciel)";
       case "al_aqida": return "Al-Aqîda (Distanciel)";
       case "fiqh_malikite": return "Fiqh Mâlikite (Distanciel)";
