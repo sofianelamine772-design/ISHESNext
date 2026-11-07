@@ -8,8 +8,24 @@ module.exports = {
   roots: ['<rootDir>/__tests__'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   setupFiles: ['<rootDir>/jest.setup.cjs'],
+  // ts-jest en mode transpile seul (rapide, pas de typecheck : `tsc` s'en charge au pre-push).
+  // Contrairement à l'ancien transformer maison, il remonte les jest.mock() avant les imports.
   transform: {
-    '^.+\\.tsx?$': '<rootDir>/scripts/jest-ts-transformer.cjs',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        isolatedModules: true,
+        diagnostics: false,
+        tsconfig: {
+          module: 'commonjs',
+          moduleResolution: 'node',
+          esModuleInterop: true,
+          jsx: 'react-jsx',
+          target: 'ES2020',
+          skipLibCheck: true,
+        },
+      },
+    ],
   },
   testPathIgnorePatterns: [
     '/scratch/',

@@ -1,375 +1,154 @@
-import { POST } from '@/app/api/webhooks/stripe/route';
+/**
+ * Webhook Stripe : signature, routage des événements, codes de retour.
+ * (La logique d'inscription est testée dans __tests__/lib/stripe-fulfillment.test.ts.)
+ * Pas d'import ES du SUT avant les mocks : on utilise require() après jest.mock().
+ */
 
-// --- Mocks ---
-jest.mock('@/lib/supabaseAdmin', () => ({
-  supabaseAdmin: {
-    from: jest.fn().mockReturnThis(),
-    select: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockReturnThis(),
-    ilike: jest.fn().mockReturnThis(),
-    order: jest.fn().mockReturnThis(),
-    limit: jest.fn().mockReturnThis(),
-    in: jest.fn().mockReturnThis(),
-    maybeSingle: jest.fn().mockResolvedValue({ data: null }),
-    single: jest.fn().mockResolvedValue({ data: { id: 'temp_123', email: 'test@example.com' } }),
-    insert: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-  }
-}));
-
-jest.mock('@clerk/nextjs/server', () => ({
-  clerkClient: jest.fn().mockResolvedValue({
-    invitations: { createInvitation: jest.fn() }
-  })
-}));
-
-const mockConstructEvent = jest.fn();
-jest.mock('stripe', () => {
-  const mStripe = {
-    webhooks: {
-      constructEvent: jest.fn()
-    }
-  };
-  return jest.fn(() => mStripe);
-});
+const mockConstruct = jest.fn();
+const mockFulfill = jest.fn();
+const mockRecordInvoice = jest.fn();
+const mockLogSystemError = jest.fn().mockResolvedValue(undefined);
 
 jest.mock('next/headers', () => ({
-  headers: jest.fn().mockResolvedValue({
-    get: jest.fn().mockReturnValue('test_signature')
-  })
+  headers: jest.fn().mockResolvedValue({ get: jest.fn().mockReturnValue('sig_test') }),
 }));
 
-const mockMaybeSendPresentielRentreeEmail = jest.fn().mockImplementation(
-  async (_email: string, formationId: string, formationType?: string | null) => {
-    const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
-    if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
-      return { success: true, skipped: true };
-    }
-    return { success: true, skipped: false };
-  }
-);
-const mockMaybeSendDistancielRentreeEmail = jest.fn().mockImplementation(
-  async (_email: string, formationId: string, formationType?: string | null) => {
-    const { shouldSendDistancielRentreeEmail } = jest.requireActual('@/lib/distanciel-rentree');
-    if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
-      return { success: true, skipped: true };
-    }
-    return { success: true, skipped: false };
-  }
-);
-const mockMaybeSendPresentielFournituresEmail = jest.fn().mockResolvedValue({ success: true, skipped: true });
-
-jest.mock('@/lib/mail', () => ({
-  maybeSendPresentielRentreeEmail: (...args: unknown[]) => mockMaybeSendPresentielRentreeEmail(...args),
-  maybeSendDistancielRentreeEmail: (...args: unknown[]) => mockMaybeSendDistancielRentreeEmail(...args),
-  maybeSendPresentielFournituresEmail: (...args: unknown[]) => mockMaybeSendPresentielFournituresEmail(...args),
-  sendAdminNewStudentNotificationEmail: jest.fn().mockResolvedValue({ success: true }),
-  sendWelcomeEmail: jest.fn(),
-  sendClassAssignmentEmail: jest.fn(),
-  sendPresentielRentreeEmail: jest.fn(),
-  sendDistancielRentreeEmail: jest.fn(),
+jest.mock('@/lib/stripe-accounts', () => ({
+  constructStripeWebhookEvent: (...args: unknown[]) => mockConstruct(...args),
+  getStripeClient: jest.fn(() => ({
+    subscriptions: { retrieve: jest.fn(), update: jest.fn(), cancel: jest.fn() },
+    invoices: { list: jest.fn() },
+  })),
+  normalizeStoredStripeAccount: (v: string | null | undefined) =>
+    String(v || '').trim().toLowerCase() === 'presentiel' ? 'presentiel' : 'distanciel',
 }));
 
-const DISTANCIEL_FORMATIONS = [
-  'tajwid_intensif',
-  'sciences_islamiques',
-  'arabe_coran_junior',
-  'sciences_du_coran',
-  'sciences_hadith',
-  'memoriser_coran',
-  'as_sirah',
-  'al_aqida',
-  'fiqh_malikite',
-  'arabe_adulte',
-  'tarbiya_islamiya',
-  'spiritualite_islam'
-];
+jest.mock('@/lib/stripe-checkout-fulfillment', () => ({
+  fulfillCheckoutSession: (...args: unknown[]) => mockFulfill(...args),
+}));
 
-beforeAll(() => {
+jest.mock('@/lib/stripe-invoice-sync', () => ({
+  recordInvoicePayment: (...args: unknown[]) => mockRecordInvoice(...args),
+}));
+
+jest.mock('@/lib/error-logger', () => ({
+  logSystemError: (...args: unknown[]) => mockLogSystemError(...args),
+}));
+
+jest.mock('@/app/actions/students', () => ({
+  syncStudentPaidStatus: jest.fn().mockResolvedValue(undefined),
+  sendPaymentReminderWithLinkAction: jest.fn().mockResolvedValue(undefined),
+}));
+
+const { POST } = require('@/app/api/webhooks/stripe/route') as typeof import('@/app/api/webhooks/stripe/route');
+
+const req = () => new Request('http://localhost/api/webhooks/stripe', { method: 'POST', body: '{}' });
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockLogSystemError.mockResolvedValue(undefined);
   jest.spyOn(console, 'log').mockImplementation(() => {});
+  jest.spyOn(console, 'error').mockImplementation(() => {});
 });
+afterEach(() => jest.restoreAllMocks());
 
-afterAll(() => {
-  jest.restoreAllMocks();
-});
-
-describe('Stripe Webhook - Auto-Assignation Toutes Formations Distanciel', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockMaybeSendPresentielRentreeEmail.mockImplementation(
-      async (_email: string, formationId: string, formationType?: string | null) => {
-        const { shouldSendPresentielRentreeEmail } = jest.requireActual('@/lib/presentiel-rentree-email');
-        if (!shouldSendPresentielRentreeEmail(formationId, formationType)) {
-          return { success: true, skipped: true };
-        }
-        return { success: true, skipped: false };
-      }
-    );
-    mockMaybeSendDistancielRentreeEmail.mockImplementation(
-      async (_email: string, formationId: string, formationType?: string | null) => {
-        const { shouldSendDistancielRentreeEmail } = jest.requireActual('@/lib/distanciel-rentree');
-        if (!shouldSendDistancielRentreeEmail(formationId, formationType)) {
-          return { success: true, skipped: true };
-        }
-        return { success: true, skipped: false };
-      }
-    );
-    const { supabaseAdmin } = require('@/lib/supabaseAdmin');
-    supabaseAdmin.maybeSingle.mockResolvedValue({ data: null });
+describe('Webhook Stripe', () => {
+  it('rejette une signature invalide avec 400 et journalise (logSystemError)', async () => {
+    mockConstruct.mockImplementation(() => {
+      throw new Error('No signatures found matching the expected signature');
+    });
+    const res = await POST(req());
+    expect(res.status).toBe(400);
+    expect(mockFulfill).not.toHaveBeenCalled();
+    expect(mockLogSystemError).toHaveBeenCalledWith('Stripe Webhook Signature', expect.any(Error));
   });
 
-  test.each(DISTANCIEL_FORMATIONS)('devrait auto-assigner la classe par défaut pour la formation %s', async (formationSlug) => {
-    const mockRequest = new Request('http://localhost/api/webhooks/stripe', {
-      method: 'POST',
-      body: JSON.stringify({}),
+  it('checkout.session.completed → fulfillCheckoutSession avec le bon compte Stripe', async () => {
+    const session = { id: 'cs_live_1', metadata: {} };
+    mockConstruct.mockReturnValue({
+      event: { type: 'checkout.session.completed', data: { object: session } },
+      account: 'presentiel',
     });
+    mockFulfill.mockResolvedValue({ ok: true, studentIds: ['s1'], payerEmail: 'a@b.fr' });
 
-    const Stripe = require('stripe');
-    const stripe = new Stripe();
-
-    // Simuler le paiement Stripe pour LA formation en cours
-    stripe.webhooks.constructEvent.mockReturnValue({
-      type: 'checkout.session.completed',
-      data: {
-        object: {
-          id: `cs_test_${formationSlug}`,
-          payment_status: 'paid',
-          amount_total: 15000,
-          currency: 'eur',
-          mode: 'payment',
-          metadata: {
-            formationId: formationSlug,
-            email: 'test@example.com',
-            first_name: 'Jean',
-            last_name: 'Dupont',
-          }
-        }
-      }
-    });
-
-    const { supabaseAdmin } = require('@/lib/supabaseAdmin');
-    
-    const mockFormationUuid = `uuid-${formationSlug}`;
-    const mockDefaultClassUuid = `class-${formationSlug}-2026`;
-
-    // Mock des appels base de données pour simuler l'assignation automatique
-    let eqContext = '';
-    supabaseAdmin.from.mockImplementation((table: string) => {
-      eqContext = table;
-      return supabaseAdmin;
-    });
-
-    supabaseAdmin.eq.mockImplementation((field: string, value: string) => {
-      // 1. Recherche de la formation
-      if (eqContext === 'formations' && field === 'slug' && value === formationSlug) {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: mockFormationUuid } });
-      }
-      // 2. Recherche de la classe par défaut
-      if (eqContext === 'classes' && field === 'formation_id' && value === mockFormationUuid) {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: mockDefaultClassUuid } });
-      }
-      // 3. Recherche de l'inscription existante (on simule qu'elle n'existe pas pour forcer le INSERT)
-      if (eqContext === 'inscriptions' && field === 'formation_id' && value === mockFormationUuid) {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: null });
-      }
-      return supabaseAdmin;
-    });
-
-    supabaseAdmin.ilike.mockReturnThis();
-
-    await POST(mockRequest);
-    
-    expect(supabaseAdmin.insert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        formation_id: mockFormationUuid,
-        class_id: mockDefaultClassUuid,
-      })
-    );
-
-    if (formationSlug === 'tajwid_intensif' && mockMaybeSendPresentielRentreeEmail.mock.calls.length > 0) {
-      const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
-      expect(rentree.skipped).toBe(true);
-    }
-    if (mockMaybeSendDistancielRentreeEmail.mock.calls.length > 0) {
-      const distanciel = await mockMaybeSendDistancielRentreeEmail.mock.results.at(-1)?.value;
-      expect(distanciel.skipped).toBe(false);
-    }
+    const res = await POST(req());
+    expect(res.status).toBe(200);
+    expect(mockFulfill).toHaveBeenCalledTimes(1);
+    expect(mockFulfill).toHaveBeenCalledWith({ session, stripeAccount: 'presentiel' });
   });
 
-  it('devrait assigner l\'élève à la classe SPÉCIFIQUE qu\'il a choisie (Présentiel)', async () => {
-    const mockRequest = new Request('http://localhost/api/webhooks/stripe', {
-      method: 'POST',
-      body: JSON.stringify({}),
+  it('metadata.stripe_account prime sur le compte détecté par la signature', async () => {
+    const session = { id: 'cs_live_2', metadata: { stripe_account: 'distanciel' } };
+    mockConstruct.mockReturnValue({
+      event: { type: 'checkout.session.completed', data: { object: session } },
+      account: 'presentiel',
     });
+    mockFulfill.mockResolvedValue({ ok: true, studentIds: ['s1'], payerEmail: '' });
 
-    const Stripe = require('stripe');
-    const stripe = new Stripe();
+    await POST(req());
+    expect(mockFulfill).toHaveBeenCalledWith({ session, stripeAccount: 'distanciel' });
+  });
 
-    // Simuler le paiement Stripe pour une formation Présentiel (l'élève a choisi un horaire, donc un classId)
-    stripe.webhooks.constructEvent.mockReturnValue({
-      type: 'checkout.session.completed',
-      data: {
-        object: {
-          id: 'cs_test_presentiel',
-          payment_status: 'paid',
-          amount_total: 34900,
-          currency: 'eur',
-          mode: 'payment',
-          metadata: {
-            formationId: 'presentiel-global',
-            email: 'test_presentiel@example.com',
-            classId: 'uuid-classe-specifique-choisie', // L'élève a choisi sa classe !
-            first_name: 'Jean',
-            last_name: 'Dupont',
-          }
-        }
-      }
+  it('renvoie 500 (Stripe réessaiera) et journalise si le traitement échoue', async () => {
+    mockConstruct.mockReturnValue({
+      event: { type: 'checkout.session.completed', data: { object: { id: 'cs_live_3', metadata: {} } } },
+      account: 'distanciel',
     });
+    mockFulfill.mockRejectedValue(new Error('db down'));
 
-    const { supabaseAdmin } = require('@/lib/supabaseAdmin');
-    
-    let eqContext = '';
-    supabaseAdmin.from.mockImplementation((table: string) => {
-      eqContext = table;
-      return supabaseAdmin;
+    const res = await POST(req());
+    expect(res.status).toBe(500);
+    expect(mockLogSystemError).toHaveBeenCalledWith('Stripe Webhook Handler', expect.any(Error));
+  });
+
+  it('ignore les événements non gérés avec 200 (pas de retry inutile)', async () => {
+    mockConstruct.mockReturnValue({
+      event: { type: 'customer.created', data: { object: {} } },
+      account: 'distanciel',
     });
+    const res = await POST(req());
+    expect(res.status).toBe(200);
+    expect(mockFulfill).not.toHaveBeenCalled();
+    expect(mockRecordInvoice).not.toHaveBeenCalled();
+  });
 
-    supabaseAdmin.eq.mockImplementation((field: string, value: string) => {
-      if (eqContext === 'formations' && field === 'slug' && value === 'presentiel-global') {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: 'uuid-formation-presentiel' } });
-      }
-      if (eqContext === 'inscriptions' && field === 'formation_id' && value === 'uuid-formation-presentiel') {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: null });
-      }
-      return supabaseAdmin;
+  it('invoice.payment_succeeded → recordInvoicePayment', async () => {
+    const invoice = { id: 'in_1', billing_reason: 'subscription_cycle', subscription: null };
+    mockConstruct.mockReturnValue({
+      event: { type: 'invoice.payment_succeeded', data: { object: invoice } },
+      account: 'presentiel',
     });
+    mockRecordInvoice.mockResolvedValue({ action: 'inserted', paymentId: 'p1', etudiantId: 'e1' });
 
-    supabaseAdmin.ilike.mockReturnThis();
+    const res = await POST(req());
+    expect(res.status).toBe(200);
+    expect(mockRecordInvoice).toHaveBeenCalledWith(
+      expect.objectContaining({ invoice, status: 'succeeded', stripeAccount: 'presentiel' }),
+    );
+  });
 
-    await POST(mockRequest);
+  it('alerte (logSystemError) quand une facture réelle ne peut pas être enregistrée', async () => {
+    const invoice = { id: 'in_2', billing_reason: 'subscription_cycle', subscription: null };
+    mockConstruct.mockReturnValue({
+      event: { type: 'invoice.payment_succeeded', data: { object: invoice } },
+      account: 'distanciel',
+    });
+    mockRecordInvoice.mockResolvedValue({ action: 'skipped', reason: 'aucun élève trouvé pour x@y.fr' });
 
-    expect(mockMaybeSendPresentielRentreeEmail).toHaveBeenCalledWith(
-      'test_presentiel@example.com',
-      'presentiel-global',
-      null,
-    );
-    const rentree = await mockMaybeSendPresentielRentreeEmail.mock.results.at(-1)?.value;
-    expect(rentree).toEqual({ success: true, skipped: false });
-    expect(mockMaybeSendDistancielRentreeEmail).toHaveBeenCalledWith(
-      'test_presentiel@example.com',
-      'presentiel-global',
-      null,
-    );
-    const distanciel = await mockMaybeSendDistancielRentreeEmail.mock.results.at(-1)?.value;
-    expect(distanciel).toEqual({ success: true, skipped: true });
-    expect(mockMaybeSendPresentielFournituresEmail).toHaveBeenCalledWith(
-      'test_presentiel@example.com',
-      { classRefs: ['uuid-classe-specifique-choisie'] },
-    );
+    const res = await POST(req());
+    expect(res.status).toBe(200);
+    expect(mockLogSystemError).toHaveBeenCalledWith('Stripe Webhook Invoice', expect.any(Error));
+  });
 
-    // VERIFICATION: on vérifie que le système a ignoré la classe par défaut et a bien utilisé la classe SPÉCIFIQUE !
-    expect(supabaseAdmin.insert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        formation_id: 'uuid-formation-presentiel',
-        class_id: 'uuid-classe-specifique-choisie', // La classe exacte choisie par l'élève
-      })
-    );
+  it("n'alerte pas pour un skip volontaire (1er mois d'abonnement)", async () => {
+    const invoice = { id: 'in_3', billing_reason: 'subscription_create', subscription: null };
+    mockConstruct.mockReturnValue({
+      event: { type: 'invoice.payment_succeeded', data: { object: invoice } },
+      account: 'distanciel',
+    });
+    mockRecordInvoice.mockResolvedValue({ action: 'skipped', reason: 'subscription_create' });
+
+    await POST(req());
+    expect(mockLogSystemError).not.toHaveBeenCalled();
   });
 });
-
-describe('Parcours Fiqh Malikite - Test Solide et Intégral', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('devrait garantir que l\'étudiant est inscrit dans la bonne formation Fiqh Malikite ET la bonne classe', async () => {
-    const mockRequest = new Request('http://localhost/api/webhooks/stripe', {
-      method: 'POST',
-      body: JSON.stringify({}),
-    });
-
-    const Stripe = require('stripe');
-    const stripe = new Stripe();
-
-    // 1. L'élève achète la formation "Fiqh Malikite"
-    stripe.webhooks.constructEvent.mockReturnValue({
-      type: 'checkout.session.completed',
-      data: {
-        object: {
-          id: 'cs_test_fiqh_malikite_solid',
-          payment_status: 'paid',
-          amount_total: 15000,
-          currency: 'eur',
-          mode: 'payment',
-          metadata: {
-            formationId: 'fiqh_malikite',
-            email: 'eleve.fiqh@example.com',
-            first_name: 'Imam',
-            last_name: 'Malik',
-          }
-        }
-      }
-    });
-
-    const { supabaseAdmin } = require('@/lib/supabaseAdmin');
-
-    const FORMATION_UUID = 'uuid-formation-fiqh-malikite-123';
-    const CLASSE_UUID = 'uuid-classe-fiqh-malikite-active-456';
-    const STUDENT_UUID = 'uuid-student-imam-malik';
-
-    // 2. On configure la base de données pour ce scénario précis
-    let eqContext = '';
-    supabaseAdmin.from.mockImplementation((table: string) => {
-      eqContext = table;
-      return supabaseAdmin;
-    });
-
-    supabaseAdmin.ilike.mockReturnThis();
-
-    // Simuler que l'étudiant n'existe pas encore (ilike renvoie null, maybeSingle renvoie null)
-    supabaseAdmin.maybeSingle.mockImplementation(() => {
-      if (eqContext === 'etudiants') return Promise.resolve({ data: null });
-      if (eqContext === 'inscriptions') return Promise.resolve({ data: null });
-      return Promise.resolve({ data: null });
-    });
-
-    supabaseAdmin.eq.mockImplementation((field: string, value: string) => {
-      // Trouver la formation exacte "fiqh_malikite"
-      if (eqContext === 'formations' && field === 'slug' && value === 'fiqh_malikite') {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: FORMATION_UUID, title: 'FIQH MALIKITE' } });
-      }
-      // Trouver la classe active pour cette formation
-      if (eqContext === 'classes' && field === 'formation_id' && value === FORMATION_UUID) {
-        supabaseAdmin.maybeSingle.mockResolvedValueOnce({ data: { id: CLASSE_UUID, name: 'Session Fiqh Malikite 2026' } });
-      }
-      return supabaseAdmin;
-    });
-
-    // 3. Exécuter le Webhook
-    await POST(mockRequest);
-
-    // 4. VÉRIFICATIONS SOLIDES
-    // Vérifier la création de l'étudiant
-    expect(supabaseAdmin.insert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        email: 'eleve.fiqh@example.com',
-        first_name: 'Imam',
-        last_name: 'Malik',
-        status: 'actif'
-      })
-    );
-
-    // Vérifier L'AFFECTATION EXACTE dans la table des inscriptions
-    expect(supabaseAdmin.insert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        formation_id: FORMATION_UUID,
-        class_id: CLASSE_UUID,
-        status: 'actif',
-        paid_status: 'paye'
-      })
-    );
-
-    // Si ces vérifications passent, l'élève s'affichera parfaitement dans l'interface Admin !
-  });
-});
-

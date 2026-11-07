@@ -12,7 +12,10 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest --forceExit --watchAll=false",
-    "test:prepush": "jest --config jest.prepush.cjs --forceExit --watchAll=false --runInBand"
+    "test:prepush": "jest --config jest.prepush.cjs --forceExit --watchAll=false --runInBand",
+    "typecheck": "tsc --noEmit",
+    "test:network": "jest __tests__/integration/formations.test.ts --forceExit --watchAll=false",
+    "check": "npm run typecheck && npm run test:prepush"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

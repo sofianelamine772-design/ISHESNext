@@ -109,6 +109,20 @@ jest.mock('@/lib/supabaseAdmin', () => {
                 };
                 return queryObj;
               }),
+              ilike: jest.fn().mockImplementation((field: string, value: any) => {
+                const cleanVal = String(value).toLowerCase();
+                const filtered = currentData.filter(
+                  (r: any) => String(r[field] ?? '').toLowerCase() === cleanVal,
+                );
+                const queryObj: any = {
+                  order: jest.fn().mockImplementation(() => queryObj),
+                  limit: jest.fn().mockImplementation(() => queryObj),
+                  maybeSingle: jest.fn().mockResolvedValue({ data: filtered[0] || null }),
+                  single: jest.fn().mockResolvedValue({ data: filtered[0] || null }),
+                  then: (cb: any) => cb({ data: filtered }),
+                };
+                return queryObj;
+              }),
               order: jest.fn().mockImplementation(() => {
                 const queryObj: any = {
                   limit: jest.fn().mockImplementation(() => queryObj),
@@ -145,6 +159,12 @@ jest.mock('@/lib/supabaseAdmin', () => {
               then: (cb: any) => cb({ data: inserted })
             };
           }),
+          upsert: jest.fn().mockImplementation((data: any) => {
+            const existing = tableData.find((r: any) => r.id === data.id);
+            if (existing) Object.assign(existing, data);
+            else tableData.push({ ...data });
+            return Promise.resolve({ error: null });
+          }),
           update: jest.fn().mockImplementation((data: any) => {
             const queryObj: any = {
               eq: jest.fn().mockImplementation((field: string, value: any) => {
@@ -153,7 +173,11 @@ jest.mock('@/lib/supabaseAdmin', () => {
                     Object.assign(r, data);
                   }
                 });
-                return Promise.resolve({ error: null });
+                const done: any = Promise.resolve({ error: null });
+                done.in = jest.fn().mockImplementation(() => Promise.resolve({ error: null }));
+                done.is = jest.fn().mockImplementation(() => Promise.resolve({ error: null }));
+                done.eq = jest.fn().mockImplementation(() => Promise.resolve({ error: null }));
+                return done;
               }),
               in: jest.fn().mockImplementation((field: string, values: any[]) => {
                 tableData.forEach((r: any) => {
@@ -161,7 +185,9 @@ jest.mock('@/lib/supabaseAdmin', () => {
                     Object.assign(r, data);
                   }
                 });
-                return queryObj;
+                const done: any = Promise.resolve({ error: null });
+                done.eq = jest.fn().mockImplementation(() => Promise.resolve({ error: null }));
+                return done;
               })
             };
             return queryObj;
@@ -192,7 +218,15 @@ jest.mock('@clerk/nextjs/server', () => ({
   clerkClient: jest.fn().mockResolvedValue({
     invitations: {
       createInvitation: jest.fn().mockResolvedValue({})
-    }
+    },
+    users: {
+      getUser: jest.fn().mockResolvedValue({
+        emailAddresses: [{ id: 'e1', emailAddress: 'samy.fauve@example.com' }],
+        primaryEmailAddressId: 'e1',
+        firstName: 'Samy',
+        lastName: 'Fauve',
+      }),
+    },
   }),
 }));
 
@@ -218,6 +252,7 @@ const mockMaybeSendDistancielRentreeEmail = jest.fn().mockImplementation(
 jest.mock('@/lib/mail', () => ({
   sendAdminNewMessageEmail: (params: any) => mockSendAdminNewMessageEmail(params),
   sendWelcomeEmail: jest.fn(),
+  sendAdminNewStudentNotificationEmail: jest.fn().mockResolvedValue({ success: true }),
   sendPaymentReminderEmail: jest.fn().mockResolvedValue({ success: true }),
   sendClassAssignmentEmail: jest.fn(),
   sendPresentielRentreeEmail: jest.fn(),
@@ -317,6 +352,7 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
 
       // 6. Vérifier que la fonction d'envoi d'e-mail à l'administrateur a été appelée avec les bons détails
       expect(mockSendAdminNewMessageEmail).toHaveBeenCalledWith({
+        chatId: 'clerk_student_123',
         studentName: 'Samy Fauve',
         studentEmail: 'samy.fauve@example.com',
         messageContent: reqPayload.content
@@ -545,6 +581,9 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         data: {
           object: {
             id: 'in_failed_invoice_123',
+            subscription: 'sub_test_installments',
+            billing_reason: 'subscription_cycle',
+            created: 1789516800,
             customer_email: 'failed_card@example.com',
             amount_due: 15000,
             amount_paid: 0,
@@ -694,6 +733,9 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         data: {
           object: {
             id: 'in_success_invoice_777',
+            subscription: 'sub_test_installments',
+            billing_reason: 'subscription_cycle',
+            created: 1789516800,
             customer_email: 'billing.exact@example.com',
             amount_paid: 18000, // 180.00 €
             currency: 'eur'
@@ -762,7 +804,7 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         type: 'checkout.session.completed',
         data: {
           object: {
-            id: 'cs_test_fiqh_malikite_multi',
+            id: 'cs_live_fiqh_malikite_multi',
             payment_status: 'paid',
             amount_total: 15000, // 1ère mensualité payée
             currency: 'eur',
@@ -800,6 +842,9 @@ describe('ISHES - Scénarios de tests d\'intégration fonctionnels', () => {
         data: {
           object: {
             id: 'in_failed_invoice_multi',
+            subscription: 'sub_test_installments',
+            billing_reason: 'subscription_cycle',
+            created: 1789516800,
             customer_email: 'eleve.multi@example.com',
             amount_due: 15000,
             amount_paid: 0,

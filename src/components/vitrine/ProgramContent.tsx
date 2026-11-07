@@ -232,8 +232,8 @@ export const PROGRAMS: Program[] = [
   {
     id: "memoriser_coran",
     imageUrl: "/images/formations/memorisation-tilawa-1.jpg",
-    title: "Mémorisation du Coran",
-    subtitle: "Accompagnement personnalisé pour mémoriser le Livre d'Allah à votre rythme.",
+    title: "HIFZ (Mémorisation) ou TILAWA (lecture fluide) du Coran",
+    subtitle: "Accompagnement personnalisé pour mémoriser le livre d'ALLAH ou perfectionner sa lecture",
     tagText: "HIFZ",
     tagColor: "bg-amber-100 text-amber-700",
     durationText: "4 mois",
@@ -890,7 +890,7 @@ export function ProgramContent() {
                           <div className="flex items-start gap-1.5 sm:gap-2">
                             <CalendarDays className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
                             <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
-                              {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h/sem." : (program.id === 'tajwid_intensif' ? "Rythme : 2h/sem." : "Rythme : 1h/sem."))}
+                              {isPresentiel ? `Horaires : ${program.durationText}` : (program.id === 'tajwid_standard' ? "Rythme : 1h/sem." : (program.id === 'tajwid_intensif' ? "Rythme : 2h/sem." : (program.id === 'memoriser_coran' ? "Rythme : 2x par semaine" : "Rythme : 1h/sem.")))}
                             </span>
                           </div>
                         )}
@@ -907,6 +907,14 @@ export function ProgramContent() {
                             <Award className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
                             <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
                               {program.id === 'tajwid_standard' || isPresentiel ? "Diplôme de fin" : "Diplôme ISHES"}
+                            </span>
+                          </div>
+                        )}
+                        {program.id === "memoriser_coran" && (
+                          <div className="flex items-start gap-1.5 sm:gap-2">
+                            <BookOpen className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${accentColor} shrink-0 mt-0.5`} />
+                            <span className="text-[9px] sm:text-xs text-gray-700 font-bold leading-tight">
+                              Pré requis : connaissances du Tajwid
                             </span>
                           </div>
                         )}

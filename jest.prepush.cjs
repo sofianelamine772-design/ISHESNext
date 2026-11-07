@@ -2,15 +2,14 @@
 const base = require('./jest.config.cjs');
 
 /**
- * Suite bloquante avant push / déploiement.
- * Inclut lib + unit + garde-fou checkout double Stripe.
+ * Suite BLOQUANTE avant push / CI : tous les tests, sauf ceux qui interrogent
+ * la vraie base Supabase (réseau) → `npm run test:network`.
+ * Couvre : lib, unit, checkout, webhooks Stripe, fulfillment, scénarios d'intégration (mockés).
  */
 module.exports = {
   ...base,
-  roots: ['<rootDir>/__tests__'],
-  testMatch: [
-    '**/__tests__/lib/**/*.test.ts',
-    '**/__tests__/unit/**/*.test.ts',
-    '**/__tests__/api/checkout/dual-stripe.test.ts',
+  testPathIgnorePatterns: [
+    ...base.testPathIgnorePatterns,
+    '/__tests__/integration/formations\\.test\\.ts$',
   ],
 };

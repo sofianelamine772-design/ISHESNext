@@ -2,7 +2,6 @@ import { POST } from '@/app/api/checkout/route';
 import { NextRequest } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
-import Stripe from 'stripe';
 
 // Mock dependencies
 jest.mock('@clerk/nextjs/server', () => ({
@@ -15,37 +14,16 @@ jest.mock('@/lib/supabaseAdmin', () => ({
   }
 }));
 
+const mockSessionCreate = jest.fn();
+const mockPriceCreate = jest.fn();
+
 jest.mock('@/lib/stripe-accounts', () => {
   const actual = jest.requireActual('@/lib/stripe-accounts');
   const mStripe = {
-    checkout: {
-      sessions: {
-        create: jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' })
-      }
-    },
-    prices: {
-      create: jest.fn().mockResolvedValue({ id: 'price_test_123' })
-    }
+    checkout: { sessions: { create: (...args: unknown[]) => mockSessionCreate(...args) } },
+    prices: { create: (...args: unknown[]) => mockPriceCreate(...args) },
   };
-  return {
-    ...actual,
-    getStripeClient: jest.fn(() => mStripe),
-  };
-});
-
-// Setup a basic mock for Stripe (compat anciens asserts new Stripe())
-jest.mock('stripe', () => {
-  const mStripe = {
-    checkout: {
-      sessions: {
-        create: jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' })
-      }
-    },
-    prices: {
-      create: jest.fn().mockResolvedValue({ id: 'price_test_123' })
-    }
-  };
-  return jest.fn(() => mStripe);
+  return { ...actual, getStripeClient: jest.fn(() => mStripe) };
 });
 
 function mockFormation(price = 480, title = 'Cours enfants', type = 'presentiel') {
@@ -67,6 +45,8 @@ async function postCheckout(body: Record<string, unknown>) {
 describe('Checkout API', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSessionCreate.mockResolvedValue({ url: 'https://checkout.stripe.com/test' });
+    mockPriceCreate.mockResolvedValue({ id: 'price_test_123' });
   });
 
   it('should return 404 for any formation if database fetch fails or returns null', async () => {
@@ -90,8 +70,7 @@ describe('Checkout API', () => {
     const res = await POST(req);
     const json = await res.json();
 
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
     
     // Verify it blocked the checkout
     expect(res.status).toBe(404);
@@ -101,14 +80,13 @@ describe('Checkout API', () => {
 
   it('ne réduit pas un seul enfant', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'arabe_enfant_distance',
       registrationType: 'child',
       email: 'parent@example.com',
-      childrenList: [{ prenom: 'Amina', nom: 'Benali' }]
+      childrenList: [{ prenom: 'Amina', nom: 'Benali', classId: '101' }]
     });
 
     expect(res.status).toBe(200);
@@ -120,16 +98,15 @@ describe('Checkout API', () => {
 
   it('applique 50 € de réduction pour 2 enfants inscrits en même temps (960 → 910)', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'arabe_enfant_distance',
       registrationType: 'child',
       email: 'parent@example.com',
       childrenList: [
-        { prenom: 'Amina', nom: 'Benali' },
-        { prenom: 'Youssef', nom: 'Benali' }
+        { prenom: 'Amina', nom: 'Benali', classId: '101' },
+        { prenom: 'Youssef', nom: 'Benali', classId: '101' }
       ]
     });
 
@@ -143,9 +120,6 @@ describe('Checkout API', () => {
 
   it('en plusieurs fois, applique −50 € sur le total (910 €) puis le découpe — pas −50 € par mois', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockSessionCreate = stripeInstance.checkout.sessions.create as jest.Mock;
-    const mockPriceCreate = stripeInstance.prices.create as jest.Mock;
 
     await postCheckout({
       formationId: 'arabe_enfant_distance',
@@ -153,8 +127,8 @@ describe('Checkout API', () => {
       installments: 10,
       email: 'parent@example.com',
       childrenList: [
-        { prenom: 'Amina', nom: 'Benali' },
-        { prenom: 'Youssef', nom: 'Benali' }
+        { prenom: 'Amina', nom: 'Benali', classId: '101' },
+        { prenom: 'Youssef', nom: 'Benali', classId: '101' }
       ]
     });
 
@@ -172,8 +146,8 @@ describe('Checkout API', () => {
       installments: 3,
       email: 'parent@example.com',
       childrenList: [
-        { prenom: 'Amina', nom: 'Benali' },
-        { prenom: 'Youssef', nom: 'Benali' }
+        { prenom: 'Amina', nom: 'Benali', classId: '101' },
+        { prenom: 'Youssef', nom: 'Benali', classId: '101' }
       ]
     });
 
@@ -184,17 +158,16 @@ describe('Checkout API', () => {
 
   it('applique 100 € de réduction pour 3 enfants inscrits en même temps', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     await postCheckout({
       formationId: 'arabe_enfant_distance',
       registrationType: 'child',
       email: 'parent@example.com',
       childrenList: [
-        { prenom: 'Amina', nom: 'Benali' },
-        { prenom: 'Youssef', nom: 'Benali' },
-        { prenom: 'Sara', nom: 'Benali' }
+        { prenom: 'Amina', nom: 'Benali', classId: '101' },
+        { prenom: 'Youssef', nom: 'Benali', classId: '101' },
+        { prenom: 'Sara', nom: 'Benali', classId: '101' }
       ]
     });
 
@@ -205,15 +178,15 @@ describe('Checkout API', () => {
 
   it('ne réduit pas une inscription adulte', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     await postCheckout({
       formationId: 'arabe_enfant_distance',
       registrationType: 'adult',
       email: 'adulte@example.com',
       prenom: 'Fatima',
-      nom: 'Benali'
+      nom: 'Benali',
+      classId: '101'
     });
 
     const session = mockCreate.mock.calls[0][0];
@@ -223,8 +196,7 @@ describe('Checkout API', () => {
 
   it('refuse une inscription enfant sans enfant nommé (évite un paiement à 0 €)', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'arabe_enfant_distance',
@@ -239,15 +211,14 @@ describe('Checkout API', () => {
 
   it('ignore un enfant vide et ne réduit pas si un seul enfant est vraiment nommé', async () => {
     mockFormation(480);
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'arabe_enfant_distance',
       registrationType: 'child',
       email: 'parent@example.com',
       childrenList: [
-        { prenom: 'Amina', nom: 'Benali' },
+        { prenom: 'Amina', nom: 'Benali', classId: '101' },
         { prenom: '', nom: '' }
       ]
     });
@@ -261,8 +232,7 @@ describe('Checkout API', () => {
 
   it('facture le Tajwid Intensif à 649 € depuis la base', async () => {
     mockFormation(649, 'Tajwid Intensif');
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'tajwid_intensif',
@@ -281,8 +251,7 @@ describe('Checkout API', () => {
 
   it('facture la femme débutante présentiel à 649 € sans la remapper vers presentiel-global (480 €)', async () => {
     mockFormation(649, 'Arabe & Tajwid Femme Débutante (Présentiel)');
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'femme-debutante-presentiel',
@@ -300,8 +269,7 @@ describe('Checkout API', () => {
 
   it('autorise Tarbiya distanciel (classe 107) sans la traiter comme un créneau présentiel', async () => {
     mockFormation(399, 'Tarbiya Islamiya');
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'tarbiya_islamiya',
@@ -320,8 +288,7 @@ describe('Checkout API', () => {
 
   it('encaisse la somme des formations ajoutées, sans le prix envoyé par le navigateur', async () => {
     mockFormation(649, 'Tajwid', 'distanciel');
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'tajwid_standard',
@@ -343,8 +310,7 @@ describe('Checkout API', () => {
 
   it('multiplie une formation enfant ajoutée par le nombre d enfants', async () => {
     mockFormation(399, 'Tajwid enfant', 'distanciel');
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
 
     const res = await postCheckout({
       formationId: 'arabe_enfant_distance',
@@ -352,8 +318,8 @@ describe('Checkout API', () => {
       email: 'parent@example.com',
       orderBump: 'tajwid_enfant_distance',
       childrenList: [
-        { prenom: 'Amina', nom: 'Benali' },
-        { prenom: 'Youssef', nom: 'Benali' },
+        { prenom: 'Amina', nom: 'Benali', classId: '101' },
+        { prenom: 'Youssef', nom: 'Benali', classId: '101' },
       ],
     });
 
@@ -367,8 +333,7 @@ describe('Checkout API', () => {
 
   it('autorise toutes les classes distanciel enfant (101–108)', async () => {
     mockFormation(399, 'Cours enfant distanciel');
-    const stripeInstance = new Stripe('fake', {} as any);
-    const mockCreate = stripeInstance.checkout.sessions.create as jest.Mock;
+    const mockCreate = mockSessionCreate;
     for (const classId of Object.keys(DISTANCE_CLASS_ID_TO_UUID).map(Number)) {
       mockCreate.mockClear();
       const res = await postCheckout({
@@ -380,5 +345,34 @@ describe('Checkout API', () => {
       expect(res.status).toBe(200);
       expect(mockCreate).toHaveBeenCalledTimes(1);
     }
+  });
+
+  it('refuse un enfant arabe distance sans niveau (101–108) avant tout paiement', async () => {
+    mockFormation(480);
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'child',
+      email: 'parent@example.com',
+      childrenList: [{ prenom: 'Amina', nom: 'Benali' }],
+    });
+    expect(res.status).toBe(400);
+    expect(mockSessionCreate).not.toHaveBeenCalled();
+  });
+
+  it('ignore tout prix envoyé par le navigateur (le prix vient de la base)', async () => {
+    mockFormation(480);
+    const res = await postCheckout({
+      formationId: 'arabe_enfant_distance',
+      registrationType: 'adult',
+      email: 'a@example.com',
+      prenom: 'Amina',
+      nom: 'Benali',
+      classId: '101',
+      price: 1,
+      amount: 1,
+      unit_amount: 100,
+    });
+    expect(res.status).toBe(200);
+    expect(mockSessionCreate.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(48000);
   });
 });

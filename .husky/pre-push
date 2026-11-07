@@ -1,19 +1,40 @@
 #!/bin/sh
+# Garde-fou avant push : type-check + tests. Contourner en urgence : git push --no-verify
+cd "$(git rev-parse --show-toplevel)" || exit 1
 
-echo "✅ Lancement des tests unitaires (Jest)..."
-PREPUSH_TIMEOUT_MS=300000 node scripts/run-with-timeout.mjs npm run test:prepush
-
-if [ $? -ne 0 ]; then
-  echo "❌ Le push a été bloqué car les tests unitaires ont échoué."
+fail() {
+  echo ""
+  echo "❌ Push bloqué : $1"
+  echo "   Corrigez, puis relancez 'git push'. (Urgence uniquement : git push --no-verify)"
   exit 1
+}
+
+# 0. Outils installés ? (corrige « jest: command not found » : liens node_modules/.bin manquants)
+if [ ! -x node_modules/.bin/jest ] || [ ! -x node_modules/.bin/tsc ]; then
+  echo "🔧 Outils de test introuvables → réparation (npm rebuild)..."
+  npm rebuild >/dev/null 2>&1
+  if [ ! -x node_modules/.bin/jest ]; then
+    fail "jest introuvable. Lancez 'npm install' puis réessayez."
+  fi
 fi
 
-echo "🔄 Lancement du test d'intégrité de la base de données..."
-node scripts/run-with-timeout.mjs node scripts/test-db-mapping.mjs
+# 1. Types TypeScript
+echo "🔎 [1/3] Vérification des types (tsc)..."
+PREPUSH_TIMEOUT_MS=300000 node scripts/run-with-timeout.mjs npm run typecheck --silent \
+  || fail "erreurs TypeScript (npm run typecheck)."
 
-if [ $? -ne 0 ]; then
-  echo "❌ Le push a été bloqué car des erreurs d'intégrité ont été trouvées dans la base de données."
-  exit 1
+# 2. Tests unitaires + API (checkout, webhooks, paiements) + intégration mockée
+echo "✅ [2/3] Tests (Jest)..."
+PREPUSH_TIMEOUT_MS=300000 node scripts/run-with-timeout.mjs npm run test:prepush --silent \
+  || fail "des tests échouent (npm run test:prepush)."
+
+# 3. Intégrité de la base (lecture seule, réseau). SKIP_DB_CHECK=1 pour l'ignorer hors ligne.
+if [ "$SKIP_DB_CHECK" = "1" ]; then
+  echo "⏭️  [3/3] Test d'intégrité base ignoré (SKIP_DB_CHECK=1)."
+else
+  echo "🔄 [3/3] Intégrité de la base de données..."
+  node scripts/run-with-timeout.mjs node scripts/test-db-mapping.mjs \
+    || fail "erreurs d'intégrité en base (ou hors ligne : SKIP_DB_CHECK=1 git push)."
 fi
 
-echo "✅ Tests OK — push autorisé."
+echo "✅ Tout est OK — push autorisé."
