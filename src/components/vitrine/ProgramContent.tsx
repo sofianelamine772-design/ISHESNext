@@ -247,7 +247,7 @@ export const PROGRAMS: Program[] = [
     priceSub: "/ SESSION",
     type: "distanciel",
     audience: "adulte",
-    keywords: ["hifz", "hifdh", "mémorisation"]
+    keywords: ["hifz", "hifdh", "mémorisation", "memorisation", "tilawa", "récitation", "recitation", "lecture fluide", "lecture", "coran"]
   },
   {
     id: "tilawa",

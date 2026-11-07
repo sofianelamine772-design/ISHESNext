@@ -4,6 +4,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getCurrentAcademicYear } from '@/lib/utils';
 import { bumpPriceMetadataKey, getExpectedAmountForChild, PER_CHILD_FORMATION_SLUGS } from '@/lib/pricing';
 import { insertPaiementWithStripeAccount } from '@/lib/paiements-insert';
+import { canonicalBumpSlugs, canonicalFormationSlug } from '@/lib/formation-aliases';
 import type { StripeAccountId } from '@/lib/stripe-accounts';
 
 /** Normalise un email en supprimant le suffixe +xxx avant le @ */
@@ -66,6 +67,7 @@ async function resolveFormationUuid(
   options?: { strict?: boolean },
 ): Promise<string | null> {
   if (!formationId) return null;
+  formationId = canonicalFormationSlug(formationId);
   const isUuid =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
       formationId,
@@ -108,7 +110,7 @@ async function readBumpUnit(
 }
 
 function listOrderBumps(metadata: Stripe.Metadata | null | undefined): string[] {
-  return (metadata?.order_bump || '').split(',').map((slug) => slug.trim()).filter(Boolean);
+  return canonicalBumpSlugs((metadata?.order_bump || '').split(','), metadata?.formationId || '');
 }
 
 async function upsertInscription(params: {

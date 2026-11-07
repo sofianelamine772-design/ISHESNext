@@ -16,6 +16,7 @@ import { DISTANCE_CLASSES } from "@/lib/distance-data";
 import { addedFormationCharge, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
 import { PresentielChoicePicker, PresentielHorairePicker } from "@/components/vitrine/PresentielHorairePicker";
 import { cn } from "@/lib/utils";
+import { canonicalFormationSlug, formationSearchText } from "@/lib/formation-aliases";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -41,14 +42,9 @@ function InscriptionForm() {
     slot = 'dimanche';
   } else if (planId === 'femme-intermediaire-presentiel' || planId === 'femme_intermediaire_presentiel') {
     slot = 'samedi';
-  } else if (
-    // Anciens doublons remplacés (classes / formations supprimées)
-    planId === 'arabe_coran_junior' ||
-    planId === 'arabe-coran-junior'
-  ) {
-    planId = 'arabe_enfant_distance';
-  } else if (planId === 'sciences-islamiques') {
-    planId = 'sciences_islamiques';
+  } else if (planId) {
+    // Alias / anciens doublons (tilawa → memoriser_coran, arabe_coran_junior…)
+    planId = canonicalFormationSlug(planId);
   }
 
   const level = searchParams?.get("level");
@@ -124,8 +120,7 @@ function InscriptionForm() {
     { id: "tajwid_intensif", title: "Tajwid intensif", audience: "Adulte", detail: "À distance · 3 mois", price: 649 },
     { id: "arabe_adulte", title: "Arabe", audience: "Adulte", detail: "À distance", price: 649 },
     { id: "arabe_enfant_distance", title: "Arabe", audience: "Enfant", detail: "À distance", price: 399 },
-    { id: "memoriser_coran", title: "Mémorisation du Coran", audience: "Adulte", detail: "À distance", price: 399 },
-    { id: "tilawa", title: "Tilawa — Lecture & Récitation", audience: "Adulte", detail: "À distance", price: 399 },
+    { id: "memoriser_coran", title: "Mémorisation du Coran (Hifz) · Tilawa", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "fiqh_malikite", title: "Fiqh Mâlikite", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "al_aqida", title: "Al-Aqîda", audience: "Adulte", detail: "À distance", price: 399 },
     { id: "as_sirah", title: "Sîrah", audience: "Adulte", detail: "À distance", price: 649 },
@@ -1478,7 +1473,7 @@ function InscriptionForm() {
                 <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
                   {distanceCoursesList
                     .filter(c => !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id))
-                    .filter(c => `${c.title} ${c.audience} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()))
+                    .filter(c => formationSearchText(c.id, c.title, c.audience, c.detail).includes(searchCourseQuery.toLowerCase()))
                     .map(course => (
                       <div key={course.id} className="bg-white px-4 py-3.5 rounded-xl border border-[#e7e2d8] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="min-w-0">
@@ -1501,7 +1496,7 @@ function InscriptionForm() {
                       </div>
                     ))}
                   
-                  {distanceCoursesList.filter(c => `${c.title} ${c.audience} ${c.detail}`.toLowerCase().includes(searchCourseQuery.toLowerCase()) && !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id)).length === 0 && (
+                  {distanceCoursesList.filter(c => formationSearchText(c.id, c.title, c.audience, c.detail).includes(searchCourseQuery.toLowerCase()) && !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id)).length === 0 && (
                     <div className="text-center py-8 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                       <p className="text-xs text-gray-400 font-medium">Aucune formation trouvée.</p>
                     </div>

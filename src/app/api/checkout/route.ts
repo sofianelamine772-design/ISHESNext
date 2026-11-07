@@ -8,6 +8,7 @@ import {
   isLeveledDistanceFormationSlug,
 } from '@/lib/distance-data';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { canonicalBumpSlugs, canonicalFormationSlug } from '@/lib/formation-aliases';
 import { addedFormationCharge, bumpPriceMetadataKey, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
 import {
@@ -46,12 +47,8 @@ export async function POST(req: Request) {
       body.formationId || body.planId || '',
       classIdsToCheck,
     );
-    // Anciens slugs doublons → formations remplacées
-    if (formationId === 'arabe_coran_junior' || formationId === 'arabe-coran-junior') {
-      formationId = 'arabe_enfant_distance';
-    } else if (formationId === 'sciences-islamiques') {
-      formationId = 'sciences_islamiques';
-    }
+    // Anciens slugs / alias (arabe_coran_junior, tilawa → memoriser_coran…) → formation officielle
+    formationId = canonicalFormationSlug(formationId);
 
     // --- SÉCURITÉ : BLOCAGE DES INSCRIPTIONS PRÉSENTIELLES (30 Nov - 30 Avril) ---
     const isPlanPresentiel = formationId.toLowerCase().includes('presentiel') || formationId === 'femme_debutante' || formationId === 'femme_intermediaire';
@@ -116,12 +113,8 @@ export async function POST(req: Request) {
     }
 
     const mainSlug = formationId.replace(/-/g, '_');
-    const bumpSlugs = [...new Set(
-      String(body.orderBump || '')
-        .split(',')
-        .map((slug: string) => slug.trim())
-        .filter(Boolean),
-    )].filter((slug) => slug.replace(/-/g, '_') !== mainSlug);
+    // Alias résolus + doublons retirés : « Tilawa » et « Mémorisation » = une seule formation.
+    const bumpSlugs = canonicalBumpSlugs(String(body.orderBump || '').split(','), formationId);
 
     const bumpUnitPrices: Record<string, number> = {};
     for (const slug of bumpSlugs) {

@@ -375,4 +375,37 @@ describe('Checkout API', () => {
     expect(res.status).toBe(200);
     expect(mockSessionCreate.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(48000);
   });
+
+  it('Tilawa = Mémorisation : choisir les deux ne facture qu’une seule formation (399 €, pas 798 €)', async () => {
+    mockFormation(399, 'Mémorisation du Coran', 'distanciel');
+    const res = await postCheckout({
+      formationId: 'memoriser_coran',
+      registrationType: 'adult',
+      email: 'a@example.com',
+      prenom: 'Hayette',
+      nom: 'Douis',
+      orderBump: 'tilawa',
+    });
+    expect(res.status).toBe(200);
+    const session = mockSessionCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(39900);
+    expect(session.metadata.formationId).toBe('memoriser_coran');
+    expect(session.metadata.order_bump).toBe('');
+  });
+
+  it('Tilawa choisie comme formation principale est facturée comme Mémorisation', async () => {
+    mockFormation(399, 'Mémorisation du Coran', 'distanciel');
+    const res = await postCheckout({
+      formationId: 'tilawa',
+      registrationType: 'adult',
+      email: 'a@example.com',
+      prenom: 'Hayette',
+      nom: 'Douis',
+      orderBump: 'memoriser_coran',
+    });
+    expect(res.status).toBe(200);
+    const session = mockSessionCreate.mock.calls[0][0];
+    expect(session.line_items[0].price_data.unit_amount).toBe(39900);
+    expect(session.metadata.formationId).toBe('memoriser_coran');
+  });
 });

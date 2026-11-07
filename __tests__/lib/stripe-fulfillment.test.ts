@@ -86,6 +86,7 @@ function resetDb() {
   idSeq = 0;
   table('formations').push({ id: 'f_tajwid', slug: 'tajwid_intensif', price: 649, type: 'distanciel', title: 'Tajwid Intensif' });
   table('formations').push({ id: 'f_arabe_enfant', slug: 'arabe_enfant_distance', price: 480, type: 'distanciel', title: 'Arabe enfant' });
+  table('formations').push({ id: 'f_memo', slug: 'memoriser_coran', price: 399, type: 'distanciel', title: 'Mémorisation du Coran' });
   table('classes').push({ id: 'c_tajwid', formation_id: 'f_tajwid', is_active: true, name: 'Tajwid intensif', external_id: null });
   table('classes').push({ id: 'c_101', formation_id: 'f_arabe_enfant', is_active: true, name: 'Niveau 1', external_id: 101 });
 }
@@ -207,5 +208,15 @@ describe('fulfillCheckoutSession', () => {
     expect(mockCreateInvitation).toHaveBeenCalledWith(
       expect.objectContaining({ emailAddress: 'parent@example.com', ignoreExisting: true }),
     );
+  });
+
+  it('une session « tilawa » (ancien slug) est inscrite à Mémorisation du Coran, une seule fois', async () => {
+    const s = session(
+      { id: 'cs_live_tilawa', amount_total: 39900 },
+      { formationId: 'tilawa', expected_amount: '399', order_bump: 'memoriser_coran' },
+    );
+    await fulfillCheckoutSession({ session: s, stripeAccount: 'distanciel', skipSideEffects: true });
+    expect(table('inscriptions')).toHaveLength(1);
+    expect(table('inscriptions')[0]).toMatchObject({ formation_id: 'f_memo', expected_amount: 399 });
   });
 });
