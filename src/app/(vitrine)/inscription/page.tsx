@@ -17,6 +17,7 @@ import { addedFormationCharge, getFamilyCheckoutTotal, getNamedChildren, getSibl
 import { PresentielChoicePicker, PresentielHorairePicker } from "@/components/vitrine/PresentielHorairePicker";
 import { cn } from "@/lib/utils";
 import { canonicalFormationSlug, formationSearchText } from "@/lib/formation-aliases";
+import { getActivePromoCampaign } from "@/lib/promo-campaign";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -334,6 +335,16 @@ function InscriptionForm() {
   const isSamePlan = (a: string | null, b: string) =>
     Boolean(a) && a!.replace(/-/g, "_") === b.replace(/-/g, "_");
 
+  // Cours déjà choisi (cursus principal) ou déjà ajouté : ne doit jamais réapparaître dans la liste.
+  const isScolariteEnfantPresentiel = (id: string | null) => /^enfant[-_].*presentiel$/.test(id || "");
+  const isAlreadyChosen = (id: string) =>
+    isSamePlan(planId, id) ||
+    isSamePlan(originalPlanId, id) ||
+    additionalCourses.includes(id) ||
+    // Scolarité enfants présentiel : un seul créneau possible (mercredi/samedi/dimanche)
+    ((isScolariteEnfantPresentiel(id)) &&
+      (isScolariteEnfantPresentiel(originalPlanId) || planId === "presentiel-global"));
+
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
     // Même règle que /api/checkout : réduction fratrie pour TOUTE inscription multi-enfants
@@ -357,6 +368,13 @@ function InscriptionForm() {
   const [appliedPromo, setAppliedPromo] = useState<{ code: string; discountEuros: number } | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
   const [promoChecking, setPromoChecking] = useState(false);
+  const activePromo = getActivePromoCampaign();
+
+  // Campagne promo en cours : on pré-remplit le code (la remise reste validée par Stripe).
+  useEffect(() => {
+    if (activePromo) setPromoCodeInput((prev) => prev || activePromo.code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (getPrice() < 100) {
@@ -726,7 +744,11 @@ function InscriptionForm() {
   };
 
   const levelLabel = selectedClass ? selectedClass.niveau : getLevelLabel(level);
-  const planName = (levelLabel ? levelLabel : getPlanName(originalPlanId || planId)) + (slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "");
+  const planNameBase = levelLabel ? levelLabel : getPlanName(originalPlanId || planId);
+  const slotSuffix = slot ? ` (${slot.charAt(0).toUpperCase() + slot.slice(1)})` : "";
+  const planName = slot && (planNameBase || "").toLowerCase().includes(slot.toLowerCase())
+    ? (planNameBase || "")
+    : (planNameBase || "") + slotSuffix;
   const recapAudience = (() => {
     const id = (originalPlanId || planId || "").toLowerCase();
     if (audienceParam === "enfant" || id.includes("enfant") || id === "tarbiya_islamiya" || id === "arabe_coran_junior") return "Enfant";
@@ -1089,10 +1111,10 @@ function InscriptionForm() {
 
                     <button
                       type="button"
-                      onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "", slot: "", horaire: "", classId: "" }])}
+                      onClick={() => setChildrenList([...childrenList, { prenom: "", nom: "", niveau: "", slot: childrenList[0]?.slot || (slot ? slot.toLowerCase() : ""), horaire: "", classId: "" }])}
                       className="w-full py-4 px-6 border-2 border-dashed border-gray-200 rounded-2xl text-xs font-black text-ishes-blue hover:border-ishes-blue hover:bg-ishes-blue/5 transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-sm"
                     >
-                      <span>➕</span> Inscrire un autre enfant (−50 €)
+                      <span>➕</span> <span>Inscrire un autre enfant <span className="whitespace-nowrap">(−50 €)</span></span>
                     </button>
                   </div>
                 ) : (
@@ -1393,7 +1415,7 @@ function InscriptionForm() {
                       <BookOpen className="w-5 h-5" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ishes-gold mb-1">Votre cursus</p>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ishes-gold mb-1">Votre cursus choisi</p>
                       <h3 className="text-base sm:text-lg font-black text-[#101828] leading-snug break-words">
                         {((planId === 'presentiel-global' && planName?.toLowerCase().includes('débutant') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_debutante_presentiel' || planId === 'femme-debutante-presentiel' || planId === 'debutante_presentiel') ? 'Arabe et Tajwid · adulte débutante'
                         : ((planId === 'presentiel-global' && planName?.toLowerCase().includes('interm') && planName?.toLowerCase().includes('arabe') && planName?.toLowerCase().includes('tajwid')) || planId === 'femme_intermediaire_presentiel' || planId === 'femme-intermediaire-presentiel' || planId === 'intermediaire_presentiel') ? 'Arabe et Tajwid · adulte, 2e année'
@@ -1408,7 +1430,10 @@ function InscriptionForm() {
                       </p>
                     </div>
                   </div>
-                  <p className="text-lg font-black text-ishes-blue sm:shrink-0">{getBasePriceOfPlan(planId)} €</p>
+                  <div className="flex items-center justify-between border-t border-[#e7e2d8] pt-3 sm:border-0 sm:pt-0 sm:shrink-0 sm:block">
+                    <span className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500 sm:hidden">Tarif</span>
+                    <p className="text-lg font-black text-ishes-blue">{getBasePriceOfPlan(planId)} €</p>
+                  </div>
                 </div>
 
                 {registrationType === 'child' && (
@@ -1427,12 +1452,17 @@ function InscriptionForm() {
                               <p className="text-sm font-black text-ishes-dark">{child.prenom} {child.nom}</p>
                               {planId === 'presentiel-global' ? (
                                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">
-                                  {child.slot || "Jour non défini"} • {PRESENTIEL_CLASSES.find(c => c.id.toString() === child.classId)?.niveau?.replace("Femme débutante ", "") || child.niveau || "Niveau non défini"}
+                                  {child.slot || PRESENTIEL_CLASSES.find(c => c.id.toString() === child.classId)?.jour || slot || "Jour non défini"} • {PRESENTIEL_CLASSES.find(c => c.id.toString() === child.classId)?.niveau?.replace("Femme débutante ", "") || child.niveau || "Niveau non défini"}
                                   {child.horaire && ` (${child.horaire})`}
                                 </p>
                               ) : (
                                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">
-                                  Niveau : {child.niveau || "Non défini"}
+                                  {(() => {
+                                    const cls = DISTANCE_CLASSES.find(c => c.id.toString() === child.classId);
+                                    if (cls) return `Niveau : ${cls.niveau}${cls.horaire ? ` (${cls.horaire})` : ""}`;
+                                    const lbl = getLevelLabel(child.niveau);
+                                    return `Niveau : ${lbl && lbl !== child.niveau ? lbl : (child.niveau ? child.niveau.replace(/_/g, " ") : "Non défini")}`;
+                                  })()}
                                 </p>
                               )}
                             </div>
@@ -1450,13 +1480,20 @@ function InscriptionForm() {
               </div>
 
               {/* SUGGESTION DE FORMATIONS SUPPLEMENTAIRES */}
-              <div className="bg-[#fafafa] rounded-2xl p-5 md:p-6 max-w-xl mx-auto mb-8 text-left border border-[#e7e2d8]">
-                <h3 className="text-sm font-black text-[#101828] tracking-tight">
-                  Ajouter une autre formation
-                </h3>
-                <p className="text-sm text-gray-500 font-medium mt-1 mb-5">
-                  Facultatif. Le public est indiqué sous chaque formation : adulte ou enfant.
-                </p>
+              <div className="bg-[#fafafa] rounded-2xl p-4 sm:p-5 md:p-6 w-full max-w-xl mx-auto mb-8 text-left border-2 border-ishes-blue/30 shadow-sm">
+                <div className="text-center mb-5">
+                  <p className="inline-flex items-center gap-1.5 rounded-full bg-ishes-blue/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-ishes-blue">
+                    <Plus className="w-3.5 h-3.5" /> Facultatif
+                  </p>
+                  <h3 className="mt-3 text-lg sm:text-xl font-black text-[#101828] tracking-tight">
+                    Ajouter une formation supplémentaire
+                  </h3>
+                  <p className="text-sm text-[#344054] font-medium mt-2 leading-relaxed">
+                    Votre cursus est déjà choisi : <strong>{getPlanName(originalPlanId || planId) || planName}</strong>.
+                    Vous n&apos;avez rien à re-sélectionner. Cliquez sur « Ajouter » uniquement si vous souhaitez
+                    suivre une <strong>autre</strong> formation en plus, sinon cliquez sur « Continuer ».
+                  </p>
+                </div>
 
                 <div className="relative mb-6 group">
                   <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-ishes-blue transition-colors" />
@@ -1471,7 +1508,7 @@ function InscriptionForm() {
 
                 <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
                   {distanceCoursesList
-                    .filter(c => !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id))
+                    .filter(c => !isAlreadyChosen(c.id))
                     .filter(c => formationSearchText(c.id, c.title, c.audience, c.detail).includes(searchCourseQuery.toLowerCase()))
                     .map(course => (
                       <div key={course.id} className="bg-white px-4 py-3.5 rounded-xl border border-[#e7e2d8] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -1483,10 +1520,13 @@ function InscriptionForm() {
                         <div className="flex items-center justify-between gap-3 sm:shrink-0">
                           <p className="text-sm font-bold text-[#101828]">
                             {addOnPriceLabel(course)}
+                            {course.price != null && course.price > 0 && quoteAddOn(course.id) !== course.price && namedChildren.length > 1 && (
+                              <span className="block text-[10px] font-semibold text-gray-500 normal-case">pour {namedChildren.length} enfants</span>
+                            )}
                           </p>
                           <button
                             type="button"
-                            onClick={() => setAdditionalCourses((prev) => prev.includes(course.id) ? prev : [...prev, course.id])}
+                            onClick={() => { if (!isAlreadyChosen(course.id)) setAdditionalCourses((prev) => [...prev, course.id]); }}
                             className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-lg border border-ishes-blue text-ishes-blue text-xs font-bold hover:bg-ishes-blue hover:text-white transition-colors"
                           >
                             <Plus className="w-3.5 h-3.5" /> Ajouter
@@ -1495,7 +1535,7 @@ function InscriptionForm() {
                       </div>
                     ))}
                   
-                  {distanceCoursesList.filter(c => formationSearchText(c.id, c.title, c.audience, c.detail).includes(searchCourseQuery.toLowerCase()) && !isSamePlan(planId, c.id) && !isSamePlan(originalPlanId, c.id) && !additionalCourses.includes(c.id)).length === 0 && (
+                  {distanceCoursesList.filter(c => formationSearchText(c.id, c.title, c.audience, c.detail).includes(searchCourseQuery.toLowerCase()) && !isAlreadyChosen(c.id)).length === 0 && (
                     <div className="text-center py-8 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                       <p className="text-xs text-gray-400 font-medium">Aucune formation trouvée.</p>
                     </div>
@@ -1504,7 +1544,7 @@ function InscriptionForm() {
 
                 {additionalCourses.length > 0 && (
                   <div className="mt-8 pt-6 border-t border-gray-100">
-                    <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-[0.14em] mb-3">Ajoutées à cette inscription</h4>
+                    <h4 className="text-xs font-black text-ishes-blue uppercase tracking-[0.14em] mb-3 text-center">Formations supplémentaires ajoutées ({additionalCourses.length})</h4>
                     <div className="space-y-2">
                       {additionalCourses.map(id => {
                         const course = distanceCoursesList.find(c => c.id === id);
@@ -1534,7 +1574,7 @@ function InscriptionForm() {
 
 
               {/* Action Buttons */}
-              <div className="w-full flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
+              <div className="w-full flex flex-col-reverse md:flex-row gap-3 md:gap-4 max-w-xl mx-auto">
                 <button
                   onClick={prevStep}
                   className="flex-1 bg-white border-2 border-gray-100 text-gray-500 py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:border-gray-300 transition-all"
@@ -1586,6 +1626,7 @@ function InscriptionForm() {
                     return (
                       <li key={id} className="flex items-start justify-between gap-3">
                         <span className="min-w-0">
+                          <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-ishes-blue">Formation supplémentaire</span>
                           <span className="block text-sm font-bold text-[#101828] leading-snug break-words">{course.title}</span>
                           <span className="mt-0.5 block text-[11px] font-black uppercase tracking-[0.12em] text-[#6e5730]">{course.audience}</span>
                         </span>
@@ -1677,6 +1718,11 @@ function InscriptionForm() {
                         {promoChecking ? "…" : appliedPromo ? "OK" : "Appliquer"}
                       </button>
                     </div>
+                    {activePromo && !appliedPromo && !promoError && (
+                      <p className="text-[11px] text-ishes-blue font-semibold mt-2">
+                        Offre en cours : −{activePromo.discountEuros} € avec le code {activePromo.code}. Cliquez sur « Appliquer ».
+                      </p>
+                    )}
                     {promoError && (
                       <p className="text-[11px] text-red-600 font-semibold mt-2">{promoError}</p>
                     )}
@@ -1813,7 +1859,7 @@ function InscriptionForm() {
                 </div>
 
                 <div className="flex items-start gap-3 mb-8 text-left group cursor-pointer" onClick={() => setAcceptedTerms(!acceptedTerms)}>
-                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-ishes-blue border-ishes-blue' : 'border-gray-300 bg-white group-hover:border-ishes-blue'}`}>
+                  <div className={`mt-0.5 w-5 h-5 shrink-0 rounded border-2 flex items-center justify-center transition-all ${acceptedTerms ? 'bg-ishes-blue border-ishes-blue' : 'border-gray-300 bg-white group-hover:border-ishes-blue'}`}>
                     {acceptedTerms && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <p className="text-[10px] text-gray-500 font-bold leading-relaxed">

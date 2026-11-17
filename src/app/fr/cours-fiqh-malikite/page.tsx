@@ -74,6 +74,26 @@ const FIQH_FAQS = [
       "Non. Le programme couvre la purification (tahâra, wudu, ghusl, tayammum), la prière (salât), la zakat, le jeûne du Ramadan et les règles de la 'umra et du hajj, plus une introduction aux usûl al-fiqh.",
   },
   {
+    question: "Combien coûte le cours de Fiqh mâlikite en ligne ?",
+    answer:
+      "La formation complète de 4 mois coûte 399 €, supports pédagogiques et diplôme ISHES inclus. Le paiement en plusieurs fois est possible lors de l'inscription en ligne.",
+  },
+  {
+    question: "Y a-t-il des replays si je rate un cours de fiqh ?",
+    answer:
+      "Oui. Chaque séance hebdomadaire est donnée en direct sur Zoom et enregistrée : les replays te permettent de rattraper un cours manqué ou de réviser, à ton rythme.",
+  },
+  {
+    question: "Quel diplôme obtient-on à la fin de la formation de fiqh ?",
+    answer:
+      "À l'issue du parcours, l'Institut ISHES délivre un diplôme attestant le suivi de la formation de Fiqh mâlikite (Ibn Âchir).",
+  },
+  {
+    question: "Quelle différence entre le wudû', le ghusl et le tayammum ?",
+    answer:
+      "Le wudû' (petites ablutions) purifie d'un petit état d'impureté ; le ghusl (grande ablution) d'un grand état d'impureté ; le tayammum (ablution sèche) les remplace lorsque l'eau est absente ou ne peut être utilisée. Le cours détaille chacun selon l'école malikite.",
+  },
+  {
     question: "Puis-je étudier le Fiqh mâlikite si je vis loin de Toulouse ?",
     answer:
       "Oui. Le cours est 100 % à distance. L'Institut ISHES est à Toulouse pour le présentiel d'autres formations, mais le Fiqh mâlikite se suit en ligne, partout dans le monde francophone.",
@@ -81,9 +101,9 @@ const FIQH_FAQS = [
 ];
 
 export const metadata = buildPageMetadata({
-  title: "Cours de Fiqh Mâlikite en ligne — Ibn Âchir | Droit musulman",
+  title: "Cours de Fiqh Mâlikite en ligne (Ibn Âchir)",
   description:
-    "Cours de Fiqh mâlikite en français : école de l'imam Mâlik, Matn Ibn Âchir (Al-Murshid al-Mu'în). Purification, prière, zakat, jeûne et hajj. Formation en ligne 4 mois, Institut ISHES.",
+    "Apprenez le fiqh mâlikite en français : Matn Ibn Âchir, purification, prière, zakat, jeûne, hajj. Cours en direct + replays, 4 mois, diplôme ISHES. 399 €.",
   path: "/fr/cours-fiqh-malikite",
   keywords: [
     "fiqh malikite",
@@ -106,6 +126,36 @@ export const metadata = buildPageMetadata({
     "wudu malikite",
     "fiqh des adorations",
     "sciences islamiques fiqh",
+    "cours de fiqh malikite en ligne",
+    "formation fiqh malikite",
+    "apprendre le fiqh malikite",
+    "apprendre le fiqh malikite en français",
+    "cours fiqh malikite débutant",
+    "cours de droit musulman en ligne",
+    "cours de fiqh en français",
+    "fiqh malékite",
+    "fiqh malikite pdf",
+    "rite malikite",
+    "mazhab malikite",
+    "madhhab maliki",
+    "al akhdari",
+    "mourchid al mouine",
+    "murshid al mu'in",
+    "cours ibn achir",
+    "cours matn ibn achir",
+    "fiqh de la prière malikite",
+    "pilier de la prière malikite",
+    "ablutions selon le rite malikite",
+    "tayammum malikite",
+    "ghusl malikite",
+    "zakat malikite",
+    "jeûne ramadan malikite",
+    "hajj et omra malikite",
+    "tahara fiqh",
+    "usul al fiqh",
+    "cours fiqh toulouse",
+    "cours islam en ligne diplômant",
+    "institut ishes fiqh",
   ],
   image: "/images/fiqh_students.png",
 });
@@ -149,8 +199,11 @@ export default function CoursFiqhMalikitePage() {
             "al murshid al muin",
             "école malikite",
             "cours fiqh en ligne",
+            "formation fiqh malikite",
+            "droit musulman malikite",
+            "fiqh malikite débutant",
           ],
-          wordCount: 1800,
+          wordCount: 2300,
           about: [
             "Fiqh mâlikite",
             "Imam Mâlik",
@@ -745,6 +798,57 @@ export default function CoursFiqhMalikitePage() {
               . Question de niveau ?{" "}
               <Link href="/fr/contact" className="text-ishes-blue font-bold hover:underline">
                 Contacte l&apos;équipe sur WhatsApp
+              </Link>
+              .
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              Les grands chapitres du fiqh malikite des adorations
+            </h3>
+            <ul className="list-disc space-y-2 pl-6">
+              <li>
+                <strong>La purification (tahâra)</strong> : statut des eaux, impuretés, petites ablutions
+                (<em>wudû&apos;</em>), grande ablution (<em>ghusl</em>) et ablution sèche (<em>tayammum</em>).
+              </li>
+              <li>
+                <strong>La prière (salât)</strong> : conditions, piliers, actes obligatoires, <em>sunan</em>,
+                prières surérogatoires et règles de l&apos;imamat.
+              </li>
+              <li>
+                <strong>La zakat</strong> : <em>zakat al-mâl</em>, <em>zakat al-fitr</em>, conditions et
+                bénéficiaires.
+              </li>
+              <li>
+                <strong>Le jeûne (sawm)</strong> : jeûne du Ramadan, jeûnes surérogatoires et règles
+                essentielles.
+              </li>
+              <li>
+                <strong>La &apos;umra et le hajj</strong> : rites, obligations et visite de Médine.
+              </li>
+            </ul>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-xl font-black text-ishes-dark">
+              À qui s&apos;adresse ce cours de droit musulman malikite ?
+            </h3>
+            <p>
+              Aux <strong>débutants</strong> qui veulent enfin comprendre leurs adorations, aux musulmans
+              francophones de France, de Belgique, de Suisse, du Maghreb ou du Canada, et à ceux qui ont grandi
+              dans le <strong>rite malikite</strong> sans l&apos;avoir étudié. Pour poser de bonnes bases avant ou
+              après le fiqh, découvre aussi les cours de{" "}
+              <Link href="/fr/cours-lecture-tajwid" className="text-ishes-blue font-bold hover:underline">
+                lecture et tajwid
+              </Link>
+              , de{" "}
+              <Link href="/fr/cours-sciences-coran" className="text-ishes-blue font-bold hover:underline">
+                sciences du Coran
+              </Link>{" "}
+              et d&apos;
+              <Link href="/fr/cours-arabe-adulte" className="text-ishes-blue font-bold hover:underline">
+                arabe pour adultes
               </Link>
               .
             </p>

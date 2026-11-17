@@ -87,6 +87,7 @@ function resetDb() {
   table('formations').push({ id: 'f_tajwid', slug: 'tajwid_intensif', price: 649, type: 'distanciel', title: 'Tajwid Intensif' });
   table('formations').push({ id: 'f_arabe_enfant', slug: 'arabe_enfant_distance', price: 480, type: 'distanciel', title: 'Arabe enfant' });
   table('formations').push({ id: 'f_memo', slug: 'memoriser_coran', price: 399, type: 'distanciel', title: 'Mémorisation du Coran' });
+  table('classes').push({ id: 'c_memo', formation_id: 'f_memo', is_active: true, name: 'Session Mémorisation du Coran (2026-2027)', external_id: null });
   table('classes').push({ id: 'c_tajwid', formation_id: 'f_tajwid', is_active: true, name: 'Tajwid intensif', external_id: null });
   table('classes').push({ id: 'c_101', formation_id: 'f_arabe_enfant', is_active: true, name: 'Niveau 1', external_id: 101 });
 }
@@ -218,5 +219,22 @@ describe('fulfillCheckoutSession', () => {
     await fulfillCheckoutSession({ session: s, stripeAccount: 'distanciel', skipSideEffects: true });
     expect(table('inscriptions')).toHaveLength(1);
     expect(table('inscriptions')[0]).toMatchObject({ formation_id: 'f_memo', expected_amount: 399 });
+  });
+
+  it('Mémorisation du Coran : inscrit dans l’unique classe de la formation, statut actif (pas en attente)', async () => {
+    const s = session(
+      { id: 'cs_live_memo', amount_total: 39900 },
+      { formationId: 'memoriser_coran', expected_amount: '399' },
+    );
+    await fulfillCheckoutSession({ session: s, stripeAccount: 'distanciel', skipSideEffects: true });
+    expect(table('inscriptions')).toHaveLength(1);
+    expect(table('inscriptions')[0]).toMatchObject({
+      formation_id: 'f_memo',
+      class_id: 'c_memo',
+      status: 'actif',
+      paid_status: 'paye',
+    });
+    // aucune classe « Session » supplémentaire créée au passage
+    expect(table('classes').filter((c) => c.formation_id === 'f_memo')).toHaveLength(1);
   });
 });
