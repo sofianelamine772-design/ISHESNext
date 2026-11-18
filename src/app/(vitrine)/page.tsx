@@ -402,14 +402,14 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== NEWSLETTER (compacte, avant la FAQ) ===== */}
+      <NewsletterSection />
+
       <VitrineFaq
         eyebrow="FAQ"
         title="Questions fréquentes sur l'Institut ISHES"
         items={HOME_FAQS}
       />
-
-      {/* ===== NEWSLETTER ===== */}
-      <NewsletterSection />
 
       {/* ===== RÉSEAUX SOCIAUX SECTION ===== */}
       <SocialSection />

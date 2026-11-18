@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ContactGratuitCtaGate } from "@/components/vitrine/ContactGratuitCtaGate";
 import { WhatsappButton } from "@/components/WhatsappButton";
+import { PromoPopup } from "@/components/vitrine/PromoPopup";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
@@ -21,6 +22,7 @@ export default function FrLayout({
       <ContactGratuitCtaGate />
       <Footer />
       <WhatsappButton />
+      <PromoPopup />
     </>
   );
 }

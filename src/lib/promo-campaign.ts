@@ -4,7 +4,7 @@
  * ⚠️ Le code doit AUSSI exister dans Stripe (compte distanciel) : coupon
  * `amount_off` + promotion code. Voir `scripts/create-promo-code.mjs`.
  * Le site n'applique jamais la remise lui-même : c'est /api/checkout qui
- * vérifie le code auprès de Stripe.
+ * vérifie le code auprès de Stripe. Les codes promo sont réservés au distanciel.
  */
 export type PromoCampaign = {
   /** Code saisi par le client (majuscules). */
@@ -15,23 +15,32 @@ export type PromoCampaign = {
   startsAt: string;
   /** Fin d'affichage (exclue). `null` = pas de fin programmée. */
   endsAt: string | null;
+  /** Petit badge au-dessus du titre (ex. « Rentrée 2026 »). */
+  badge: string;
   /** Texte court affiché dans le pop-up. */
   headline: string;
-  /** Précision affichée sous le code. */
+  /** Précision affichée sous le titre. */
   note: string;
+  /** Bouton principal du pop-up. */
+  ctaLabel: string;
+  /** Destination du bouton principal. */
+  ctaHref: string;
 };
 
 export const PROMO_CAMPAIGN: PromoCampaign = {
   code: 'ISHES100',
   discountEuros: 100,
-  // Minuit heure de Paris, le 20 novembre 2026
-  startsAt: '2026-11-20T00:00:00+01:00',
+  // Active dès le 18 novembre 2026 (heure de Paris), sans date de fin programmée.
+  startsAt: '2026-11-18T00:00:00+01:00',
   endsAt: null,
-  headline: '−100 € sur votre formation à distance',
-  note: 'Valable sur les formations à distance, à saisir à l’étape paiement.',
+  badge: 'Rentrée 2026',
+  headline: '−100 € sur toutes les formations à distance',
+  note: 'Arabe, Tajwid, Coran, Fiqh, Aqîda, Sîrah… en direct avec nos enseignants, depuis chez vous.',
+  ctaLabel: 'Je m’inscris maintenant',
+  ctaHref: '/fr/cours-a-distance',
 };
 
-/** Clé localStorage : le pop-up n'est montré qu'une fois par jour et par navigateur. */
+/** Clé de stockage : le pop-up n'est montré qu'une fois par visite (sessionStorage). */
 export const PROMO_POPUP_STORAGE_KEY = `ishes_promo_popup_${PROMO_CAMPAIGN.code}`;
 
 export function isPromoCampaignActive(
@@ -52,11 +61,35 @@ export function getActivePromoCampaign(now: Date = new Date()): PromoCampaign | 
   return isPromoCampaignActive(PROMO_CAMPAIGN, now) ? PROMO_CAMPAIGN : null;
 }
 
-/** Pages où le pop-up ne doit pas s'afficher (tunnel de paiement, légal). */
+/** Pages « liste » qui restent autorisées bien qu'elles commencent par /fr/cours-. */
+const FR_LISTING_PAGES = new Set(['/fr/cours-a-distance', '/fr/cours-en-presentiel']);
+
+/** Pages /fr qui sont des fiches formation sans suivre le motif /fr/cours-*. */
+const FR_FORMATION_PAGES = new Set([
+  '/fr/les-cles-du-coran',
+  '/fr/correction-fatiha',
+  '/fr/guide-tilawa-memorisation-coran',
+]);
+
+/**
+ * Le pop-up s'affiche partout (accueil compris) SAUF :
+ * - tunnel d'inscription, espace élève, connexion, pages légales ;
+ * - fiches formation détaillées (/program/<id>, /fr/cours-*, /fr/formation-*…),
+ *   où le visiteur est déjà en train de lire une formation.
+ */
 export function shouldShowPromoPopupOnPath(pathname: string | null | undefined): boolean {
-  const p = String(pathname || '/');
+  const p = String(pathname || '/').split('?')[0].replace(/\/+$/, '') || '/';
+
   if (p.startsWith('/inscription')) return false;
   if (p.startsWith('/app') || p.startsWith('/sign-in') || p.startsWith('/sign-up')) return false;
   if (p === '/cgv' || p === '/mentions-legales' || p === '/politique-de-confidentialite') return false;
+  if (p === '/unauthorized' || p === '/test-db') return false;
+
+  // Fiches formation
+  if (/^\/program\/[^/]+/.test(p)) return false;
+  if (p.startsWith('/fr/cours-') && !FR_LISTING_PAGES.has(p)) return false;
+  if (p.startsWith('/fr/formation-')) return false;
+  if (FR_FORMATION_PAGES.has(p)) return false;
+
   return true;
 }
