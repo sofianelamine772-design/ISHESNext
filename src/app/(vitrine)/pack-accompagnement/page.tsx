@@ -9,7 +9,59 @@ import {
   faqJsonLd,
   howToJsonLd,
 } from "@/lib/seo";
-import { PACK_FAQS } from "@/lib/pack-accompagnement-seo";
+
+const PACK_ACCOMPAGNEMENT_FAQS = [
+  {
+    question: "Que comprend exactement le Pack Accompagnement ISHES à 49 € par an ?",
+    answer:
+      "Le Pack Accompagnement de l’Institut ISHES comprend quatre éléments : une communauté privée active toute l’année (groupe WhatsApp avec rappels, motivation, préparation du Ramadan et échanges entre étudiants et parents), le module exclusif Les Fondamentaux de la Spiritualité, des lives mensuels privés avec les fondateurs, et un espace de questions et d’accompagnement. L’ensemble est proposé 49 € pour un an, pour une valeur annoncée de plus de 399 €.",
+  },
+  {
+    question: "Quelle différence entre suivre un cours seul et rejoindre le Pack Accompagnement ?",
+    answer:
+      "Un cours seul vous donne une heure d’enseignement par semaine, en direct, avec replays. Le Pack Accompagnement ajoute ce qui se passe entre les cours : une communauté qui vous relance quand la motivation baisse, des rappels, des lives où poser vos questions aux fondateurs et un module de spiritualité pour donner du sens à l’apprentissage. Le cours construit la connaissance ; le Pack entretient le cheminement.",
+  },
+  {
+    question: "Comment se passent les lives mensuels avec les fondateurs de l’Institut ISHES ?",
+    answer:
+      "Chaque mois, les membres du Pack Accompagnement participent à un live privé avec Oustadha Rachida et Oustadh Riad, fondateurs de l’Institut ISHES. Le format est simple : vos questions, leurs conseils, des échanges sur votre progression et vos difficultés concrètes. C’est un accès direct aux fondateurs que les cours classiques, centrés sur le programme, ne permettent pas.",
+  },
+  {
+    question: "Qu’est-ce que le module « Les Fondamentaux de la Spiritualité » inclus dans le Pack ?",
+    answer:
+      "Les Fondamentaux de la Spiritualité est un module exclusif réservé aux membres du Pack Accompagnement. Il se compose de quatre séances essentielles : purifier son intention, comprendre les niveaux de la religion et construire une progression vers Allah. Il pose le cadre spirituel dans lequel s’inscrivent ensuite l’arabe, le Tajwid, le Fiqh mâlikite ou la Tarbiya, pour que l’étude nourrisse le cœur et pas seulement la mémoire.",
+  },
+  {
+    question: "À quoi sert le groupe WhatsApp privé du Pack Accompagnement ?",
+    answer:
+      "Le groupe WhatsApp privé est le cœur de la communauté du Pack Accompagnement. On y reçoit des rappels et de la motivation, un accompagnement spécifique pour préparer le Ramadan, et l’on y échange entre étudiants et parents de l’Institut ISHES. C’est aussi là que l’on revient quand la régularité flanche : un lieu de présence tout au long de l’année, et pas seulement pendant les séances de cours.",
+  },
+  {
+    question: "Peut-on prendre le Pack Accompagnement sans être inscrit à une formation ISHES ?",
+    answer:
+      "Le Pack Accompagnement est conçu comme le complément d’un cursus : il est proposé au moment de l’inscription à une formation annuelle de l’Institut ISHES, en présentiel à Toulouse ou à distance. Le parcours est le suivant : vous choisissez une formation, vous vous inscrivez, et le Pack vous est proposé pour accompagner cette année d’étude avec la communauté, les lives et le module de spiritualité.",
+  },
+  {
+    question: "Pourquoi le Pack Accompagnement affiche-t-il une valeur de 399 € pour 49 € ?",
+    answer:
+      "La valeur de 399 € correspond à ce que représentent, pris séparément, les éléments du Pack : un module de spiritualité en quatre séances, des lives mensuels privés avec les fondateurs, une communauté animée toute l’année et un accompagnement aux questions. L’Institut ISHES le propose à 49 € par an comme un engagement symbolique : l’objectif n’est pas de vendre un produit, mais que chaque élève progresse durablement sans rester isolé.",
+  },
+  {
+    question: "Le Pack Accompagnement est-il utile pour un parent qui inscrit son enfant ?",
+    answer:
+      "Oui. Le Pack Accompagnement est ouvert aux étudiants adultes et aux parents qui inscrivent un enfant à l’Institut ISHES, en présentiel à Toulouse ou à distance. Le parent accède au groupe d’entraide, aux conseils, aux rappels et aux lives avec les fondateurs. Il bénéficie ainsi d’un soutien pour accompagner son enfant à la maison et pour son propre cheminement, dans une même communauté.",
+  },
+  {
+    question: "Combien de temps dure l’accès au Pack Accompagnement ?",
+    answer:
+      "L’accès au Pack Accompagnement dure un an, au tarif de 49 € par an. Pendant cette année, vous profitez en continu de la communauté privée, des lives mensuels avec les fondateurs, du module Les Fondamentaux de la Spiritualité et de l’accompagnement aux questions. La durée est alignée sur celle d’une formation annuelle de l’Institut ISHES, pour un soutien constant du début à la fin du cursus.",
+  },
+  {
+    question: "En quoi le Pack fait-il d’ISHES un institut de sciences religieuses en ligne plutôt qu’une plateforme de vidéos ?",
+    answer:
+      "Une plateforme vend des replays ; un institut est une présence. Le Pack Accompagnement matérialise cette différence à l’Institut ISHES : des fondateurs joignables chaque mois, une communauté qui prie pour votre réussite et répond à vos questions, un module de spiritualité et des rappels réguliers. C’est ce cadre humain, ajouté aux cours en direct et au présentiel à Toulouse, qui fait d’ISHES un institut de sciences religieuses et non un catalogue de vidéos.",
+  },
+];
 
 export default function PackAccompagnementPage() {
   return (
@@ -54,7 +106,7 @@ export default function PackAccompagnementPage() {
           ],
         })}
       />
-      <JsonLd data={faqJsonLd(PACK_FAQS)} />
+      <JsonLd data={faqJsonLd(PACK_ACCOMPAGNEMENT_FAQS)} />
       <JsonLd
         data={howToJsonLd({
           name: "Comment rejoindre un institut de science religieuse en ligne (ISHES)",
@@ -152,9 +204,10 @@ export default function PackAccompagnementPage() {
       </article>
 
       <VitrineFaq
-        eyebrow="FAQ — Institut de science religieuse en ligne"
-        title="ISHES, sciences religieuses à distance et Pack Accompagnement"
-        items={PACK_FAQS}
+        eyebrow="FAQ Pack Accompagnement"
+        title="Tout savoir sur le Pack Accompagnement ISHES"
+        intro="Contenu du pack, lives avec les fondateurs, communauté et suivi : ce qui distingue un institut de sciences religieuses en ligne d’une simple plateforme de cours."
+        items={PACK_ACCOMPAGNEMENT_FAQS}
       />
     </>
   );

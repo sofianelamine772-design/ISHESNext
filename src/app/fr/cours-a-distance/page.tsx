@@ -22,11 +22,63 @@ import {
 } from 'lucide-react';
 import { ArabicBackground } from '@/components/ArabicBackground';
 import { Button } from '@/components/ui/button';
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { faqJsonLd } from "@/lib/seo";
+
+const DISTANCE_FAQS = [
+  {
+    question: "Comment se déroule un cours d’islam à distance sur Zoom avec l’Institut ISHES ?",
+    answer:
+      "Le cours a lieu en direct sur Zoom, à heure fixe chaque semaine, avec l’enseignant à la caméra, un partage d’écran et un tableau blanc virtuel. Tu peux lever la main, poser tes questions à l’oral ou dans le chat, et l’enseignant corrige en séance. Un appel est fait en début de cours, puis la séance est enregistrée et mise en replay. Le groupe WhatsApp de la classe prend le relais toute la semaine.",
+  },
+  {
+    question: "Quelle différence entre un cours en direct sur Zoom et des vidéos préenregistrées ?",
+    answer:
+      "Un cours en direct permet d’interagir : poser une question au moment où elle se pose, se faire corriger sur sa récitation ou sa prononciation, et avancer avec un groupe au même rythme. Des vidéos préenregistrées se regardent seul, sans correction ni suivi. Chez ISHES, les cours à distance sont tous en direct, et le replay vient en complément pour réviser, pas en remplacement de la classe.",
+  },
+  {
+    question: "Peut-on revoir un cours à distance en replay pour réviser ?",
+    answer:
+      "Oui. Chaque séance en direct est enregistrée et disponible en replay. Tu peux ainsi rattraper une absence, réécouter une explication difficile ou réviser avant une évaluation, à ton rythme. Le replay complète le cours en direct : il ne remplace pas la participation, qui reste la meilleure façon de progresser en lecture du Coran, en arabe ou en sciences islamiques.",
+  },
+  {
+    question: "De quel matériel a-t-on besoin pour suivre des cours islamiques en ligne ?",
+    answer:
+      "Un ordinateur, une tablette ou un smartphone avec l’application Zoom, une connexion internet stable et, idéalement, un casque ou des écouteurs pour bien entendre la récitation suffisent. Une caméra est utile pour les corrections de lecture, et WhatsApp sert aux échanges avec la classe. Les supports de cours sont fournis par l’institut selon la formation choisie.",
+  },
+  {
+    question: "Peut-on suivre les cours à distance depuis la Belgique, la Suisse, le Canada ou le Maghreb ?",
+    answer:
+      "Oui. Les cours en ligne de l’Institut ISHES sont suivis depuis la France, la Belgique, la Suisse, le Maghreb et le Canada. Les horaires indiqués sur les fiches de formation sont ceux de la France, puisque l’institut enseigne depuis Toulouse : il suffit de convertir dans ton fuseau horaire. Pour les décalages importants, le replay permet de suivre le cours le lendemain.",
+  },
+  {
+    question: "L’assiduité est-elle contrôlée dans les cours à distance ?",
+    answer:
+      "Oui. Un appel est fait au début de chaque cours et le suivi de présence est rigoureux, pour encourager la constance, qui est la clé d’un apprentissage à distance réussi. Ce cadre n’est pas une contrainte scolaire : il aide à ne pas décrocher, et l’enseignant peut repérer rapidement un élève en difficulté et le relancer via le groupe WhatsApp.",
+  },
+  {
+    question: "Comment poser une question au professeur entre deux cours en ligne ?",
+    answer:
+      "Chaque classe à distance dispose d’un groupe WhatsApp exclusif où l’enseignant reste accessible pendant la semaine. Tu peux y poser une question sur une règle vue en cours, envoyer un audio de récitation à corriger quand la formation le prévoit, ou échanger avec tes camarades. C’est la réponse d’ISHES à l’isolement, principal risque des cours en ligne.",
+  },
+  {
+    question: "Comment fonctionnent les cours à distance pour les enfants (arabe, Tajwid) ?",
+    answer:
+      "Les enfants suivent une heure de cours en direct par semaine, le mardi ou le jeudi de 18h30 à 19h30 selon le niveau, avec Les Clés du Coran pour le Tajwid et un manuel progressif pour l’arabe. Les classes d’arabe sont limitées à 10 élèves, le replay est disponible, les parents reçoivent un suivi via WhatsApp et un certificat de fin d’année est remis aux élèves ayant validé leur niveau.",
+  },
+  {
+    question: "Les classes en ligne ISHES sont-elles limitées en nombre d’élèves ?",
+    answer:
+      "Oui. Il n’y a pas d’amphithéâtre virtuel de 200 personnes : les classes sont restreintes pour que chacun puisse participer, lire à voix haute et être corrigé. Les groupes de Coran et de Tajwid sont volontairement petits pour un suivi optimal, et les classes d’arabe pour enfants sont plafonnées à 10 élèves. Cette taille humaine est ce qui rend le distanciel aussi efficace que la classe.",
+  },
+];
 
 export default function CoursDistancePage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-ishes-blue selection:text-white pb-20">
-      
+      <JsonLd data={faqJsonLd(DISTANCE_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-white border-b border-gray-100">
         <ArabicBackground />
@@ -342,6 +394,13 @@ export default function CoursDistancePage() {
           </div>
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ cours à distance"
+        title="Cours islamiques à distance : Zoom, replays, assiduité et enfants"
+        intro="Tout ce qu’il faut savoir avant de suivre un cours d’islam en ligne avec l’Institut ISHES, en direct depuis n’importe quel pays francophone."
+        items={DISTANCE_FAQS}
+      />
 
       {/* ─── CTA SECTION ─── */}
       <section className="py-24 px-6 relative">

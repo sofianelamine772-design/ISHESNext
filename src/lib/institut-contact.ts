@@ -20,43 +20,48 @@ export const WHATSAPP_PRESENTIEL =
 
 export const INSTITUT_CONTACT_FAQS: Array<{ question: string; answer: string }> = [
   {
-    question: "L'entretien avec l'Institut ISHES est-il vraiment gratuit ?",
+    question: "Comment contacter l’Institut ISHES rapidement ?",
     answer:
-      "Oui. L'entretien d'orientation est gratuit et sans engagement. Vous pouvez poser vos questions sur l'institut, les niveaux, les horaires, le présentiel à Toulouse ou les cours à distance, puis décider sereinement d'une formation.",
+      "Le moyen le plus rapide de contacter l’Institut ISHES est WhatsApp : le 07 68 65 20 91 pour le présentiel à Toulouse, le 06 66 03 35 19 (ou le 06 86 91 13 01) pour les cours à distance. Vous pouvez aussi remplir le formulaire de cette page pour demander un entretien d’orientation gratuit. Un conseiller vous répond et vous oriente, sans engagement.",
   },
   {
-    question: "À qui s'adresse l'Institut ISHES ?",
+    question: "L’entretien d’orientation avec l’Institut ISHES est-il vraiment gratuit ?",
     answer:
-      "L'Institut ISHES est un institut de sciences religieuses en ligne et à Toulouse. Il accompagne les adultes et les enfants : langue arabe, lecture et Tajwid du Coran, Fiqh mâlikite, Aqîda, Sîrah, Tarbiya islamique et formations d'enseignants. Les familles peuvent inscrire un enfant dès le plus jeune âge ; les adultes débutants sont les bienvenus.",
+      "Oui. L’entretien d’orientation est entièrement gratuit et sans engagement. Il sert à discuter de l’Institut ISHES, des niveaux, des créneaux, du présentiel à Toulouse ou des cours à distance, et de l’inscription d’un adulte ou d’un enfant. Aucun paiement n’est demandé pour cet échange : vous décidez ensuite, sereinement, de vous inscrire ou non.",
   },
   {
-    question: "Mon enfant n'a jamais appris l'arabe : peut-il commencer ?",
+    question: "Quel numéro WhatsApp utiliser pour le présentiel à Toulouse et lequel pour les cours à distance ?",
     answer:
-      "Oui. Les parcours enfants (présentiel à Toulouse et à distance) sont conçus pour les débutants. L'équipe vous oriente selon l'âge, le jour (mercredi, samedi, dimanche) et le niveau. Un entretien gratuit permet de choisir le bon groupe avant l'inscription.",
+      "Pour les cours en présentiel à Toulouse (scolarité enfants, groupes femmes), écrivez au 07 68 65 20 91, de préférence sur WhatsApp. Pour les formations à distance (arabe, Tajwid, Fiqh mâlikite, Tarbiya, formations d’enseignants), le premier contact est le 06 66 03 35 19 et le second le 06 86 91 13 01. Choisir le bon numéro permet de parler directement à l’équipe concernée.",
   },
   {
-    question: "Quelle différence entre le présentiel à Toulouse et les cours à distance ?",
+    question: "Peut-on prendre rendez-vous pour visiter l’Institut ISHES à Toulouse ?",
     answer:
-      "Le présentiel a lieu à l'institut, 41 boulevard de Thibaud à Toulouse, en petits groupes. Le distanciel se fait en direct (Zoom), avec replays et suivi pédagogique, partout en francophonie. Les deux visent le même exigence : un enseignement clair, traditionnel et régulier.",
+      "Oui. L’espace de formation du 41 boulevard de Thibaud, à Toulouse, est ouvert sur rendez-vous. Pour réserver une visite ou rencontrer l’équipe avant d’inscrire votre enfant ou vous-même, contactez le pôle présentiel par WhatsApp au 07 68 65 20 91 ou via le formulaire de contact. La visite et l’entretien sont gratuits.",
   },
   {
-    question: "Comment choisir la formation adaptée à ma famille ?",
+    question: "Quels sont les horaires pour joindre l’Institut ISHES ?",
     answer:
-      "Indiquez-nous l'âge, le niveau (débutant ou non), le créneau souhaité et l'objectif (arabe, Coran, Tajwid, sciences islamiques). Lors de l'entretien gratuit, un conseiller ISHES vous propose le parcours le plus cohérent — plutôt que de vous laisser seul devant le catalogue.",
+      "Vous pouvez laisser un message WhatsApp à l’Institut ISHES à toute heure : les messages sont déposables 24h/24 et l’équipe y répond dès que possible. Pour l’accueil physique à Toulouse, l’institut est ouvert les jours de cours, le mercredi après-midi, le samedi et le dimanche, aux horaires détaillés sur cette page. En dehors de ces créneaux, WhatsApp reste le canal le plus simple.",
   },
   {
-    question: "Les enseignants sont-ils formés ?",
+    question: "Combien de temps faut-il pour obtenir une réponse de l’Institut ISHES ?",
     answer:
-      "Oui. ISHES forme aussi des enseignants en Tajwid et en Tarbiya Islamiyya. Les cours sont assurés par des professeurs expérimentés, avec une pédagogie adaptée aux enfants comme aux adultes, dans le cadre de l'islam traditionnel.",
+      "L’équipe de l’Institut ISHES s’efforce de répondre rapidement, de façon personnalisée. WhatsApp est le canal le plus réactif pour une question courte sur un niveau, un créneau ou une inscription. Pour une orientation complète (adulte ou enfant, Toulouse ou distance), demandez un entretien gratuit via le formulaire : un conseiller vous recontacte pour fixer un échange.",
   },
   {
-    question: "Puis-je visiter l'institut ou poser une question avant de payer ?",
+    question: "Quelle est l’adresse de l’Institut ISHES à Toulouse ?",
     answer:
-      "Oui. Contactez-nous par WhatsApp, téléphone ou via un rendez-vous Zoom de 15 minutes. Aucun paiement n'est demandé pour cette discussion. Vous pouvez aussi consulter le catalogue des formations et vous inscrire en ligne lorsque vous êtes prêt.",
+      "L’Institut ISHES se trouve au 41 boulevard de Thibaud, 31100 Toulouse. C’est là que se déroulent les cours en présentiel (scolarité enfants, groupes femmes Arabe et Tajwid). Un lien Google Maps est disponible sur cette page pour lancer l’itinéraire. Les formations à distance, elles, se suivent de chez vous, partout en francophonie.",
   },
   {
-    question: "Où se trouve l'Institut ISHES à Toulouse ?",
+    question: "Que préparer avant l’entretien pour inscrire un enfant ou un adulte ?",
     answer:
-      "L'institut est situé au 41 boulevard de Thibaud, 31100 Toulouse. Les cours présentiels ont lieu notamment le mercredi, le samedi et le dimanche. Les formations à distance restent accessibles partout.",
+      "Préparez quelques informations : l’âge de l’élève, son niveau (débutant ou non), l’objectif (arabe, lecture du Coran, Tajwid, Fiqh mâlikite, Tarbiya), le mode souhaité (présentiel à Toulouse ou distance) et vos disponibilités. Avec ces éléments, le conseiller de l’Institut ISHES vous propose directement le groupe ou la formation la plus cohérente, sans vous laisser seul devant le catalogue.",
+  },
+  {
+    question: "Peut-on faire l’entretien en visio si l’on habite loin de Toulouse ?",
+    answer:
+      "Oui. Si vous n’êtes pas à Toulouse, l’entretien d’orientation se fait à distance : échange WhatsApp ou rendez-vous Zoom d’une quinzaine de minutes avec un conseiller de l’Institut ISHES. C’est le format habituel pour les familles et les adultes de toute la francophonie qui souhaitent rejoindre une formation en ligne (arabe, Tajwid, Fiqh mâlikite, Tarbiya).",
   },
 ];

@@ -38,42 +38,52 @@ const INTENSIF_FAQS = [
   {
     question: "Qu'est-ce que le Tajwid intensif ISHES ?",
     answer:
-      "C'est un cours en ligne pour apprendre à lire le Coran avec les règles du Tajwid en 3 mois (12 semaines). Deux séances par semaine, le mardi et le vendredi à 19h30, en direct sur Zoom, avec replays, corrections audio individuelles et le support Les Clés du Coran (volumes 1 et 2). Le diplôme ISHES est remis en fin de parcours validé.",
+      "C'est un cours de Tajwid accéléré en ligne pour apprendre à lire le Coran avec les règles de récitation en 3 mois, soit 12 semaines. Deux séances par semaine, le mardi et le vendredi à 19h30, en direct sur Zoom, avec replays, corrections audio individuelles et le support Les Clés du Coran, volumes 1 et 2. Le diplôme de l'Institut ISHES est remis en fin de parcours validé.",
   },
   {
-    question: "Peut-on suivre le Tajwid intensif sans savoir lire l'arabe ?",
+    question: "Le Tajwid intensif est-il trop rapide pour un débutant complet ?",
     answer:
-      "Oui. Aucun prérequis n'est exigé. Le premier module part de l'alphabet, des voyelles et de la lecture pas à pas, puis applique les règles sur des phrases et des petites sourates. Le cours accueille aussi celles et ceux qui lisent déjà et veulent reprendre les bases proprement.",
+      "Non, à condition d'être motivé et régulier. Aucun prérequis n'est exigé : le premier module part de l'alphabet, des voyelles et du tahajjî, puis applique les règles sur des phrases et des petites sourates. Le rythme de deux soirs par semaine évite d'oublier une règle entre deux cours. Le format convient aussi à ceux qui lisent déjà et veulent comprendre enfin les signes du Moushaf.",
   },
   {
     question: "Quelle est la différence entre le Tajwid intensif et le Tajwid standard ?",
     answer:
-      "Le support est le même : Les Clés du Coran, adaptation francophone inspirée de Nour Al Bayan. Le Tajwid standard avance à raison d'une heure par semaine, sur deux années scolaires. Le Tajwid intensif condense le parcours en 12 semaines, avec deux cours par semaine et des corrections audio individuelles. Les deux mènent au diplôme ISHES.",
+      "Le savoir et le support sont identiques : Les Clés du Coran, adaptation francophone inspirée de Nour Al Bayan. Le Tajwid standard avance à raison d'une heure par semaine, sur deux années scolaires. Le Tajwid intensif condense le parcours en 12 semaines, avec deux cours par semaine et des corrections audio individuelles en plus. Les deux formats mènent au même diplôme ISHES.",
   },
   {
     question: "Quels sont les horaires du cours de Tajwid intensif ?",
     answer:
-      "À partir de janvier 2027, le mardi et le vendredi à 19h30, une heure par séance, en direct sur Zoom. Si tu rates un cours, le replay reste disponible. Le cursus dure 3 mois.",
+      "À partir de janvier 2027, le mardi et le vendredi à 19h30, une heure par séance, en direct sur Zoom. Si tu rates un cours, le replay reste disponible pour réviser entre le mardi et le vendredi. Le cursus complet dure 3 mois.",
+  },
+  {
+    question: "Combien d'heures par semaine faut-il prévoir pour le Tajwid intensif ?",
+    answer:
+      "Deux heures de cours en direct par semaine, le mardi et le vendredi soir, auxquelles s'ajoute un temps personnel de lecture et d'exercices avec Les Clés du Coran, puis l'envoi de tes audios à l'enseignant. Le format intensif demande de la régularité sur 12 semaines, mais il reste pensé pour des adultes qui travaillent : les séances ont lieu à 19h30 et les replays rattrapent une absence.",
   },
   {
     question: "Le support Les Clés du Coran est-il inclus ?",
     answer:
-      "Oui. Les volumes 1 et 2 sont inclus. Le volume 1 construit la lecture (alphabet, harakât, tahajjî). Le volume 2 porte les règles du Tajwid, les symboles du Moushaf et un poème didactique en français pour mémoriser les règles. Une fiche pratique détaille la méthode.",
+      "Oui. Les volumes 1 et 2 sont inclus dans le tarif. Le volume 1 construit la lecture (alphabet, harakât, tahajjî). Le volume 2 porte les règles du Tajwid, les symboles du Moushaf et un poème didactique en français pour mémoriser les règles. Une fiche pratique gratuite détaille la méthode sur le site de l'Institut ISHES.",
   },
   {
     question: "Comment se passent les corrections audio ?",
     answer:
-      "Tu envoies ta lecture, l'enseignant te renvoie une correction audio individuelle : une lettre mal articulée, une ghounna, un prolongement. Le direct sert à expliquer et à pratiquer ; l'audio sert à corriger ta voix entre les séances.",
+      "Tu envoies ta lecture enregistrée, l'enseignant te renvoie une correction audio individuelle : une lettre mal articulée, une ghounna trop courte, un prolongement faux. Le direct sur Zoom sert à expliquer et à pratiquer en groupe ; l'audio sert à corriger ta propre voix entre les séances. C'est ce qui distingue le format intensif du cursus classique.",
+  },
+  {
+    question: "Est-il réaliste d'apprendre à lire le Coran en 3 mois ?",
+    answer:
+      "Oui, pour l'objectif fixé par le cours : reconnaître les lettres, les voyelles et les signes de lecture, lire des mots puis des passages sans transcription phonétique, et repérer les règles essentielles du Tajwid dans le Moushaf. La fluidité parfaite vient ensuite avec la pratique. L'intensif donne la méthode, les règles et les corrections ; la régularité de l'élève fait le reste.",
   },
   {
     question: "Quel est le tarif du Tajwid intensif ?",
     answer:
-      "649 € pour les 3 mois : deux cours par semaine, replays, corrections audio, Les Clés du Coran volumes 1 et 2, suivi et diplôme ISHES. Paiement en plusieurs fois, sans frais.",
+      "649 € pour les 3 mois : deux cours par semaine en direct, replays, corrections audio individuelles, Les Clés du Coran volumes 1 et 2, suivi par un enseignant qualifié et diplôme ISHES. Le paiement se fait en plusieurs fois, sans frais. Le cours se suit depuis la France, la Belgique, la Suisse, le Maghreb ou le Canada.",
   },
   {
-    question: "Le diplôme est-il remis à la fin ?",
+    question: "Le diplôme du Tajwid intensif a-t-il la même valeur que celui du cursus sur deux ans ?",
     answer:
-      "Oui. L'Institut ISHES remet un diplôme aux élèves qui ont validé le parcours de 3 mois.",
+      "Oui. L'Institut ISHES remet le même diplôme aux élèves qui ont validé le parcours, qu'ils l'aient suivi en 12 semaines ou sur deux années scolaires. Le contenu enseigné et le support sont identiques ; seul le rythme change. Le diplôme atteste la connaissance des règles du Tajwid et leur application dans la lecture du Moushaf.",
   },
 ];
 
@@ -602,6 +612,7 @@ export default function CoursTajwidIntensifPage() {
       <VitrineFaq
         eyebrow="FAQ Tajwid intensif"
         title="Questions fréquentes : 3 mois, débutants, corrections audio"
+        intro="Rythme, niveau requis, différence avec le Tajwid standard et tarif du cours de Tajwid accéléré en ligne."
         items={INTENSIF_FAQS}
       />
 

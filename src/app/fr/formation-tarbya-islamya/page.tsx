@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -37,13 +39,62 @@ export const metadata: Metadata = {
   keywords: "éducation islamique enfant, tarbiya islamiya, cours islam junior, adab enfant, ishes toulouse"
 };
 
+const TARBIYA_FAQS = [
+  {
+    question: "Qu’est-ce que la Tarbiya Islamiyya pour les enfants ?",
+    answer:
+      "La Tarbiya Islamiyya est l’éducation islamique du cœur et du comportement : apprendre à l’enfant à connaître et aimer Allah et Son Messager ﷺ, à comprendre les piliers de l’islam et de la foi, à connaître les histoires des Prophètes et à adopter un bon comportement (adab) au quotidien. À l’Institut ISHES, ce cours en ligne s’appuie sur le Coran et la Sunna, avec une pédagogie faite de récits, de jeux et de mises en scène.",
+  },
+  {
+    question: "À partir de quel âge un enfant peut-il suivre le cours de Tarbiya Islamiyya en ligne ?",
+    answer:
+      "À partir de 6 ans. Les enfants sont répartis en groupes adaptés selon les âges et les niveaux, pour que les récits, les échanges et les activités correspondent à leur compréhension. Aucune connaissance préalable n’est demandée : le cours construit progressivement la personnalité musulmane de l’enfant sur 8 mois, à raison d’une séance par semaine.",
+  },
+  {
+    question: "Que signifie « préserver la Fitra » dans l’éducation islamique de l’enfant ?",
+    answer:
+      "La Fitra est la disposition naturelle et pure qu’Allah a placée dans le cœur de chaque enfant. Dans un monde saturé de distractions, la Tarbiya Islamiyya cherche à préserver cette pureté plutôt qu’à la laisser s’éroder : nourrir l’amour d’Allah, apprendre à Le craindre et à Le satisfaire, et aider l’enfant à construire une relation saine avec son Créateur, avant même d’accumuler des connaissances.",
+  },
+  {
+    question: "Quel est le programme du cours d’éducation islamique pour enfants ISHES ?",
+    answer:
+      "Le programme complet et progressif couvre l’aqîda adaptée aux enfants, les piliers de l’islam et de la foi, les histoires des Prophètes, les bonnes actions et le bon comportement (adab), les invocations et le dhikr, avec des révisions et des évaluations régulières. Chaque thème est abordé par des récits vivants, des échanges et des mises en scène pour que l’enfant comprenne et retienne.",
+  },
+  {
+    question: "Comment se déroule le cours de Tarbiya Islamiyya à distance ?",
+    answer:
+      "Le cours a lieu une fois par semaine, le lundi à 18h30, en direct sur Zoom, à partir d’octobre 2026, pendant 8 mois. Les replays sont accessibles à vie, ce qui permet de rattraper une séance manquée, et chaque classe dispose d’un groupe WhatsApp privé pour le suivi avec l’enseignante. Les enfants participent activement : questions, jeux, récits et activités interactives.",
+  },
+  {
+    question: "Combien coûte la formation Tarbiya Islamiyya et peut-on payer en plusieurs fois ?",
+    answer:
+      "La formation complète de 8 mois coûte 399 €, payables en une fois ou en 5 fois 79,80 € sans frais, avec un paiement 100 % sécurisé en ligne. Ce tarif inclut les cours en direct, les replays à vie, le suivi WhatsApp et les évaluations. L’inscription se fait directement sur le site, en choisissant le plan Tarbiya Islamiyya pour enfant.",
+  },
+  {
+    question: "Comment les parents suivent-ils la progression de leur enfant en Tarbiya ?",
+    answer:
+      "Par le groupe WhatsApp privé de la classe, où l’enseignante partage le suivi, et par les évaluations régulières qui ponctuent le programme. Les parents peuvent aussi revoir les replays avec leur enfant pour prolonger le cours à la maison. L’accompagnement est pensé pour être bienveillant et motivant, afin que l’enfant progresse sereinement et prenne plaisir à apprendre sa religion.",
+  },
+  {
+    question: "Quelle différence entre la Tarbiya Islamiyya et un cours d’arabe ou de Tajwid pour enfant ?",
+    answer:
+      "Le cours d’arabe apprend la langue, le Tajwid apprend à lire et réciter le Coran. La Tarbiya Islamiyya, elle, éduque le cœur et le comportement : croyance, amour d’Allah, histoires des Prophètes, adab et invocations, enseignés en français. Les trois se complètent : beaucoup de familles ISHES associent la Tarbiya du lundi à un cours de Tajwid ou d’arabe le mardi ou le jeudi.",
+  },
+  {
+    question: "Qui enseigne le cours de Tarbiya Islamiyya en ligne ?",
+    answer:
+      "Une professeure diplômée en sciences islamiques, titulaire d’une ijaza dans la méthode Nour Al Bayan et formée au Caire, expérimentée dans la pédagogie de l’enfant. Son enseignement est basé sur le Coran et la Sunna et s’appuie sur des récits vivants, des exemples concrets du quotidien et un cadre éducatif positif, pour faire aimer la religion et donner envie de progresser.",
+  },
+];
+
 export default function FormationTarbyaPage() {
   const course = PROGRAMS_DATA["tarbiya_islamiya"];
   const videoUrl = course?.videoUrl;
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd data={faqJsonLd(TARBIYA_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -264,6 +315,13 @@ export default function FormationTarbyaPage() {
           </div>
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ Tarbiya Islamiyya"
+        title="Éducation islamique des enfants en ligne : âge, programme, Fitra et parents"
+        intro="Les questions des parents avant d’inscrire leur enfant au cours de Tarbiya Islamiyya à distance de l’Institut ISHES."
+        items={TARBIYA_FAQS}
+      />
 
       {/* ─── PRICING BANNER ─── */}
       <section className="py-8 px-6 max-w-[80rem] mx-auto mb-10">

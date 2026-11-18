@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl, courseJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { absoluteUrl, courseJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -23,6 +24,54 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+
+const ARABE_ADULTE_FAQS = [
+  {
+    question: "Peut-on apprendre l’arabe à l’âge adulte en partant de zéro ?",
+    answer:
+      "Oui. Le cours d’arabe adulte de l’Institut ISHES commence par l’alphabet et s’adresse aux grands débutants francophones. Aucune connaissance préalable n’est demandée : chaque étape, de la reconnaissance des lettres à la lecture puis à la conversation, est pensée pour un adulte qui n’a jamais étudié la langue. La progression est régulière, en direct sur Zoom, avec des replays pour réviser entre deux séances.",
+  },
+  {
+    question: "Combien de temps faut-il pour apprendre l’arabe littéraire avec ce cours ?",
+    answer:
+      "La formation d’arabe littéraire pour adultes dure 8 mois, à raison d’un cours en direct par semaine. Sur cette période, l’objectif est de passer de l’alphabet à la lecture fluide, à l’écriture et à la compréhension de phrases du quotidien et de textes simples. La maîtrise complète de la langue demande plusieurs années ; ce parcours pose des bases solides et l’autonomie nécessaire pour continuer ensuite.",
+  },
+  {
+    question: "Quel jour et à quelle heure a lieu le cours d’arabe adulte en ligne ?",
+    answer:
+      "Le cours a lieu le vendredi à 19h30, en direct sur Zoom, pour les frères, à partir de janvier 2027. Chaque séance est enregistrée : si tu ne peux pas être présent, le replay reste accessible pendant toute la formation. Les supports (manuel PDF, exercices, audios et vidéos) sont consultables à tout moment, et un groupe WhatsApp privé par classe prolonge l’échange entre deux vendredis.",
+  },
+  {
+    question: "Quelle différence entre arabe littéraire et arabe dialectal : lequel apprend-on ici ?",
+    answer:
+      "Le cours enseigne l’arabe littéraire (al-fusha), la langue du Coran, des hadiths et des livres de sciences islamiques, comprise dans tout le monde arabe. Les dialectes (marocain, algérien, égyptien…) varient d’un pays à l’autre et ne permettent pas de lire les textes religieux. En apprenant l’arabe littéraire, tu accèdes directement aux sources et tu comprends ensuite plus facilement n’importe quel dialecte.",
+  },
+  {
+    question: "Faut-il apprendre l’arabe pour comprendre le Coran ?",
+    answer:
+      "Comprendre le Coran dans sa langue d’origine change profondément la lecture et la prière. Une traduction reste une interprétation ; l’arabe permet de saisir le sens des versets, des invocations et des hadiths sans intermédiaire. C’est précisément l’objectif du cours d’arabe adulte de l’Institut ISHES : donner aux francophones une autonomie progressive face aux textes religieux, en reliant chaque notion de vocabulaire et de grammaire à des exemples concrets.",
+  },
+  {
+    question: "Le cours d’arabe pour adultes aborde-t-il la grammaire et l’expression orale ?",
+    answer:
+      "Oui, les deux. Les séances travaillent la lecture, l’écriture, la compréhension et l’expression orale à travers des exercices concrets et des mises en situation du quotidien. Les notions de grammaire sont introduites progressivement, au service de la compréhension, et non comme une liste de règles abstraites. L’objectif est de pouvoir comprendre et parler arabe dans des situations courantes tout en accédant aux textes.",
+  },
+  {
+    question: "Combien coûte le cours d’arabe en ligne pour adulte et peut-on payer en plusieurs fois ?",
+    answer:
+      "Le tarif de la formation d’arabe adulte est de 649 € pour les 8 mois, avec la possibilité de régler en 5 fois 129,80 € sans frais. Le prix inclut les cours en direct sur Zoom, les replays, le manuel pédagogique en PDF, les supports et exercices, les enregistrements audio et vidéo, le suivi pédagogique et le diplôme ISHES en fin de parcours. Le paiement en ligne est sécurisé.",
+  },
+  {
+    question: "Peut-on suivre ce cours d’arabe depuis Toulouse ou ailleurs en France ?",
+    answer:
+      "Oui. Le cours d’arabe adulte se suit entièrement à distance, en direct sur Zoom, depuis Toulouse comme depuis n’importe quelle ville de France, de Belgique, de Suisse ou d’ailleurs. L’Institut ISHES est basé à Toulouse et y propose aussi des cours en présentiel ; cette formation d’arabe littéraire pour adultes, elle, est pensée pour être accessible à tous les francophones, où qu’ils vivent.",
+  },
+  {
+    question: "Que reçoit-on à la fin de la formation d’arabe littéraire ISHES ?",
+    answer:
+      "Les élèves qui valident le parcours reçoivent le diplôme de l’Institut ISHES. Au-delà du diplôme, l’objectif concret est de savoir lire et écrire l’arabe avec aisance, de comprendre des textes simples et des passages du Coran, et d’échanger en arabe littéraire dans des situations courantes. Le suivi pédagogique tout au long des 8 mois et le groupe WhatsApp de classe aident à ne pas décrocher.",
+  },
+];
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-arabe-adulte") },
@@ -60,6 +109,7 @@ export default function CoursArabeAdultePage() {
           { name: "Arabe Adulte", path: "/fr/cours-arabe-adulte" },
         ])}
       />
+      <JsonLd data={faqJsonLd(ARABE_ADULTE_FAQS)} />
 
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
@@ -282,10 +332,17 @@ export default function CoursArabeAdultePage() {
         </div>
       </section>
 
+      <VitrineFaq
+        eyebrow="FAQ Arabe adulte"
+        title="Questions fréquentes sur le cours d’arabe pour adultes en ligne"
+        intro="Apprendre l’arabe littéraire à l’âge adulte, de l’alphabet à la compréhension du Coran : horaires, durée, tarif et méthode."
+        items={ARABE_ADULTE_FAQS}
+      />
+
       {/* ─── PRICING BANNER ─── */}
       <section className="py-8 px-6 max-w-[80rem] mx-auto mb-10">
         <div className="bg-ishes-dark rounded-[2rem] p-6 md:p-8 shadow-2xl text-white relative overflow-hidden flex flex-wrap md:flex-nowrap items-center gap-6 justify-between">
-          
+
           <div className="flex items-center gap-4 border-r border-white/20 pr-8 md:pr-16">
             <Tag className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>

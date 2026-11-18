@@ -44,22 +44,47 @@ const CIV_FAQS = [
   {
     question: "Qu'est-ce que la civilisation arabo-musulmane ?",
     answer:
-      "C'est un vaste ensemble historique, culturel, scientifique et artistique, développé dans les sociétés marquées par l'islam, où l'arabe a joué un rôle central. Elle n'est pas exclusivement arabe ni uniquement musulmane : Persans, Berbères, Turcs, savants d'Asie centrale, chrétiens et juifs y ont contribué.",
+      "C'est un vaste ensemble historique, culturel, scientifique et artistique, développé dans les sociétés marquées par l'islam, où la langue arabe a joué un rôle central. Elle n'est pas exclusivement arabe ni uniquement musulmane : Persans, Berbères, Turcs, savants d'Asie centrale, chrétiens et juifs y ont contribué. De l'Arabie à l'Andalousie, elle a fait rayonner le savoir, la science, l'art et la sagesse pendant plusieurs siècles.",
   },
   {
-    question: "Quelles sont les grandes périodes de cette civilisation ?",
+    question: "Qu'appelle-t-on l'âge d'or de l'islam et quand a-t-il eu lieu ?",
     answer:
-      "Arabie préislamique, naissance de l'islam (610–632), premiers califats, Omeyyades (Damas), Abbassides (Bagdad et l'âge d'or), grandes dynasties (Xe–XVe s.), puis l'héritage dans le monde moderne.",
+      "L'âge d'or désigne surtout la période du califat abbasside (750–1258), lorsque Bagdad et sa Maison de la Sagesse rassemblent traducteurs, mathématiciens, médecins et astronomes. Il se prolonge dans les grandes dynasties du Xe au XVe siècle, de Cordoue au Caire et de Fès à Samarcande. C'est l'époque d'Al-Khwārizmī, d'Ibn Sīnā, d'Ibn al-Haytham, puis d'Averroès et d'Ibn Khaldūn, que le cours ISHES étudie en détail.",
   },
   {
-    question: "Qui sont les savants étudiés dans le cours ISHES ?",
+    question: "Quelles sont les grandes périodes de la civilisation arabo-musulmane ?",
     answer:
-      "Parmi d'autres : Al-Khwārizmī (algèbre), Ibn Sīnā (médecine), Al-Rāzī, Ibn al-Haytham (optique), Al-Bīrūnī, Ibn Khaldūn, Al-Idrīsī, Ibn Rushd (Averroès) et Al-Zahrāwī (chirurgie). Chaque nom a une mini-biographie sur ishes.fr.",
+      "Le cours suit sept étapes : l'Arabie avant l'islam (jusqu'en 610), la naissance de l'islam (610–632), les premiers califats (632–661), le califat omeyyade de Damas (661–750), le califat abbasside de Bagdad et l'âge d'or (750–1258), les grandes dynasties du Xe au XVe siècle (Seldjoukides, Mamelouks, Almohades, Nasrides), puis l'héritage et l'influence dans le monde moderne.",
   },
   {
-    question: "La formation est-elle en ligne ?",
+    question: "Quel rôle a joué la Maison de la Sagesse de Bagdad ?",
     answer:
-      "Oui. Cours en direct le mercredi 20h–21h, replays, supports, module de 4 à 5 mois. Tarif 349 €. Inscription en ligne. Un entretien WhatsApp est possible via la page contact.",
+      "La Bayt al-Hikma, fondée sous les Abbassides, a été le grand centre de traduction et de recherche de l'âge d'or : on y traduisait le grec, le sanskrit et le persan, on y vérifiait les tables astronomiques et le calife finançait le savoir comme un outil d'État. C'est là qu'Al-Khwārizmī a composé son traité d'algèbre. Le cours de civilisation arabo-musulmane montre comment ce modèle de bibliothèques, de madrasas et d'hôpitaux s'est diffusé.",
+  },
+  {
+    question: "Comment les savoirs arabo-musulmans ont-ils été transmis à l'Europe ?",
+    answer:
+      "Principalement par des traductions latines à partir du XIIe siècle, via l'Espagne et la Sicile normande : l'algèbre d'Al-Khwārizmī, le Canon d'Avicenne, l'optique d'Alhazen, la chirurgie d'Abulcasis et les commentaires d'Averroès sont devenus des manuels des universités d'Occident, parfois jusqu'à la Renaissance. Cette transmission vers l'Occident est l'une des thématiques du cours, avec les échanges entre Bagdad, Cordoue et Damas.",
+  },
+  {
+    question: "Qui sont les savants étudiés dans le cours de civilisation arabo-musulmane ISHES ?",
+    answer:
+      "Neuf figures servent de fil conducteur : Al-Khwārizmī (algèbre), Ibn Sīnā ou Avicenne (médecine), Al-Rāzī (hôpitaux), Ibn al-Haytham (optique), Al-Bīrūnī (astronomie, Inde), Ibn Khaldūn (histoire), Al-Idrīsī (cartographie), Ibn Rushd ou Averroès (philosophie et droit mâlikite) et Al-Zahrāwī (chirurgie). Chacun a une mini-biographie sur ishes.fr, et le cours les replace dans leur ville, leur époque et leur réseau.",
+  },
+  {
+    question: "Comment se déroule le cours de civilisation arabo-musulmane en ligne ?",
+    answer:
+      "Le module dure 4 à 5 mois, à partir de janvier 2027, avec un cours par semaine le mercredi de 20h à 21h, en direct sur Zoom. Les replays et tous les supports sont inclus, et un groupe WhatsApp privé permet d'échanger entre les séances. L'approche est culturelle et historique : histoire, sciences, philosophie, arts, architecture, échanges interculturels et héritage contemporain.",
+  },
+  {
+    question: "Combien coûte le cours de civilisation arabo-musulmane et quand commence-t-il ?",
+    answer:
+      "Le module coûte 349 € en paiement unique sécurisé, pour 4 à 5 mois de cours, replays et supports inclus. La première session démarre en janvier 2027 et l'inscription se fait immédiatement en ligne. Pour une question avant de s'inscrire, un échange WhatsApp est possible via la page contact de l'Institut ISHES.",
+  },
+  {
+    question: "Faut-il être étudiant en histoire pour suivre le cours de civilisation arabo-musulmane ?",
+    answer:
+      "Non. Le cours s'adresse à toute personne qui souhaite connaître l'âge d'or, découvrir les savants qui ont révolutionné les sciences, comprendre comment l'islam a influencé le monde contemporain et renouer avec un héritage intellectuel et spirituel. Il est donné en français, à un rythme d'une heure par semaine, avec des supports clairs et une pédagogie accessible, sans prérequis universitaire.",
   },
 ];
 
@@ -492,7 +517,8 @@ export default function CivilisationPage() {
 
       <VitrineFaq
         eyebrow="FAQ civilisation arabo-musulmane"
-        title="Questions fréquentes sur l'histoire, les savants et le cours"
+        title="Civilisation arabo-musulmane : âge d'or, périodes, transmission et cours en ligne"
+        intro="Les questions les plus fréquentes sur l'histoire de la civilisation arabo-musulmane et sur le cours en ligne de l'Institut ISHES."
         items={CIV_FAQS}
       />
 

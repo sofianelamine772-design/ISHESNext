@@ -5,7 +5,7 @@
  *   STRIPE_SECRET_KEY=sk_live_… node scripts/create-promo-code.mjs
  *
  * Options :
- *   --code=ISHES100        code (défaut : ISHES100)
+ *   --code=ISHES2026       code (défaut : ISHES2026)
  *   --amount=100           remise en euros (défaut : 100)
  *   --expires=2026-12-01   date d'expiration du code (optionnel, heure de Paris)
  *   --allow-test           autorise une clé sk_test_ (sinon refusé)
@@ -21,7 +21,7 @@ const args = Object.fromEntries(
   }),
 );
 
-const code = String(args.code || 'ISHES100').trim().toUpperCase();
+const code = String(args.code || 'ISHES2026').trim().toUpperCase();
 const amountEuros = Number(args.amount || 100);
 const key = process.env.STRIPE_SECRET_KEY || '';
 

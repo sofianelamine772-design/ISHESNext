@@ -4,11 +4,58 @@ import { motion } from "framer-motion";
 import { Sparkles, BookOpen, Heart, Mail, ShieldCheck, ChevronRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { faqJsonLd } from "@/lib/seo";
+
+const CONSEIL_SPIRITUALITE_FAQS = [
+  {
+    question: "Comment poser une question de spiritualité musulmane à un enseignant de l’Institut ISHES ?",
+    answer:
+      "Il suffit de passer par la page de contact de l’Institut ISHES et d’exposer votre interrogation. Votre demande est transmise aux enseignants en spiritualité musulmane, qui vous répondent pour vous orienter dans votre cheminement. Vous pouvez formuler une question précise ou décrire plus largement une difficulté : doute, perte de sens, pratique à structurer. Aucune connaissance préalable n’est requise pour écrire.",
+  },
+  {
+    question: "Demander un conseil spirituel à l’Institut ISHES est-il gratuit ?",
+    answer:
+      "La prise de contact avec l’Institut ISHES est gratuite et sans engagement. Vous écrivez via la page de contact, un enseignant en spiritualité prend connaissance de votre demande et vous oriente. Il ne s’agit ni d’une inscription à une formation ni d’un engagement : si vous souhaitez ensuite approfondir avec un cursus (Tarbiya islamique, Fiqh mâlikite), l’équipe vous l’indique, mais rien n’est imposé.",
+  },
+  {
+    question: "Mes questions de spiritualité restent-elles confidentielles ?",
+    answer:
+      "Oui. Toutes les interrogations adressées aux enseignants de l’Institut ISHES sont traitées avec la plus grande discrétion. Les enseignants respectent une charte éthique de confidentialité pour chaque personne accompagnée. Les informations transmises servent uniquement à répondre à votre demande : elles ne sont ni utilisées ni transmises à des fins de démarchage commercial.",
+  },
+  {
+    question: "Quelles questions peut-on poser à un conseiller en spiritualité islamique ?",
+    answer:
+      "Toute question liée au cheminement intérieur : mieux comprendre les fondements de l’islam, saisir le sens profond des adorations (prière, jeûne, invocation), donner du sens à sa pratique quotidienne, traverser une période de doute ou de baisse de motivation, ou simplement savoir par où commencer pour approfondir sa foi. Les enseignants de l’Institut ISHES répondent avec bienveillance et savoir, sans jugement.",
+  },
+  {
+    question: "Peut-on demander conseil en spiritualité quand on débute ou que l’on a des doutes ?",
+    answer:
+      "Oui, c’est même l’une des raisons d’être de cet accompagnement. La spiritualité musulmane est un voyage personnel qui nécessite parfois un éclairage extérieur. À l’Institut ISHES, chaque question mérite une réponse empreinte de bienveillance : celle d’un débutant qui structure sa pratique comme celle d’un pratiquant confronté à des doutes ou à une recherche de profondeur.",
+  },
+  {
+    question: "Un conseil spirituel ISHES remplace-t-il un cours de Fiqh ou de sciences islamiques ?",
+    answer:
+      "Non. Le conseil spirituel aide à mettre des mots sur un ressenti et à ajuster sa pratique de manière équilibrée ; il ne remplace pas l’étude structurée. Pour les règles détaillées des adorations, l’Institut ISHES propose un cours de Fiqh mâlikite ; pour l’éducation du cœur, la formation de Tarbiya islamique. Le conseil ponctuel et le cursus se complètent : l’un éclaire, l’autre construit.",
+  },
+  {
+    question: "Pourquoi demander conseil à un enseignant plutôt que chercher seul sur internet ?",
+    answer:
+      "Parce qu’un interlocuteur formé replace votre question dans votre situation réelle, là où une recherche en ligne renvoie des réponses contradictoires et hors contexte. Le cheminement spirituel est un processus continu : avoir un enseignant de l’Institut ISHES comme repère permet d’ajuster sa pratique de façon équilibrée et authentique, en évitant à la fois le relâchement et l’excès.",
+  },
+  {
+    question: "Comment approfondir sa spiritualité musulmane au-delà d’un conseil ponctuel ?",
+    answer:
+      "L’Institut ISHES propose plusieurs prolongements : la formation de Tarbiya islamique (purification de l’âme, bon comportement), le module Les Fondamentaux de la Spiritualité inclus dans le Pack Accompagnement, les lives avec les fondateurs et les rappels publiés sur la chaîne YouTube de l’institut. Le conseiller peut vous indiquer, selon votre situation, par quelle étape commencer.",
+  },
+];
 
 export default function ConseilSpiritualitePage() {
   return (
     <div className="min-h-screen bg-[#fafafc] font-sans selection:bg-ishes-blue selection:text-white pb-32">
-      
+      <JsonLd data={faqJsonLd(CONSEIL_SPIRITUALITE_FAQS)} />
+
       {/* --- HERO SECTION --- */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white">
         <ArabicBackground />
@@ -139,6 +186,13 @@ export default function ConseilSpiritualitePage() {
           </div>
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ Conseil spirituel"
+        title="Questions sur l'accompagnement spirituel de l'Institut ISHES"
+        intro="Comment demander conseil à un enseignant en spiritualité musulmane, dans quel cadre, et avec quelle confidentialité."
+        items={CONSEIL_SPIRITUALITE_FAQS}
+      />
 
     </div>
   );

@@ -28,44 +28,6 @@ export const SCIENCES_GUIDE_DISCIPLINES: [string, string][] = [
   ["Langue arabe / balâgha", "Grammaire, lexique et rhétorique indispensables à une lecture approfondie."],
 ];
 
-export const SCIENCES_GUIDE_FAQS = [
-  {
-    question: "Que sont les Sciences du Coran (‘Ulûm al-Qur'ân) ?",
-    answer:
-      "Les Sciences du Coran regroupent les disciplines qui étudient la Révélation : contexte, déroulement, transmission, lectures (qirâ'ât), organisation du texte et méthodes d'interprétation. Ce n'est pas une science unique mais un ensemble complémentaire.",
-  },
-  {
-    question: "Les Sciences du Coran sont-elles réservées aux spécialistes ?",
-    answer:
-      "Non. Une introduction progressive est accessible aux débutants, à condition d'expliquer le vocabulaire et de distinguer les niveaux de complexité. Le guide ISHES et le cours de 4 mois (399 €) sont conçus pour cela.",
-  },
-  {
-    question: "Faut-il savoir lire l'arabe pour démarrer ?",
-    answer:
-      "On peut découvrir l'histoire et les notions fondamentales en français. L'arabe devient indispensable pour approfondir les qirâ'ât, le rasm et la rhétorique.",
-  },
-  {
-    question: "Quelle différence entre Sciences du Coran et Tafsîr ?",
-    answer:
-      "Le Tafsîr cherche à expliquer le sens des versets. Les Sciences du Coran étudient plus largement les conditions, modalités et outils nécessaires à leur compréhension : révélation, transmission, makki/madani, qirâ'ât, etc.",
-  },
-  {
-    question: "Les manuscrits prouvent-ils que chaque détail du texte actuel était identique dès le premier jour ?",
-    answer:
-      "Les manuscrits sont des témoins historiques précieux. Une telle affirmation dépasse ce qu'un fragment isolé peut démontrer. Il faut articuler documentation, tradition de récitation et foi dans la préservation (Coran 15:9).",
-  },
-  {
-    question: "Que prouvent les manuscrits de Birmingham et de Sanaa ?",
-    answer:
-      "Birmingham : deux feuillets (sourates 18–20), parchemin daté au radiocarbone entre 568 et 645 (95,4 %) — la fourchette concerne la peau, pas forcément la date d'écriture. Sanaa : palimpseste qui éclaire les premiers états écrits, avec des variations textuelles à étudier, pas à nier.",
-  },
-  {
-    question: "Où suivre un cours de Sciences du Coran en français ?",
-    answer:
-      "À l'Institut ISHES : formation en ligne de 4 mois, 1 cours par semaine, 399 €, replays et diplôme. Ce guide en est l'introduction gratuite.",
-  },
-];
-
 export function SciencesDuCoranGuideArticle() {
   return (
     <>

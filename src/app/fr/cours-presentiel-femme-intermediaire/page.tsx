@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -12,6 +14,49 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
+
+const FEMME_INTERMEDIAIRE_FAQS = [
+  {
+    question: "Quel niveau faut-il pour rejoindre le cours femme intermédiaire à Toulouse ?",
+    answer:
+      "Il faut savoir lire l’arabe et avoir des notions de base de Tajwid. Le cours s’adresse aux femmes qui lisent déjà le Coran, même avec quelques hésitations, mais qui ne comprennent pas ce qu’elles lisent ou manquent d’assurance dans la récitation. Si vous ne connaissez pas encore l’alphabet, le cours femme débutante du dimanche est le point de départ ; l’équipe de l’Institut ISHES vous oriente en cas de doute.",
+  },
+  {
+    question: "Qu’est-ce que le Nahw et pourquoi l’étudier pour comprendre le Coran ?",
+    answer:
+      "Le Nahw est la grammaire arabe : la science qui explique la structure des phrases, la fonction des mots et leurs terminaisons. Sans lui, on reconnaît des mots isolés sans saisir le sens du verset. Le cours femme intermédiaire introduit les bases du Nahw directement appliquées au Coran, puis les met en pratique par l’analyse linguistique et la traduction guidée de sourates sélectionnées.",
+  },
+  {
+    question: "Comment passer d’une lecture mécanique du Coran à une récitation comprise ?",
+    answer:
+      "En reliant la récitation et le sens. La première étape consolide le Tajwid avec des corrections individuelles. Ensuite, la grammaire (Nahw) et le vocabulaire coranique permettent de comprendre la structure des versets récités. Enfin, la récitation redevient fluide, mais consciente : on sait ce que l’on dit. C’est le passage d’une lecture mécanique à une récitation vivante et méditée (Tadabbour) que vise le cursus de l’Institut ISHES.",
+  },
+  {
+    question: "À quelle heure se déroule le cours femme intermédiaire le samedi ?",
+    answer:
+      "Tous les samedis de 9h00 à 12h00, en présentiel à Toulouse, pendant 9 mois. Chaque séance est enregistrée et les replays restent accessibles à vie, ce qui permet de réviser une règle de grammaire ou de rattraper un samedi manqué. Le groupe WhatsApp privé de la classe permet de poser ses questions à l’enseignante entre deux cours et de garder le rythme.",
+  },
+  {
+    question: "Peut-on apprendre à traduire des sourates du Coran soi-même avec ce cours ?",
+    answer:
+      "Oui, c’est l’un des objectifs. Le cours travaille la traduction guidée de sourates sélectionnées : l’enseignante analyse la structure grammaticale, le vocabulaire et le sens, puis les élèves s’exercent à traduire des versets courts. Au fil de l’année, le vocabulaire coranique et littéraire s’enrichit et l’on gagne en autonomie face au texte, sans dépendre systématiquement d’une traduction.",
+  },
+  {
+    question: "Le cours intermédiaire corrige-t-il encore le Tajwid ou seulement la grammaire ?",
+    answer:
+      "Les deux, en parallèle. L’étape 1 est entièrement consacrée à la consolidation de la récitation : correction individuelle du Tajwid et revue des règles essentielles. La grammaire arrive ensuite, mais la récitation reste travaillée à chaque séance jusqu’à l’application automatique des règles, sans hésitation. Comprendre le sens ne remplace pas la justesse de la prononciation ; le cursus avance sur les deux fronts.",
+  },
+  {
+    question: "Combien coûte le cours femme intermédiaire à Toulouse et quels paiements sont possibles ?",
+    answer:
+      "Le tarif est de 649 € pour l’année, payable en 1, 3, 5 ou 10 fois sans frais. Il inclut les cours en présentiel du samedi matin, les supports de niveau intermédiaire, les exercices, les évaluations régulières, les corrections individuelles, le suivi pédagogique personnalisé, le groupe WhatsApp privé et le diplôme de réussite remis en fin de parcours par l’Institut ISHES.",
+  },
+  {
+    question: "Faut-il être arabophone pour suivre un cours de grammaire arabe appliquée au Coran ?",
+    answer:
+      "Non. Le cursus est pensé pour les francophones : les explications de grammaire sont données en français, avec des exemples tirés directement des sourates étudiées. Il s’adresse aux femmes qui savent lire l’arabe sans forcément le parler. L’objectif n’est pas la conversation mais la compréhension du texte coranique et une récitation fluide, dans un cadre 100 % féminin et bienveillant.",
+  },
+];
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-presentiel-femme-intermediaire") },
@@ -29,6 +74,7 @@ export const metadata: Metadata = {
 export default function CoursPresentielFemmeIntermediairePage() {
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-[#C69C6D] selection:text-white pb-32">
+      <JsonLd data={faqJsonLd(FEMME_INTERMEDIAIRE_FAQS)} />
       <Navbar />
 
       {/* Hero Section */}
@@ -250,6 +296,13 @@ export default function CoursPresentielFemmeIntermediairePage() {
           </div>
         </div>
       </div>
+
+      <VitrineFaq
+        eyebrow="FAQ Femme intermédiaire"
+        title="Questions fréquentes : perfectionner son arabe et son Tajwid à Toulouse"
+        intro="Cours présentiel 100 % femme, le samedi matin : grammaire Nahw, traduction de sourates, récitation fluide, niveau requis et tarif."
+        items={FEMME_INTERMEDIAIRE_FAQS}
+      />
 
       <Footer />
 

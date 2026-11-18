@@ -39,8 +39,9 @@ export default function ContactPage() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-ishes-blue/5 blur-[140px] rounded-full pointer-events-none -z-10" />
       <ContactContent />
       <VitrineFaq
-        eyebrow="Questions sur l'institut"
-        title="Tout ce que les familles nous demandent avant de s'inscrire"
+        eyebrow="FAQ Contact"
+        title="Comment joindre l'Institut ISHES à Toulouse et à distance"
+        intro="WhatsApp, rendez-vous, visite de l’institut, délais de réponse : les réponses aux questions posées avant un premier contact."
         items={INSTITUT_CONTACT_FAQS}
       />
       <ContactGratuitCta />

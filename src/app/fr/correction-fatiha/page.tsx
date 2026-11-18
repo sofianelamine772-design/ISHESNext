@@ -32,49 +32,54 @@ import { WHATSAPP_DISTANCE } from "@/lib/institut-contact";
 
 const FATIHA_FAQS = [
   {
-    question: "Le cours de Fatiha est-il vraiment 100 % gratuit ?",
+    question: "Pourquoi l'Institut ISHES offre-t-il un cours de Fatiha gratuit, sans frais cachés ?",
     answer:
-      "Oui. Le cours de Fatiha de l'Institut ISHES est 100 % gratuit : pas de carte bancaire, pas de frais cachés. Inscription en ligne, correction avec un professeur, et accès à un groupe WhatsApp.",
+      "Parce que la prière n'est pas valide sans Al-Fatiha, et que beaucoup la récitent avec des fautes sans le savoir. L'institut offre donc ce module à la communauté : inscription en ligne à 0 €, sans carte bancaire, correction en direct avec un professeur et accès au groupe WhatsApp. Si les bases manquent, on t'oriente vers un cursus Tajwid payant, mais le cours de Fatiha lui-même reste offert.",
   },
   {
     question: "C'est un cours de Fatiha avec un professeur ou seulement des vidéos ?",
     answer:
-      "C'est un cours de Fatiha avec professeur : séance en direct (Zoom), correction de ta récitation, puis un groupe WhatsApp pour les questions. Une vidéo pédagogique complète le suivi — tu n'es pas seul face à un replay.",
+      "C'est un cours de Fatiha avec professeur : une séance en direct sur Zoom où tu récites et où l'enseignant ISHES corrige lettre par lettre, puis un groupe WhatsApp pour les questions et les audios. Une vidéo pédagogique complète le suivi, mais tu n'es jamais seul face à un replay : c'est l'oreille du professeur qui fait la correction.",
   },
   {
     question: "Y a-t-il un groupe WhatsApp pour le cours de Fatiha ?",
     answer:
-      "Oui. Après inscription, tu rejoins un groupe WhatsApp lié au module : rappels, questions au professeur, entraide. Le cours de Fatiha reste 100 % gratuit, y compris cet accompagnement.",
+      "Oui. Après inscription, tu rejoins le groupe WhatsApp lié au module : rappels de la séance, questions au professeur, entraide entre élèves. Si un verset reste bloqué après le cours, tu renvoies un audio dans le groupe pour une nouvelle correction. Cet accompagnement est compris dans le cours de Fatiha gratuit.",
   },
   {
     question: "Que corrige-t-on dans ce cours de Fatiha gratuit ?",
     answer:
-      "Sourate Al-Fatiha (ouverture de la prière) et les trois dernières sourates (Al-Ikhlâs, Al-Falaq, An-Nâs). Objectif : prononciation, makhârij, et éviter les fautes qui peuvent invalider la prière.",
+      "Les sept versets de sourate Al-Fatiha, l'ouverture de la prière, puis les trois dernières sourates : Al-Ikhlâs, Al-Falaq et An-Nâs, celles qu'on récite le plus souvent en salât. On travaille les makhârij (points de sortie des lettres), les voyelles, la shadda, le madd et la qalqala, pour éviter les fautes qui changent le sens ou peuvent invalider la prière.",
   },
   {
-    question: "À qui s'adresse le cours de Fatiha ISHES ?",
+    question: "Le cours de Fatiha convient-il à un converti ou à un débutant qui ne lit pas l'arabe ?",
     answer:
-      "À tout musulman francophone : débutant, converti, ou pratiquant qui doute de sa récitation. Hommes et femmes. Aucun niveau d'arabe n'est exigé. Cours en ligne, avec professeur.",
+      "Oui. Aucun niveau d'arabe n'est exigé : la page donne chaque verset en arabe, en phonétique française et en traduction, et le professeur corrige à l'oreille. Le cours s'adresse à tout musulman francophone, homme ou femme : converti, débutant, ou pratiquant de longue date qui doute de sa récitation ou ne sait pas s'il fait des erreurs majeures ou mineures.",
   },
   {
     question: "Comment s'inscrire au cours de Fatiha gratuit ?",
     answer:
-      "Clique sur « Je m'inscris » (0 €) ou écris sur WhatsApp. Tu reçois le créneau avec le professeur et le lien du groupe WhatsApp. Le module est offert par l'Institut ISHES.",
+      "Clique sur « Je m'inscris gratuitement » (0 €, sans carte bancaire) ou écris directement à l'équipe sur WhatsApp. Tu reçois ensuite le créneau de la séance en direct avec le professeur et le lien du groupe WhatsApp du module. L'inscription est ouverte aux adultes, débutants compris.",
+  },
+  {
+    question: "Quand a lieu le cours de Fatiha en ligne et combien de temps dure-t-il ?",
+    answer:
+      "La séance a lieu le dimanche à 11h00 (heure de France), en direct sur Zoom, à partir d'octobre 2026. Le module tient en une session de correction, suivie de l'accompagnement dans le groupe WhatsApp. Il ne donne pas lieu à un diplôme : c'est un cours d'entrée, gratuit, pour sécuriser la récitation de la prière avant un éventuel cursus de Tajwid.",
   },
   {
     question: "Combien de personnes récitent mal la Fatiha ?",
     answer:
-      "Lors des séances de correction ISHES, plus de 70 % des élèves francophones commettent au moins une faute d'articulation (makhraj) dès la première lecture d'Al-Fatiha. Environ 1 élève sur 2 confond le 'Ayn et le hamza, et près d'un tiers allège le Dâd ou le Sâd. D'où un cours de Fatiha avec professeur, pas seulement de la phonétique écrite.",
+      "Lors des séances de correction ISHES, plus de 70 % des élèves francophones commettent au moins une faute d'articulation (makhraj) dès la première lecture d'Al-Fatiha. Environ 1 élève sur 2 affaiblit ou saute le 'Ayn, près de 40 % oublient la shadda d'Iyyâka, et environ 30 % allègent le Sâd ou le Dâd. Ce n'est pas une statistique d'État, c'est ce que constatent les enseignants à chaque session.",
   },
   {
     question: "Quelles sont les erreurs les plus fréquentes sur Al-Fatiha ?",
     answer:
-      "Les erreurs récurrentes : shadda d'Iyyâka oubliée, 'Ayn de na'budu ou nasta'în trop faible, Sâd de sirât lu comme un Sîn, Dâd de ad-dâllîn lu comme un Dâl, madd trop court, et confusion Mâliki / Maliki. Le professeur les corrige une par une, verset par verset.",
+      "Les erreurs récurrentes : shadda d'Iyyâka oubliée (faute qui peut changer le sens), 'Ayn de na'budu ou nasta'în trop faible, Sâd de sirât lu comme un Sîn, Dâd de ad-dâllîn lu comme un Dâl, madd de Ar-Rahmân trop court, Hâ de al-hamdu prononcé comme un h muet, et confusion Mâliki / Maliki. Le professeur les corrige une par une, verset par verset.",
   },
   {
     question: "La phonétique française suffit-elle pour réciter la Fatiha ?",
     answer:
-      "Non. La phonétique (Bismi-llâhi r-rahmâni r-rahîm, etc.) aide à mémoriser, mais elle ne remplace pas l'oreille du professeur : le Hâ, le 'Ayn, le Dâd et le Qaf n'existent pas en français. D'où le cours de Fatiha 100 % gratuit en direct + groupe WhatsApp.",
+      "Non. La phonétique (Bismi-llâhi r-rahmâni r-rahîm, etc.) aide à mémoriser l'ordre des mots, mais le Hâ, le 'Ayn, le Dâd, le Sâd et le Qaf n'existent pas en français : seule l'oreille d'un professeur peut dire si tu les prononces vraiment. Plus de 80 % des débutants complets ont besoin de cette correction en direct. D'où ce cours de Fatiha gratuit, sur Zoom, avec groupe WhatsApp.",
   },
 ];
 
@@ -613,6 +618,7 @@ export default function CorrectionFatihaPage() {
       <VitrineFaq
         eyebrow="FAQ — Cours de Fatiha gratuit"
         title="Professeur, groupe WhatsApp, inscription 100 % gratuite"
+        intro="Tout ce qu'il faut savoir avant de rejoindre le cours de Fatiha gratuit en ligne : horaires, erreurs corrigées, phonétique et inscription."
         items={FATIHA_FAQS}
       />
     </div>

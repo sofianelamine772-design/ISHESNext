@@ -39,6 +39,31 @@ const FAQS = [
     answer:
       "Ibn Mujâhid (mort en 936) est connu pour sa présentation des sept lectures dans le développement des ouvrages sur les qirâ'ât aux IXe–Xe siècles.",
   },
+  {
+    question: "Combien de temps a duré la Révélation du Coran ?",
+    answer:
+      "D'après la frise, la Révélation s'étend de ses débuts vers 610 jusqu'au décès du Prophète Muhammad ﷺ en 632, soit environ 23 ans. Elle se répartit entre une période mecquoise d'environ douze ans (610–622), centrée sur l'appel à la foi, à la responsabilité morale et à la patience, et une période médinoise d'environ dix ans (622–632), marquée par les enseignements spirituels, sociaux et juridiques d'une communauté en formation.",
+  },
+  {
+    question: "Pourquoi l'Hégire de 622 est-elle un repère dans la chronologie du Coran ?",
+    answer:
+      "L'Hégire, l'émigration du Prophète ﷺ vers Médine en 622, sert de repère pour distinguer, dans la classification traditionnelle, les révélations mecquoises de celles médinoises, indépendamment du lieu exact où un verset a été révélé. Elle marque aussi le passage d'une communauté persécutée à une communauté organisée, ce qui éclaire l'évolution du contexte, des interlocuteurs et des thématiques du texte coranique.",
+  },
+  {
+    question: "L'écriture arabe existait-elle avant l'islam ?",
+    answer:
+      "Oui. La langue et l'écriture arabes existaient avant l'islam, mais les premiers manuscrits emploient une graphie dont les signes distinctifs des consonnes et les voyelles ne sont pas toujours notés. La transmission et l'étude du Coran ont fortement contribué à la codification de l'écriture : points distinctifs, signes vocaliques, puis formalisation de la grammaire avec Sîbawayh au VIIIe siècle.",
+  },
+  {
+    question: "Qu'a apporté Al-Khalîl ibn Ahmad à l'écriture du Coran ?",
+    answer:
+      "Al-Khalîl ibn Ahmad, savant du VIIIe siècle, est associé à des signes vocaliques proches de ceux utilisés aujourd'hui dans le Coran, qui ont remplacé l'ancien système de points attribué à Abû al-Aswad ad-Du'alî. Son apport dépasse l'écriture : il a marqué la linguistique et la prosodie arabes, dans un mouvement de codification largement stimulé par l'étude du texte coranique.",
+  },
+  {
+    question: "Peut-on télécharger la frise chronologique de la Révélation en PDF ?",
+    answer:
+      "Oui. La frise chronologique de la Révélation est disponible gratuitement en PDF depuis cette page, pour être consultée ou imprimée. Elle récapitule les deux tableaux : la Révélation et les premiers codex (610–656), puis l'évolution de l'écriture arabe après ‘Uthmân jusqu'aux IXe–Xe siècles. Les périodes indiquées sont approximatives et sont contextualisées dans le cours de Sciences du Coran de l'Institut ISHES.",
+  },
 ];
 
 const TOC = [
@@ -330,7 +355,8 @@ export default function FriseChronologiquePage() {
 
       <VitrineFaq
         eyebrow="FAQ Frise"
-        title="Questions sur la chronologie de la Révélation"
+        title="Questions sur la frise chronologique de la Révélation du Coran"
+        intro="Dates clés, Hégire, collecte des codex et codification de l'écriture arabe : les repères pour lire la frise chronologique de la Révélation."
         items={FAQS}
       />
     </>

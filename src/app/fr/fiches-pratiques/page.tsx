@@ -72,19 +72,39 @@ const FICHES = [
 
 const FAQS = [
   {
-    question: "Que trouve-t-on dans les fiches pratiques ISHES ?",
+    question: "Que trouve-t-on dans les fiches pratiques gratuites ISHES ?",
     answer:
-      "Des guides pédagogiques gratuits en texte libre : Les Clés du Coran (méthode Tajwid), le guide des Sciences du Coran, et une frise chronologique de la Révélation. Chaque fiche est lisible en ligne pour le référencement et téléchargeable en PDF.",
+      "Cinq guides pédagogiques en texte libre : un guide de récitation et de mémorisation du Coran avec planning sur 30 jours, la présentation de la méthode Les Clés du Coran (volumes 1 et 2) pour le Tajwid, le guide complet des Sciences du Coran (‘Ulûm al-Qur’ân), une frise chronologique de la Révélation et la fiche du cours de Tajwid en ligne. Chaque fiche se lit en ligne et se télécharge en PDF.",
   },
   {
-    question: "Les fiches remplacent-elles les cours ?",
+    question: "Comment télécharger les fiches pratiques en PDF ?",
     answer:
-      "Non. Elles introduisent et structurent. Les formations ISHES apportent l'enseignant, la correction orale, les replays et la progression diplômante (Tajwid, Sciences du Coran, etc.).",
+      "Directement depuis cette page : chaque fiche propose un bouton « Lire en ligne » et un bouton « PDF » qui ouvre le document, sans inscription ni paiement. Les PDF peuvent être imprimés, annotés ou partagés avec un groupe d’étude. La version en ligne, elle, reste consultable depuis un téléphone et contient des liens vers les formations correspondantes de l’Institut ISHES.",
   },
   {
-    question: "Pour qui sont ces ressources ?",
+    question: "Par quelle fiche commencer pour apprendre à lire le Coran en français ?",
     answer:
-      "Débutants francophones, parents, étudiants en sciences islamiques, futurs enseignants — toute personne qui veut comprendre la lecture du Coran ou l'histoire de sa transmission avec une pédagogie claire.",
+      "Par la fiche Les Clés du Coran, qui explique la méthode Tajwid francophone ISHES : le tahajjî, les fondations de la lecture, puis les règles de récitation, comme alternative pédagogique à Nour Al Bayan. Une fois les lettres installées, le guide de récitation et de mémorisation donne un planning de 30 jours et des conseils de révision. Les Sciences du Coran et la frise viennent ensuite éclairer l’histoire du texte.",
+  },
+  {
+    question: "Les fiches pratiques remplacent-elles un cours de Tajwid ou de Sciences du Coran ?",
+    answer:
+      "Non. Elles introduisent et structurent, mais ne corrigent pas une récitation ni ne répondent à une question en direct. Les formations ISHES apportent l’enseignant, la correction orale, les replays et la progression diplômante, en ligne ou à Toulouse. La fiche est la porte d’entrée ; le cours de Tajwid avec Les Clés du Coran ou le cours de Sciences du Coran en est la suite logique.",
+  },
+  {
+    question: "Pour qui sont les fiches pratiques sur le Coran et le Tajwid ?",
+    answer:
+      "Pour les débutants francophones qui veulent comprendre comment on lit le Coran, les parents qui accompagnent un enfant, les étudiants en sciences islamiques qui révisent les ‘Ulûm al-Qur’ân et les futurs enseignants qui cherchent une progression claire. Elles sont rédigées en français, avec un sommaire, des titres clairs et une FAQ, pour être lisibles sans bagage préalable.",
+  },
+  {
+    question: "Peut-on utiliser les fiches ISHES pour enseigner à ses enfants ou en classe ?",
+    answer:
+      "Oui. Les fiches sont libres de lecture et de téléchargement, et leur structure (progression de lecture, planning de mémorisation, frise chronologique) se prête à un usage familial ou associatif. Pour aller plus loin dans la transmission, l’Institut ISHES propose des formations d’enseignants de Tajwid et de Tarbiya Islamiyya qui apprennent à utiliser Les Clés du Coran avec de vrais élèves.",
+  },
+  {
+    question: "Quelle formation suivre après avoir lu une fiche pratique ?",
+    answer:
+      "Après la fiche Les Clés du Coran ou le guide de mémorisation, le cours de Tajwid en ligne (parcours progressif annuel, cours en direct, replays et enseignant, 649 €) est la suite naturelle. Après le guide des Sciences du Coran ou la frise chronologique, le cours de Sciences du Coran de l’Institut ISHES approfondit la Révélation, la collecte et les disciplines coraniques avec un enseignant.",
   },
 ];
 
@@ -312,8 +332,9 @@ export default function FichesPratiquesPage() {
         </section>
 
         <VitrineFaq
-          eyebrow="FAQ Ressources"
-          title="Questions sur les fiches pratiques ISHES"
+          eyebrow="FAQ fiches pratiques"
+          title="Fiches pratiques gratuites : format PDF, thèmes et utilisation"
+          intro="Comment lire, télécharger et utiliser les ressources pédagogiques gratuites de l’Institut ISHES sur le Tajwid et les Sciences du Coran."
           items={FAQS}
         />
       </div>

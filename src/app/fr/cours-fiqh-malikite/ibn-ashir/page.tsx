@@ -1,7 +1,60 @@
 import Link from 'next/link';
 import { ArrowLeft, BookOpen, MapPin, Star, CheckCircle2, ArrowRight, UserCheck, Heart, Users, HelpCircle } from 'lucide-react';
-import { buildPageMetadata, articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { buildPageMetadata, articleJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+
+const IBN_ASHIR_FAQS = [
+  {
+    question: "Quel est le nom complet de l'imam Ibn Âchir et d'où venait sa famille ?",
+    answer:
+      "L'imam Ibn Âchir (Ibn 'Âshir) se nomme Abû Muhammad 'Abd al-Wahid ibn Ahmad ibn 'Ali Ibn 'Âshir al-Ansârî. Né à Fès en 990 de l'Hégire (1582), il est issu d'une famille andalouse se rattachant aux Ansârs, les alliés médinois du Prophète ﷺ, qui avait quitté Al-Andalus au moment de la Reconquista. Il a grandi dans la Fès de l'université Al-Qarawiyyin, alors l'un des grands carrefours du savoir islamique.",
+  },
+  {
+    question: "À quelle école juridique appartenait Ibn 'Âshir ?",
+    answer:
+      "Ibn 'Âshir appartenait à l'école juridique mâlikite, fondée par l'imam Mâlik ibn Anas. En matière de croyance, il suivait l'école ash'arite, et en spiritualité la voie de l'imam Al-Junayd. Ces trois références structurent son poème Al-Murshid al-Mu'în, ce qui explique pourquoi ce matn reste le manuel de base du fiqh mâlikite au Maghreb et en Afrique de l'Ouest.",
+  },
+  {
+    question: "Quand et où est décédé l'imam Ibn Âchir ?",
+    answer:
+      "L'imam Ibn Âchir est décédé le jeudi 3 Dhul-Hijja 1040 de l'Hégire, soit l'été 1631, à Fès au Maroc, à environ cinquante ans, où il est enterré. Sa vie fut courte mais dense : enseignement, adoration nocturne et même participation à la défense des côtes marocaines, selon ses biographes.",
+  },
+  {
+    question: "Que signifie le titre Al-Murshid al-Mu'în ?",
+    answer:
+      "Le titre complet est Al-Murshid al-Mu'în 'alâ ad-Darûrî min 'Ulûm ad-Dîn, c'est-à-dire « le guide utile sur l'indispensable des sciences de la religion ». Le mot murshid désigne ce qui oriente, mu'în ce qui aide, et darûrî l'indispensable : le poème condense ce que chaque musulman a l'obligation de connaître pour pratiquer correctement, sans entrer dans les débats réservés aux spécialistes.",
+  },
+  {
+    question: "Combien de vers compte le Matn Ibn Âchir ?",
+    answer:
+      "Le Matn Ibn Âchir compte 314 vers, composés en mètre rajaz, un rythme régulier qui facilite la mémorisation. L'imam l'aurait rédigé lors de son voyage vers La Mecque pour le pèlerinage. Cette brièveté est voulue : le texte se retient en quelques mois, puis un enseignant en déplie le sens vers après vers, comme le fait le cours de fiqh mâlikite de l'Institut ISHES.",
+  },
+  {
+    question: "Quelles sont les trois parties d'Al-Murshid al-Mu'în ?",
+    answer:
+      "Al-Murshid al-Mu'în suit le hadith de Jibrîl, qui définit la religion en trois degrés, et se divise donc en trois parties. La 'aqîda expose les attributs d'Allah, ce qui Lui est impossible et la croyance envers Ses messagers. Le fiqh mâlikite détaille la purification (wudû', ghusl, tayammum), la prière, la zakat, le jeûne et le hajj. Le tasawwuf traite de la purification du cœur, du repentir et des maladies de l'âme.",
+  },
+  {
+    question: "Le Matn Ibn Âchir convient-il à un débutant en fiqh mâlikite ?",
+    answer:
+      "Oui, Al-Murshid al-Mu'în est considéré comme la meilleure introduction au fiqh mâlikite pour un débutant. Rédigé il y a plus de quatre siècles, il résume de façon structurée l'essentiel des obligations religieuses, sans supposer de connaissances préalables. C'est pour cette raison que l'Institut ISHES l'a choisi comme texte de base de sa formation de Fiqh mâlikite en ligne, accessible sans bagage en sciences islamiques.",
+  },
+  {
+    question: "Dans quels pays le Matn Ibn Âchir est-il enseigné ?",
+    answer:
+      "Le Matn Ibn Âchir est le manuel de base enseigné dans la plupart des mosquées, écoles coraniques et universités d'Afrique du Nord (Maroc, Algérie, Tunisie) et d'Afrique de l'Ouest (Sénégal, Mauritanie, Mali), encore aujourd'hui. Sa structure rythmée l'a rendu facile à mémoriser, ce qui explique sa diffusion dans tout le monde mâlikite, puis auprès des musulmans francophones d'Europe.",
+  },
+  {
+    question: "Quelles sciences maîtrisait Ibn 'Âshir en dehors du fiqh ?",
+    answer:
+      "Ibn 'Âshir était un savant pluridisciplinaire. Outre le fiqh mâlikite, il maîtrisait les lectures coraniques (qirâ'ât), la croyance ash'arite, la grammaire et la rhétorique arabes, ainsi que les mathématiques et l'astronomie, qu'il employait pour calculer les horaires de prière et la direction de la qibla. Il s'était formé auprès de maîtres de Fès comme Ibn Abî an-Na'îm et Ibn Qâdî, puis auprès de savants d'Égypte et du Hedjaz lors de son pèlerinage.",
+  },
+  {
+    question: "Comment étudier le Matn Ibn Âchir en ligne avec un enseignant ?",
+    answer:
+      "La lecture seule ne suffit pas : un matn en vers se comprend avec un professeur qui en ouvre le sens. L'Institut ISHES propose une formation de Fiqh mâlikite en ligne de 4 mois fondée sur Al-Murshid al-Mu'în, avec un cours par semaine en direct, des replays illimités et plus de 30 supports PDF. La partie croyance du même poème est étudiée dans le cours d'aqîda en ligne de l'institut.",
+  },
+];
 
 export const metadata = buildPageMetadata({
   title: "Ibn Âchir — Biographie et Al-Murshid al-Mu'în | Fiqh Mâlikite",
@@ -43,7 +96,8 @@ export default function IbnAshirBiographyPage() {
           about: ["Ibn Âchir", "Fiqh mâlikite", "Al-Murshid al-Mu'în"],
         })}
       />
-      
+      <JsonLd data={faqJsonLd(IBN_ASHIR_FAQS)} />
+
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-[500px] bg-ishes-blue -z-10" />
       <div className="absolute top-0 left-0 w-full h-[500px] bg-[url('/images/patterns/islamic-pattern.svg')] opacity-10 -z-10" />
@@ -185,35 +239,17 @@ export default function IbnAshirBiographyPage() {
 
             {/* Section FAQ SEO */}
             <section className="bg-gray-50 p-8 md:p-12 rounded-3xl border border-gray-200 mt-12">
-              <h2 className="text-2xl font-black text-ishes-blue mb-8">Questions Fréquentes sur l'Imam Ibn 'Âshir (FAQ)</h2>
+              <h2 className="text-2xl font-black text-ishes-blue mb-8">Questions fréquentes sur l&apos;imam Ibn &apos;Âshir et le Matn Al-Murshid al-Mu&apos;în</h2>
               <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-start gap-2">
-                    <HelpCircle className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
-                    À quelle école juridique appartenait Ibn 'Âshir ?
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed ml-7">
-                    Il appartenait à l'école juridique Mâlikite (fondée par l'Imam Malik ibn Anas). En matière de dogme (croyance), il suivait l'école Ash'arite, et en matière de spiritualité, il suivait la voie de l'Imam Al-Junayd.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-start gap-2">
-                    <HelpCircle className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
-                    Quand et où est-il décédé ?
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed ml-7">
-                    L'Imam Ibn 'Âshir est décédé le jeudi 3 du mois de Dhul-Hijjah de l'an 1040 de l'Hégire (ce qui correspond à l'été 1631) à Fès, au Maroc. Il a été enterré près de la prière de l'Andalousie.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-start gap-2">
-                    <HelpCircle className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
-                    Pourquoi étudier Al-Murshid Al-Mu'in aujourd'hui ?
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed ml-7">
-                    Bien que rédigé il y a plus de 400 ans, cet ouvrage reste la meilleure introduction au Fiqh Mâlikite pour un débutant. Il résume l'essentiel des obligations religieuses de manière structurée. C'est pourquoi nous l'avons choisi comme texte de base pour notre formation Fiqh Malikite à l'ISHES.
-                  </p>
-                </div>
+                {IBN_ASHIR_FAQS.map((faq) => (
+                  <div key={faq.question}>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-start gap-2">
+                      <HelpCircle className="w-5 h-5 text-ishes-gold shrink-0 mt-0.5" />
+                      {faq.question}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed ml-7">{faq.answer}</p>
+                  </div>
+                ))}
               </div>
             </section>
 

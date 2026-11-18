@@ -100,9 +100,9 @@ const AQIDA_FAQS = [
       "L'aqîda est la science de la croyance : ce qu'un musulman affirme au sujet d'Allah, de Ses messagers et de l'invisible. Elle couvre les six piliers de la foi (Allah, les anges, les livres, les messagers, le Jour dernier et le destin), le sens de l'attestation de foi, et la définition de l'ihsân. Le cours ISHES l'étudie en français, de façon progressive, à partir du matn d'Ibn 'Âshir.",
   },
   {
-    question: "Pourquoi suivre un cours d'aqîda en français ?",
+    question: "Pourquoi étudier l'aqîda quand on est déjà musulman ?",
     answer:
-      "Beaucoup de musulmans francophones ont reçu la foi par héritage, par fragments : un peu sur les anges, un peu sur le destin, sans jamais relier l'ensemble. Un cours d'aqîda en ligne donne un cadre clair, appuyé sur le Coran et la Sounna, pour connaître Allah, répondre aux confusions et vivre sa religion avec plus de certitude.",
+      "Parce que croire et savoir expliquer sa croyance sont deux choses différentes. Beaucoup de musulmans francophones ont reçu la foi par fragments : un peu sur les anges, un peu sur le destin, sans jamais relier l'ensemble. Un cours d'aqîda en ligne donne un cadre clair, appuyé sur le Coran et la Sounna, pour connaître Allah par Ses attributs, répondre aux discours contradictoires et vivre sa religion avec plus de certitude et de sérénité.",
   },
   {
     question: "Quel livre est étudié dans le cours d'aqîda ISHES ?",
@@ -115,24 +115,34 @@ const AQIDA_FAQS = [
       "Le matn d'Ibn 'Âshir expose treize attributs obligatoires : l'existence, l'éternité sans commencement, la pérennité, la dissemblance avec les créatures, la subsistance par Soi-même, l'unicité, la vie, la science, la puissance, la volonté, l'ouïe, la vue et la parole. Le cours explique aussi leurs contraires, c'est-à-dire ce qu'il est impossible d'attribuer à Allah.",
   },
   {
-    question: "Le cours d'aqîda est-il adapté aux débutants ?",
+    question: "Quels sont les six piliers de la foi (arkân al-îmân) ?",
     answer:
-      "Oui. Aucune formation préalable en sciences islamiques n'est exigée. Les séances sont progressives, en français, avec des exemples et des questions-réponses. Le cours accueille les hommes et les femmes, les débutants comme ceux qui ont déjà étudié.",
+      "Les six piliers de la foi sont la croyance en Allah, en Ses anges, en Ses livres, en Ses messagers, au Jour dernier et au destin, son bien comme son mal. Dans le cours d'aqîda ISHES, chaque pilier est étudié un par un à partir du matn d'Ibn 'Âshir, puis relié aux cinq piliers de l'Islam, qui sont les actes sur lesquels cette croyance débouche.",
+  },
+  {
+    question: "Qu'est-ce que l'ihsân et pourquoi termine-t-il le cours d'aqîda ?",
+    answer:
+      "L'ihsân est l'excellence dans l'adoration : adorer Allah comme si on Le voyait et, puisqu'on ne Le voit pas, savoir que Lui nous voit. Il correspond au troisième degré de la religion décrit dans le hadith de Jibrîl, après l'Islam et la foi. Le cours s'achève sur cette notion pour que la croyance ne reste pas une liste, mais devienne une présence du cœur dans la prière et la vie quotidienne.",
+  },
+  {
+    question: "Peut-on suivre un cours d'aqîda en ligne sans avoir jamais étudié les sciences islamiques ?",
+    answer:
+      "Oui. Aucune formation préalable en sciences islamiques ni aucun niveau d'arabe n'est exigé pour ce cours d'aqîda en ligne. Les séances sont progressives, en français, avec des exemples concrets et un temps de questions-réponses. Le cours accueille les hommes et les femmes, les débutants comme ceux qui ont déjà étudié et veulent remettre leur croyance en ordre.",
   },
   {
     question: "Quelle est la différence entre le cours d'aqîda et le fiqh mâlikite ?",
     answer:
-      "Les deux cours s'appuient sur Al-Murshid al-Mu'în d'Ibn 'Âshir. L'aqîda traite de la croyance : qui est Allah, que signifie croire, quels sont les piliers de la foi. Le fiqh mâlikite traite des actes d'adoration : purification, prière, zakat, jeûne et hajj. Ils se complètent.",
+      "Les deux cours s'appuient sur Al-Murshid al-Mu'în d'Ibn 'Âshir, mais n'étudient pas la même partie du poème. L'aqîda traite de la croyance : qui est Allah, que signifie croire, quels sont les piliers de la foi. Le fiqh mâlikite traite des actes d'adoration : purification, prière, zakat, jeûne et hajj. Ils se complètent et peuvent se suivre l'un après l'autre.",
   },
   {
     question: "Comment se déroule le cours d'aqîda en ligne ?",
     answer:
-      "La formation dure 4 mois, à raison d'un cours par semaine, le samedi à 11h00, en direct sur Zoom, à partir d'octobre 2026. Les replays restent disponibles, les supports sont inclus, et le parcours validé donne le diplôme ISHES. Tarif : 399 €, payable en plusieurs fois. Le cours se suit depuis la France, la Belgique, la Suisse, le Maghreb, le Canada ou ailleurs.",
+      "Le cours d'aqîda se suit entièrement à distance, en direct sur Zoom, un samedi par semaine à 11h00, à partir d'octobre 2026, pendant 4 mois. Les replays restent disponibles si tu rates une séance, les supports et exercices sont inclus, et un groupe WhatsApp assure le suivi. Il n'est pas nécessaire d'habiter Toulouse : une connexion suffit depuis la France, la Belgique, la Suisse, le Maghreb ou le Canada.",
   },
   {
-    question: "Faut-il habiter près de Toulouse pour suivre l'aqîda ?",
+    question: "Combien coûte le cours d'aqîda en ligne ?",
     answer:
-      "Non. Le cours d'aqîda est entièrement à distance. L'Institut ISHES est à Toulouse pour d'autres formations en présentiel. Ici, il suffit d'une connexion pour le direct du samedi et les replays.",
+      "La formation complète d'aqîda coûte 399 € pour 4 mois, tous les supports inclus, avec un paiement en plusieurs fois sans frais possible lors de l'inscription. À l'issue du parcours validé, l'Institut ISHES remet son diplôme. Le tarif couvre les directs du samedi, les replays, les exercices, les évaluations et le suivi pédagogique.",
   },
 ];
 
@@ -697,6 +707,7 @@ export default function CoursAlAqidaPage() {
       <VitrineFaq
         eyebrow="FAQ Aqîda"
         title="Questions fréquentes : croyance, Ibn Âchir, cours en ligne"
+        intro="Tout ce qu'il faut savoir avant de suivre un cours d'aqîda en ligne en français : texte étudié, piliers de la foi, niveau requis, déroulement et tarif."
         items={AQIDA_FAQS}
       />
     </div>

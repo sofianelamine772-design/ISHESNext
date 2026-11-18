@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, Copy, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, Clock, Copy, Sparkles, X } from "lucide-react";
 import {
   PROMO_POPUP_STORAGE_KEY,
   getActivePromoCampaign,
@@ -30,9 +30,8 @@ function markSeen() {
 }
 
 /**
- * Pop-up promo « Rentrée 2026 » : s'affiche sur presque toutes les pages
- * (accueil compris), une fois par visite, uniquement pendant la campagne.
- * Jamais dans le tunnel d'inscription ni sur les fiches formation.
+ * Pop-up promo « Rentrée 2026 » : s'affiche sur l'accueil et quelques pages
+ * d'entrée (voir PROMO_POPUP_PAGES), une fois par visite, pendant la campagne.
  */
 export function PromoPopup() {
   const pathname = usePathname();
@@ -93,7 +92,7 @@ export function PromoPopup() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="promo-popup-title"
-            className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl"
+            className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl"
             initial={{ opacity: 0, scale: 0.94, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -101,7 +100,7 @@ export function PromoPopup() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Bandeau haut */}
-            <div className="relative bg-ishes-blue px-6 pt-7 pb-8 text-center text-white sm:px-8">
+            <div className="relative bg-ishes-blue px-6 pt-6 pb-6 text-center text-white sm:px-8">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-ishes-gold/20 blur-2xl"
@@ -122,22 +121,25 @@ export function PromoPopup() {
               <p className="inline-flex items-center gap-1.5 rounded-full bg-ishes-gold px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-ishes-dark">
                 <Sparkles className="h-3.5 w-3.5" /> {campaign.badge}
               </p>
-              <p className="mt-4 text-6xl font-black leading-none tracking-tight text-ishes-gold sm:text-7xl">
+              <p className="mt-3 text-5xl font-black leading-none tracking-tight text-ishes-gold">
                 −{campaign.discountEuros}&nbsp;€
               </p>
-              <h2 id="promo-popup-title" className="mt-3 text-lg font-black leading-snug sm:text-xl">
+              <h2 id="promo-popup-title" className="mt-2 text-base font-bold leading-snug sm:text-lg">
                 sur toutes les formations à distance
               </h2>
             </div>
 
             {/* Corps */}
-            <div className="px-6 pb-6 pt-5 text-center sm:px-8 sm:pb-8">
+            <div className="px-6 pb-6 pt-5 text-center sm:px-8 sm:pb-7">
               <p className="text-sm font-medium leading-relaxed text-gray-600">{campaign.note}</p>
+              <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-ishes-gold/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#8a6a32]">
+                <Clock className="h-3.5 w-3.5" /> {campaign.deadlineLabel}
+              </p>
 
               <button
                 type="button"
                 onClick={copyCode}
-                className="mt-5 flex w-full items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-ishes-blue/40 bg-ishes-blue/5 px-5 py-3.5 transition-colors hover:bg-ishes-blue/10"
+                className="mt-4 flex w-full items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-ishes-blue/40 bg-ishes-blue/5 px-5 py-3.5 transition-colors hover:bg-ishes-blue/10"
                 aria-label={`Copier le code ${campaign.code}`}
               >
                 <span className="text-left">
@@ -157,12 +159,12 @@ export function PromoPopup() {
               <Link
                 href={campaign.ctaHref}
                 onClick={close}
-                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ishes-gold py-4 text-sm font-black uppercase tracking-wider text-ishes-dark shadow-lg shadow-ishes-gold/30 transition-transform hover:scale-[1.02] hover:bg-[#d4b67c]"
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ishes-gold py-3.5 text-sm font-black uppercase tracking-wider text-ishes-dark transition-colors hover:bg-[#d4b67c]"
               >
                 {campaign.ctaLabel} <ArrowRight className="h-4 w-4" />
               </Link>
               <p className="mt-3 text-[11px] font-semibold text-gray-500">
-                Code à saisir à l’étape paiement · Places limitées
+                Code à saisir à l’étape paiement
               </p>
               <button
                 type="button"

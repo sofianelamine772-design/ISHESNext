@@ -5,6 +5,57 @@ import { BookOpen, Building2, Monitor, Map, Users, CheckCircle2 } from "lucide-r
 import Image from "next/image";
 import Link from "next/link";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
+import { faqJsonLd } from "@/lib/seo";
+
+const HISTOIRE_FAQS = [
+  {
+    question: "Qui a fondé l’Institut ISHES ?",
+    answer:
+      "L’Institut ISHES a été fondé par Oustadha Rachida et Oustadh Riad, un couple qui a parcouru le chemin de la recherche des sciences religieuses. Oustadha Rachida est co-fondatrice et directrice de l’institut ; Oustadh Riad en est co-fondateur et dirigeant. Leur conviction commune : un savoir authentique transforme les cœurs avant de transformer les vies. C’est ce fil qui relie les cours d’arabe, de Coran et de sciences islamiques de l’ISHES.",
+  },
+  {
+    question: "Quand l’Institut ISHES a-t-il été créé et comment a-t-il évolué ?",
+    answer:
+      "L’histoire de l’Institut ISHES commence en 2010, avec des études de sciences religieuses en Égypte et l’ouverture des premières classes de Coran et de Tajwid pour enfants et adultes. En 2013 s’ouvre l’école primaire musulmane Transmettre à Toulouse. En 2020, l’Institut ISHES se déploie à distance, puis élargit en 2022 l’enseignement des sciences religieuses et spirituelles en ligne. Cela représente seize années d’engagement.",
+  },
+  {
+    question: "Quel lien entre l’école Transmettre à Toulouse et l’Institut ISHES ?",
+    answer:
+      "L’école primaire musulmane Transmettre, ouverte à Toulouse en 2013, est une étape du parcours des fondateurs de l’Institut ISHES. Elle s’inscrit dans la même démarche : transmettre l’arabe, le Coran et les valeurs de l’islam avec une vraie pédagogie. L’expérience acquise auprès des enfants nourrit aujourd’hui la scolarité en présentiel à Toulouse et les formations d’enseignants en Tarbiya Islamiyya.",
+  },
+  {
+    question: "Depuis quand l’Institut ISHES propose-t-il des cours à distance ?",
+    answer:
+      "L’Institut ISHES à distance a ouvert en 2020. Les premières années ont concerné l’arabe, la lecture du Coran et le Tajwid ; en 2022, l’offre s’est étendue aux sciences religieuses et spirituelles en ligne (Fiqh mâlikite, Aqîda, Tarbiya). Aujourd’hui, l’institut fonctionne sur deux piliers complémentaires : le présentiel à Toulouse et les cours en direct sur Zoom, avec replays, pour toute la francophonie.",
+  },
+  {
+    question: "Quelles sont les qualifications des fondateurs de l’ISHES ?",
+    answer:
+      "Oustadha Rachida est diplômée en sciences religieuses, formatrice d’enseignants en Tarbiya Islamiya et experte en accompagnement spirituel et éducatif. Oustadh Riad est spécialiste du Tajwid, titulaire d’une Ijaza Jazariya, formateur d’enseignants de Tajwid et responsable de la communication. Ces deux profils expliquent les deux axes forts de l’Institut ISHES : la lecture du Coran et l’éducation spirituelle.",
+  },
+  {
+    question: "Qu’est-ce qu’une Ijaza Jazariya et pourquoi compte-t-elle pour enseigner le Tajwid ?",
+    answer:
+      "Une ijaza est une autorisation de transmission délivrée par un maître à son élève après vérification de sa maîtrise. La Jazariya désigne la Muqaddima d’Ibn al-Jazarî, poème de référence qui codifie les règles du Tajwid. Détenir une Ijaza Jazariya, comme Oustadh Riad, atteste d’une transmission rigoureuse de ces règles. C’est sur cette base que l’Institut ISHES a construit sa méthode Les Clés du Coran et sa formation d’enseignants de Tajwid.",
+  },
+  {
+    question: "Quelles valeurs guident la pédagogie de l’Institut ISHES ?",
+    answer:
+      "La pédagogie de l’Institut ISHES repose sur une idée simple : le savoir authentique doit transformer les cœurs avant de transformer les vies. Concrètement, cela se traduit par un enseignement traditionnel et progressif, des enseignants formés, un cadre bienveillant pour les enfants comme pour les adultes, et un accompagnement spirituel qui ne se limite pas à la transmission de connaissances. Apprendre, puis cheminer.",
+  },
+  {
+    question: "Combien d’élèves et d’enseignants l’Institut ISHES a-t-il formés ?",
+    answer:
+      "Depuis 2010, l’Institut ISHES a formé des milliers d’élèves, enfants et adultes, en présentiel à Toulouse puis à distance, ainsi que des centaines d’enseignants en Tajwid et en Tarbiya Islamiyya. Cette expérience accumulée sur seize ans permet d’ajuster en permanence les méthodes, les supports (comme Les Clés du Coran) et le suivi proposé aux familles.",
+  },
+  {
+    question: "Pourquoi choisir l’Institut ISHES plutôt qu’un autre institut islamique en ligne ?",
+    answer:
+      "Parce que l’Institut ISHES n’est pas né sur internet : il s’appuie sur seize années d’enseignement, une école et un lieu physique à Toulouse, des fondateurs identifiés et qualifiés, et une expérience reconnue dans la formation d’enseignants. Les cours en ligne reprennent cette exigence, avec direct, replays et suivi. Vous savez qui vous enseigne, d’où vient la méthode, et vers quoi elle vous mène.",
+  },
+];
 
 export default function NotreHistoirePage() {
   const timeline = [
@@ -17,6 +68,7 @@ export default function NotreHistoirePage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-0">
+      <JsonLd data={faqJsonLd(HISTOIRE_FAQS)} />
       {/* HERO SECTION */}
       <section className="relative pt-40 pb-16 md:pt-44 md:pb-20 overflow-hidden bg-[#fafafa]">
         <ArabicBackground />
@@ -167,6 +219,13 @@ export default function NotreHistoirePage() {
           </div>
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ Notre histoire"
+        title="Fondateurs, dates clés et valeurs de l'Institut ISHES"
+        intro="Qui a fondé l’institut, depuis quand il enseigne à Toulouse et en ligne, et ce qui guide sa pédagogie."
+        items={HISTOIRE_FAQS}
+      />
 
       {/* FINAL SECTION */}
       <section className="py-20 bg-[#fafafa]">

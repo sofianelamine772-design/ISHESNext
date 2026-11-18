@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -25,6 +27,54 @@ import {
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
+const SIRAH_FAQS = [
+  {
+    question: "Qu'est-ce que la Sîrah an-Nabawiyya ?",
+    answer:
+      "La Sîrah an-Nabawiyya (ou Sira) est la biographie du Prophète Muhammad ﷺ : sa naissance, sa jeunesse, la Révélation, l'appel à l'Islam à La Mecque, l'émigration à Médine, la construction de la communauté et sa disparition. Étudier la Sîrah, c'est connaître la vie de celui que le Coran présente comme modèle, pour comprendre sa sagesse, son comportement et sa relation avec Allah, puis s'en inspirer au quotidien.",
+  },
+  {
+    question: "Pourquoi étudier la Sîrah du Prophète ﷺ aujourd'hui ?",
+    answer:
+      "Parce que beaucoup de musulmans connaissent son nom et quelques événements, mais ressentent une distance avec lui dans leur quotidien. Souvent, la Sîrah est enseignée comme une suite de dates et de batailles, sans montrer comment la vie du Prophète ﷺ transforme notre manière de vivre. Le cours ISHES veut rapprocher le Prophète ﷺ du cœur de l'étudiant, répondre aux récits contradictoires entendus à son sujet et donner une connaissance solide de sa vie.",
+  },
+  {
+    question: "Quel est le programme du cours de Sîrah ISHES ?",
+    answer:
+      "Le programme couvre toute la vie du Prophète ﷺ, de sa naissance à sa disparition, en trois grandes parties. La période pré-islamique : ses parents, son enfance, sa jeunesse et son mariage avec Khadîja. La période mecquoise : la Révélation, l'appel secret puis public, le boycott, l'année de la tristesse, les serments d'Al-Aqaba et l'émigration. La période médinoise : Badr, Uhud, Hudaybiya, Tabûk, le pèlerinage d'adieu et ses derniers jours.",
+  },
+  {
+    question: "Quels événements de la période médinoise sont étudiés dans le cours de Sîrah ?",
+    answer:
+      "La période médinoise du cours commence par les premiers jours à Médine et la cohabitation avec les tribus juives et les hypocrites. Elle étudie ensuite la bataille de Badr, celle de Uhud, les expéditions, le pacte de Hudaybiya, la diffusion du message prophétique aux grands empires, la conversion de Khâlid ibn al-Walîd, l'appel aux gens de Tâ'if, l'expédition de Tabûk, le pèlerinage d'adieu et son sermon, l'arrivée des délégations, puis la maladie et le décès du Prophète ﷺ.",
+  },
+  {
+    question: "La Sîrah est-elle enseignée de façon historique ou spirituelle à l'ISHES ?",
+    answer:
+      "Les deux à la fois. L'approche du cours de Sîrah est historique, spirituelle et pédagogique : chaque événement clé est expliqué avec clarté dans son contexte, puis relié à une leçon de vie applicable aujourd'hui. L'enseignement mêle récit vivant, enseignements spirituels et réflexion contemporaine, afin que la biographie prophétique ne reste pas un récit du passé mais devienne une direction pour le présent.",
+  },
+  {
+    question: "Le cours de Sîrah en ligne convient-il à quelqu'un qui n'a jamais étudié ?",
+    answer:
+      "Oui. Le cours de Sîrah en ligne est ouvert aux hommes et aux femmes, aux débutants comme aux initiés, sans prérequis en sciences islamiques, et il est donné en français. Il s'adresse à toute personne qui veut découvrir la vie du Prophète ﷺ, ou qui souhaite renforcer son amour pour lui avec des connaissances solides plutôt que des souvenirs épars.",
+  },
+  {
+    question: "Comment se déroule le cours de Sîrah en ligne ?",
+    answer:
+      "Le cours de Sîrah se suit à distance, en direct sur Zoom, un samedi par semaine à 10h30, à partir d'octobre 2026, sur une durée de 8 mois. Les replays restent accessibles si tu manques une séance. Les supports de cours et les résumés sont inclus, et un groupe WhatsApp privé assure le suivi entre les séances. Des QCM, exercices et activités permettent de mesurer ta progression tout au long de l'année.",
+  },
+  {
+    question: "Combien de temps dure la formation de Sîrah et combien coûte-t-elle ?",
+    answer:
+      "La formation de Sîrah de l'Institut ISHES dure 8 mois, à raison d'un cours par semaine, et coûte 649 € pour le parcours complet, supports inclus. Le paiement est possible en 3 fois sans frais et sécurisé. Ce tarif couvre les cours en direct, les replays, les supports, les évaluations et le suivi pédagogique jusqu'au diplôme.",
+  },
+  {
+    question: "Y a-t-il un diplôme à la fin du cours de Sîrah ?",
+    answer:
+      "Oui. À la fin des 8 mois, l'Institut ISHES remet son diplôme aux élèves ayant validé le parcours. La validation repose sur les évaluations proposées pendant la formation : QCM, exercices et activités. Le diplôme atteste du suivi complet du cours de Sîrah an-Nabawiyya, de la période pré-islamique jusqu'à la disparition du Prophète ﷺ.",
+  },
+];
+
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-as-sirah") },
   openGraph: {
@@ -44,7 +94,8 @@ export default function CoursAsSirahPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd data={faqJsonLd(SIRAH_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -254,10 +305,17 @@ export default function CoursAsSirahPage() {
         </div>
       </section>
 
+      <VitrineFaq
+        eyebrow="FAQ Sîrah"
+        title="Questions fréquentes sur le cours de Sîrah du Prophète ﷺ"
+        intro="Programme, méthode, niveau requis, déroulement en ligne et diplôme : les réponses avant de rejoindre le cours de Sîrah an-Nabawiyya de l'Institut ISHES."
+        items={SIRAH_FAQS}
+      />
+
       {/* ─── PRICING BANNER ─── */}
       <section className="py-12 px-6 max-w-6xl mx-auto mb-10 mt-12">
         <div className="bg-ishes-dark rounded-[2rem] p-8 md:p-12 shadow-2xl text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-          
+
           {/* Section Gauche : Prix */}
           <div className="text-center md:text-left space-y-2 flex-1 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0">
             <div className="text-5xl md:text-6xl font-black text-ishes-gold">649 €</div>

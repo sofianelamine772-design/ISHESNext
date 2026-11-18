@@ -37,44 +37,54 @@ export const metadata = buildPageMetadata({
 
 const PROGRAM_FAQS = [
   {
-    question: "Quelles formations propose l'Institut ISHES ?",
+    question: "Comment choisir sa formation dans le catalogue de l’Institut ISHES ?",
     answer:
-      "L'Institut ISHES propose des formations en langue arabe, Tajwid et lecture du Coran, mémorisation (Hifz), Fiqh mâlikite, Aqîda, Sîrah, Tarbiya Islamiyya, civilisation arabo-musulmane, ainsi que des formations d'enseignants. Les parcours existent pour adultes et enfants, en présentiel à Toulouse ou à distance.",
+      "Le catalogue des formations ISHES se parcourt en trois étapes : choisissez d’abord le mode (présentiel à Toulouse ou distanciel), puis le public (adulte ou enfant), puis ouvrez la fiche détaillée de la formation qui vous intéresse pour vérifier le programme, le niveau attendu, le calendrier et le tarif. L’inscription en ligne se fait directement depuis la fiche. En cas d’hésitation, un entretien gratuit vous oriente.",
   },
   {
-    question: "ISHES est-il un institut de science religieuse en ligne ?",
+    question: "Quelles formations figurent au catalogue de l’Institut ISHES (arabe, Tajwid, Fiqh, Coran) ?",
     answer:
-      "Oui. ISHES est un institut de sciences religieuses en ligne et à Toulouse : le catalogue couvre l'arabe, le Tajwid, le Fiqh mâlikite et les sciences islamiques, avec cours en direct, replays et Pack Accompagnement. C'est ce que l'on attend des meilleurs instituts de science religieuse en ligne — un cursus, pas seulement des vidéos.",
+      "Le catalogue ISHES regroupe la langue arabe pour adultes et pour enfants, la lecture et le Tajwid du Coran (standard ou intensif), la Mémorisation du Coran (Hifz), le Fiqh mâlikite, l’Aqîda, la Sîrah, les Sciences du Coran, les Sciences du hadith, la Tarbiya Islamiyya, la civilisation arabo-musulmane, les cours en présentiel à Toulouse et les formations d’enseignants (Tajwid et Tarbiya). Chaque formation dispose de sa propre fiche.",
   },
   {
-    question: "Quelle différence entre présentiel et distanciel ?",
+    question: "Quelle différence entre une formation en présentiel à Toulouse et une formation en distanciel ?",
     answer:
-      "Le présentiel se déroule à Toulouse, en salle, avec un cadre collectif. Le distanciel se fait en ligne (cours en direct sur Zoom, replays, suivi pédagogique) et reste accessible partout en francophonie. Le catalogue /program permet de filtrer selon le mode choisi.",
+      "En présentiel, les cours ont lieu en salle à Toulouse, en groupe, avec un contact direct avec l’enseignant : scolarité enfants le mercredi, le samedi ou le dimanche, et groupes femmes Arabe et Tajwid. En distanciel, les cours se suivent en direct sur Zoom, avec replays, supports et suivi pédagogique, où que vous soyez en francophonie. Le filtre Présentiel / Distanciel du catalogue n’affiche que les formations du mode choisi.",
   },
   {
-    question: "Les cours sont-ils adaptés aux débutants ?",
+    question: "Par quelle formation commencer pour apprendre à lire le Coran ?",
     answer:
-      "Oui. Plusieurs cursus sont conçus pour les débutants : Tajwid Standard, arabe adulte, présentiel femmes débutantes, parcours enfants, etc. Chaque fiche précise le public et le niveau attendu.",
+      "Pour apprendre à lire le Coran, le point d’entrée du catalogue ISHES est le cours de lecture et Tajwid standard, construit pour les débutants avec le support Les Clés du Coran. Le Tajwid intensif condense les règles sur trois mois pour ceux qui veulent un rythme soutenu. Une fois la lecture acquise, la Mémorisation du Coran (Hifz) prend le relais avec un suivi dédié. L’entretien gratuit permet de trancher entre standard et intensif.",
   },
   {
-    question: "Comment s'inscrire à une formation ?",
+    question: "Comment connaître le niveau requis avant de s’inscrire à une formation ISHES ?",
     answer:
-      "Choisissez votre formation sur cette page, puis cliquez pour accéder à la fiche et à l'inscription en ligne. Le paiement peut souvent être effectué en plusieurs fois sans frais.",
+      "Chaque fiche du catalogue précise le public visé et le niveau attendu : débutant, intermédiaire ou avancé. Plusieurs parcours partent de zéro (Tajwid standard, arabe adulte, groupe femmes débutantes, parcours enfants) ; d’autres supposent des bases, indiquées sur la fiche. Pour un enfant en présentiel, un test de positionnement gratuit aide à choisir le groupe. Pour un adulte, l’entretien gratuit confirme le niveau d’entrée.",
   },
   {
-    question: "Proposez-vous des cours pour enfants ?",
+    question: "Quels cours pour enfant propose le catalogue ISHES (arabe, Coran, Tajwid) ?",
     answer:
-      "Oui. L'ISHES propose des cours d'arabe et de Tajwid pour enfants, en distanciel et en présentiel à Toulouse (créneaux mercredi, samedi ou dimanche selon les classes).",
+      "Le filtre Enfant du catalogue affiche les cours d’arabe et de Coran avec Tajwid adaptés à l’âge, disponibles en distanciel (en direct, avec un enseignant) et en présentiel à Toulouse le mercredi, le samedi ou le dimanche selon les classes. La pédagogie est progressive et bienveillante ; en présentiel, elle s’accompagne d’activités et d’ateliers. Les parents peuvent compléter avec le Pack Accompagnement.",
   },
   {
     question: "Je ne sais pas quelle formation choisir : que faire ?",
     answer:
-      "Demandez un entretien gratuit (page Contact, WhatsApp ou rendez-vous Zoom de 15 minutes). Un conseiller ISHES vous aide à choisir selon l'âge, le niveau et le mode (Toulouse ou distance), sans engagement.",
+      "Demandez un entretien gratuit : via la page Contact, par WhatsApp ou lors d’un rendez-vous Zoom d’une quinzaine de minutes. Un conseiller de l’Institut ISHES vous aide à choisir dans le catalogue selon l’âge, le niveau, l’objectif (arabe, Coran, Fiqh, sciences islamiques) et le mode (Toulouse ou distance), sans engagement. Vous repartez avec une ou deux formations ciblées plutôt qu’un catalogue entier.",
   },
   {
-    question: "Le cours de Fatiha est-il vraiment 100 % gratuit ?",
+    question: "Comment s’inscrire à une formation depuis le catalogue ?",
     answer:
-      "Oui. La correction d'Al-Fatiha (et des 3 dernières sourates) est un cours de Fatiha avec professeur, 100 % gratuit, avec groupe WhatsApp. Inscription sans paiement sur la page Correction al Fatiha.",
+      "Depuis le catalogue, ouvrez la fiche de la formation puis cliquez sur le bouton d’inscription : l’inscription et le paiement se font en ligne, de façon sécurisée. Selon la formation, le paiement peut être échelonné en plusieurs fois sans frais ; les modalités exactes sont indiquées sur la fiche et sur la page d’inscription. Le Pack Accompagnement vous est proposé au moment de l’inscription.",
+  },
+  {
+    question: "Quelles formations de sciences islamiques à distance propose l’Institut ISHES ?",
+    answer:
+      "Au-delà de l’arabe et du Tajwid, le catalogue ISHES propose en distanciel un ensemble de sciences islamiques : Fiqh mâlikite (adorations selon l’école de l’imam Mâlik), Aqîda (croyance), Sîrah (vie du Prophète), Sciences du Coran, Sciences du hadith, Tarbiya Islamiyya (éducation spirituelle) et civilisation arabo-musulmane. Les cours sont en français, en direct sur Zoom, avec replays.",
+  },
+  {
+    question: "Existe-t-il des ressources gratuites avant de choisir une formation payante ?",
+    answer:
+      "Oui. L’Institut ISHES met à disposition des fiches pratiques gratuites (Les Clés du Coran, Sciences du Coran, frise de la Révélation) et un cours gratuit de correction de la Fatiha avec professeur. Ces ressources permettent de découvrir la méthode et le niveau d’exigence de l’institut avant de s’engager dans une formation du catalogue, en présentiel ou à distance.",
   },
 ];
 
@@ -389,8 +399,9 @@ export default function ProgrammesPage() {
       </section>
 
       <VitrineFaq
-        eyebrow="FAQ Formations"
-        title="Questions fréquentes sur nos formations"
+        eyebrow="FAQ Catalogue"
+        title="Choisir sa formation dans le catalogue ISHES"
+        intro="Présentiel à Toulouse ou distanciel, adultes ou enfants, niveaux et inscription : les réponses pour choisir la bonne formation."
         items={PROGRAM_FAQS}
       />
 

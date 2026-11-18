@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -25,6 +27,54 @@ import {
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
+const TAJWID_ENFANT_FAQS = [
+  {
+    question: "À quel âge un enfant peut-il apprendre le Tajwid ?",
+    answer:
+      "Dès qu’il peut suivre une heure de cours en visio et répéter des sons avec attention, un enfant peut commencer le Tajwid. Le cours de Tajwid enfant de l’Institut ISHES est organisé en 3 niveaux progressifs, avec des groupes constitués selon l’âge et le niveau, le mardi ou le jeudi à 18h30. Plus l’oreille et la prononciation se forment tôt, plus la récitation correcte devient naturelle.",
+  },
+  {
+    question: "Le Tajwid pour enfant commence-t-il par l’apprentissage des lettres arabes ?",
+    answer:
+      "Oui, au premier niveau. La méthode Les Clés du Coran, adaptée de Nour al-Bayan pour les enfants francophones, part des lettres, de leurs sons et de leurs voyelles avant d’enchaîner sur la lecture de mots puis de versets. Un enfant qui ne connaît pas encore l’alphabet arabe peut donc commencer ; celui qui lit déjà est orienté vers le niveau qui lui correspond.",
+  },
+  {
+    question: "Quelle méthode de Tajwid est utilisée pour les enfants à l’Institut ISHES ?",
+    answer:
+      "Le cours s’appuie sur Les Clés du Coran, un support développé par l’Institut ISHES à partir de la célèbre méthode Nour al-Bayan et spécialement adapté aux enfants francophones. Il facilite l’apprentissage de la lecture du Coran et conduit progressivement à une récitation fluide et conforme aux règles du Tajwid (ou Tajweed). Les séances alternent théorie, pratique, jeux et corrections personnalisées.",
+  },
+  {
+    question: "Comment un enfant apprend-il à réciter le Coran correctement en ligne ?",
+    answer:
+      "Par l’écoute et la répétition guidée. Chaque semaine, en direct sur Zoom, l’enseignant fait lire chaque enfant, corrige la prononciation et explique la règle concernée de manière ludique. Entre deux cours, l’enfant révise avec le replay et reçoit des corrections audio personnalisées sur sa récitation. Des évaluations régulières et des temps de consolidation mesurent sa progression vers une récitation juste et belle.",
+  },
+  {
+    question: "Le cours de Tajwid enfant est-il compatible avec l’école ?",
+    answer:
+      "Oui. Il n’y a qu’un cours par semaine, le mardi ou le jeudi à 18h30 selon le niveau, en direct sur Zoom, dès octobre 2026. Le créneau de fin de journée est pensé pour les enfants scolarisés : ils rentrent, goûtent, puis retrouvent leur classe et leur enseignant depuis la maison. L’année dure 8 mois et chaque séance est enregistrée, avec des replays accessibles à vie.",
+  },
+  {
+    question: "Combien de temps faut-il à un enfant pour maîtriser le Tajwid ?",
+    answer:
+      "Le parcours de Tajwid enfant ISHES est construit en 3 niveaux progressifs, pour acquérir des bases solides sans brûler les étapes : d’abord les lettres et la lecture, puis les règles essentielles, enfin leur application fluide dans le Coran. Chaque année se termine par le diplôme ISHES. La durée dépend du rythme de l’enfant et de sa régularité ; l’important est une pratique hebdomadaire encadrée plutôt qu’une course.",
+  },
+  {
+    question: "Pourquoi apprendre le Tajwid à un enfant plutôt que la simple lecture du Coran ?",
+    answer:
+      "Parce que le Tajwid, c’est réciter le Coran comme il a été transmis : chaque lettre à sa place, chaque allongement respecté. Un enfant qui apprend d’emblée les bonnes règles n’aura pas à corriger plus tard des habitudes installées. Au-delà de la technique, le cours cherche à transmettre l’amour du Coran, la fierté de le réciter et la conscience de sa valeur, dès le plus jeune âge.",
+  },
+  {
+    question: "Quel est le prix du cours de Tajwid enfant et le paiement est-il échelonné ?",
+    answer:
+      "Le cours de Tajwid enfant coûte 399 € pour l’année, payable en 5 fois 79,80 € sans frais. Le tarif inclut les cours en direct sur Zoom, les replays à vie, les activités et exercices, les évaluations régulières, les corrections audio personnalisées, le suivi via le groupe WhatsApp privé de la classe et le diplôme ISHES. Le paiement en ligne est entièrement sécurisé.",
+  },
+  {
+    question: "Mon enfant est timide : va-t-il oser réciter devant les autres en visio ?",
+    answer:
+      "Les enseignants du cours de Tajwid enfant sont spécialisés dans la pédagogie des enfants et accompagnent chacun avec patience et exigence. Les activités ludiques détendent l’atmosphère, chaque élève est écouté régulièrement et les corrections restent bienveillantes. La confiance vient avec la progression : l’erreur fait partie de l’apprentissage et chaque réussite est encouragée, en classe comme dans le groupe WhatsApp.",
+  },
+];
+
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-tajwid-enfant") },
   openGraph: {
@@ -44,7 +94,8 @@ export default function CoursTajwidEnfantPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd data={faqJsonLd(TAJWID_ENFANT_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -55,7 +106,7 @@ export default function CoursTajwidEnfantPage() {
                 LANGUE & COMMUNICATION
               </span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
               TAJWID (Enfant)
             </h1>
@@ -270,10 +321,17 @@ export default function CoursTajwidEnfantPage() {
         </div>
       </section>
 
+      <VitrineFaq
+        eyebrow="FAQ Tajwid enfant"
+        title="Questions fréquentes sur le Tajwid pour enfants en ligne"
+        intro="Âge, méthode Les Clés du Coran, horaires et progression : réponses aux parents qui veulent que leur enfant récite le Coran correctement."
+        items={TAJWID_ENFANT_FAQS}
+      />
+
       {/* ─── PRICING BANNER ─── */}
       <section className="py-8 px-6 max-w-[80rem] mx-auto mb-10">
         <div className="bg-ishes-dark rounded-[2rem] p-6 md:p-8 shadow-2xl text-white relative overflow-hidden flex flex-wrap md:flex-nowrap items-center gap-6 justify-between">
-          
+
           <div className="flex items-center gap-4 border-r border-white/20 pr-8 md:pr-16">
             <Tag className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
@@ -291,8 +349,8 @@ export default function CoursTajwidEnfantPage() {
           </div>
 
           <div className="flex flex-col items-center md:items-end gap-2 shrink-0 w-full md:w-auto mt-4 md:mt-0">
-            <Link 
-              href="/inscription?plan=tajwid_enfant_distance&audience=enfant" 
+            <Link
+              href="/inscription?plan=tajwid_enfant_distance&audience=enfant"
               className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"
             >
               JE M'INSCRIS MAINTENANT <ArrowRight className="w-4 h-4" />

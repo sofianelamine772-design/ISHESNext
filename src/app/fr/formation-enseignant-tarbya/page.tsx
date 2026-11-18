@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -38,13 +40,62 @@ export const metadata: Metadata = {
     "devenir enseignant tarbiya, enseigner l'islam aux enfants, professeur education islamique, formation enseignant islam, pédagogie islamique",
 };
 
+const ENSEIGNANT_TARBYA_FAQS = [
+  {
+    question: "Qu’apprend-on dans la formation d’enseignant en Tarbiya Islamiyya ?",
+    answer:
+      "On apprend à concevoir et animer des cours d’éducation islamique pour enfants autour des grands thèmes de la Tarbiya Islamiyya : fondements de la spiritualité, piliers de l’islam, récits des Prophètes, adorations, éthique, adab et calendrier musulman. Un second module, « apprendre à apprendre », couvre la gestion de classe, la motivation, les activités interactives, la gestion des conflits et l’accompagnement personnalisé des élèves.",
+  },
+  {
+    question: "Faut-il déjà avoir des connaissances religieuses pour devenir enseignant en Tarbiya ?",
+    answer:
+      "La formation s’adresse d’abord à celles et ceux qui possèdent déjà des connaissances religieuses mais ne savent pas comment les transmettre à des enfants. Elle n’est pas un cours de sciences islamiques : elle apprend à passer du savoir à la pédagogie. Un entretien gratuit avec l’équipe de l’Institut ISHES permet de vérifier que ton profil et ton projet correspondent avant de recevoir le devis.",
+  },
+  {
+    question: "Comment se déroule la formation enseignant Tarbiya Islamiyya à distance ?",
+    answer:
+      "Elle démarre en octobre 2026 et dure 4 à 5 mois, avec deux cours par semaine, le mardi et le vendredi à 19h30, en direct sur Zoom. Les replays sont disponibles si tu manques une séance et tous les supports sont inclus. Le parcours se termine par la certification Formation Enseignant ISHES, après des évaluations régulières de validation.",
+  },
+  {
+    question: "Combien coûte la formation d’enseignant en Tarbiya Islamiyya ?",
+    answer:
+      "Le tarif est sur devis, avec des facilités de paiement en plusieurs fois. Il s’obtient en demandant un rendez-vous sur le site ou en écrivant à l’équipe sur WhatsApp. Le devis tient compte de ton projet (mosquée, association, école ou famille) et précise les supports inclus et les modalités de paiement avant toute inscription.",
+  },
+  {
+    question: "Quelle différence entre la formation enseignant Tarbiya et la formation enseignant Tajwid ?",
+    answer:
+      "La formation enseignant Tarbiya prépare à transmettre l’éducation islamique aux enfants : croyance, récits, adorations, valeurs et comportement. La formation enseignant Tajwid prépare à enseigner la lecture du Coran avec Les Clés du Coran. Les deux partagent un module de pédagogie et de gestion de classe, mais le contenu enseigné et les supports diffèrent. Certains suivent les deux pour couvrir un programme complet.",
+  },
+  {
+    question: "Où peut-on enseigner l’éducation islamique après la formation ?",
+    answer:
+      "Dans une mosquée, une association, une école ou simplement en famille. La formation vise à donner la légitimité, la méthode et l’assurance nécessaires pour tenir une classe d’enfants et répondre aux parents. La certification Formation Enseignant ISHES atteste du parcours suivi auprès d’un institut qui enseigne la Tarbiya aux enfants depuis plus de quinze ans à Toulouse et à distance.",
+  },
+  {
+    question: "Quels supports pédagogiques sont fournis pour enseigner la Tarbiya Islamiyya ?",
+    answer:
+      "Tous les supports sont inclus : cours, manuels, fiches, activités, modèles de leçons et ressources prêtes à l’emploi, dont un manuel pédagogique sur le Tawhid et la Sîrah pour enfants. L’objectif est une formation clé en main : à la sortie, tu disposes du contenu, des outils et des méthodes pour concevoir et animer des séances captivantes sans repartir de zéro.",
+  },
+  {
+    question: "Comment apprend-on à gérer une classe d’enfants en cours d’éducation islamique ?",
+    answer:
+      "Le module « apprendre à apprendre » traite concrètement de la gestion de classe : poser un cadre, capter et maintenir l’attention, motiver, proposer des activités interactives, gérer les conflits et accompagner chaque enfant. On y découvre aussi comment un enfant mémorise, comprend et applique ce qu’il apprend, pour adapter ses récits et ses mises en pratique à l’âge du groupe.",
+  },
+  {
+    question: "Y a-t-il un stage pratique ou un suivi après la formation enseignant Tarbiya ?",
+    answer:
+      "Oui. Un stage pratique au sein de l’Institut ISHES est possible, et un mentorat avec supervision est proposé après la formation pour accompagner les premiers cours. Cette continuité, ajoutée aux évaluations régulières pendant le parcours, vise à ce que chaque participant reparte avec les compétences et la confiance pour enseigner la Tarbiya Islamiyya avec impact.",
+  },
+];
+
 export default function FormationEnseignantTarbyaPage() {
   const course = PROGRAMS_DATA["formation_enseignante_tarbya"];
   const videoUrl = course?.videoUrl;
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd data={faqJsonLd(ENSEIGNANT_TARBYA_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -319,10 +370,17 @@ export default function FormationEnseignantTarbyaPage() {
         </div>
       </section>
 
+      <VitrineFaq
+        eyebrow="FAQ formation enseignant Tarbiya"
+        title="Devenir enseignant en Tarbiya Islamiyya : contenu, débouchés et déroulement"
+        intro="Les réponses aux questions des futurs enseignants d’éducation islamique pour enfants, en mosquée, en association, à l’école ou en famille."
+        items={ENSEIGNANT_TARBYA_FAQS}
+      />
+
       {/* ─── PRICING BANNER ─── */}
       <section className="py-8 px-6 max-w-[80rem] mx-auto mb-10">
         <div className="bg-ishes-dark rounded-[2rem] p-6 md:p-8 shadow-2xl text-white relative overflow-hidden flex flex-wrap md:flex-nowrap items-center gap-6">
-          
+
           <div className="flex items-center gap-4 flex-1 border-r border-white/10 pr-6 min-w-[250px]">
             <Award className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>

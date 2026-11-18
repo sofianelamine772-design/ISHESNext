@@ -11,6 +11,56 @@ import { FEMME_PRESENTIEL_CLASS_BY_PLAN } from "@/lib/presentiel-data";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqJsonLd } from "@/lib/seo";
+
+const INSTITUT_PRESENTIEL_FAQS = [
+  {
+    question: "Comment se rendre à l’Institut ISHES en présentiel à Toulouse (parking, périphérique, transports) ?",
+    answer:
+      "L’Institut ISHES se trouve au 41 boulevard de Thibaud, 31100 Toulouse, dans ses propres locaux. En voiture, prenez le périphérique toulousain, sortie 37 ou 38 : un parking gratuit est disponible sur place. Le site est aussi accessible en transports en commun. Un lien d’itinéraire Google Maps est proposé sur cette page pour préparer votre trajet avant le premier cours.",
+  },
+  {
+    question: "Quels jours ont lieu les cours en présentiel à Toulouse pour les enfants et pour les femmes ?",
+    answer:
+      "La scolarité enfants en présentiel a lieu le mercredi de 13h30 à 16h30, le samedi et le dimanche (9h à 12h ou 13h30 à 16h30 selon le groupe). Le groupe Femme débutante Arabe et Tajwid se réunit le dimanche matin de 9h à 12h, et le groupe Femme intermédiaire le samedi matin de 9h à 12h. Chaque carte de formation ci-dessus indique le créneau et les places disponibles.",
+  },
+  {
+    question: "Combien coûte la scolarité en présentiel à Toulouse et peut-on payer en plusieurs fois ?",
+    answer:
+      "La scolarité enfants en présentiel est affichée à 480 € la session, et les formations femmes Arabe et Tajwid à 649 € la session. Pour valider la place, un acompte de 150 € est demandé lors de l’inscription en ligne. Le solde se règle en une fois ou en 3, 5 ou 10 mensualités automatiques, sans frais. Les tarifs exacts figurent sur chaque carte et sur la page d’inscription.",
+  },
+  {
+    question: "Faut-il acheter les manuels pour la scolarité en présentiel à Toulouse ?",
+    answer:
+      "Non. L’inscription en présentiel à l’Institut ISHES comprend les manuels physiques distribués en début d’année : le support exclusif Les Clés du Coran (adaptation francophone de Nour Al Bayane) pour la lecture et le Tajwid, et les manuels de langue arabe de Habib Haffes. Les familles n’ont donc rien à commander en plus pour suivre les cours.",
+  },
+  {
+    question: "Que se passe-t-il si mon enfant ou moi manquons un cours en présentiel ?",
+    answer:
+      "Les séances en présentiel de l’Institut ISHES sont enregistrées. Vous conservez un accès aux replays vidéo des cours depuis votre espace élève, pour réviser et rattraper un cours manqué à votre rythme. C’est un avantage rare pour un enseignement en salle : l’absence ponctuelle ne fait pas perdre le fil du programme d’arabe, de Coran ou de Tajwid.",
+  },
+  {
+    question: "Combien d’élèves y a-t-il par classe en présentiel à l’Institut ISHES ?",
+    answer:
+      "Les groupes en présentiel restent volontairement petits. Pour les formations adultes femmes, l’effectif est limité à 20 personnes. Pour la scolarité enfants, les classes préparatoires accueillent au maximum 13 élèves et les classes élémentaires 18 élèves. Ces effectifs permettent une correction individuelle de la lecture et un vrai suivi par l’enseignant.",
+  },
+  {
+    question: "Les cours Arabe et Tajwid pour femmes à Toulouse sont-ils ouverts aux débutantes ?",
+    answer:
+      "Oui. Le groupe Femme débutante, le dimanche matin, est conçu pour celles qui commencent l’arabe et les règles de Tajwid. Le groupe Femme intermédiaire, le samedi matin, s’adresse à celles qui ont déjà des bases. Dans les deux cas, la formation combine arabe et Tajwid : il n’y a pas d’option séparée. Les groupes sont réservés aux femmes, avec un suivi personnalisé.",
+  },
+  {
+    question: "Comment savoir si mon enfant doit commencer en niveau Débutant ou en niveau 1+ ?",
+    answer:
+      "L’Institut ISHES propose un test de positionnement gratuit en ligne. En moins de deux minutes, ce test interactif vous aide à choisir entre le niveau Débutant et le niveau 1+ pour la scolarité enfants en présentiel. En cas de doute après le test, l’équipe du pôle présentiel peut affiner l’orientation lors d’un entretien gratuit avant l’inscription.",
+  },
+  {
+    question: "À quel âge un enfant peut-il intégrer la scolarité en présentiel à Toulouse ?",
+    answer:
+      "La scolarité enfants de l’Institut ISHES accueille les 4 à 15 ans, le mercredi, le samedi ou le dimanche. Le programme réunit arabe, Coran et Tajwid avec une pédagogie active : enseignement direct, activités ludiques, ateliers et vie d’institut. Le niveau d’entrée (Débutant ou 1+) se détermine avec le test de positionnement gratuit.",
+  },
+];
 
 // Définition rigoureuse du type pour éviter les erreurs TypeScript
 interface ProgramSlot {
@@ -108,28 +158,7 @@ export default function InstitutPage() {
   const [slotsStatus, setSlotsStatus] = useState<any[]>([]);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const faqItems = [
-    {
-      q: "Où se déroulent exactement les cours en présentiel ?",
-      a: "Tous les cours ont lieu dans nos propres locaux situés au 41 Boulevard de Thibaud, 31100 Toulouse. Le campus est facilement accessible en voiture (périphérique sortie 37 ou 38, parking gratuit sur place) et en transports en commun."
-    },
-    {
-      q: "Quels sont les jours et horaires des formations ?",
-      a: "Pour l'année en cours : \n• Scolarité Enfants : Mercredi après-midi (13h30-16h30), Samedi ou Dimanche.\n• Scolarité Femmes Débutante : Dimanche matin de 9h00 à 12h00.\n• Scolarité Femmes Intermédiaire : Samedi matin de 9h00 à 12h00."
-    },
-    {
-      q: "Comment fonctionne le paiement de la scolarité ?",
-      a: "Le tarif annuel est de 480 € pour la scolarité enfants, et de 649 € pour les formations femmes (Arabe & Tajwid). Pour valider votre place, un acompte initial de 150 € est demandé lors de l'inscription en ligne. Le solde restant peut être réglé en une seule fois, ou étalé en 3, 5 ou 10 mensualités automatiques sans aucun frais."
-    },
-    {
-      q: "Les manuels et supports pédagogiques sont-ils compris ?",
-      a: "Oui, l'inscription comprend l'ensemble des manuels physiques distribués en début d'année, y compris notre support exclusif 'Les Clés du Coran' (basé sur Nour Al Bayane) et les manuels de langue arabe (Habib Haffes)."
-    },
-    {
-      q: "Que se passe-t-il si je manque un cours en présentiel ?",
-      a: "Pas d'inquiétude ! L'intégralité des séances est enregistrée. Vous conservez un accès illimité aux replays vidéo des cours via votre espace élève pour réviser et rattraper les cours manqués à votre rythme."
-    }
-  ];
+  const faqItems = INSTITUT_PRESENTIEL_FAQS;
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -154,6 +183,7 @@ export default function InstitutPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white">
+      <JsonLd data={faqJsonLd(INSTITUT_PRESENTIEL_FAQS)} />
       {/* Navbar provided by layout */}
 
       {/* --- HERO CINEMATIC --- */}
@@ -486,7 +516,7 @@ export default function InstitutPage() {
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
                     className="w-full flex items-center justify-between p-6 text-left font-black text-ishes-dark text-lg hover:text-ishes-gold transition-colors"
                   >
-                    <span>{item.q}</span>
+                    <span>{item.question}</span>
                     <ChevronRight 
                       className={`w-5 h-5 text-ishes-gold transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} 
                     />
@@ -496,7 +526,7 @@ export default function InstitutPage() {
                       isOpen ? 'max-h-[500px] border-t border-gray-100/50 p-6 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
                     } bg-white text-gray-500 font-medium leading-relaxed text-sm whitespace-pre-line`}
                   >
-                    {item.a}
+                    {item.answer}
                   </div>
                 </div>
               );

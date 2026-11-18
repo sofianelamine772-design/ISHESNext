@@ -19,37 +19,52 @@ const FAQS = [
   {
     question: "Qu'est-ce que Les Clés du Coran ?",
     answer:
-      "Les Clés du Coran est le manuel exclusif de l'Institut ISHES pour apprendre à lire le Coran et le Tajwid en français. En deux volumes, il conduit l'élève des fondations de la lecture (alphabet, tahajjî) à l'étude structurée des règles de récitation, avec une progression inspirée de Nour Al Bayan.",
+      "Les Clés du Coran est le manuel exclusif de l'Institut ISHES pour apprendre à lire le Coran et le Tajwid en français. En deux volumes, il conduit l'élève des fondations de la lecture (alphabet, voyelles, tahajjî) à l'étude structurée des règles de récitation, avec une progression inspirée de Nour Al Bayan. Il sert de support aux cours de Tajwid en ligne et en présentiel à Toulouse.",
   },
   {
     question: "Les Clés du Coran ou Nour Al Bayan : quelle différence ?",
     answer:
-      "Les Clés du Coran s'inspire de la progression Nour Al Bayan tout en étant conçu pour les francophones : explications en français, exemples adaptés, et un poème didactique de Tajwid rédigé directement en français — pas une simple traduction d'un matn arabe.",
+      "Les Clés du Coran s'inspire de la progression de Nour Al Bayan, méthode largement utilisée dans le monde arabo-musulman, mais il est conçu pour les francophones : explications en français, exemples adaptés, repères du Moushaf expliqués, et un poème didactique de Tajwid rédigé directement en français, pas une simple traduction d'un matn arabe. C'est une alternative francophone, pas une copie.",
   },
   {
     question: "Que contient le Volume 1 des Clés du Coran ?",
     answer:
-      "Le Volume 1 pose les fondations : lettres de l'alphabet, fatha, kasra, damma, tahajjî des phrases, prolongements (alif, yâ, wâw), tanwin, soukoun, chaddah et combinaisons, arrêts et exemples coraniques. Objectif : comprendre ce qui est écrit avant d'automatiser.",
+      "Le Volume 1 pose les fondations de la lecture : lettres de l'alphabet arabe, fatha, kasra et damma, tahajjî des phrases, prolongements (alif, yâ, wâw), tanwin, soukoun, chaddah et combinaisons, chaddah avec madd tabi'î, arrêts et exemples coraniques. Objectif : comprendre ce qui est écrit et décomposer avant d'automatiser, pour lire au lieu de deviner.",
   },
   {
     question: "Que contient le Volume 2 des Clés du Coran ?",
     answer:
-      "Le Volume 2 traite l'adab, isti'âdha et basmalah, hamzat wasl, noun sâkina et tanwin, mim sâkina, lâm ta'rîf, moudoud, idgham, nom d'ALLAH et Râ, waqf et ibtidâ, makhârij, sifât, erreurs de récitation, repères du Moushaf, plus le poème Les Clés du Coran.",
+      "Le Volume 2 fait entrer dans les règles du Tajwid : adab, isti'âdha et basmalah, hamzat wasl, noun sâkina et tanwin, mim sâkina, lâm ta'rîf, moudoud, idgham, nom d'ALLAH et Râ, waqf et ibtidâ, makhârij, sifât, erreurs de récitation majeures et mineures, repères du Moushaf. Il se termine par le poème didactique « Les Clés du Coran » qui résume les règles en vers français.",
   },
   {
     question: "Qu'est-ce que le tahajjî dans Les Clés du Coran ?",
     answer:
-      "Le tahajjî consiste à décomposer la lecture : identifier la lettre, sa voyelle ou son signe, puis reconstruire le mot. Cette méthode évite de deviner et crée des automatismes plus sûrs — c'est la particularité pédagogique centrale du Volume 1.",
+      "Le tahajjî consiste à décomposer la lecture : identifier la lettre, lire sa voyelle ou son signe, puis assembler progressivement le mot, syllabe par syllabe, avant de fluidifier. Cette méthode évite de deviner et permet de comprendre pourquoi on prononce ainsi. C'est la particularité pédagogique centrale du Volume 1, et la base indispensable avant les règles du Volume 2.",
+  },
+  {
+    question: "Qu'est-ce que le poème didactique des Clés du Coran et à quoi sert-il ?",
+    answer:
+      "C'est un texte versifié en français, inclus dans le Volume 2, qui reprend les grandes règles du Tajwid sous une forme mémorisable : noun sâkina, mim sâkina, lâm ta'rîf, moudoud, idgham, hamzat wasl, Râ, waqf, makhârij, sifât et erreurs de récitation. Comme les matn de la tradition islamique, il sert de repère mental et de révision globale. À notre connaissance, c'est le premier poème didactique de Tajwid conçu directement en langue française.",
+  },
+  {
+    question: "Qui a écrit Les Clés du Coran ?",
+    answer:
+      "Oustadh Riad Latreche, enseignant et cofondateur de l'Institut ISHES, a conçu l'ouvrage à partir de son expérience auprès d'apprenants francophones. Il a également rédigé le poème français du Volume 2, pour transposer la pédagogie traditionnelle de mémorisation par le vers. L'ouvrage est aujourd'hui le support de tous les cours de Tajwid de l'institut.",
   },
   {
     question: "Le livre Les Clés du Coran suffit-il sans professeur ?",
     answer:
-      "Non. Un support écrit structure et explique, mais le Tajwid se transmet aussi par l'écoute et la correction orale. À ISHES, le manuel accompagne le cours en direct : l'enseignant explique, écoute, corrige et guide.",
+      "Non. Un support écrit structure et explique une règle, mais le Tajwid est aussi une science de transmission orale : il faut entendre, reproduire, être écouté et corrigé. Un manuel ne détecte pas une lettre mal articulée, une ghounna insuffisante ou un prolongement imprécis. À l'Institut ISHES, Les Clés du Coran accompagne le cours en direct : l'enseignant explique, écoute et corrige.",
+  },
+  {
+    question: "Peut-on télécharger Les Clés du Coran en PDF ?",
+    answer:
+      "La fiche pratique de cette page, qui présente la méthode, le Volume 1, le Volume 2, le tahajjî et le poème, se télécharge gratuitement en PDF. Les deux volumes complets du manuel sont fournis aux élèves inscrits aux cours de Tajwid ISHES, où ils sont inclus dans le tarif, et sont également disponibles dans la boutique de l'institut.",
   },
   {
     question: "Où apprendre Les Clés du Coran avec un enseignant ?",
     answer:
-      "À l'Institut ISHES : cours de Tajwid en ligne (parcours annuel 649 €), Tajwid intensif (3 mois), présentiel à Toulouse, et formation enseignant Tajwid. La fiche pratique présente la méthode ; le cursus apporte la transmission.",
+      "À l'Institut ISHES : le cours de Tajwid en ligne sur deux années scolaires (649 € l'année), le Tajwid intensif en 3 mois avec corrections audio, les classes en présentiel à Toulouse, et la formation enseignant de Tajwid pour ceux qui veulent transmettre la méthode. Les volumes 1 et 2 sont inclus dans ces cursus. La fiche pratique présente la méthode ; le cours apporte la transmission.",
   },
 ];
 
@@ -406,7 +421,8 @@ export default function LesClesDuCoranPage() {
 
       <VitrineFaq
         eyebrow="FAQ Les Clés du Coran"
-        title="Questions fréquentes sur la méthode"
+        title="Questions fréquentes sur la méthode Les Clés du Coran"
+        intro="Contenu des volumes 1 et 2, tahajjî, poème didactique, auteur, PDF et différence avec Nour Al Bayan."
         items={FAQS}
       />
 

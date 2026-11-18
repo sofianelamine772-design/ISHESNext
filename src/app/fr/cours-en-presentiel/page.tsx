@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl, SITE_URL } from "@/lib/seo";
+import { absoluteUrl, SITE_URL, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { 
   CheckCircle2, 
@@ -41,6 +43,54 @@ export const metadata: Metadata = {
     ]
   }
 };
+
+const PRESENTIEL_FAQS = [
+  {
+    question: "Quels cours en présentiel propose l’Institut ISHES à Toulouse ?",
+    answer:
+      "À Toulouse, les adultes peuvent suivre le cursus arabe et Tajwid femme débutante (dimanche matin), le cursus arabe et Tajwid femme intermédiaire (samedi matin), le Tajwid accéléré en 3 mois (mardi et vendredi), le programme de Mémorisation du Coran en tête-à-tête (Hifdh) et la Sîrah du Prophète ﷺ le samedi à 10h30. Les enfants de 4 à 15 ans ont leur propre programme arabe, Coran et éducation islamique le mercredi, le samedi et le dimanche.",
+  },
+  {
+    question: "Quels jours ont lieu les cours en présentiel pour adultes à Toulouse ?",
+    answer:
+      "Toute la semaine, selon le programme. Le samedi matin accueille le cursus femme intermédiaire (9h00-12h00) et la Sîrah (10h30) ; le dimanche matin, le cursus femme débutante (9h00-12h00). Le Tajwid accéléré se tient le mardi et le vendredi, en séances intensives d’une heure. La Mémorisation du Coran se fait en tête-à-tête le mercredi soir ou le dimanche matin, à une heure convenue avec l’enseignant.",
+  },
+  {
+    question: "Faut-il verser un acompte pour réserver sa place en présentiel ?",
+    answer:
+      "Oui. Pour toutes les formations en présentiel, un acompte de 150 € est demandé lors de l’inscription en ligne. Il valide et garantit votre place physique dans la classe, ou votre créneau horaire pour les suivis individuels. Le solde se règle ensuite selon la formule choisie, les cursus annuels étant payables en plusieurs fois sans frais. Le paiement est sécurisé.",
+  },
+  {
+    question: "Les cours en présentiel à Toulouse sont-ils enregistrés si je manque une séance ?",
+    answer:
+      "Oui. Chaque session en présentiel est enregistrée et les replays restent accessibles en ligne pour réviser sereinement ou rattraper une absence. Pour les cursus femme débutante et intermédiaire, les replays sont accessibles à vie. Le présentiel garde ainsi l’avantage de la correction directe par l’enseignant en classe, sans faire perdre le fil à celles et ceux qui ont un empêchement ponctuel.",
+  },
+  {
+    question: "Peut-on apprendre le Tajwid en présentiel à Toulouse en partant de zéro ?",
+    answer:
+      "Oui. Pour les femmes, le cursus arabe et Tajwid débutante du dimanche part de l’alphabet avec la méthode Habib Haffes puis introduit le Tajwid avec Les Clés du Coran. Le Tajwid accéléré (3 mois, mardi et vendredi) s’adresse aux élèves qui lisent déjà l’arabe ou aux débutants très investis. Les programmes de mémorisation, eux, demandent de connaître les règles de Tajwid au préalable.",
+  },
+  {
+    question: "Existe-t-il un programme de mémorisation du Coran (Hifdh) à Toulouse ?",
+    answer:
+      "Oui. Le programme de Mémorisation du Coran de l’Institut ISHES se déroule en tête-à-tête avec un enseignant, le mercredi soir ou le dimanche matin, au rythme et avec les objectifs adaptés à chaque élève. Il comprend la vérification de la récitation avant mémorisation, la correction des erreurs et un programme de révision (Mouraja’a) régulier. Le tarif indiqué est de 399 € par parcours ; il faut connaître les règles de Tajwid.",
+  },
+  {
+    question: "Y a-t-il des cours en présentiel pour les hommes à Toulouse ?",
+    answer:
+      "Oui. La Sîrah du Prophète ﷺ (samedi à 10h30) s’adresse explicitement aux hommes comme aux femmes, débutants ou initiés. Le Tajwid accéléré et la Mémorisation du Coran ne sont pas réservés à un public féminin. Seuls les deux cursus annuels arabe et Tajwid du samedi et du dimanche matin sont exclusivement féminins. Pour un cours d’arabe adulte, l’Institut ISHES propose aussi une formation en ligne en direct.",
+  },
+  {
+    question: "Combien d’élèves par classe en présentiel à Toulouse ?",
+    answer:
+      "Les classes en présentiel sont volontairement petites pour permettre des corrections individuelles à chaque séance ; le cursus femme débutante, par exemple, est limité à 20 élèves. Les programmes de mémorisation se font en tête-à-tête avec l’enseignant. Cette proximité est au cœur de la pédagogie ISHES : un retour direct du professeur, séance après séance, pour affiner et parfaire sa pratique.",
+  },
+  {
+    question: "Quelle est la durée des formations en présentiel à Toulouse ?",
+    answer:
+      "Elle varie selon le programme. Les cursus arabe et Tajwid femme débutante et intermédiaire sont des scolarités annuelles. Le Tajwid accéléré est un format intensif de 3 mois, à deux séances par semaine. La Mémorisation du Coran se suit à l’année ou à la carte, selon vos objectifs. La Sîrah est un cursus suivi chaque samedi. Dans tous les cas, un diplôme de l’Institut ISHES atteste de la validation des compétences en fin de parcours.",
+  },
+];
 
 const coursesJsonLd = {
   "@context": "https://schema.org",
@@ -330,7 +380,8 @@ export default function CoursPresentielPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(coursesJsonLd) }}
       />
-      
+      <JsonLd data={faqJsonLd(PRESENTIEL_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="relative pt-36 pb-20 px-6 overflow-hidden bg-gradient-to-b from-green-50/50 via-white to-white">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-400/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
@@ -615,6 +666,13 @@ export default function CoursPresentielPage() {
           </Link>
         </div>
       </section>
+
+      <VitrineFaq
+        eyebrow="FAQ Présentiel Toulouse"
+        title="Questions fréquentes sur les cours en présentiel à Toulouse"
+        intro="Jours, publics, acompte, replays et programmes : ce qu’il faut savoir avant de rejoindre une classe de l’Institut ISHES à Toulouse."
+        items={PRESENTIEL_FAQS}
+      />
 
       {/* ─── INFORMATION NOTE & GENERAL REGISTRATION ─── */}
       <section className="py-16 px-6 max-w-7xl mx-auto">

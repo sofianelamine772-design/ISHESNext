@@ -34,42 +34,52 @@ const FAQS = [
   {
     question: "Qu'est-ce qu'un cours particulier de Coran à l'Institut ISHES ?",
     answer:
-      "C'est un cours en tête-à-tête, à distance, avec un enseignant ISHES. Le programme est construit selon ton niveau et ton objectif : apprendre à lire, corriger le Tajwid, réciter avec plus de justesse, ou mémoriser des sourates. Le rythme est convenu avec l'enseignant. Le tarif est sur devis.",
+      "C'est un cours en tête-à-tête, à distance et en direct, entre un enseignant ISHES et un seul élève. Le programme est construit après t'avoir entendu, selon ton niveau et ton objectif : apprendre à lire l'arabe du Coran, appliquer les règles du Tajwid, corriger une récitation, ou mémoriser des sourates. Le rythme est convenu avec l'enseignant et le tarif est établi sur devis, avant toute inscription.",
   },
   {
-    question: "Les cours particuliers sont-ils ouverts aux enfants ?",
+    question: "Comment se passe un cours particulier de Coran pour un enfant ?",
     answer:
-      "Oui. Ils s'adressent aux adultes et aux enfants, à partir du niveau débutant. Un enfant qui a besoin de toute l'attention de l'enseignant, ou un adulte qui ne peut pas suivre un horaire de groupe, peut avancer seul avec le professeur. Les cours en groupe restent disponibles : Tajwid enfant, arabe enfant, Tajwid standard et Tajwid intensif.",
+      "La séance reste courte et l'enseignant revient sur le même mot jusqu'à ce qu'il tienne, sans passer à la suite sans l'enfant. Les cours particuliers ISHES accueillent les enfants dès le niveau débutant, en direct à distance, quand une classe ne convient pas ou qu'un suivi individuel est nécessaire. Si le groupe convient mieux, l'institut propose aussi des classes de Tajwid enfant et d'arabe enfant.",
   },
   {
-    question: "Peut-on commencer sans savoir lire l'arabe ?",
+    question: "Par où commence un cours particulier de Coran pour un adulte qui débute ?",
     answer:
-      "Oui. Le parcours peut partir de l'alphabet, des voyelles et de la lecture des premiers mots. L'enseignant n'avance pas tant que la lettre n'est pas sûre. Si tu lis déjà, le cours se concentre sur les erreurs qui restent : une lettre, un prolongement, un arrêt, une règle du Tajwid.",
+      "Par l'alphabet : lettres, formes, voyelles, puis mots et phrases courtes. L'enseignant n'avance pas tant que la lettre n'est pas sûre, et ne se moque ni de la lenteur ni des lettres difficiles. Si tu lis déjà, le cours saute cette étape et se concentre sur l'erreur qui revient toujours : une lettre, un prolongement, une ghounna, un arrêt ou une règle du Tajwid que tu n'entends plus.",
   },
   {
-    question: "Quelle est la différence avec le cours de Tajwid en groupe ?",
+    question: "Cours particulier de Tajwid ou cours de Tajwid en groupe : lequel choisir ?",
     answer:
-      "Le Tajwid standard et le Tajwid intensif sont à 649 €. Ils suivent un calendrier fixé, avec d'autres élèves, les replays et Les Clés du Coran. Le cours particulier n'a pas d'horaire imposé : la séance est pour toi seul, le contenu change selon ce que tu dois travailler, et le prix est établi après un échange sur le rythme souhaité.",
+      "Le groupe convient si tu veux un calendrier fixe, des camarades, les replays et un tarif affiché : Tajwid standard sur deux ans ou Tajwid intensif en 3 mois, à 649 €, avec Les Clés du Coran. Le cours particulier convient si le blocage est personnel, si ton enfant a besoin qu'on ne passe pas à la suite sans lui, ou si tes horaires bougent : la séance est pour toi seul, et le contenu change selon ce que tu dois travailler.",
+  },
+  {
+    question: "Combien coûte un cours particulier de Coran en ligne ?",
+    answer:
+      "Le tarif n'est pas affiché dans le catalogue : il dépend du rythme choisi (nombre de séances, fréquence) et il est annoncé dans un devis, avant toute inscription. Il n'y a pas de paiement en ligne tant que le devis n'est pas validé. Pour l'obtenir, décris ton niveau, ton objectif et tes disponibilités sur la page Contact ou sur WhatsApp au 06 66 03 35 19.",
   },
   {
     question: "Comment obtenir un devis pour des cours particuliers ?",
     answer:
-      "Écris via la page Contact ou sur WhatsApp au 06 66 03 35 19. Indique si le cours est pour un adulte ou un enfant, ton niveau de lecture, ce que tu veux travailler (lecture, Tajwid, récitation, mémorisation) et les créneaux possibles. L'équipe répond pour proposer un rythme et un tarif. Il n'y a pas de paiement en ligne tant que le devis n'est pas validé.",
+      "Écris via la page Contact ou sur WhatsApp au 06 66 03 35 19. Indique si le cours est pour un adulte ou un enfant, ton niveau de lecture actuel, ce que tu veux travailler (lecture, Tajwid, récitation, mémorisation) et les créneaux possibles. L'équipe de l'Institut ISHES répond en proposant un rythme tenable et un tarif. Les séances commencent une fois le devis accepté.",
   },
   {
-    question: "Les cours particuliers se font-ils en présentiel à Toulouse ?",
+    question: "Combien de séances par semaine faut-il prévoir en cours particulier ?",
     answer:
-      "Non. Cette formule est uniquement à distance, en direct avec l'enseignant. L'institut accueille aussi des classes en présentiel au 41 boulevard de Thibaud, à Toulouse, pour d'autres cursus. Le particulier permet de suivre le cours depuis la France, la Belgique, la Suisse, le Maghreb ou le Canada.",
+      "Il n'y a pas de soirée fixe ni de nombre imposé : tu indiques tes disponibilités, l'enseignant propose un rythme tenable, et le tarif en découle. Le rythme peut baisser ou monter selon la semaine sans que tu perdes ta place, contrairement à une classe. Entre deux cours, tu répètes le passage travaillé, et le prochain cours reprend exactement là où tu en es.",
   },
   {
-    question: "Y a-t-il un certificat à la fin ?",
+    question: "Le professeur particulier de Coran donne-t-il cours à domicile ou en ligne ?",
     answer:
-      "Oui. Lorsque le parcours convenu est validé, l'Institut ISHES remet un certificat qui atteste les connaissances acquises en Tajwid. Le certificat correspond au travail réellement fait avec l'enseignant, pas à une durée unique imposée à tout le monde.",
+      "Uniquement en ligne, en direct avec l'enseignant. Il n'y a pas de cours à domicile ni de séance particulière dans les locaux de l'institut : l'adresse du 41 boulevard de Thibaud, à Toulouse, sert aux classes en présentiel d'autres cursus. Tu peux donc suivre ton cours particulier de Coran depuis Toulouse, ailleurs en France, en Belgique, en Suisse, au Maghreb ou au Canada.",
+  },
+  {
+    question: "Quelle différence entre le certificat des cours particuliers et le diplôme ISHES des cours en groupe ?",
+    answer:
+      "Le certificat des cours particuliers atteste les connaissances acquises en Tajwid dans le parcours convenu avec ton enseignant ; il est remis quand ce travail est validé, sans durée unique imposée. Le diplôme ISHES des cours en groupe sanctionne un cursus calé sur un calendrier commun, par exemple 4 mois ou deux années scolaires. Les deux sont délivrés par l'Institut ISHES.",
   },
   {
     question: "Peut-on mémoriser le Coran en cours particulier ?",
     answer:
-      "Oui, si c'est l'objectif posé au départ. On peut viser quelques sourates utiles à la prière, consolider une récitation déjà apprise, ou avancer sur un projet plus long. La mémorisation suppose une lecture juste : l'enseignant corrige avant que l'erreur ne soit apprise par cœur. Un cours en groupe existe aussi : Tilawa et mémorisation, 399 €, mercredi 19h30 et dimanche 12h.",
+      "Oui, si c'est l'objectif posé au départ. On peut viser quelques sourates utiles à la prière, consolider une récitation déjà apprise, ou avancer sur un projet plus long. La mémorisation suppose une lecture juste : l'enseignant corrige avant que l'erreur ne soit apprise par cœur, et on ne multiplie pas le nouveau texte tant que l'ancien n'est pas stable. Un programme de mémorisation en groupe existe aussi, à 399 €, pour ceux qui ont déjà une base de Tajwid.",
   },
 ];
 
@@ -556,6 +566,7 @@ export default function CoursParticuliersPage() {
       <VitrineFaq
         eyebrow="FAQ cours particuliers"
         title="Questions fréquentes sur le cours particulier de Coran"
+        intro="Enseignant dédié, enfants et adultes débutants, rythme des séances, devis et certificat : le cours particulier de Coran et de Tajwid en ligne expliqué."
         items={FAQS}
       />
 

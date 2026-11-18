@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl, SITE_URL } from "@/lib/seo";
+import { absoluteUrl, SITE_URL, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -62,6 +64,54 @@ const courseSchema = {
   }
 };
 
+const SPIRITUALITE_FAQS = [
+  {
+    question: "Qu’est-ce que la spiritualité en islam ?",
+    answer:
+      "La spiritualité musulmane est le cœur vivant de l’islam : ce qui nourrit l’âme, apaise le cœur et donne du sens à la relation avec Allah, au-delà de la pratique extérieure. Elle repose sur le Coran et la Sunna, sur le rappel d’Allah (dhikr), sur la science religieuse qui guide l’adoration et sur un travail concret de purification de soi. Le cours de l’Institut ISHES l’enseigne en français, en direct sur Zoom, sur 4 mois.",
+  },
+  {
+    question: "Que signifie tazkiya, ou tazkiyat an-nafs, la purification de l’âme ?",
+    answer:
+      "Tazkiyat an-nafs désigne la purification et l’éducation de l’âme : connaître son propre fonctionnement (corps et âme), identifier ses failles et les corriger méthodiquement pour se rapprocher d’Allah. Ce n’est pas une théorie : c’est un travail sur soi au quotidien, appuyé sur les sources authentiques. Le cours de spiritualité musulmane ISHES consacre une partie du programme aux outils de la tazkiya.",
+  },
+  {
+    question: "Comment purifier son cœur concrètement selon l’islam ?",
+    answer:
+      "En reliant la science et la pratique : apprendre à connaître Allah, saisir le sens profond de chaque acte d’adoration, fréquenter les assises de rappel, puis identifier ses défauts et avancer pas à pas vers une meilleure version de soi-même. Le cours propose une méthode progressive et des réflexions contemporaines pour apaiser les doutes et ancrer le travail sur soi dans la vie réelle, sans quitter le monde.",
+  },
+  {
+    question: "Quel est le programme du cours de spiritualité musulmane en ligne ?",
+    answer:
+      "Le cursus de 4 mois aborde les assises de rappel (dhikr) et leur impact sur le cœur, l’importance de la science religieuse pour guider l’adoration, le Coran et la Sunna comme fondement spirituel, les finalités spirituelles des cinq piliers de l’islam et des six piliers de la foi, la relation de soumission confiante entre le serviteur et son Créateur, et la connaissance de soi avec les outils de la tazkiya.",
+  },
+  {
+    question: "Faut-il connaître l’arabe ou avoir étudié la théologie pour suivre le cours de spiritualité ?",
+    answer:
+      "Non. Aucun niveau préalable en théologie ou en langue arabe n’est requis. Le cours est ouvert aux débutants qui découvrent la spiritualité, aux étudiants en sciences islamiques qui veulent relier théorie et pratique, et à toute personne en quête de sens. L’enseignement est donné en français par une professeure diplômée en sciences islamiques, avec un support pédagogique après chaque séance.",
+  },
+  {
+    question: "Comment se déroule le cours de spiritualité musulmane à distance ?",
+    answer:
+      "Le cours démarre en janvier 2027 et dure 4 mois, avec une séance par semaine le samedi à 10h30, en direct sur Zoom. Les replays restent accessibles en permanence, un support pédagogique est envoyé après chaque séance et un groupe WhatsApp privé permet de poser ses questions tout au long de la formation. Le parcours se termine par un diplôme de fin de parcours ISHES, après validation des examens.",
+  },
+  {
+    question: "Combien coûte le cours de spiritualité musulmane et comment le payer ?",
+    answer:
+      "La formation complète de 4 mois coûte 399 €, payable en 3 fois sans frais, avec un paiement 100 % sécurisé en ligne. Ce tarif comprend les cours en direct du samedi, les replays permanents, les supports après chaque séance, l’accompagnement par WhatsApp et le diplôme de fin de parcours. L’inscription se fait directement sur le site de l’Institut ISHES.",
+  },
+  {
+    question: "Quelle différence entre le cours de spiritualité musulmane et le cours d’aqîda ?",
+    answer:
+      "L’aqîda enseigne ce que le musulman doit croire : les attributs d’Allah, les prophètes, les piliers de la foi. La spiritualité musulmane travaille le cœur qui porte cette croyance : intention, dhikr, sens intérieur des adorations, purification de l’âme et relation vivante avec Allah. L’une structure la foi, l’autre la fait vivre. Les deux cours ISHES se suivent à distance et se complètent naturellement.",
+  },
+  {
+    question: "Pourquoi associer science religieuse et purification du cœur ?",
+    answer:
+      "Parce que l’une sans l’autre déséquilibre le croyant. L’imam Al-Ghazâlî rappelait que la science sans purification du cœur est une preuve contre soi, non une lumière. Le cours allie donc rigueur de la science religieuse, spiritualité, réflexion personnelle et travail concret sur soi, pour vivre une foi plus consciente, plus profonde et plus apaisée, dans un monde où beaucoup ressentent un vide intérieur malgré la pratique.",
+  },
+];
+
 export default function SpiritualiteIslamPage() {
   const course = PROGRAMS_DATA["spiritualite_islam"];
   const videoUrl = course?.videoUrl;
@@ -72,6 +122,7 @@ export default function SpiritualiteIslamPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
       />
+      <JsonLd data={faqJsonLd(SPIRITUALITE_FAQS)} />
       <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
         
         {/* ─── HERO SECTION ─── */}
@@ -260,10 +311,17 @@ export default function SpiritualiteIslamPage() {
           </div>
         </section>
 
+        <VitrineFaq
+          eyebrow="FAQ spiritualité musulmane"
+          title="Spiritualité en islam et tazkiya : purifier son cœur, progresser, se former en ligne"
+          intro="Les réponses aux questions sur la spiritualité musulmane, la purification de l’âme et le cours à distance de l’Institut ISHES."
+          items={SPIRITUALITE_FAQS}
+        />
+
         {/* ─── PRICING BANNER ─── */}
         <section className="py-12 px-6 max-w-6xl mx-auto mb-10 mt-12">
           <div className="bg-ishes-dark rounded-[2rem] p-8 md:p-12 shadow-2xl text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-            
+
             {/* Section Gauche : Prix */}
             <div className="text-center md:text-left space-y-2 flex-1 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0">
               <div className="text-5xl md:text-6xl font-black text-ishes-gold">399 €</div>

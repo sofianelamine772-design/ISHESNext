@@ -12,14 +12,18 @@ describe('promo-campaign', () => {
     endsAt: '2026-12-01T00:00:00+01:00',
   };
 
-  it('la campagne réelle « Rentrée 2026 » : −100 € distanciel, active dès le 18 novembre 2026 (Paris)', () => {
+  it('la campagne réelle « Rentrée 2026 » : −100 € distanciel, du 18 au 22 novembre 2026 inclus (Paris)', () => {
     expect(PROMO_CAMPAIGN.discountEuros).toBe(100);
     expect(PROMO_CAMPAIGN.code).toBe(PROMO_CAMPAIGN.code.toUpperCase());
     expect(PROMO_CAMPAIGN.badge).toBe('Rentrée 2026');
     expect(PROMO_CAMPAIGN.headline).toMatch(/à distance/i);
     expect(PROMO_CAMPAIGN.ctaHref).toBe('/fr/cours-a-distance');
+    expect(PROMO_CAMPAIGN.deadlineLabel).toContain('22 novembre');
     expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-17T22:59:59Z'))).toBe(false);
     expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-17T23:00:00Z'))).toBe(true);
+    // 22 novembre 23:59 Paris : encore active ; 23 novembre 00:00 Paris : terminée
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-22T22:59:59Z'))).toBe(true);
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-22T23:00:00Z'))).toBe(false);
   });
 
   it('inactive avant le début, active pendant, inactive après la fin', () => {
@@ -38,27 +42,25 @@ describe('promo-campaign', () => {
     expect(getActivePromoCampaign(new Date('2026-11-21T10:00:00Z'))?.code).toBe(PROMO_CAMPAIGN.code);
   });
 
-  it("le pop-up s'affiche sur l'accueil et les pages générales (vitrine et /fr)", () => {
+  it("le pop-up s'affiche uniquement sur l'accueil et quelques pages d'entrée", () => {
     expect(shouldShowPromoPopupOnPath('/')).toBe(true);
+    expect(shouldShowPromoPopupOnPath('/?utm=x')).toBe(true);
     expect(shouldShowPromoPopupOnPath('/program')).toBe(true);
-    expect(shouldShowPromoPopupOnPath('/institut')).toBe(true);
-    expect(shouldShowPromoPopupOnPath('/contact')).toBe(true);
     expect(shouldShowPromoPopupOnPath('/fr')).toBe(true);
-    expect(shouldShowPromoPopupOnPath('/fr/sciences-islamiques')).toBe(true);
+    expect(shouldShowPromoPopupOnPath('/fr/')).toBe(true);
     expect(shouldShowPromoPopupOnPath('/fr/cours-a-distance')).toBe(true);
-    expect(shouldShowPromoPopupOnPath('/fr/cours-en-presentiel')).toBe(true);
-    expect(shouldShowPromoPopupOnPath('/fr/pack-accompagnement')).toBe(true);
-    expect(shouldShowPromoPopupOnPath('/fr/civilisation-arabo-musulmane/savants/ibn-khaldoun')).toBe(true);
+    expect(shouldShowPromoPopupOnPath('/fr/sciences-islamiques')).toBe(true);
   });
 
-  it("le pop-up ne s'affiche pas sur les fiches formation détaillées", () => {
+  it("le pop-up ne s'affiche pas sur les autres pages (fiches formation, institut, contact…)", () => {
+    expect(shouldShowPromoPopupOnPath('/institut')).toBe(false);
+    expect(shouldShowPromoPopupOnPath('/contact')).toBe(false);
+    expect(shouldShowPromoPopupOnPath('/fr/cours-en-presentiel')).toBe(false);
+    expect(shouldShowPromoPopupOnPath('/fr/pack-accompagnement')).toBe(false);
     expect(shouldShowPromoPopupOnPath('/program/fiqh_malikite')).toBe(false);
     expect(shouldShowPromoPopupOnPath('/fr/cours-fiqh-malikite')).toBe(false);
-    expect(shouldShowPromoPopupOnPath('/fr/cours-fiqh-malikite/ibn-ashir')).toBe(false);
     expect(shouldShowPromoPopupOnPath('/fr/cours-arabe-enfant/')).toBe(false);
     expect(shouldShowPromoPopupOnPath('/fr/formation-enseignant-tajwid')).toBe(false);
-    expect(shouldShowPromoPopupOnPath('/fr/les-cles-du-coran')).toBe(false);
-    expect(shouldShowPromoPopupOnPath('/fr/correction-fatiha')).toBe(false);
   });
 
   it("le pop-up ne s'affiche pas dans le tunnel de paiement, l'espace élève ni les pages légales", () => {

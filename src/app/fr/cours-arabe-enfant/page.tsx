@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -25,6 +27,54 @@ import {
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 
+const ARABE_ENFANT_FAQS = [
+  {
+    question: "À quel âge un enfant peut-il commencer un cours d’arabe en ligne ?",
+    answer:
+      "Il n’y a pas d’âge unique : les groupes du cours d’arabe enfant de l’Institut ISHES sont constitués selon l’âge et le niveau, et les cours ont lieu le mardi ou le jeudi à 18h30 selon le niveau. Un enfant capable de suivre une heure en visio avec attention et de participer à des activités guidées peut commencer. L’équipe oriente les parents vers le bon groupe au moment de l’inscription.",
+  },
+  {
+    question: "Comment se passe un cours d’arabe pour enfant à distance sur Zoom ?",
+    answer:
+      "Le cours dure une heure, en direct sur Zoom, une fois par semaine. L’enseignant alterne apprentissage par le jeu, activités variées, mises en situation et participation active pour garder l’attention des enfants. Le manuel pédagogique et les enregistrements audio et vidéo servent de support entre deux séances. Un replay est disponible après chaque cours, et le groupe WhatsApp de la classe permet d’encourager et de guider chaque enfant.",
+  },
+  {
+    question: "Un enfant peut-il vraiment apprendre à lire et écrire l’arabe en ligne ?",
+    answer:
+      "Oui. La méthode du cours d’arabe enfant ISHES est conçue pour les enfants francophones et travaille l’arabe écrit et parlé de façon progressive : lettres, lecture, écriture, vocabulaire, puis premières phrases. Les classes en petit effectif permettent à l’enseignant de corriger chaque enfant en direct, et les activités interactives rendent l’écran vivant plutôt que passif. Le suivi régulier et les évaluations confirment les progrès au fil des 8 mois.",
+  },
+  {
+    question: "Mon enfant parle un dialecte à la maison : ce cours lui sert-il quand même ?",
+    answer:
+      "Oui. Parler un dialecte à la maison est un atout pour l’oral, mais ne suffit pas pour lire, écrire et comprendre l’arabe littéraire, la langue du Coran et des livres. Le cours d’arabe enfant structure ce que l’enfant entend déjà : alphabet, lecture, écriture et vocabulaire courant, avec une ouverture vers la langue du Coran, les invocations et les valeurs islamiques dès le plus jeune âge.",
+  },
+  {
+    question: "Quels sont les horaires et la durée du cours d’arabe enfant en ligne ?",
+    answer:
+      "Le cours a lieu une fois par semaine, le mardi ou le jeudi à 18h30 selon le niveau de l’enfant, en direct sur Zoom, à partir d’octobre 2026. L’année dure 8 mois. Chaque séance est enregistrée et les replays restent accessibles à vie, ce qui permet de rattraper un cours manqué ou de réviser pendant les vacances. Le diplôme ISHES est remis à la fin de l’année.",
+  },
+  {
+    question: "Que se passe-t-il si mon enfant manque un cours d’arabe ?",
+    answer:
+      "Rien n’est perdu : chaque cours est enregistré et le replay est disponible juste après la séance, sans limite de durée. L’enfant peut le regarder avec vous avant le cours suivant, et poser ses questions dans le groupe WhatsApp privé de sa classe. Les enseignants suivent la progression de chaque élève, ce qui évite qu’un retard ponctuel ne devienne un décrochage.",
+  },
+  {
+    question: "Les parents doivent-ils parler arabe pour accompagner leur enfant ?",
+    answer:
+      "Non. Le cours d’arabe enfant est pensé pour des familles francophones : les consignes sont claires, le manuel pédagogique est progressif et les enregistrements audio permettent à l’enfant de réécouter la prononciation sans l’aide d’un adulte arabophone. Le rôle des parents est surtout d’assurer la présence au cours hebdomadaire et quelques minutes de révision ; l’enseignant et le groupe WhatsApp s’occupent du reste.",
+  },
+  {
+    question: "Combien coûte le cours d’arabe pour enfant et que comprend le tarif ?",
+    answer:
+      "Le cours d’arabe enfant à distance coûte 399 € pour l’année de 8 mois, payable en 5 fois 79,80 € sans frais. Ce tarif comprend le cours hebdomadaire en direct sur Zoom, les replays à vie, le manuel pédagogique complet, les activités et exercices, les enregistrements audio et vidéo, le suivi via le groupe WhatsApp de classe et le diplôme ISHES de fin d’année.",
+  },
+  {
+    question: "Quelle différence entre le cours d’arabe enfant et le cours de Tajwid enfant ISHES ?",
+    answer:
+      "Le cours d’arabe enfant enseigne la langue : lire, écrire, comprendre et parler l’arabe littéraire, avec un vocabulaire du quotidien et une ouverture vers la langue du Coran. Le cours de Tajwid enfant est centré sur la récitation correcte du Coran et ses règles de prononciation. Les deux ont le même format (mardi ou jeudi à 18h30, Zoom, replays) et se complètent : l’un donne la langue, l’autre la récitation.",
+  },
+];
+
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-arabe-enfant") },
   openGraph: {
@@ -44,7 +94,8 @@ export default function CoursArabeEnfantPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-ishes-gold selection:text-white pb-20">
-      
+      <JsonLd data={faqJsonLd(ARABE_ENFANT_FAQS)} />
+
       {/* ─── HERO SECTION ─── */}
       <section className="pt-28 pb-6 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -55,7 +106,7 @@ export default function CoursArabeEnfantPage() {
                 LANGUE & COMMUNICATION
               </span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-ishes-blue leading-[1.1] tracking-tight">
               ARABE (Enfant)
             </h1>
@@ -264,10 +315,17 @@ export default function CoursArabeEnfantPage() {
         </div>
       </section>
 
+      <VitrineFaq
+        eyebrow="FAQ Arabe enfant"
+        title="Questions fréquentes sur le cours d’arabe pour enfants en ligne"
+        intro="Âge, méthode, horaires, rôle des parents : tout savoir avant d’inscrire votre enfant à un cours d’arabe à distance."
+        items={ARABE_ENFANT_FAQS}
+      />
+
       {/* ─── PRICING BANNER ─── */}
       <section className="py-8 px-6 max-w-[80rem] mx-auto mb-10">
         <div className="bg-ishes-dark rounded-[2rem] p-6 md:p-8 shadow-2xl text-white relative overflow-hidden flex flex-wrap md:flex-nowrap items-center gap-6 justify-between">
-          
+
           <div className="flex items-center gap-4 border-r border-white/20 pr-8 md:pr-16">
             <Tag className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
@@ -285,8 +343,8 @@ export default function CoursArabeEnfantPage() {
           </div>
 
           <div className="flex flex-col items-center md:items-end gap-2 shrink-0 w-full md:w-auto mt-4 md:mt-0">
-            <Link 
-              href="/inscription?plan=arabe_enfant_distance&audience=enfant" 
+            <Link
+              href="/inscription?plan=arabe_enfant_distance&audience=enfant"
               className="inline-flex items-center justify-center gap-2 bg-[#b88c4d] hover:bg-[#a67b3f] text-white px-8 py-4 rounded-md text-[15px] font-black transition-all shadow-lg hover:-translate-y-1 w-full md:w-auto"
             >
               JE M'INSCRIS MAINTENANT <ArrowRight className="w-4 h-4" />

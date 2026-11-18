@@ -33,10 +33,7 @@ import {
   faqJsonLd,
 } from "@/lib/seo";
 
-import {
-  SciencesDuCoranGuideArticle,
-  SCIENCES_GUIDE_FAQS,
-} from "@/components/vitrine/SciencesDuCoranGuideArticle";
+import { SciencesDuCoranGuideArticle } from "@/components/vitrine/SciencesDuCoranGuideArticle";
 
 const PROGRAMME_SCIENCES = [
   {
@@ -71,26 +68,55 @@ const PROGRAMME_SCIENCES = [
 
 const SCIENCES_FAQS = [
   {
-    question: "Qu'apprend-on en Sciences du Coran à l'ISHES ?",
+    question: "Qu'apprend-on dans le cours de Sciences du Coran en ligne de l'ISHES ?",
     answer:
-      "L'histoire de la Révélation, le rôle du Prophète ﷺ et des Compagnons, la collecte et la transmission du texte, les grandes disciplines (‘Ulûm al-Qur'ân) et les enjeux liés aux manuscrits anciens — avec une pédagogie claire pour francophones.",
-  },
-  {
-    question: "Combien coûte la formation ?",
-    answer:
-      "La formation complète dure 4 mois, à 399 €, avec 1 cours par semaine en direct sur Zoom, replays, supports et diplôme ISHES.",
-  },
-  {
-    question: "Quand ont lieu les cours de Sciences du Coran ?",
-    answer:
-      "Un cours par semaine, le dimanche à 10h30, en direct sur Zoom, avec les replays. La formation dure 4 mois. Les supports de cours, l'attestation de suivi et le groupe WhatsApp sont inclus.",
+      "Le cours de Sciences du Coran en ligne retrace l'histoire du Livre d'Allah : la Révélation et ses étapes, le rôle du Prophète ﷺ dans sa réception et sa transmission, l'engagement des Compagnons dans sa mémorisation et sa mise par écrit, la compilation sous les califes, les grandes disciplines des ‘Ulûm al-Qur'ân et le miracle du Coran. Le tout est enseigné en français, avec une pédagogie claire et structurée pour francophones.",
   },
   {
     question: "Quel est le programme du cours de Sciences du Coran ?",
     answer:
-      "Introduction aux ‘Ulûm al-Qur'ân, révélation (contexte, étapes et sagesses), transmission par le Prophète ﷺ, préservation par les Compagnons, compilation jusqu'aux califes, disciplines coraniques (mecquois et médinois, asbâb an-nuzûl, qirâ'ât) et miracle du Coran.",
+      "Le programme suit sept chapitres : introduction aux Sciences du Coran et à leur importance ; la Révélation (contexte, étapes et sagesses) ; le Prophète ﷺ et la transmission du Coran ; les Compagnons et la préservation du texte ; la compilation du vivant du Prophète ﷺ jusqu'aux califes ; les sciences liées au Coran (makkî et madanî, asbâb an-nuzûl, qirâ'ât, rasm, tafsîr, nâsikh et mansûkh) ; et enfin le miracle du Coran (i‘jâz).",
   },
-  ...SCIENCES_GUIDE_FAQS,
+  {
+    question: "Quand ont lieu les cours de Sciences du Coran ?",
+    answer:
+      "Les cours de Sciences du Coran ont lieu un dimanche par semaine à 10h30, en direct sur Zoom, à partir d'octobre 2026, pendant 4 mois. Chaque séance est enregistrée : les replays restent accessibles pour rattraper ou réviser. Les supports de cours, les exercices, les évaluations et le groupe WhatsApp dédié aux étudiants sont inclus dans la formation.",
+  },
+  {
+    question: "Combien coûte le cours de Sciences du Coran en ligne ?",
+    answer:
+      "La formation complète de Sciences du Coran coûte 399 € pour 4 mois, avec un cours par semaine en direct sur Zoom, les replays, les supports pédagogiques et le suivi. Le paiement est sécurisé et se fait en ligne lors de l'inscription. À la fin des 4 mois, après validation des examens, l'étudiant reçoit le diplôme de fin de parcours de l'Institut ISHES.",
+  },
+  {
+    question: "À qui s'adresse le cours de Sciences du Coran ?",
+    answer:
+      "Le cours s'adresse à celles et ceux qui récitent le Coran et veulent comprendre son histoire, aux personnes qui souhaitent renforcer leur foi et leur lien avec le Prophète ﷺ, aux étudiants en sciences islamiques, aux enseignants et aux parents. Aucun niveau avancé en arabe n'est requis : l'enseignement est donné en français, de manière progressive, et convient aux débutants comme aux étudiants plus avancés.",
+  },
+  {
+    question: "Pourquoi le Coran a-t-il été révélé progressivement sur 23 ans ?",
+    answer:
+      "Selon la tradition musulmane, la Révélation a commencé dans la grotte de Hirâ' avec les premiers versets de la sourate Al-‘Alaq, puis s'est poursuivie pendant environ 23 ans, entre la période mecquoise et la période médinoise. Cette progression accompagnait les situations vécues par le Prophète ﷺ et la communauté : affirmation de la foi, patience face aux épreuves, puis organisation sociale et juridique. Le cours en étudie le contexte, les étapes et les sagesses.",
+  },
+  {
+    question: "Comment les Compagnons ont-ils préservé le Coran ?",
+    answer:
+      "Les Compagnons ont préservé le Coran par une transmission à la fois orale et écrite : mémorisation, récitation régulière, enseignement aux nouveaux musulmans et, pour certains, mise par écrit des versets. Le cours montre que cette préservation n'était pas un simple travail d'archivage, mais l'expression d'un amour immense pour la Parole d'Allah, vécue comme une guidance qui transformait leur comportement et leurs responsabilités.",
+  },
+  {
+    question: "Pourquoi ‘Uthmân a-t-il fait diffuser des copies de référence du Coran ?",
+    answer:
+      "Après la collecte des feuillets organisée sous Abû Bakr, le calife ‘Uthmân a fait établir et diffuser des copies de référence afin d'unifier le cadre écrit de la récitation dans une communauté en pleine expansion, où des musulmans de langues différentes apprenaient le Coran. Le cours distingue soigneusement les notions de Révélation, de mémorisation, de mise par écrit, de collecte et de diffusion des codex.",
+  },
+  {
+    question: "Que sont les asbâb an-nuzûl, les circonstances de la révélation ?",
+    answer:
+      "Les asbâb an-nuzûl sont les circonstances associées à la révélation de certains versets : un événement, une question posée au Prophète ﷺ ou une situation à laquelle un passage répond. Leur étude, complétée par la Sîrah, permet de lire un verset dans son contexte. Le cours insiste sur la méthode critique : toutes les circonstances rapportées n'ont pas le même degré de fiabilité et doivent être examinées avec rigueur.",
+  },
+  {
+    question: "Quelle différence entre le cours de Sciences du Coran et le guide gratuit ?",
+    answer:
+      "Le guide gratuit des Sciences du Coran est une fiche de lecture d'environ 18 minutes qui introduit les grandes notions : Révélation, Compagnons, collecte, disciplines et manuscrits. Le cours de 4 mois les développe semaine après semaine avec un enseignant en direct, des exercices, des évaluations, un groupe d'étudiants et un diplôme à la clé. Le guide sert d'introduction ; le cours permet d'étudier réellement.",
+  },
 ];
 
 export const metadata = buildPageMetadata({
@@ -611,7 +637,8 @@ export default function CoursSciencesCoranPage() {
 
       <VitrineFaq
         eyebrow="FAQ Sciences du Coran"
-        title="Questions fréquentes sur le cours"
+        title="Questions fréquentes sur le cours de Sciences du Coran en ligne"
+        intro="Programme, horaires, tarif, public visé et grandes notions des ‘Ulûm al-Qur'ân : les réponses avant de rejoindre la formation de l'Institut ISHES."
         items={SCIENCES_FAQS}
       />
 

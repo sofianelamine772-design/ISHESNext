@@ -25,39 +25,6 @@ export const TILAWA_RESOURCES = [
   },
 ] as const;
 
-export const TILAWA_FAQS = [
-  {
-    question: "Faut-il connaître le Tajwid pour suivre les cours de Tilawa et de mémorisation ?",
-    answer:
-      "Oui, une base de lecture et de Tajwid est demandée. Le cours de mémorisation ISHES corrige la récitation et fait réviser, il ne reprend pas l'alphabet depuis zéro. Si le niveau n'est pas encore là, l'enseignant oriente vers le Tajwid standard ou le Tajwid intensif.",
-  },
-  {
-    question: "Dois-je mémoriser le Coran entier ?",
-    answer:
-      "Non. Tu peux travailler quelques sourates utiles à la prière, consolider ce que tu connais déjà, ou viser la mémorisation complète sur un temps plus long. L'enseignant ajuste la quantité à ta lecture et à tes révisions.",
-  },
-  {
-    question: "Pourquoi apprendre la Tilawa ou le Hifdh avec un enseignant ?",
-    answer:
-      "Un support écrit et une écoute enregistrée ne repèrent pas toujours une lettre mal articulée, une ghounna trop courte ou un arrêt incorrect. L'enseignant écoute, corrige avant que l'erreur ne devienne une habitude mémorisée, et adapte le planning.",
-  },
-  {
-    question: "Comment savoir si je dois choisir le Tajwid ou la Tilawa ?",
-    answer:
-      "Le Tajwid apprend les règles et la lecture. La Tilawa les applique dans une récitation suivie, avec fluidité et correction. Le Hifdh (mémorisation) vient quand la lecture est juste. Le choix se fait avec l'enseignant, sur WhatsApp, selon ta fluidité réelle.",
-  },
-  {
-    question: "Comment se déroule le cours Tilawa et mémorisation ISHES ?",
-    answer:
-      "Formation individuelle de 4 mois, à 399 €, deux séances par semaine : le mercredi à 19h30 et le dimanche à 12h, en direct sur Zoom, avec replays. Le parcours comprend corrections, révisions (mouraja'a) et le diplôme ISHES. Début : octobre 2026.",
-  },
-  {
-    question: "Les fiches de Tilawa et de mémorisation sont-elles gratuites ?",
-    answer:
-      "Oui. Le planning de 30 jours, la liste des sourates courtes, les 7 conseils de récitation et le plan de révision se lisent sur la page et se téléchargent en PDF, sans formulaire et sans e-mail.",
-  },
-];
-
 const SOURATES = [
   ["Al-Fâtiha", "1", "7"],
   ["Al-Ikhlâs", "112", "4"],

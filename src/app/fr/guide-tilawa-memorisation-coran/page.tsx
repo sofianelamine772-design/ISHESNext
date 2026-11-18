@@ -1,7 +1,7 @@
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import { FichePratiqueShell } from "@/components/vitrine/FichePratiqueShell";
-import { TILAWA_FAQS, TILAWA_RESOURCES, TilawaGuideBody } from "@/components/vitrine/TilawaGuideBody";
+import { TILAWA_RESOURCES, TilawaGuideBody } from "@/components/vitrine/TilawaGuideBody";
 import {
   absoluteUrl,
   articleJsonLd,
@@ -10,6 +10,54 @@ import {
   faqJsonLd,
   howToJsonLd,
 } from "@/lib/seo";
+
+const GUIDE_FAQS = [
+  {
+    question: "Qu’est-ce que la Tilawa du Coran ?",
+    answer:
+      "La Tilawa est la récitation du Coran. Dans l’apprentissage, elle fait passer de la connaissance des règles du Tajwid à leur application réelle et régulière : prononciation des lettres, prolongements, arrêts et enchaînements. L’objectif est de réciter avec justesse, fluidité et attention, pour que les hésitations diminuent et que l’attention reste sur le sens des versets. Ce guide gratuit de l’Institut ISHES en donne la méthode.",
+  },
+  {
+    question: "Comment faire un planning de mémorisation du Coran sur 30 jours ?",
+    answer:
+      "Avec un tableau à remplir chaque jour : les nouveaux versets, les révisions, les difficultés rencontrées et un bilan. Tu fixes d’abord un temps quotidien réaliste, puis un jour de bilan dans le mois pour ajuster. La fiche gratuite « Mon planning de mémorisation — 30 jours » de l’Institut ISHES est prête à imprimer et se télécharge en PDF depuis ce guide, sans inscription.",
+  },
+  {
+    question: "Par quelles sourates courtes commencer à mémoriser le Coran ?",
+    answer:
+      "Par celles qui servent à la prière et correspondent à ton niveau de lecture : Al-Fâtiha, Al-Ikhlâs, Al-Falaq, An-Nâs, puis Al-Kawthar, Al-‘Asr, An-Nasr, Al-Kâfirûn, Al-Masad, Quraysh, Al-Fîl et Al-Mâ‘ûn. Ce n’est pas un ordre obligatoire. Si tu en connais déjà plusieurs, fais-les écouter et corriger avant d’en ajouter. La liste des douze sourates courtes est disponible en fiche PDF gratuite.",
+  },
+  {
+    question: "Comment réviser le Coran pour ne pas oublier ce que l’on a mémorisé ?",
+    answer:
+      "En distinguant trois catégories de passages : le nouveau (les versets du jour), le récent (appris ces derniers jours, encore fragile) et l’ancien (les sourates déjà mémorisées, à entretenir). Si les anciennes sourates deviennent fragiles, réduis temporairement le nouveau texte et consolide. C’est la mouraja’a. La fiche gratuite « Mon plan de révision du Coran » répartit ces trois catégories sur une semaine.",
+  },
+  {
+    question: "Comment fluidifier sa récitation du Coran quand on hésite ?",
+    answer:
+      "Lis lentement, sans chercher la vitesse, sur de courts passages relus plusieurs fois. Repère une difficulté précise (une lettre, un prolongement, une ghounna, un arrêt), écoute une récitation fiable puis répète en respectant le rythme. Enregistre-toi pour comparer, fais corriger ta récitation par un enseignant, et révise les passages déjà fluides pour stabiliser les bonnes habitudes. Ces sept conseils sont réunis dans une fiche PDF gratuite.",
+  },
+  {
+    question: "Combien de temps par jour faut-il consacrer à la mémorisation du Coran ?",
+    answer:
+      "Un temps que tu peux tenir tous les jours, plutôt qu’un programme ambitieux abandonné au bout d’une semaine. Un objectif modeste et régulier tient mieux qu’un volume impossible. Le planning de 30 jours proposé par l’Institut ISHES te fait noter ton temps quotidien réaliste, puis répartir ce temps entre nouveaux versets et révisions. L’enseignant, si tu suis un cours, ajuste ensuite la quantité à ta progression.",
+  },
+  {
+    question: "Quelle est la récompense de celui qui mémorise et récite le Coran ?",
+    answer:
+      "Un hadith rapporté par Abû Dâwûd (1464) et At-Tirmidhî (2914) dit qu’il sera dit au compagnon du Coran : « Lis et élève-toi, et récite comme tu récitais dans le bas monde, car ta place sera au dernier verset que tu réciteras. » Le Coran lui-même demande de réciter « lentement et clairement » (sourate Al-Muzzammil, verset 4). La régularité compte donc davantage que la quantité.",
+  },
+  {
+    question: "Comment télécharger les quatre fiches gratuites de Tilawa et de mémorisation ?",
+    answer:
+      "Directement depuis ce guide : chaque fiche (planning de 30 jours, liste des sourates courtes, 7 conseils de récitation, plan de révision) s’ouvre dans la page ou se télécharge en PDF pour l’imprimer. Il n’y a ni formulaire ni adresse e-mail à fournir. Sur mobile, le navigateur peut proposer le téléchargement plutôt que l’aperçu.",
+  },
+  {
+    question: "Ce guide gratuit suffit-il, ou faut-il un enseignant pour mémoriser le Coran ?",
+    answer:
+      "Le guide donne la méthode, les fiches et les sourates par lesquelles commencer. Il ne remplace pas l’oreille d’un enseignant : certaines erreurs de prononciation ne s’entendent pas seul, même en s’enregistrant, et se figent une fois mémorisées. Pour un suivi, l’Institut ISHES propose la formation Mémorisation du Coran en cours individuels : 4 mois, mercredi 19h30 et dimanche 12h, en direct sur Zoom, 399 €.",
+  },
+];
 
 export const metadata = buildPageMetadata({
   title: "Récitation et mémorisation du Coran",
@@ -42,7 +90,7 @@ export default function GuideTilawaPage() {
           { name: "Tilawa et mémorisation", path: "/fr/guide-tilawa-memorisation-coran" },
         ])}
       />
-      <JsonLd data={faqJsonLd(TILAWA_FAQS)} />
+      <JsonLd data={faqJsonLd(GUIDE_FAQS)} />
       <JsonLd
         data={articleJsonLd({
           headline: "Comment améliorer sa récitation et mémoriser le Coran",
@@ -132,9 +180,10 @@ export default function GuideTilawaPage() {
         <TilawaGuideBody />
       </FichePratiqueShell>
       <VitrineFaq
-        eyebrow="FAQ Tilawa et Hifdh"
-        title="Questions fréquentes sur la récitation et la mémorisation"
-        items={TILAWA_FAQS}
+        eyebrow="FAQ guide gratuit"
+        title="Questions fréquentes : planning, sourates courtes et révision du Coran"
+        intro="Les réponses pratiques du guide gratuit de Tilawa et de mémorisation du Coran de l’Institut ISHES."
+        items={GUIDE_FAQS}
       />
     </>
   );

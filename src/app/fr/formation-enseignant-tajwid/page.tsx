@@ -32,34 +32,54 @@ const WHATSAPP =
 
 const FAQS = [
   {
-    question: "Faut-il déjà maîtriser le Tajwid pour s'inscrire ?",
+    question: "Faut-il déjà maîtriser le Tajwid pour s'inscrire à la formation enseignant de Tajwid ?",
     answer:
-      "Non. Aucun prérequis n'est exigé pour s'inscrire. La formation accueille celles et ceux qui veulent transmettre, même si la récitation doit encore être travaillée. Le troisième module sert justement à écouter, repérer les points faibles et les corriger avant d'enseigner.",
+      "Non. Aucun prérequis n'est exigé pour s'inscrire. La formation enseignant de Tajwid accueille celles et ceux qui veulent transmettre la lecture du Coran, même si leur propre récitation doit encore être travaillée. Le troisième module sert justement à écouter ta récitation, repérer les points faibles et les corriger avant que tu ne les transmettes à tes élèves.",
+  },
+  {
+    question: "Quels sont les trois modules de la formation enseignant de Tajwid ?",
+    answer:
+      "Le premier module apprend à enseigner avec Les Clés du Coran : progression de lecture, tahajjî, manière d'expliquer puis de corriger. Le deuxième, « apprendre à apprendre », traite de la mémorisation, de l'attention, de l'erreur, des émotions et de la métacognition. Le troisième vérifie et perfectionne la récitation du futur enseignant, et montre comment corriger un élève sans le décourager.",
+  },
+  {
+    question: "Comment apprend-on à corriger la récitation d'un élève de Tajwid ?",
+    answer:
+      "En trois temps : écouter et identifier précisément la difficulté, hiérarchiser pour ne pas tout corriger en même temps, puis expliquer, montrer le geste juste et faire reprendre dans un nouvel essai. La formation insiste sur le fait qu'une trop grande quantité de corrections devient un apprentissage de la confusion : on corrige peu, et on corrige juste, avec des cas concrets comme la confusion entre dhâd et dâd.",
+  },
+  {
+    question: "La formation enseignant de Tajwid apprend-elle à gérer une classe et à répondre aux parents ?",
+    answer:
+      "Oui. Au-delà des règles de Tajwid, la formation travaille la préparation d'une classe (objectif, progression, activités), la gestion du groupe (cadre, attention, participation), la gestion des conflits et la communication avec les parents sur les progrès et les difficultés. Ce sont ces compétences pédagogiques qui manquent souvent aux bons réciteurs quand ils commencent à enseigner.",
+  },
+  {
+    question: "Un parent peut-il suivre la formation enseignant de Tajwid pour enseigner le Coran à ses enfants ?",
+    answer:
+      "Oui. La transmission en famille est l'un des trois profils visés, avec les enseignants déjà en poste et les futurs enseignants en mosquée, école ou association. Un parent y apprend à installer les lettres et le tahajjî avec le volume 1 des Clés du Coran, puis à poser les règles du volume 2, à expliquer sans jargon et à corriger ses enfants avec méthode et bienveillance.",
+  },
+  {
+    question: "Combien de temps dure la formation enseignant de Tajwid et à quel rythme ?",
+    answer:
+      "Elle dure 4 à 5 mois, à partir d'octobre 2026, avec deux cours par semaine, le lundi et le jeudi à 19h30, en direct sur Zoom. Les replays restent disponibles si tu manques une séance. Ce rythme soutenu convient à des adultes qui travaillent ou enseignent déjà en journée, et la certification Formation enseignant ISHES est remise au terme du parcours validé.",
   },
   {
     question: "Comment obtenir le tarif de la formation enseignant de Tajwid ?",
     answer:
-      "Le tarif est sur devis. Il s'obtient en écrivant à l'équipe, par la page de rendez-vous ou sur WhatsApp au 06 66 03 35 19. Le devis précise le rythme, les supports et les facilités de paiement, avant toute inscription.",
-  },
-  {
-    question: "Combien de temps dure la formation et à quels horaires ?",
-    answer:
-      "Elle dure 4 à 5 mois, à partir d'octobre 2026. Deux cours par semaine, le lundi et le jeudi à 19h30, en direct sur Zoom, avec les replays. La certification Formation enseignant ISHES est remise à la fin du parcours validé.",
-  },
-  {
-    question: "À qui s'adresse la formation ?",
-    answer:
-      "Aux enseignants déjà en poste qui veulent structurer leurs cours, aux futurs enseignants qui préparent un poste en mosquée, en école ou en association, et aux parents qui transmettent le Coran à la maison. Le point commun : vouloir transmettre, et bien le faire.",
+      "Le tarif est sur devis. Il s'obtient en écrivant à l'équipe, par la page de rendez-vous ou sur WhatsApp au 06 66 03 35 19. Le devis précise le rythme, les supports et les facilités de paiement, avant toute inscription. Cet échange permet aussi de présenter ton projet : classe, mosquée, association ou transmission en famille.",
   },
   {
     question: "Une ijaza suffit-elle pour enseigner le Tajwid ?",
     answer:
-      "Non. Une ijaza atteste une transmission de la récitation. Elle ne donne pas, à elle seule, la manière de préparer une séance, d'expliquer une règle à un débutant, de gérer un groupe ou de répondre à un parent. Cette formation travaille ces compétences pédagogiques, avec Les Clés du Coran.",
+      "Non. Une ijaza atteste une transmission de la récitation. Elle ne donne pas, à elle seule, la manière de préparer une séance, d'expliquer une règle à un débutant, de gérer un groupe ou de répondre à un parent. Cette formation travaille ces compétences pédagogiques, avec Les Clés du Coran, pour qu'un bon réciteur devienne aussi un bon enseignant.",
   },
   {
-    question: "Quelle est la différence avec le cours de Tajwid pour apprendre à lire ?",
+    question: "Quelle certification obtient-on à la fin de la formation d'enseignant de Tajwid ?",
     answer:
-      "Le Tajwid standard et le Tajwid intensif apprennent à lire le Coran. La formation enseignant apprend à transmettre cette lecture : progression, explication, correction et accompagnement d'un élève. Le support est le même, Les Clés du Coran, volumes 1 et 2.",
+      "La certification Formation enseignant de l'Institut ISHES, remise au bout de 4 à 5 mois après validation du parcours. Elle atteste que tu as travaillé la pédagogie des Clés du Coran, la correction de la récitation et la gestion d'un groupe d'élèves. Elle complète une éventuelle ijaza, qui porte sur la récitation elle-même, et non sur la manière de l'enseigner.",
+  },
+  {
+    question: "Quelle différence entre la formation enseignant de Tajwid et le cours de Tajwid standard ou intensif ?",
+    answer:
+      "Le Tajwid standard et le Tajwid intensif apprennent à lire le Coran. La formation enseignant apprend à faire lire quelqu'un d'autre : progression, explication, correction et accompagnement d'un élève. Le support est le même, Les Clés du Coran, volumes 1 et 2, mais l'objectif change : passer du statut d'étudiant à celui de transmetteur.",
   },
 ];
 
@@ -549,8 +569,9 @@ export default function FormationEnseignantTajwidPage() {
       </section>
 
       <VitrineFaq
-        eyebrow="Questions fréquentes"
-        title="Une question ?"
+        eyebrow="FAQ formation enseignant de Tajwid"
+        title="Devenir enseignant de Tajwid : prérequis, modules, correction et certification"
+        intro="Les questions les plus posées avant de rejoindre la formation enseignant de Tajwid en ligne de l’Institut ISHES."
         items={FAQS}
       />
 

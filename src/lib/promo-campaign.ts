@@ -25,19 +25,23 @@ export type PromoCampaign = {
   ctaLabel: string;
   /** Destination du bouton principal. */
   ctaHref: string;
+  /** Date limite lisible, affichée dans le pop-up. */
+  deadlineLabel: string;
 };
 
 export const PROMO_CAMPAIGN: PromoCampaign = {
-  code: 'ISHES100',
+  code: 'ISHES2026',
   discountEuros: 100,
-  // Active dès le 18 novembre 2026 (heure de Paris), sans date de fin programmée.
+  // Active dès le 18 novembre 2026, valable jusqu'au 22 novembre 2026 INCLUS
+  // (fin = minuit heure de Paris dans la nuit du 22 au 23).
   startsAt: '2026-11-18T00:00:00+01:00',
-  endsAt: null,
+  endsAt: '2026-11-23T00:00:00+01:00',
   badge: 'Rentrée 2026',
   headline: '−100 € sur toutes les formations à distance',
   note: 'Arabe, Tajwid, Coran, Fiqh, Aqîda, Sîrah… en direct avec nos enseignants, depuis chez vous.',
-  ctaLabel: 'Je m’inscris maintenant',
+  ctaLabel: 'Découvrir les formations à distance',
   ctaHref: '/fr/cours-a-distance',
+  deadlineLabel: 'Offre valable jusqu’au 22 novembre',
 };
 
 /** Clé de stockage : le pop-up n'est montré qu'une fois par visite (sessionStorage). */
@@ -61,35 +65,20 @@ export function getActivePromoCampaign(now: Date = new Date()): PromoCampaign | 
   return isPromoCampaignActive(PROMO_CAMPAIGN, now) ? PROMO_CAMPAIGN : null;
 }
 
-/** Pages « liste » qui restent autorisées bien qu'elles commencent par /fr/cours-. */
-const FR_LISTING_PAGES = new Set(['/fr/cours-a-distance', '/fr/cours-en-presentiel']);
-
-/** Pages /fr qui sont des fiches formation sans suivre le motif /fr/cours-*. */
-const FR_FORMATION_PAGES = new Set([
-  '/fr/les-cles-du-coran',
-  '/fr/correction-fatiha',
-  '/fr/guide-tilawa-memorisation-coran',
+/**
+ * Pages où le pop-up s'affiche : l'accueil et quelques pages d'entrée
+ * (catalogue, cours à distance). Nulle part ailleurs, pour ne pas être
+ * envahissant.
+ */
+export const PROMO_POPUP_PAGES = new Set([
+  '/',
+  '/fr',
+  '/program',
+  '/fr/cours-a-distance',
+  '/fr/sciences-islamiques',
 ]);
 
-/**
- * Le pop-up s'affiche partout (accueil compris) SAUF :
- * - tunnel d'inscription, espace élève, connexion, pages légales ;
- * - fiches formation détaillées (/program/<id>, /fr/cours-*, /fr/formation-*…),
- *   où le visiteur est déjà en train de lire une formation.
- */
 export function shouldShowPromoPopupOnPath(pathname: string | null | undefined): boolean {
   const p = String(pathname || '/').split('?')[0].replace(/\/+$/, '') || '/';
-
-  if (p.startsWith('/inscription')) return false;
-  if (p.startsWith('/app') || p.startsWith('/sign-in') || p.startsWith('/sign-up')) return false;
-  if (p === '/cgv' || p === '/mentions-legales' || p === '/politique-de-confidentialite') return false;
-  if (p === '/unauthorized' || p === '/test-db') return false;
-
-  // Fiches formation
-  if (/^\/program\/[^/]+/.test(p)) return false;
-  if (p.startsWith('/fr/cours-') && !FR_LISTING_PAGES.has(p)) return false;
-  if (p.startsWith('/fr/formation-')) return false;
-  if (FR_FORMATION_PAGES.has(p)) return false;
-
-  return true;
+  return PROMO_POPUP_PAGES.has(p);
 }

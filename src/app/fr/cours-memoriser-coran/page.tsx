@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
-import { TilawaGuideBody, TILAWA_FAQS } from "@/components/vitrine/TilawaGuideBody";
+import { TilawaGuideBody } from "@/components/vitrine/TilawaGuideBody";
 import { buildPageMetadata, courseJsonLd, breadcrumbJsonLd, faqJsonLd, articleJsonLd } from "@/lib/seo";
 import { CourseCadenceNote } from "@/components/vitrine/CourseCadenceNote";
 import { 
@@ -24,6 +24,59 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+
+const MEMORISATION_FAQS = [
+  {
+    question: "Quel niveau de lecture est demandé pour entrer dans le cours de mémorisation du Coran ?",
+    answer:
+      "Il faut déjà connaître les règles du Tajwid, validées à l’Institut ISHES ou ailleurs. Le programme de mémorisation (hifz) corrige la récitation et fait réviser : il ne reprend pas l’alphabet ni les règles depuis zéro. Si la lecture n’est pas encore stable, l’enseignant oriente d’abord vers le Tajwid standard ou le Tajwid intensif, puis la mémorisation commence sur une base juste.",
+  },
+  {
+    question: "Comment se déroule une séance de mémorisation du Coran en ligne avec l’enseignant ?",
+    answer:
+      "Le cours est individuel, en direct sur Zoom, deux fois par semaine : le mercredi à 19h30 et le dimanche à 12h. Tu récites le passage préparé, l’enseignant corrige la prononciation et les règles, puis tu révises les sourates précédentes avec lui. Les replays restent accessibles, et le groupe WhatsApp privé sert au suivi entre deux séances. Le parcours dure 4 mois, à partir d’octobre 2026.",
+  },
+  {
+    question: "Pourquoi le cours de mémorisation du Coran se fait-il en individuel plutôt qu’en classe ?",
+    answer:
+      "Parce que la mémorisation avance au rythme de chaque élève. Le tête-à-tête avec l’enseignant permet un suivi précis de ce qui est appris, des révisions adaptées au niveau, des corrections régulières de la récitation et un accompagnement personnalisé. Chacun progresse selon ses capacités, quelques sourates ou un projet plus long, dans un cadre qui favorise la régularité et la stabilité.",
+  },
+  {
+    question: "Peut-on suivre le cours de mémorisation pour seulement quelques sourates de la prière ?",
+    answer:
+      "Oui. Le programme de hifdh ISHES s’adapte à ton objectif : mémoriser les sourates courtes utiles à la prière, consolider ce que tu connais déjà, ou avancer vers un projet de mémorisation plus long. L’enseignant ajuste la quantité de nouveaux versets à ta lecture et à tes révisions. Le point de départ est souvent le hizb des sourates courtes, pour commencer sereinement.",
+  },
+  {
+    question: "Quelle est la différence entre Tilawa et mémorisation (hifdh) dans ce cours ?",
+    answer:
+      "La Tilawa est la récitation du Coran : appliquer les règles du Tajwid dans une lecture suivie, fluide et corrigée. Le hifdh, ou hifz, est la mémorisation : retenir par cœur un passage dont la lecture est déjà juste. Dans la formation Mémorisation du Coran de l’Institut ISHES, les deux vont ensemble : on récite devant l’enseignant, il corrige, puis on mémorise et on révise.",
+  },
+  {
+    question: "Les révisions (mouraja’a) sont-elles incluses dans les séances du cours ?",
+    answer:
+      "Oui. Le programme allie mémorisation progressive, révisions régulières, récitation accompagnée et corrections détaillées. À chaque séance, une partie du temps est consacrée aux sourates déjà apprises, pour qu’une mémorisation fragile devienne solide. Si une sourate ancienne faiblit, l’enseignant réduit temporairement le nouveau texte et consolide l’acquis avant d’avancer.",
+  },
+  {
+    question: "Comment sont validées les sourates mémorisées à la fin des 4 mois ?",
+    answer:
+      "Par des évaluations régulières tout au long du parcours, puis une validation des sourates travaillées à la fin des 4 mois. Tu récites de mémoire devant l’enseignant, qui vérifie la justesse du Tajwid et la stabilité de la mémorisation. Les élèves qui ont validé le parcours reçoivent le diplôme de l’Institut ISHES.",
+  },
+  {
+    question: "Le cours de mémorisation du Coran en ligne est-il ouvert aux enfants ?",
+    answer:
+      "Ce programme est proposé en inscription adulte, pour des élèves qui ont déjà validé le Tajwid. Pour un enfant qui souhaite mémoriser le Coran, l’Institut ISHES oriente vers les cours particuliers à distance, ouverts aux enfants, où la lecture, la correction et la mémorisation se travaillent en tête-à-tête à un rythme convenu avec l’enseignant.",
+  },
+  {
+    question: "Combien coûte le cours de mémorisation du Coran en ligne ?",
+    answer:
+      "399 € pour la formation complète de 4 mois, payable en 3 fois sans frais. Le tarif comprend les deux séances individuelles par semaine en direct sur Zoom, les replays, tous les supports, le groupe WhatsApp privé, les évaluations et le diplôme ISHES en fin de parcours. Quatre fiches de méthode (planning, sourates courtes, conseils, plan de révision) sont en plus offertes gratuitement.",
+  },
+  {
+    question: "Pourquoi est-il difficile de mémoriser le Coran seul, sans suivi ?",
+    answer:
+      "Parce que la régularité tient rarement sans cadre. Seul, on apprend une sourate puis on en oublie une partie quelques semaines plus tard, et le manque de suivi ou de motivation ralentit la progression. Beaucoup abandonnent par manque d’organisation, pas par manque d’amour du Coran. Le programme ISHES apporte un rendez-vous fixe, un enseignant qui écoute, et un plan de révision pour que le Coran devienne un compagnon quotidien.",
+  },
+];
 
 export const metadata = buildPageMetadata({
   title: "Tilawa et mémorisation du Coran en ligne",
@@ -71,7 +124,7 @@ export default function CoursMemoriserCoranPage() {
           { name: "Tilawa et mémorisation", path: "/fr/cours-memoriser-coran" },
         ])}
       />
-      <JsonLd data={faqJsonLd(TILAWA_FAQS)} />
+      <JsonLd data={faqJsonLd(MEMORISATION_FAQS)} />
       <JsonLd
         data={articleJsonLd({
           headline: "Tilawa et Hifdh : réciter et mémoriser le Coran avec un enseignant",
@@ -326,9 +379,10 @@ export default function CoursMemoriserCoranPage() {
       </article>
 
       <VitrineFaq
-        eyebrow="FAQ Tilawa et Hifdh"
-        title="Questions fréquentes sur la récitation et la mémorisation"
-        items={TILAWA_FAQS}
+        eyebrow="FAQ mémorisation du Coran"
+        title="Questions fréquentes : mémoriser le Coran avec un enseignant"
+        intro="Niveau requis, déroulement des séances individuelles, révisions, validation des sourates et tarif du cours de hifz en ligne."
+        items={MEMORISATION_FAQS}
       />
 
     </div>

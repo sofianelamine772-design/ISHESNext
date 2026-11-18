@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -9,6 +11,54 @@ import {
 } from 'lucide-react';
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+
+const PRESENTIEL_ENFANT_FAQS = [
+  {
+    question: "À quel âge inscrire son enfant à l’école d’arabe et de Coran ISHES à Toulouse ?",
+    answer:
+      "Les cours enfants en présentiel de l’Institut ISHES à Toulouse accueillent les enfants de 4 à 15 ans. Les groupes sont constitués selon l’âge et le niveau, des plus petits aux collégiens, pour que chacun progresse à son rythme. Les plus jeunes découvrent l’arabe et le Coran par des méthodes ludiques ; les plus grands approfondissent la lecture avec Tajwid, l’écriture et la compréhension des sourates.",
+  },
+  {
+    question: "Mercredi, samedi ou dimanche : quels créneaux pour les cours enfants à Toulouse ?",
+    answer:
+      "Cinq créneaux sont proposés : le mercredi après-midi (13h30-16h30), le samedi matin (9h00-12h00), le samedi après-midi (13h30-16h30), le dimanche matin (9h00-12h00) et le dimanche après-midi (13h30-16h30). Vous choisissez un seul créneau à l’inscription et votre enfant vient une seule fois par semaine, dans les locaux de l’institut, 41 boulevard de Thibaud à Toulouse. Quel que soit le jour, il suit l’ensemble du programme.",
+  },
+  {
+    question: "Qu’apprend un enfant en cours d’arabe et de Coran à Toulouse chez ISHES ?",
+    answer:
+      "Trois matières, chaque semaine, dans la même demi-journée. En Coran : lecture avec Tajwid, mémorisation et compréhension des sourates. En arabe : lecture, écriture, vocabulaire et expression pour comprendre et s’exprimer avec confiance. En éducation islamique : les valeurs de l’islam, les histoires des Prophètes, l’éthique musulmane et les bonnes manières au quotidien. L’ensemble est porté par une pédagogie active et bienveillante.",
+  },
+  {
+    question: "Combien coûte l’école arabe et Coran pour enfants à Toulouse ?",
+    answer:
+      "Le tarif est de 480 € par an pour l’ensemble du programme (arabe, Coran et éducation islamique), soit une demi-journée hebdomadaire pendant toute l’année. Le paiement peut se faire en 1, 3, 5 ou 10 fois, en ligne et de façon sécurisée. Pour toute question avant d’inscrire votre enfant, l’équipe de l’Institut ISHES répond sur WhatsApp.",
+  },
+  {
+    question: "Comment inscrire mon enfant aux cours en présentiel à Toulouse ?",
+    answer:
+      "L’inscription se fait en ligne depuis le bouton « Inscrire mon enfant » : vous renseignez l’enfant, choisissez le créneau (mercredi, samedi ou dimanche, matin ou après-midi) et la formule de paiement. Les groupes sont ensuite ajustés selon l’âge et le niveau de chaque enfant. Si vous hésitez entre deux créneaux ou deux niveaux, un échange sur WhatsApp permet de poser vos questions avant de valider.",
+  },
+  {
+    question: "Les groupes d’enfants sont-ils mélangés ou constitués par niveau ?",
+    answer:
+      "Par âge et par niveau. Les groupes sont à effectifs réduits pour permettre un suivi personnalisé : un enfant qui débute n’est pas placé avec des élèves qui lisent déjà le Coran, et un enfant plus avancé n’attend pas les autres. Des enseignants qualifiés accompagnent chacun avec attention, dans un environnement sain, motivant et sécurisant, où les valeurs islamiques sont vécues au quotidien.",
+  },
+  {
+    question: "Un enfant reçoit-il une attestation à la fin de l’année scolaire ?",
+    answer:
+      "Oui. Une attestation de suivi est remise en fin d’année, inch’Allah, aux enfants ayant suivi le programme. Elle témoigne de leur assiduité et de leur progression en arabe, en Coran et en éducation islamique. Au-delà du document, l’objectif de l’Institut ISHES est que l’enfant termine l’année avec des acquis solides et l’envie de continuer.",
+  },
+  {
+    question: "Une demi-journée par semaine suffit-elle pour progresser en arabe et en Coran ?",
+    answer:
+      "Oui, si elle est régulière. Les trois heures hebdomadaires regroupent arabe, Coran et éducation islamique, avec des méthodes ludiques et interactives qui maintiennent l’attention des enfants. La régularité d’une séance par semaine, sur toute l’année, construit des acquis durables, surtout quand les parents encouragent quelques minutes de révision à la maison. Les petits groupes permettent à l’enseignant de vérifier que chaque enfant suit.",
+  },
+  {
+    question: "Y a-t-il des cours de Coran pour enfants le dimanche à Toulouse ?",
+    answer:
+      "Oui. L’Institut ISHES propose deux créneaux le dimanche : le matin de 9h00 à 12h00 et l’après-midi de 13h30 à 16h30, en plus du mercredi après-midi et du samedi. Chaque créneau couvre le programme complet : Coran avec Tajwid, arabe et éducation islamique. Le dimanche permet aux familles dont les enfants ont déjà des activités le mercredi ou le samedi de garder ce rendez-vous hebdomadaire.",
+  },
+];
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-presentiel-enfant") },
@@ -26,6 +76,7 @@ export const metadata: Metadata = {
 export default function CoursPresentielEnfantPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-[#C69C6D] selection:text-white pb-10">
+      <JsonLd data={faqJsonLd(PRESENTIEL_ENFANT_FAQS)} />
       <Navbar />
 
       {/* Hero Section */}
@@ -224,6 +275,13 @@ export default function CoursPresentielEnfantPage() {
           <ShieldCheck className="w-4 h-4 text-[#C69C6D]" /> Paiement 100% sécurisé
         </div>
       </div>
+
+      <VitrineFaq
+        eyebrow="FAQ Cours enfants Toulouse"
+        title="Questions fréquentes sur l’école d’arabe et de Coran pour enfants à Toulouse"
+        intro="Âge, créneaux du mercredi au dimanche, programme et tarif : tout savoir avant d’inscrire votre enfant en présentiel."
+        items={PRESENTIEL_ENFANT_FAQS}
+      />
 
       {/* WhatsApp Contact */}
       <div className="max-w-4xl mx-auto px-6 py-12">

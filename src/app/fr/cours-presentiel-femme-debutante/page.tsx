@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, faqJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -11,6 +13,49 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArabicBackground } from "@/components/ArabicBackground";
+
+const FEMME_DEBUTANTE_FAQS = [
+  {
+    question: "Peut-on apprendre à lire le Coran à Toulouse en partant de zéro, sans connaître l’alphabet ?",
+    answer:
+      "Oui. Le cours présentiel femme débutante de l’Institut ISHES à Toulouse est conçu pour celles qui ne savent pas encore lire l’arabe. La première étape est la découverte de l’alphabet et de la lecture avec la méthode Habib Haffes ; viennent ensuite la prononciation des lettres (Makharij), les règles du Tajwid avec Les Clés du Coran, puis la lecture du Moushaf avec correction individuelle. Aucun prérequis n’est demandé.",
+  },
+  {
+    question: "Quand ont lieu les cours d’arabe et de Tajwid pour femmes débutantes à Toulouse ?",
+    answer:
+      "Tous les dimanches de 9h00 à 12h00, en présentiel dans les locaux de l’Institut ISHES à Toulouse, pendant toute l’année de formation. Le dimanche matin laisse la semaine libre aux femmes qui travaillent ou accompagnent des enfants scolarisés. Si vous manquez une séance, un replay est disponible en ligne pour rattraper, et le groupe WhatsApp privé de la classe permet de rester en lien entre deux dimanches.",
+  },
+  {
+    question: "Pourquoi apprendre l’arabe et le Tajwid en même temps quand on débute ?",
+    answer:
+      "Parce que les deux se renforcent. Dans la plupart des écoles, il faut choisir entre apprendre l’arabe ou apprendre le Tajwid. À l’Institut ISHES, les notions de lecture et d’écriture apprises avec la méthode Habib Haffes sont immédiatement appliquées à la prononciation et aux règles de récitation du Coran. Un seul cursus, une seule progression, deux compétences essentielles, sans double effort de temps ni d’argent.",
+  },
+  {
+    question: "Le cours femme débutante est-il vraiment réservé aux femmes ?",
+    answer:
+      "Oui, à 100 %. Le cursus est exclusivement féminin, assuré par une enseignante, dans un cadre serein, chaleureux et propice à l’entraide entre sœurs. Ce cadre permet de réciter, de se tromper et de se corriger en confiance, sans gêne. Le groupe WhatsApp privé de la classe prolonge cet esprit d’entraide et de motivation entre deux dimanches.",
+  },
+  {
+    question: "Quelle méthode est utilisée pour apprendre à lire l’arabe aux femmes débutantes ?",
+    answer:
+      "Deux supports complémentaires. Pour la langue, la méthode Habib Haffes, reconnue chez les francophones pour sa pédagogie claire et progressive de l’alphabet, de la lecture et de l’écriture. Pour la récitation, Les Clés du Coran, le support exclusif de l’Institut ISHES adapté de Nour al-Bayan, qui introduit progressivement les règles du Tajwid. Les supports pédagogiques sont inclus dans la formation.",
+  },
+  {
+    question: "Combien coûte la formation arabe et Tajwid pour femmes débutantes à Toulouse ?",
+    answer:
+      "Le tarif est de 649 € pour l’année complète, payable en 1, 3, 5 ou 10 fois sans frais. Il comprend les cours en présentiel chaque dimanche, les exercices et activités, les évaluations régulières, les corrections individuelles, le suivi pédagogique personnalisé, le groupe WhatsApp privé de la classe et le diplôme de réussite en fin de formation. Le paiement en ligne est sécurisé.",
+  },
+  {
+    question: "Que sait-on faire à la fin du cours femme débutante ?",
+    answer:
+      "Lire l’arabe de façon fluide, écrire les lettres, prononcer correctement chaque lettre depuis son point de sortie (Makharij al-Hourouf), appliquer les règles fondamentales du Tajwid et lire le Moushaf avec assurance. Le parcours vise aussi un vocabulaire religieux indispensable pour comprendre les sourates courtes. Un diplôme de réussite est remis en fin de formation aux élèves ayant validé le cursus.",
+  },
+  {
+    question: "Après le niveau débutante, comment continuer à progresser à Toulouse ?",
+    answer:
+      "Le prolongement naturel est le cours présentiel femme intermédiaire de l’Institut ISHES, le samedi matin à Toulouse : il consolide la récitation, introduit la grammaire arabe (Nahw) appliquée au Coran et travaille la traduction guidée de sourates. Il s’adresse aux femmes qui savent déjà lire l’arabe, ce qui est exactement l’acquis du niveau débutante.",
+  },
+];
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/cours-presentiel-femme-debutante") },
@@ -28,6 +73,7 @@ export const metadata: Metadata = {
 export default function CoursPresentielFemmeDebutantePage() {
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-[#C69C6D] selection:text-white pb-32">
+      <JsonLd data={faqJsonLd(FEMME_DEBUTANTE_FAQS)} />
       <Navbar />
 
       {/* Hero Section */}
@@ -252,6 +298,13 @@ export default function CoursPresentielFemmeDebutantePage() {
           </div>
         </div>
       </div>
+
+      <VitrineFaq
+        eyebrow="FAQ Femme débutante"
+        title="Questions fréquentes : apprendre l’arabe et le Tajwid à Toulouse quand on débute"
+        intro="Cours présentiel 100 % femme, le dimanche matin : alphabet, lecture du Coran, méthode, tarif et suite du parcours."
+        items={FEMME_DEBUTANTE_FAQS}
+      />
 
       <Footer />
 

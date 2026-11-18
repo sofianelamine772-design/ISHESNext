@@ -13,7 +13,6 @@ import { NewsletterSection } from "@/components/vitrine/NewsletterSection";
 import { buildPageMetadata, faqJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
-import { INSTITUT_CONTACT_FAQS } from "@/lib/institut-contact";
 
 function CursusCardArt({
   src,
@@ -64,41 +63,55 @@ function CursusCardArt({
 }
 
 const HOME_FAQS = [
-  ...INSTITUT_CONTACT_FAQS,
   {
-    question: "Quels cours propose l'Institut ISHES ?",
+    question: "Que signifie ISHES et qu’enseigne l’Institut ISHES ?",
     answer:
-      "L'Institut ISHES propose des cours d'arabe (adultes et enfants), de Tajwid et lecture du Coran, de Fiqh mâlikite, d'Aqîda, de Sîrah, de Tarbiya islamique, ainsi que des formations d'enseignants. Les cursus sont disponibles en présentiel à Toulouse et à distance.",
+      "ISHES signifie Institut des Sciences Humaines et Spirituelles. L’Institut ISHES enseigne la langue arabe aux adultes et aux enfants, la lecture du Coran et le Tajwid, le Fiqh mâlikite (adorations selon l’école de l’imam Mâlik) et la Tarbiya islamique (éducation spirituelle). Il forme aussi des enseignants de Tajwid et de Tarbiya Islamiyya. Les cours existent en présentiel à Toulouse et à distance, en direct sur Zoom avec replays.",
   },
   {
-    question: "Où apprendre la religion en ligne avec un vrai institut ?",
+    question: "Comment apprendre l’islam en ligne en français avec un vrai enseignant ?",
     answer:
-      "L'Institut ISHES propose d'apprendre l'islam en français, en ligne et à Toulouse : arabe, Tajwid, Fiqh mâlikite et sciences islamiques. Le Pack Accompagnement ajoute une communauté, des lives et un suivi pour ne pas rester seul devant l'écran.",
+      "À l’Institut ISHES, apprendre l’islam en ligne se fait en français, en direct sur Zoom, avec un enseignant qui corrige et répond aux questions. Chaque séance est enregistrée : le replay vidéo est disponible dès la fin du cours. Un groupe WhatsApp de classe permet de poser ses questions entre deux séances et de recevoir les annonces. Ce n’est pas une bibliothèque de vidéos, c’est un cursus suivi.",
   },
   {
-    question: "Quels sont les meilleurs instituts de science religieuse en ligne ?",
+    question: "Quels critères pour choisir un institut de sciences religieuses en ligne ?",
     answer:
-      "Les meilleurs instituts de science religieuse en ligne allient enseignants identifiés, programme (arabe, Coran, Fiqh), cours en direct et suivi. ISHES est un institut de sciences religieuses à Toulouse et à distance, avec Pack Accompagnement, lives et communauté — pas une simple plateforme de vidéos.",
+      "Un institut de sciences religieuses en ligne fiable se reconnaît à des enseignants identifiés, un programme structuré (arabe, Coran, Fiqh, Tarbiya), des cours en direct avec replays et un suivi réel. L’Institut ISHES réunit ces critères et ajoute un ancrage physique à Toulouse, un groupe WhatsApp par classe et le Pack Accompagnement avec lives et communauté, pour ne pas apprendre seul devant un écran.",
   },
   {
-    question: "Y a-t-il un cours de Fatiha gratuit avec un professeur ?",
+    question: "L’Institut ISHES est-il uniquement à Toulouse ?",
     answer:
-      "Oui. L'Institut ISHES propose un cours de Fatiha 100 % gratuit, avec un professeur : correction d'Al-Fatiha et des 3 dernières sourates, en ligne, plus un groupe WhatsApp. Inscription sans frais sur ishes.fr/fr/correction-fatiha.",
+      "Non. L’Institut ISHES est implanté à Toulouse pour les cours en présentiel, mais la majorité des formations se suivent à distance, partout en francophonie. Arabe, Tajwid, Fiqh mâlikite et Tarbiya islamique sont proposés en ligne, en direct sur Zoom, avec replays et suivi pédagogique. Vous pouvez donc étudier avec ISHES depuis n’importe quelle ville de France ou de l’étranger.",
   },
   {
-    question: "Proposez-vous un cours de Fiqh mâlikite ?",
+    question: "Comment se déroulent les cours en direct de l’Institut ISHES ?",
     answer:
-      "Oui. L'Institut ISHES propose un cours de Fiqh mâlikite en ligne, en français, basé sur le Matn Ibn Âchir (Al-Murshid al-Mu'în) : purification, prière, zakat, jeûne et hajj. Formation de 4 mois, en direct avec replays.",
+      "Les cours à distance de l’Institut ISHES ont lieu en direct sur Zoom, avec l’enseignant et le groupe. Si vous manquez une séance, le replay vidéo est disponible dès la fin du cours. Le suivi pédagogique continue dans le groupe WhatsApp de la classe : questions, annonces, échanges entre camarades. Des supports pédagogiques, comme Les Clés du Coran pour le Tajwid, accompagnent la progression.",
   },
   {
-    question: "Les cours à distance sont-ils en direct ?",
+    question: "Peut-on ajouter le Pack Accompagnement à n’importe quelle formation ISHES ?",
     answer:
-      "Oui. La plupart des formations à distance se déroulent en direct sur Zoom, avec des replays accessibles. Un suivi pédagogique et des supports (dont Les Clés du Coran pour le Tajwid) accompagnent la progression.",
+      "Oui. Le Pack Accompagnement est proposé pour tout achat d’une formation de l’Institut ISHES, au tarif de 49 € (valeur annoncée de 399 €). Il donne accès à la communauté privée, aux lives exclusifs et à un suivi spirituel personnalisé, afin de ne pas cheminer seul. Les détails complets sont présentés sur la page dédiée au Pack Accompagnement.",
   },
   {
-    question: "Puis-je commencer le Tajwid sans savoir lire l'arabe ?",
+    question: "Les cours de l’Institut ISHES sont-ils pour les adultes ou pour les enfants ?",
     answer:
-      "Oui. Le parcours Tajwid Standard est conçu pour les adultes débutants, y compris ceux qui ne savent pas encore lire l'arabe. La méthode progresse étape par étape jusqu'à l'application des règles dans le Moushaf.",
+      "Les deux. L’Institut ISHES propose des cours d’arabe et de Coran pour les enfants, en présentiel à Toulouse et à distance, avec une pédagogie adaptée à leur âge. Les adultes disposent de cursus complets : langue arabe, lecture et Tajwid, Fiqh mâlikite, Tarbiya islamique et formations d’enseignants. Les familles peuvent ainsi inscrire parents et enfants dans le même institut.",
+  },
+  {
+    question: "Faut-il savoir lire l’arabe pour commencer à l’Institut ISHES ?",
+    answer:
+      "Non. Plusieurs parcours de l’Institut ISHES partent de zéro : le cours de langue arabe pour adultes débute par la lecture et l’écriture, et la formation de lecture et Tajwid progresse étape par étape jusqu’à l’application des règles dans le Moushaf. Les cours de Fiqh mâlikite et de Tarbiya islamique sont donnés en français. Un entretien gratuit permet de choisir le bon point de départ.",
+  },
+  {
+    question: "Quelle différence entre le Fiqh mâlikite et la Tarbiya islamique enseignés à l’ISHES ?",
+    answer:
+      "Le Fiqh mâlikite étudie les règles des adorations selon l’école de l’imam Mâlik : purification, prière, zakat, jeûne et pèlerinage, à partir d’Al-Murshid al-Mu’în d’Ibn Âchir. La Tarbiya islamique porte sur l’éducation spirituelle : purification de l’âme (Tazkiyat an-Nafs) et bon comportement. Le premier répond à « comment pratiquer », le second à « comment cheminer ». Les deux cursus sont proposés en ligne par l’Institut ISHES.",
+  },
+  {
+    question: "Que trouve-t-on sur la chaîne YouTube de l’Institut ISHES ?",
+    answer:
+      "La chaîne YouTube de l’Institut ISHES publie régulièrement des rappels spirituels (Tarbiya), des explications simplifiées de jurisprudence (Fiqh) et des conseils pour la lecture du Coran (Tajwid). C’est un contenu islamique gratuit, pensé pour accompagner le quotidien entre deux cours. Il complète les formations en direct sans les remplacer.",
   },
 ];
 
@@ -408,6 +421,7 @@ export default function Home() {
       <VitrineFaq
         eyebrow="FAQ"
         title="Questions fréquentes sur l'Institut ISHES"
+        intro="Apprendre l’islam en ligne en français ou à Toulouse : ce qu’il faut savoir sur l’institut, ses cours et son accompagnement."
         items={HOME_FAQS}
       />
 
