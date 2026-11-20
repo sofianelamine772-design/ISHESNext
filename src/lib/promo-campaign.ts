@@ -40,7 +40,7 @@ export const PROMO_CAMPAIGN: PromoCampaign = {
   headline: '−100 € sur toutes les formations à distance',
   note: 'Arabe, Tajwid, Coran, Fiqh, Aqîda, Sîrah… en direct avec nos enseignants, depuis chez vous.',
   ctaLabel: 'Découvrir les formations à distance',
-  ctaHref: '/fr/cours-a-distance',
+  ctaHref: '/program',
   deadlineLabel: 'Offre valable jusqu’au 22 novembre',
 };
 

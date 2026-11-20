@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, Eye, HelpCircle, Mail } from "lucide-react";
 import { ArabicBackground } from "@/components/ArabicBackground";
+import { CookieSettingsButton } from "@/components/consent/CookieSettingsButton";
 
 const sections = [
   {
@@ -57,6 +58,17 @@ const sections = [
       "• Droit à la limitation et d'opposition au traitement de vos données.",
       "Vous pouvez exercer vos droits à tout moment en nous envoyant une demande écrite à l'adresse suivante : contact@ishes.fr."
     ]
+  },
+  {
+    title: "7. Cookies et traceurs",
+    content: [
+      "Lors de votre première visite, un bandeau vous permet d'accepter ou de refuser les cookies non essentiels, aussi simplement l'un que l'autre, ou de choisir finalité par finalité. Votre choix est conservé 6 mois, puis vous est redemandé. Vous pouvez le modifier à tout moment via le lien « Gérer mes cookies » en bas de chaque page.",
+      "• Cookies nécessaires (toujours actifs) : connexion sécurisée à l'espace élève (Clerk), paiement (Stripe), mémorisation de vos choix de cookies et du pop-up d'information. Ils ne nécessitent pas votre consentement car ils sont indispensables au service demandé.",
+      "• Mesure d'audience (soumise à consentement) : Google Analytics (cookies _ga, _gid, durée maximale 13 mois) nous aide à comprendre quelles pages sont consultées afin d'améliorer le site. Aucun script Google Analytics n'est chargé tant que vous n'avez pas accepté.",
+      "• Publicité (soumise à consentement) : Google Ads (cookies _gcl_au, _gac_, durée maximale 13 mois) mesure les inscriptions issues de nos campagnes et peut personnaliser les annonces. Aucun script Google Ads n'est chargé tant que vous n'avez pas accepté.",
+      "• Contenus tiers : les vidéos YouTube sont intégrées en mode « confidentialité renforcée » (youtube-nocookie.com) ; la carte Google Maps de la page Contact, le formulaire de newsletter (Brevo) et la prise de rendez-vous (Calendly) sont fournis par leurs éditeurs respectifs, qui peuvent déposer leurs propres cookies lorsque vous interagissez avec eux.",
+      "• Mesure de performance technique : Vercel Speed Insights collecte des mesures de vitesse d'affichage sans cookie ni identifiant personnel."
+    ]
   }
 ];
 
@@ -79,7 +91,7 @@ export default function PolitiqueConfidentialitePage() {
             </h1>
             <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
               <Lock className="w-4 h-4 text-ishes-blue" />
-              <span>Dernière mise à jour : Juin 2026 — Institut ISHES</span>
+              <span>Dernière mise à jour : Novembre 2026 — Institut ISHES</span>
             </div>
           </div>
 
@@ -108,6 +120,11 @@ export default function PolitiqueConfidentialitePage() {
                 <h2 className="ishes-label text-ishes-blue mb-6 pb-4 border-b border-gray-100 font-bold text-lg">
                   {section.title}
                 </h2>
+                {section.title.startsWith("7.") && (
+                  <div className="mb-6">
+                    <CookieSettingsButton className="inline-flex items-center gap-2 bg-ishes-blue text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-ishes-blue-hover transition-colors" />
+                  </div>
+                )}
                 <div className="space-y-4">
                   {section.content.map((paragraph, pIdx) => (
                     <p key={pIdx} className="text-gray-500 font-medium leading-relaxed text-[15px]">

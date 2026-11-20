@@ -81,9 +81,9 @@ export const metadata: Metadata = {
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Script from "next/script";
-import { GoogleAnalytics } from '@next/third-parties/google';
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import { ConsentScripts } from "@/components/consent/ConsentScripts";
+import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
 import { frFR } from "@/lib/clerk-fr";
 
 export default function RootLayout({
@@ -110,22 +110,13 @@ export default function RootLayout({
       >
         <body className={cn(inter.className, "min-h-full flex flex-col bg-white text-ishes-dark selection:bg-ishes-blue selection:text-white")}>
           {children}
+          {/* Speed Insights : mesure technique sans cookie (exempté de consentement). */}
           <SpeedInsights />
           <AnalyticsTracker />
+          {/* RGPD : Google Analytics / Google Ads chargés uniquement après consentement. */}
+          <ConsentScripts />
+          <CookieConsentBanner />
         </body>
-        <GoogleAnalytics gaId="G-WS8XG0WKXZ" />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18510499480"
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads-aw" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-18510499480');
-          `}
-        </Script>
       </html>
     </ClerkProvider>
   );

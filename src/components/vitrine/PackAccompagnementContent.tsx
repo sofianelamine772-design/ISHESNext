@@ -54,7 +54,7 @@ export function PackAccompagnementContent() {
             <div className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 bg-black">
               <iframe
                 className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/GuP0DX_0mHg"
+                src="https://www.youtube-nocookie.com/embed/GuP0DX_0mHg"
                 title="Institut de sciences religieuses en ligne — Pack Accompagnement ISHES"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

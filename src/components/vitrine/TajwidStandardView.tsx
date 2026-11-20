@@ -57,7 +57,7 @@ export function TajwidStandardView() {
             <div className="w-full">
               <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-ishes-blue">
                 <iframe
-                  src="https://www.youtube.com/embed/y0MCrrbSogY"
+                  src="https://www.youtube-nocookie.com/embed/y0MCrrbSogY"
                   title="Présentation du cours de Tajwid — Institut ISHES"
                   className="absolute inset-0 w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

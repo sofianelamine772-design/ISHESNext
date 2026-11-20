@@ -353,7 +353,7 @@ export default function Home() {
           <div className="flex-1 w-full grid grid-cols-3 gap-4 sm:gap-6">
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border border-white/10 transform rotate-[-2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
               <iframe 
-                src="https://www.youtube.com/embed/OSl6Xx3yrBk?autoplay=1&mute=1&loop=1&playlist=OSl6Xx3yrBk&controls=0&showinfo=0" 
+                src="https://www.youtube-nocookie.com/embed/OSl6Xx3yrBk?autoplay=1&mute=1&loop=1&playlist=OSl6Xx3yrBk&controls=0&showinfo=0" 
                 className="absolute top-0 left-0 w-full h-full pointer-events-none" 
                 allow="autoplay; encrypted-media" 
                 frameBorder="0"
@@ -362,7 +362,7 @@ export default function Home() {
             </div>
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border border-white/10 transform translate-y-8 hover:translate-y-4 hover:scale-105 transition-all duration-300 z-10">
               <iframe 
-                src="https://www.youtube.com/embed/IhbjCvavh4M?autoplay=1&mute=1&loop=1&playlist=IhbjCvavh4M&controls=0&showinfo=0" 
+                src="https://www.youtube-nocookie.com/embed/IhbjCvavh4M?autoplay=1&mute=1&loop=1&playlist=IhbjCvavh4M&controls=0&showinfo=0" 
                 className="absolute top-0 left-0 w-full h-full pointer-events-none" 
                 allow="autoplay; encrypted-media" 
                 frameBorder="0"
@@ -371,7 +371,7 @@ export default function Home() {
             </div>
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border border-white/10 transform rotate-[2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
               <iframe 
-                src="https://www.youtube.com/embed/m_0P8XGmBG0?autoplay=1&mute=1&loop=1&playlist=m_0P8XGmBG0&controls=0&showinfo=0" 
+                src="https://www.youtube-nocookie.com/embed/m_0P8XGmBG0?autoplay=1&mute=1&loop=1&playlist=m_0P8XGmBG0&controls=0&showinfo=0" 
                 className="absolute top-0 left-0 w-full h-full pointer-events-none" 
                 allow="autoplay; encrypted-media" 
                 frameBorder="0"

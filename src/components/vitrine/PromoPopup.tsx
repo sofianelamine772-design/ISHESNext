@@ -10,6 +10,7 @@ import {
   getActivePromoCampaign,
   shouldShowPromoPopupOnPath,
 } from "@/lib/promo-campaign";
+import { CONSENT_CHANGED_EVENT, readConsent } from "@/lib/cookie-consent";
 
 const SHOW_DELAY_MS = 1200;
 
@@ -39,11 +40,24 @@ export function PromoPopup() {
   const [copied, setCopied] = useState(false);
   const campaign = getActivePromoCampaign();
 
+  // Le pop-up attend que le bandeau cookies ait reçu une réponse : jamais
+  // deux fenêtres en même temps.
   useEffect(() => {
     if (!campaign || !shouldShowPromoPopupOnPath(pathname)) return;
     if (alreadySeenThisVisit()) return;
-    const t = setTimeout(() => setOpen(true), SHOW_DELAY_MS);
-    return () => clearTimeout(t);
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const schedule = () => {
+      t = setTimeout(() => setOpen(true), SHOW_DELAY_MS);
+    };
+    if (readConsent()) {
+      schedule();
+    } else {
+      window.addEventListener(CONSENT_CHANGED_EVENT, schedule, { once: true });
+    }
+    return () => {
+      if (t) clearTimeout(t);
+      window.removeEventListener(CONSENT_CHANGED_EVENT, schedule);
+    };
   }, [campaign, pathname]);
 
   useEffect(() => {

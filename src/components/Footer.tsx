@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { MapPin, Mail, Phone } from "lucide-react";
 import { NewsletterEmbed } from "@/components/vitrine/NewsletterEmbed";
+import { CookieSettingsButton } from "@/components/consent/CookieSettingsButton";
 
 export function Footer() {
   // Le formulaire (760 px, iframe tierce) n'est chargé qu'à la demande pour ne pas
@@ -223,6 +224,7 @@ export function Footer() {
             <Link href="/mentions-legales" className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors">Mentions Légales</Link>
             <Link href="/cgv" className="bg-ishes-blue text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-blue-dark transition-colors">CGV</Link>
             <Link href="/politique-de-confidentialite" className="bg-ishes-blue text-white text-xs font-medium px-3 py-1 rounded hover:bg-ishes-blue-dark transition-colors">Politique de confidentialité</Link>
+            <CookieSettingsButton />
           </div>
 
           {/* Paiement Sécurisé */}

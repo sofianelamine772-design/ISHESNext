@@ -17,7 +17,7 @@ describe('promo-campaign', () => {
     expect(PROMO_CAMPAIGN.code).toBe(PROMO_CAMPAIGN.code.toUpperCase());
     expect(PROMO_CAMPAIGN.badge).toBe('Rentrée 2026');
     expect(PROMO_CAMPAIGN.headline).toMatch(/à distance/i);
-    expect(PROMO_CAMPAIGN.ctaHref).toBe('/fr/cours-a-distance');
+    expect(PROMO_CAMPAIGN.ctaHref).toBe('/program');
     expect(PROMO_CAMPAIGN.deadlineLabel).toContain('22 novembre');
     expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-17T22:59:59Z'))).toBe(false);
     expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-17T23:00:00Z'))).toBe(true);
