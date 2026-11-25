@@ -912,7 +912,7 @@ export function ProgramContent() {
                           </div>
                         )}
                         {(() => {
-                          // Offre −100 € distanciel : tarif habituel barré en rouge, tarif remisé affiché.
+                          // Offre distanciel (−50 €) : tarif habituel barré en rouge, tarif remisé affiché.
                           const offer = program.type === "distanciel" && !program.originalPrice
                             ? applyDistancielOffer(parsePriceEuros(program.price), { slug: program.id, type: program.type })
                             : null;

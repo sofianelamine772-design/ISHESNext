@@ -322,7 +322,7 @@ function InscriptionForm() {
            isChildSlot === 'dimanche';
   };
 
-  // Offre distanciel (−49 €, pack offert) : même règle que /api/checkout (jamais sur un panier présentiel).
+  // Offre distanciel (−50 €, pack offert) : même règle que /api/checkout (jamais sur un panier présentiel).
   const planOfferFormation = () => ({
     slug: planId,
     type: isPresentielCart() ? 'presentiel' : 'distanciel',
@@ -1730,7 +1730,7 @@ function InscriptionForm() {
                           setPromoError(null);
                           if (appliedPromo) setAppliedPromo(null);
                         }}
-                        placeholder="Ex: ISHES2026"
+                        placeholder="Votre code promo"
                         className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#008953]/20 focus:border-ishes-blue transition-all text-sm font-bold tracking-wider uppercase"
                       />
                       <button

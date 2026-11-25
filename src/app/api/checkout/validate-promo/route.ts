@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         .eq('slug', formationId)
         .maybeSingle();
       formationType = formation?.type || null;
-      // Offre distanciel (−49 €) déjà incluse dans le tarif affiché : pas de cumul.
+      // Offre distanciel (−50 €) déjà incluse dans le tarif affiché : pas de cumul.
       const offer = applyDistancielOffer(Number(formation?.price), {
         slug: formationId,
         type: formationType,

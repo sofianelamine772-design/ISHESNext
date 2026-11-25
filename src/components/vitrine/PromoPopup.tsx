@@ -136,13 +136,18 @@ export function PromoPopup() {
               <p className="inline-flex items-center gap-1.5 rounded-full bg-ishes-gold px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-ishes-dark">
                 <Sparkles className="h-3.5 w-3.5" /> {campaign.badge}
               </p>
-              <p className="mt-3 inline-flex items-center justify-center gap-2 text-5xl font-black leading-none tracking-tight text-ishes-gold">
-                {!campaign.code && <Gift className="h-9 w-9" aria-hidden />}
+              <p className="mt-3 inline-flex items-center justify-center gap-2 text-4xl font-black leading-none tracking-tight text-ishes-gold sm:text-5xl">
+                {!campaign.code && <Gift className="h-8 w-8 sm:h-9 sm:w-9" aria-hidden />}
                 {campaign.highlight}
               </p>
-              <h2 id="promo-popup-title" className="mt-2 text-base font-bold leading-snug sm:text-lg">
+              <h2 id="promo-popup-title" className="mt-2 px-2 text-[15px] font-bold leading-snug sm:text-lg">
                 {campaign.headline}
               </h2>
+              {campaign.valueLabel && (
+                <p className="mt-2 inline-flex items-center rounded-full border border-ishes-gold/60 px-3 py-0.5 text-[11px] font-black uppercase tracking-[0.15em] text-ishes-gold">
+                  {campaign.valueLabel}
+                </p>
+              )}
             </div>
 
             {/* Corps */}

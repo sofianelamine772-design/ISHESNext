@@ -113,7 +113,7 @@ export const metadata = buildPageMetadata({
 });
 
 export default function CoursTajwidIntensifPage() {
-  // Offre −100 € distanciel : tarif habituel barré, tarif remisé affiché.
+  // Offre distanciel (−50 €) : tarif habituel barré, tarif remisé affiché.
   const tajwidIntensifOffer = applyDistancielOffer(
     parsePriceEuros(PROGRAMS_DATA.tajwid_intensif?.price) ?? 649,
     { slug: "tajwid_intensif" },

@@ -9,7 +9,7 @@ type Props = {
   className?: string;
   /** Classes du tarif barré. */
   originalClassName?: string;
-  /** Afficher le badge « −100 € ». */
+  /** Afficher le badge « −50 € ». */
   badge?: boolean;
 };
 

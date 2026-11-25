@@ -1,6 +1,6 @@
 /**
  * Offre « Rentrée » sur les formations à distance :
- * - −49 € sur le tarif habituel (barré), appliqué à l'affichage ET au
+ * - −50 € sur le tarif habituel (barré), appliqué à l'affichage ET au
  *   montant réellement facturé par /api/checkout (le prix de base reste
  *   celui de Supabase `formations.price`, la remise est appliquée dessus) ;
  * - Pack Accompagnement (49 €) offert pour toute inscription à une
@@ -13,7 +13,7 @@
  * et `packOffered` à false).
  */
 export const DISTANCIEL_OFFER = {
-  discountEuros: 49,
+  discountEuros: 50,
   /** Début (inclus), heure de Paris. */
   startsAt: '2026-11-23T00:00:00+01:00',
   /** Fin (exclue), heure de Paris. `null` = jusqu'à nouvel ordre. */
@@ -22,7 +22,8 @@ export const DISTANCIEL_OFFER = {
   /** Pack Accompagnement offert avec une formation à distance. */
   packOffered: true,
   packSlug: 'pack_accompagnement',
-  packValueEuros: 49,
+  /** Valeur affichée du pack (son tarif de vente seul est de 49 €). */
+  packValueEuros: 399,
 };
 
 export const DISTANCIEL_OFFER_EXCLUDED_SLUGS = new Set([

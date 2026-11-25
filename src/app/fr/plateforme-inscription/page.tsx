@@ -202,7 +202,7 @@ function InscriptionForm() {
   })();
   const isStep1ContinueDisabled = Boolean(step1BlockReason);
 
-  // Offre −100 € distanciel (même règle que /api/checkout). Sur cette page,
+  // Offre distanciel −50 € (même règle que /api/checkout). Sur cette page,
   // tajwid_standard et presentiel-global sont des parcours présentiel.
   const isPresentielPlan = (plan: string | null) => {
     const normalized = (plan || "").toLowerCase().replace(/-/g, '_');

@@ -16,7 +16,9 @@ describe('promo-campaign', () => {
   it('la campagne réelle : Pack Accompagnement offert, sans code, dès le 25 novembre 2026 (Paris), sans fin programmée', () => {
     expect(PROMO_CAMPAIGN.code).toBeNull();
     expect(PROMO_CAMPAIGN.badge).toBe('Rentrée 2026');
-    expect(PROMO_CAMPAIGN.headline).toMatch(/Pack Accompagnement offert/i);
+    expect(PROMO_CAMPAIGN.headline).toMatch(/Pack Accompagnement/i);
+    expect(PROMO_CAMPAIGN.highlight).toBe('OFFERT');
+    expect(PROMO_CAMPAIGN.valueLabel).toMatch(/399 €/);
     expect(PROMO_CAMPAIGN.note).toMatch(/à distance/i);
     expect(PROMO_CAMPAIGN.ctaHref).toBe('/program');
     expect(PROMO_CAMPAIGN.endsAt).toBeNull();

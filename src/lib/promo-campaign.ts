@@ -24,10 +24,12 @@ export type PromoCampaign = {
   endsAt: string | null;
   /** Petit badge au-dessus du titre (ex. « Rentrée 2026 »). */
   badge: string;
-  /** Gros texte du bandeau (ex. « −100 € » ou « OFFERT »). */
+  /** Gros texte du bandeau (ex. « OFFERT »). */
   highlight: string;
   /** Titre sous le gros texte. */
   headline: string;
+  /** Petite pastille sous le titre (ex. « Valeur 399 € »), '' = aucune. */
+  valueLabel: string;
   /** Précision affichée sous le titre. */
   note: string;
   /** Bouton principal du pop-up. */
@@ -48,12 +50,13 @@ export const PROMO_CAMPAIGN: PromoCampaign = {
   endsAt: null,
   badge: 'Rentrée 2026',
   highlight: 'OFFERT',
-  headline: 'Pack Accompagnement offert',
-  note: 'Pour toute inscription à une formation à distance : suivi pédagogique, communauté et accompagnement tout au long de l’année (valeur 49 €).',
-  ctaLabel: 'Découvrir les formations à distance',
+  headline: 'Le Pack Accompagnement',
+  valueLabel: 'Valeur 399 €',
+  note: 'Pour toute inscription à une formation à distance : suivi pédagogique, communauté et accompagnement toute l’année.',
+  ctaLabel: 'Voir les formations à distance',
   ctaHref: '/program',
   deadlineLabel: '',
-  footnote: 'Ajouté automatiquement à votre inscription, sans code à saisir',
+  footnote: 'Ajouté automatiquement, sans code à saisir',
 };
 
 /** Clé de stockage : le pop-up n'est montré qu'une fois par visite (sessionStorage). */

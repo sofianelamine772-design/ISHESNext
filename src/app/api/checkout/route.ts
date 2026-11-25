@@ -91,7 +91,7 @@ export async function POST(req: Request) {
     }
 
     const formationTitle = formationData.title || 'Formation ISHES';
-    // Offre distanciel (−49 €, pack offert) : appliquée sur le prix de la base (jamais présentiel).
+    // Offre distanciel (−50 €, pack offert) : appliquée sur le prix de la base (jamais présentiel).
     const mainOfferFormation = {
       slug: formationId,
       type: isPlanPresentiel ? 'presentiel' : formationData.type,
@@ -138,7 +138,7 @@ export async function POST(req: Request) {
           { status: 404 },
         );
       }
-      // Pack Accompagnement offert avec une formation à distance ; autres ajouts : −49 €.
+      // Pack Accompagnement offert avec une formation à distance ; autres ajouts : −50 €.
       const bumpOffer = addedFormationOfferPrice(Number(bump.price) || 0, { slug, type: bump.type }, mainOfferFormation);
       const unit = bumpOffer.current;
       offerDiscountEuros += bumpOffer.discount;

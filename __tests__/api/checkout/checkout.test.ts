@@ -50,7 +50,7 @@ describe('Checkout API', () => {
     jest.clearAllMocks();
     mockSessionCreate.mockResolvedValue({ url: 'https://checkout.stripe.com/test' });
     mockPriceCreate.mockResolvedValue({ id: 'price_test_123' });
-    // Les tests tarifaires de base se lisent hors offre distanciel (−49 €, pack offert).
+    // Les tests tarifaires de base se lisent hors offre distanciel (−50 €, pack offert).
     DISTANCIEL_OFFER.endsAt = DISTANCIEL_OFFER.startsAt;
   });
 
@@ -58,12 +58,12 @@ describe('Checkout API', () => {
     DISTANCIEL_OFFER.endsAt = OFFER_ENDS_AT_INITIAL;
   });
 
-  describe('Offre distanciel : −49 € et Pack Accompagnement offert', () => {
+  describe('Offre distanciel : −50 € et Pack Accompagnement offert', () => {
     beforeEach(() => {
       DISTANCIEL_OFFER.endsAt = null; // offre active
     });
 
-    it('facture 399 € − 49 € = 350 € pour une formation à distance (prix lu en base)', async () => {
+    it('facture 399 € − 50 € = 349 € pour une formation à distance (prix lu en base)', async () => {
       mockFormation(399, 'Fiqh Mâlikite', 'distanciel');
       const res = await postCheckout({
         formationId: 'fiqh_malikite',
@@ -75,14 +75,14 @@ describe('Checkout API', () => {
       });
       expect(res.status).toBe(200);
       const session = mockSessionCreate.mock.calls[0][0];
-      expect(session.line_items[0].price_data.unit_amount).toBe(35000);
-      expect(session.metadata.expected_amount).toBe('350');
-      expect(session.metadata.distanciel_offer_euros).toBe('49');
+      expect(session.line_items[0].price_data.unit_amount).toBe(34900);
+      expect(session.metadata.expected_amount).toBe('349');
+      expect(session.metadata.distanciel_offer_euros).toBe('50');
       expect(session.metadata.pack_offert).toBe('false');
       expect(session.allow_promotion_codes).toBeUndefined();
     });
 
-    it('en 3 fois : (399 − 49) / 3 par mois', async () => {
+    it('en 3 fois : (399 − 50) / 3 par mois', async () => {
       mockFormation(399, 'Fiqh Mâlikite', 'distanciel');
       const res = await postCheckout({
         formationId: 'fiqh_malikite',
@@ -93,10 +93,10 @@ describe('Checkout API', () => {
         installments: 3,
       });
       expect(res.status).toBe(200);
-      expect(mockPriceCreate.mock.calls[0][0].unit_amount).toBe(Math.round(35000 / 3));
+      expect(mockPriceCreate.mock.calls[0][0].unit_amount).toBe(Math.round(34900 / 3));
     });
 
-    it('2 enfants à distance : 350 × 2 − 50 € de fratrie = 650 €', async () => {
+    it('2 enfants à distance : 349 × 2 − 50 € de fratrie = 648 €', async () => {
       mockFormation(399, 'Arabe enfant', 'distanciel');
       const res = await postCheckout({
         formationId: 'arabe_enfant_distance',
@@ -109,8 +109,8 @@ describe('Checkout API', () => {
       });
       expect(res.status).toBe(200);
       const session = mockSessionCreate.mock.calls[0][0];
-      expect(session.line_items[0].price_data.unit_amount).toBe(65000);
-      expect(session.metadata.expected_amount).toBe('350');
+      expect(session.line_items[0].price_data.unit_amount).toBe(64800);
+      expect(session.metadata.expected_amount).toBe('349');
     });
 
     it('jamais sur le présentiel : 649 € restent 649 €', async () => {
@@ -166,7 +166,7 @@ describe('Checkout API', () => {
       });
       expect(res.status).toBe(200);
       let session = mockSessionCreate.mock.calls[0][0];
-      expect(session.line_items[0].price_data.unit_amount).toBe(35000); // 350 + 0
+      expect(session.line_items[0].price_data.unit_amount).toBe(34900); // 349 + 0
       expect(session.metadata.pack_offert).toBe('true');
       expect(session.metadata.price_pack_accompagnement).toBe('0');
 
@@ -184,7 +184,7 @@ describe('Checkout API', () => {
       expect(session.metadata.pack_offert).toBe('false');
     });
 
-    it('refuse un code promo quand la remise −49 € est déjà appliquée (non cumulable)', async () => {
+    it('refuse un code promo quand la remise −50 € est déjà appliquée (non cumulable)', async () => {
       mockFormation(399, 'Fiqh Mâlikite', 'distanciel');
       const res = await postCheckout({
         formationId: 'fiqh_malikite',
