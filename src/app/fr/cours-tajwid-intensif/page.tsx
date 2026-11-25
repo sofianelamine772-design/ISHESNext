@@ -31,6 +31,7 @@ import {
   Target,
   Users,
 } from "lucide-react";
+import { applyDistancielOffer, formatEuros, parsePriceEuros } from "@/lib/distanciel-offer";
 
 const INSCRIPTION = "/inscription?plan=tajwid_intensif&audience=adulte";
 
@@ -112,7 +113,12 @@ export const metadata = buildPageMetadata({
 });
 
 export default function CoursTajwidIntensifPage() {
-  const price = PROGRAMS_DATA.tajwid_intensif?.price ?? "649 €";
+  // Offre −100 € distanciel : tarif habituel barré, tarif remisé affiché.
+  const tajwidIntensifOffer = applyDistancielOffer(
+    parsePriceEuros(PROGRAMS_DATA.tajwid_intensif?.price) ?? 649,
+    { slug: "tajwid_intensif" },
+  );
+  const price = formatEuros(tajwidIntensifOffer.current);
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans text-[#101828]">
@@ -594,7 +600,13 @@ export default function CoursTajwidIntensifPage() {
               Belgique, Suisse, Maghreb, Canada.
             </p>
             <p>
-              Le tarif est de <strong>{price}</strong>, payable en plusieurs fois. Une question de
+              Le tarif est de{" "}
+              {tajwidIntensifOffer.discount > 0 && (
+                <>
+                  <s className="text-red-500">{formatEuros(tajwidIntensifOffer.original)}</s>{" "}
+                </>
+              )}
+              <strong>{price}</strong>, payable en plusieurs fois. Une question de
               niveau :{" "}
               <Link href="/fr/contact" className="text-ishes-blue font-bold hover:underline">
                 l&apos;équipe répond sur WhatsApp

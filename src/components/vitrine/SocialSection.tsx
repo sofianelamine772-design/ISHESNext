@@ -121,7 +121,7 @@ export function SocialSection() {
             variants={item}
             whileHover={{ scale: 1.08, rotate: 3 }}
             whileTap={{ scale: 0.95 }}
-            href="https://www.youtube.com/@institutishes"
+            href="https://www.youtube.com/@ishesinstitut"
             target="_blank" rel="noopener noreferrer"
             className="group block"
           >

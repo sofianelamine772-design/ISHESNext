@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/fr/spiritualite-islam") },
@@ -324,7 +325,7 @@ export default function SpiritualiteIslamPage() {
 
             {/* Section Gauche : Prix */}
             <div className="text-center md:text-left space-y-2 flex-1 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0">
-              <div className="text-5xl md:text-6xl font-black text-ishes-gold">399 €</div>
+              <div className="text-5xl md:text-6xl font-black text-ishes-gold"><DistancielPrice price={399} slug="spiritualite_islam" originalClassName="text-2xl md:text-3xl" /></div>
               <h3 className="text-lg font-medium text-gray-300">Formation complète – 4 mois</h3>
             </div>
 

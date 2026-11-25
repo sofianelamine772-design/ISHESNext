@@ -29,6 +29,7 @@ import {
   Lightbulb,
   GraduationCap,
 } from "lucide-react";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const INSCRIPTION_HREF = "/inscription?plan=tajwid_standard&audience=adulte";
 
@@ -650,7 +651,7 @@ export function TajwidStandardView() {
                 Cours de Tajwid en ligne
               </div>
               <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-6xl font-black text-[#c8a063]">649 €</span>
+                <span className="text-6xl font-black text-[#c8a063]"><DistancielPrice price={649} slug="tajwid_standard" originalClassName="text-3xl" /></span>
               </div>
               <div className="text-sm font-bold tracking-widest uppercase mb-6">POUR 1 AN</div>
               <p className="text-[13px] text-gray-400 mb-8 max-w-[200px] mx-auto leading-relaxed">

@@ -10,6 +10,7 @@ import { ArabicBackground } from "@/components/ArabicBackground";
 import { PRESENTIEL_CLASSES, FEMME_DEBUTANTE_CLASS_ID, FEMME_INTERMEDIAIRE_CLASS_ID, resolvePresentielCheckoutSlug, type PresentielClass } from "@/lib/presentiel-data";
 import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from "@/lib/pricing";
+import { DISTANCIEL_OFFER, applyDistancielOffer } from "@/lib/distanciel-offer";
 import { areClassesAllFull, isClassFull, type SlotStatusRow } from "@/lib/class-availability";
 import { PresentielChoicePicker, PresentielHorairePicker } from "@/components/vitrine/PresentielHorairePicker";
 import { cn } from "@/lib/utils";
@@ -106,7 +107,8 @@ function InscriptionForm() {
     );
   };
 
-  const getBasePriceOfPlan = (plan: string | null): number => {
+  // Tarif catalogue (hors offre). Le tarif affiché/facturé passe par getBasePriceOfPlan.
+  const getCatalogPriceOfPlan = (plan: string | null): number => {
     if (!plan) return 349;
     const normalized = plan.toLowerCase().replace(/-/g, '_');
 
@@ -199,6 +201,20 @@ function InscriptionForm() {
     return null;
   })();
   const isStep1ContinueDisabled = Boolean(step1BlockReason);
+
+  // Offre −100 € distanciel (même règle que /api/checkout). Sur cette page,
+  // tajwid_standard et presentiel-global sont des parcours présentiel.
+  const isPresentielPlan = (plan: string | null) => {
+    const normalized = (plan || "").toLowerCase().replace(/-/g, '_');
+    return normalized.includes('presentiel') || normalized === 'tajwid_standard';
+  };
+  const planOffer = () =>
+    applyDistancielOffer(getCatalogPriceOfPlan(planId), {
+      slug: planId,
+      type: isPresentielPlan(planId) ? 'presentiel' : 'distanciel',
+    });
+  const getBasePriceOfPlan = (plan: string | null): number =>
+    plan === planId ? planOffer().current : getCatalogPriceOfPlan(plan);
 
   const getPrice = () => {
     const basePrice = getBasePriceOfPlan(planId);
@@ -1412,6 +1428,15 @@ function InscriptionForm() {
                       <span className="uppercase tracking-widest text-[11px]">Réduction fratrie</span>
                       <span>−{siblingDiscount},00 €</span>
                     </div>
+                  </div>
+                )}
+                {planOffer().discount > 0 && (
+                  <div className="flex justify-between items-center mb-4 text-sm font-bold text-red-600">
+                    <span>{DISTANCIEL_OFFER.label} · à distance</span>
+                    <span>
+                      <s className="text-gray-400 mr-2">{planOffer().original} €</s>
+                      −{planOffer().discount} € déjà déduits
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between items-center mb-4 text-sm font-bold text-gray-500 uppercase tracking-widest">

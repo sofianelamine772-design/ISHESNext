@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays, Play, Hourglass, Gift } from "lucide-react";
 import { PRESENTIEL_CLASSES, FEMME_PRESENTIEL_CLASS_BY_PLAN } from "@/lib/presentiel-data";
 import { isPresentielCardFull } from "@/lib/class-availability";
+import { applyDistancielOffer, formatEuros, parsePriceEuros } from "@/lib/distanciel-offer";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 type Program = {
@@ -910,7 +911,24 @@ export function ProgramContent() {
                             Valeur : {program.originalPrice}
                           </div>
                         )}
-                        <div className="text-lg sm:text-3xl font-black text-[#101828] tracking-tight leading-none">{program.price}</div>
+                        {(() => {
+                          // Offre −100 € distanciel : tarif habituel barré en rouge, tarif remisé affiché.
+                          const offer = program.type === "distanciel" && !program.originalPrice
+                            ? applyDistancielOffer(parsePriceEuros(program.price), { slug: program.id, type: program.type })
+                            : null;
+                          if (!offer || offer.discount <= 0) {
+                            return <div className="text-lg sm:text-3xl font-black text-[#101828] tracking-tight leading-none">{program.price}</div>;
+                          }
+                          return (
+                            <>
+                              <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                                <s className="text-xs sm:text-base font-bold text-red-500 decoration-red-500 decoration-2">{formatEuros(offer.original)}</s>
+                                <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] sm:text-[10px] font-black uppercase tracking-wider text-white">−{offer.discount} €</span>
+                              </div>
+                              <div className="text-lg sm:text-3xl font-black text-[#101828] tracking-tight leading-none">{formatEuros(offer.current)}</div>
+                            </>
+                          );
+                        })()}
                         <div className="text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-0.5 sm:mt-1">
                           {program.priceSub}
                         </div>

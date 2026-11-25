@@ -815,26 +815,45 @@ export default function EleveDashboard() {
                         const pDate = new Date(payment.created_at).toLocaleDateString('fr-FR', {
                           day: 'numeric', month: 'long', year: 'numeric'
                         });
-                        const canDownloadStripe = !!payment.isStripePayment;
+                        const paymentStatus = String(payment.status || '').toLowerCase();
+                        const isSucceeded = paymentStatus === 'succeeded' || paymentStatus === 'paid' || paymentStatus === 'payé';
+                        const isFailed = paymentStatus === 'failed';
+                        // Facture téléchargeable uniquement pour un paiement réellement encaissé
+                        const canDownloadStripe = !!payment.isStripePayment && isSucceeded;
                         return (
                           <div key={payment.id} className="border border-gray-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:bg-gray-50 transition-colors">
                             <div className="flex items-center gap-4 w-full sm:w-auto">
-                              <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isFailed ? 'bg-red-50 text-red-500' : 'bg-slate-100 text-slate-700'}`}>
                                 <CreditCard className="w-5 h-5" />
                               </div>
                               <div>
                                 <p className="font-bold text-gray-900">
-                                  {canDownloadStripe ? 'Paiement Stripe' : payment.isManualPayment ? 'Paiement manuel' : 'Paiement Scolarité'}
+                                  {payment.isStripePayment ? 'Paiement Stripe' : payment.isManualPayment ? 'Paiement manuel' : 'Paiement Scolarité'}
                                 </p>
-                                <p className="text-xs text-gray-500 font-medium">Reçu le {pDate}</p>
+                                <p className="text-xs text-gray-500 font-medium">
+                                  {isFailed ? `Prélèvement refusé le ${pDate}` : isSucceeded ? `Reçu le ${pDate}` : `Initié le ${pDate}`}
+                                </p>
+                                {isFailed && (
+                                  <p className="text-xs text-red-500 font-medium mt-1">
+                                    Le prélèvement sera représenté automatiquement. Vérifiez votre solde ou contactez-nous.
+                                  </p>
+                                )}
                               </div>
                             </div>
                             <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-100">
                               <span className="text-xl font-black text-gray-900">
                                 {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: payment.currency || 'EUR' }).format(payment.amount)}
                               </span>
-                              <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                                Réussi
+                              <span
+                                className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                  isFailed
+                                    ? 'bg-red-50 text-red-500'
+                                    : isSucceeded
+                                      ? 'bg-emerald-50 text-emerald-600'
+                                      : 'bg-amber-50 text-amber-600'
+                                }`}
+                              >
+                                {isFailed ? 'Échoué' : isSucceeded ? 'Réussi' : 'En attente'}
                               </span>
                               {canDownloadStripe && (
                                 <button

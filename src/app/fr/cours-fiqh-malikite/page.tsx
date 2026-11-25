@@ -36,6 +36,7 @@ import { PROGRAMS_DATA } from "@/lib/programs-data";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import { buildPageMetadata, courseJsonLd, breadcrumbJsonLd, faqJsonLd, articleJsonLd, howToJsonLd } from "@/lib/seo";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const FIQH_FAQS = [
   {
@@ -661,7 +662,7 @@ export default function CoursFiqhMalikitePage() {
               </div>
               <div className="flex flex-col items-center md:items-start gap-1">
                 <div className="text-7xl font-black text-white drop-shadow-md">
-                  399<span className="text-5xl text-ishes-gold">€</span>
+                  <DistancielPrice price={399} slug="fiqh_malikite" originalClassName="text-3xl" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-200 mt-2">Formation complète - 4 mois</h3>
               </div>

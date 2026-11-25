@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, Clock, Copy, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, Clock, Copy, Gift, Sparkles, X } from "lucide-react";
 import {
   PROMO_POPUP_STORAGE_KEY,
   getActivePromoCampaign,
@@ -31,8 +31,9 @@ function markSeen() {
 }
 
 /**
- * Pop-up promo « Rentrée 2026 » : s'affiche sur l'accueil et quelques pages
- * d'entrée (voir PROMO_POPUP_PAGES), une fois par visite, pendant la campagne.
+ * Pop-up de campagne (voir PROMO_CAMPAIGN) : s'affiche sur l'accueil et quelques
+ * pages d'entrée (voir PROMO_POPUP_PAGES), une fois par visite, pendant la campagne.
+ * Avec un `code`, il propose de le copier ; sans code, l'avantage est automatique.
  */
 export function PromoPopup() {
   const pathname = usePathname();
@@ -80,7 +81,7 @@ export function PromoPopup() {
   };
 
   const copyCode = async () => {
-    if (!campaign) return;
+    if (!campaign?.code) return;
     try {
       await navigator.clipboard.writeText(campaign.code);
       setCopied(true);
@@ -135,21 +136,25 @@ export function PromoPopup() {
               <p className="inline-flex items-center gap-1.5 rounded-full bg-ishes-gold px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-ishes-dark">
                 <Sparkles className="h-3.5 w-3.5" /> {campaign.badge}
               </p>
-              <p className="mt-3 text-5xl font-black leading-none tracking-tight text-ishes-gold">
-                −{campaign.discountEuros}&nbsp;€
+              <p className="mt-3 inline-flex items-center justify-center gap-2 text-5xl font-black leading-none tracking-tight text-ishes-gold">
+                {!campaign.code && <Gift className="h-9 w-9" aria-hidden />}
+                {campaign.highlight}
               </p>
               <h2 id="promo-popup-title" className="mt-2 text-base font-bold leading-snug sm:text-lg">
-                sur toutes les formations à distance
+                {campaign.headline}
               </h2>
             </div>
 
             {/* Corps */}
             <div className="px-6 pb-6 pt-5 text-center sm:px-8 sm:pb-7">
               <p className="text-sm font-medium leading-relaxed text-gray-600">{campaign.note}</p>
-              <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-ishes-gold/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#8a6a32]">
-                <Clock className="h-3.5 w-3.5" /> {campaign.deadlineLabel}
-              </p>
+              {campaign.deadlineLabel && (
+                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-ishes-gold/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#8a6a32]">
+                  <Clock className="h-3.5 w-3.5" /> {campaign.deadlineLabel}
+                </p>
+              )}
 
+              {campaign.code && (
               <button
                 type="button"
                 onClick={copyCode}
@@ -169,6 +174,7 @@ export function PromoPopup() {
                   {copied ? "Copié !" : "Copier"}
                 </span>
               </button>
+              )}
 
               <Link
                 href={campaign.ctaHref}
@@ -177,9 +183,9 @@ export function PromoPopup() {
               >
                 {campaign.ctaLabel} <ArrowRight className="h-4 w-4" />
               </Link>
-              <p className="mt-3 text-[11px] font-semibold text-gray-500">
-                Code à saisir à l’étape paiement
-              </p>
+              {campaign.footnote && (
+                <p className="mt-3 text-[11px] font-semibold text-gray-500">{campaign.footnote}</p>
+              )}
               <button
                 type="button"
                 onClick={close}

@@ -34,6 +34,7 @@ import {
 } from "@/lib/seo";
 
 import { SciencesDuCoranGuideArticle } from "@/components/vitrine/SciencesDuCoranGuideArticle";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const PROGRAMME_SCIENCES = [
   {
@@ -615,7 +616,7 @@ export default function CoursSciencesCoranPage() {
         <div className="bg-ishes-blue rounded-[2rem] p-8 md:p-12 shadow-2xl text-white relative flex flex-col md:flex-row items-center justify-between gap-8">
           
           <div className="text-center md:text-left space-y-2 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0 pr-0 md:pr-16 w-full md:w-auto">
-            <div className="text-5xl md:text-6xl font-black text-[#c19b6c]">399 €</div>
+            <div className="text-5xl md:text-6xl font-black text-[#c19b6c]"><DistancielPrice price={399} slug="sciences_du_coran" originalClassName="text-2xl md:text-3xl" /></div>
             <h3 className="text-lg font-medium text-gray-300">Formation complète – 4 mois</h3>
           </div>
 

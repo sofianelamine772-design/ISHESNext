@@ -18,6 +18,7 @@ import { PresentielChoicePicker, PresentielHorairePicker } from "@/components/vi
 import { cn } from "@/lib/utils";
 import { canonicalFormationSlug, formationSearchText } from "@/lib/formation-aliases";
 import { getActivePromoCampaign } from "@/lib/promo-campaign";
+import { DISTANCIEL_OFFER, addedFormationOfferPrice, applyDistancielOffer, isPackOfferedWith } from "@/lib/distanciel-offer";
 
 // Form Component wrapped in Suspense so useSearchParams doesn't break static generation
 function InscriptionForm() {
@@ -201,7 +202,8 @@ function InscriptionForm() {
     );
   };
 
-  const getBasePriceOfPlan = (plan: string | null): number => {
+  // Tarif catalogue (hors offre). Le tarif réellement affiché/facturé passe par getBasePriceOfPlan.
+  const getCatalogPriceOfPlan = (plan: string | null): number => {
     if (!plan) return 349;
     const normalized = plan.toLowerCase().replace(/-/g, '_');
 
@@ -320,15 +322,42 @@ function InscriptionForm() {
            isChildSlot === 'dimanche';
   };
 
+  // Offre distanciel (−49 €, pack offert) : même règle que /api/checkout (jamais sur un panier présentiel).
+  const planOfferFormation = () => ({
+    slug: planId,
+    type: isPresentielCart() ? 'presentiel' : 'distanciel',
+  });
+  const planOffer = () => applyDistancielOffer(getCatalogPriceOfPlan(planId), planOfferFormation());
+  const packOfferedWithPlan = () => isPackOfferedWith(planOfferFormation());
+
+  // Pack Accompagnement offert : ajouté d'office au panier d'une formation à distance
+  // (l'élève peut le retirer). Facturé 0 € par /api/checkout.
+  useEffect(() => {
+    if (!packOfferedWithPlan()) return;
+    setAdditionalCourses((prev) =>
+      prev.includes(DISTANCIEL_OFFER.packSlug) ? prev : [...prev, DISTANCIEL_OFFER.packSlug],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId, registrationType]);
+
+  const getBasePriceOfPlan = (plan: string | null): number =>
+    plan === planId ? planOffer().current : getCatalogPriceOfPlan(plan);
+
   const quoteAddOn = (id: string) => {
     const course = distanceCoursesList.find((c) => c.id === id);
     if (!course || course.price == null) return 0;
-    return addedFormationCharge(course.price, course.id, registrationType, namedChildren.length);
+    const unit = addedFormationOfferPrice(course.price, { slug: course.id }, planOfferFormation()).current;
+    return addedFormationCharge(unit, course.id, registrationType, namedChildren.length);
   };
+
+  const isOfferedAddOn = (course: (typeof distanceCoursesList)[number]) =>
+    course.price != null && course.price > 0 &&
+    addedFormationOfferPrice(course.price, { slug: course.id }, planOfferFormation()).offered;
 
   const addOnPriceLabel = (course: (typeof distanceCoursesList)[number]) => {
     if (course.price == null) return "Sur devis";
     if (course.price === 0) return "Gratuit";
+    if (isOfferedAddOn(course)) return "Offert";
     return `${quoteAddOn(course.id)} €`;
   };
 
@@ -372,7 +401,7 @@ function InscriptionForm() {
 
   // Campagne promo en cours : on pré-remplit le code (la remise reste validée par Stripe).
   useEffect(() => {
-    if (activePromo) setPromoCodeInput((prev) => prev || activePromo.code);
+    if (activePromo?.code) setPromoCodeInput((prev) => prev || activePromo.code || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1432,7 +1461,14 @@ function InscriptionForm() {
                   </div>
                   <div className="flex items-center justify-between border-t border-[#e7e2d8] pt-3 sm:border-0 sm:pt-0 sm:shrink-0 sm:block">
                     <span className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500 sm:hidden">Tarif</span>
-                    <p className="text-lg font-black text-ishes-blue">{getBasePriceOfPlan(planId)} €</p>
+                    {planOffer().discount > 0 ? (
+                      <p className="text-lg font-black text-ishes-blue flex items-center gap-2 sm:flex-col sm:items-end sm:gap-0">
+                        <s className="text-sm font-bold text-red-500 decoration-red-500 decoration-2">{planOffer().original} €</s>
+                        <span>{planOffer().current} €</span>
+                      </p>
+                    ) : (
+                      <p className="text-lg font-black text-ishes-blue">{getBasePriceOfPlan(planId)} €</p>
+                    )}
                   </div>
                 </div>
 
@@ -1559,7 +1595,7 @@ function InscriptionForm() {
                               <p className="text-xs text-[#667085] font-medium mt-0.5 leading-relaxed">{course.detail}</p>
                             </div>
                             <div className="flex items-center justify-between gap-3 sm:shrink-0">
-                              <span className="text-sm font-bold text-ishes-blue">{priceLabel.startsWith("Sur") || priceLabel === "Gratuit" ? priceLabel : `+${priceLabel}`}</span>
+                              <span className={`text-sm font-bold ${priceLabel === "Offert" ? "text-emerald-600" : "text-ishes-blue"}`}>{priceLabel.startsWith("Sur") || priceLabel === "Gratuit" || priceLabel === "Offert" ? priceLabel : `+${priceLabel}`}</span>
                               <button type="button" onClick={() => setAdditionalCourses((prev) => prev.filter((c) => c !== id))} className="text-gray-400 hover:text-red-600 transition-colors p-1" aria-label={`Retirer ${course.title}`}>
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -1613,13 +1649,29 @@ function InscriptionForm() {
                       </span>
                       <span className="mt-0.5 block text-[11px] font-black uppercase tracking-[0.12em] text-[#6e5730]">{recapAudience}</span>
                     </span>
-                    <span className="text-sm font-bold text-[#101828] shrink-0">
+                    <span className="text-sm font-bold text-[#101828] shrink-0 text-right">
+                      {planOffer().discount > 0 && (
+                        <s className="block text-xs font-bold text-red-500 decoration-red-500 decoration-2">
+                          {(registrationType === "child"
+                            ? planOffer().original * Math.max(namedChildren.length, 1)
+                            : planOffer().original
+                          ).toLocaleString("fr-FR")} €
+                        </s>
+                      )}
                       {(registrationType === "child"
                         ? getBasePriceOfPlan(planId) * Math.max(namedChildren.length, 1)
                         : getBasePriceOfPlan(planId)
                       ).toLocaleString("fr-FR")} €
                     </span>
                   </li>
+                  {planOffer().discount > 0 && (
+                    <li className="flex items-start justify-between gap-3 text-sm font-bold text-red-600">
+                      <span>{DISTANCIEL_OFFER.label} · formations à distance</span>
+                      <span className="shrink-0">
+                        −{(planOffer().discount * (registrationType === "child" ? Math.max(namedChildren.length, 1) : 1)).toLocaleString("fr-FR")} € déjà déduits
+                      </span>
+                    </li>
+                  )}
                   {additionalCourses.map((id) => {
                     const course = distanceCoursesList.find((c) => c.id === id);
                     if (!course) return null;
@@ -1630,7 +1682,7 @@ function InscriptionForm() {
                           <span className="block text-sm font-bold text-[#101828] leading-snug break-words">{course.title}</span>
                           <span className="mt-0.5 block text-[11px] font-black uppercase tracking-[0.12em] text-[#6e5730]">{course.audience}</span>
                         </span>
-                        <span className="text-sm font-bold text-[#101828] shrink-0">{addOnPriceLabel(course)}</span>
+                        <span className={`text-sm font-bold shrink-0 ${addOnPriceLabel(course) === "Offert" ? "text-emerald-600" : "text-[#101828]"}`}>{addOnPriceLabel(course)}</span>
                       </li>
                     );
                   })}
@@ -1663,8 +1715,8 @@ function InscriptionForm() {
                 })()}
                 <div className="h-[1px] bg-gray-200 mb-6" />
 
-                {/* Code promo distanciel (ex. ISHES2026) */}
-                {getPrice() > 0 && !isPresentielCart() && (
+                {/* Code promo distanciel — masqué quand l'offre distanciel est déjà appliquée (non cumulable) */}
+                {getPrice() > 0 && !isPresentielCart() && planOffer().discount <= 0 && (
                   <div className="mb-6 text-left">
                     <label className="text-[10px] font-black tracking-widest text-gray-400 uppercase block mb-2">
                       Code promo
@@ -1718,7 +1770,7 @@ function InscriptionForm() {
                         {promoChecking ? "…" : appliedPromo ? "OK" : "Appliquer"}
                       </button>
                     </div>
-                    {activePromo && !appliedPromo && !promoError && (
+                    {activePromo?.code && !appliedPromo && !promoError && (
                       <p className="text-[11px] text-ishes-blue font-semibold mt-2">
                         Offre en cours : −{activePromo.discountEuros} € avec le code {activePromo.code}. Cliquez sur « Appliquer ».
                       </p>

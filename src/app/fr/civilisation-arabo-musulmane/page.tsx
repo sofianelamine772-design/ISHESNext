@@ -39,6 +39,7 @@ import {
   faqJsonLd,
   articleJsonLd,
 } from "@/lib/seo";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const CIV_FAQS = [
   {
@@ -487,7 +488,7 @@ export default function CivilisationPage() {
           {/* Section Gauche : Prix */}
           <div className="text-center md:text-left space-y-2 flex-1 border-b md:border-b-0 md:border-r border-white/20 pb-6 md:pb-0">
             <div className="text-5xl md:text-6xl font-black text-ishes-gold flex items-baseline gap-4 justify-center md:justify-start">
-              349 €
+              <DistancielPrice price={349} slug="civilisation_arabo_musulmane" originalClassName="text-2xl md:text-3xl" />
             </div>
             <h3 className="text-lg font-medium text-gray-300">Module 4 à 5 mois · début janvier 2027</h3>
           </div>

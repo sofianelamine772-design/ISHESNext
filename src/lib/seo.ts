@@ -118,7 +118,7 @@ export function organizationJsonLd() {
     },
     areaServed: ['FR', 'BE', 'CH', 'CA', 'MA', 'DZ', 'TN'],
     sameAs: [
-      'https://www.youtube.com/@institutishes',
+      'https://www.youtube.com/@ishesinstitut',
       'https://www.instagram.com/institutishes/',
       'https://www.tiktok.com/@institutishes',
       'https://www.facebook.com/people/Institut-des-Sciences-Humaines-et-Spirituelles/100064820028202/',

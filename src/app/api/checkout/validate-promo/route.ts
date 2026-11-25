@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
 import { resolvePresentielCheckoutSlug } from '@/lib/presentiel-data';
 import { resolveStripePromoDiscount } from '@/lib/stripe-promo';
+import { DISTANCIEL_OFFER, applyDistancielOffer } from '@/lib/distanciel-offer';
 
 /**
  * Prévisualise un code promo distanciel avant paiement.
@@ -30,6 +31,17 @@ export async function POST(req: Request) {
         .eq('slug', formationId)
         .maybeSingle();
       formationType = formation?.type || null;
+      // Offre distanciel (−49 €) déjà incluse dans le tarif affiché : pas de cumul.
+      const offer = applyDistancielOffer(Number(formation?.price), {
+        slug: formationId,
+        type: formationType,
+      });
+      if (offer.discount > 0) {
+        return NextResponse.json(
+          { error: `Le tarif affiché inclut déjà la remise de ${DISTANCIEL_OFFER.discountEuros} € : les codes promo ne sont pas cumulables.` },
+          { status: 400 },
+        );
+      }
       if (!(totalCents > 0) && formation?.price != null) {
         totalCents = Math.round(Number(formation.price) * 100);
       }

@@ -1,5 +1,6 @@
 import {
   PROMO_CAMPAIGN,
+  PROMO_POPUP_STORAGE_KEY,
   getActivePromoCampaign,
   isPromoCampaignActive,
   shouldShowPromoPopupOnPath,
@@ -12,18 +13,17 @@ describe('promo-campaign', () => {
     endsAt: '2026-12-01T00:00:00+01:00',
   };
 
-  it('la campagne réelle « Rentrée 2026 » : −100 € distanciel, du 18 au 22 novembre 2026 inclus (Paris)', () => {
-    expect(PROMO_CAMPAIGN.discountEuros).toBe(100);
-    expect(PROMO_CAMPAIGN.code).toBe(PROMO_CAMPAIGN.code.toUpperCase());
+  it('la campagne réelle : Pack Accompagnement offert, sans code, dès le 25 novembre 2026 (Paris), sans fin programmée', () => {
+    expect(PROMO_CAMPAIGN.code).toBeNull();
     expect(PROMO_CAMPAIGN.badge).toBe('Rentrée 2026');
-    expect(PROMO_CAMPAIGN.headline).toMatch(/à distance/i);
+    expect(PROMO_CAMPAIGN.headline).toMatch(/Pack Accompagnement offert/i);
+    expect(PROMO_CAMPAIGN.note).toMatch(/à distance/i);
     expect(PROMO_CAMPAIGN.ctaHref).toBe('/program');
-    expect(PROMO_CAMPAIGN.deadlineLabel).toContain('22 novembre');
-    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-17T22:59:59Z'))).toBe(false);
-    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-17T23:00:00Z'))).toBe(true);
-    // 22 novembre 23:59 Paris : encore active ; 23 novembre 00:00 Paris : terminée
-    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-22T22:59:59Z'))).toBe(true);
-    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-22T23:00:00Z'))).toBe(false);
+    expect(PROMO_CAMPAIGN.endsAt).toBeNull();
+    expect(PROMO_POPUP_STORAGE_KEY).toContain(PROMO_CAMPAIGN.id);
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-24T22:59:59Z'))).toBe(false);
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-24T23:00:00Z'))).toBe(true);
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2027-06-01T00:00:00Z'))).toBe(true);
   });
 
   it('inactive avant le début, active pendant, inactive après la fin', () => {
@@ -39,7 +39,7 @@ describe('promo-campaign', () => {
 
   it('getActivePromoCampaign renvoie null hors période', () => {
     expect(getActivePromoCampaign(new Date('2026-11-01T00:00:00Z'))).toBeNull();
-    expect(getActivePromoCampaign(new Date('2026-11-21T10:00:00Z'))?.code).toBe(PROMO_CAMPAIGN.code);
+    expect(getActivePromoCampaign(new Date('2026-11-26T10:00:00Z'))?.id).toBe(PROMO_CAMPAIGN.id);
   });
 
   it("le pop-up s'affiche uniquement sur l'accueil et quelques pages d'entrée", () => {

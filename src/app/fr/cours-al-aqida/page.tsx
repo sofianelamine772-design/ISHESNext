@@ -29,6 +29,7 @@ import Image from 'next/image';
 import { JsonLd } from "@/components/seo/JsonLd";
 import { VitrineFaq } from "@/components/vitrine/VitrineFaq";
 import { buildPageMetadata, courseJsonLd, breadcrumbJsonLd, faqJsonLd, articleJsonLd, howToJsonLd } from "@/lib/seo";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const PROGRAMME_AQIDA = [
   {
@@ -562,7 +563,7 @@ export default function CoursAlAqidaPage() {
         <div className="bg-ishes-dark rounded-[2rem] p-8 md:p-12 shadow-2xl text-white relative overflow-hidden">
           <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
             <div className="text-center md:text-left space-y-4">
-              <div className="text-5xl md:text-6xl font-black text-ishes-gold">399 €</div>
+              <div className="text-5xl md:text-6xl font-black text-ishes-gold"><DistancielPrice price={399} slug="al_aqida" originalClassName="text-2xl md:text-3xl" /></div>
               <h3 className="text-lg font-medium text-gray-300">Formation complète — 4 mois</h3>
               <div className="flex items-center justify-center md:justify-start gap-2 text-gray-400 text-sm font-medium">
                 <Lock className="w-4 h-4 text-ishes-gold" />

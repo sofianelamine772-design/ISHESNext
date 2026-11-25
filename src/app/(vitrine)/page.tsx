@@ -341,7 +341,7 @@ export default function Home() {
               </p>
             </div>
             <a 
-              href="https://www.youtube.com/@ishes_toulouse" 
+              href="https://www.youtube.com/@ishesinstitut" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl text-[15px] font-black transition-all shadow-lg shadow-red-600/30 hover:-translate-y-1 mt-4"

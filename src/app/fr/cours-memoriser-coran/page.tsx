@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const MEMORISATION_FAQS = [
   {
@@ -343,7 +344,7 @@ export default function CoursMemoriserCoranPage() {
       <section className="py-12 px-6 max-w-6xl mx-auto mb-10">
         <div className="bg-ishes-dark rounded-[2rem] p-8 md:p-12 shadow-2xl text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left space-y-2">
-            <div className="text-5xl md:text-6xl font-black text-ishes-gold">399 €</div>
+            <div className="text-5xl md:text-6xl font-black text-ishes-gold"><DistancielPrice price={399} slug="memoriser_coran" originalClassName="text-2xl md:text-3xl" /></div>
             <h3 className="text-lg font-medium text-gray-300">Formation complète – 4 mois</h3>
           </div>
 

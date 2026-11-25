@@ -1,15 +1,22 @@
 /**
- * Campagne promo affichée sur le site (pop-up) et pré-remplie à l'inscription.
+ * Campagne mise en avant sur le site (pop-up).
  *
- * ⚠️ Le code doit AUSSI exister dans Stripe (compte distanciel) : coupon
- * `amount_off` + promotion code. Voir `scripts/create-promo-code.mjs`.
- * Le site n'applique jamais la remise lui-même : c'est /api/checkout qui
- * vérifie le code auprès de Stripe. Les codes promo sont réservés au distanciel.
+ * Deux formes possibles :
+ * - avec `code` : code promo à saisir à l'étape paiement (il doit AUSSI
+ *   exister dans Stripe, compte distanciel — voir `scripts/create-promo-code.mjs`) ;
+ * - sans `code` (`null`) : avantage appliqué automatiquement par le site
+ *   (ex. Pack Accompagnement offert, voir `src/lib/distanciel-offer.ts`).
+ *
+ * Le site n'applique jamais une remise lui-même hors des règles de
+ * `distanciel-offer.ts` : c'est /api/checkout qui calcule le montant.
+ * Les codes promo sont réservés au distanciel.
  */
 export type PromoCampaign = {
-  /** Code saisi par le client (majuscules). */
-  code: string;
-  /** Remise en euros, pour l'affichage uniquement. */
+  /** Identifiant stable (clé de stockage du pop-up). */
+  id: string;
+  /** Code saisi par le client (majuscules), ou `null` si l'avantage est automatique. */
+  code: string | null;
+  /** Remise en euros, pour l'affichage uniquement (0 si pas de remise chiffrée). */
   discountEuros: number;
   /** Début d'affichage (inclus). */
   startsAt: string;
@@ -17,7 +24,9 @@ export type PromoCampaign = {
   endsAt: string | null;
   /** Petit badge au-dessus du titre (ex. « Rentrée 2026 »). */
   badge: string;
-  /** Texte court affiché dans le pop-up. */
+  /** Gros texte du bandeau (ex. « −100 € » ou « OFFERT »). */
+  highlight: string;
+  /** Titre sous le gros texte. */
   headline: string;
   /** Précision affichée sous le titre. */
   note: string;
@@ -25,27 +34,30 @@ export type PromoCampaign = {
   ctaLabel: string;
   /** Destination du bouton principal. */
   ctaHref: string;
-  /** Date limite lisible, affichée dans le pop-up. */
+  /** Date limite lisible ('' = aucune échéance affichée). */
   deadlineLabel: string;
+  /** Petite ligne sous le bouton. */
+  footnote: string;
 };
 
 export const PROMO_CAMPAIGN: PromoCampaign = {
-  code: 'ISHES2026',
-  discountEuros: 100,
-  // Active dès le 18 novembre 2026, valable jusqu'au 22 novembre 2026 INCLUS
-  // (fin = minuit heure de Paris dans la nuit du 22 au 23).
-  startsAt: '2026-11-18T00:00:00+01:00',
-  endsAt: '2026-11-23T00:00:00+01:00',
+  id: 'pack-offert-2026',
+  code: null,
+  discountEuros: 0,
+  startsAt: '2026-11-25T00:00:00+01:00',
+  endsAt: null,
   badge: 'Rentrée 2026',
-  headline: '−100 € sur toutes les formations à distance',
-  note: 'Arabe, Tajwid, Coran, Fiqh, Aqîda, Sîrah… en direct avec nos enseignants, depuis chez vous.',
+  highlight: 'OFFERT',
+  headline: 'Pack Accompagnement offert',
+  note: 'Pour toute inscription à une formation à distance : suivi pédagogique, communauté et accompagnement tout au long de l’année (valeur 49 €).',
   ctaLabel: 'Découvrir les formations à distance',
   ctaHref: '/program',
-  deadlineLabel: 'Offre valable jusqu’au 22 novembre',
+  deadlineLabel: '',
+  footnote: 'Ajouté automatiquement à votre inscription, sans code à saisir',
 };
 
 /** Clé de stockage : le pop-up n'est montré qu'une fois par visite (sessionStorage). */
-export const PROMO_POPUP_STORAGE_KEY = `ishes_promo_popup_${PROMO_CAMPAIGN.code}`;
+export const PROMO_POPUP_STORAGE_KEY = `ishes_promo_popup_${PROMO_CAMPAIGN.id}`;
 
 export function isPromoCampaignActive(
   campaign: PromoCampaign = PROMO_CAMPAIGN,

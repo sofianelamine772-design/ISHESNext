@@ -10,6 +10,7 @@ import {
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { canonicalBumpSlugs, canonicalFormationSlug } from '@/lib/formation-aliases';
 import { addedFormationCharge, bumpPriceMetadataKey, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
+import { DISTANCIEL_OFFER, addedFormationOfferPrice, applyDistancielOffer } from '@/lib/distanciel-offer';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
 import {
   applyPromoToTotalCents,
@@ -90,7 +91,15 @@ export async function POST(req: Request) {
     }
 
     const formationTitle = formationData.title || 'Formation ISHES';
-    const basePrice = Number(formationData.price);
+    // Offre distanciel (−49 €, pack offert) : appliquée sur le prix de la base (jamais présentiel).
+    const mainOfferFormation = {
+      slug: formationId,
+      type: isPlanPresentiel ? 'presentiel' : formationData.type,
+    };
+    const mainOffer = applyDistancielOffer(Number(formationData.price), mainOfferFormation);
+    const basePrice = mainOffer.current;
+    let offerDiscountEuros = mainOffer.discount;
+    let packOffered = false;
 
     // 2. Calculer le montant total (multiplié par le nombre d'enfants si inscription famille)
     // Réduction fratrie : −50 € par enfant supplémentaire, uniquement pour ce même paiement.
@@ -120,7 +129,7 @@ export async function POST(req: Request) {
     for (const slug of bumpSlugs) {
       const { data: bump } = await supabaseAdmin
         .from('formations')
-        .select('price')
+        .select('price, type')
         .eq('slug', slug)
         .maybeSingle();
       if (!bump) {
@@ -129,7 +138,11 @@ export async function POST(req: Request) {
           { status: 404 },
         );
       }
-      const unit = Number(bump.price) || 0;
+      // Pack Accompagnement offert avec une formation à distance ; autres ajouts : −49 €.
+      const bumpOffer = addedFormationOfferPrice(Number(bump.price) || 0, { slug, type: bump.type }, mainOfferFormation);
+      const unit = bumpOffer.current;
+      offerDiscountEuros += bumpOffer.discount;
+      if (bumpOffer.offered) packOffered = true;
       bumpUnitPrices[slug] = unit;
       totalAmount += addedFormationCharge(unit, slug, registrationType, childrenCount);
     }
@@ -258,6 +271,12 @@ export async function POST(req: Request) {
     let promoPromotionCodeId = '';
     const rawPromoCode = String(body.promoCode || body.promotionCode || '').trim();
     if (rawPromoCode) {
+      if (offerDiscountEuros > 0) {
+        return NextResponse.json(
+          { error: `Le tarif affiché inclut déjà la remise de ${DISTANCIEL_OFFER.discountEuros} € : les codes promo ne sont pas cumulables.` },
+          { status: 400 },
+        );
+      }
       if (!isDistancielCheckout) {
         return NextResponse.json(
           { error: 'Les codes promo sont réservés aux formations distanciel.' },
@@ -297,7 +316,9 @@ export async function POST(req: Request) {
       renewalYear: body.year || '',
       nextLevelTitle: body.nextLevelTitle || '',
       registrationType,
-      expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant)
+      expected_amount: String(basePrice), // Le prix de base par inscription (1er enfant), offre distanciel déduite
+      distanciel_offer_euros: String(offerDiscountEuros || 0),
+      pack_offert: packOffered ? 'true' : 'false',
       sibling_discount: String(siblingDiscount),
       promo_code: promoCodeLabel,
       promo_discount_euros: String(promoDiscountEuros || 0),
@@ -346,7 +367,7 @@ export async function POST(req: Request) {
     // En mensualités, un coupon « once » ne touche que le 1er mois → dette fausse.
     // On force donc la saisie site (répartition correcte) pour le Nx.
     const showStripePromoField =
-      isDistancielCheckout && promoDiscountCents <= 0 && !(installments > 1);
+      isDistancielCheckout && promoDiscountCents <= 0 && offerDiscountEuros <= 0 && !(installments > 1);
 
     if (installments > 1) {
       const installmentAmount = installmentAmountAfterPromoCents(

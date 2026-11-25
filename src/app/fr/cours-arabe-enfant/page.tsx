@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { PROGRAMS_DATA } from "@/lib/programs-data";
+import { DistancielPrice } from "@/components/vitrine/DistancielPrice";
 
 const ARABE_ENFANT_FAQS = [
   {
@@ -330,7 +331,7 @@ export default function CoursArabeEnfantPage() {
             <Tag className="w-8 h-8 text-ishes-gold shrink-0" />
             <div>
               <p className="text-sm font-bold text-gray-300">Tarif</p>
-              <h3 className="text-3xl md:text-4xl font-black text-ishes-gold mt-0.5">399 €</h3>
+              <h3 className="text-3xl md:text-4xl font-black text-ishes-gold mt-0.5"><DistancielPrice price={399} slug="arabe_enfant_distance" originalClassName="text-lg md:text-xl" /></h3>
             </div>
           </div>
 

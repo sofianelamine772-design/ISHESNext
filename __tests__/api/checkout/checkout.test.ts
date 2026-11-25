@@ -2,6 +2,7 @@ import { POST } from '@/app/api/checkout/route';
 import { NextRequest } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { DISTANCE_CLASS_ID_TO_UUID } from '@/lib/distance-data';
+import { DISTANCIEL_OFFER } from '@/lib/distanciel-offer';
 
 // Mock dependencies
 jest.mock('@clerk/nextjs/server', () => ({
@@ -42,11 +43,161 @@ async function postCheckout(body: Record<string, unknown>) {
   }));
 }
 
+const OFFER_ENDS_AT_INITIAL = DISTANCIEL_OFFER.endsAt;
+
 describe('Checkout API', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockSessionCreate.mockResolvedValue({ url: 'https://checkout.stripe.com/test' });
     mockPriceCreate.mockResolvedValue({ id: 'price_test_123' });
+    // Les tests tarifaires de base se lisent hors offre distanciel (−49 €, pack offert).
+    DISTANCIEL_OFFER.endsAt = DISTANCIEL_OFFER.startsAt;
+  });
+
+  afterAll(() => {
+    DISTANCIEL_OFFER.endsAt = OFFER_ENDS_AT_INITIAL;
+  });
+
+  describe('Offre distanciel : −49 € et Pack Accompagnement offert', () => {
+    beforeEach(() => {
+      DISTANCIEL_OFFER.endsAt = null; // offre active
+    });
+
+    it('facture 399 € − 49 € = 350 € pour une formation à distance (prix lu en base)', async () => {
+      mockFormation(399, 'Fiqh Mâlikite', 'distanciel');
+      const res = await postCheckout({
+        formationId: 'fiqh_malikite',
+        registrationType: 'adult',
+        email: 'a@example.com',
+        prenom: 'Amina',
+        nom: 'Benali',
+        price: '399 €',
+      });
+      expect(res.status).toBe(200);
+      const session = mockSessionCreate.mock.calls[0][0];
+      expect(session.line_items[0].price_data.unit_amount).toBe(35000);
+      expect(session.metadata.expected_amount).toBe('350');
+      expect(session.metadata.distanciel_offer_euros).toBe('49');
+      expect(session.metadata.pack_offert).toBe('false');
+      expect(session.allow_promotion_codes).toBeUndefined();
+    });
+
+    it('en 3 fois : (399 − 49) / 3 par mois', async () => {
+      mockFormation(399, 'Fiqh Mâlikite', 'distanciel');
+      const res = await postCheckout({
+        formationId: 'fiqh_malikite',
+        registrationType: 'adult',
+        email: 'a@example.com',
+        prenom: 'Amina',
+        nom: 'Benali',
+        installments: 3,
+      });
+      expect(res.status).toBe(200);
+      expect(mockPriceCreate.mock.calls[0][0].unit_amount).toBe(Math.round(35000 / 3));
+    });
+
+    it('2 enfants à distance : 350 × 2 − 50 € de fratrie = 650 €', async () => {
+      mockFormation(399, 'Arabe enfant', 'distanciel');
+      const res = await postCheckout({
+        formationId: 'arabe_enfant_distance',
+        registrationType: 'child',
+        email: 'parent@example.com',
+        childrenList: [
+          { prenom: 'Amina', nom: 'Benali', classId: '101' },
+          { prenom: 'Youssef', nom: 'Benali', classId: '101' },
+        ],
+      });
+      expect(res.status).toBe(200);
+      const session = mockSessionCreate.mock.calls[0][0];
+      expect(session.line_items[0].price_data.unit_amount).toBe(65000);
+      expect(session.metadata.expected_amount).toBe('350');
+    });
+
+    it('jamais sur le présentiel : 649 € restent 649 €', async () => {
+      mockFormation(649, 'Arabe & Tajwid Femme Débutante (Présentiel)', 'presentiel');
+      const res = await postCheckout({
+        formationId: 'femme-debutante-presentiel',
+        registrationType: 'adult',
+        email: 'eleve@example.com',
+        prenom: 'Fatima',
+        nom: 'Benali',
+      });
+      expect(res.status).toBe(200);
+      const session = mockSessionCreate.mock.calls[0][0];
+      expect(session.line_items[0].price_data.unit_amount).toBe(64900);
+      expect(session.metadata.distanciel_offer_euros).toBe('0');
+    });
+
+    it('un slug présentiel reste plein tarif même si la base le dit « distanciel » par erreur', async () => {
+      mockFormation(649, 'Femme débutante', 'distanciel');
+      const res = await postCheckout({
+        formationId: 'femme-debutante-presentiel',
+        registrationType: 'adult',
+        email: 'eleve@example.com',
+        prenom: 'Fatima',
+        nom: 'Benali',
+      });
+      expect(res.status).toBe(200);
+      expect(mockSessionCreate.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(64900);
+    });
+
+    it('Pack Accompagnement offert (0 €) avec une formation à distance, facturé 49 € avec le présentiel', async () => {
+      // Même mock pour la formation principale et le pack : le prix du pack est lu en base (49 €).
+      const rows: Record<string, { price: number; title: string; type: string }> = {
+        fiqh_malikite: { price: 399, title: 'Fiqh', type: 'distanciel' },
+        pack_accompagnement: { price: 49, title: 'Pack', type: 'distanciel' },
+        'femme-debutante-presentiel': { price: 649, title: 'Femme', type: 'presentiel' },
+      };
+      (supabaseAdmin.from as jest.Mock).mockImplementation(() => ({
+        select: jest.fn().mockReturnValue({
+          eq: jest.fn((_col: string, slug: string) => ({
+            maybeSingle: jest.fn().mockResolvedValue({ data: rows[slug] || null }),
+          })),
+        }),
+      }));
+
+      let res = await postCheckout({
+        formationId: 'fiqh_malikite',
+        registrationType: 'adult',
+        email: 'a@example.com',
+        prenom: 'Amina',
+        nom: 'Benali',
+        orderBump: 'pack_accompagnement',
+      });
+      expect(res.status).toBe(200);
+      let session = mockSessionCreate.mock.calls[0][0];
+      expect(session.line_items[0].price_data.unit_amount).toBe(35000); // 350 + 0
+      expect(session.metadata.pack_offert).toBe('true');
+      expect(session.metadata.price_pack_accompagnement).toBe('0');
+
+      res = await postCheckout({
+        formationId: 'femme-debutante-presentiel',
+        registrationType: 'adult',
+        email: 'a@example.com',
+        prenom: 'Fatima',
+        nom: 'Benali',
+        orderBump: 'pack_accompagnement',
+      });
+      expect(res.status).toBe(200);
+      session = mockSessionCreate.mock.calls[1][0];
+      expect(session.line_items[0].price_data.unit_amount).toBe(64900 + 4900);
+      expect(session.metadata.pack_offert).toBe('false');
+    });
+
+    it('refuse un code promo quand la remise −49 € est déjà appliquée (non cumulable)', async () => {
+      mockFormation(399, 'Fiqh Mâlikite', 'distanciel');
+      const res = await postCheckout({
+        formationId: 'fiqh_malikite',
+        registrationType: 'adult',
+        email: 'a@example.com',
+        prenom: 'Amina',
+        nom: 'Benali',
+        promoCode: 'ISHES2026',
+      });
+      expect(res.status).toBe(400);
+      expect((await res.json()).error).toMatch(/ne sont pas cumulables/);
+      expect(mockSessionCreate).not.toHaveBeenCalled();
+    });
   });
 
   it('should return 404 for any formation if database fetch fails or returns null', async () => {
