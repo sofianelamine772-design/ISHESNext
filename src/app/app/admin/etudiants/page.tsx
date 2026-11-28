@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, BookOpen, Settings, CreditCard, FileText, Search, Mail, Phone, MapPin, Calendar, CheckCircle2, GraduationCap, X, ChevronRight, Download, Plus, Loader2, AlertCircle, History, Terminal, Send, Trash2, ExternalLink } from "lucide-react";
+import { PaymentSourceBadge } from "@/components/admin/PaymentSourceBadge";
 import { fetchStudentsAction, createStudentManualAction, updateStudentAction, deleteStudentAction, fetchClassesAction, assignStudentToClassAction, fetchPaymentsByStudentAction, sendPaymentReminderAction, fetchStudentBillingDataAction, addManualSettlePaymentAction, updateInscriptionExpectedAmountAction, deletePaymentAction, fetchUsersLoginsAction, getAdminStripeReceiptUrlAction } from "@/app/actions/students";
 import { isFormationEnseignante } from "@/lib/pricing";
 import { LogoutButton } from "@/components/LogoutButton";
@@ -1400,6 +1401,14 @@ function EtudiantsContent() {
                       </div>
                     )}
 
+                    {/* Élève soldé mais reste famille : la saisie se fait sur le membre concerné */}
+                    {!loadingPayments && billingData.resteAPayer <= 0 && billingData.familyResteAPayer > 0.009 && (
+                      <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-[12px] font-bold text-amber-900">
+                        Cet élève est soldé. Le reste famille de {formatEur(billingData.familyResteAPayer)} concerne un autre membre
+                        (même e-mail) : sélectionnez-le dans la liste pour saisir un règlement ou un acompte.
+                      </div>
+                    )}
+
                     {/* Règlement manuel (autres formations — pas enseignant) */}
                     {!loadingPayments && billingData.resteAPayer > 0 && !(billingData.inscriptions || []).some(
                       (ins: any) => ins.studentId === selectedStudentId && ins.isFormationEnseignant
@@ -1486,6 +1495,7 @@ function EtudiantsContent() {
                                           {payment.studentName}
                                         </span>
                                       )}
+                                      <PaymentSourceBadge sessionId={payment.stripe_session_id} stripeAccount={payment.stripe_account} />
                                     </div>
                                     <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
                                       {isSucceeded ? 'Reçu le' : 'Échoué le'} {paymentDate}

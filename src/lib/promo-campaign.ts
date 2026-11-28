@@ -28,8 +28,12 @@ export type PromoCampaign = {
   highlight: string;
   /** Titre sous le gros texte. */
   headline: string;
-  /** Petite pastille sous le titre (ex. « Valeur 399 € »), '' = aucune. */
+  /** Petite ligne sous le titre (ex. « D'une valeur de 399 € »), '' = aucune. */
   valueLabel: string;
+  /** Accroche en tête du corps ('' = aucune). */
+  tagline: string;
+  /** Liste d'avantages (titre + précision). */
+  bullets: { title: string; detail: string }[];
   /** Précision affichée sous le titre. */
   note: string;
   /** Bouton principal du pop-up. */
@@ -47,16 +51,25 @@ export const PROMO_CAMPAIGN: PromoCampaign = {
   code: null,
   discountEuros: 0,
   startsAt: '2026-11-25T00:00:00+01:00',
-  endsAt: null,
-  badge: 'Rentrée 2026',
+  // Valable jusqu'au 31 décembre 2026 inclus (fin = 1er janvier 00h00 Paris).
+  endsAt: '2027-01-01T00:00:00+01:00',
+  badge: 'Offre exceptionnelle',
   highlight: 'OFFERT',
   headline: 'Le Pack Accompagnement',
-  valueLabel: 'Valeur 399 €',
-  note: 'Pour toute inscription à une formation à distance : suivi pédagogique, communauté et accompagnement toute l’année.',
-  ctaLabel: 'Voir les formations à distance',
-  ctaHref: '/program',
-  deadlineLabel: '',
-  footnote: 'Ajouté automatiquement, sans code à saisir',
+  valueLabel: 'D’une valeur de 399 €',
+  note: '',
+  tagline: 'Ne chemine plus seul dans ta religion.',
+  bullets: [
+    { title: 'Une communauté WhatsApp privée', detail: 'Échange et avance avec d’autres cheminants.' },
+    { title: '4 cours de spiritualité en direct', detail: 'Avec Oustadha Rachida.' },
+    { title: 'Des rencontres mensuelles en direct', detail: 'Avec les fondateurs de l’Institut ISHES.' },
+    { title: 'Des entretiens individuels d’orientation', detail: 'Pour être guidé dans ton cheminement religieux.' },
+  ],
+  ctaLabel: 'Je profite de l’offre',
+  // Inscription gratuite au pack (0 €, sans paiement).
+  ctaHref: '/inscription?plan=pack_accompagnement&audience=adulte',
+  deadlineLabel: 'Offre valable jusqu’au 31 décembre 2026',
+  footnote: 'Pack ajouté automatiquement, sans code promo.',
 };
 
 /** Clé de stockage : le pop-up n'est montré qu'une fois par visite (sessionStorage). */

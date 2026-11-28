@@ -3,14 +3,16 @@
  * - −50 € sur le tarif habituel (barré), appliqué à l'affichage ET au
  *   montant réellement facturé par /api/checkout (le prix de base reste
  *   celui de Supabase `formations.price`, la remise est appliquée dessus) ;
- * - Pack Accompagnement (49 €) offert pour toute inscription à une
- *   formation à distance.
+ * - Pack Accompagnement (49 €, valeur annoncée 399 €) offert à TOUS jusqu'au
+ *   31 décembre 2026 : seul (inscription gratuite, sans Stripe) ou ajouté à
+ *   n'importe quelle inscription ; ajouté d'office au panier d'une formation
+ *   à distance.
  *
- * Jamais sur le présentiel. Non cumulable avec un code promo : quand l'offre
- * s'applique au panier, les codes sont refusés.
+ * La remise −50 € ne concerne jamais le présentiel. Non cumulable avec un
+ * code promo : quand l'offre s'applique au panier, les codes sont refusés.
  *
- * Pour arrêter l'offre : renseigner `endsAt` (ou mettre `discountEuros` à 0
- * et `packOffered` à false).
+ * Pour arrêter : `endsAt` (remise) / `packEndsAt` (pack), ou `discountEuros`
+ * à 0 et `packOffered` à false.
  */
 export const DISTANCIEL_OFFER = {
   discountEuros: 50,
@@ -19,8 +21,11 @@ export const DISTANCIEL_OFFER = {
   /** Fin (exclue), heure de Paris. `null` = jusqu'à nouvel ordre. */
   endsAt: null as string | null,
   label: 'Offre de rentrée',
-  /** Pack Accompagnement offert avec une formation à distance. */
+  /** Pack Accompagnement offert à tous (seul ou avec une inscription). */
   packOffered: true,
+  /** Fin de l'offre pack (exclue), heure de Paris : valable jusqu'au 31 décembre 2026 inclus. */
+  packEndsAt: '2027-01-01T00:00:00+01:00' as string | null,
+  packEndsLabel: 'Offre valable jusqu’au 31 décembre 2026',
   packSlug: 'pack_accompagnement',
   /** Valeur affichée du pack (son tarif de vente seul est de 49 €). */
   packValueEuros: 399,
@@ -53,15 +58,30 @@ export function normalizeFormationSlug(slug: string | null | undefined): string 
   return String(slug || '').trim().toLowerCase().replace(/-/g, '_');
 }
 
-export function isDistancielOfferActive(now: Date = new Date()): boolean {
-  if (!(DISTANCIEL_OFFER.discountEuros > 0)) return false;
-  const start = new Date(DISTANCIEL_OFFER.startsAt).getTime();
+function isWithin(startsAt: string, endsAt: string | null, now: Date): boolean {
+  const start = new Date(startsAt).getTime();
   if (!Number.isFinite(start) || now.getTime() < start) return false;
-  if (DISTANCIEL_OFFER.endsAt) {
-    const end = new Date(DISTANCIEL_OFFER.endsAt).getTime();
+  if (endsAt) {
+    const end = new Date(endsAt).getTime();
     if (Number.isFinite(end) && now.getTime() >= end) return false;
   }
   return true;
+}
+
+/** Remise −50 € sur les formations à distance : active ? */
+export function isDistancielOfferActive(now: Date = new Date()): boolean {
+  if (!(DISTANCIEL_OFFER.discountEuros > 0)) return false;
+  return isWithin(DISTANCIEL_OFFER.startsAt, DISTANCIEL_OFFER.endsAt, now);
+}
+
+/** Pack Accompagnement offert à tous : actif ? (jusqu'au 31 décembre 2026) */
+export function isPackOfferActive(now: Date = new Date()): boolean {
+  if (!DISTANCIEL_OFFER.packOffered) return false;
+  return isWithin(DISTANCIEL_OFFER.startsAt, DISTANCIEL_OFFER.packEndsAt, now);
+}
+
+export function isPackSlug(slug: string | null | undefined): boolean {
+  return normalizeFormationSlug(slug) === DISTANCIEL_OFFER.packSlug;
 }
 
 /**
@@ -92,6 +112,12 @@ export function applyDistancielOffer(
   if (!Number.isFinite(original) || original <= 0) {
     return { original: Number.isFinite(original) ? original : 0, current: Number.isFinite(original) ? original : 0, discount: 0 };
   }
+  // Le pack lui-même : offert (0 €) pendant l'offre, même choisi seul.
+  if (isPackSlug(formation.slug)) {
+    return isPackOfferActive(now)
+      ? { original, current: 0, discount: original }
+      : { original, current: original, discount: 0 };
+  }
   const discount = DISTANCIEL_OFFER.discountEuros;
   if (
     !isDistancielOfferActive(now) ||
@@ -104,30 +130,24 @@ export function applyDistancielOffer(
 }
 
 /**
- * Le Pack Accompagnement est-il offert avec cette formation principale ?
- * (offre active, pack offert, formation à distance tarifée)
+ * Le Pack Accompagnement doit-il être ajouté d'office au panier de cette
+ * formation principale ? Oui pour une formation à distance tarifée pendant
+ * l'offre. (Il reste offert, à 0 €, s'il est ajouté à la main ailleurs.)
  */
 export function isPackOfferedWith(mainFormation: OfferFormation, now: Date = new Date()): boolean {
-  return (
-    DISTANCIEL_OFFER.packOffered &&
-    isDistancielOfferActive(now) &&
-    isDistancielOfferEligible(mainFormation)
-  );
+  return isPackOfferActive(now) && isDistancielOfferEligible(mainFormation);
 }
 
-/** Tarif d'une formation ajoutée au panier : le pack est à 0 € s'il est offert. */
+/** Tarif d'une formation ajoutée au panier : le pack est à 0 € pendant l'offre, quel que soit le panier. */
 export function addedFormationOfferPrice(
   price: number | null | undefined,
   addedFormation: OfferFormation,
-  mainFormation: OfferFormation,
+  _mainFormation: OfferFormation,
   now: Date = new Date(),
 ): OfferedPrice & { offered: boolean } {
   const original = Number(price);
   const safe = Number.isFinite(original) && original > 0 ? original : 0;
-  if (
-    normalizeFormationSlug(addedFormation.slug) === DISTANCIEL_OFFER.packSlug &&
-    isPackOfferedWith(mainFormation, now)
-  ) {
+  if (isPackSlug(addedFormation.slug) && isPackOfferActive(now)) {
     return { original: safe, current: 0, discount: safe, offered: true };
   }
   return { ...applyDistancielOffer(price, addedFormation, now), offered: false };

@@ -11,6 +11,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { canonicalBumpSlugs, canonicalFormationSlug } from '@/lib/formation-aliases';
 import { addedFormationCharge, bumpPriceMetadataKey, getFamilyCheckoutTotal, getNamedChildren, getSiblingDiscount } from '@/lib/pricing';
 import { DISTANCIEL_OFFER, addedFormationOfferPrice, applyDistancielOffer } from '@/lib/distanciel-offer';
+import { fulfillCheckoutSession } from '@/lib/stripe-checkout-fulfillment';
 import { getStripeClient, resolveStripeAccount } from '@/lib/stripe-accounts';
 import {
   applyPromoToTotalCents,
@@ -295,8 +296,12 @@ export async function POST(req: Request) {
     const unitAmount = applyPromoToTotalCents(unitAmountBeforePromo, promoDiscountCents);
     const promoDiscountEuros = promoDiscountCents / 100;
 
+    // Panier entièrement offert (ex. Pack Accompagnement seul pendant l'offre) :
+    // inscription gratuite, sans passer par Stripe (voir plus bas).
+    const isFreeOfferCart = unitAmountBeforePromo <= 0 && offerDiscountEuros > 0;
+
     // Stripe refuse unit_amount = 0 ; une promo à 100 % doit être gérée hors Checkout carte.
-    if (unitAmount <= 0) {
+    if (unitAmount <= 0 && !isFreeOfferCart) {
       return NextResponse.json(
         { error: 'Le montant après code promo est nul. Contactez l’administration pour une inscription offerte.' },
         { status: 400 },
@@ -368,6 +373,33 @@ export async function POST(req: Request) {
     // On force donc la saisie site (répartition correcte) pour le Nx.
     const showStripePromoField =
       isDistancielCheckout && promoDiscountCents <= 0 && offerDiscountEuros <= 0 && !(installments > 1);
+
+    if (isFreeOfferCart) {
+      // Même traitement qu'un paiement Stripe réussi (élève, inscriptions à 0 €,
+      // invitation Clerk, e-mails), sans ligne de paiement.
+      const freeSession = {
+        id: `free_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
+        payment_status: 'paid',
+        amount_total: 0,
+        currency: 'eur',
+        customer_details: { email: body.email || '' },
+        metadata,
+      } as unknown as Stripe.Checkout.Session;
+      const result = await fulfillCheckoutSession({ session: freeSession, stripeAccount });
+      console.log(
+        `[CHECKOUT] inscription offerte ${freeSession.id}: ok=${result.ok} students=${result.studentIds.length} reason=${result.reason || ''}`,
+      );
+      if (!result.ok) {
+        return NextResponse.json(
+          { error: 'Impossible de finaliser l’inscription offerte. Vérifiez vos informations ou contactez-nous.' },
+          { status: 400 },
+        );
+      }
+      return NextResponse.json({
+        url: `${baseUrl}/sign-up?email_address=${encodeURIComponent(body.email || '')}`,
+        free: true,
+      });
+    }
 
     if (installments > 1) {
       const installmentAmount = installmentAmountAfterPromoCents(

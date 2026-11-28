@@ -13,19 +13,22 @@ describe('promo-campaign', () => {
     endsAt: '2026-12-01T00:00:00+01:00',
   };
 
-  it('la campagne réelle : Pack Accompagnement offert, sans code, dès le 25 novembre 2026 (Paris), sans fin programmée', () => {
+  it('la campagne réelle : Pack Accompagnement offert à tous, sans code, du 25 novembre au 31 décembre 2026 (Paris)', () => {
     expect(PROMO_CAMPAIGN.code).toBeNull();
-    expect(PROMO_CAMPAIGN.badge).toBe('Rentrée 2026');
+    expect(PROMO_CAMPAIGN.badge).toBe('Offre exceptionnelle');
     expect(PROMO_CAMPAIGN.headline).toMatch(/Pack Accompagnement/i);
     expect(PROMO_CAMPAIGN.highlight).toBe('OFFERT');
     expect(PROMO_CAMPAIGN.valueLabel).toMatch(/399 €/);
-    expect(PROMO_CAMPAIGN.note).toMatch(/à distance/i);
-    expect(PROMO_CAMPAIGN.ctaHref).toBe('/program');
-    expect(PROMO_CAMPAIGN.endsAt).toBeNull();
+    expect(PROMO_CAMPAIGN.tagline).toMatch(/Ne chemine plus seul/i);
+    expect(PROMO_CAMPAIGN.bullets).toHaveLength(4);
+    expect(PROMO_CAMPAIGN.deadlineLabel).toMatch(/31 décembre 2026/);
+    expect(PROMO_CAMPAIGN.ctaHref).toBe('/inscription?plan=pack_accompagnement&audience=adulte');
+    expect(PROMO_CAMPAIGN.footnote).toMatch(/sans code promo/i);
     expect(PROMO_POPUP_STORAGE_KEY).toContain(PROMO_CAMPAIGN.id);
     expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-24T22:59:59Z'))).toBe(false);
     expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-11-24T23:00:00Z'))).toBe(true);
-    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2027-06-01T00:00:00Z'))).toBe(true);
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-12-31T22:59:59Z'))).toBe(true);
+    expect(isPromoCampaignActive(PROMO_CAMPAIGN, new Date('2026-12-31T23:00:00Z'))).toBe(false);
   });
 
   it('inactive avant le début, active pendant, inactive après la fin', () => {

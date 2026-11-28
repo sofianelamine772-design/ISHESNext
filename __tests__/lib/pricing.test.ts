@@ -195,6 +195,12 @@ describe('Déduplication facturation (doublons de saisie)', () => {
 });
 
 describe('resolveBillingExpectedAmount', () => {
+  it('offre distanciel : la dette est le prix payé (349 €), pas le prix catalogue (399 €) ; pack offert = 0 €', () => {
+    expect(resolveBillingExpectedAmount(349, 399)).toBe(349);
+    expect(resolveBillingExpectedAmount(599, 649)).toBe(599);
+    expect(resolveBillingExpectedAmount(299, 349)).toBe(299);
+    expect(resolveBillingExpectedAmount(0, 49)).toBe(0);
+  });
   it('garde une réduction fratrie sous le catalogue', () => {
     expect(resolveBillingExpectedAmount(430, 480)).toBe(430);
   });
@@ -205,6 +211,18 @@ describe('resolveBillingExpectedAmount', () => {
 
   it('garde l’ancien tarif d’une inscription déjà créée si le catalogue baisse', () => {
     expect(resolveBillingExpectedAmount(799, 649)).toBe(799);
+    // Un ancien élève a payé 500 € ; le catalogue passe à 300 € : il doit toujours 500 €.
+    expect(resolveBillingExpectedAmount(500, 300)).toBe(500);
+    // Même avec une forte baisse (649 € → 300 €), la dette d'avant reste 649 €.
+    expect(resolveBillingExpectedAmount(649, 300)).toBe(649);
+    // Et si le catalogue remonte, le nouvel élève garde son tarif réduit.
+    expect(resolveBillingExpectedAmount(349, 499)).toBe(349);
+  });
+
+  it('ne confond pas une baisse de prix avec un doublon : seuls les multiples entiers (×2, ×3…) sont écrasés', () => {
+    expect(resolveBillingExpectedAmount(798, 399)).toBe(399); // 2 × 399 collés
+    expect(resolveBillingExpectedAmount(1197, 399)).toBe(399); // 3 × 399 collés
+    expect(resolveBillingExpectedAmount(1000, 399)).toBe(1000); // pas un multiple : on garde
   });
 
   it('utilise le catalogue si expected absent', () => {

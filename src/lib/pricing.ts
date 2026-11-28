@@ -71,9 +71,12 @@ export function unwrapRelation<T>(value: T | T[] | null | undefined): T | null {
 
 /**
  * Montant dû d'une inscription déjà créée.
- * expected_amount est figé à l'inscription (réduction fratrie, ou tarif d'alors).
- * Une baisse du catalogue (ex. Tajwid intensif 799 € → 649 €) ne réécrit pas cette dette.
- * On ignore seulement un expected gonflé (ex. 1197 = 3×399 après doublons).
+ * expected_amount est figé à l'inscription (réduction fratrie, offre, ou tarif d'alors) :
+ * un élève qui a payé 500 € doit 500 €, même si le catalogue passe ensuite à 300 €,
+ * et un nouvel élève doit le tarif du moment. Une baisse ou une hausse du catalogue
+ * ne réécrit jamais cette dette.
+ * Seule exception : un expected « gonflé » par des doublons de saisie, reconnaissable
+ * parce qu'il vaut un multiple entier (×2, ×3…) du prix catalogue (ex. 1197 = 3×399).
  */
 export function resolveBillingExpectedAmount(
   expectedAmount: number | null | undefined,
@@ -86,8 +89,11 @@ export function resolveBillingExpectedAmount(
   const hasRaw = Number.isFinite(raw) && raw >= 0;
 
   if (hasCatalog && hasRaw) {
-    if (raw <= catalog * 1.5 + 0.01) return raw;
-    return catalog;
+    if (raw <= catalog + 0.01) return raw;
+    const ratio = raw / catalog;
+    const k = Math.round(ratio);
+    const isDuplicatedMultiple = k >= 2 && Math.abs(raw - k * catalog) <= 1;
+    return isDuplicatedMultiple ? catalog : raw;
   }
   if (hasCatalog) return catalog;
   if (hasRaw) return raw;

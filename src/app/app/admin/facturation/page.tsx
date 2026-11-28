@@ -7,6 +7,7 @@ import {
   Calendar, X, Phone, Mail, History, 
   AlertCircle, CreditCard, Users, GraduationCap, UserCheck
 } from "lucide-react";
+import { PaymentSourceBadge } from "@/components/admin/PaymentSourceBadge";
 import { fetchPaymentsAction, sendPaymentReminderWithLinkAction, fetchManualBalancesAction, addManualPaymentAction, syncStripeInvoicesAction } from "@/app/actions/students";
 import { RefreshCw } from "lucide-react";
 import { Loader2 } from "lucide-react";
@@ -70,6 +71,9 @@ type Payment = {
   familyMembers: FamilyMember[];
   isFamilyPayment: boolean;
   modalities: CourseModality[];
+  /** cs_… / in_… = Stripe, manual_… = saisie manuelle */
+  sessionId?: string | null;
+  stripeAccount?: string | null;
 };
 
 export default function FacturationPage() {
@@ -123,6 +127,8 @@ export default function FacturationPage() {
           familyMembers,
           isFamilyPayment,
           modalities,
+          sessionId: p.stripe_session_id || null,
+          stripeAccount: p.stripe_account || null,
         };
       });
       setPayments(formatted as Payment[]);
@@ -559,15 +565,18 @@ export default function FacturationPage() {
                             <span className="text-sm font-black text-ishes-dark">{payment.amount}</span>
                           </td>
 
-                          {/* Statut */}
+                          {/* Statut + source (Stripe / saisie manuelle) */}
                           <td className="px-6 py-5 text-center">
-                            {payment.status === 'refuse' ? (
-                              <span className="px-3 py-1 bg-red-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">REFUSÉ</span>
-                            ) : payment.status === 'paye' ? (
-                              <span className="px-3 py-1 bg-ishes-blue text-white rounded-lg text-[9px] font-black uppercase tracking-widest">RÉGLÉ</span>
-                            ) : (
-                              <span className="px-3 py-1 bg-yellow-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">ATTENTE</span>
-                            )}
+                            <div className="inline-flex flex-col items-center gap-1.5">
+                              {payment.status === 'refuse' ? (
+                                <span className="px-3 py-1 bg-red-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">REFUSÉ</span>
+                              ) : payment.status === 'paye' ? (
+                                <span className="px-3 py-1 bg-ishes-blue text-white rounded-lg text-[9px] font-black uppercase tracking-widest">RÉGLÉ</span>
+                              ) : (
+                                <span className="px-3 py-1 bg-yellow-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">ATTENTE</span>
+                              )}
+                              <PaymentSourceBadge sessionId={payment.sessionId} stripeAccount={payment.stripeAccount} />
+                            </div>
                           </td>
 
                           {/* Action */}
@@ -763,6 +772,7 @@ export default function FacturationPage() {
                       <Phone className="w-4 h-4" />
                     </div>
                     <span className="text-sm font-bold text-ishes-dark">{selectedPayment.phone || '—'}</span>
+                  <div className="mt-2"><PaymentSourceBadge sessionId={selectedPayment.sessionId} stripeAccount={selectedPayment.stripeAccount} /></div>
                   </div>
                   <div className="flex items-center gap-4 group">
                     <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-ishes-blue/10 group-hover:text-ishes-blue transition-colors shrink-0">

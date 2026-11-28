@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, Clock, Copy, Gift, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, CheckCircle2, Clock, Copy, Gift, Sparkles, X } from "lucide-react";
 import {
   PROMO_POPUP_STORAGE_KEY,
   getActivePromoCampaign,
@@ -107,7 +107,7 @@ export function PromoPopup() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="promo-popup-title"
-            className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl"
+            className="relative w-full max-w-sm max-h-[92vh] overflow-y-auto overscroll-contain rounded-3xl bg-white shadow-2xl"
             initial={{ opacity: 0, scale: 0.94, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -144,18 +144,35 @@ export function PromoPopup() {
                 {campaign.headline}
               </h2>
               {campaign.valueLabel && (
-                <p className="mt-2 inline-flex items-center rounded-full border border-ishes-gold/60 px-3 py-0.5 text-[11px] font-black uppercase tracking-[0.15em] text-ishes-gold">
-                  {campaign.valueLabel}
-                </p>
+                <p className="mt-1.5 text-sm font-bold text-ishes-gold">{campaign.valueLabel}</p>
               )}
             </div>
 
             {/* Corps */}
             <div className="px-6 pb-6 pt-5 text-center sm:px-8 sm:pb-7">
-              <p className="text-sm font-medium leading-relaxed text-gray-600">{campaign.note}</p>
+              {campaign.tagline && (
+                <p className="text-base font-black leading-snug text-ishes-blue sm:text-lg">{campaign.tagline}</p>
+              )}
+              {campaign.bullets.length > 0 && (
+                <ul className="mt-4 space-y-3 text-left">
+                  {campaign.bullets.map((b) => (
+                    <li key={b.title} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-hidden />
+                      <span>
+                        <span className="block text-sm font-bold leading-snug text-[#101828]">{b.title}</span>
+                        <span className="block text-xs font-medium leading-snug text-gray-500">{b.detail}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {campaign.note && (
+                <p className="mt-3 text-sm font-medium leading-relaxed text-gray-600">{campaign.note}</p>
+              )}
               {campaign.deadlineLabel && (
-                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-ishes-gold/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#8a6a32]">
-                  <Clock className="h-3.5 w-3.5" /> {campaign.deadlineLabel}
+                <p className="mt-4 border-t border-gray-100 pt-4 text-sm font-bold text-ishes-blue">
+                  <Clock className="mr-1.5 inline h-4 w-4 align-[-3px]" aria-hidden />
+                  {campaign.deadlineLabel}
                 </p>
               )}
 

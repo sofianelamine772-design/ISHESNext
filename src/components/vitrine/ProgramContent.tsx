@@ -8,7 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, MapPin, Monitor, Clock, BookOpen, Users, Award, Star, User, Baby, Search, CalendarDays, Play, Hourglass, Gift } from "lucide-react";
 import { PRESENTIEL_CLASSES, FEMME_PRESENTIEL_CLASS_BY_PLAN } from "@/lib/presentiel-data";
 import { isPresentielCardFull } from "@/lib/class-availability";
-import { applyDistancielOffer, formatEuros, parsePriceEuros } from "@/lib/distanciel-offer";
+import { applyDistancielOffer, formatEuros, isPackOfferActive, parsePriceEuros } from "@/lib/distanciel-offer";
+import { ENFANT_DISTANCE_CARD_IDS, EnfantDistanceCard } from "@/components/vitrine/EnfantDistanceCard";
 import { ArabicBackground } from "@/components/ArabicBackground";
 
 type Program = {
@@ -708,6 +709,21 @@ export function ProgramContent() {
                                                         program.id === 'formation_enseignante_tajwid' ? '/fr/formation-enseignant-tajwid' :
                                                           `/program/${program.id}`;
 
+            if (ENFANT_DISTANCE_CARD_IDS.has(program.id)) {
+              return (
+                <EnfantDistanceCard
+                  key={program.id}
+                  id={program.id}
+                  imageUrl={program.imageUrl}
+                  price={program.price}
+                  infoUrl={infoUrl}
+                  inscriptionUrl={`/inscription?plan=${program.id}&audience=${program.audience}`}
+                  index={index}
+                  onOpen={() => router.push(infoUrl)}
+                />
+              );
+            }
+
             return (
               <div key={program.id} onClick={() => router.push(infoUrl)} className="block w-full cursor-pointer">
                 <motion.div
@@ -912,6 +928,18 @@ export function ProgramContent() {
                           </div>
                         )}
                         {(() => {
+                          // Pack Accompagnement offert à tous pendant l'offre (inscription gratuite).
+                          if (program.id === "pack_accompagnement" && isPackOfferActive()) {
+                            return (
+                              <>
+                                <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                                  <s className="text-xs sm:text-base font-bold text-red-500 decoration-red-500 decoration-2">{program.price}</s>
+                                </div>
+                                <div className="text-lg sm:text-3xl font-black text-emerald-600 tracking-tight leading-none">OFFERT</div>
+                                <div className="text-[9px] sm:text-[11px] font-bold text-gray-500 mt-1">Jusqu’au 31 décembre 2026</div>
+                              </>
+                            );
+                          }
                           // Offre distanciel (−50 €) : tarif habituel barré en rouge, tarif remisé affiché.
                           const offer = program.type === "distanciel" && !program.originalPrice
                             ? applyDistancielOffer(parsePriceEuros(program.price), { slug: program.id, type: program.type })
@@ -929,10 +957,12 @@ export function ProgramContent() {
                             </>
                           );
                         })()}
-                        <div className="text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-0.5 sm:mt-1">
-                          {program.priceSub}
-                        </div>
-                        {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "Devis" && program.price !== "GRATUIT" && (
+                        {!(program.id === "pack_accompagnement" && isPackOfferActive()) && (
+                          <div className="text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-0.5 sm:mt-1">
+                            {program.priceSub}
+                          </div>
+                        )}
+                        {program.price !== "0 €" && program.price !== "Sur Devis" && program.price !== "Devis" && program.price !== "GRATUIT" && !(program.id === "pack_accompagnement" && isPackOfferActive()) && (
                           <div className="text-[10px] font-bold text-ishes-blue uppercase tracking-wide mt-1.5 flex items-center gap-1">
                             <span>💳</span> {isPresentiel ? "Paiement en 1x, 3x, 5x ou 10x" : "Paiement en 1x, 3x ou 5x"}
                           </div>

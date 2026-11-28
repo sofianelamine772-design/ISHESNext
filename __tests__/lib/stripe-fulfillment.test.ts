@@ -149,6 +149,55 @@ describe('fulfillCheckoutSession', () => {
     });
   });
 
+  it('offre distanciel : la dette enregistrée est le prix payé (349 €), pas le prix catalogue (399 €), et le pack offert vaut 0 €', async () => {
+    table('formations').push({ id: 'f_fiqh', slug: 'fiqh_malikite', price: 399, type: 'distanciel', title: 'Fiqh' });
+    table('formations').push({ id: 'f_pack', slug: 'pack_accompagnement', price: 49, type: 'distanciel', title: 'Pack' });
+    table('classes').push({ id: 'c_fiqh', formation_id: 'f_fiqh', is_active: true, name: 'Session Fiqh', external_id: null });
+    table('classes').push({ id: 'c_pack', formation_id: 'f_pack', is_active: true, name: 'Pack', external_id: null });
+
+    // L'inscription « en attente » créée AVANT le paiement porte encore le prix catalogue (399 €).
+    table('etudiants').push({ id: 'e_1', email: 'amina@example.com', first_name: 'Amina', last_name: 'Benali' });
+    const year = (await import('@/lib/utils')).getCurrentAcademicYear();
+    table('inscriptions').push({ id: 'ins_old', etudiant_id: 'e_1', formation_id: 'f_fiqh', class_id: null, status: 'en_attente', paid_status: 'impaye', academic_year: year, expected_amount: 399 });
+
+    const s = session(
+      { id: 'cs_live_offre', amount_total: 34900, customer_details: { email: 'amina@example.com' } },
+      {
+        email: 'amina@example.com',
+        formationId: 'fiqh_malikite',
+        expected_amount: '349', // prix au moment du paiement (399 − 50)
+        distanciel_offer_euros: '99',
+        pack_offert: 'true',
+        order_bump: 'pack_accompagnement',
+        price_pack_accompagnement: '0',
+      },
+    );
+    const res = await fulfillCheckoutSession({ session: s, stripeAccount: 'distanciel', skipSideEffects: true });
+    expect(res.ok).toBe(true);
+
+    const fiqh = table('inscriptions').find((i) => i.formation_id === 'f_fiqh');
+    const pack = table('inscriptions').find((i) => i.formation_id === 'f_pack');
+    expect(fiqh).toMatchObject({ id: 'ins_old', expected_amount: 349, paid_status: 'paye' });
+    expect(pack).toMatchObject({ expected_amount: 0, paid_status: 'paye' });
+    expect(table('paiements')).toHaveLength(1);
+    expect(table('paiements')[0]).toMatchObject({ amount: 349, status: 'succeeded' });
+  });
+
+  it('inscription offerte (free_…, 0 €) : élève + inscription à 0 € « payé », sans ligne de paiement', async () => {
+    table('formations').push({ id: 'f_pack', slug: 'pack_accompagnement', price: 49, type: 'distanciel', title: 'Pack' });
+    table('classes').push({ id: 'c_pack', formation_id: 'f_pack', is_active: true, name: 'Pack', external_id: null });
+    const s = session(
+      { id: 'free_123_abc', amount_total: 0, customer_details: { email: 'libre@example.com' } },
+      { email: 'libre@example.com', formationId: 'pack_accompagnement', expected_amount: '0', distanciel_offer_euros: '49' },
+    );
+    const res = await fulfillCheckoutSession({ session: s, stripeAccount: 'distanciel', skipSideEffects: true });
+    expect(res.ok).toBe(true);
+    expect(table('etudiants')).toHaveLength(1);
+    expect(table('inscriptions')).toHaveLength(1);
+    expect(table('inscriptions')[0]).toMatchObject({ formation_id: 'f_pack', expected_amount: 0, paid_status: 'paye', status: 'actif' });
+    expect(table('paiements')).toHaveLength(0);
+  });
+
   it('est idempotent : rejouer la même session ne crée aucun doublon', async () => {
     const s = session();
     await fulfillCheckoutSession({ session: s, stripeAccount: 'distanciel', skipSideEffects: true });

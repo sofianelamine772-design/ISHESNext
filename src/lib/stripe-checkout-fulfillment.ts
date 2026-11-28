@@ -90,6 +90,17 @@ async function resolveFormationUuid(
   return fallback?.id || null;
 }
 
+/**
+ * Montant dû lu dans les metadata Stripe. 0 est une vraie valeur (inscription
+ * offerte) : il ne doit pas retomber sur le prix catalogue.
+ */
+function readExpectedAmount(metadata: Stripe.Metadata | null | undefined): number | undefined {
+  const raw = metadata?.expected_amount;
+  if (raw == null || raw === '') return undefined;
+  const parsed = parseFloat(raw);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+}
+
 async function readBumpUnit(
   metadata: Stripe.Metadata | null | undefined,
   slug: string,
@@ -342,7 +353,7 @@ export async function fulfillCheckoutSession(params: {
     const studentId = session.metadata?.studentId;
     if (studentId && formationUuid) {
       const expectedAmount = takePromoFromAmount(
-        parseFloat(session.metadata?.expected_amount || '0') || undefined,
+        readExpectedAmount(session.metadata),
         remainingPromo,
       );
       const insId = await upsertInscription({
@@ -389,7 +400,7 @@ export async function fulfillCheckoutSession(params: {
         }
 
         const baseExpected =
-          parseFloat(session.metadata?.expected_amount || '0') || undefined;
+          readExpectedAmount(session.metadata);
         const siblingDiscount =
           parseFloat(session.metadata?.sibling_discount || '0') || 0;
         const rawExpected =
@@ -457,7 +468,7 @@ export async function fulfillCheckoutSession(params: {
           }
 
           const expectedAmount = takePromoFromAmount(
-            parseFloat(session.metadata?.expected_amount || '0') || undefined,
+            readExpectedAmount(session.metadata),
             remainingPromo,
           );
           const insId = await upsertInscription({
@@ -506,7 +517,10 @@ export async function fulfillCheckoutSession(params: {
     .eq('stripe_session_id', session.id)
     .maybeSingle();
 
-  if (!existingPayment) {
+  // Inscription offerte (0 €, hors Stripe) : pas de ligne de paiement.
+  const isFreeRegistration = (session.amount_total || 0) <= 0 && String(session.id).startsWith('free_');
+
+  if (!existingPayment && !isFreeRegistration) {
     const { buildPromoPaymentNote } = await import('@/lib/stripe-promo');
     const promoNote = buildPromoPaymentNote(session);
 

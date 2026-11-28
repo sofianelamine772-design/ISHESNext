@@ -4,12 +4,14 @@ import {
   applyDistancielOffer,
   isDistancielOfferActive,
   isDistancielOfferEligible,
+  isPackOfferActive,
   isPackOfferedWith,
   parsePriceEuros,
 } from '@/lib/distanciel-offer';
 
 const DURING = new Date('2026-11-25T12:00:00Z');
 const BEFORE = new Date('2026-11-01T00:00:00Z');
+const AFTER_PACK = new Date('2027-01-01T12:00:00Z');
 
 describe('distanciel-offer', () => {
   it('offre réelle : −50 € et pack offert, à partir du 23 novembre 2026 (Paris)', () => {
@@ -38,7 +40,7 @@ describe('distanciel-offer', () => {
   });
 
   it('pas de remise sur le pack, les cours offerts, les devis ni les prix ≤ 50 €', () => {
-    expect(applyDistancielOffer(49, { slug: 'pack_accompagnement', type: 'distanciel' }, DURING).discount).toBe(0);
+    expect(applyDistancielOffer(49, { slug: 'pack_accompagnement', type: 'distanciel' }, AFTER_PACK).discount).toBe(0);
     expect(applyDistancielOffer(0, { slug: 'correction_fatiha', type: 'distanciel' }, DURING)).toEqual({ original: 0, current: 0, discount: 0 });
     expect(applyDistancielOffer(null, { slug: 'cours_particuliers' }, DURING)).toEqual({ original: 0, current: 0, discount: 0 });
     expect(applyDistancielOffer(50, { slug: 'fiqh_malikite', type: 'distanciel' }, DURING).discount).toBe(0);
@@ -49,19 +51,31 @@ describe('distanciel-offer', () => {
     expect(applyDistancielOffer(399, { slug: 'fiqh_malikite', type: 'distanciel' }, BEFORE)).toEqual({ original: 399, current: 399, discount: 0 });
   });
 
-  it('le Pack Accompagnement est offert avec une formation à distance, pas avec le présentiel', () => {
+  it('le Pack Accompagnement est offert à tous jusqu’au 31 décembre 2026, seul ou ajouté à n’importe quelle inscription', () => {
+    expect(isPackOfferActive(DURING)).toBe(true);
+    expect(isPackOfferActive(new Date('2026-12-31T22:59:59Z'))).toBe(true); // 31 déc. 23h59 Paris
+    expect(isPackOfferActive(new Date('2026-12-31T23:00:00Z'))).toBe(false); // 1er janv. 00h00 Paris
+    expect(isPackOfferActive(BEFORE)).toBe(false);
+
+    // Le pack choisi seul : 49 € → 0 € (inscription gratuite)
+    expect(applyDistancielOffer(49, { slug: 'pack_accompagnement', type: 'distanciel' }, DURING)).toEqual({ original: 49, current: 0, discount: 49 });
+    expect(applyDistancielOffer(49, { slug: 'pack-accompagnement' }, AFTER_PACK).current).toBe(49);
+
+    const pack = { slug: 'pack_accompagnement', type: 'distanciel' };
+    expect(addedFormationOfferPrice(49, pack, { slug: 'fiqh_malikite', type: 'distanciel' }, DURING)).toEqual({ original: 49, current: 0, discount: 49, offered: true });
+    // Même avec une inscription présentiel : offert à tous
+    expect(addedFormationOfferPrice(49, pack, { slug: 'femme-debutante-presentiel' }, DURING)).toEqual({ original: 49, current: 0, discount: 49, offered: true });
+    expect(addedFormationOfferPrice(49, pack, { slug: 'fiqh_malikite' }, BEFORE).current).toBe(49);
+    expect(addedFormationOfferPrice(49, pack, { slug: 'fiqh_malikite' }, AFTER_PACK).current).toBe(49);
+    // Une autre formation ajoutée garde la remise −50 €
+    expect(addedFormationOfferPrice(399, { slug: 'al_aqida', type: 'distanciel' }, { slug: 'fiqh_malikite' }, DURING)).toEqual({ original: 399, current: 349, discount: 50, offered: false });
+
+    // Ajout d'office au panier : uniquement avec une formation à distance tarifée
     expect(isPackOfferedWith({ slug: 'fiqh_malikite', type: 'distanciel' }, DURING)).toBe(true);
     expect(isPackOfferedWith({ slug: 'arabe-enfant-distance' }, DURING)).toBe(true);
     expect(isPackOfferedWith({ slug: 'femme-debutante-presentiel', type: 'presentiel' }, DURING)).toBe(false);
     expect(isPackOfferedWith({ slug: 'correction_fatiha', type: 'distanciel' }, DURING)).toBe(false);
     expect(isPackOfferedWith({ slug: 'fiqh_malikite', type: 'distanciel' }, BEFORE)).toBe(false);
-
-    const pack = { slug: 'pack_accompagnement', type: 'distanciel' };
-    expect(addedFormationOfferPrice(49, pack, { slug: 'fiqh_malikite', type: 'distanciel' }, DURING)).toEqual({ original: 49, current: 0, discount: 49, offered: true });
-    expect(addedFormationOfferPrice(49, pack, { slug: 'femme-debutante-presentiel' }, DURING)).toEqual({ original: 49, current: 49, discount: 0, offered: false });
-    expect(addedFormationOfferPrice(49, pack, { slug: 'fiqh_malikite' }, BEFORE).current).toBe(49);
-    // Une autre formation ajoutée garde la remise −50 €
-    expect(addedFormationOfferPrice(399, { slug: 'al_aqida', type: 'distanciel' }, { slug: 'fiqh_malikite' }, DURING)).toEqual({ original: 399, current: 349, discount: 50, offered: false });
   });
 
   it('parsePriceEuros lit les libellés du catalogue', () => {

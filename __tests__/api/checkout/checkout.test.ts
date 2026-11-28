@@ -17,6 +17,11 @@ jest.mock('@/lib/supabaseAdmin', () => ({
 
 const mockSessionCreate = jest.fn();
 const mockPriceCreate = jest.fn();
+const mockFulfill = jest.fn();
+
+jest.mock('@/lib/stripe-checkout-fulfillment', () => ({
+  fulfillCheckoutSession: (...args: unknown[]) => mockFulfill(...args),
+}));
 
 jest.mock('@/lib/stripe-accounts', () => {
   const actual = jest.requireActual('@/lib/stripe-accounts');
@@ -44,6 +49,7 @@ async function postCheckout(body: Record<string, unknown>) {
 }
 
 const OFFER_ENDS_AT_INITIAL = DISTANCIEL_OFFER.endsAt;
+const PACK_ENDS_AT_INITIAL = DISTANCIEL_OFFER.packEndsAt;
 
 describe('Checkout API', () => {
   beforeEach(() => {
@@ -52,15 +58,18 @@ describe('Checkout API', () => {
     mockPriceCreate.mockResolvedValue({ id: 'price_test_123' });
     // Les tests tarifaires de base se lisent hors offre distanciel (−50 €, pack offert).
     DISTANCIEL_OFFER.endsAt = DISTANCIEL_OFFER.startsAt;
+    DISTANCIEL_OFFER.packEndsAt = DISTANCIEL_OFFER.startsAt;
   });
 
   afterAll(() => {
     DISTANCIEL_OFFER.endsAt = OFFER_ENDS_AT_INITIAL;
+    DISTANCIEL_OFFER.packEndsAt = PACK_ENDS_AT_INITIAL;
   });
 
   describe('Offre distanciel : −50 € et Pack Accompagnement offert', () => {
     beforeEach(() => {
-      DISTANCIEL_OFFER.endsAt = null; // offre active
+      DISTANCIEL_OFFER.endsAt = null; // remise active
+      DISTANCIEL_OFFER.packEndsAt = PACK_ENDS_AT_INITIAL; // pack offert actif (jusqu'au 31 déc. 2026)
     });
 
     it('facture 399 € − 50 € = 349 € pour une formation à distance (prix lu en base)', async () => {
@@ -141,7 +150,7 @@ describe('Checkout API', () => {
       expect(mockSessionCreate.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(64900);
     });
 
-    it('Pack Accompagnement offert (0 €) avec une formation à distance, facturé 49 € avec le présentiel', async () => {
+    it('Pack Accompagnement offert (0 €) avec une formation à distance comme avec le présentiel', async () => {
       // Même mock pour la formation principale et le pack : le prix du pack est lu en base (49 €).
       const rows: Record<string, { price: number; title: string; type: string }> = {
         fiqh_malikite: { price: 399, title: 'Fiqh', type: 'distanciel' },
@@ -180,8 +189,53 @@ describe('Checkout API', () => {
       });
       expect(res.status).toBe(200);
       session = mockSessionCreate.mock.calls[1][0];
-      expect(session.line_items[0].price_data.unit_amount).toBe(64900 + 4900);
-      expect(session.metadata.pack_offert).toBe('false');
+      expect(session.line_items[0].price_data.unit_amount).toBe(64900); // 649 + 0
+      expect(session.metadata.pack_offert).toBe('true');
+      expect(session.metadata.price_pack_accompagnement).toBe('0');
+    });
+
+    it('Pack Accompagnement seul : inscription gratuite sans Stripe (élève créé, dette 0 €)', async () => {
+      mockFormation(49, 'Pack Accompagnement', 'distanciel');
+      mockFulfill.mockResolvedValue({ ok: true, studentIds: ['e_1'], payerEmail: 'a@example.com', sessionId: 'free_x', stripeAccount: 'distanciel' });
+      const res = await postCheckout({
+        formationId: 'pack_accompagnement',
+        registrationType: 'adult',
+        email: 'a@example.com',
+        prenom: 'Amina',
+        nom: 'Benali',
+      });
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.free).toBe(true);
+      expect(json.url).toContain('/sign-up?email_address=a%40example.com');
+      expect(mockSessionCreate).not.toHaveBeenCalled();
+      expect(mockFulfill).toHaveBeenCalledTimes(1);
+      const call = mockFulfill.mock.calls[0][0];
+      expect(call.session.id).toMatch(/^free_/);
+      expect(call.session.payment_status).toBe('paid');
+      expect(call.session.amount_total).toBe(0);
+      expect(call.session.metadata.formationId).toBe('pack_accompagnement');
+      expect(call.session.metadata.expected_amount).toBe('0');
+      expect(call.session.metadata.distanciel_offer_euros).toBe('49');
+    });
+
+    it('Pack seul hors offre : Stripe est bien appelé (49 €)', async () => {
+      DISTANCIEL_OFFER.packEndsAt = DISTANCIEL_OFFER.startsAt; // offre pack terminée
+      try {
+        mockFormation(49, 'Pack Accompagnement', 'distanciel');
+        const res = await postCheckout({
+          formationId: 'pack_accompagnement',
+          registrationType: 'adult',
+          email: 'a@example.com',
+          prenom: 'Amina',
+          nom: 'Benali',
+        });
+        expect(res.status).toBe(200);
+        expect(mockFulfill).not.toHaveBeenCalled();
+        expect(mockSessionCreate.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(4900);
+      } finally {
+        DISTANCIEL_OFFER.packEndsAt = PACK_ENDS_AT_INITIAL;
+      }
     });
 
     it('refuse un code promo quand la remise −50 € est déjà appliquée (non cumulable)', async () => {

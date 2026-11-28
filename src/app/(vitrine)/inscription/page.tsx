@@ -334,6 +334,7 @@ function InscriptionForm() {
   // (l'élève peut le retirer). Facturé 0 € par /api/checkout.
   useEffect(() => {
     if (!packOfferedWithPlan()) return;
+    if ((planId || "").toLowerCase().replace(/-/g, "_") === DISTANCIEL_OFFER.packSlug) return; // le pack est déjà la formation choisie
     setAdditionalCourses((prev) =>
       prev.includes(DISTANCIEL_OFFER.packSlug) ? prev : [...prev, DISTANCIEL_OFFER.packSlug],
     );
@@ -1464,7 +1465,7 @@ function InscriptionForm() {
                     {planOffer().discount > 0 ? (
                       <p className="text-lg font-black text-ishes-blue flex items-center gap-2 sm:flex-col sm:items-end sm:gap-0">
                         <s className="text-sm font-bold text-red-500 decoration-red-500 decoration-2">{planOffer().original} €</s>
-                        <span>{planOffer().current} €</span>
+                        <span className={planOffer().current === 0 ? "text-emerald-600" : ""}>{planOffer().current === 0 ? "Offert" : `${planOffer().current} €`}</span>
                       </p>
                     ) : (
                       <p className="text-lg font-black text-ishes-blue">{getBasePriceOfPlan(planId)} €</p>
@@ -1658,17 +1659,23 @@ function InscriptionForm() {
                           ).toLocaleString("fr-FR")} €
                         </s>
                       )}
-                      {(registrationType === "child"
-                        ? getBasePriceOfPlan(planId) * Math.max(namedChildren.length, 1)
-                        : getBasePriceOfPlan(planId)
-                      ).toLocaleString("fr-FR")} €
+                      {planOffer().current === 0 ? (
+                        <span className="text-emerald-600">Offert</span>
+                      ) : (
+                        `${(registrationType === "child"
+                          ? getBasePriceOfPlan(planId) * Math.max(namedChildren.length, 1)
+                          : getBasePriceOfPlan(planId)
+                        ).toLocaleString("fr-FR")} €`
+                      )}
                     </span>
                   </li>
                   {planOffer().discount > 0 && (
                     <li className="flex items-start justify-between gap-3 text-sm font-bold text-red-600">
-                      <span>{DISTANCIEL_OFFER.label} · formations à distance</span>
+                      <span>{planOffer().current === 0 ? "Pack Accompagnement offert" : `${DISTANCIEL_OFFER.label} · formations à distance`}</span>
                       <span className="shrink-0">
-                        −{(planOffer().discount * (registrationType === "child" ? Math.max(namedChildren.length, 1) : 1)).toLocaleString("fr-FR")} € déjà déduits
+                        {planOffer().current === 0
+                          ? `jusqu’au 31 décembre 2026`
+                          : `−${(planOffer().discount * (registrationType === "child" ? Math.max(namedChildren.length, 1) : 1)).toLocaleString("fr-FR")} € déjà déduits`}
                       </span>
                     </li>
                   )}
@@ -1906,7 +1913,7 @@ function InscriptionForm() {
                     <Monitor className="w-3.5 h-3.5" /> Accès au logiciel ISHEECOLE
                   </h4>
                   <p className="text-xs text-blue-900 font-medium leading-relaxed">
-                    Dès la validation de votre paiement, vous recevrez un email pour créer votre mot de passe. Votre espace vous permettra de suivre votre scolarité.
+                    {getPrice() <= 0 ? "Dès la validation de votre inscription" : "Dès la validation de votre paiement"}, vous recevrez un email pour créer votre mot de passe. Votre espace vous permettra de suivre votre scolarité.
                   </p>
                 </div>
 
@@ -1924,7 +1931,7 @@ function InscriptionForm() {
                   disabled={loadingCheckout || !acceptedTerms}
                   className="w-full bg-ishes-dark text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2 shadow-xl shadow-ishes-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loadingCheckout ? "Redirection..." : "Payer & Créer mon compte"} <ArrowRight className="w-4 h-4" />
+                  {loadingCheckout ? "Redirection..." : getPrice() <= 0 ? "Créer mon compte gratuitement" : "Payer & Créer mon compte"} <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
 
